@@ -586,6 +586,7 @@ var _colorWinner = function(model, winner){
 	}
 	model.canvas.style.borderColor = color;
 	model.winners = [winner];
+	model.color = color;
 	return color;
 }
 
