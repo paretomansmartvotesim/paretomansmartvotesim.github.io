@@ -126,12 +126,31 @@ function dostrategy(dista,scores,minscore,maxscore,strategy,lastwinner,frontrunn
 ///////// TYPES OF VOTER ////////////
 /////////////////////////////////////
 
+// Modifications
+// so I wanted to make a graph that didn't have two distance axes but instead one distance axis and a popularity axis.  At first I wanted the popularity axis to represent how many votes the candidate gets relative to the others.  Imagine a triangle or mountain for each candidate.  The candidate's icon sits on top of the mountain.  The best support is directly underneath the candidate. For every voter at a particular x-coordinate, the altitude on each candidate's mountain is proportional to the chance that the voter supports them as a first choice candidate.  This was difficult, so I decided to take the easy way.
+// The easier way to do this is to change the distance function so that more popular candidates appear closer.  Each candidate sits on a parabola.  For each x-coordinate, the highest parabola wins the voter.
+function popularity_distance(dx,cy) {
+	// var dist = Math.abs(dx) + cy; // triangle
+	// cy is measured from the top, so being at the top adds no distance but as we get less popular, there is more distance between us and the candidates.
+	var dist = dx*dx*.01 + cy; // parabola is better because there are no sharp transitions.  The .01 comes from an average distance of about 100 pixels between candidate and voter.  So this should change with the size of the image.
+	// The reason to choose parabolas is that the decision boundary changes linearly as the parabolas are moved around.  Linear is nice.  (As long as all the parabolas have the same curvature.. I mean the 'a' in 'a x ^ 2'.)  
+	// var dist = Math.log(Math.abs(dx)+1) * 100 + cy; // cusp
+	// console.log(dist);
+	dist = Math.round(.5*(dist+Math.abs(dist)) * .5); //rectify
+	return dist
+	// return Math.sqrt(dx*dx+dy*dy);
+}
+// In the future, I'd like to add a broadness to each candidate.  This would just be a change to the .01 factor.  A candidate with broader appeal would have a smaller .01 factor.
+// Also, in the future, I'd like to have a uniform line of voters placed at the bottom of the arena so that it is simpler.  And also we can't drag them up and down.  Or left to right.
+// Also, I'd like to make an axes label on the vertical axis to say "popularity".
+// and the x-axis should say "political spectrum"
+
 function ScoreVoter(model){
 
 	var self = this;
 	self.model = model;
 
-	self.radiusStep = window.HACK_BIG_RANGE ? 61 : 25; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
+	self.radiusStep = window.HACK_BIG_RANGE ? 30 : 30; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.getScore = function(x){
 		var step = self.radiusStep;
@@ -153,8 +172,11 @@ function ScoreVoter(model){
 			var c = self.model.candidates[i];
 			var dx = c.x-x;
 			var dy = c.y-y;
-			var dist = Math.sqrt(dx*dx+dy*dy);
-			dista.push(dist)
+			if (self.model.popon) {
+				var dist = Math.sqrt(Math.abs(popularity_distance(dx,c.y)*200))-40; // Math.sqrt(dx*dx+dy*dy);    // I change the distance.
+			} else {
+				var dist = Math.sqrt(dx*dx+dy*dy);
+			}
 			scores[c.id] = self.getScore(dist);
 		}
 		self.model.idlastwinner = "square"
@@ -316,7 +338,11 @@ function ApprovalVoter(model){
 			var c = self.model.candidates[i];
 			var dx = c.x-x;
 			var dy = c.y-y;
-			var dist = Math.sqrt(dx*dx+dy*dy);
+			if (self.model.popon) {
+				var dist = popularity_distance(dx,c.y); // Math.sqrt(dx*dx+dy*dy);    // I change the distance.
+			} else {
+				var dist = Math.sqrt(dx*dx+dy*dy);
+			}
 			dista.push(dist)
 			scores[c.id] = (dist<self.approvalRadius) ? 1 : 0;
 		}
@@ -330,6 +356,7 @@ function ApprovalVoter(model){
 		for(var i=0; i<self.model.candidates.length; i++){
 			var c = self.model.candidates[i];
 			if(scores[c.id] == 1){
+
 				approved.push(c.id);
 			}
 		}
@@ -391,12 +418,20 @@ function RankedVoter(model){
 			var c1 = self.model.candidatesById[a];
 			var x1 = c1.x-x;
 			var y1 = c1.y-y;
-			var d1 = x1*x1+y1*y1;
+			if (self.model.popon) {
+				var d1 = popularity_distance(x1,c1.y); // x1*x1+y1*y1;    // I change the distance.
+			} else {
+				var d1 = Math.sqrt(x1*x1+y1*y1);
+			}
 
 			var c2 = self.model.candidatesById[b];
 			var x2 = c2.x-x;
 			var y2 = c2.y-y;
-			var d2 = x2*x2+y2*y2;
+			if (self.model.popon) {
+				var d2 = popularity_distance(x2,c2.y); // x2*x2+y2*y2;    // I change the distance.
+			} else {
+				var d2 = Math.sqrt(x2*x2+y2*y2);
+			}
 
 			return d1-d2;
 
@@ -469,7 +504,11 @@ function PluralityVoter(model){
 			var c = self.model.candidates[j];
 			var dx = c.x-x;
 			var dy = c.y-y;
-			var dist = dx*dx+dy*dy;
+			if (self.model.popon) {
+				var dist = popularity_distance(dx,c.y); // dx*dx+dy*dy;    // I change the distance.
+			} else {
+				var dist = Math.sqrt(dx*dx + dy*dy);
+			}
 			if(dist<closestDistance){
 				closestDistance = dist;
 				closest = c;
@@ -510,12 +549,14 @@ function PluralityVoter(model){
 		// What fill?
 		var fill = Candidate.graphics[ballot.vote].fill;
 		ctx.fillStyle = fill;
+		ctx.strokeStyle = 'rgb(0,0,0)';
+		ctx.lineWidth = 1; // border
 
 		// Just draw a circle.
 		ctx.beginPath();
 		ctx.arc(x, y, size, 0, Math.TAU, true);
 		ctx.fill();
-
+		ctx.stroke();
 	};
 
 }
@@ -528,6 +569,7 @@ var _drawSlices = function(ctx, x, y, size, slices, totalSlices){
 	y = y*2;
 	//size = size*2;
 
+	
 	// GO AROUND THE CLOCK...
 	var startingAngle = -Math.TAU/4;
 	var endingAngle = 0;
@@ -552,6 +594,14 @@ var _drawSlices = function(ctx, x, y, size, slices, totalSlices){
 		startingAngle = endingAngle;
 
 	}
+	
+	// Just draw a circle.		
+	ctx.strokeStyle = 'rgb(0,0,0)';
+	ctx.lineWidth = 1; // border
+	ctx.beginPath();
+	ctx.arc(x, y, size, 0, Math.TAU, true);
+	ctx.closePath();
+	ctx.stroke();
 
 };
 var _drawBlank = function(ctx, x, y, size){
@@ -598,6 +648,10 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 	// Create 100+ points, in a Gaussian-ish distribution!
 	var points = [[0,0]];
 	self.points = points;
+	
+	
+	
+
 	var _radius = 0,
 		_RINGS = spacings.length;
 	for(var i=1; i<_RINGS; i++){
@@ -617,8 +671,8 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 			var y = Math.sin(angle)*_radius;
 			points.push([x,y]);
 		}
-
 	}
+
 
 	// UPDATE! Get all ballots.
 	self.ballots = [];
