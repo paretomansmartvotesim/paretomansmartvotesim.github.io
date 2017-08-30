@@ -7,7 +7,7 @@ div.target  {
 }
 
 #main {
-	margin-left: 500px;
+	margin-left: 970px;
 	position:relative;
 	right: 20px;
 }
@@ -53,8 +53,9 @@ div.target  {
 }
 
 #fixedbox {
-	width: 458px;
-	height: 100%;
+	width: 930px;
+	height: 500px;
+	background-color: white;
 }
 
 .anchor {
