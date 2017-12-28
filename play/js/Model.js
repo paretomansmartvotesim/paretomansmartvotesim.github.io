@@ -88,7 +88,7 @@ function Model(config){
 	self.onUpdate = function(){}; // TO IMPLEMENT
 	
 	self.calculateYee = function(){
-		self.pixelsize= 30.0;
+		// self.pixelsize= 30.0;
 		var pixelsize = self.pixelsize;
 		WIDTH = ctx.canvas.width;
 		HEIGHT = ctx.canvas.height;
@@ -269,7 +269,7 @@ function Model(config){
 					var yb = self.gridy[k]-pixelsize*.5
 					var wb = pixelsize
 					var hb = pixelsize
-					var hh = 5; // height of stripe
+					var hh = pixelsize / 6; // height of stripe // used to be 5
 					for (var j=0; j< pixelsize/hh; j++) {
 						ctx.fillStyle = cb[j % cb.length]
 						ctx.fillRect(xb,yb+j*hh,wb,hh);

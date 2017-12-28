@@ -79,6 +79,7 @@ function main(config){
 		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
 		config.keyyee = config.keyyee || "off";
 		config.computeMethod = config.computeMethod || "ez";
+		config.pixelsize = config.pixelsize || 30;
 		var url = window.location.pathname;
 		var filename = url.substring(url.lastIndexOf('/')+1);
 		config.filename = filename
@@ -110,6 +111,7 @@ function main(config){
 			model.system = config.system;
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.computeMethod = config.computeMethod;
+			model.pixelsize = config.pixelsize;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==model.system);
 			})[0];
@@ -716,6 +718,22 @@ function main(config){
 		// only do this once.  Otherwise it would be in SelectUI
 
 
+		var pixelsize = [{name:"30",val:30,margin:4},{name:"12",val:12,margin:4},{name:"6",val:6}]
+		var onChoosePixelsize = function(data){
+			config.pixelsize = data.val
+			model.pixelsize = data.val
+			if (model.yeeon) {model.calculateYee(); model.update()}
+		};
+		window.choosePixelsize = new ButtonGroup({
+			label: "size of pixels in yee diagram:",
+			width: 38,
+			data: pixelsize,
+			onChoose: onChoosePixelsize
+		});
+		choosePixelsize.dom.hidden = true
+		document.querySelector("#left").insertBefore(choosePixelsize.dom,doms["systems"]);
+		
+
 		var computeMethod = [{name:"gpu",margin:4},{name:"js",margin:4},{name:"ez"}]
 		var onChooseComputeMethod = function(data){
 			config.computeMethod = data.name
@@ -739,10 +757,12 @@ function main(config){
 				choosegearconfig.dom.hidden = false
 				choosepresetconfig.dom.hidden = false
 				chooseComputeMethod.dom.hidden = false
+				choosePixelsize.dom.hidden = false
 			} else {
 				choosegearconfig.dom.hidden = true
 				choosepresetconfig.dom.hidden = true
 				chooseComputeMethod.dom.hidden = true
+				choosePixelsize.dom.hidden = true
 			}
 		};
 		window.choosegearicon = new ButtonGroup({
@@ -785,6 +805,7 @@ function main(config){
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
 			if(window.choosegearconfig) choosegearconfig.highlight("realname", config.featurelist);
 			if(window.chooseComputeMethod) chooseComputeMethod.highlight("name", config.computeMethod);
+			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
 			
 		};
 		selectUI();
