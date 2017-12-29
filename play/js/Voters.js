@@ -600,6 +600,7 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 	self.num = config.num || 3;
 	self.vid = config.vid || 0;
 	self.snowman = config.snowman || false;
+	self.spread_factor_voters = config.spread_factor_voters || 1
 
 	// WHAT TYPE?
 	self.type = new config.type(self.model);
@@ -655,8 +656,8 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 
 		var err = 0.01; // yeah whatever
 		for(var angle=0; angle<Math.TAU-err; angle+=Math.TAU/num){
-			var x = Math.cos(angle)*_radius;
-			var y = Math.sin(angle)*_radius;
+			var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
+			var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
 			points.push([x,y]);
 		}
 

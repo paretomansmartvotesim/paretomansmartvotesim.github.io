@@ -44,6 +44,7 @@ function main(config){
 		config.candidates = config.candidates || 3;
 		config.voters = config.voters || 1;
 		config.snowman = config.snowman || false;
+		config.spread_factor_voters = config.spread_factor_voters || 1;
 		//config.votersRealName = config.votersRealName || "Single Voter";
 		config.oneVoter = config.oneVoter || false;
 
@@ -80,6 +81,7 @@ function main(config){
 		config.keyyee = config.keyyee || "off";
 		config.computeMethod = config.computeMethod || "ez";
 		config.pixelsize = config.pixelsize || 30;
+		config.spread_factor_voters = config.spread_factor_voters || 1;
 		var url = window.location.pathname;
 		var filename = url.substring(url.lastIndexOf('/')+1);
 		config.filename = filename
@@ -112,6 +114,7 @@ function main(config){
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.computeMethod = config.computeMethod;
 			model.pixelsize = config.pixelsize;
+			model.spread_factor_voters = config.spread_factor_voters;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==model.system);
 			})[0];
@@ -148,6 +151,7 @@ function main(config){
 					unstrategic: config.unstrategic,
 					vid: i,
 					snowman: config.snowman,
+					spread_factor_voters: config.spread_factor_voters,
 					num:(4-num),
 					x:pos[0], y:pos[1]
 				});
@@ -749,6 +753,29 @@ function main(config){
 		chooseComputeMethod.dom.hidden = true
 		document.querySelector("#left").insertBefore(chooseComputeMethod.dom,doms["systems"]);
 		
+		var spread_factor_voters = [{name:"1",val:1,margin:4},{name:"2",val:2,margin:4},{name:"5",val:5}]
+		var onChoose_spread_factor_voters = function(data){
+			config.spread_factor_voters = data.val
+			model.spread_factor_voters = data.val
+
+			// // save candidates before switching!
+			config.candidatePositions = save().candidatePositions; // not sure if needed
+
+			// // reset!
+			config.voterPositions = null; // not sure if needed
+			model.reset();
+			setInPosition();
+
+		};
+		window.choose_spread_factor_voters = new ButtonGroup({
+			label: "Voter Spread:",
+			width: 38,
+			data: spread_factor_voters,
+			onChoose: onChoose_spread_factor_voters
+		});
+		choose_spread_factor_voters.dom.hidden = true
+		document.querySelector("#left").insertBefore(choose_spread_factor_voters.dom,doms["systems"]);
+		
 		// gear button (combines with above)
 		
 		var gearicon = [{name:"config"}]
@@ -758,11 +785,13 @@ function main(config){
 				choosepresetconfig.dom.hidden = false
 				chooseComputeMethod.dom.hidden = false
 				choosePixelsize.dom.hidden = false
+				choose_spread_factor_voters.dom.hidden = false
 			} else {
 				choosegearconfig.dom.hidden = true
 				choosepresetconfig.dom.hidden = true
 				chooseComputeMethod.dom.hidden = true
 				choosePixelsize.dom.hidden = true
+				choose_spread_factor_voters.dom.hidden = true
 			}
 		};
 		window.choosegearicon = new ButtonGroup({
@@ -806,6 +835,7 @@ function main(config){
 			if(window.choosegearconfig) choosegearconfig.highlight("realname", config.featurelist);
 			if(window.chooseComputeMethod) chooseComputeMethod.highlight("name", config.computeMethod);
 			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
+			if(window.choose_spread_factor_voters) choose_spread_factor_voters.highlight("name", config.spread_factor_voters);
 			
 		};
 		selectUI();
