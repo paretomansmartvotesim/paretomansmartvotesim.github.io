@@ -259,6 +259,10 @@ function Model(config){
 		//ctx.drawImage(background,0,0);
 		
 		if(self.yeeon){
+			ctx.globalAlpha = 1
+			ctx.fillStyle = "#fff"
+			ctx.fillRect(0,0,canvas.width,canvas.height)  // draw a white background
+			ctx.fill()
 			ctx.globalAlpha = .9
 			var pixelsize = self.pixelsize;
 			for(var k=0;k<self.gridx.length;k++) {
@@ -323,8 +327,16 @@ function Model(config){
 			}
 			ctx.textAlign = "center";
 			ctx.globalAlpha = 0.9
-			drawStroked("yee-yee!",x*2,y*2+50);		
+			drawStroked("yee-yee!",x*2,y*2+50);
+			var dot = 3
+			ctx.fillStyle = "#000"
+			ctx.fillRect(x*2-dot-1,y*2-dot-1,dot*2+2,dot*2+2);
+			ctx.fillStyle = "#fff"
+			ctx.fillRect(x*2-dot,y*2-dot,dot*2,dot*2);
 			ctx.globalAlpha = 1
+
+			self.canvas.style.borderColor = "#fff"
+			//ctx.style.borderColor = "#fff"
 		}
 
 		// Update!

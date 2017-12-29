@@ -618,6 +618,7 @@ var _colorWinner = function(model, winners){
 		var color = (winners[0]) ? Candidate.graphics[winners[0]].fill : "";
 	}
 	model.canvas.style.borderColor = color;
+	if (model.yeeon) model.canvas.style.borderColor = "#fff"
 	model.winners = winners;
 	model.color = color;
 	return color;

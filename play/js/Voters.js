@@ -57,7 +57,6 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 			if (index > -1) {shortlist.push(index)}
 		}	
 	}
-	console.log(shortlist)
 
 	// find min and max of shortlist
 	var m=-1
