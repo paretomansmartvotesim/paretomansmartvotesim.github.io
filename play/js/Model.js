@@ -15,7 +15,9 @@ function Model(config){
 	self.id = config.id || "model";
 	self.size = config.size || 300;
 	self.scale = config.scale || 1; // TO DO: actually USE this.
-	self.border = config.border || 0; // used to be 10, then I got rid of the border.
+	
+	if (config.border === undefined) config.border = 2
+	self.border = config.border; // used to be 10, then I got rid of the border.
 
 	// RETINA canvas, whatever.
 	var canvas = document.createElement("canvas");
@@ -23,6 +25,7 @@ function Model(config){
 	canvas.width = canvas.height = self.size*2; // retina!
 	canvas.style.width = canvas.style.height = self.size+"px";
 	canvas.style.borderWidth = self.border+"px";
+	//canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
 	var ctx = canvas.getContext("2d");
 	self.canvas = canvas;
 	self.ctx = ctx;

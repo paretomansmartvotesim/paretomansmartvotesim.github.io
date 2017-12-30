@@ -392,6 +392,7 @@ kindayee: "can",
 	doFullStrategyConfig: true,
 	doPercentFirst: true,
 	arena_size: 600,
+	arena_border: 0,
 	spread_factor_voters: 2
 }
     } else if (htmlname == "ballot1.html") {

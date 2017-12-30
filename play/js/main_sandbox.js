@@ -46,6 +46,7 @@ function main(config){
 		config.snowman = config.snowman || false;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
 		config.arena_size = config.arena_size || 300;
+		if (config.arena_border === undefined) config.arena_border = 2;
 		//config.votersRealName = config.votersRealName || "Single Voter";
 		config.oneVoter = config.oneVoter || false;
 
@@ -84,6 +85,7 @@ function main(config){
 		config.pixelsize = config.pixelsize || 30;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
 		config.arena_size = config.arena_size || 300;
+		if (config.arena_border === undefined) config.arena_border = 2;  // very important to use this triple equals === syntax rather than the ||
 		var url = window.location.pathname;
 		var filename = url.substring(url.lastIndexOf('/')+1);
 		config.filename = filename
@@ -100,7 +102,7 @@ function main(config){
 		////////////////////////
 
 		// the only use of the model config so far: sandboxsave
-		var model_config = {size: config.arena_size}
+		var model_config = {size: config.arena_size, border: config.arena_border}
 		window.model = new Model(model_config);
 		document.querySelector("#center").appendChild(model.dom);
 		model.dom.removeChild(model.caption);
@@ -120,6 +122,7 @@ function main(config){
 			model.pixelsize = config.pixelsize;
 			model.spread_factor_voters = config.spread_factor_voters;
 			model.arena_size = config.arena_size;
+			model.arena_border = config.arena_border;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==model.system);
 			})[0];
@@ -158,6 +161,7 @@ function main(config){
 					snowman: config.snowman,
 					spread_factor_voters: config.spread_factor_voters,
 					arena_size: config.arena_size,
+					arena_border: config.arena_border,
 					num:(4-num),
 					x:pos[0] + (model.arena_size - 300) * .5,
 					y:pos[1] + (model.arena_size - 300) * .5
