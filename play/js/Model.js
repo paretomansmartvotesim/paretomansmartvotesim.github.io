@@ -15,7 +15,7 @@ function Model(config){
 	self.id = config.id || "model";
 	self.size = config.size || 300;
 	self.scale = config.scale || 1; // TO DO: actually USE this.
-	self.border = config.border || 10;
+	self.border = config.border || 0; // used to be 10, then I got rid of the border.
 
 	// RETINA canvas, whatever.
 	var canvas = document.createElement("canvas");
