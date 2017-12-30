@@ -40,6 +40,13 @@ function Model(config){
 	self.dom.appendChild(self.canvas);
 	self.dom.appendChild(self.caption);
 
+	self.resize = function() {
+		canvas.width = canvas.height = self.size*2; // retina!
+		canvas.style.width = canvas.style.height = self.size+"px";
+		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
+		self.caption.style.width = self.dom.style.width;
+	}
+
 	// MAH MOUSE
 	self.mouse = new Mouse(self.id, self.canvas);
 
@@ -334,9 +341,6 @@ function Model(config){
 			ctx.fillStyle = "#fff"
 			ctx.fillRect(x*2-dot,y*2-dot,dot*2,dot*2);
 			ctx.globalAlpha = 1
-
-			self.canvas.style.borderColor = "#fff"
-			//ctx.style.borderColor = "#fff"
 		}
 
 		// Update!

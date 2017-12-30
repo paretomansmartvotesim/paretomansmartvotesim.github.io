@@ -45,6 +45,7 @@ function main(config){
 		config.voters = config.voters || 1;
 		config.snowman = config.snowman || false;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
+		config.arena_size = config.arena_size || 300;
 		//config.votersRealName = config.votersRealName || "Single Voter";
 		config.oneVoter = config.oneVoter || false;
 
@@ -82,6 +83,7 @@ function main(config){
 		config.computeMethod = config.computeMethod || "ez";
 		config.pixelsize = config.pixelsize || 30;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
+		config.arena_size = config.arena_size || 300;
 		var url = window.location.pathname;
 		var filename = url.substring(url.lastIndexOf('/')+1);
 		config.filename = filename
@@ -97,7 +99,9 @@ function main(config){
 		// THE FRIGGIN' MODEL //
 		////////////////////////
 
-		window.model = new Model();
+		// the only use of the model config so far: sandboxsave
+		var model_config = {size: config.arena_size}
+		window.model = new Model(model_config);
 		document.querySelector("#center").appendChild(model.dom);
 		model.dom.removeChild(model.caption);
 		document.querySelector("#right").appendChild(model.caption);
@@ -115,6 +119,7 @@ function main(config){
 			model.computeMethod = config.computeMethod;
 			model.pixelsize = config.pixelsize;
 			model.spread_factor_voters = config.spread_factor_voters;
+			model.arena_size = config.arena_size;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==model.system);
 			})[0];
@@ -152,8 +157,10 @@ function main(config){
 					vid: i,
 					snowman: config.snowman,
 					spread_factor_voters: config.spread_factor_voters,
+					arena_size: config.arena_size,
 					num:(4-num),
-					x:pos[0], y:pos[1]
+					x:pos[0] + (model.arena_size - 300) * .5,
+					y:pos[1] + (model.arena_size - 300) * .5
 				});
 			}
 
@@ -168,8 +175,8 @@ function main(config){
 			}
 			for(var i=0; i<num; i++){
 				var r = 100;
-				var x = 150 - r*Math.cos(angle);
-				var y = 150 - r*Math.sin(angle);
+				var x = 150 - r*Math.cos(angle) + (model.arena_size - 300) * .5;
+				var y = 150 - r*Math.sin(angle) + (model.arena_size - 300) * .5;
 				var id = _candidateIDs[i];
 				model.addCandidate(id, x, y);
 				angle += Math.TAU/num;
@@ -227,8 +234,8 @@ function main(config){
 				for(var i=0; i<positions.length; i++){
 					var position = positions[i];
 					var candidate = model.candidates[i];
-					candidate.x = position[0];
-					candidate.y = position[1];
+					candidate.x = position[0] //+ (model.arena_size - 300) * .5;
+					candidate.y = position[1] //+ (model.arena_size - 300) * .5;
 				}
 			}
 
@@ -238,8 +245,8 @@ function main(config){
 				for(var i=0; i<positions.length; i++){
 					var position = positions[i];
 					var voter = model.voters[i];
-					voter.x = position[0];
-					voter.y = position[1];
+					voter.x = position[0] //+ (model.arena_size - 300) * .5;
+					voter.y = position[1] //+ (model.arena_size - 300) * .5;
 				}
 			}
 
@@ -776,6 +783,61 @@ function main(config){
 		choose_spread_factor_voters.dom.hidden = true
 		document.querySelector("#left").insertBefore(choose_spread_factor_voters.dom,doms["systems"]);
 		
+		var arena_size = [{name:"300",val:300,margin:4},{name:"600",val:600}]
+		var onChoose_arena_size = function(data){
+			model_config.size = data.val
+			model.size = data.val
+			config.arena_size = data.val
+			
+
+			addsome = model.size - 300
+
+			// document.querySelector("#sandbox").style.width = 802 + addsome
+			// document.querySelector("#sandbox_iframe").style.width = 802 + addsome
+
+			// select all elements in class .sim-sandbox
+			// document.querySelector("#sandbox").style.width = 800 + addsome
+
+			// #center
+			document.getElementById("center").style.height = (320 + addsome) + "px"
+			document.getElementById("center").style.width = (320 + addsome) + "px"
+
+			// #description_container
+			document.getElementById("description_container").style.width = (800 + addsome) + "px"
+
+			// #description_container textarea
+			document.getElementById("description_text").style.width = (778 + addsome) + "px"
+
+			// #savelink
+			document.getElementById("savelink").style.top = (471 + addsome) + "px"
+			document.getElementById("savelink").style.width = (82 + addsome) + "px"
+
+
+			document.getElementById("save").style.top = (470 + addsome) + "px"
+			document.getElementById("reset").style.top = (470 + addsome) + "px"
+
+
+			//window.model = new Model(model_config);
+			
+			// model.reset();
+			// setInPosition();
+			model.resize()
+			loadDefaults()
+			model.reset(true);
+			model.onInit();
+			setInPosition();
+			selectUI();
+			
+		};
+		window.choose_arena_size = new ButtonGroup({
+			label: "Arena size:",
+			width: 38,
+			data: arena_size,
+			onChoose: onChoose_arena_size
+		});
+		choose_arena_size.dom.hidden = true
+		document.querySelector("#left").insertBefore(choose_arena_size.dom,doms["systems"]);
+		
 		// gear button (combines with above)
 		
 		var gearicon = [{name:"config"}]
@@ -786,12 +848,14 @@ function main(config){
 				chooseComputeMethod.dom.hidden = false
 				choosePixelsize.dom.hidden = false
 				choose_spread_factor_voters.dom.hidden = false
+				choose_arena_size.dom.hidden = false
 			} else {
 				choosegearconfig.dom.hidden = true
 				choosepresetconfig.dom.hidden = true
 				chooseComputeMethod.dom.hidden = true
 				choosePixelsize.dom.hidden = true
 				choose_spread_factor_voters.dom.hidden = true
+				choose_arena_size.dom.hidden = true
 			}
 		};
 		window.choosegearicon = new ButtonGroup({
@@ -836,6 +900,7 @@ function main(config){
 			if(window.chooseComputeMethod) chooseComputeMethod.highlight("name", config.computeMethod);
 			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
 			if(window.choose_spread_factor_voters) choose_spread_factor_voters.highlight("name", config.spread_factor_voters);
+			if(window.choose_arena_size) choose_arena_size.highlight("name", config.arena_size);
 			
 		};
 		selectUI();
@@ -953,7 +1018,7 @@ function main(config){
 			}
 			// Move that reset button
 			if (config.sandboxsave) {
-				resetDOM.style.top = "470px";
+				resetDOM.style.top = (470 - 300 + model_config.size) + "px";
 				resetDOM.style.left = "235px";
 			} else {
 				resetDOM.style.top = "340px";
@@ -964,7 +1029,7 @@ function main(config){
 			saveDOM.id = "save";
 			saveDOM.innerHTML = "save:";
 			if (config.sandboxsave) {
-				saveDOM.style.top = "470px";
+				saveDOM.style.top = (470 - 300 + model_config.size) + "px";
 				saveDOM.style.left = "350px";
 			} else {
 				saveDOM.style.top = "340px";

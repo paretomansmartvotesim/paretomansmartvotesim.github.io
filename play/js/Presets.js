@@ -390,7 +390,9 @@ kindayee: "can",
 	candidates: 5,
 	voters: 1,
 	doFullStrategyConfig: true,
-	doPercentFirst: true
+	doPercentFirst: true,
+	arena_size: 600,
+	spread_factor_voters: 2
 }
     } else if (htmlname == "ballot1.html") {
 		config = 
