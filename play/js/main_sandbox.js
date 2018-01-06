@@ -147,6 +147,8 @@ function main(config){
 				var pos = voterPositions[i];
 				if (config.oneVoter) {
 					var dist1 = SingleVoter
+				} else if (config.customVoters) {
+					var dist1 = PhyllotaxisVoters
 				} else {
 					var dist1 = GaussianVoters
 				}
@@ -908,6 +910,7 @@ function main(config){
 			
 		};
 		selectUI();
+		//onChoose_arena_size({val: config.arena_size})
 
 
 		//////////////////////////
@@ -1054,6 +1057,21 @@ function main(config){
 			};
 			if (config.sandboxsave) {
 				//skip
+
+				addsome = model.size - 300
+
+				document.getElementById("center").style.height = (320 + addsome) + "px"
+				document.getElementById("center").style.width = (320 + addsome) + "px"
+	
+				// #description_container
+				document.getElementById("description_container").style.width = (800 + addsome) + "px"
+	
+				// #description_container textarea
+				document.getElementById("description_text").style.width = (778 + addsome) + "px"
+	
+				// #savelink
+				linkText.style.width = (82 + addsome) + "px"	
+				linkText.style.top = (471 + addsome) + "px";
 			} else {
 				linkText.style.position = "absolute";
 				linkText.style.top = "340px";
