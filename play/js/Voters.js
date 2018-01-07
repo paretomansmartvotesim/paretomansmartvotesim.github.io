@@ -37,8 +37,8 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 	// {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
 	// {name:"N", realname:"normalize", margin:4},
 	// {name:"F", realname:"normalize frontrunners only", margin:4},
-	// {name:"B", realname:"best frontrunner", margin:4},
-	// {name:"W", realname:"not the worst frontrunner"}
+	// {name:"F+", realname:"best frontrunner", margin:4},
+	// {name:"F-", realname:"not the worst frontrunner"}
 
 	var lf = preFrontrunnerIds.length
 
@@ -473,7 +473,7 @@ function PluralityVoter(model){
 	self.getBallot = function(x, y, strategy){
 
 		// Who am I closest to? Use their fill
-		var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && model.preFrontrunnerIds.length > 1)
+		var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && model.preFrontrunnerIds.length > 1 && strategy!="normalize")
 		var closest = null;
 		var closestDistance = Infinity;
 		for(var j=0;j<self.model.candidates.length;j++){

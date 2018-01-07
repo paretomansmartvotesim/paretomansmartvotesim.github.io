@@ -55,8 +55,8 @@ function main(config){
 				{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
 				{name:"N", realname:"normalize", margin:4},
 				{name:"F", realname:"normalize frontrunners only", margin:4},
-				{name:"B", realname:"best frontrunner", margin:4},
-				{name:"W", realname:"not the worst frontrunner"}
+				{name:"F+", realname:"best frontrunner", margin:4},
+				{name:"F-", realname:"not the worst frontrunner"}
 			];
 			// old ones
 			// {name:"FL", realname:"justfirstandlast", margin:4},

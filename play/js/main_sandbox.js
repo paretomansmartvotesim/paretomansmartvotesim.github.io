@@ -68,7 +68,7 @@ function main(config){
 		config.doPercentFirst = config.doPercentFirst || false;
 		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
 		config.doFullStrategyConfig = config.doFullStrategyConfig || false;
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","frontrunners","poll","yee"])
+		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","yee"])
 		// clear the grandfathered config settings
 		config.doPercentFirst = undefined
 		config.features = undefined
@@ -95,7 +95,8 @@ function main(config){
 		}
 		
 		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
-		config.second_strategy = config.second_strategy || false;
+		config.strategic = config.strategic || "zero strategy. judge on an absolute scale.";
+		if (config.second_strategy === undefined) config.second_strategy = true;
 		config.keyyee = config.keyyee || "off";
 		config.computeMethod = config.computeMethod || "ez";
 		config.pixelsize = config.pixelsize || 30;
@@ -141,7 +142,6 @@ function main(config){
 			} else {
 				model.votersRealName = voters.filter( function(x){return x.num==config.voters && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
 			}
-			console.log(model.votersRealName)
 			model.system = config.system;
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.computeMethod = config.computeMethod;
@@ -628,8 +628,8 @@ function main(config){
 			{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
 			{name:"N", realname:"normalize", margin:5},
 			{name:"F", realname:"normalize frontrunners only", margin:5},
-			{name:"B", realname:"best frontrunner", margin:5},
-			{name:"W", realname:"not the worst frontrunner"}
+			{name:"F+", realname:"best frontrunner", margin:5},
+			{name:"F-", realname:"not the worst frontrunner"}
 		];
 		// old ones
 		// {name:"FL", realname:"justfirstandlast", margin:5},
@@ -647,6 +647,24 @@ function main(config){
 			}
 			model.update();
 
+			// gui update
+			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+			var xlist = ["frontrunners","poll"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if ( ! turnOffFrontrunnerControls) {
+					featureset.add(xi)
+					doms[xi].hidden = false
+				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			config.featurelist = Array.from(featureset)
+
+
 		};
 		window.chooseVoterStrategyOff = new ButtonGroup({
 			label: "what's voters' strategy?",
@@ -663,7 +681,7 @@ function main(config){
 
 		// Is there a 2nd strategy?
 		var second_strategy = [
-			{realname: "opton for 2nd strategy", name:"+"}
+			{realname: "opton for 2nd strategy", name:"2"}
 		];
 		var onChoose_second_strategy = function(data){
 
@@ -715,8 +733,8 @@ function main(config){
 			{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
 			{name:"N", realname:"normalize", margin:5},
 			{name:"F", realname:"normalize frontrunners only", margin:5},
-			{name:"B", realname:"best frontrunner", margin:5},
-			{name:"W", realname:"not the worst frontrunner"}
+			{name:"F+", realname:"best frontrunner", margin:5},
+			{name:"F-", realname:"not the worst frontrunner"}
 		];
 		// old ones
 		// {name:"FL", realname:"justfirstandlast", margin:5},
@@ -736,6 +754,24 @@ function main(config){
 			}
 			model.update();
 
+
+			// gui update
+			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+			var xlist = ["frontrunners","poll"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if ( ! turnOffFrontrunnerControls) {
+					featureset.add(xi)
+					doms[xi].hidden = false
+				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			config.featurelist = Array.from(featureset)
+			
 		};
 		window.chooseVoterStrategyOn = new ButtonGroup({
 			label: "what's voters' 2nd strategy?",
@@ -1211,7 +1247,7 @@ function main(config){
 			if(window.chooseVoterStrategyOff) chooseVoterStrategyOff.highlight("realname", model.voters[0].unstrategic);
 			if(window.choose_second_strategy) {
 				if (config.second_strategy) {
-					choose_second_strategy.highlight("name", "+");
+					choose_second_strategy.highlight("name", "2");
 				}
 			}
 			
