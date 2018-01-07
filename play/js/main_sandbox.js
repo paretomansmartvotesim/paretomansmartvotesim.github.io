@@ -131,7 +131,7 @@ function main(config){
 			// Based on config... what should be what?
 			model.numOfCandidates = config.candidates;
 			model.numOfVoters = config.voters;
-			model.votersRealName = voters.filter( function(x){return (x.num==config.voters && (x.snowman||false)==config.snowman || (x.x_voters||false)==config.x_voters || (x.oneVoter||false)==config.oneVoter ) })[0].realname
+			model.votersRealName = voters.filter( function(x){return (x.num==config.voters && (x.snowman||false)==config.snowman) || (x.x_voters||false)==config.x_voters || (x.oneVoter||false)==config.oneVoter  })[0].realname
 			model.system = config.system;
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.computeMethod = config.computeMethod;
