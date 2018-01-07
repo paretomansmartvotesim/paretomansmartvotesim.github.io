@@ -55,3 +55,28 @@ textarea, input{
     padding: 8px;
     font-size: 12px;
 }
+
+
+
+
+
+/* Slider stuff - This modifies values in election.css */
+input[type="range"] {
+    height: 8px;
+}
+::-webkit-slider-thumb {
+    height: 8px; /* 1 */
+}
+::-moz-range-track {
+    height: 8px;
+}
+::-moz-range-thumb {
+    height: 8px;
+}
+::-ms-thumb { 
+    height: 8px;
+}
+::-ms-track { 
+    height: 8px;
+}
+/* end of slider stuff */

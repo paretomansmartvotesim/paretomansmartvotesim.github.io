@@ -127,7 +127,7 @@ input[type="range"] {
     -webkit-appearance: none;
     position: relative;
     overflow: hidden;
-    height: 8px;
+    height: 20px;
     width: 218px;
     cursor: pointer;
 	border-radius: 0; /* iOS */
@@ -135,7 +135,11 @@ input[type="range"] {
 }
 
 
-/* Beginning of Slider Stuff */
+
+
+
+
+/* Beginning of Slider Stuff  - note that the height is changed later in sandbox.css */
 
 ::-webkit-slider-runnable-track {
     background: #ccc;
@@ -147,20 +151,20 @@ input[type="range"] {
 ::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 20px; /* 1 */
-    height: 8px; /* 1 */
+    height: 20px; /* 1 */
     background: #fff;
     box-shadow: -100vw 0 0 100vw #001;
     border: 2px solid #555; /* 1 */
 }
 
 ::-moz-range-track {
-    height: 8px;
+    height: 20px;
     background: #ccc;
 }
 
 ::-moz-range-thumb {
     background: #fff;
-    height: 8px;
+    height: 20px;
     width: 20px;
     border: 3px solid #555;
     border-radius: 0 !important;
@@ -175,7 +179,7 @@ input[type="range"] {
 ::-ms-thumb { 
     background: #fff;
     border: 2px solid #555;
-    height: 8px;
+    height: 20px;
     width: 20px;
     box-sizing: border-box;
 }
@@ -191,7 +195,7 @@ input[type="range"] {
 ::-ms-track { 
     background: #ccc;
     color: transparent;
-    height: 8px;
+    height: 20px;
     border: none;
 }
 
