@@ -1031,6 +1031,9 @@ function main(config){
 				if (firstletter == 'e' || firstletter == 's') {
 					config = loadpreset(data.htmlname)
 					loadDefaults()
+					set_layout_wrt_arena(config.arena_size)
+					model.size = config.arena_size
+					model.resize()
 					model.reset(true);
 					model.onInit();
 					setInPosition();
@@ -1048,7 +1051,11 @@ function main(config){
 					if (ballotconfig.showChoiceOfFrontrunners) {config.featurelist.push("frontrunners")}
 					if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("strategy")}
 					config.oneVoter = true
+					config.arena_size = 300
 					loadDefaults()
+					set_layout_wrt_arena(config.arena_size)
+					model.size = config.arena_size
+					model.resize()
 					model.reset(true);
 					model.onInit();
 					setInPosition();
@@ -1124,13 +1131,9 @@ function main(config){
 		document.querySelector("#left").insertBefore(choose_spread_factor_voters.dom,doms["systems"]);
 		
 		var arena_size = [{name:"300",val:300,margin:4},{name:"600",val:600}]
-		var onChoose_arena_size = function(data){
-			model_config.size = data.val
-			model.size = data.val
-			config.arena_size = data.val
-			
 
-			addsome = model.size - 300
+		var set_layout_wrt_arena = function(a_size) {
+			addsome = a_size - 300
 
 			// document.querySelector("#sandbox").style.width = 802 + addsome
 			// document.querySelector("#sandbox_iframe").style.width = 802 + addsome
@@ -1155,8 +1158,14 @@ function main(config){
 
 			document.getElementById("save").style.top = (470 + addsome) + "px"
 			document.getElementById("reset").style.top = (470 + addsome) + "px"
-
-
+		}
+		var onChoose_arena_size = function(data){
+			model_config.size = data.val
+			model.size = data.val
+			config.arena_size = data.val
+			
+			
+			
 			//window.model = new Model(model_config);
 
 			config.voterPositions = save().voterPositions;
@@ -1164,8 +1173,10 @@ function main(config){
 
 			// model.reset();
 			// setInPosition();
-			model.resize()
 			loadDefaults()
+			set_layout_wrt_arena(config.arena_size)
+			model.size = config.arena_size
+			model.resize()
 			model.reset(true);
 			model.onInit();
 			setInPosition();
