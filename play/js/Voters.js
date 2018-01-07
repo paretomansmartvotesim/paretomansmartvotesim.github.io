@@ -587,6 +587,32 @@ var _drawBlank = function(ctx, x, y, size){
 };
 
 
+var  _erfinv  = function(x){ // from https://stackoverflow.com/a/12556710
+	var z;
+	var a  = 0.147;                                                   
+	var the_sign_of_x;
+	if(0==x) {
+		the_sign_of_x = 0;
+	} else if(x>0){
+		the_sign_of_x = 1;
+	} else {
+		the_sign_of_x = -1;
+	}
+
+	if(0 != x) {
+		var ln_1minus_x_sqrd = Math.log(1-x*x);
+		var ln_1minusxx_by_a = ln_1minus_x_sqrd / a;
+		var ln_1minusxx_by_2 = ln_1minus_x_sqrd / 2;
+		var ln_etc_by2_plus2 = ln_1minusxx_by_2 + (2/(Math.PI * a));
+		var first_sqrt = Math.sqrt((ln_etc_by2_plus2*ln_etc_by2_plus2)-ln_1minusxx_by_a);
+		var second_sqrt = Math.sqrt(first_sqrt - ln_etc_by2_plus2);
+		z = second_sqrt * the_sign_of_x;
+	} else { // x is zero
+		z = 0;
+	}
+	return z;
+}
+
 /////////////////////////////////////////
 ///////// SINGLE OR GAUSSIAN ////////////
 /////////////////////////////////////////
@@ -600,6 +626,7 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 	self.num = config.num || 3;
 	self.vid = config.vid || 0;
 	self.snowman = config.snowman || false;
+	self.x_voters = config.x_voters || false;
 	self.spread_factor_voters = config.spread_factor_voters || 1
 
 	// WHAT TYPE?
@@ -609,13 +636,19 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 	};
 	
 	self.percentStrategy = config.percentStrategy
+	self.group_count = config.group_count
+	self.group_spread = config.group_spread
 	self.strategy = config.strategy
 	self.unstrategic = config.unstrategic
 	self.preFrontrunnerIds = config.preFrontrunnerIds
 
+	self.img = new Image();  // use the face
+	self.img.src = "img/voter_face.png";
+
+
 	// HACK: larger grab area
 	self.radius = 50;
-
+if (!self.x_voters) {
 	// SPACINGS, dependent on NUM
 	var spacings = [0, 12, 12, 12, 12, 20, 30, 50, 100];
 	if (self.snowman) {
@@ -662,6 +695,24 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 		}
 
 	}
+} else {
+	var points = [];
+	self.points = points;
+	var angle = 0;
+	var _radius = 0;
+	var _radius_norm = 0;
+	var _spread_factor = 2 * Math.exp(.01*self.group_spread) // so the slider is exponential
+	var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
+	for (var count = 0; count < self.group_count; count++) {
+		angle = theta * count
+		_radius_norm = Math.sqrt(1-(count+.5)/self.group_count)
+		_radius = _erfinv(_radius_norm) * _spread_factor
+		var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
+		var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
+		points.push([x,y]);
+	}
+	self.points = points
+}
 
 	// UPDATE! Get all ballots.
 	self.ballots = [];
@@ -700,6 +751,29 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 			var ballot = self.ballots[i];
 			self.type.drawCircle(ctx, x, y, 10, ballot);
 		}
+		// Circle!
+		var size = 20;
+		//self.type.drawCircle(ctx, self.x, self.y, size, ballot);
+		_drawBlank(ctx, self.x, self.y, size)
+		
+		// Face!
+		size = size*2;
+		var x = self.x*2;
+		var y = self.y*2;
+		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		
+		// Number ID
+		var textsize = 20
+		function drawStroked(text, x, y) {
+			ctx.font = textsize + "px Sans-serif"
+			ctx.strokeStyle = 'black';
+			ctx.lineWidth = 4;
+			ctx.strokeText(text, x, y);
+			ctx.fillStyle = 'white';
+			ctx.fillText(text, x, y);
+		}
+		ctx.textAlign = "center";
+		drawStroked(self.vid+1,x+0*textsize,y+0*textsize);
 
 	};
 
@@ -715,7 +789,10 @@ function SingleVoter(config){
 	self.num = 1;
 	self.vid = 0;
 	self.snowman = false;
+	self.x_voters = false;
 	self.percentStrategy = config.percentStrategy
+	self.group_count = config.group_count
+	self.group_spread = config.group_spread
 	self.strategy = config.strategy
 	self.unstrategic = config.unstrategic
 	self.preFrontrunnerIds = config.preFrontrunnerIds

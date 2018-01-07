@@ -431,10 +431,10 @@ Election.irv = function(model, options){
 
 		// ACTUALLY ELIMINATE
 		
-		text += "nobody's more than 50%. ";
+		//text += "nobody's more than 50%. ";
 		for (var li = 0; li < losers.length ; li++ ) {
 			loser = losers[li];
-			text += "eliminate loser, "+_icon(loser)+". next round!<br>";
+			text += "eliminate loser, "+_icon(loser)+".<br>";
 			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
 			var ballots = model.getBallots();
 			for(var i=0; i<ballots.length; i++){

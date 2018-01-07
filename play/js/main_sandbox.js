@@ -33,10 +33,16 @@ function main(config){
 	}
 
 	var initialConfig
-	var allnames = ["systems","voters","candidates","strategy","percentstrategy","unstrategic","frontrunners","poll","yee"]
+	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","percentstrategy","unstrategic","frontrunners","poll","yee"]
 	var doms = {}  // for hiding menus, later
 	var stratsliders = [] // for hiding sliders, later
+	var groupsliders = [] // for hiding sliders, later
+	var x_voter_sliders = [] // for hiding sliders, later
+	var spreadsliders = [] // for hiding sliders, later
 	
+	// workaround
+	var maxVoters = 10 // there is a bug where the real max is one less than this
+
 	var loadDefaults = function() {
 		// Defaults...
 		config = config || {};
@@ -44,6 +50,7 @@ function main(config){
 		config.candidates = config.candidates || 3;
 		config.voters = config.voters || 1;
 		config.snowman = config.snowman || false;
+		config.x_voters = config.x_voters || false;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
 		config.arena_size = config.arena_size || 300;
 		if (config.arena_border === undefined) config.arena_border = 2;
@@ -71,12 +78,20 @@ function main(config){
 		config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"]
 		config.voterStrategies = config.voterStrategies || []
 		config.description = config.description || ""
-		for (i in [0,1,2]) {
+		for (var i = 0; i < maxVoters; i++) {
 			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
 		}
 		config.voterPercentStrategy = config.voterPercentStrategy || []
-		for (i in [0,1,2]) {
+		for (var i = 0; i < maxVoters; i++) {
 			config.voterPercentStrategy[i] = config.voterPercentStrategy[i] || 0
+		}
+		config.voter_group_count = config.voter_group_count || []
+		for (var i = 0; i < maxVoters; i++) {
+			config.voter_group_count[i] = config.voter_group_count[i] || 50
+		}
+		config.voter_group_spread = config.voter_group_spread || []
+		for (var i = 0; i < maxVoters; i++) {
+			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
 		}
 		
 		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
@@ -109,13 +124,14 @@ function main(config){
 		document.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
 
+
 		// INIT!
 		model.onInit = function(){
 
 			// Based on config... what should be what?
 			model.numOfCandidates = config.candidates;
 			model.numOfVoters = config.voters;
-			model.votersRealName = voters.filter( function(x){return (x.num==config.voters && (x.snowman||false)==config.snowman && (x.oneVoter||false) == config.oneVoter) })[0].realname
+			model.votersRealName = voters.filter( function(x){return (x.num==config.voters && (x.snowman||false)==config.snowman && (x.x_voters||false)==config.x_voters || (x.oneVoter||false) ) })[0].realname
 			model.system = config.system;
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.computeMethod = config.computeMethod;
@@ -133,22 +149,43 @@ function main(config){
 			// Voters
 			var num = model.numOfVoters;
 			var voterPositions;
-			if(num==1){
+			if (config.snowman) {
+				voterPositions =  [[150,83],[150,150],[150,195]]
+			}else if(config.x_voters) {
+				voterPositions =  [[65,150],[150,150],[235,150],[150,65]]
+				if (1) {//(num > 4) {
+
+
+					var points = [];
+					var angle = 0;
+					var _radius = 0;
+					var _radius_norm = 0;
+					var _spread_factor = model.arena_size * .2
+					var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
+					for (var count = 0; count < num; count++) {
+						angle = theta * count
+						_radius_norm = Math.sqrt((count+.5)/num)
+						_radius = _radius_norm * _spread_factor
+
+						var x = Math.cos(angle)*_radius  + 150 ;
+						var y = Math.sin(angle)*_radius  + 150 ;
+						points.push([x,y]);
+					}
+					voterPositions = points
+
+				}
+			}else if(num==1){
 				voterPositions = [[150,150]];
 			}else if(num==2){
 				voterPositions = [[95,150],[205,150]];
 			}else if(num==3){
 				voterPositions = [[65,150],[150,150],[235,150]];
-				if (config.snowman) {
-					voterPositions =  [[150,83],[150,150],[150,195]]
-				}
+
 			}
 			for(var i=0; i<num; i++){
 				var pos = voterPositions[i];
 				if (config.oneVoter) {
 					var dist1 = SingleVoter
-				} else if (config.customVoters) {
-					var dist1 = PhyllotaxisVoters
 				} else {
 					var dist1 = GaussianVoters
 				}
@@ -157,10 +194,13 @@ function main(config){
 					type: model.voterType,
 					strategy: config.voterStrategies[i],
 					percentStrategy: config.voterPercentStrategy[i],
+					group_count: config.voter_group_count[i],
+					group_spread: config.voter_group_spread[i],
 					preFrontrunnerIds: config.preFrontrunnerIds,
 					unstrategic: config.unstrategic,
 					vid: i,
 					snowman: config.snowman,
+					x_voters: config.x_voters,
 					spread_factor_voters: config.spread_factor_voters,
 					arena_size: config.arena_size,
 					arena_border: config.arena_border,
@@ -188,7 +228,9 @@ function main(config){
 				angle += Math.TAU/num;
 			}
 			
-			for (i in [0,1,2]) stratsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
+			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
+			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
+			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
 			
 			// Yee diagram
 			if (config.kindayee == "can") {
@@ -308,18 +350,21 @@ function main(config){
 		
 		// How many voters?
 		var voters = [
-			{realname: "Single Voter", name:"&#50883;", num:1, margin:5, oneVoter:true},
+			{realname: "Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
 			{realname: "One Group", name:"1", num:1, margin:5},
 			{realname: "Two Groups", name:"2", num:2, margin:5},
-			{realname: "Three Groups", name:"3", num:3, margin:5},
-			{realname: "Different Sized Groups (like a snowman)", name:"&#x2603;", num:3, snowman:true},
+			{realname: "Three Groups", name:"3", num:3, margin:6},
+			{realname: "Different Sized Groups (like a snowman)", name:"&#x2603;", num:3, snowman:true, margin:6},
+			{realname: "Custom Number of Voters and Sizes and Spreads", name:"X", num:4, x_voters:true},
 		];
 		var onChooseVoters = function(data){
 
 			// update config...
 			config.voters = data.num;
+			//model.numOfVoters = data.num;
 			
 			config.snowman = data.snowman || false;
+			config.x_voters = data.x_voters || false;
 			config.oneVoter = data.oneVoter || false;
 			model.votersRealName = data.realname;
 			// save candidates before switching!
@@ -330,19 +375,208 @@ function main(config){
 			model.reset();
 			setInPosition();
 			
-			
-			for (i in [0,1,2]) stratsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
+			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
+			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
+			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
+
+			// add the configuration for the voter groups when "X" is chosen
+			var xlist = ["group_count","group_spread","custom_number_voters"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if (data.x_voters) {
+					featureset.add(xi)
+					doms[xi].hidden = false
+				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			config.featurelist = Array.from(featureset)
 
 		};
 		window.chooseVoters = new ButtonGroup({
 			label: "how many groups of voters?",
-			width: 40,
+			width: 32,
 			data: voters,
 			onChoose: onChooseVoters
 		});
 		document.querySelector("#left").appendChild(chooseVoters.dom);
 		doms["voters"] = chooseVoters.dom
 		
+
+
+
+		// if the last option X is selected, we need a selection for number of voters
+
+		var button_group_3 = document.createElement('div')
+		button_group_3.className = "button-group"
+		document.querySelector("#left").appendChild(button_group_3)
+		// var button_group_3_label = document.createElement('div')
+		// button_group_3_label.className = "button-group-label"
+		// button_group_3_label.innerHTML = "how spread out is the group?";
+		// button_group_3.appendChild(button_group_3_label)
+		var makeslider3 = function(chtext,chid,chfn,containchecks,n) {
+			var slider = document.createElement("input");
+			slider.type = "range";
+			slider.max = maxVoters-1;
+			slider.min = "1";
+			slider.value = "4";
+			//slider.setAttribute("width","20px");
+			slider.id = chid;
+			slider.class = "slider";
+			slider.addEventListener('input', function() {chfn(slider,n)}, true);
+			var label = document.createElement('label')
+			label.htmlFor = chid;
+			label.appendChild(document.createTextNode(chtext));
+			containchecks.appendChild(slider);
+			//containchecks.appendChild(label);
+			slider.innerHTML = chtext;
+			return slider
+		} // https://stackoverflow.com/a/866249/8210071
+
+		var containchecks3 = button_group_3.appendChild(document.createElement('div'));
+		containchecks3.id="containsliders"
+		var slfn = function(slider,n) {
+			config.voters = slider.value;
+			config.candidatePositions = save().candidatePositions;
+
+			// reset!
+			config.voterPositions = null;
+			model.reset();
+			setInPosition();
+			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
+			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
+			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
+		}
+		x_voter_sliders[0] = makeslider3("","choose number of voter groups",slfn,containchecks3,i)
+		doms["custom_number_voters"] = button_group_3
+		
+
+
+
+
+
+		
+		// group count
+		
+		var button_group = document.createElement('div')
+		button_group.className = "button-group"
+		document.querySelector("#left").appendChild(button_group)
+		var button_group_label = document.createElement('div')
+		button_group_label.className = "button-group-label"
+		button_group_label.innerHTML = "how many voters in each group?";
+		button_group.appendChild(button_group_label)
+
+		var makeslider1 = function(chtext,chid,chfn,containchecks,n) {
+			var slider = document.createElement("input");
+			slider.type = "range";
+			slider.max = "200";
+			slider.min = "0";
+			slider.value = "50";
+			//slider.setAttribute("width","20px");
+			slider.id = chid;
+			slider.class = "slider";
+			slider.addEventListener('input', function() {chfn(slider,n)}, true);
+			var label = document.createElement('label')
+			label.htmlFor = chid;
+			label.appendChild(document.createTextNode(chtext));
+			containchecks.appendChild(slider);
+			//containchecks.appendChild(label);
+			slider.innerHTML = chtext;
+			return slider
+		} // https://stackoverflow.com/a/866249/8210071
+
+		var containchecks1 = button_group.appendChild(document.createElement('div'));
+		containchecks1.id="containsliders"
+		var slfn = function(slider,n) {
+			// update config...
+				config.voter_group_count[n] = slider.value;
+				if (n<model.numOfVoters) {
+					model.voters[n].group_count = config.voter_group_count[n]
+				}
+				config.candidatePositions = save().candidatePositions;
+
+				// reset!
+				config.voterPositions = save().voterPositions;
+				model.reset();
+				setInPosition();
+		}
+		for (var i = 0; i < maxVoters; i++) {
+			groupsliders.push(makeslider1("","choose number",slfn,containchecks1,i))
+		}
+		doms["group_count"] = button_group
+
+
+
+
+
+
+
+
+
+		
+		// group spread
+		
+		var button_group_2 = document.createElement('div')
+		button_group_2.className = "button-group"
+		document.querySelector("#left").appendChild(button_group_2)
+		var button_group_2_label = document.createElement('div')
+		button_group_2_label.className = "button-group-label"
+		button_group_2_label.innerHTML = "how spread out is the group?";
+		button_group_2.appendChild(button_group_2_label)
+
+		var makeslider2 = function(chtext,chid,chfn,containchecks,n) {
+			var slider = document.createElement("input");
+			slider.type = "range";
+			slider.max = "500";
+			slider.min = "10";
+			slider.value = "250";
+			//slider.setAttribute("width","20px");
+			slider.id = chid;
+			slider.class = "slider";
+			slider.addEventListener('input', function() {chfn(slider,n)}, true);
+			var label = document.createElement('label')
+			label.htmlFor = chid;
+			label.appendChild(document.createTextNode(chtext));
+			containchecks.appendChild(slider);
+			//containchecks.appendChild(label);
+			slider.innerHTML = chtext;
+			return slider
+		} // https://stackoverflow.com/a/866249/8210071
+
+		var containchecks2 = button_group_2.appendChild(document.createElement('div'));
+		containchecks2.id="containsliders"
+		var slfn = function(slider,n) {
+			// update config...
+				config.voter_group_spread[n] = slider.value;
+				if (n<model.numOfVoters) {
+					model.voters[n].group_spread = config.voter_group_spread[n]
+				}
+				config.candidatePositions = save().candidatePositions;
+
+				// reset!
+				config.voterPositions = save().voterPositions;
+				model.reset();
+				setInPosition();
+		}
+		for (var i = 0; i < maxVoters; i++) {
+			spreadsliders.push(makeslider2("","choose width in pixels",slfn,containchecks2,i))
+		}
+		doms["group_spread"] = button_group_2
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
 		
 		var candidates = [
@@ -455,7 +689,7 @@ function main(config){
 		aba2.innerHTML = "how many voters strategize?";
 		aba.appendChild(aba2)
 
-		var makeslider = function(chtext,chid,chfn,containchecks,n) {
+		var makeslider0 = function(chtext,chid,chfn,containchecks,n) {
 			var slider = document.createElement("input");
 			slider.type = "range";
 			slider.max = "100";
@@ -474,8 +708,8 @@ function main(config){
 			return slider
 		} // https://stackoverflow.com/a/866249/8210071
 
-		var containchecks = aba.appendChild(document.createElement('div'));
-		containchecks.id="containsliders"
+		var containchecks0 = aba.appendChild(document.createElement('div'));
+		containchecks0.id="containsliders"
 		var slfn = function(slider,n) {
 			// update config...
 				config.voterPercentStrategy[n] = slider.value;
@@ -484,9 +718,9 @@ function main(config){
 					model.update();
 				}
 		}
-		stratsliders.push(makeslider("","choosepercent",slfn,containchecks,0))
-		stratsliders.push(makeslider("","choosepercent",slfn,containchecks,1))
-		stratsliders.push(makeslider("","choosepercent",slfn,containchecks,2))
+		for (var i = 0; i < maxVoters; i++) {
+			stratsliders.push(makeslider0("","choosepercent",slfn,containchecks0,i))
+		}
 		doms["percentstrategy"] = aba
 
 
@@ -645,7 +879,7 @@ function main(config){
 
 		// var allnames = ["systems","voters","candidates","strategy","percentstrategy","unstrategic","frontrunners","poll","yee"] // not "save"
 		var gearconfig = []
-		for (i in allnames) gearconfig.push({name:i,realname:allnames[i],margin:4})
+		for (i in allnames) gearconfig.push({name:i,realname:allnames[i],margin:1})
 
 		var onChoosegearconfig = function(data){
 			var featureset = new Set(config.featurelist)
@@ -735,7 +969,7 @@ function main(config){
 		// only do this once.  Otherwise it would be in SelectUI
 
 
-		var pixelsize = [{name:"30",val:30,margin:4},{name:"12",val:12,margin:4},{name:"6",val:6}]
+		var pixelsize = [{name:"60",val:60,margin:4},{name:"30",val:30,margin:4},{name:"12",val:12,margin:4},{name:"6",val:6}]
 		var onChoosePixelsize = function(data){
 			config.pixelsize = data.val
 			model.pixelsize = data.val
@@ -824,7 +1058,10 @@ function main(config){
 
 
 			//window.model = new Model(model_config);
-			
+
+			config.voterPositions = save().voterPositions;
+			config.candidatePositions = save().candidatePositions;
+
 			// model.reset();
 			// setInPosition();
 			model.resize()
@@ -888,6 +1125,19 @@ function main(config){
 			if(window.chooseSystem) chooseSystem.highlight("name", model.system);
 			if(window.chooseCandidates) chooseCandidates.highlight("num", model.numOfCandidates);
 			if(window.chooseVoters) chooseVoters.highlight("realname", model.votersRealName);
+			if(groupsliders) {
+				for (i in groupsliders) {
+					groupsliders[i].value = config.voter_group_count[i]
+				}
+			}
+			if(x_voter_sliders) {
+				x_voter_sliders[0].value = config.voters
+			}
+			if(spreadsliders) {
+				for (i in spreadsliders) {
+					spreadsliders[i].value = config.voter_group_spread[i]
+				}
+			}
 			if(window.choosePercentStrategy) choosePercentStrategy.highlight("num", model.voters[0].percentStrategy);
 			if(window.chooseVoterStrategyOn) {
 				if (model.voters[0].strategy != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button

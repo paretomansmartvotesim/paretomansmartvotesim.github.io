@@ -48,7 +48,7 @@ Election/Sandbox design:
 
 .button-group{
 	overflow: hidden;
-	margin-bottom: 5px;
+	margin-bottom: 0px;
 }
 .button-group-label{
 	font-weight: bold;
@@ -78,10 +78,10 @@ Election/Sandbox design:
     transition: all 0.1s;
 }
 .button:hover{
-	background: #ddd;
+	background: #ccc;
 }
 .button:active{
-	background: #aaa;
+	background: #ccc;
 }
 .button[on=yes]{
 	background: #333;
@@ -112,14 +112,91 @@ Election/Sandbox design:
 
 input[type=range]{
     border: 0px solid white; 
-    width: 22%;
 	display:inline;
-	margin-left:10%;
-	margin-top: 20px;
-	margin-bottom: 25px;
-	transform: rotate(270deg);
+	/* transform: rotate(270deg); */
 }
 
 #containsliders{
+	line-height: 0px;
+	font-size: 0px;
+}
+
+
+input[type="range"] { 
+    margin: 0px;
+    -webkit-appearance: none;
+    position: relative;
+    overflow: hidden;
+    height: 8px;
+    width: 218px;
+    cursor: pointer;
+	border-radius: 0; /* iOS */
 	
 }
+
+
+/* Beginning of Slider Stuff */
+
+::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+/*
+ * 1. Set to 0 height and width, and remove border for a slider without a thumb
+ */
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; /* 1 */
+    height: 8px; /* 1 */
+    background: #fff;
+    box-shadow: -100vw 0 0 100vw #001;
+    border: 2px solid #555; /* 1 */
+}
+
+::-moz-range-track {
+    height: 8px;
+    background: #ccc;
+}
+
+::-moz-range-thumb {
+    background: #fff;
+    height: 8px;
+    width: 20px;
+    border: 3px solid #555;
+    border-radius: 0 !important;
+    box-shadow: -100vw 0 0 100vw #001;
+    box-sizing: border-box;
+}
+
+::-ms-fill-lower { 
+    background: #001;
+}
+
+::-ms-thumb { 
+    background: #fff;
+    border: 2px solid #555;
+    height: 8px;
+    width: 20px;
+    box-sizing: border-box;
+}
+
+::-ms-ticks-after { 
+    display: none; 
+}
+
+::-ms-ticks-before { 
+    display: none; 
+}
+
+::-ms-track { 
+    background: #ccc;
+    color: transparent;
+    height: 8px;
+    border: none;
+}
+
+::-ms-tooltip { 
+    display: none;
+}
+
+/* end of slider stuff */
