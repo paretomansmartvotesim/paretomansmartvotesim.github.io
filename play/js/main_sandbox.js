@@ -131,7 +131,16 @@ function main(config){
 			// Based on config... what should be what?
 			model.numOfCandidates = config.candidates;
 			model.numOfVoters = config.voters;
-			model.votersRealName = voters.filter( function(x){return (x.num==config.voters && (x.snowman||false)==config.snowman) || (x.x_voters||false)==config.x_voters || (x.oneVoter||false)==config.oneVoter  })[0].realname
+			if (config.x_voters) {
+				model.votersRealName = voters.filter( function(x){return x.x_voters || false})[0].realname
+			} else if (config.snowman) {
+				model.votersRealName = voters.filter( function(x){return x.snowman || false})[0].realname	
+			} else if (config.oneVoter) {
+				model.votersRealName = voters.filter( function(x){return x.oneVoter || false})[0].realname	
+			} else {
+				model.votersRealName = voters.filter( function(x){return x.num==config.voters && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
+			}
+			console.log(model.votersRealName)
 			model.system = config.system;
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.computeMethod = config.computeMethod;
