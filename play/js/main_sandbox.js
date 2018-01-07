@@ -33,7 +33,7 @@ function main(config){
 	}
 
 	var initialConfig
-	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","poll","yee"]
+	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","poll","yee","choose_pixel_size"]
 	var doms = {}  // for hiding menus, later
 	var stratsliders = [] // for hiding sliders, later
 	var groupsliders = [] // for hiding sliders, later
@@ -961,6 +961,21 @@ function main(config){
 			config.keyyee = data.keyyee
 			model.update();
 
+			// gui
+			var xlist = ["choose_pixel_size"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if (model.yeeobject) {
+					featureset.add(xi)
+					doms[xi].hidden = false
+				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			config.featurelist = Array.from(featureset)
+			
 		};
 		window.chooseyeeobject = new ButtonGroup({
 			label: "which object for yee map?",
@@ -1088,8 +1103,9 @@ function main(config){
 			data: pixelsize,
 			onChoose: onChoosePixelsize
 		});
+		document.querySelector("#left").appendChild(choosePixelsize.dom);
 		choosePixelsize.dom.hidden = true
-		document.querySelector("#left").insertBefore(choosePixelsize.dom,doms["systems"]);
+		doms["choose_pixel_size"] = choosePixelsize.dom
 		
 
 		var computeMethod = [{name:"gpu",margin:4},{name:"js",margin:4},{name:"ez"}]
