@@ -99,7 +99,7 @@ function main(config){
 		if (config.second_strategy === undefined) config.second_strategy = true;
 		config.keyyee = config.keyyee || "off";
 		config.computeMethod = config.computeMethod || "ez";
-		config.pixelsize = config.pixelsize || 30;
+		config.pixelsize = config.pixelsize || 60;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
 		config.arena_size = config.arena_size || 300;
 		if (config.arena_border === undefined) config.arena_border = 2;  // very important to use this triple equals === syntax rather than the ||
@@ -405,6 +405,15 @@ function main(config){
 			}
 			config.featurelist = Array.from(featureset)
 
+			// gui 
+			for(var i=0;i<(maxVoters-1);i++) {
+				console.log(i)
+				if (i < data.num) {
+					chooseyeeobject.dom.childNodes[7+i].hidden=false
+				} else {
+					chooseyeeobject.dom.childNodes[7+i].hidden=true
+				}
+			}
 		};
 		window.chooseVoters = new ButtonGroup({
 			label: "how many groups of voters?",
@@ -459,6 +468,15 @@ function main(config){
 			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
 			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
 			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
+			
+			// gui 
+			for(var i=0;i<maxVoters-1;i++) {
+				if (i < slider.value) {
+					chooseyeeobject.dom.childNodes[7+i].hidden=false
+				} else {
+					chooseyeeobject.dom.childNodes[7+i].hidden=true
+				}
+			}
 		}
 		x_voter_sliders[0] = makeslider3("","choose number of voter groups",slfn,containchecks3,i)
 		doms["custom_number_voters"] = button_group_3
@@ -941,11 +959,18 @@ function main(config){
 			{name:h1("triangle"),realname:"triangle",keyyee:"triangle",kindayee:"can",margin:4},
 			{name:h1("hexagon"),realname:"hexagon",keyyee:"hexagon",kindayee:"can",margin:4},
 			{name:h1("pentagon"),realname:"pentagon",keyyee:"pentagon",kindayee:"can",margin:4},
-			{name:h1("bob"),realname:"bob",keyyee:"bob",kindayee:"can",margin:8},
+			{name:h1("bob"),realname:"bob",keyyee:"bob",kindayee:"can",margin:28},
+			{name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5},
 			{name:"1",realname:"first voter group",kindayee:"voter",keyyee:0,margin:4},
 			{name:"2",realname:"second voter group",kindayee:"voter",keyyee:1,margin:4},
-			{name:"3",realname:"third voter group",kindayee:"voter",keyyee:2,margin:8},
-			{name:"off",realname:"turn off",keyyee:"off",kindayee:"off"}
+			{name:"3",realname:"third voter group",kindayee:"voter",keyyee:2,margin:4},
+			{name:"4",realname:"fourth voter group",kindayee:"voter",keyyee:3,margin:4},
+			{name:"5",realname:"fifth voter group",kindayee:"voter",keyyee:4,margin:4},
+			{name:"6",realname:"sixth voter group",kindayee:"voter",keyyee:5,margin:4},
+			{name:"7",realname:"seventh voter group",kindayee:"voter",keyyee:6,margin:4},
+			{name:"8",realname:"eighth voter group",kindayee:"voter",keyyee:7,margin:4},
+			{name:"9",realname:"ninth voter group",kindayee:"voter",keyyee:8,margin:8},
+			
 		];
 		var onChooseyeeobject = function(data){
 
@@ -983,6 +1008,7 @@ function main(config){
 			data: yeeobject,
 			onChoose: onChooseyeeobject
 		});
+		chooseyeeobject.dom.childNodes[6].style.width = "68px"
 		chooseyeeobject.dom.setAttribute("id","yee")
 		document.querySelector("#left").appendChild(chooseyeeobject.dom);
 		doms["yee"] = chooseyeeobject.dom
@@ -1285,6 +1311,18 @@ function main(config){
 				}
 			}
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
+			
+			// gui 
+			if(window.chooseyeeobject){
+				for(var i=0;i<maxVoters-1;i++) {
+					if (i < config.voters) {
+						window.chooseyeeobject.dom.childNodes[7+i].hidden=false
+					} else {
+						window.chooseyeeobject.dom.childNodes[7+i].hidden=true
+					}
+				}
+			}
+			
 			if(window.choosegearconfig) choosegearconfig.highlight("realname", config.featurelist);
 			if(window.chooseComputeMethod) chooseComputeMethod.highlight("name", config.computeMethod);
 			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
