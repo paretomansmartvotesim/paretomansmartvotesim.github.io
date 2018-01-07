@@ -390,7 +390,7 @@ kindayee: "can",
 	candidates: 5,
 	voters: 1,
 	doFullStrategyConfig: true,
-	doPercentFirst: true,
+	doPercentFirst: false,
 	arena_size: 600,
 	arena_border: 0,
 	spread_factor_voters: 2

@@ -33,7 +33,7 @@ function main(config){
 	}
 
 	var initialConfig
-	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","percentstrategy","unstrategic","frontrunners","poll","yee"]
+	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","poll","yee"]
 	var doms = {}  // for hiding menus, later
 	var stratsliders = [] // for hiding sliders, later
 	var groupsliders = [] // for hiding sliders, later
@@ -68,7 +68,7 @@ function main(config){
 		config.doPercentFirst = config.doPercentFirst || false;
 		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
 		config.doFullStrategyConfig = config.doFullStrategyConfig || false;
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["strategy","percentstrategy","unstrategic","frontrunners","poll","yee"])
+		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","frontrunners","poll","yee"])
 		// clear the grandfathered config settings
 		config.doPercentFirst = undefined
 		config.features = undefined
@@ -95,6 +95,7 @@ function main(config){
 		}
 		
 		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
+		config.second_strategy = config.second_strategy || false;
 		config.keyyee = config.keyyee || "off";
 		config.computeMethod = config.computeMethod || "ez";
 		config.pixelsize = config.pixelsize || 30;
@@ -207,6 +208,7 @@ function main(config){
 					group_spread: config.voter_group_spread[i],
 					preFrontrunnerIds: config.preFrontrunnerIds,
 					unstrategic: config.unstrategic,
+					second_strategy: config.second_strategy,
 					vid: i,
 					snowman: config.snowman,
 					x_voters: config.x_voters,
@@ -639,8 +641,8 @@ function main(config){
 			// only the middle percent (for the yellow triangle)
 
 			// no reset...
+			config.unstrategic = data.realname; 
 			for(var i=0;i<model.voters.length;i++){
-				config.unstrategic = data.realname; 
 				model.voters[i].unstrategic = config.unstrategic
 			}
 			model.update();
@@ -655,6 +657,56 @@ function main(config){
 		document.querySelector("#left").appendChild(chooseVoterStrategyOff.dom);
 		doms["unstrategic"] = chooseVoterStrategyOff.dom
 		
+
+
+
+
+		// Is there a 2nd strategy?
+		var second_strategy = [
+			{realname: "opton for 2nd strategy", name:"+"}
+		];
+		var onChoose_second_strategy = function(data){
+
+			// update config and model
+			var b = data.isOn
+			config.second_strategy = b
+			model.second_strategy = b
+			for(var i=0;i<model.voters.length;i++){
+				model.voters[i].second_strategy = b
+			}
+			model.update();
+
+
+			// update gui
+			var xlist = ["strategy","percentstrategy"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if (data.isOn) {
+					featureset.add(xi)
+					doms[xi].hidden = false
+				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			config.featurelist = Array.from(featureset)
+
+
+
+		};
+		window.choose_second_strategy = new ButtonGroup({
+			label: "",
+			width: 40,
+			data: second_strategy,
+			onChoose: onChoose_second_strategy,
+			isCheckbox: true
+		});
+		document.querySelector("#left").appendChild(choose_second_strategy.dom);
+		doms["second strategy"] = choose_second_strategy.dom
+		
+		
+
 
 		
 		// strategy
@@ -1157,6 +1209,12 @@ function main(config){
 				}
 			}
 			if(window.chooseVoterStrategyOff) chooseVoterStrategyOff.highlight("realname", model.voters[0].unstrategic);
+			if(window.choose_second_strategy) {
+				if (config.second_strategy) {
+					choose_second_strategy.highlight("name", "+");
+				}
+			}
+			
 			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
 			if(stratsliders) {
 				for (i in stratsliders) {

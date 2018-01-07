@@ -636,6 +636,7 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 	};
 	
 	self.percentStrategy = config.percentStrategy
+	self.second_strategy = config.second_strategy
 	self.group_count = config.group_count
 	self.group_spread = config.group_spread
 	self.strategy = config.strategy
@@ -729,7 +730,7 @@ if (!self.x_voters) {
 			var y = self.y + p[1];
 			
 			var r1 = Math.random() * 100;
-			if (r1 < self.percentStrategy) { 
+			if (r1 < self.percentStrategy && self.second_strategy) { 
 				var strategy = self.strategy // yes
 			} else {
 				var strategy = self.unstrategic; // no e.g. "zero strategy. judge on an absolute scale."
@@ -791,6 +792,7 @@ function SingleVoter(config){
 	self.snowman = false;
 	self.x_voters = false;
 	self.percentStrategy = config.percentStrategy
+	self.second_strategy = config.second_strategy
 	self.group_count = config.group_count
 	self.group_spread = config.group_spread
 	self.strategy = config.strategy
