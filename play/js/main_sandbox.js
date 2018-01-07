@@ -474,7 +474,7 @@ function main(config){
 		document.querySelector("#left").appendChild(button_group)
 		var button_group_label = document.createElement('div')
 		button_group_label.className = "button-group-label"
-		button_group_label.innerHTML = "how many voters in each group?";
+		button_group_label.innerHTML = "what # voters in each group?";
 		button_group.appendChild(button_group_label)
 
 		var makeslider1 = function(chtext,chid,chfn,containchecks,n) {
@@ -617,7 +617,45 @@ function main(config){
 		document.querySelector("#left").appendChild(chooseCandidates.dom);
 		doms["candidates"] = chooseCandidates.dom
 		
+
 		
+
+		// unstrategic
+
+		var strategyOff = [
+			{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
+			{name:"N", realname:"normalize", margin:5},
+			{name:"F", realname:"normalize frontrunners only", margin:5},
+			{name:"B", realname:"best frontrunner", margin:5},
+			{name:"W", realname:"not the worst frontrunner"}
+		];
+		// old ones
+		// {name:"FL", realname:"justfirstandlast", margin:5},
+		// {name:"T", realname:"threshold"},
+		// {name:"SNTF", realname:"starnormfrontrunners"}
+		var onChooseVoterStrategyOff = function(data){
+
+			// update config...
+			// only the middle percent (for the yellow triangle)
+
+			// no reset...
+			for(var i=0;i<model.voters.length;i++){
+				config.unstrategic = data.realname; 
+				model.voters[i].unstrategic = config.unstrategic
+			}
+			model.update();
+
+		};
+		window.chooseVoterStrategyOff = new ButtonGroup({
+			label: "what's voters' strategy?",
+			width: 40,
+			data: strategyOff,
+			onChoose: onChooseVoterStrategyOff
+		});
+		document.querySelector("#left").appendChild(chooseVoterStrategyOff.dom);
+		doms["unstrategic"] = chooseVoterStrategyOff.dom
+		
+
 		
 		// strategy
 		
@@ -648,7 +686,7 @@ function main(config){
 
 		};
 		window.chooseVoterStrategyOn = new ButtonGroup({
-			label: "do voters strategize?",
+			label: "what's voters' 2nd strategy?",
 			width: 40,
 			data: strategyOn,
 			onChoose: onChooseVoterStrategyOn
@@ -695,7 +733,7 @@ function main(config){
 		document.querySelector("#left").appendChild(aba)
 		var aba2 = document.createElement('div')
 		aba2.className = "button-group-label"
-		aba2.innerHTML = "how many voters strategize?";
+		aba2.innerHTML = "what % use this 2nd strategy?";
 		aba.appendChild(aba2)
 
 		var makeslider0 = function(chtext,chid,chfn,containchecks,n) {
@@ -733,41 +771,6 @@ function main(config){
 		doms["percentstrategy"] = aba
 
 
-		// unstrategic
-
-		var strategyOff = [
-			{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
-			{name:"N", realname:"normalize", margin:5},
-			{name:"F", realname:"normalize frontrunners only", margin:5},
-			{name:"B", realname:"best frontrunner", margin:5},
-			{name:"W", realname:"not the worst frontrunner"}
-		];
-		// old ones
-		// {name:"FL", realname:"justfirstandlast", margin:5},
-		// {name:"T", realname:"threshold"},
-		// {name:"SNTF", realname:"starnormfrontrunners"}
-		var onChooseVoterStrategyOff = function(data){
-
-			// update config...
-			// only the middle percent (for the yellow triangle)
-
-			// no reset...
-			for(var i=0;i<model.voters.length;i++){
-				config.unstrategic = data.realname; 
-				model.voters[i].unstrategic = config.unstrategic
-			}
-			model.update();
-
-		};
-		window.chooseVoterStrategyOff = new ButtonGroup({
-			label: "what do the rest do?",
-			width: 40,
-			data: strategyOff,
-			onChoose: onChooseVoterStrategyOff
-		});
-		document.querySelector("#left").appendChild(chooseVoterStrategyOff.dom);
-		doms["unstrategic"] = chooseVoterStrategyOff.dom
-		
 		
 		
 		// frontrunners
