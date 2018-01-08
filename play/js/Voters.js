@@ -734,7 +734,7 @@ if (!self.x_voters) {
 			} else {
 				var r1 = (1861*i) % 100;
 			}
-			if (r1 < self.percentStrategy && self.second_strategy) { 
+			if (r1 <= self.percentStrategy && self.second_strategy) { 
 				var strategy = self.strategy // yes
 			} else {
 				var strategy = self.unstrategic; // no e.g. "zero strategy. judge on an absolute scale."
