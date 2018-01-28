@@ -63,8 +63,9 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 	var n=Infinity
 	var mi=null
 	var ni=null
-	for (var i = 0; i < ls; i++) {
-		var d1 = dista[shortlist[i]]
+	for (var i_short = 0; i_short < ls; i_short++) {
+		var i = shortlist[i_short]	
+		var d1 = dista[i]
 		if (d1 > m) {
 			m = d1 // max
 			mi = i
