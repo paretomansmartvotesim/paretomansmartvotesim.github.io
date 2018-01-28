@@ -34,7 +34,7 @@ function main(config){
 			model.addCandidate("triangle", 173, 95);
 			model.addCandidate("hexagon", 216, 216);
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
-			model.strategy = config.strategy;
+			model.voters[0].strategy = config.strategy;
 		};
 
 		// CREATE A BALLOT
@@ -64,7 +64,7 @@ function main(config){
 			// {name:"SNTF", realname:"starnormfrontrunners"}
 			var onChooseVoterStrategyOn = function(data){
 				config.strategy = data.realname; 
-				model.strategy = config.strategy; 
+				model.voters[0].strategy = config.strategy; 
 				model.update();
 				
 			};
@@ -114,7 +114,7 @@ function main(config){
 		}
 		
 		var selectUI = function(){
-			if(window.chooseVoterStrategyOn) chooseVoterStrategyOn.highlight("realname", model.strategy);
+			if(window.chooseVoterStrategyOn) chooseVoterStrategyOn.highlight("realname", model.voters[0].strategy);
 			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
 		};
 		selectUI();
