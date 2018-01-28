@@ -329,7 +329,8 @@ function main(config){
 			{name:"Approval", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.approval, margin:4},
 			{name:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
 			{name:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
-			{name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21}
+			{name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
+			{name:"Pair Elim.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs}
 		];
 		var onChooseSystem = function(data){
 

@@ -329,6 +329,182 @@ Election.condorcet = function(model, options){
 
 };
 
+// PairElimination
+Election.rankedPairs = function(model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
+
+	var reverseExplanation = true
+
+	var text = "";
+	text += "<span class='small'>";
+	if (reverseExplanation) {
+		text += "<b>who lost the least, one-on-one?</b><br>";
+	} else {
+		text += "<b>who had the strongest wins, one-on-one?</b><br>";
+	}
+
+	var ballots = model.getBallots();
+
+	// Create the WIN tally
+	var tally = {};
+	var losses = {};
+	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
+	for(var candidateID in model.candidatesById) losses[candidateID] = 0;
+
+	// For each combination... who's the better ranking?
+	pairs = []
+	for(var i=0; i<model.candidates.length-1; i++){
+		var a = model.candidates[i];
+		for(var j=i+1; j<model.candidates.length; j++){
+			var b = model.candidates[j];
+
+			// Actually figure out who won.
+			var aWins = 0;
+			var bWins = 0;
+			for(var k=0; k<ballots.length; k++){
+				var rank = ballots[k].rank;
+				if(rank.indexOf(a.id)<rank.indexOf(b.id)){
+					aWins++; // a wins!
+				}else{
+					bWins++; // b wins!
+				}
+			}
+
+			// WINNER?
+			var winner = (aWins>bWins) ? a : b;
+			var loser = (aWins>bWins) ? b : a;
+			if (aWins != bWins) {
+				tally[winner.id]++;
+				losses[loser.id]++;
+
+				// Text.
+				var by,to;
+				if(winner==a){
+					by = aWins;
+					to = bWins;
+					pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:false})
+				}else{
+					by = bWins;
+					to = aWins;
+					pairs.push({winI:j,loseI:i,winN:bWins,loseN:aWins,margin:bWins-aWins,tie:false})
+				}
+				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins by "+by+" to "+to+"<br>";
+			} else { //tie
+				tally[a.id]++;
+				tally[b.id]++;
+				pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:true})
+				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+"TIE"+"<br>";
+			}
+		}
+	}
+
+
+	topWinners = _countWinner(tally);
+
+	pairs = pairs.sort(function(x,y) {return x.margin<y.margin}) // sort in descending order
+		
+
+	// if there was a tie, then try to break the tie
+	var tieBreakerWinners = []
+	var unanimousWin = topWinners.length == 1
+	if (! unanimousWin) {
+		for (var i = pairs.length - 1; i >= 0; i--) { // i represents the strongest pair to be eliminated
+			
+			if (! pairs[i].tie) {
+				losses[model.candidates[pairs[i].loseI].id] -- // eliminate loss
+			}
+			
+			if (i > 0 && pairs[i].margin == pairs[i-1].margin) { // check if there is a tie for weakest win
+				continue
+			}
+			
+			for(var id in tally){ // see who wins
+				if(losses[id]==0){
+					tieBreakerWinners.push(id);
+				}
+			}
+			if (tieBreakerWinners.length > 0) break; // stop if someone won
+		}
+		topWinners = tieBreakerWinners
+		var strongestElimination = i
+	}
+
+
+
+
+	var color = _colorWinner(model, topWinners);
+	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
+	if (!options.sidebar) return
+		
+	if (unanimousWin) {
+		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
+	}
+
+	// add text
+	for (var i in pairs) {
+		if (reverseExplanation) i = pairs.length - i - 1
+		var a = model.candidates[pairs[i].winI]
+		var b = model.candidates[pairs[i].loseI]
+		
+		if (i >= strongestElimination) {
+			var endtext = " . weak<br>"
+		} else {
+			var endtext = ".<br>"
+		}
+
+		if (pairs[i].tie) {
+			if(reverseExplanation) {
+				text += _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
+			} else {
+				text += "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
+				//text += _icon(b.id)+" ties  "+_icon(a.id) + endtext
+			}
+		} else {
+			if(reverseExplanation) {
+				text += _icon(b.id)+" lost to "+_icon(a.id)+" by " + pairs[i].margin + endtext
+			} else {
+				text += _icon(a.id)+" beats "+_icon(b.id)+" by " + pairs[i].margin + endtext	
+			}
+		}
+		
+	}
+
+	// sort losses
+	var sortedlosses = []
+	for(var i = 0; i < model.candidates.length; i++) sortedlosses.push({name:model.candidates[i].id,losses:losses[model.candidates[i].id]})
+	sortedlosses.sort(function(a,b) {return a.losses>b.losses})
+
+	text += "<br>";
+	if (topWinners.length >= 2) {
+		text += "<b>Eliminate the weakest losses until someone has 0 losses.</b><br>"
+		for(var i=0; i<sortedlosses.length; i++){
+			var c = sortedlosses[i].name;
+			text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+		}
+		text += _tietext(topWinners);
+		text = "<b>TIE</b> <br> <br>" + text;
+	} else {
+		topWinner = topWinners[0]
+		if (unanimousWin) {
+			
+		} else {
+			text += "<b>Eliminate the weakest wins until someone has 0 losses.<br>"
+			for(var i=0; i<sortedlosses.length; i++){
+				var c = sortedlosses[i].name;
+				text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+			}
+		}
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+	}
+	
+	// what's the loop?
+
+	model.caption.innerHTML = text;
+
+};
+
 Election.borda = function(model, options){
 
 	// Tally the approvals & get winner!
