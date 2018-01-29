@@ -314,19 +314,22 @@ function Model(config){
 		}
 
 		// do the center voter thing
-		if(Mouse.dragging == self.voterCenter) {
-			var oldcenter = self.findVoterCenter()
-			var changecenter = {x:self.voterCenter.x - oldcenter.x, y:self.voterCenter.y - oldcenter.y}
-			for(var i=0; i<self.voters.length; i++){
-				self.voters[i].x += changecenter.x
-				self.voters[i].y += changecenter.y
-			}
-		} else {
-			var recenter = self.findVoterCenter()
-			self.voterCenter.x = recenter.x
-			self.voterCenter.y = recenter.y
+		doCenterVoter = (typeof self.voterCenter !== 'undefined')
+		if (doCenterVoter) {
+			if(Mouse.dragging == self.voterCenter) {
+				var oldcenter = self.findVoterCenter()
+				var changecenter = {x:self.voterCenter.x - oldcenter.x, y:self.voterCenter.y - oldcenter.y}
+				for(var i=0; i<self.voters.length; i++){
+					self.voters[i].x += changecenter.x
+					self.voters[i].y += changecenter.y
+				}
+			} else {
+				var recenter = self.findVoterCenter()
+				self.voterCenter.x = recenter.x
+				self.voterCenter.y = recenter.y
+			}	
 		}
-
+		
 		// DRAW 'EM ALL.
 		// Draw voters' BG first, then candidates, then voters.
 
@@ -394,8 +397,10 @@ function Model(config){
 		}
 
 		//voterCenter.update()
-		self.voterCenter.draw(ctx)
-		
+		if (doCenterVoter && model.getTotalVoters() != 1) {
+			self.voterCenter.draw(ctx)
+		}
+
 		if(self.yeeon){
 			function drawStroked(text, x, y) {
 				ctx.font = "40px Sans-serif"
