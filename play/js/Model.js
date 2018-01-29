@@ -77,6 +77,14 @@ function Model(config){
 		self.voters.push(voters);
 		self.draggables.push(voters);
 	};
+	self.addVoterCenter = function(id, x, y){
+		var voterCenter = new VoterCenter({
+			model: self,
+			id:id, x:x, y:y
+		});
+		self.draggables.push(voterCenter);
+		self.voterCenter = voterCenter
+	};
 
 	// Init!
 	self.onInit = function(){}; // TO IMPLEMENT
@@ -104,7 +112,7 @@ function Model(config){
 		HEIGHT = ctx.canvas.height;
 		doArrayWay = self.computeMethod != "ez"
 		var winners
-		if (doArrayWay) {
+		if (doArrayWay) { // note that voterCenter is not yet implemented in the array way.  Only if "ez" is selected will the yee diagram work
 			// put candidate information into arrays
 			var canAid = [], xc = [], yc = [], fillc = [] //, canA = [], revCan = {} // candidates
 			var f=[] // , fA = [], fAid = [], xf = [], yf = [], fillf = [] // frontrunners
@@ -156,6 +164,12 @@ function Model(config){
 				}
 				i++
 			}
+
+			if (self.yeeobject == self.voterCenter) { // this is just a workaround until I get around to implementing this in the gpu and js methods of computing the yee diagram
+				movethisidx = 0
+				whichtypetomove = "voter"
+			}
+
 			// now we have xv,yv,
 			// we might not need av
 
@@ -194,8 +208,18 @@ function Model(config){
 		self.gridl = []; 
 		self.gridb = []; 
 		saveo = {}
+
+
 		saveo.x = self.yeeobject.x;
 		saveo.y = self.yeeobject.y;
+		if (self.yeeobject == self.voterCenter) {
+			var voterso = []
+			for(var i=0; i<self.voters.length; i++){
+				voterso[i] = {}
+				voterso[i].x = self.voters[i].x
+				voterso[i].y = self.voters[i].y
+			}
+		}
 		var i=0
 		for(var x=.5*pixelsize, cx=0; x<=WIDTH; x+= pixelsize, cx++) {
 			for(var y=.5*pixelsize, cy=0; y<=HEIGHT; y+= pixelsize, cy++) {
@@ -229,6 +253,18 @@ function Model(config){
 				}
 				self.yeeobject.x = x * .5;
 				self.yeeobject.y = y * .5;
+				// update positions of all the voters if the voterCenter is the yee object
+				if (self.yeeobject == self.voterCenter) {
+					var changecenter = {
+						x:self.yeeobject.x - saveo.x, 
+						y:self.yeeobject.y - saveo.y
+					}
+					for(var j=0; j<self.voters.length; j++){
+						self.voters[j].x = voterso[j].x + changecenter.x
+						self.voters[j].y = voterso[j].y + changecenter.y
+					}
+				}
+				
 				for(var j=0; j<self.voters.length; j++){
 					self.voters[j].update();
 				}
@@ -245,8 +281,25 @@ function Model(config){
 		}
 		self.yeeobject.x = saveo.x;
 		self.yeeobject.y = saveo.y;
+		if (self.yeeobject == self.voterCenter) {
+			for(var i=0; i<self.voters.length; i++){
+				self.voters[i].x = voterso[i].x
+				self.voters[i].y = voterso[i].y
+			}
+		}
 	}
 	
+	self.findVoterCenter = function(){
+		var x = 0
+		var y = 0
+		for(var i=0; i<self.voters.length; i++){
+			var voter = self.voters[i];
+			x += voter.x
+			y += voter.y
+		}
+		return {x:x/self.voters.length,y:y/self.voters.length}
+	}
+
 	self.update = function(){
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
 		if (self.yeeon && Mouse.dragging != self.yeeobject) self.calculateYee()
@@ -258,6 +311,20 @@ function Model(config){
 		// Move the one that's being dragged, if any
 		if(Mouse.dragging){
 			Mouse.dragging.moveTo(Mouse.x, Mouse.y);
+		}
+
+		// do the center voter thing
+		if(Mouse.dragging == self.voterCenter) {
+			var oldcenter = self.findVoterCenter()
+			var changecenter = {x:self.voterCenter.x - oldcenter.x, y:self.voterCenter.y - oldcenter.y}
+			for(var i=0; i<self.voters.length; i++){
+				self.voters[i].x += changecenter.x
+				self.voters[i].y += changecenter.y
+			}
+		} else {
+			var recenter = self.findVoterCenter()
+			self.voterCenter.x = recenter.x
+			self.voterCenter.y = recenter.y
 		}
 
 		// DRAW 'EM ALL.
@@ -325,6 +392,9 @@ function Model(config){
 			c.update();
 			c.draw(ctx);
 		}
+
+		//voterCenter.update()
+		self.voterCenter.draw(ctx)
 		
 		if(self.yeeon){
 			function drawStroked(text, x, y) {

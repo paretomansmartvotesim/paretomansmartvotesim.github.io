@@ -845,3 +845,34 @@ function SingleVoter(config){
 
 
 }
+
+function VoterCenter(config){
+
+	var self = this;
+	Draggable.call(self, config);
+
+	// Passed properties
+	self.id = config.id;
+	self.size = 30;
+
+	
+	self.points = [[0,0]];
+	
+	self.img = new Image();  // use the face
+	self.img.src = "img/voter_face.png";
+
+	// DRAW!
+	self.draw = function(ctx){
+		size = self.size
+		
+		_drawBlank(ctx, self.x, self.y, size);
+		
+		// Face!
+		size = size*2;
+		var x = self.x*2;
+		var y = self.y*2;
+		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+
+	};
+
+}

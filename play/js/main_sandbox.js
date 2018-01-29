@@ -79,7 +79,7 @@ function main(config){
 		config.voterStrategies = config.voterStrategies || []
 		config.description = config.description || ""
 		for (var i = 0; i < maxVoters; i++) {
-			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
+			config.voterStrategies[i] = config.voterStrategies[i] || "normalize"
 		}
 		config.voterPercentStrategy = config.voterPercentStrategy || []
 		for (var i = 0; i < maxVoters; i++) {
@@ -94,8 +94,8 @@ function main(config){
 			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
 		}
 		
-		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
-		config.strategic = config.strategic || "zero strategy. judge on an absolute scale.";
+		config.unstrategic = config.unstrategic || "normalize";
+		config.strategic = config.strategic || "normalize";
 		if (config.second_strategy === undefined) config.second_strategy = true;
 		config.keyyee = config.keyyee || "off";
 		config.computeMethod = config.computeMethod || "ez";
@@ -220,6 +220,7 @@ function main(config){
 					y:pos[1] + (model.arena_size - 300) * .5
 				});
 			}
+			model.addVoterCenter("center",100,100)
 
 			// Candidates, in a circle around the center.
 			var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
@@ -250,6 +251,8 @@ function main(config){
 				model.yeeobject = model.voters[config.keyyee]
 			} else if (config.kindayee=="off") {
 				model.yeeobject = undefined
+			} else if (config.kindayee=="center") { 
+				model.yeeobject = model.voterCenter
 			} else { // if yeeobject is not defined
 				model.yeeobject = undefined
 			}
@@ -324,13 +327,13 @@ function main(config){
 		var votingSystems = [
 			{name:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
 			{name:"IRV", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv},
-			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda, margin:4},
+			{name:"Pair Elim.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs, margin:4},
 			{name:"Condorcet", voter:RankedVoter, ballot:"RankedBallot", election:Election.condorcet},
 			{name:"Approval", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.approval, margin:4},
 			{name:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
 			{name:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
 			{name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
-			{name:"Pair Elim.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs}
+			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda}
 		];
 		var onChooseSystem = function(data){
 
@@ -410,9 +413,9 @@ function main(config){
 			for(var i=0;i<(maxVoters-1);i++) {
 				console.log(i)
 				if (i < data.num) {
-					chooseyeeobject.dom.childNodes[7+i].hidden=false
+					chooseyeeobject.dom.childNodes[8+i].hidden=false
 				} else {
-					chooseyeeobject.dom.childNodes[7+i].hidden=true
+					chooseyeeobject.dom.childNodes[8+i].hidden=true
 				}
 			}
 		};
@@ -473,9 +476,9 @@ function main(config){
 			// gui 
 			for(var i=0;i<maxVoters-1;i++) {
 				if (i < slider.value) {
-					chooseyeeobject.dom.childNodes[7+i].hidden=false
+					chooseyeeobject.dom.childNodes[8+i].hidden=false
 				} else {
-					chooseyeeobject.dom.childNodes[7+i].hidden=true
+					chooseyeeobject.dom.childNodes[8+i].hidden=true
 				}
 			}
 		}
@@ -962,6 +965,7 @@ function main(config){
 			{name:h1("pentagon"),realname:"pentagon",keyyee:"pentagon",kindayee:"can",margin:4},
 			{name:h1("bob"),realname:"bob",keyyee:"bob",kindayee:"can",margin:28},
 			{name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5},
+			{name:"A",realname:"all voters",keyyee:"mean",kindayee:"center",margin:28},
 			{name:"1",realname:"first voter group",kindayee:"voter",keyyee:0,margin:4},
 			{name:"2",realname:"second voter group",kindayee:"voter",keyyee:1,margin:4},
 			{name:"3",realname:"third voter group",kindayee:"voter",keyyee:2,margin:4},
@@ -982,6 +986,8 @@ function main(config){
 				model.yeeobject = model.voters[data.keyyee]
 			} else if (data.kindayee=="off") {
 				model.yeeobject = undefined
+			} else if (data.kindayee=="center") {
+				model.yeeobject = model.voterCenter
 			}
 			if (model.yeeobject) {model.yeeon = true} else {model.yeeon = false}
 			config.keyyee = data.keyyee
@@ -1317,9 +1323,9 @@ function main(config){
 			if(window.chooseyeeobject){
 				for(var i=0;i<maxVoters-1;i++) {
 					if (i < config.voters) {
-						window.chooseyeeobject.dom.childNodes[7+i].hidden=false
+						window.chooseyeeobject.dom.childNodes[8+i].hidden=false
 					} else {
-						window.chooseyeeobject.dom.childNodes[7+i].hidden=true
+						window.chooseyeeobject.dom.childNodes[8+i].hidden=true
 					}
 				}
 			}
