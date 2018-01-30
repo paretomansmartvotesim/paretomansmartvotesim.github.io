@@ -397,16 +397,23 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 		}
 	}
 
-
-	topWinners = _countWinner(tally);
+	// Was there one who won all????
+	var topWinners = [];
+	
+	for(var id in tally){
+		if(tally[id]==model.candidates.length-1){
+			topWinners.push(id);
+		}
+	}
+	var unanimousWin = topWinners.length == 1
+	
 
 	pairs = pairs.sort(function(x,y) {return x.margin<y.margin}) // sort in descending order
 		
 
 	// if there was a tie, then try to break the tie
-	var tieBreakerWinners = []
-	var unanimousWin = topWinners.length == 1
 	if (! unanimousWin) {
+		var tieBreakerWinners = []
 		for (var i = pairs.length - 1; i >= 0; i--) { // i represents the strongest pair to be eliminated
 			
 			if (! pairs[i].tie) {
