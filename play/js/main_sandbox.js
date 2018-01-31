@@ -333,7 +333,8 @@ function main(config){
 			{name:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
 			{name:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
 			{name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
-			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda}
+			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda, margin:4},
+			{name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv}
 		];
 		var onChooseSystem = function(data){
 

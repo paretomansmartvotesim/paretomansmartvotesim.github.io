@@ -656,6 +656,148 @@ Election.irv = function(model, options){
 
 };
 
+Election.stv = function(model, options){
+
+	var numreps = 3
+	var quota = 1/(numreps+1)
+	var quotapercent = Math.round(quota * 100)
+	var text = "";
+	text += "<span class='small'>";
+	text += "Find " + numreps + " winners.<br>"
+	text += "Set quota at 1/(1+" + numreps + ") = " + quotapercent + "%.<br><br>"
+	var resolved = null;
+	var roundNum = 1;
+
+	var candidates = [];
+	for(var i=0; i<model.candidates.length; i++){
+		candidates.push(model.candidates[i].id);
+	}
+	var loserslist = []
+	var winnerslist = []
+	var ballots = model.getBallots();	
+	for(var i=0; i<ballots.length; i++){
+		ballots[i].weight = 1
+	}
+	while(!resolved){
+
+		text += "<b>round "+roundNum+":</b><br>";
+		text += "who's voters' #1 choice?<br>";
+
+		// Tally the approvals & get winner!
+		var pre_tally = _tally(model, function(tally, ballot){
+			var first = ballot.rank[0]; // just count #1
+			tally[first] += ballot.weight;
+		});
+
+		// ONLY tally the remaining candidates...
+		var tally = {};
+		for(var i=0; i<candidates.length; i++){
+			var cID = candidates[i];
+			tally[cID] = pre_tally[cID];
+		}
+
+		// Say 'em...
+		for(var i=0; i<candidates.length; i++){
+			var c = candidates[i];
+			text += _icon(c)+":"+Math.round(tally[c]);
+			if(i<candidates.length-1) text+=", ";
+		}
+		text += "<br>";
+
+		// Do they have more than 50%?
+		var winners = _countWinner(tally);
+		var winner = winners[0];
+		var ratio = tally[winner]/model.getTotalVoters();
+		if(ratio>quota){
+			// if (winners.length >= 2) {	// won't happen bc ratio > .5	
+			// 	resolved = "tie"; 
+			// 	break;
+			// }
+			reweight = 1-quota/ratio
+			text += _icon(winner)+" has more than " + quotapercent + "%<br>";
+			winnerslist.push(winner)
+			
+			text += "select winner, "+_icon(winner)+".<br><br>";
+			
+			candidates.splice(candidates.indexOf(winner), 1); // remove from candidates...
+			var ballots = model.getBallots();
+			for(var i=0; i<ballots.length; i++){
+				var rank = ballots[i].rank;
+				if (0 == rank.indexOf(winner)) {
+					ballots[i].weight *= reweight
+				}
+				rank.splice(rank.indexOf(winner), 1); // REMOVE THE LOSER
+			}
+			// And repeat!
+			roundNum++;
+			if (winnerslist.length == numreps) {
+				resolved = "done"
+				break
+			}
+			continue
+		}
+
+		// Otherwise... runoff...
+		var losers = _countLoser(tally);
+		var loser = losers[0];
+		if (losers.length >= candidates.length) {
+			resolved = "tie"; 
+			winnerslist = winnerslist.concat(losers)
+			var tiedlosers = losers
+			break;
+		}
+		loserslist = loserslist.concat(losers)
+
+		// ACTUALLY ELIMINATE
+		
+		//text += "nobody's more than 50%. ";
+		for (var li = 0; li < losers.length ; li++ ) {
+			loser = losers[li];
+			text += "eliminate loser, "+_icon(loser)+".<br>";
+			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
+			var ballots = model.getBallots();
+			for(var i=0; i<ballots.length; i++){
+				var rank = ballots[i].rank;
+				rank.splice(rank.indexOf(loser), 1); // REMOVE THE LOSER
+			}
+			// And repeat!
+			roundNum++;
+		}
+		text += "<br>"
+	
+	}
+	winners = winnerslist.sort()
+
+	if (model.dotop2) {
+		loserslist = loserslist.concat(_sortTallyRev(tally))
+		var ll = loserslist.length
+		model.top2 = loserslist.slice(ll-1,ll).concat(loserslist.slice(ll-2,ll-1))
+	}
+	
+	
+	var color = _colorWinner(model, winners);
+
+	if (!options.sidebar) return
+
+	if (resolved == "tie") {
+		text += _tietext(tiedlosers);
+		text = "<b>TIE</b> <br> <br>" + text;
+	} 
+	text = "<br>" + text
+	for (var i in winners) {
+		var winner = winners[i]
+		var color = _colorWinner(model, [winner]);
+		// END!
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;	
+	}
+
+	model.caption.innerHTML = text;
+
+};
+
 Election.plurality = function(model, options){
 
 	options = options || {};
