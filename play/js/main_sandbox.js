@@ -33,7 +33,7 @@ function main(config){
 	}
 
 	var initialConfig
-	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","poll","yee","choose_pixel_size"]
+	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","poll","yee","yeefilter","choose_pixel_size"]
 	var doms = {}  // for hiding menus, later
 	var stratsliders = [] // for hiding sliders, later
 	var groupsliders = [] // for hiding sliders, later
@@ -98,6 +98,8 @@ function main(config){
 		config.strategic = config.strategic || "normalize";
 		if (config.second_strategy === undefined) config.second_strategy = true;
 		config.keyyee = config.keyyee || "off";
+		var all_candidate_names = Object.keys(Candidate.graphics)
+		config.yeefilter = config.yeefilter || all_candidate_names;
 		config.computeMethod = config.computeMethod || "ez";
 		config.pixelsize = config.pixelsize || 60;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
@@ -257,6 +259,8 @@ function main(config){
 				model.yeeobject = undefined
 			}
 			if (model.yeeobject) {model.yeeon = true} else {model.yeeon = false}
+
+			model.yeefilter = config.yeefilter
 			
 
 			// hide some menus
@@ -995,7 +999,7 @@ function main(config){
 			model.update();
 
 			// gui
-			var xlist = ["choose_pixel_size"]
+			var xlist = ["choose_pixel_size","yeefilter"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
 				var xi = xlist[i]
@@ -1020,6 +1024,43 @@ function main(config){
 		chooseyeeobject.dom.setAttribute("id","yee")
 		document.querySelector("#left").appendChild(chooseyeeobject.dom);
 		doms["yee"] = chooseyeeobject.dom
+		
+		
+		
+		
+		// yee filter
+
+		var h1 = function(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
+		var yeefilter = [
+			{name:h1("square"),realname:"square",keyyee:"square",margin:4},
+			{name:h1("triangle"),realname:"triangle",keyyee:"triangle",margin:4},
+			{name:h1("hexagon"),realname:"hexagon",keyyee:"hexagon",margin:4},
+			{name:h1("pentagon"),realname:"pentagon",keyyee:"pentagon",margin:4},
+			{name:h1("bob"),realname:"bob",keyyee:"bob"}
+		];
+		var onChooseyeefilter = function(data){
+			
+			var yeefilterset = new Set(config.yeefilter)
+			if (data.isOn) {
+				yeefilterset.add(data.realname)
+			} else {
+				yeefilterset.delete(data.realname)
+			}
+			config.yeefilter = Array.from(yeefilterset)
+			model.yeefilter = config.yeefilter
+			model.update();
+
+		};
+		window.chooseyeefilter = new ButtonGroup({
+			label: "filter yee map?",
+			width: 20,
+			data: yeefilter,
+			onChoose: onChooseyeefilter,
+			isCheckbox: true
+		});
+		chooseyeefilter.dom.setAttribute("id","yeefilter")
+		document.querySelector("#left").appendChild(chooseyeefilter.dom);
+		doms["yeefilter"] = chooseyeefilter.dom
 		
 		
 		
@@ -1319,6 +1360,7 @@ function main(config){
 				}
 			}
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
+			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);
 			
 			// gui 
 			if(window.chooseyeeobject){

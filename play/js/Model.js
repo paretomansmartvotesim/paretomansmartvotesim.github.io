@@ -345,10 +345,30 @@ function Model(config){
 			ctx.fill()
 			ctx.globalAlpha = .9
 			var pixelsize = self.pixelsize;
+
+			var can_filter_yee = self.yeefilter
+			var method_1 = (Election.stv == self.election)  // two methods for filtering colors in the yee diagram
+			if (method_1) {
+				color_filter_yee = can_filter_yee.map(x => Candidate.graphics[x].fill)
+			} else {
+				translate = {}
+				for(can in Candidate.graphics) {
+					var colorcan = Candidate.graphics[can].fill
+					translate[colorcan] = can_filter_yee.includes(can) ? colorcan : 'white'
+				}
+			}
+
 			for(var k=0;k<self.gridx.length;k++) {
 				var ca = self.gridl[k]
+				
 				if (ca=="#ccc") { // make stripes instead of gray
 					var cb = self.gridb[k]
+					if (method_1) {
+						cb = cb.filter(function(x) {return color_filter_yee.includes(x)} )// filter the colors so that only the selected colors are displayed
+						if (cb.length == 0) cb = ['white']
+					} else {
+						cb = cb.map(x => translate[x])
+					}
 					var xb = self.gridx[k]-pixelsize*.5
 					var yb = self.gridy[k]-pixelsize*.5
 					var wb = pixelsize
@@ -359,7 +379,15 @@ function Model(config){
 						ctx.fillRect(xb,yb+j*hh,wb,hh);
 					}
 				} else {
-					ctx.fillStyle = self.gridl[k];
+					if (method_1) {
+						if (color_filter_yee.includes(ca)) {
+							ctx.fillStyle = ca;
+						} else {
+							ctx.fillStyle = 'white';
+						}	
+					} else {
+						ctx.fillStyle = translate[ca]
+					}
 					ctx.fillRect(self.gridx[k]-pixelsize*.5, self.gridy[k]-pixelsize*.5, pixelsize, pixelsize);
 				}
 			}
