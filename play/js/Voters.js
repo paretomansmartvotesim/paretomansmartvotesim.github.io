@@ -703,7 +703,7 @@ if (!self.x_voters) {
 	var angle = 0;
 	var _radius = 0;
 	var _radius_norm = 0;
-	var _spread_factor = 2 * Math.exp(.01*self.group_spread) * Math.sqrt(self.group_count/50) // so the slider is exponential
+	var _spread_factor = 2 * Math.exp(.01*self.group_spread) * Math.sqrt(self.group_count/20) // so the slider is exponential
 	var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
 	for (var count = 0; count < self.group_count; count++) {
 		angle = theta * count

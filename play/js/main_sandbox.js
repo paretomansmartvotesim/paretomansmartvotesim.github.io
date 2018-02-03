@@ -102,7 +102,7 @@ function main(config){
 		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
 		config.strategic = config.strategic || "zero strategy. judge on an absolute scale.";
 		if (config.second_strategy === undefined) config.second_strategy = true;
-		config.keyyee = config.keyyee || "off";
+		config.keyyee = (config.keyyee === undefined) ? "off" : config.keyyee;
 		var all_candidate_names = Object.keys(Candidate.graphics)
 		config.yeefilter = config.yeefilter || all_candidate_names;
 		config.computeMethod = config.computeMethod || "ez";
