@@ -1,5 +1,5 @@
 // helper function for strategies
-function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,candidates,radiusStep,getScore) {
+function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,candidates,radiusStep,getScore,doStar) {
 	// no strategy first
 	var lc = candidates.length
 	var dottedCircle = false
@@ -125,7 +125,8 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 
 
 	// star exception
-	if (strategy == "starnormfrontrunners") {
+	//if (strategy == "starnormfrontrunners") {
+	if(doStar) {
 		// find best candidate and make sure that only he gets the best score
 		var n1 = n
 		var n1i = ni
@@ -171,8 +172,8 @@ function ScoreVoter(model){
 
 	self.getBallot = function(x, y, strategy){
 
-		
-		var scoresfirstlast = dostrategy(x,y,minscore,maxscore,scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore)
+		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
+		var scoresfirstlast = dostrategy(x,y,minscore,maxscore,scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,doStar)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -252,7 +253,7 @@ function ThreeVoter(model){
 	self.getBallot = function(x, y, strategy){
 
 		
-		var scoresfirstlast = dostrategy(x,y,minscore,maxscore,scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore)
+		var scoresfirstlast = dostrategy(x,y,minscore,maxscore,scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,false)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -327,7 +328,7 @@ function ApprovalVoter(model){
 	self.getBallot = function(x, y, strategy){
 		
 		
-		var scoresfirstlast = dostrategy(x,y,0,1,[0,1],strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore)
+		var scoresfirstlast = dostrategy(x,y,0,1,[0,1],strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,false)
 		var scores = scoresfirstlast.scores
 		self.drawApprovalRadius = (scoresfirstlast.radiusFirst + scoresfirstlast.radiusLast) * .5
 		self.dottedCircle = scoresfirstlast.dottedCircle
@@ -737,7 +738,7 @@ if (!self.x_voters) {
 			if (r1 <= self.percentStrategy && self.second_strategy) { 
 				var strategy = self.strategy // yes
 			} else {
-				var strategy = self.unstrategic; // no e.g. "zero strategy. judge on an absolute scale."
+				var strategy = self.unstrategic; // no e.g. 
 			}
 			
 			var ballot = self.type.getBallot(x, y, strategy);
@@ -799,7 +800,7 @@ function SingleVoter(config){
 	self.second_strategy = config.second_strategy
 	self.group_count = config.group_count
 	self.group_spread = config.group_spread
-	self.strategy = config.strategy
+	self.strategy = config.unstrategic // at first glance this doesn't seem right, but there is only one group of voters.
 	self.unstrategic = config.unstrategic
 	self.preFrontrunnerIds = config.preFrontrunnerIds
 
@@ -821,7 +822,7 @@ function SingleVoter(config){
 	self.ballot = null;
 	self.ballots = [];
 	self.update = function(){
-		self.ballot = self.type.getBallot(self.x, self.y, self.strategy);
+		self.ballot = self.type.getBallot(self.x, self.y, self.unstrategic);
 		self.ballots = [self.ballot]
 	};
 
