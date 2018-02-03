@@ -79,7 +79,7 @@ var loadpreset = function(htmlname) {
 		config = 
 {
 	featurelist: ["percentstrategy"],
-	voterPercentStrategy: [100,0,0],
+	voterPercentStrategy: [90,0,0],
 	
 	system: "Score",
 
@@ -88,7 +88,8 @@ var loadpreset = function(htmlname) {
 	
 	voters: 1,
 	voterPositions: [[150,150]],
-	voterStrategies: ["normalize"]
+	voterStrategies: ["normalize"],
+	unstrategic: "zero strategy. judge on an absolute scale."
 	
 }
     } else if (htmlname == "election8.html") {
@@ -218,7 +219,7 @@ system: "Approval",
 candidates: 3,
 voters: 3,
 voterStrategies: ["best frontrunner","best frontrunner","best frontrunner"],
-voterPercentStrategy: ["100","100",100],
+voterPercentStrategy: [18,22,92],
 preFrontrunnerIds: ["square","triangle","hexagon"],
 featurelist: ["percentstrategy","systems"],
 sandboxsave: false,
@@ -394,7 +395,9 @@ kindayee: "can",
 	doPercentFirst: false,
 	arena_size: 600,
 	arena_border: 0,
-	spread_factor_voters: 2
+	spread_factor_voters: 2,
+	unstrategic: "normalize",
+	strategic: "normalize frontrunners only"
 }
     } else if (htmlname == "ballot1.html") {
 		config = 

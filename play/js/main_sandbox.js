@@ -79,7 +79,12 @@ function main(config){
 		config.voterStrategies = config.voterStrategies || []
 		config.description = config.description || ""
 		for (var i = 0; i < maxVoters; i++) {
-			config.voterStrategies[i] = config.voterStrategies[i] || "normalize"
+			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
+		}
+		if (config.strategic) {
+			for (var i = 0; i < maxVoters; i++) {
+				config.voterStrategies[i] = config.strategic
+			}	
 		}
 		config.voterPercentStrategy = config.voterPercentStrategy || []
 		for (var i = 0; i < maxVoters; i++) {
@@ -94,8 +99,8 @@ function main(config){
 			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
 		}
 		
-		config.unstrategic = config.unstrategic || "normalize";
-		config.strategic = config.strategic || "normalize";
+		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
+		config.strategic = config.strategic || "zero strategy. judge on an absolute scale.";
 		if (config.second_strategy === undefined) config.second_strategy = true;
 		config.keyyee = config.keyyee || "off";
 		var all_candidate_names = Object.keys(Candidate.graphics)
@@ -1467,7 +1472,8 @@ function main(config){
 				}
 			}
 			var aloc = window.location.pathname.split('/')
-			logtext += "\n\npaste this JSON into" + aloc[aloc.length-2] + "/" + aloc[aloc.length-1]
+			//logtext += "\n\npaste this JSON into" + aloc[aloc.length-2] + "/" + aloc[aloc.length-1]
+			logtext += "\n\npaste this JSON into /play/js/Presets.js under option " + aloc[aloc.length-1]
 			console.log(logtext)
 			if (log==2) console.log(JSON.stringify(config))
 			
