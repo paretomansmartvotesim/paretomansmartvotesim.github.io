@@ -453,23 +453,25 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 		var b = model.candidates[pairs[i].loseI]
 		
 		if (i >= strongestElimination) {
-			var endtext = " . weak<br>"
+			var begintext = "<del>"
+			var endtext = "</del> . weak<br>"
 		} else {
+			var begintext = ""
 			var endtext = ".<br>"
 		}
 
 		if (pairs[i].tie) {
 			if(reverseExplanation) {
-				text += _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
+				text += begintext + _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
 			} else {
-				text += "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
+				text += begintext + "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
 				//text += _icon(b.id)+" ties  "+_icon(a.id) + endtext
 			}
 		} else {
 			if(reverseExplanation) {
-				text += _icon(b.id)+" lost to "+_icon(a.id)+" by " + pairs[i].margin + endtext
+				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + pairs[i].margin + endtext
 			} else {
-				text += _icon(a.id)+" beats "+_icon(b.id)+" by " + pairs[i].margin + endtext	
+				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + pairs[i].margin + endtext	
 			}
 		}
 		
@@ -568,19 +570,22 @@ Election.rrv = function(model, options){
 			text += "<span class='small'>";
 			var tally = tallies[j]
 			var winner = winnerslist[j];
-		
-			text += "<b>highest average score wins</b><br>";
+			if (j>0) text += "<br><b>After votes go to winner,</b>"
+			text += "<br><b>sum scores, divide by 5:</b><br>";
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
-				text += _icon(c)+"'s score: "+((tally[c]/model.getTotalVoters()).toFixed(2))+" out of 5.00<br>";
+				//text += _icon(c)+"'s score: "+((tally[c]/model.getTotalVoters()).toFixed(2))+" out of 5.00<br>";
+				text += _icon(c)+": "+((tally[c]*.2).toFixed(0))
+				if (winner == c) text += " &larr;"//" <--"
+				text += "<br>";
 			}
 			var color = _colorWinner(model, [winner]);
-			text += "<br>";
-			text += _icon(winner)+" has the highest score, so...<br>";
+			text += "";
+			//text += _icon(winner)+" has the highest score, so...";
 			text += "</span>";
-			text += "<br>";
-			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>";
-			text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+			text += "";
+			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>";
+			text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;
 		}
 
 		model.caption.innerHTML = text;
@@ -923,7 +928,7 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 		var c = model.candidates[i].id;
 		text += _icon(c)+" got "+tally1[c]+" votes<br>";
 	}
-	text += "<br><br><b>2nd round</b><br>";
+	text += "<br><b>2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
 		if (toptwo.includes(c)) text += _icon(c)+" got "+tally[c]+" votes<br>";

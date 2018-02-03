@@ -177,7 +177,7 @@ function main(config){
 					var angle = 0;
 					var _radius = 0;
 					var _radius_norm = 0;
-					var _spread_factor = model.arena_size * .2
+					var _spread_factor = 600 * .2
 					var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
 					for (var count = 0; count < num; count++) {
 						angle = theta * count
@@ -223,8 +223,8 @@ function main(config){
 					arena_size: config.arena_size,
 					arena_border: config.arena_border,
 					num:(4-num),
-					x:pos[0] + (model.arena_size - 300) * .5,
-					y:pos[1] + (model.arena_size - 300) * .5
+					x:pos[0] * model.arena_size / 300 , //+ (model.arena_size - 300) * .5
+					y:pos[1] * model.arena_size / 300 //+ (model.arena_size - 300) * .5
 				});
 			}
 			model.addVoterCenter("center",100,100)
@@ -423,7 +423,6 @@ function main(config){
 
 			// gui 
 			for(var i=0;i<(maxVoters-1);i++) {
-				console.log(i)
 				if (i < data.num) {
 					chooseyeeobject.dom.childNodes[8+i].hidden=false
 				} else {
@@ -1264,7 +1263,9 @@ function main(config){
 			model.size = data.val
 			config.arena_size = data.val
 			
-			
+			if ("300" == data.val) config.spread_factor_voters = 1
+			if ("600" == data.val) config.spread_factor_voters = 2
+			model.spread_factor_voters = config.spread_factor_voters
 			
 			//window.model = new Model(model_config);
 
@@ -1407,6 +1408,11 @@ function main(config){
 
 			config = JSON.parse(JSON.stringify(initialConfig)); // RESTORE IT!
 			// Reset manually, coz update LATER.
+			loadDefaults()
+			set_layout_wrt_arena(config.arena_size)
+			model.size = config.arena_size
+			model_config.size = model.size
+			model.resize()
 			model.reset(true);
 			model.onInit();
 			setInPosition();
