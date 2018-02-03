@@ -1577,7 +1577,12 @@ function main(config){
 
 		}
 
+		config.candidatePositions = save().candidatePositions;
 
+		// reset!
+		config.voterPositions = save().voterPositions;
+		model.reset();
+		setInPosition(); // this is actually the second time we do this.  It's a workaround.  The yee diagram wasn't working right.
 	};
 
 	Loader.load([
