@@ -776,8 +776,10 @@ function main(config){
 			// only the middle percent (for the yellow triangle)
 
 			// no reset...
+			for (var i = 0; i < maxVoters; i++) {
+				config.voterStrategies[i] = data.realname
+			}
 			for(var i=0;i<model.voters.length;i++){
-				config.voterStrategies[i] = data.realname; 
 				model.voters[i].strategy = config.voterStrategies[i]
 			}
 			model.update();

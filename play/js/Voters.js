@@ -731,11 +731,15 @@ if (!self.x_voters) {
 			var y = self.y + p[1];
 			
 			if (0) { // two ways to choose which voters are strategic
-				var r1 = Math.random() * 100;
+				var r1 = Math.random() * 99.8 + .1;
 			} else {
-				var r1 = (1861*i) % 100;
-			}
-			if (r1 <= self.percentStrategy && self.second_strategy) { 
+				if (!self.x_voters) {
+					var r1 = (1861*i) % 100 + .5;
+				} else {
+					var r1 = (34*i) % 100 + .5;
+				}
+			}	
+			if (r1 < self.percentStrategy && self.second_strategy) { 
 				var strategy = self.strategy // yes
 			} else {
 				var strategy = self.unstrategic; // no e.g. 
