@@ -335,16 +335,17 @@ function main(config){
 		// Which voting system?
 		var votingSystems = [
 			{name:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
-			{name:"IRV", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv},
+			{name:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo},
+			{name:"IRV", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv, margin:4},
+			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda},
 			{name:"Pair Elim.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs, margin:4},
 			{name:"Condorcet", voter:RankedVoter, ballot:"RankedBallot", election:Election.condorcet},
 			{name:"Approval", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.approval, margin:4},
 			{name:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
 			{name:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
 			{name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
-			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda, margin:4},
-			{name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv},
-			{name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv, margin:4}
+			{name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
+			{name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv}
 		];
 		var onChooseSystem = function(data){
 
