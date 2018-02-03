@@ -682,7 +682,11 @@ function main(config){
 
 			// gui update
 			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
+			for(var i=0;i<model.voters.length;i++){
+				if (! not_f.includes(config.voterStrategies[i])) turnOffFrontrunnerControls = false
+			}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+			
 			var xlist = ["frontrunners","poll"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
@@ -792,7 +796,11 @@ function main(config){
 
 			// gui update
 			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
+			for(var i=0;i<model.voters.length;i++){
+				if (! not_f.includes(config.voterStrategies[i])) turnOffFrontrunnerControls = false
+			}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+			
 			var xlist = ["frontrunners","poll"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
