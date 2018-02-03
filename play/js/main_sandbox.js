@@ -1419,6 +1419,8 @@ function main(config){
 			model.reset(true);
 			model.onInit();
 			setInPosition();
+			
+			if (model.yeeon) {model.calculateYee(); model.update()} // workaround
 
 			// Back to ol' UI
 			selectUI();
@@ -1583,6 +1585,7 @@ function main(config){
 		config.voterPositions = save().voterPositions;
 		model.reset();
 		setInPosition(); // this is actually the second time we do this.  It's a workaround.  The yee diagram wasn't working right.
+		if (model.yeeon) {model.calculateYee(); model.update()}
 	};
 
 	Loader.load([
