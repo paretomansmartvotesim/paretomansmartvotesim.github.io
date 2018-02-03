@@ -81,7 +81,7 @@ function main(config){
 		for (var i = 0; i < maxVoters; i++) {
 			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
 		}
-		if (config.strategic) {
+		if (config.strategic && config.voterStrategies === undefined) {
 			for (var i = 0; i < maxVoters; i++) {
 				config.voterStrategies[i] = config.strategic
 			}	
@@ -270,7 +270,7 @@ function main(config){
 
 			// hide some menus
 			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
-
+			
 		};
 		model.election = Election.plurality;
 		model.onUpdate = function(){
@@ -1408,11 +1408,6 @@ function main(config){
 
 			config = JSON.parse(JSON.stringify(initialConfig)); // RESTORE IT!
 			// Reset manually, coz update LATER.
-			loadDefaults()
-			set_layout_wrt_arena(config.arena_size)
-			model.size = config.arena_size
-			model_config.size = model.size
-			model.resize()
 			model.reset(true);
 			model.onInit();
 			setInPosition();
@@ -1530,6 +1525,7 @@ function main(config){
 				saveDOM.style.left = "350px";
 			}
 			saveDOM.onclick = function(){
+				config.sandboxsave = true // this seems to fix a bug
 				_saveModel();
 			};
 			document.body.appendChild(saveDOM);
@@ -1555,7 +1551,7 @@ function main(config){
 	
 				// #description_container textarea
 				document.getElementById("description_text").style.width = (778 + addsome) + "px"
-	
+
 				// #savelink
 				linkText.style.width = (82 + addsome) + "px"	
 				linkText.style.top = (471 + addsome) + "px";
