@@ -15,14 +15,14 @@ Election.score = function(model, options){
 			tally[candidate] += ballot[candidate];
 		}
 	});
-	for(var candidate in tally){
-		tally[candidate] /= model.getTotalVoters();
-	}
 	var winners = _countWinner(tally);
 	var color = _colorWinner(model, winners);
 
 	if (options.sidebar) {
 
+		for(var candidate in tally){
+			tally[candidate] /= model.getTotalVoters();
+		}
 		// Caption
 		var winner = winners[0];
 		var text = "";
@@ -512,6 +512,85 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 
 };
 
+Election.rrv = function(model, options){
+
+	var numreps = 3
+	var maxscore = 5
+	var invmaxscore = 1/maxscore
+	var ballots = model.getBallots();
+	var ballotweight = []
+	var ballotsum = []
+	for(var i=0; i<ballots.length; i++){
+		ballotweight[i] = 1
+		ballotsum[i] = 0
+	}
+	var resolved = false
+	var tallies = []
+	var winnerslist = []
+	
+	var candidates = [];
+	for(var i=0; i<model.candidates.length; i++){
+		candidates.push(model.candidates[i].id);
+	}
+	
+	for(var j=0; j<numreps;j++) {
+		// Tally the approvals & get winner!
+		var tally = _tally_i(model, function(tally, ballot, i){
+			for(var j=0; j<candidates.length; j++){
+				var candidate = candidates[j];
+				tally[candidate] += ballot[candidate] * ballotweight[i]
+			}
+		})
+		tallies.push(tally)
+		
+		var winners = _countWinner(tally);
+		var winner = winners[0] // really we should have a tree of scenarios form here because a whole different group can be chosen from a tiebreaker TODO
+		winnerslist.push(winner)
+		
+
+		//reweight
+		for(var i=0; i<ballots.length; i++){
+			var ballot = ballots[i]
+			var votetotal = tally[winner]
+			ballotsum[i] += ballot[winner] 
+			ballotweight[i] = 1/(1+ballotsum[i]*invmaxscore)
+		}
+		
+		// remove winner from candidates
+		candidates.splice(candidates.indexOf(winner),1)
+	}
+
+	if (options.sidebar) {
+
+		// Caption
+		var text = "";
+		for(j=0; j<winnerslist.length;j++){
+			text += "<span class='small'>";
+			var tally = tallies[j]
+			var winner = winnerslist[j];
+		
+			text += "<b>highest average score wins</b><br>";
+			for(var i=0; i<model.candidates.length; i++){
+				var c = model.candidates[i].id;
+				text += _icon(c)+"'s score: "+((tally[c]/model.getTotalVoters()).toFixed(2))+" out of 5.00<br>";
+			}
+			var color = _colorWinner(model, [winner]);
+			text += "<br>";
+			text += _icon(winner)+" has the highest score, so...<br>";
+			text += "</span>";
+			text += "<br>";
+			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>";
+			text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+		}
+
+		model.caption.innerHTML = text;
+	}
+	var color = _colorWinner(model, winnerslist.concat().sort());
+	
+	// if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)  
+	if (model.dotop2) model.top2 = winnerslist.slice(0,2)  /// TODO: see if this actually works 
+};
+
 Election.borda = function(model, options){
 
 	// Tally the approvals & get winner!
@@ -675,8 +754,9 @@ Election.stv = function(model, options){
 	var loserslist = []
 	var winnerslist = []
 	var ballots = model.getBallots();	
+	var ballotweight = []
 	for(var i=0; i<ballots.length; i++){
-		ballots[i].weight = 1
+		ballotweight[i] = 1
 	}
 	while(!resolved){
 
@@ -684,9 +764,9 @@ Election.stv = function(model, options){
 		text += "who's voters' #1 choice?<br>";
 
 		// Tally the approvals & get winner!
-		var pre_tally = _tally(model, function(tally, ballot){
+		var pre_tally = _tally_i(model, function(tally, ballot, i){
 			var first = ballot.rank[0]; // just count #1
-			tally[first] += ballot.weight;
+			tally[first] += ballotweight[i];
 		});
 
 		// ONLY tally the remaining candidates...
@@ -706,7 +786,7 @@ Election.stv = function(model, options){
 
 		// Do they have more than 50%?
 		var winners = _countWinner(tally);
-		var winner = winners[0];
+		var winner = winners[0];  // there needs to be a better tiebreaker here. TODO
 		var ratio = tally[winner]/model.getTotalVoters();
 		if(ratio>quota){
 			// if (winners.length >= 2) {	// won't happen bc ratio > .5	
@@ -724,9 +804,9 @@ Election.stv = function(model, options){
 			for(var i=0; i<ballots.length; i++){
 				var rank = ballots[i].rank;
 				if (0 == rank.indexOf(winner)) {
-					ballots[i].weight *= reweight
+					ballotweight[i] *= reweight
 				}
-				rank.splice(rank.indexOf(winner), 1); // REMOVE THE LOSER
+				rank.splice(rank.indexOf(winner), 1); // REMOVE THE winner
 			}
 			// And repeat!
 			roundNum++;
@@ -766,9 +846,9 @@ Election.stv = function(model, options){
 		text += "<br>"
 	
 	}
-	winners = winnerslist.sort()
+	winners = winnerslist.sort() 
 
-	if (model.dotop2) {
+	if (model.dotop2) { /// TODO: see if this actually works
 		loserslist = loserslist.concat(_sortTallyRev(tally))
 		var ll = loserslist.length
 		model.top2 = loserslist.slice(ll-1,ll).concat(loserslist.slice(ll-2,ll-1))
@@ -796,6 +876,10 @@ Election.stv = function(model, options){
 
 	model.caption.innerHTML = text;
 
+	// we messed around with the rankings, so lets put them back
+	for(var j=0; j<model.voters.length; j++){
+		model.voters[j].update();
+	}
 };
 
 Election.plurality = function(model, options){
@@ -847,6 +931,24 @@ var _tally = function(model, tallyFunc){
 	var ballots = model.getBallots();
 	for(var i=0; i<ballots.length; i++){
 		tallyFunc(tally, ballots[i]);
+	}
+
+	// Return it.
+	return tally;
+
+}
+
+
+var _tally_i = function(model, tallyFunc){
+
+	// Create the tally
+	var tally = {};
+	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
+
+	// Count 'em up
+	var ballots = model.getBallots();
+	for(var i=0; i<ballots.length; i++){
+		tallyFunc(tally, ballots[i], i);
 	}
 
 	// Return it.

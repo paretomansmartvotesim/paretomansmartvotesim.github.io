@@ -347,7 +347,7 @@ function Model(config){
 			var pixelsize = self.pixelsize;
 
 			var can_filter_yee = self.yeefilter
-			var method_1 = (Election.stv == self.election)  // two methods for filtering colors in the yee diagram
+			var method_1 = (Election.stv == self.election) || (Election.rrv == self.election)  // two methods for filtering colors in the yee diagram
 			if (method_1) {
 				color_filter_yee = can_filter_yee.map(x => Candidate.graphics[x].fill)
 			} else {
