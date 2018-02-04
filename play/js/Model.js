@@ -289,15 +289,18 @@ function Model(config){
 		}
 	}
 	
-	self.findVoterCenter = function(){
+	self.findVoterCenter = function(){ // calculate the center of the voter groups
 		var x = 0
 		var y = 0
+		var totalnumbervoters = 0
 		for(var i=0; i<self.voters.length; i++){
 			var voter = self.voters[i];
-			x += voter.x
-			y += voter.y
+			var numbervoters = voter.ballots.length
+			x += voter.x * numbervoters
+			y += voter.y * numbervoters
+			totalnumbervoters += numbervoters
 		}
-		return {x:x/self.voters.length,y:y/self.voters.length}
+		return {x:x/totalnumbervoters,y:y/totalnumbervoters}
 	}
 
 	self.update = function(){
@@ -314,7 +317,7 @@ function Model(config){
 		}
 
 		// do the center voter thing
-		doCenterVoter = (typeof self.voterCenter !== 'undefined')
+		doCenterVoter = (typeof self.voterCenter !== 'undefined') // does the voterCenter exist?  If so then calculate it.
 		if (doCenterVoter) {
 			if(Mouse.dragging == self.voterCenter) {
 				var oldcenter = self.findVoterCenter()
