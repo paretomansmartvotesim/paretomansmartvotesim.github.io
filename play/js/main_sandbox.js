@@ -227,6 +227,9 @@ function main(config){
 					y:pos[1] * model.arena_size / 300 //+ (model.arena_size - 300) * .5
 				});
 			}
+			var ce =  model.findVoterCenter()
+			model.addVoterCenter("center",ce.x,ce.y)
+			
 			model.addVoterCenter("center",100,100)
 
 			// Candidates, in a circle around the center.

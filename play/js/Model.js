@@ -439,16 +439,20 @@ function Model(config){
 	}
 
 	self.update = function(){
-		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		if (self.yeeon && Mouse.dragging != self.yeeobject) self.calculateYee()
-		
-		
-		// Clear it all!
-		ctx.clearRect(0,0,canvas.width,canvas.height);
 
 		// Move the one that's being dragged, if any
 		if(Mouse.dragging){
 			Mouse.dragging.moveTo(Mouse.x, Mouse.y);
+		}
+		
+		// get the ballots
+		for(var i=0; i<self.voters.length; i++){
+			var voter = self.voters[i];
+			voter.update();
+		}
+		for(var i=0; i<self.candidates.length; i++){
+			var c = self.candidates[i];
+			c.update();
 		}
 
 		// do the center voter thing
@@ -468,6 +472,12 @@ function Model(config){
 			}	
 		}
 		
+		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
+		if (self.yeeon && Mouse.dragging != self.yeeobject) self.calculateYee()
+		
+		// Clear it all!
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+
 		// DRAW 'EM ALL.
 		// Draw voters' BG first, then candidates, then voters.
 
@@ -553,12 +563,10 @@ function Model(config){
 		
 		for(var i=0; i<self.voters.length; i++){
 			var voter = self.voters[i];
-			voter.update();
 			voter.draw(ctx);
 		}
 		for(var i=0; i<self.candidates.length; i++){
 			var c = self.candidates[i];
-			c.update();
 			c.draw(ctx);
 		}
 
