@@ -287,6 +287,11 @@ function Model(config){
 				self.voters[i].y = voterso[i].y
 			}
 		}
+
+		// reload the original ballots
+		for(var j=0; j<self.voters.length; j++){
+			self.voters[j].update();
+		}
 	}
 	
 	self.findVoterCenter = function(){ // calculate the center of the voter groups
