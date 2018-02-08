@@ -1189,7 +1189,7 @@ function main(config){
 		var onChoosePixelsize = function(data){
 			config.pixelsize = data.val
 			model.pixelsize = data.val
-			if (model.yeeon) {model.calculateYee(); model.update()}
+			model.update()
 		};
 		window.choosePixelsize = new ButtonGroup({
 			label: "size of pixels in yee diagram:",
@@ -1206,7 +1206,7 @@ function main(config){
 		var onChooseComputeMethod = function(data){
 			config.computeMethod = data.name
 			model.computeMethod = data.name
-			if (model.yeeon) {model.calculateYee(); model.update()}
+			model.update()
 		};
 		window.chooseComputeMethod = new ButtonGroup({
 			label: "method of computing yee diagram:",
@@ -1422,8 +1422,6 @@ function main(config){
 			model.reset(true);
 			model.onInit();
 			setInPosition();
-			
-			if (model.yeeon) {model.calculateYee(); model.update()} // workaround
 
 			// Back to ol' UI
 			selectUI();
@@ -1582,13 +1580,6 @@ function main(config){
 
 		}
 
-		config.candidatePositions = save().candidatePositions;
-
-		// reset!
-		config.voterPositions = save().voterPositions;
-		model.reset();
-		setInPosition(); // this is actually the second time we do this.  It's a workaround.  The yee diagram wasn't working right.
-		if (model.yeeon) {model.calculateYee(); model.update()}
 	};
 
 	Loader.load([
