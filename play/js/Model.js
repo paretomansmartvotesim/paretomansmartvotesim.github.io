@@ -309,7 +309,7 @@ function Model(config){
 		y/=totalnumbervoters
 		
 
-		var method = 2 // 1,2,3
+		var method = self.median_mean // 1,2,3
 		// 1 is the mean
 		// 2 is the geometric median
 		// 3 is a 1-d median along 4 projections

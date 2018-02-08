@@ -53,6 +53,7 @@ function main(config){
 		config.x_voters = config.x_voters || false;
 		config.spread_factor_voters = config.spread_factor_voters || 1;
 		config.arena_size = config.arena_size || 300;
+		config.median_mean = config.median_mean || 1;
 		if (config.arena_border === undefined) config.arena_border = 2;
 		//config.votersRealName = config.votersRealName || "Single Voter";
 		config.oneVoter = config.oneVoter || false;
@@ -107,8 +108,6 @@ function main(config){
 		config.yeefilter = config.yeefilter || all_candidate_names;
 		config.computeMethod = config.computeMethod || "ez";
 		config.pixelsize = config.pixelsize || 60;
-		config.spread_factor_voters = config.spread_factor_voters || 1;
-		config.arena_size = config.arena_size || 300;
 		if (config.arena_border === undefined) config.arena_border = 2;  // very important to use this triple equals === syntax rather than the ||
 		var url = window.location.pathname;
 		var filename = url.substring(url.lastIndexOf('/')+1);
@@ -155,6 +154,7 @@ function main(config){
 			model.pixelsize = config.pixelsize;
 			model.spread_factor_voters = config.spread_factor_voters;
 			model.arena_size = config.arena_size;
+			model.median_mean = config.median_mean;
 			model.arena_border = config.arena_border;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==model.system);
@@ -1304,6 +1304,24 @@ function main(config){
 		choose_arena_size.dom.hidden = true
 		document.querySelector("#left").insertBefore(choose_arena_size.dom,doms["systems"]);
 		
+
+		var median_mean = [{name:"median",val:2,margin:4},{name:"mean",val:1}]
+
+		var onChoose_median_mean = function(data){
+			config.median_mean = data.val
+			model.median_mean = data.val
+			model.update()
+			
+		};
+		window.choose_median_mean = new ButtonGroup({
+			label: "Median or Mean:",
+			width: 68,
+			data: median_mean,
+			onChoose: onChoose_median_mean
+		});
+		choose_median_mean.dom.hidden = true
+		document.querySelector("#left").insertBefore(choose_median_mean.dom,doms["systems"]);
+
 		// gear button (combines with above)
 		
 		var gearicon = [{name:"config"}]
@@ -1312,16 +1330,16 @@ function main(config){
 				choosegearconfig.dom.hidden = false
 				choosepresetconfig.dom.hidden = false
 				chooseComputeMethod.dom.hidden = false
-				choosePixelsize.dom.hidden = false
 				choose_spread_factor_voters.dom.hidden = false
 				choose_arena_size.dom.hidden = false
+				choose_median_mean.dom.hidden = false
 			} else {
 				choosegearconfig.dom.hidden = true
 				choosepresetconfig.dom.hidden = true
 				chooseComputeMethod.dom.hidden = true
-				choosePixelsize.dom.hidden = true
 				choose_spread_factor_voters.dom.hidden = true
 				choose_arena_size.dom.hidden = true
+				choose_median_mean.dom.hidden = true
 			}
 		};
 		window.choosegearicon = new ButtonGroup({
@@ -1399,6 +1417,7 @@ function main(config){
 			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
 			if(window.choose_spread_factor_voters) choose_spread_factor_voters.highlight("name", config.spread_factor_voters);
 			if(window.choose_arena_size) choose_arena_size.highlight("name", config.arena_size);
+			if(window.choose_median_mean) choose_median_mean.highlight("val", config.median_mean);
 			
 		};
 		selectUI();
