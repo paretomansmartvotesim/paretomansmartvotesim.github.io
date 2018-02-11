@@ -33,7 +33,7 @@ function main(config){
 	}
 
 	var initialConfig
-	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","poll","yee","yeefilter","choose_pixel_size"]
+	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"]
 	var doms = {}  // for hiding menus, later
 	var stratsliders = [] // for hiding sliders, later
 	var groupsliders = [] // for hiding sliders, later
@@ -77,6 +77,7 @@ function main(config){
 		config.hidegearconfig = config.hidegearconfig || false;
 		
 		config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"]
+		config.autoPoll = config.autoPoll || "Manual"
 		config.voterStrategies = config.voterStrategies || []
 		config.description = config.description || ""
 		for (var i = 0; i < maxVoters; i++) {
@@ -150,6 +151,7 @@ function main(config){
 			}
 			model.system = config.system;
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
+			model.autoPoll = config.autoPoll
 			model.computeMethod = config.computeMethod;
 			model.pixelsize = config.pixelsize;
 			model.spread_factor_voters = config.spread_factor_voters;
@@ -690,7 +692,7 @@ function main(config){
 				if (! not_f.includes(config.voterStrategies[i])) turnOffFrontrunnerControls = false
 			}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
 			
-			var xlist = ["frontrunners","poll"]
+			var xlist = ["frontrunners","autoPoll","poll"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
 				var xi = xlist[i]
@@ -804,7 +806,7 @@ function main(config){
 				if (! not_f.includes(config.voterStrategies[i])) turnOffFrontrunnerControls = false
 			}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
 			
-			var xlist = ["frontrunners","poll"]
+			var xlist = ["frontrunners","autoPoll","poll"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
 				var xi = xlist[i]
@@ -976,6 +978,29 @@ function main(config){
 		});
 		document.querySelector("#left").appendChild(choosePoll.dom);
 		doms["poll"] = choosePoll.dom
+
+
+
+		// do a poll to find frontrunner
+		
+		var autoPoll = [
+			{name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
+			{name:"Manual",realname:"Press the poll button to find the frontrunners once."}
+		];
+		var onChooseAutoPoll = function(data){
+			config.autoPoll = data.name
+			model.autoPoll = data.name
+			model.update()
+
+		};
+		window.chooseAutoPoll = new ButtonGroup({
+			label: "AutoPoll to find new frontrunner:",
+			width: 72,
+			data: autoPoll,
+			onChoose: onChooseAutoPoll
+		});
+		document.querySelector("#left").appendChild(chooseAutoPoll.dom);
+		doms["autoPoll"] = chooseAutoPoll.dom
 		
 		
 		
@@ -1398,6 +1423,7 @@ function main(config){
 					stratsliders[i].value = config.voterPercentStrategy[i]
 				}
 			}
+			if(window.autoPoll) chooseAutoPoll.highlight("name", model.autoPoll)
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
 			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);
 			

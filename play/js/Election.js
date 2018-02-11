@@ -206,6 +206,40 @@ Election.approval = function(model, options){
 	
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 
+	var dostrategypoll = model.autoPoll == "Auto" // just for now
+	if (dostrategypoll) {
+		var max1 = 0
+		for (var can in tally) {
+			if (tally[can] > max1) max1 = tally[can]
+		}
+		var threshold = max1 * .5
+		var viable = []
+		for (var can in tally) {
+			if (tally[can] > threshold) viable.push(can)
+		}
+		var oldkeep = model.preFrontrunnerIds // only a temporary change
+		model.preFrontrunnerIds = viable
+		
+		// get the ballots
+		for(var i=0; i<model.voters.length; i++){
+			var voter = model.voters[i];
+			voter.update();
+		}
+		if (1) {
+			model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
+		}
+		
+
+		// Tally the approvals & get winner!
+		var tally = _tally(model, function(tally, ballot){
+			var approved = ballot.approved;
+			for(var i=0; i<approved.length; i++) tally[approved[i]]++;
+		});
+		var winners = _countWinner(tally);
+
+		var color = _colorWinner(model, winners);
+	}
+
 	if (!options.sidebar) return
 
 	// Caption
