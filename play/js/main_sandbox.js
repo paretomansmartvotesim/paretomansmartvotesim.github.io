@@ -77,7 +77,7 @@ function main(config){
 		config.hidegearconfig = config.hidegearconfig || false;
 		
 		config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"]
-		config.autoPoll = config.autoPoll || "Manual"
+		config.autoPoll = config.autoPoll || "Auto"
 		config.voterStrategies = config.voterStrategies || []
 		config.description = config.description || ""
 		for (var i = 0; i < maxVoters; i++) {
@@ -691,7 +691,6 @@ function main(config){
 			for(var i=0;i<model.voters.length;i++){
 				if (! not_f.includes(config.voterStrategies[i])) turnOffFrontrunnerControls = false
 			}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
-			
 			var xlist = ["frontrunners","autoPoll","poll"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
@@ -700,6 +699,14 @@ function main(config){
 					featureset.add(xi)
 					doms[xi].hidden = false
 				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			if (config.autoPoll == "Auto") {
+				var xlist = ["frontrunners","poll"]
+				for (var i in xlist){
+					var xi = xlist[i]
 					featureset.delete(xi)
 					doms[xi].hidden = true
 				}
@@ -907,6 +914,42 @@ function main(config){
 		doms["percentstrategy"] = aba
 
 
+		// do a poll to find frontrunner
+		
+		var autoPoll = [
+			{name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
+			{name:"Manual",realname:"Press the poll button to find the frontrunners once."}
+		];
+		var onChooseAutoPoll = function(data){
+			config.autoPoll = data.name
+			model.autoPoll = data.name
+			model.update()
+
+			// gui
+			var xlist = ["poll","frontrunners"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if (data.name == "Manual") {
+					featureset.add(xi)
+					doms[xi].hidden = false
+				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			config.featurelist = Array.from(featureset)
+
+		};
+		window.chooseAutoPoll = new ButtonGroup({
+			label: "AutoPoll to find new frontrunner:",
+			width: 72,
+			data: autoPoll,
+			onChoose: onChooseAutoPoll
+		});
+		document.querySelector("#left").appendChild(chooseAutoPoll.dom);
+		doms["autoPoll"] = chooseAutoPoll.dom
+		
 		
 		
 		// frontrunners
@@ -981,27 +1024,6 @@ function main(config){
 
 
 
-		// do a poll to find frontrunner
-		
-		var autoPoll = [
-			{name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
-			{name:"Manual",realname:"Press the poll button to find the frontrunners once."}
-		];
-		var onChooseAutoPoll = function(data){
-			config.autoPoll = data.name
-			model.autoPoll = data.name
-			model.update()
-
-		};
-		window.chooseAutoPoll = new ButtonGroup({
-			label: "AutoPoll to find new frontrunner:",
-			width: 72,
-			data: autoPoll,
-			onChoose: onChooseAutoPoll
-		});
-		document.querySelector("#left").appendChild(chooseAutoPoll.dom);
-		doms["autoPoll"] = chooseAutoPoll.dom
-		
 		
 		
 		// yee
@@ -1423,7 +1445,8 @@ function main(config){
 					stratsliders[i].value = config.voterPercentStrategy[i]
 				}
 			}
-			if(window.autoPoll) chooseAutoPoll.highlight("name", model.autoPoll)
+			if(window.chooseAutoPoll) chooseAutoPoll.highlight("name", config.autoPoll)
+
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
 			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);
 			

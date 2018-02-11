@@ -7,7 +7,10 @@ and RENDER IT INTO THE CAPTION
 
 var Election = {};
 
+
 Election.score = function(model, options){
+
+	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"score")
 
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
@@ -15,6 +18,9 @@ Election.score = function(model, options){
 			tally[candidate] += ballot[candidate];
 		}
 	});
+
+
+
 	var winners = _countWinner(tally);
 	var color = _colorWinner(model, winners);
 
@@ -27,6 +33,7 @@ Election.score = function(model, options){
 		var winner = winners[0];
 		var text = "";
 		text += "<span class='small'>";
+		if ("Auto" == model.autoPoll) text += polltext;
 		text += "<b>highest average score wins</b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
@@ -52,6 +59,8 @@ Election.score = function(model, options){
 };
 
 Election.star = function(model, options){
+
+	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"score")
 
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
@@ -102,6 +111,7 @@ Election.star = function(model, options){
 		// Caption
 		var text = "";
 		text += "<span class='small'>";
+		if ("Auto" == model.autoPoll) text += polltext;
 		text += "<b>pairwise winner of two highest average scores wins</b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
@@ -123,6 +133,9 @@ Election.star = function(model, options){
 Election.three21 = function(model, options){
 
 	var ballots = model.getBallots();
+
+	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"score")
+	
 	// Tally the approvals & get winner!
 	var tallies = _tallies(model, 3);
 
@@ -169,6 +182,7 @@ Election.three21 = function(model, options){
 		// Caption
 		var text = "";
 		text += "<span class='small'>";
+		if ("Auto" == model.autoPoll) text += polltext;
 		text += "<b>Semifinalists: 3 most good. Finalists: 2 least bad. Winner: more preferred.</b><br>";
 		text += "<b>Semifinalists:</b><br>";
 		for(var i=0; i<semifinalists.length; i++){
@@ -195,50 +209,21 @@ Election.three21 = function(model, options){
 
 Election.approval = function(model, options){
 
+	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"approval")
+
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
 		var approved = ballot.approved;
 		for(var i=0; i<approved.length; i++) tally[approved[i]]++;
 	});
+
 	var winners = _countWinner(tally);
 
 	var color = _colorWinner(model, winners);
 	
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 
-	var dostrategypoll = model.autoPoll == "Auto" // just for now
-	if (dostrategypoll) {
-		var max1 = 0
-		for (var can in tally) {
-			if (tally[can] > max1) max1 = tally[can]
-		}
-		var threshold = max1 * .5
-		var viable = []
-		for (var can in tally) {
-			if (tally[can] > threshold) viable.push(can)
-		}
-		var oldkeep = model.preFrontrunnerIds // only a temporary change
-		model.preFrontrunnerIds = viable
-		
-		// get the ballots
-		for(var i=0; i<model.voters.length; i++){
-			var voter = model.voters[i];
-			voter.update();
-		}
-		if (1) {
-			model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
-		}
-		
-
-		// Tally the approvals & get winner!
-		var tally = _tally(model, function(tally, ballot){
-			var approved = ballot.approved;
-			for(var i=0; i<approved.length; i++) tally[approved[i]]++;
-		});
-		var winners = _countWinner(tally);
-
-		var color = _colorWinner(model, winners);
-	}
+	
 
 	if (!options.sidebar) return
 
@@ -246,6 +231,7 @@ Election.approval = function(model, options){
 	var winner = winners[0];
 	var text = "";
 	text += "<span class='small'>";
+	if ("Auto" == model.autoPoll) text += polltext;
 	text += "<b>most approvals wins</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
@@ -1022,6 +1008,74 @@ Election.plurality = function(model, options){
 	}
 	model.caption.innerHTML = text;
 };
+
+var doPollAndUpdateBallots = function(model,options,electiontype){
+
+	
+	var oldkeep = model.preFrontrunnerIds // only a temporary change
+	model.preFrontrunnerIds = []
+	// get the ballots
+	for(var i=0; i<model.voters.length; i++){
+		var voter = model.voters[i];
+		voter.update();
+	}
+
+	// just sets the frontrunners and reruns the ballots, then sets the frontrunners back to normal, but keeps the altered ballots.
+	if (electiontype == "score") {
+		// Tally
+		var tally = _tally(model, function(tally, ballot){
+			for(var candidate in ballot){
+				tally[candidate] += ballot[candidate];
+			}
+		});
+	} else if (electiontype=="approval"){ 
+		// Tally the approvals & get winner!
+		var tally = _tally(model, function(tally, ballot){
+			var approved = ballot.approved;
+			for(var i=0; i<approved.length; i++) tally[approved[i]]++;
+		});
+	}
+
+	var factor = .5
+	var max1 = 0
+	for (var can in tally) {
+		if (tally[can] > max1) max1 = tally[can]
+	}
+	var threshold = max1 * factor
+	var viable = []
+	for (var can in tally) {
+		if (tally[can] > threshold) viable.push(can)
+	}
+
+	model.preFrontrunnerIds = viable
+	
+	// get the ballots
+	for(var i=0; i<model.voters.length; i++){
+		var voter = model.voters[i];
+		voter.update();
+	}
+
+	if (1) {
+		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
+	}
+
+	polltext = ""
+	if(options.sidebar) {
+		model.draw()
+		
+		polltext += "<b>polling for viable candidates: </b><br>";
+		polltext += "<b>(score > " + (threshold/model.getTotalVoters()).toFixed(2) + " = half max)</b><br>"
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i].id;
+			polltext += _icon(c)+": "+((tally[c]/model.getTotalVoters()).toFixed(2));
+			if (tally[c] > threshold) polltext += " &larr;"//" <--"
+			polltext += "<br>"
+		}
+		polltext += "<br>"
+	}
+	return polltext
+}
+
 
 var _tally = function(model, tallyFunc){
 

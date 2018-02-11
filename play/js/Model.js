@@ -480,6 +480,17 @@ function Model(config){
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
 		if (self.yeeon && Mouse.dragging != self.yeeobject) self.calculateYee()
 		
+		self.draw()
+
+		// Update!
+		self.onUpdate();
+		publish(self.id+"-update");
+
+	};
+
+
+	self.draw = function() {
+		
 		// Clear it all!
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 
@@ -599,12 +610,7 @@ function Model(config){
 			ctx.fillRect(x*2-dot,y*2-dot,dot*2,dot*2);
 			ctx.globalAlpha = 1
 		}
-
-		// Update!
-		self.onUpdate();
-		publish(self.id+"-update");
-
-	};
+	}
 
 	// HELPERS:
 	self.getBallots = function(){
