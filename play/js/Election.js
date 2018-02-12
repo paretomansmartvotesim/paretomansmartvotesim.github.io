@@ -10,7 +10,7 @@ var Election = {};
 
 Election.score = function(model, options){
 
-	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"score")
+	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"score")
 
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
@@ -60,7 +60,7 @@ Election.score = function(model, options){
 
 Election.star = function(model, options){
 
-	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"score")
+	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"score")
 
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
@@ -134,7 +134,7 @@ Election.three21 = function(model, options){
 
 	var ballots = model.getBallots();
 
-	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"score")
+	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"score")
 	
 	// Tally the approvals & get winner!
 	var tallies = _tallies(model, 3);
@@ -209,7 +209,7 @@ Election.three21 = function(model, options){
 
 Election.approval = function(model, options){
 
-	if ("Auto" == model.autoPoll) textpoll = doPollAndUpdateBallots(model,options,"approval")
+	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"approval")
 
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
@@ -1011,68 +1011,81 @@ Election.plurality = function(model, options){
 
 var doPollAndUpdateBallots = function(model,options,electiontype){
 
-	
-	var oldkeep = model.preFrontrunnerIds // only a temporary change
-	model.preFrontrunnerIds = []
-	// get the ballots
-	for(var i=0; i<model.voters.length; i++){
-		var voter = model.voters[i];
-		voter.update();
-	}
+	// check to see if there is a need for checking frontrunners
+
+	var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+	var skipthis =  not_f.includes(config.unstrategic)
+	for(var i=0;i<model.voters.length;i++){
+		if (! not_f.includes(model.voters[i].strategy)) skipthis = false
+	}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+	if (skipthis) return ""
 
 	// just sets the frontrunners and reruns the ballots, then sets the frontrunners back to normal, but keeps the altered ballots.
-	if (electiontype == "score") {
-		// Tally
-		var tally = _tally(model, function(tally, ballot){
-			for(var candidate in ballot){
-				tally[candidate] += ballot[candidate];
+
+	polltext = ""
+	var oldkeep = model.preFrontrunnerIds // only a temporary change
+	model.preFrontrunnerIds = []
+	for (var k=0;k<3;k++) { // do the polling 3 times
+			
+		// get the ballots
+		for(var i=0; i<model.voters.length; i++){
+			var voter = model.voters[i];
+			voter.update();
+		}
+
+		if (electiontype == "score") {
+			// Tally
+			var tally = _tally(model, function(tally, ballot){
+				for(var candidate in ballot){
+					tally[candidate] += ballot[candidate];
+				}
+			});
+		} else if (electiontype=="approval"){ 
+			// Tally the approvals & get winner!
+			var tally = _tally(model, function(tally, ballot){
+				var approved = ballot.approved;
+				for(var i=0; i<approved.length; i++) tally[approved[i]]++;
+			});
+		}
+
+		var factor = .5
+		var max1 = 0
+		for (var can in tally) {
+			if (tally[can] > max1) max1 = tally[can]
+		}
+		var threshold = max1 * factor
+		var viable = []
+		for (var can in tally) {
+			if (tally[can] > threshold) viable.push(can)
+		}
+
+		model.preFrontrunnerIds = viable
+		
+
+		if(options.sidebar) {
+			model.draw()
+			
+			polltext += "<b>polling for viable candidates: </b><br>";
+			polltext += "<b>(score > " + (threshold/model.getTotalVoters()).toFixed(2) + " = half max)</b><br>"
+			for(var i=0; i<model.candidates.length; i++){
+				var c = model.candidates[i].id;
+				polltext += _icon(c)+": "+((tally[c]/model.getTotalVoters()).toFixed(2));
+				if (tally[c] > threshold) polltext += " &larr;"//" <--"
+				polltext += "<br>"
 			}
-		});
-	} else if (electiontype=="approval"){ 
-		// Tally the approvals & get winner!
-		var tally = _tally(model, function(tally, ballot){
-			var approved = ballot.approved;
-			for(var i=0; i<approved.length; i++) tally[approved[i]]++;
-		});
-	}
+			polltext += "<br>"
+		}
 
-	var factor = .5
-	var max1 = 0
-	for (var can in tally) {
-		if (tally[can] > max1) max1 = tally[can]
-	}
-	var threshold = max1 * factor
-	var viable = []
-	for (var can in tally) {
-		if (tally[can] > threshold) viable.push(can)
-	}
-
-	model.preFrontrunnerIds = viable
-	
+	}		
 	// get the ballots
 	for(var i=0; i<model.voters.length; i++){
 		var voter = model.voters[i];
 		voter.update();
 	}
-
 	if (1) {
 		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
 	}
 
-	polltext = ""
-	if(options.sidebar) {
-		model.draw()
-		
-		polltext += "<b>polling for viable candidates: </b><br>";
-		polltext += "<b>(score > " + (threshold/model.getTotalVoters()).toFixed(2) + " = half max)</b><br>"
-		for(var i=0; i<model.candidates.length; i++){
-			var c = model.candidates[i].id;
-			polltext += _icon(c)+": "+((tally[c]/model.getTotalVoters()).toFixed(2));
-			if (tally[c] > threshold) polltext += " &larr;"//" <--"
-			polltext += "<br>"
-		}
-		polltext += "<br>"
-	}
 	return polltext
 }
 
