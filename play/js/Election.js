@@ -1014,8 +1014,9 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 	// check to see if there is a need for checking frontrunners
 
 	var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-	var skipthis =  not_f.includes(config.unstrategic)
+	var skipthis =  true
 	for(var i=0;i<model.voters.length;i++){
+		if (! not_f.includes(model.voters[i].unstrategic)) skipthis = false
 		if (! not_f.includes(model.voters[i].strategy)) skipthis = false
 	}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
 	if (skipthis) return ""
