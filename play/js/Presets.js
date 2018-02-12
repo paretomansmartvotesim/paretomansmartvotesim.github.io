@@ -397,7 +397,8 @@ kindayee: "can",
 	arena_border: 0,
 	spread_factor_voters: 2,
 	unstrategic: "normalize",
-	strategic: "normalize frontrunners only"
+	strategic: "normalize frontrunners only",
+	autoPoll: "Auto"
 }
     } else if (htmlname == "ballot1.html") {
 		config = 

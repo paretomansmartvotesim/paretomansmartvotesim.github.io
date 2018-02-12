@@ -46,6 +46,10 @@ function main(config){
 	var loadDefaults = function() {
 		// Defaults...
 		config = config || {};
+		config.configversion = config.configversion || 1
+		
+		// version 2 stuff
+		// if (config.configversion >= 2) { // for future}
 		config.system = config.system || "FPTP";
 		config.candidates = config.candidates || 3;
 		config.voters = config.voters || 1;
@@ -77,7 +81,7 @@ function main(config){
 		config.hidegearconfig = config.hidegearconfig || false;
 		
 		config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"]
-		config.autoPoll = config.autoPoll || "Auto"
+		config.autoPoll = config.autoPoll || "Manual"
 		config.voterStrategies = config.voterStrategies || []
 		config.description = config.description || ""
 		for (var i = 0; i < maxVoters; i++) {
@@ -114,6 +118,7 @@ function main(config){
 		var filename = url.substring(url.lastIndexOf('/')+1);
 		config.filename = filename
 		config.presethtmlname = filename;
+
 		initialConfig = JSON.parse(JSON.stringify(config));
 
 	}
