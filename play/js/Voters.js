@@ -211,6 +211,7 @@ function ScoreVoter(model){
 		var totalSlices = self.model.candidates.length*(maxscore-minscore);
 		var leftover = totalSlices;
 		var slices = [];
+		totalScore = 0;
 		for(var i=0; i<self.model.candidates.length; i++){
 			var c = self.model.candidates[i];
 			var cID = c.id;
@@ -220,12 +221,14 @@ function ScoreVoter(model){
 				num: score,
 				fill: c.fill
 			});
+			totalScore += score
 		}
+		totalSlices = totalScore
 		// Leftover is gray
-		slices.push({
-			num: leftover,
-			fill: "#bbb"
-		});
+		// slices.push({
+		// 	num: leftover,
+		// 	fill: "#bbb"
+		// });
 		// FILL 'EM IN
 		_drawSlices(ctx, x, y, size, slices, totalSlices);
 
@@ -291,6 +294,7 @@ function ThreeVoter(model){
 		var totalSlices = self.model.candidates.length*(maxscore-minscore);
 		var leftover = totalSlices;
 		var slices = [];
+		totalScore = 0;
 		for(var i=0; i<self.model.candidates.length; i++){
 			var c = self.model.candidates[i];
 			var cID = c.id;
@@ -300,12 +304,14 @@ function ThreeVoter(model){
 				num: score,
 				fill: c.fill
 			});
+			totalScore += score
 		}
+		totalSlices = totalScore
 		// Leftover is gray
-		slices.push({
-			num: leftover,
-			fill: "#bbb"
-		});
+		// slices.push({
+		// 	num: leftover,
+		// 	fill: "#bbb"
+		// });
 		// FILL 'EM IN
 		_drawSlices(ctx, x, y, size, slices, totalSlices);
 
