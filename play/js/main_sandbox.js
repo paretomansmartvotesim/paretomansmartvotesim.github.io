@@ -33,7 +33,7 @@ function main(config){
 	}
 
 	var initialConfig
-	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"]
+	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 	var doms = {}  // for hiding menus, later
 	var stratsliders = [] // for hiding sliders, later
 	var groupsliders = [] // for hiding sliders, later
@@ -82,6 +82,7 @@ function main(config){
 		
 		config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"]
 		config.autoPoll = config.autoPoll || "Manual"
+		// config.primaries = config.primaries || "No"
 		config.voterStrategies = config.voterStrategies || []
 		config.description = config.description || ""
 		for (var i = 0; i < maxVoters; i++) {
@@ -157,6 +158,7 @@ function main(config){
 			model.system = config.system;
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.autoPoll = config.autoPoll
+			// model.primaries = config.primaries
 			model.computeMethod = config.computeMethod;
 			model.pixelsize = config.pixelsize;
 			model.spread_factor_voters = config.spread_factor_voters;
@@ -345,7 +347,8 @@ function main(config){
 		// Which voting system?
 		var votingSystems = [
 			{name:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
-			{name:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo},
+			{name:"+Primary", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.pluralityWithPrimary},
+			{name:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo, margin:100},
 			{name:"IRV", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv, margin:4},
 			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda},
 			{name:"Pair Elim.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs, margin:4},
@@ -919,6 +922,29 @@ function main(config){
 		doms["percentstrategy"] = aba
 
 
+		// // are there primaries?
+		
+		// var primaries = [
+		// 	{name:"Yes",realname:"Yes", margin:5},
+		// 	{name:"No",realname:"No"}
+		// ];
+		// var onChoosePrimaries = function(data){
+		// 	config.primaries = data.name
+		// 	model.primaries = data.name
+		// 	model.update()
+
+		// };
+		// window.choosePrimaries = new ButtonGroup({
+		// 	label: "Primaries?",
+		// 	width: 72,
+		// 	data: primaries,
+		// 	onChoose: onChoosePrimaries
+		// });
+		// document.querySelector("#left").appendChild(choosePrimaries.dom);
+		// doms["primaries"] = choosePrimaries.dom
+		
+
+
 		// do a poll to find frontrunner
 		
 		var autoPoll = [
@@ -1451,6 +1477,7 @@ function main(config){
 				}
 			}
 			if(window.chooseAutoPoll) chooseAutoPoll.highlight("name", config.autoPoll)
+			// if(window.choosePrimaries) choosePrimaries.highlight("name", config.primaries)
 
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
 			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);

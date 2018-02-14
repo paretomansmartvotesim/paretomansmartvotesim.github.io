@@ -970,8 +970,83 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 	model.caption.innerHTML = text;
 };
 
+Election.pluralityWithPrimary = function(model, options){
+	options = options || {};
+
+	// Tally the approvals & get winner!
+	var ptallies = _tally_primary(model, function(tally, ballot){
+		tally[ballot.vote]++;
+	});
+
+	pwinners = []
+	for (var i in ptallies) {
+		var tally = ptallies[i]
+		pwinners = pwinners.concat(_countWinner(tally))
+	}
+
+	// only do 2 candidates
+	var oldcandidates = model.candidates
+	model.candidates = model.candidates.filter( x => pwinners.includes(x.id)) 
+	for(var j=0; j<model.voters.length; j++){
+		model.voters[j].update();
+	}
+	var tally = _tally(model, function(tally, ballot){
+		tally[ballot.vote]++;
+	});
+	model.candidates = oldcandidates
+
+	var winners = _countWinner(tally);
+	var color = _colorWinner(model, winners);
+	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
+	if (!options.sidebar) return
+
+	// Caption
+	var winner = winners[0];
+	var text = "";
+	text += "<span class='small'>";
+	for (var i in ptallies) {
+		var tally1 = ptallies[i]
+		var ip1 = i*1+1
+		text += "<b>primary for group " + ip1 + ":</b><br>";
+		var pwin = _countWinner(tally1)
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i].id;
+			text += _icon(c)+" got "+tally1[c]+" votes";
+			if (pwin.includes(c)) text += " &larr;"
+			text += "<br>"
+		}
+		text += "<br>"
+	}
+	text += "<b>general election:</b><br>";
+	for(var i=0; i<model.candidates.length; i++){
+		var c = model.candidates[i].id;
+		if (pwinners.includes(c)) text += _icon(c)+" got "+tally[c]+" votes<br>";
+	}
+	// Caption text for winner, or tie
+	if (winners.length == 1) {
+		if(options.sidebar){
+			text += "<br>";
+			text += _icon(winner)+" has most votes, so...<br>";
+		}
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+	} else {
+		text += _tietext(winners);
+		text = "<b>TIE</b> <br> <br>" + text;
+	}
+	model.caption.innerHTML = text;
+
+}
+
+
 Election.plurality = function(model, options){
 
+	// if (model.primaries == "Yes"){
+	// 	Election.pluralityWithPrimary(model, options)
+	// 	return
+	// }
 	options = options || {};
 
 	// Tally the approvals & get winner!
@@ -1105,6 +1180,29 @@ var _tally = function(model, tallyFunc){
 
 	// Return it.
 	return tally;
+
+}
+
+
+var _tally_primary = function(model, tallyFunc){
+
+	primaries_tallies = []
+	for ( var j = 0; j < model.voters.length; j++){
+		
+		// Create the tally
+		var tally = {};
+		for(var candidateID in model.candidatesById) tally[candidateID] = 0;
+
+		// Count 'em up
+			
+		var ballots = model.voters[j].ballots
+		for(var i=0; i<ballots.length; i++){
+			tallyFunc(tally, ballots[i]);
+		}
+		primaries_tallies.push(tally)
+	}
+	// Return it.
+	return primaries_tallies;
 
 }
 
