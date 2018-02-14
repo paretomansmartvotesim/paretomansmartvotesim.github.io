@@ -1186,7 +1186,28 @@ var _tally = function(model, tallyFunc){
 
 var _tally_primary = function(model, tallyFunc){
 
-	primaries_tallies = []
+	var primaries_tallies = []
+	var oldcandidates = model.candidates // temporary change
+	caninprimary = []
+	for ( var j = 0; j < model.voters.length; j++){
+		caninprimary.push([])
+	}
+	
+	for (var c in model.candidates){
+		var can = model.candidates[c]
+		var maxdist2 = Infinity
+		var votebelong = 0
+		for ( var j = 0; j < model.voters.length; j++){
+			var dx = model.voters[j].x - can.x
+			var dy = model.voters[j].y - can.y
+			var dist2 = dx*dx + dy*dy
+			if (dist2 < maxdist2) {
+				votebelong = j
+				maxdist2 = dist2
+			}
+		}
+		caninprimary[votebelong].push(model.candidates[c])
+	}
 	for ( var j = 0; j < model.voters.length; j++){
 		
 		// Create the tally
@@ -1194,14 +1215,18 @@ var _tally_primary = function(model, tallyFunc){
 		for(var candidateID in model.candidatesById) tally[candidateID] = 0;
 
 		// Count 'em up
-			
+		model.candidates = caninprimary[j]	
+		if (model.candidates.length == 0) model.candidates = oldcandidates // workaround
+		model.voters[j].update()
 		var ballots = model.voters[j].ballots
 		for(var i=0; i<ballots.length; i++){
 			tallyFunc(tally, ballots[i]);
 		}
 		primaries_tallies.push(tally)
 	}
+	model.candidates = oldcandidates // reset
 	// Return it.
+	model.draw()
 	return primaries_tallies;
 
 }
