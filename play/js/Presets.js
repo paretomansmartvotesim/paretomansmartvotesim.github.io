@@ -939,16 +939,6 @@ preFrontrunnerIds: ["square","triangle"],
 showChoiceOfFrontrunners: true,
 showChoiceOfStrategy: true
 }
-
-} else if (htmlname == "ballot13.html") {
-	config = 
-{
-system: "Approval",
-strategy: "normalize",
-candidatePositions: [[76,147],[151,144],[211,145]],
-voterPositions: [[187,188]]
-}
-
     // } else if (htmlname == "election.html") {
 	// 	config = 
 
