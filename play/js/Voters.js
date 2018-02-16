@@ -85,6 +85,12 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 
 	// assign scores
 	scores = {}
+	var nonlinear = true
+	if (nonlinear) {
+		var f = x => x**2
+		f_n = f(n)
+		f_m = f(m)
+	}
 	for(var i=0; i<lc; i++){
 		var d1 = dista[i]
 		if (d1 < n) {
@@ -92,7 +98,11 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 		} else if (d1 >= m){ // in the case that the voter likes the frontrunner candidates equally, he just votes for everyone better
 			score = minscore
 		} else { // putting this last avoids m==n giving division by 0
-			frac = ( d1 - n ) / ( m - n )
+			if (nonlinear) {
+				frac = ( f(d1) - f_n ) / ( f_m - f_n )
+			} else {
+				frac = ( d1 - n ) / ( m - n )
+			}
 			score = Math.floor(.5+minscore+(maxscore-minscore)*(1-frac))
 		}
 		scores[canAid[i]] = score
@@ -192,8 +202,19 @@ function ScoreVoter(model){
 		var step = (self.radiusLast - self.radiusFirst)/scorange;
 		// Draw big ol' circles.
 		for(var i=0;i<scorange;i++){
+			//var dist = step*(i+.5) + self.radiusFirst
+			var nonlinear = true
+			if (nonlinear) {
+				var f = x => x**2 // f is a function defined between 0 and 1 and increasing.
+				var finv = x => Math.sqrt(x)
+				var frac = (1-(i+.5)/scorange)
+				var worst = f(1)
+				var best = f(self.radiusFirst/self.radiusLast)
+				var x1 = finv(frac*(worst-best)+best)
+				var dist = x1 * self.radiusLast
+			}
 			ctx.beginPath();
-			ctx.arc(x, y, (step*(i+.5) + self.radiusFirst)*2, 0, Math.TAU, false);
+			ctx.arc(x, y, dist*2, 0, Math.TAU, false);
 			ctx.lineWidth = (5-i)*2;
 			ctx.strokeStyle = "#888";
 			ctx.setLineDash([]);
