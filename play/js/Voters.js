@@ -164,10 +164,10 @@ function ScoreVoter(model){
 
 	var self = this;
 	self.model = model;
-	var maxscore = 5;
-	var minscore = 0;
-	var scorearray = [];
-	for (var i=minscore; i<= maxscore; i++) scorearray.push(i)
+	self.maxscore = 5;
+	self.minscore = 0;
+	self.scorearray = [];
+	for (var i=self.minscore; i<= self.maxscore; i++) self.scorearray.push(i)
 	self.radiusStep = window.HACK_BIG_RANGE ? 61 : 25; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.getScore = function(x2){
@@ -183,7 +183,7 @@ function ScoreVoter(model){
 	self.getBallot = function(x, y, strategy){
 
 		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
-		var scoresfirstlast = dostrategy(x,y,minscore,maxscore,scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,doStar)
+		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,self.scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,doStar)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -198,7 +198,7 @@ function ScoreVoter(model){
 		// RETINA
 		x = x*2;
 		y = y*2;
-		var scorange = maxscore - minscore
+		var scorange = self.maxscore - self.minscore
 		var step = (self.radiusLast - self.radiusFirst)/scorange;
 		// Draw big ol' circles.
 		for(var i=0;i<scorange;i++){
@@ -222,21 +222,20 @@ function ScoreVoter(model){
 			ctx.stroke();
 			if (self.dottedCircle) ctx.setLineDash([]);
 		}
-
-	};
+	}
 
 	self.drawCircle = function(ctx, x, y, size, ballot){
 
 		// There are #Candidates*5 slices
 		// Fill 'em in in order -- and the rest is gray.
-		var totalSlices = self.model.candidates.length*(maxscore-minscore);
+		var totalSlices = self.model.candidates.length*(self.maxscore-self.minscore);
 		var leftover = totalSlices;
 		var slices = [];
 		totalScore = 0;
 		for(var i=0; i<self.model.candidates.length; i++){
 			var c = self.model.candidates[i];
 			var cID = c.id;
-			var score = ballot[cID] - minscore;
+			var score = ballot[cID] - self.minscore;
 			leftover -= score;
 			slices.push({
 				num: score,
@@ -260,82 +259,19 @@ function ScoreVoter(model){
 function ThreeVoter(model){
 
 	var self = this;
-	self.model = model;
-	var maxscore = 2;
-	var minscore = 0;
-	var scorearray = [];
-	for (var i=minscore; i<= maxscore; i++) scorearray.push(i)
-	self.radiusStep = window.HACK_BIG_RANGE ? 61 : 25; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
+
+	ScoreVoter.call(self,model)
+
+	self.maxscore = 2;
+	self.minscore = 0;
+	self.scorearray = [];
+	for (var i=self.minscore; i<= self.maxscore; i++) self.scorearray.push(i)
 
 	self.getScore = function(x2){
 		var step = self.radiusStep;
 		if(x2<step*step) return 2;
 		if(x2<step*3.5*step*3.5) return 1;
 		return 0;
-	};
-
-	self.getBallot = function(x, y, strategy){
-
-		
-		var scoresfirstlast = dostrategy(x,y,minscore,maxscore,scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,false)
-		
-		self.radiusFirst = scoresfirstlast.radiusFirst
-		self.radiusLast = scoresfirstlast.radiusLast
-		self.dottedCircle = scoresfirstlast.dottedCircle
-		var scores = scoresfirstlast.scores
-		return scores
-		
-	};
-
-	self.drawBG = function(ctx, x, y, ballot){
-
-		// RETINA
-		x = x*2;
-		y = y*2;
-		var scorange = maxscore - minscore
-		var step = (self.radiusLast - self.radiusFirst)/scorange;
-		// Draw big ol' circles.
-		for(var i=0;i<scorange;i++){
-			ctx.beginPath();
-			ctx.arc(x, y, (step*(i+.5) + self.radiusFirst)*2, 0, Math.TAU, false);
-			ctx.lineWidth = (5-i)*2;
-			ctx.strokeStyle = "#888";
-			ctx.setLineDash([]);
-			if (self.dottedCircle) ctx.setLineDash([5, 15]);
-			ctx.stroke();
-			if (self.dottedCircle) ctx.setLineDash([]);
-		}
-
-	};
-
-	self.drawCircle = function(ctx, x, y, size, ballot){
-
-		// There are #Candidates*5 slices
-		// Fill 'em in in order -- and the rest is gray.
-		var totalSlices = self.model.candidates.length*(maxscore-minscore);
-		var leftover = totalSlices;
-		var slices = [];
-		totalScore = 0;
-		for(var i=0; i<self.model.candidates.length; i++){
-			var c = self.model.candidates[i];
-			var cID = c.id;
-			var score = ballot[cID] - minscore;
-			leftover -= score;
-			slices.push({
-				num: score,
-				fill: c.fill
-			});
-			totalScore += score
-		}
-		totalSlices = totalScore
-		// Leftover is gray
-		// slices.push({
-		// 	num: leftover,
-		// 	fill: "#bbb"
-		// });
-		// FILL 'EM IN
-		_drawSlices(ctx, x, y, size, slices, totalSlices);
-
 	};
 
 }
