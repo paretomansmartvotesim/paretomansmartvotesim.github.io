@@ -58,6 +58,7 @@ function main(config){
 		config.spread_factor_voters = config.spread_factor_voters || 1;
 		config.arena_size = config.arena_size || 300;
 		config.median_mean = config.median_mean || 1;
+		config.utility_shape = config.utility_shape || "linear";
 		if (config.arena_border === undefined) config.arena_border = 2;
 		//config.votersRealName = config.votersRealName || "Single Voter";
 		config.oneVoter = config.oneVoter || false;
@@ -164,6 +165,7 @@ function main(config){
 			model.spread_factor_voters = config.spread_factor_voters;
 			model.arena_size = config.arena_size;
 			model.median_mean = config.median_mean;
+			model.utility_shape = config.utility_shape;
 			model.arena_border = config.arena_border;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==model.system);
@@ -1400,6 +1402,27 @@ function main(config){
 		choose_median_mean.dom.hidden = true
 		document.querySelector("#left").insertBefore(choose_median_mean.dom,doms["systems"]);
 
+
+
+		var utility_shape = [{name:"linear",margin:4},{name:"quadratic"}]
+
+		var onChoose_utility_shape = function(data){
+			config.utility_shape = data.name
+			model.utility_shape = data.name
+			model.update()
+			
+		};
+		window.choose_utility_shape = new ButtonGroup({
+			label: "Median or Mean:",
+			width: 68,
+			data: utility_shape,
+			onChoose: onChoose_utility_shape
+		});
+		choose_utility_shape.dom.hidden = true
+		document.querySelector("#left").insertBefore(choose_utility_shape.dom,doms["systems"]);
+
+
+
 		// gear button (combines with above)
 		
 		var gearicon = [{name:"config"}]
@@ -1411,6 +1434,7 @@ function main(config){
 				choose_spread_factor_voters.dom.hidden = false
 				choose_arena_size.dom.hidden = false
 				choose_median_mean.dom.hidden = false
+				choose_utility_shape.dom.hidden = false
 			} else {
 				choosegearconfig.dom.hidden = true
 				choosepresetconfig.dom.hidden = true
@@ -1418,6 +1442,7 @@ function main(config){
 				choose_spread_factor_voters.dom.hidden = true
 				choose_arena_size.dom.hidden = true
 				choose_median_mean.dom.hidden = true
+				choose_utility_shape.dom.hidden = true
 			}
 		};
 		window.choosegearicon = new ButtonGroup({
@@ -1499,6 +1524,7 @@ function main(config){
 			if(window.choose_spread_factor_voters) choose_spread_factor_voters.highlight("name", config.spread_factor_voters);
 			if(window.choose_arena_size) choose_arena_size.highlight("name", config.arena_size);
 			if(window.choose_median_mean) choose_median_mean.highlight("val", config.median_mean);
+			if(window.choose_utility_shape) choose_utility_shape.highlight("name", config.utility_shape);
 			
 		};
 		selectUI();

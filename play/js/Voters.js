@@ -1,5 +1,5 @@
 // helper function for strategies
-function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar) {
+function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar,utility_shape) {
 	
 	// reference
 	// {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
@@ -81,8 +81,7 @@ function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,
 
 	// assign scores //
 	scores = {}
-	var nonlinear = false
-	if (nonlinear) {
+	if (utility_shape == "quadratic") {
 		var f = x => x**2
 		var m_inv = 1/m
 		f_n = f(n*m_inv)
@@ -95,7 +94,7 @@ function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,
 		} else if (d1 >= m){ // in the case that the voter likes the frontrunner candidates equally, he just votes for everyone better
 			score = minscore
 		} else { // putting this last avoids m==n giving division by 0
-			if (nonlinear) {
+			if (utility_shape == "quadratic") {
 				frac = ( f(d1*m_inv) - f_n ) / ( f_m - f_n )
 			} else {
 				frac = ( d1 - n ) / ( m - n )
@@ -194,7 +193,7 @@ function ScoreVoter(model){
 				self.model.preFrontrunnerIds = viable
 			}
 		}
-		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.defaultMax,doStar)
+		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.defaultMax,doStar,self.model.utility_shape)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -212,23 +211,25 @@ function ScoreVoter(model){
 		var scorange = self.maxscore - self.minscore
 		var step = (self.radiusLast - self.radiusFirst)/scorange;
 		// Draw big ol' circles.
+		if (self.model.utility_shape == "quadratic") {
+			var f = x => x**2 // f is a function defined between 0 and 1 and increasing.
+			var finv = x => Math.sqrt(x)
+		} else {
+			var f = x => x // f is a function defined between 0 and 1 and increasing.
+			var finv = x => x
+		}
 		for(var i=0;i<scorange;i++){
 			//var dist = step*(i+.5) + self.radiusFirst
-			var nonlinear = false
-			if (nonlinear) {
-				var f = x => x**2 // f is a function defined between 0 and 1 and increasing.
-				var finv = x => Math.sqrt(x)
-				var frac = (1-(i+.5)/scorange)
-				var worst = f(1)
-				var best = f(self.radiusFirst/self.radiusLast)
-				var x1 = finv(frac*(worst-best)+best)
-				var dist = x1 * self.radiusLast
-			} else {
-				var dist = (self.radiusLast + self.radiusFirst) * .5
-			}
+
+			var frac = (1-(i+.5)/scorange)
+			var worst = f(1)
+			var best = f(self.radiusFirst/self.radiusLast)
+			var x1 = finv(frac*(worst-best)+best)
+			var dist = x1 * self.radiusLast
+			
+			ctx.lineWidth = (i+5-scorange)*2 + 2;
 			ctx.beginPath();
 			ctx.arc(x, y, dist*2, 0, Math.TAU, false);
-			ctx.lineWidth = (5-i)*2;
 			ctx.strokeStyle = "#888";
 			ctx.setLineDash([]);
 			if (self.dottedCircle) ctx.setLineDash([5, 15]);
