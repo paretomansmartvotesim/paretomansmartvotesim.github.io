@@ -1,5 +1,5 @@
 // helper function for strategies
-function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar) {
+function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar) {
 	
 	// reference
 	// {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
@@ -81,7 +81,7 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 
 	// assign scores //
 	scores = {}
-	var nonlinear = true
+	var nonlinear = false
 	if (nonlinear) {
 		var f = x => x**2
 		var m_inv = 1/m
@@ -171,13 +171,30 @@ function ScoreVoter(model){
 	self.model = model;
 	self.maxscore = 5;
 	self.minscore = 0;
-	self.scorearray = [0,1,2,3,4,5]
 	self.defaultMax = window.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.getBallot = function(x, y, strategy){
 
 		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
-		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,self.scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.defaultMax,doStar)
+		if (self.model.autoPoll) {
+			if (self.model.pollResults) {
+				tally = model.pollResults
+
+				var factor = self.poll_threshold_factor
+				var max1 = 0
+				for (var can in tally) {
+					if (tally[can] > max1) max1 = tally[can]
+				}
+				var threshold = max1 * factor
+				var viable = []
+				for (var can in tally) {
+					if (tally[can] > threshold) viable.push(can)
+				}
+
+				self.model.preFrontrunnerIds = viable
+			}
+		}
+		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.defaultMax,doStar)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -265,7 +282,6 @@ function ThreeVoter(model){
 	ScoreVoter.call(self,model)
 
 	self.maxscore = 2
-	self.scorearray = [0,1,2]
 
 }
 
@@ -275,7 +291,6 @@ function ApprovalVoter(model){
 
 	ScoreVoter.call(self,model)
 	self.maxscore = 1
-	self.scorearray = [0,1]
 	self.defaultMax = 200 // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.subGetBallot = self.getBallot
@@ -677,6 +692,10 @@ if (!self.x_voters) {
 				var strategy = self.unstrategic; // no e.g. 
 			}
 			
+			// choose the threshold of voters
+			var r_11 = Math.random() * 2 - 1 
+			self.type.poll_threshold_factor = _erfinv(r_11) * .2 + .5
+
 			var ballot = self.type.getBallot(x, y, strategy);
 			self.ballots.push(ballot);
 		}

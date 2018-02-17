@@ -1101,7 +1101,8 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 	polltext = ""
 	var oldkeep = model.preFrontrunnerIds // only a temporary change
 	model.preFrontrunnerIds = []
-	for (var k=0;k<3;k++) { // do the polling 3 times
+	model.pollResults = undefined
+	for (var k=0;k<10;k++) { // do the polling 3 times
 			
 		// get the ballots
 		for(var i=0; i<model.voters.length; i++){
@@ -1123,6 +1124,8 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 				for(var i=0; i<approved.length; i++) tally[approved[i]]++;
 			});
 		}
+		
+		model.pollResults = tally
 
 		var factor = .5
 		var max1 = 0
