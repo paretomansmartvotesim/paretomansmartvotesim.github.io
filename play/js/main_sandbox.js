@@ -1416,7 +1416,7 @@ function main(config){
 			
 		};
 		window.choose_utility_shape = new ButtonGroup({
-			label: "Median or Mean:",
+			label: "Utility Shape:",
 			width: 68,
 			data: utility_shape,
 			onChoose: onChoose_utility_shape
