@@ -175,25 +175,23 @@ function ScoreVoter(model){
 	self.getBallot = function(x, y, strategy){
 
 		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
-		if (self.model.autoPoll) {
-			if (self.model.pollResults) {
-				tally = model.pollResults
+		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
+			tally = model.pollResults
 
-				var factor = self.poll_threshold_factor
-				var max1 = 0
-				for (var can in tally) {
-					if (tally[can] > max1) max1 = tally[can]
-				}
-				var threshold = max1 * factor
-				var viable = []
-				for (var can in tally) {
-					if (tally[can] > threshold) viable.push(can)
-				}
-
-				self.model.preFrontrunnerIds = viable
+			var factor = self.poll_threshold_factor
+			var max1 = 0
+			for (var can in tally) {
+				if (tally[can] > max1) max1 = tally[can]
 			}
+			var threshold = max1 * factor
+			var viable = []
+			for (var can in tally) {
+				if (tally[can] > threshold) viable.push(can)
+			}
+		} else {
+			viable = self.model.preFrontrunnerIds
 		}
-		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.defaultMax,doStar,self.model.utility_shape)
+		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,viable,self.model.candidates,self.defaultMax,doStar,self.model.utility_shape)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
