@@ -1102,7 +1102,11 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 	var oldkeep = model.preFrontrunnerIds // only a temporary change
 	model.preFrontrunnerIds = []
 	model.pollResults = undefined
-	for (var k=0;k<10;k++) { // do the polling 3 times
+	if (options.sidebar) {
+		polltext += "<b>polling for viable candidates: </b><br>";
+		//polltext += "<b>(score > " + (100*threshold/model.getTotalVoters()).toFixed(0) + " = half max)</b><br>"
+	}
+	for (var k=0;k<5;k++) { // do the polling 3 times
 			
 		// get the ballots
 		for(var i=0; i<model.voters.length; i++){
@@ -1142,15 +1146,12 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 		
 
 		if(options.sidebar) {
-			model.draw()
 			
-			polltext += "<b>polling for viable candidates: </b><br>";
-			polltext += "<b>(score > " + (threshold/model.getTotalVoters()).toFixed(2) + " = half max)</b><br>"
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
-				polltext += _icon(c)+": "+((tally[c]/model.getTotalVoters()).toFixed(2));
-				if (tally[c] > threshold) polltext += " &larr;"//" <--"
-				polltext += "<br>"
+				polltext += _icon(c)+""+((100*tally[c]/(model.getTotalVoters() * model.voters[0].type.maxscore)).toFixed(0)) + ". "
+				//if (tally[c] > threshold) polltext += " &larr;"//" <--"
+				//polltext += "<br>"
 			}
 			polltext += "<br>"
 		}
@@ -1160,6 +1161,9 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 	for(var i=0; i<model.voters.length; i++){
 		var voter = model.voters[i];
 		voter.update();
+	}
+	if (options.sidebar){
+		model.draw()
 	}
 	if (1) {
 		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
