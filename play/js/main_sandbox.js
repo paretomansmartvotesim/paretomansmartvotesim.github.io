@@ -1404,7 +1404,10 @@ function main(config){
 
 
 
-		var utility_shape = [{name:"linear",margin:4},{name:"quadratic"}]
+		var utility_shape = [	
+			{name:"linear",margin:4},
+			{name:"quadratic",margin:4},
+			{name:"log"}]
 
 		var onChoose_utility_shape = function(data){
 			config.utility_shape = data.name

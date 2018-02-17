@@ -1,4 +1,137 @@
-// helper function for strategies
+
+/////////////////////////////////////
+///////// TYPES OF VOTER ////////////
+/////////////////////////////////////
+
+function ScoreVoter(model){
+
+	var self = this;
+	self.model = model;
+	self.maxscore = 5;
+	self.minscore = 0;
+	self.defaultMax = window.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
+
+	self.getBallot = function(x, y, strategy){
+
+		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
+		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
+			tally = model.pollResults
+
+			var factor = self.poll_threshold_factor
+			var max1 = 0
+			for (var can in tally) {
+				if (tally[can] > max1) max1 = tally[can]
+			}
+			var threshold = max1 * factor
+			var viable = []
+			for (var can in tally) {
+				if (tally[can] > threshold) viable.push(can)
+			}
+		} else {
+			viable = self.model.preFrontrunnerIds
+		}
+		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,viable,self.model.candidates,self.defaultMax,doStar,self.model.utility_shape)
+		
+		self.radiusFirst = scoresfirstlast.radiusFirst
+		self.radiusLast = scoresfirstlast.radiusLast
+		self.dottedCircle = scoresfirstlast.dottedCircle
+		var scores = scoresfirstlast.scores
+		return scores
+		
+	};
+
+	self.drawBG = function(ctx, x, y, ballot){
+
+		// RETINA
+		x = x*2;
+		y = y*2;
+		var scorange = self.maxscore - self.minscore
+		var step = (self.radiusLast - self.radiusFirst)/scorange;
+		// Draw big ol' circles.
+		var f = utility_function(self.model.utility_shape)
+		var finv = inverse_utility_function(self.model.utility_shape)
+		for(var i=0;i<scorange;i++){
+			//var dist = step*(i+.5) + self.radiusFirst
+
+			var frac = (1-(i+.5)/scorange)
+			var worst = f(1)
+			var best = f(self.radiusFirst/self.radiusLast)
+			var x1 = finv(frac*(worst-best)+best)
+			var dist = x1 * self.radiusLast
+			
+			ctx.lineWidth = (i+5-scorange)*2 + 2;
+			ctx.beginPath();
+			ctx.arc(x, y, dist*2, 0, Math.TAU, false);
+			ctx.strokeStyle = "#888";
+			ctx.setLineDash([]);
+			if (self.dottedCircle) ctx.setLineDash([5, 15]);
+			ctx.stroke();
+			if (self.dottedCircle) ctx.setLineDash([]);
+		}
+	}
+
+	self.drawCircle = function(ctx, x, y, size, ballot){
+
+		// There are #Candidates*5 slices
+		// Fill 'em in in order -- and the rest is gray.
+		var totalSlices = self.model.candidates.length*(self.maxscore-self.minscore);
+		var leftover = totalSlices;
+		var slices = [];
+		totalScore = 0;
+		for(var i=0; i<self.model.candidates.length; i++){
+			var c = self.model.candidates[i];
+			var cID = c.id;
+			var score = ballot[cID] - self.minscore;
+			leftover -= score;
+			slices.push({
+				num: score,
+				fill: c.fill
+			});
+			totalScore += score
+		}
+		totalSlices = totalScore
+		// Leftover is gray
+		// slices.push({
+		// 	num: leftover,
+		// 	fill: "#bbb"
+		// });
+		// FILL 'EM IN
+
+		if(totalScore==0){
+			_drawBlank(ctx, x, y, size);
+			return;
+		}
+
+		_drawSlices(ctx, x, y, size, slices, totalSlices);
+
+	};
+
+}
+// helper functions for strategies
+
+function utility_function(utility_shape) {
+	if (utility_shape == "quadratic") {
+		var f = x => x**2
+	} else if (utility_shape == "log") {
+		var f = x => Math.log(x+.1)
+	} else { // "linear"
+		var f = x => x // f is a function defined between 0 and 1 and increasing.
+	}
+	return f
+}
+
+function inverse_utility_function(utility_shape) {
+	if (self.model.utility_shape == "quadratic") {
+		var finv = x => Math.sqrt(x)
+	} else if (self.model.utility_shape == "log") {
+		var finv = x => Math.exp(x) - .1
+	} else { // "linear"
+		var finv = x => x
+	}
+	return finv
+}
+
+
 function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar,utility_shape) {
 	
 	// reference
@@ -81,8 +214,8 @@ function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,
 
 	// assign scores //
 	scores = {}
-	if (utility_shape == "quadratic") {
-		var f = x => x**2
+	if (utility_shape != "linear") {
+		var f = utility_function(utility_shape)
 		var m_inv = 1/m
 		f_n = f(n*m_inv)
 		f_m = f(1)
@@ -94,10 +227,10 @@ function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,
 		} else if (d1 >= m){ // in the case that the voter likes the frontrunner candidates equally, he just votes for everyone better
 			score = minscore
 		} else { // putting this last avoids m==n giving division by 0
-			if (utility_shape == "quadratic") {
-				frac = ( f(d1*m_inv) - f_n ) / ( f_m - f_n )
-			} else {
+			if (utility_shape == "linear") {
 				frac = ( d1 - n ) / ( m - n )
+			} else {
+				frac = ( f(d1*m_inv) - f_n ) / ( f_m - f_n )
 			}
 			score = Math.floor(.5+minscore+(maxscore-minscore)*(1-frac))
 		}
@@ -158,120 +291,6 @@ function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,
 	}}}
 
 	return {scores:scores, radiusFirst:n , radiusLast:m, dottedCircle:dottedCircle}
-}
-
-/////////////////////////////////////
-///////// TYPES OF VOTER ////////////
-/////////////////////////////////////
-
-function ScoreVoter(model){
-
-	var self = this;
-	self.model = model;
-	self.maxscore = 5;
-	self.minscore = 0;
-	self.defaultMax = window.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
-
-	self.getBallot = function(x, y, strategy){
-
-		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
-		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
-			tally = model.pollResults
-
-			var factor = self.poll_threshold_factor
-			var max1 = 0
-			for (var can in tally) {
-				if (tally[can] > max1) max1 = tally[can]
-			}
-			var threshold = max1 * factor
-			var viable = []
-			for (var can in tally) {
-				if (tally[can] > threshold) viable.push(can)
-			}
-		} else {
-			viable = self.model.preFrontrunnerIds
-		}
-		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,viable,self.model.candidates,self.defaultMax,doStar,self.model.utility_shape)
-		
-		self.radiusFirst = scoresfirstlast.radiusFirst
-		self.radiusLast = scoresfirstlast.radiusLast
-		self.dottedCircle = scoresfirstlast.dottedCircle
-		var scores = scoresfirstlast.scores
-		return scores
-		
-	};
-
-	self.drawBG = function(ctx, x, y, ballot){
-
-		// RETINA
-		x = x*2;
-		y = y*2;
-		var scorange = self.maxscore - self.minscore
-		var step = (self.radiusLast - self.radiusFirst)/scorange;
-		// Draw big ol' circles.
-		if (self.model.utility_shape == "quadratic") {
-			var f = x => x**2 // f is a function defined between 0 and 1 and increasing.
-			var finv = x => Math.sqrt(x)
-		} else {
-			var f = x => x // f is a function defined between 0 and 1 and increasing.
-			var finv = x => x
-		}
-		for(var i=0;i<scorange;i++){
-			//var dist = step*(i+.5) + self.radiusFirst
-
-			var frac = (1-(i+.5)/scorange)
-			var worst = f(1)
-			var best = f(self.radiusFirst/self.radiusLast)
-			var x1 = finv(frac*(worst-best)+best)
-			var dist = x1 * self.radiusLast
-			
-			ctx.lineWidth = (i+5-scorange)*2 + 2;
-			ctx.beginPath();
-			ctx.arc(x, y, dist*2, 0, Math.TAU, false);
-			ctx.strokeStyle = "#888";
-			ctx.setLineDash([]);
-			if (self.dottedCircle) ctx.setLineDash([5, 15]);
-			ctx.stroke();
-			if (self.dottedCircle) ctx.setLineDash([]);
-		}
-	}
-
-	self.drawCircle = function(ctx, x, y, size, ballot){
-
-		// There are #Candidates*5 slices
-		// Fill 'em in in order -- and the rest is gray.
-		var totalSlices = self.model.candidates.length*(self.maxscore-self.minscore);
-		var leftover = totalSlices;
-		var slices = [];
-		totalScore = 0;
-		for(var i=0; i<self.model.candidates.length; i++){
-			var c = self.model.candidates[i];
-			var cID = c.id;
-			var score = ballot[cID] - self.minscore;
-			leftover -= score;
-			slices.push({
-				num: score,
-				fill: c.fill
-			});
-			totalScore += score
-		}
-		totalSlices = totalScore
-		// Leftover is gray
-		// slices.push({
-		// 	num: leftover,
-		// 	fill: "#bbb"
-		// });
-		// FILL 'EM IN
-
-		if(totalScore==0){
-			_drawBlank(ctx, x, y, size);
-			return;
-		}
-
-		_drawSlices(ctx, x, y, size, slices, totalSlices);
-
-	};
-
 }
 
 function ThreeVoter(model){
