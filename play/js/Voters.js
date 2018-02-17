@@ -1,27 +1,18 @@
 // helper function for strategies
-function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,candidates,radiusStep,getScore,doStar) {
-	// no strategy first
+function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar) {
+	
+	// reference
+	// {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
+	// {name:"N", realname:"normalize", margin:4},
+	// {name:"F", realname:"normalize frontrunners only", margin:4},
+	// {name:"F+", realname:"best frontrunner", margin:4},
+	// {name:"F-", realname:"not the worst frontrunner"}
+	
 	var lc = candidates.length
 	var dottedCircle = false
-	if (strategy == "zero strategy. judge on an absolute scale.") {
-		var scores = {};
-		var dist2a = [];
-		for(var i=0; i<lc; i++){
-			var c = candidates[i];
-			var dx = c.x-x;
-			var dy = c.y-y;
-			var dist2 = dx*dx+dy*dy;
-			dist2a.push(dist2)
-			scores[c.id] = getScore(dist2);
-		}
-		
-		var radiusFirst = radiusStep * (minscore + .5)
-		var radiusLast = radiusStep * (maxscore - .5)
-		var scoresfirstlast = {scores:scores, radiusFirst:radiusFirst , radiusLast:radiusLast, dottedCircle:dottedCircle}
-		return scoresfirstlast;
-	}
 
-	// find distances and ids
+	
+	// find distances and ids //
 	dista = []
 	canAid = []
 	for(var i=0; i<lc; i++){
@@ -33,46 +24,51 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 		canAid.push(c.id)
 	}
 
-	// reference
-	// {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
-	// {name:"N", realname:"normalize", margin:4},
-	// {name:"F", realname:"normalize frontrunners only", margin:4},
-	// {name:"F+", realname:"best frontrunner", margin:4},
-	// {name:"F-", realname:"not the worst frontrunner"}
+	
+	// find m and n (max and min) //
+	
+	
+	if (strategy == "zero strategy. judge on an absolute scale.") {
+		
+		m = defaultMax
+		n = 0
 
-	var lf = preFrontrunnerIds.length
-
-	// identify important set
-	var shortlist = []
-	var ls
-	if (strategy == "normalize" || lf == 0) { // exception for no frontrunners
-		ls = lc
-		for (var i = 0; i < lc; i++) {
-			shortlist.push(i)
-		}
 	} else {
-		ls = lf
-		for (var i = 0; i < ls; i++) {
-			var index = canAid.indexOf(preFrontrunnerIds[i])
-			if (index > -1) {shortlist.push(index)}
-		}	
-	}
 
-	// find min and max of shortlist
-	var m=-1
-	var n=Infinity
-	var mi=null
-	var ni=null
-	for (var i_short = 0; i_short < ls; i_short++) {
-		var i = shortlist[i_short]	
-		var d1 = dista[i]
-		if (d1 > m) {
-			m = d1 // max
-			mi = i
+		var lf = preFrontrunnerIds.length
+
+		// identify important set
+		var shortlist = []
+		var ls
+		if (strategy == "normalize" || lf == 0) { // exception for no frontrunners
+			ls = lc
+			for (var i = 0; i < lc; i++) {
+				shortlist.push(i)
+			}
+		} else {
+			ls = lf
+			for (var i = 0; i < ls; i++) {
+				var index = canAid.indexOf(preFrontrunnerIds[i])
+				if (index > -1) {shortlist.push(index)}
+			}	
 		}
-		if (d1 < n) {
-			n = d1 //min
-			ni = i
+
+		// find min and max of shortlist
+		var m=-1
+		var n=Infinity
+		var mi=null
+		var ni=null
+		for (var i_short = 0; i_short < ls; i_short++) {
+			var i = shortlist[i_short]	
+			var d1 = dista[i]
+			if (d1 > m) {
+				m = d1 // max
+				mi = i
+			}
+			if (d1 < n) {
+				n = d1 //min
+				ni = i
+			}
 		}
 	}
 
@@ -83,13 +79,14 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 		dottedCircle = true;
 	}
 
-	// assign scores
+	// assign scores //
 	scores = {}
 	var nonlinear = true
 	if (nonlinear) {
 		var f = x => x**2
-		f_n = f(n)
-		f_m = f(m)
+		var m_inv = 1/m
+		f_n = f(n*m_inv)
+		f_m = f(1)
 	}
 	for(var i=0; i<lc; i++){
 		var d1 = dista[i]
@@ -99,7 +96,7 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 			score = minscore
 		} else { // putting this last avoids m==n giving division by 0
 			if (nonlinear) {
-				frac = ( f(d1) - f_n ) / ( f_m - f_n )
+				frac = ( f(d1*m_inv) - f_n ) / ( f_m - f_n )
 			} else {
 				frac = ( d1 - n ) / ( m - n )
 			}
@@ -108,6 +105,14 @@ function dostrategy(x,y,minscore,maxscore,rangescore,strategy,preFrontrunnerIds,
 		scores[canAid[i]] = score
 	}
 	
+
+	// adjust scores if necessary //
+
+	if (strategy == "zero strategy. judge on an absolute scale.") {
+		return {scores:scores, radiusFirst:n , radiusLast:m, dottedCircle:false}
+	}
+	
+
 	// boundary condition correction
 	// scores[canAid[mi]] = minscore
 	scores[canAid[ni]] = maxscore
@@ -166,24 +171,13 @@ function ScoreVoter(model){
 	self.model = model;
 	self.maxscore = 5;
 	self.minscore = 0;
-	self.scorearray = [];
-	for (var i=self.minscore; i<= self.maxscore; i++) self.scorearray.push(i)
-	self.radiusStep = window.HACK_BIG_RANGE ? 61 : 25; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
-
-	self.getScore = function(x2){
-		var step = self.radiusStep;
-		if(x2<step*step) return 5;
-		if(x2<(step*2)*(step*2)) return 4;
-		if(x2<(step*3)*(step*3)) return 3;
-		if(x2<(step*4)*(step*4)) return 2;
-		if(x2<(step*5)*(step*5)) return 1;
-		return 0;
-	};
+	self.scorearray = [0,1,2,3,4,5]
+	self.defaultMax = window.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.getBallot = function(x, y, strategy){
 
 		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
-		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,self.scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,doStar)
+		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,self.scorearray,strategy,self.model.preFrontrunnerIds,self.model.candidates,self.defaultMax,doStar)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -203,7 +197,7 @@ function ScoreVoter(model){
 		// Draw big ol' circles.
 		for(var i=0;i<scorange;i++){
 			//var dist = step*(i+.5) + self.radiusFirst
-			var nonlinear = true
+			var nonlinear = false
 			if (nonlinear) {
 				var f = x => x**2 // f is a function defined between 0 and 1 and increasing.
 				var finv = x => Math.sqrt(x)
@@ -212,6 +206,8 @@ function ScoreVoter(model){
 				var best = f(self.radiusFirst/self.radiusLast)
 				var x1 = finv(frac*(worst-best)+best)
 				var dist = x1 * self.radiusLast
+			} else {
+				var dist = (self.radiusLast + self.radiusFirst) * .5
 			}
 			ctx.beginPath();
 			ctx.arc(x, y, dist*2, 0, Math.TAU, false);
@@ -250,6 +246,12 @@ function ScoreVoter(model){
 		// 	fill: "#bbb"
 		// });
 		// FILL 'EM IN
+
+		if(totalScore==0){
+			_drawBlank(ctx, x, y, size);
+			return;
+		}
+
 		_drawSlices(ctx, x, y, size, slices, totalSlices);
 
 	};
@@ -262,39 +264,24 @@ function ThreeVoter(model){
 
 	ScoreVoter.call(self,model)
 
-	self.maxscore = 2;
-	self.minscore = 0;
-	self.scorearray = [];
-	for (var i=self.minscore; i<= self.maxscore; i++) self.scorearray.push(i)
-
-	self.getScore = function(x2){
-		var step = self.radiusStep;
-		if(x2<step*step) return 2;
-		if(x2<step*3.5*step*3.5) return 1;
-		return 0;
-	};
+	self.maxscore = 2
+	self.scorearray = [0,1,2]
 
 }
 
 function ApprovalVoter(model){
 
 	var self = this;
-	self.model = model;
 
-	self.radiusStep = 200;
-	self.approvalRadius = 100; // whatever.
-	self.drawApprovalRadius = 100; // whatever.
-	self.getScore = function(x2){
-		return (x2<self.approvalRadius**2) ? 1 : 0
-	};
+	ScoreVoter.call(self,model)
+	self.maxscore = 1
+	self.scorearray = [0,1]
+	self.defaultMax = 200 // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
+	self.subGetBallot = self.getBallot
 	self.getBallot = function(x, y, strategy){
 		
-		
-		var scoresfirstlast = dostrategy(x,y,0,1,[0,1],strategy,self.model.preFrontrunnerIds,self.model.candidates,self.radiusStep,self.getScore,false)
-		var scores = scoresfirstlast.scores
-		self.drawApprovalRadius = (scoresfirstlast.radiusFirst + scoresfirstlast.radiusLast) * .5
-		self.dottedCircle = scoresfirstlast.dottedCircle
+		var scores = self.subGetBallot(x,y,strategy)
 
 		// Anyone close enough. If anyone.
 		var approved = [];
@@ -309,25 +296,7 @@ function ApprovalVoter(model){
 		return { approved: approved };
 
 	};
-
-	self.drawBG = function(ctx, x, y, ballot){
-
-		// RETINA
-		x = x*2;
-		y = y*2;
-
-		// Draw a big ol' circle
-		ctx.beginPath();
-		ctx.arc(x, y, self.drawApprovalRadius*2, 0, Math.TAU, false);
-		ctx.lineWidth = 8;
-		ctx.strokeStyle = "#888";
-		ctx.setLineDash([]);
-		if (self.dottedCircle) ctx.setLineDash([5, 15]);
-		ctx.stroke();
-		if (self.dottedCircle) ctx.setLineDash([]);
-
-	};
-
+	
 	self.drawCircle = function(ctx, x, y, size, ballot){
 
 		// If none, whatever.
