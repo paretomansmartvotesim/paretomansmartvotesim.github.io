@@ -911,6 +911,8 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 
 	options = options || {};
 
+	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"plurality")
+
 	// Tally the approvals & get winner!
 	var tally1 = _tally(model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -943,6 +945,7 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 	var winner = winners[0];
 	var text = "";
 	text += "<span class='small'>";
+	if ("Auto" == model.autoPoll) text += polltext;
 	text += "<b>top two move to 2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
@@ -1049,6 +1052,9 @@ Election.plurality = function(model, options){
 	// }
 	options = options || {};
 
+	
+	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"plurality")
+
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -1062,6 +1068,7 @@ Election.plurality = function(model, options){
 	var winner = winners[0];
 	var text = "";
 	text += "<span class='small'>";
+	if ("Auto" == model.autoPoll) text += polltext;
 	text += "<b>most votes wins</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
@@ -1126,6 +1133,10 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 			var tally = _tally(model, function(tally, ballot){
 				var approved = ballot.approved;
 				for(var i=0; i<approved.length; i++) tally[approved[i]]++;
+			});
+		} else if (electiontype=="plurality"){
+			var tally = _tally(model, function(tally, ballot){
+				tally[ballot.vote]++;
 			});
 		}
 		

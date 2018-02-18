@@ -435,16 +435,34 @@ function PluralityVoter(model){
 
 	var self = this;
 	self.model = model;
+	self.maxscore = 1; // just for autopoll
 
 	self.getBallot = function(x, y, strategy){
 
+		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
+			tally = model.pollResults
+
+			var factor = self.poll_threshold_factor
+			var max1 = 0
+			for (var can in tally) {
+				if (tally[can] > max1) max1 = tally[can]
+			}
+			var threshold = max1 * factor
+			var viable = []
+			for (var can in tally) {
+				if (tally[can] > threshold) viable.push(can)
+			}
+		} else {
+			viable = self.model.preFrontrunnerIds
+		}
+
 		// Who am I closest to? Use their fill
-		var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && model.preFrontrunnerIds.length > 1 && strategy!="normalize")
+		var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
 		var closest = null;
 		var closestDistance = Infinity;
 		for(var j=0;j<self.model.candidates.length;j++){
 			var c = self.model.candidates[j];
-			if(checkOnlyFrontrunners && ! model.preFrontrunnerIds.includes(c.id)  ) {
+			if(checkOnlyFrontrunners && ! viable.includes(c.id)  ) {
 				continue // skip this candidate because he isn't one of the 2 or more frontrunners, so we can't vote for him
 			}
 			var dx = c.x-x;
