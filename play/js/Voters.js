@@ -378,6 +378,49 @@ function RankedVoter(model){
 
 		});
 
+		var considerFrontrunners =  (strategy != "normalize"  &&  strategy != "zero strategy. judge on an absolute scale.")
+		if (considerFrontrunners && self.model.election == Election.irv && self.model.autoPoll == "Auto" && self.model.pollResults) {
+			// we can do an irv strategy here
+
+			// so first figure out if our candidate is winning
+			// should figure out how close we are to winning
+			
+			// who do we have first?
+			var ourFirst = rank[0]
+			// who was first?
+			var weLost = ! self.model.winners.includes(ourFirst)
+
+			if ( weLost ) {
+				// find out if our second choice could win head to head
+				var tally = model.pollResults
+				for (var i in rank) {
+					var ourguy = rank[i]
+					if (ourguy == winguy) {
+						break // there is no better candidate, so let's just keep the same strategy
+					}
+					var ourguyWins = true
+					for (var iwinguy in self.model.winners) {
+						var winguy = self.model.winners[iwinguy]
+						var ours = tally.head2head[ourguy][winguy]
+						var theirs = tally.head2head[winguy][ourguy]
+						if (theirs > ours) ourguyWins = false
+					}
+					if (ourguyWins) {
+						// okay, we should vote for him first
+						// probably, this could be improved to vote for more than just this guy first
+						
+						// bump ourguy into first on our ballot
+						for (var j = i; j > 0; j--) {
+							rank[j] = rank[j-1]
+						}
+						rank[0] = ourguy
+						break
+					}
+				}
+				// done changing rank
+			}
+		}
+
 		// Ballot!
 		return { rank:rank };
 

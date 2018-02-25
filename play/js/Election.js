@@ -656,9 +656,15 @@ Election.borda = function(model, options){
 
 Election.irv = function(model, options){
 
-	var text = "";
-	text += "<span class='small'>";
+	var dopoll = "Auto" == model.autoPoll
+	if (options.dontpoll) dopoll = false
+	if (dopoll) polltext = doPollAndUpdateBallots(model,options,"irv")
 
+
+	var text = "";
+	if (options.sidebar) text += "<span class='small'>";
+
+	if (dopoll) text += polltext;
 	var resolved = null;
 	var roundNum = 1;
 
@@ -669,8 +675,8 @@ Election.irv = function(model, options){
 	var loserslist = []
 	while(!resolved){
 
-		text += "<b>round "+roundNum+":</b><br>";
-		text += "who's voters' #1 choice?<br>";
+		if (options.sidebar) text += "<b>round "+roundNum+":</b><br>";
+		if (options.sidebar) text += "who's voters' #1 choice?<br>";
 
 		// Tally the approvals & get winner!
 		var pre_tally = _tally(model, function(tally, ballot){
@@ -686,12 +692,14 @@ Election.irv = function(model, options){
 		}
 
 		// Say 'em...
-		for(var i=0; i<candidates.length; i++){
-			var c = candidates[i];
-			text += _icon(c)+":"+tally[c];
-			if(i<candidates.length-1) text+=", ";
+		if (options.sidebar) {
+			for(var i=0; i<candidates.length; i++){
+				var c = candidates[i];
+				text += _icon(c)+":"+( (100*tally[c]/(model.getTotalVoters())).toFixed(0) );
+				if(i<candidates.length-1) text+=", ";
+			}
+			text += "<br>";
 		}
-		text += "<br>";
 
 		// Do they have more than 50%?
 		var winners = _countWinner(tally);
@@ -703,7 +711,7 @@ Election.irv = function(model, options){
 				break;
 			}
 			resolved = "done";
-			text += _icon(winner)+" has more than 50%<br>";
+			if (options.sidebar) text += _icon(winner)+" has more than 50%<br>";
 			break;
 		}
 
@@ -721,7 +729,7 @@ Election.irv = function(model, options){
 		//text += "nobody's more than 50%. ";
 		for (var li = 0; li < losers.length ; li++ ) {
 			loser = losers[li];
-			text += "eliminate loser, "+_icon(loser)+".<br>";
+			if (options.sidebar) text += "eliminate loser, "+_icon(loser)+".<br>";
 			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
 			var ballots = model.getBallots();
 			for(var i=0; i<ballots.length; i++){
@@ -731,7 +739,7 @@ Election.irv = function(model, options){
 			// And repeat!
 			roundNum++;
 		}
-		text += "<br>"
+		if (options.sidebar) text += "<br>"
 	
 	}
 	if (model.dotop2) {
@@ -980,6 +988,10 @@ Election.pluralityWithPrimary = function(model, options){
 	var ptallies = _tally_primary(model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
+	// if ("not working" == ptallies) { // not a good set up
+	// 	model.colors = ["#aaa"]
+	// 	return
+	// }
 
 	pwinners = []
 	for (var i in ptallies) {
@@ -1110,16 +1122,24 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 	model.preFrontrunnerIds = []
 	model.pollResults = undefined
 	if (options.sidebar) {
-		polltext += "<b>polling for viable candidates: </b><br>";
-		//polltext += "<b>(score > " + (100*threshold/model.getTotalVoters()).toFixed(0) + " = half max)</b><br>"
+		if (electiontype=="irv") {
+			polltext += "A low-risk strategy in IRV is to look at who wins and make a compromise if you're not winning.  Voters look down their ballot and pick the first one that defeats the current winner head to head. <br> <br>"
+			polltext += "<b>Polling first preferences: </b></br>"
+			// this strategy could be further refined by voting for people who will be eliminated but who we like better
+		} else {
+			polltext += "<b>polling for viable candidates: </b><br>";
+			//polltext += "<b>(score > " + (100*threshold/model.getTotalVoters()).toFixed(0) + " = half max)</b><br>"
+		}
 	}
-	for (var k=0;k<5;k++) { // do the polling 3 times
+	for (var k=0;k<5;k++) { // do the polling many times
 			
-		// get the ballots
+		// get the ballots (hold the poll)
 		for(var i=0; i<model.voters.length; i++){
 			var voter = model.voters[i];
 			voter.update();
 		}
+
+		// count the votes in the poll
 
 		if (electiontype == "score") {
 			// Tally
@@ -1138,36 +1158,83 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 			var tally = _tally(model, function(tally, ballot){
 				tally[ballot.vote]++;
 			});
+		} else if (electiontype=="irv"){
+
+			// for the report, get the first preferences
+			var pre_tally = _tally(model, function(tally, ballot){
+				var first = ballot.rank[0]; // just count #1
+				tally[first]++;
+			});
+
+			var options2 = {dontpoll:true, sidebar:true}
+			Election.irv(model,options2) // do an IRV election to find out who wins
+			
+			/// Get really good polling results.
+			temp1 = model.pollResults // doing a poll without strategy.  not sure if this would work
+			model.pollResults = undefined
+			for(var i=0; i<model.voters.length; i++){
+				var voter = model.voters[i];
+				voter.update();
+			}
+			var ballots = model.getBallots() // kinda double effort here but okay
+			head2head = {}
+			// For each combination... who's the better ranking?
+			for(var i=0; i<model.candidates.length; i++){
+				var a = model.candidates[i];
+				head2head[a.id] = {}
+				for(var j=0; j<model.candidates.length; j++){
+					var b = model.candidates[j];
+					// How many votes did A get?
+					var aWins = 0;
+					for(var m=0; m<ballots.length; m++){
+						var rank = ballots[m].rank;
+						if(rank.indexOf(a.id)<rank.indexOf(b.id)){
+							aWins++; // a wins!
+						}
+					}
+					head2head[a.id][b.id] = aWins
+				}
+			}
+			model.pollResults = temp1
+
+			tally = {head2head:head2head, firstpicks:pre_tally}
 		}
 		
 		model.pollResults = tally
 
-		var factor = .5
-		var max1 = 0
-		for (var can in tally) {
-			if (tally[can] > max1) max1 = tally[can]
-		}
-		var threshold = max1 * factor
-		var viable = []
-		for (var can in tally) {
-			if (tally[can] > threshold) viable.push(can)
-		}
+		// decide who the frontrunners are
+		if (0) { // 0 - let the voters have individual thresholds
+			var factor = .5
+			var max1 = 0
+			for (var can in tally) {
+				if (tally[can] > max1) max1 = tally[can]
+			}
+			var threshold = max1 * factor
+			var viable = []
+			for (var can in tally) {
+				if (tally[can] > threshold) viable.push(can)
+			}
 
-		model.preFrontrunnerIds = viable
-		
+			model.preFrontrunnerIds = viable
+		}
 
 		if(options.sidebar) {
 			
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
-				polltext += _icon(c)+""+((100*tally[c]/(model.getTotalVoters() * model.voters[0].type.maxscore)).toFixed(0)) + ". "
-				//if (tally[c] > threshold) polltext += " &larr;"//" <--"
-				//polltext += "<br>"
+				if (electiontype == "irv"){
+					polltext += _icon(c)+""+((100*tally.firstpicks[c]/(model.getTotalVoters())).toFixed(0)) + ". "
+				} else {
+					polltext += _icon(c)+""+((100*tally[c]/(model.getTotalVoters() * model.voters[0].type.maxscore)).toFixed(0)) + ". "
+					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
+					//polltext += "<br>"
+				}
 			}
 			polltext += "<br>"
 		}
-
+		// end of one poll
 	}		
+	if (electiontype == "irv") polltext += "<br>"
 	// get the ballots
 	for(var i=0; i<model.voters.length; i++){
 		var voter = model.voters[i];
