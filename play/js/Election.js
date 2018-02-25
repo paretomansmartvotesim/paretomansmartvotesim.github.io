@@ -614,24 +614,25 @@ Election.rrv = function(model, options){
 Election.borda = function(model, options){
 
 	// Tally the approvals & get winner!
+	var numcan = model.candidates.length
 	var tally = _tally(model, function(tally, ballot){
-		for(var i=0; i<ballot.rank.length; i++){
+		for(var i=0; i<numcan; i++){
 			var candidate = ballot.rank[i];
-			tally[candidate] += i; // the rank!
+			tally[candidate] += numcan - i - 1; // reverse the rank and subtract 1 because nobody's going to rank their least favorite.
 		}
 	});
-	var winners = _countLoser(tally); // LOWER score is best!
+	var winners = _countWinner(tally);
 	var color = _colorWinner(model, winners);
-	if (model.dotop2) model.top2 = _sortTallyRev(tally).slice(0,2)
+	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 
 	// Caption
 	var text = "";
 	text += "<span class='small'>";
-	text += "<b>lower score is better</b><br>";
+	text += "<b>higher score is better</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+"'s total score: "+tally[c]+"<br>";
+		text += _icon(c)+"'s total score: "+tally[c]+" = "+_percentFormat(model, tally[c] / (numcan-1))+"%<br>";
 	}
 	if(winners.length>=2){
 		// NO WINNER?! OR TIE?!?!
@@ -640,7 +641,7 @@ Election.borda = function(model, options){
 	}else{
 		var winner = winners[0];
 		text += "<br>";
-		text += _icon(winner)+" has the <i>lowest</i> score, so...<br>";
+		text += _icon(winner)+" has the <i>highest</i> score, so...<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
