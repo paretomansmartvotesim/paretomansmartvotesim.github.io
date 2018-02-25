@@ -953,7 +953,7 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 	text += "<b>top two move to 2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
+		text += _icon(c)+" got "+_percentFormat(model, tally1[c])+"<br>";
 	}
 	text += "<br><b>2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
@@ -1022,7 +1022,7 @@ Election.pluralityWithPrimary = function(model, options){
 		var pwin = _countWinner(tally1)
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+" got "+_percentFormat(model, tally[c]);
+			text += _icon(c)+" got "+_percentFormat(model, tally1[c]);
 			if (pwin.includes(c)) text += " &larr;"
 			text += "<br>"
 		}
@@ -1219,9 +1219,9 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
 				if (electiontype == "irv"){
-					polltext += _icon(c)+""+_percentFormat(model, tally.firstpicks[c]) + ". "
+					polltext += _icon(c)+""+_padAfter(3,_percentFormat(model, tally.firstpicks[c]) + ". ") + " "
 				} else {
-					polltext += _icon(c)+""+ _percentFormat(model, tally[c]/model.voters[0].type.maxscore) + ". "
+					polltext += _icon(c)+""+ _padAfter(3,_percentFormat(model, tally[c]/model.voters[0].type.maxscore) + ".") + " "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
 					//polltext += "<br>"
 				}
@@ -1455,5 +1455,25 @@ function _tietext(winners) {
 }
 
 function _percentFormat(model,count) {
-	return "" + (100*count/(model.getTotalVoters())).toFixed(0)
+	var a = "" + (100*count/(model.getTotalVoters())).toFixed(0)
+	var dopadding = false
+	if (dopadding) {
+		for (var i = a.length; i < 2; i ++) {
+			a = "&nbsp;&nbsp;" + a
+		}	
+	}
+	return a
+}
+
+function _padBefore(padding,a){
+	for (var i = a.length; i < padding; i ++) {
+		a = "&nbsp;&nbsp;" + a
+	}	
+	return a
+}
+function _padAfter(padding,a){
+	for (var i = a.length; i < padding; i ++) {
+		a = a + "&nbsp;&nbsp;"
+	}	
+	return a
 }

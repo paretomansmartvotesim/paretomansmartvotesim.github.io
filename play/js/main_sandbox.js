@@ -375,6 +375,7 @@ function main(config){
 				model.voters[i].setType(data.voter);
 			}
 			model.election = data.election;
+			model.pollResults = undefined
 			model.update();
 
 		};
