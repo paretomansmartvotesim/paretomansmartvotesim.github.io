@@ -26,18 +26,15 @@ Election.score = function(model, options){
 
 	if (options.sidebar) {
 
-		for(var candidate in tally){
-			tally[candidate] /= model.getTotalVoters();
-		}
 		// Caption
 		var winner = winners[0];
 		var text = "";
 		text += "<span class='small'>";
 		if ("Auto" == model.autoPoll) text += polltext;
-		text += "<b>highest average score wins</b><br>";
+		text += "<b>score as % of max possible: </b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+"'s score: "+(tally[c].toFixed(2))+" out of 5.00<br>";
+			text += _icon(c)+"'s score: "+_percentFormat(model, tally[c] / 5)+"<br>";
 		}
 		if(!winner | winners.length>=2){
 			// NO WINNER?! OR TIE?!?!
@@ -68,9 +65,6 @@ Election.star = function(model, options){
 			tally[candidate] += ballot[candidate];
 		}
 	});
-	for(var candidate in model.candidatesById){
-		tally[candidate] /= model.getTotalVoters();
-	}
 	var frontrunners = [];
 
 	for (var i in tally) {
@@ -115,11 +109,11 @@ Election.star = function(model, options){
 		text += "<b>pairwise winner of two highest average scores wins</b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+"'s score: "+(tally[c].toFixed(2))+" out of 5.00<br>";
+			text += _icon(c)+":"+_percentFormat(model, tally[c] / 5)+"<br>";
 		}
 		text += "<br>";
-		text += _icon(frontrunners[0])+" and "+_icon(frontrunners[1]) +" have the highest score, and...<br>";
-		text += "...their pairwise counts are "+aWins+" to "+bWins+", so...<br>";
+		text += "<b>Final Round between the top two:<br></b>";
+		text += _icon(frontrunners[0])+_percentFormat(model, aWins)+". "+_icon(frontrunners[1]) +_percentFormat(model, bWins) + "<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
@@ -187,16 +181,17 @@ Election.three21 = function(model, options){
 		text += "<b>Semifinalists:</b><br>";
 		for(var i=0; i<semifinalists.length; i++){
 			var c = semifinalists[i];
-			text += _icon(c)+"'s 'good': "+tallies[2][c]+"<br>";
+			text += _icon(c)+"'s 'good': "+ _percentFormat(model, tallies[2][c]) +"<br>";
+			
 		}
 		text += "<b>Finalists:</b><br>";
 		for(var i=0; i<finalists.length; i++){
 			var c = finalists[i];
-			text += _icon(c)+"'s 'bad': "+tallies[0][c]+"<br>";
+			text += _icon(c)+"'s 'bad': "+_percentFormat(model, tallies[0][c])+"<br>";
 		}
 		text += "<b>Winner:</b><br>";
 
-		text += _icon(finalists[0])+": "+aWins+"; "+_icon(finalists[1]) +": "+bWins+", so...<br>";
+		text += _icon(finalists[0])+": "+_percentFormat(model, aWins)+"; "+_icon(finalists[1]) +": "+_percentFormat(model, bWins)+", so...<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
@@ -232,10 +227,10 @@ Election.approval = function(model, options){
 	var text = "";
 	text += "<span class='small'>";
 	if ("Auto" == model.autoPoll) text += polltext;
-	text += "<b>most approvals wins</b><br>";
+	text += "<b>most approvals wins (%)</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+" got "+tally[c]+" approvals<br>";
+		text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	if(!winner | winners.length>=2){
 		// NO WINNER?! OR TIE?!?!
@@ -296,7 +291,7 @@ Election.condorcet = function(model, options){
 					by = bWins;
 					to = aWins;
 				}
-				text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins by "+by+" to "+to+"<br>";
+				text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins, "+_percentFormat(model, by)+" to "+_percentFormat(model, to)+"<br>";
 			} else { //tie
 				tally[a.id]++;
 				tally[b.id]++;
@@ -477,7 +472,7 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 			var endtext = "</del> . weak<br>"
 		} else {
 			var begintext = ""
-			var endtext = ".<br>"
+			var endtext = "<br>"
 		}
 
 		if (pairs[i].tie) {
@@ -489,9 +484,9 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 			}
 		} else {
 			if(reverseExplanation) {
-				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + pairs[i].margin + endtext
+				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
 			} else {
-				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + pairs[i].margin + endtext	
+				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
 			}
 		}
 		
@@ -591,11 +586,11 @@ Election.rrv = function(model, options){
 			var tally = tallies[j]
 			var winner = winnerslist[j];
 			if (j>0) text += "<br><b>After votes go to winner,</b>"
-			text += "<br><b>sum scores, divide by 5:</b><br>";
+			text += "<br><b>score as %:</b><br>";
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
 				//text += _icon(c)+"'s score: "+((tally[c]/model.getTotalVoters()).toFixed(2))+" out of 5.00<br>";
-				text += _icon(c)+": "+((tally[c]*.2).toFixed(0))
+				text += _icon(c)+": "+_percentFormat(model, tally[c] / 5)
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
 			}
@@ -695,7 +690,7 @@ Election.irv = function(model, options){
 		if (options.sidebar) {
 			for(var i=0; i<candidates.length; i++){
 				var c = candidates[i];
-				text += _icon(c)+":"+( (100*tally[c]/(model.getTotalVoters())).toFixed(0) );
+				text += _icon(c)+":"+_percentFormat(model, tally[c])
 				if(i<candidates.length-1) text+=", ";
 			}
 			text += "<br>";
@@ -957,12 +952,12 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 	text += "<b>top two move to 2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+" got "+tally1[c]+" votes<br>";
+		text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	text += "<br><b>2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		if (toptwo.includes(c)) text += _icon(c)+" got "+tally[c]+" votes<br>";
+		if (toptwo.includes(c)) text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
@@ -1026,7 +1021,7 @@ Election.pluralityWithPrimary = function(model, options){
 		var pwin = _countWinner(tally1)
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+" got "+tally1[c]+" votes";
+			text += _icon(c)+" got "+_percentFormat(model, tally[c]);
 			if (pwin.includes(c)) text += " &larr;"
 			text += "<br>"
 		}
@@ -1035,7 +1030,7 @@ Election.pluralityWithPrimary = function(model, options){
 	text += "<b>general election:</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		if (pwinners.includes(c)) text += _icon(c)+" got "+tally[c]+" votes<br>";
+		if (pwinners.includes(c)) text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
@@ -1084,7 +1079,7 @@ Election.plurality = function(model, options){
 	text += "<b>most votes wins</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+" got "+tally[c]+" votes<br>";
+		text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
@@ -1223,9 +1218,9 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
 				if (electiontype == "irv"){
-					polltext += _icon(c)+""+((100*tally.firstpicks[c]/(model.getTotalVoters())).toFixed(0)) + ". "
+					polltext += _icon(c)+""+_percentFormat(model, tally.firstpicks[c]) + ". "
 				} else {
-					polltext += _icon(c)+""+((100*tally[c]/(model.getTotalVoters() * model.voters[0].type.maxscore)).toFixed(0)) + ". "
+					polltext += _icon(c)+""+ _percentFormat(model, tally[c]/model.voters[0].type.maxscore) + ". "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
 					//polltext += "<br>"
 				}
@@ -1456,4 +1451,8 @@ function _tietext(winners) {
 	text += "<br>";	
 	text += "<b>TIE</b>";
 	return text;
+}
+
+function _percentFormat(model,count) {
+	return "" + (100*count/(model.getTotalVoters())).toFixed(0)
 }
