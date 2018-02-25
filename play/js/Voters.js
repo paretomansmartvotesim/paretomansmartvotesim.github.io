@@ -440,6 +440,7 @@ function PluralityVoter(model){
 	self.getBallot = function(x, y, strategy){
 
 		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
+			// if (self.model.autoPoll == "Auto" && (typeof self.model.pollResults !== 'undefined')) {
 			tally = model.pollResults
 
 			var factor = self.poll_threshold_factor
@@ -453,7 +454,7 @@ function PluralityVoter(model){
 				if (tally[can] > threshold) viable.push(can)
 			}
 		} else {
-			viable = self.model.preFrontrunnerIds
+			var viable = self.model.preFrontrunnerIds
 		}
 
 		// Who am I closest to? Use their fill
