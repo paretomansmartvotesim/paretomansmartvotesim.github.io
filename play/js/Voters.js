@@ -502,6 +502,9 @@ function PluralityVoter(model){
 
 		// Who am I closest to? Use their fill
 		var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
+		
+		if (self.model.election == Election.pluralityWithPrimary) checkOnlyFrontrunners = false // workaround
+		
 		var closest = null;
 		var closestDistance = Infinity;
 		for(var j=0;j<self.model.candidates.length;j++){

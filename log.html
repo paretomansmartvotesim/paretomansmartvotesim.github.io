@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+	<!-- Meta -->
+	<title>To Build an Even Better Ballot?</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<meta charset="utf-8">
+	<link rel="icon" type="image/png" href="favicon.png">
+
+	<!-- Schema.org markup for Google+ -->
+	<meta itemprop="name" content="To Build an Even Better Ballot">
+	<meta itemprop="description" content="an addendum to ncase's interactive guide to alternative voting methods">
+	<meta itemprop="image" content="http://ncase.me/ballot/social/thumbnail.png">
+
+	<!-- Twitter Card data -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@bettercount_us">
+	<meta name="twitter:title" content="To Build an Even Better Ballot">
+	<meta name="twitter:description" content="an addendum to @ncasenmare's interactive guide to alternative voting methods">
+	<meta name="twitter:creator" content="@bettercount_us">
+	<meta name="twitter:image" content="http://ncase.me/ballot/social/thumbnail.png">
+
+	<!-- Open Graph data -->
+	<meta property="og:title" content="To Build an Even Better Ballot">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="http://ncase.me/ballot/">
+	<meta property="og:image" content="http://ncase.me/ballot/social/thumbnail.png">
+	<meta property="og:description" content="an addendum to ncase's interactive guide to alternative voting methods">
+
+	<!-- Styles -->
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<base target="_blank">
+
+</head>
+
+<body>
+
+	<!-- preloading images-->
+	<div style="display: none;">
+		<script type="text/javascript">
+			<!--//--><![CDATA[//><!--
+			var images = new Array()
+
+			function preload() {
+				for (i = 0; i < preload.arguments.length; i++) {
+					images[i] = new Image()
+					images[i].src = preload.arguments[i]
+				}
+			}
+			preload(
+				"play/img/voters.png",
+				"play/img/axis.png",
+				"play/img/ballot_approval.png",
+				"play/img/ballot_box.png",
+				"play/img/ballot_fptp.png",
+				"play/img/ballot_range.png",
+				"play/img/ballot_range3.png",
+				"play/img/ballot_ranked.png",
+				"play/img/ballot_rate.png",
+				"play/img/ballot_three.png",
+				"play/img/bob.png",
+				"play/img/checkbox.png",
+				"play/img/hexagon.png",
+				"play/img/pentagon.png",
+				"play/img/square.png",
+				"play/img/triangle.png",
+				"play/img/voter.png",
+				"play/img/voter_face.png",
+				"play/img/icon/bob.png",
+				"play/img/icon/hexagon.png",
+				"play/img/icon/pentagon.png",
+				"play/img/icon/square.png",
+				"play/img/icon/triangle.png"
+			)
+			//--><!]]>
+		</script>
+
+		<img src="play/img/voters.png">
+		<img src="play/img/axis.png">
+		<img src="play/img/ballot_approval.png">
+		<img src="play/img/ballot_box.png">
+		<img src="play/img/ballot_fptp.png">
+		<img src="play/img/ballot_range.png">
+		<img src="play/img/ballot_range3.png">
+		<img src="play/img/ballot_ranked.png">
+		<img src="play/img/ballot_rate.png">
+		<img src="play/img/ballot_three.png">
+		<img src="play/img/bob.png">
+		<img src="play/img/checkbox.png">
+		<img src="play/img/hexagon.png">
+		<img src="play/img/pentagon.png">
+		<img src="play/img/square.png">
+		<img src="play/img/triangle.png">
+		<img src="play/img/voter.png">
+		<img src="play/img/voter_face.png">
+		<img src="play/img/icon/bob.png">
+		<img src="play/img/icon/hexagon.png">
+		<img src="play/img/icon/pentagon.png">
+		<img src="play/img/icon/square.png">
+		<img src="play/img/icon/triangle.png">
+	</div>
+
+	<!-- - - - - - - - -
+
+SPLASH!
+
+- - - - - - - - - -->
+
+	<div id="splash" class="banner">
+		<iframe id="splash_iframe" src="splash/splash.html" width="1500" height="400" scrolling="no"></iframe>
+		<img src="img/logo.png" />
+	</div>
+
+	</div>
+
+	<div id="content">
+
+		<!-- - - - - - - - -
+
+INTRODUCTION:
+THE SPOILER EFFECT
+
+- - - - - - - - - -->
+
+		<div class="words">
+
+			<p>
+				This is just a log I wrote while I was making changes to this voting game.
+			</p>
+
+			<h2>
+				Schulze
+			</h2>
+
+			<p>
+				Schulze is a condorcet method. That means if there's a guy that beats everyone head to head, then that guy wins. That's easy.
+				It's a clear winner. Sometimes there isn't a clear winner. Then you go through some rules. If you're just finding one
+				winner, then the rules are pretty simple. You want to find who lost by the least, basically. So just start crossing off
+				all the smallest losses until there is that guy that has no losses.
+				<b>Try it out below.</b>
+			</p>
+
+		</div>
+		<div class="sim-test">
+
+			<p class="caption-test">
+				Schulze - er, an easy version of Schulze
+				<br>
+			</p>
+			<iframe src="play/election27.html" width="900" height="380" scrolling="no"></iframe>
+		</div>
+		<div class="words">
+
+			<p>
+				Ranked pairs is a lot like Schulze. If there's a clear winner that beats everyone head-to-head, then they are the winner.
+				If there isn't a clear winner, then we follow some rules. If you're just interested in the #1 winner and not #2, then
+				the rules are pretty simple. You want to find who won by the most, basically. So start crossing off candidates that lost
+				by a lot. Unless they are the last one left and the guy they lost to already had a bigger loss. Also, you can just stop
+				once you figure out who the winner is. You don't have to go through the whole list.
+				<b>Try it out below.</b>
+			</p>
+
+		</div>
+		<div class="sim-test">
+
+			<p class="caption-test">
+				Ranked Pairs - er, an easy version of ranked pairs
+				<br>
+			</p>
+
+			<iframe src="play/election28.html" width="900" height="380" scrolling="no"></iframe>
+
+		</div>
+		<div class="words">
+			<p>Putting it all together, here's a sandbox for you to try out all the different systems and to make your own scenarios:</p>
+		</div>
+
+		<!-- - - - - - - - -
+
+PART IV:
+SANDBOX
+
+- - - - - - - - - -->
+
+		<div id="sandbox">
+			<div class="sim-sandbox">
+				<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE!
+					<a href="sandbox">(link to
+						<em>just</em> this)</a>
+				</h1>
+				<iframe id="sandbox_iframe" src="sandbox/sandbox.html" width="1102" height="960" scrolling="no"></iframe>
+			</div>
+			<div class="words">
+				<p>
+					<b>From Nicky Case:</b> One hope for Sandbox Mode is that readers can debate with me and each other
+					<em>using</em> this tool! Not just telling me I'm wrong, but
+					<em>showing</em> me I'm wrong. For example –
+					<a href="sandbox?m=%7B%22s%22%3A%22FPTP%22%2C%22v%22%3A%5B%5B54%2C147%5D%2C%5B54%2C72%5D%2C%5B249%2C109%5D%5D%2C%22c%22%3A%5B%5B54%2C227%5D%2C%5B249%2C106%5D%5D%2C%22d%22%3A%22This%20is%20the%20biggest%20challenge%20to%20Approval%2FScore%2C%20IMHO.%20Below%3A%202%2F3%20of%20voters%20dislike%20both%20candidates%2C%20but%20dislike%20Square%20slightly%20less.%20However%2C%201%2F3%20of%20voters%20LOVE%20Triangle%20and%20HATE%20Square.%20Under%20FPTP%2C%20IRV%20%26%20Condorcet%2C%20Square%20wins%2C%20coz%20a%20majority%20of%20voters%20barely%20prefer%20him.%20But%20under%20Approval%20%26%20Score%2C%20Triangle%20wins%2C%20coz%20she's%20intensely%20loved%20by%20her%20minority.%20Now%2C%20is%20this%20OKAY%3F%20Is%20this%20a%20betrayal%20of%20democracy%2C%20or%20actually%20*saving*%20democracy%20from%20a%20tyranny%20of%20the%20majority%3F%20This%20question's%20not%20just%20theoretical%2C%20it's%20*philosophical*.%22%7D">
+						here's a model I made in Sandbox Mode, showing an interesting argument
+						<em>against</em> Approval &amp; Score Voting</a>. Granted, this tool is very limited – it doesn't handle strategic voting
+					or imperfect information – but I think it's a start, and may help improve our Democratic Discourse&trade;
+				</p>
+			</div>
+		</div>
+
+
+
+	</div>
+
+</body>
+<script src="js/index.js"></script>
+
+</html>

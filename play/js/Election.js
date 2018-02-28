@@ -345,7 +345,7 @@ Election.condorcet = function(model, options){
 };
 
 // PairElimination
-Election.rankedPairs = function(model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
+Election.schulze = function(model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
 	var reverseExplanation = true
 
@@ -517,6 +517,219 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 				text += _icon(c)+" got "+losses[c]+" strong losses<br>";
 			}
 		}
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+	}
+	
+	// what's the loop?
+
+	model.caption.innerHTML = text;
+
+};
+
+// PairElimination
+Election.rankedPairs = function(model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
+
+	var reverseExplanation = false
+
+	var text = "";
+	text += "<span class='small'>";
+	if (reverseExplanation) {
+		text += "<b>who lost the least, one-on-one?</b><br>";
+	} else {
+		text += "<b>who had the strongest wins, one-on-one?</b><br>";
+	}
+
+	var ballots = model.getBallots();
+
+	// Create the WIN tally
+	var tally = {};
+	var losses = {};
+	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
+	for(var candidateID in model.candidatesById) losses[candidateID] = 0;
+
+	// For each combination... who's the better ranking?
+	pairs = []
+	for(var i=0; i<model.candidates.length-1; i++){
+		var a = model.candidates[i];
+		for(var j=i+1; j<model.candidates.length; j++){
+			var b = model.candidates[j];
+
+			// Actually figure out who won.
+			var aWins = 0;
+			var bWins = 0;
+			for(var k=0; k<ballots.length; k++){
+				var rank = ballots[k].rank;
+				if(rank.indexOf(a.id)<rank.indexOf(b.id)){
+					aWins++; // a wins!
+				}else{
+					bWins++; // b wins!
+				}
+			}
+
+			// WINNER?
+			var winner = (aWins>bWins) ? a : b;
+			var loser = (aWins>bWins) ? b : a;
+			if (aWins != bWins) {
+				tally[winner.id]++;
+				losses[loser.id]++;
+
+				// Text.
+				var by,to;
+				if(winner==a){
+					by = aWins;
+					to = bWins;
+					pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:false})
+				}else{
+					by = bWins;
+					to = aWins;
+					pairs.push({winI:j,loseI:i,winN:bWins,loseN:aWins,margin:bWins-aWins,tie:false})
+				}
+				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins by "+by+" to "+to+"<br>";
+			} else { //tie
+				tally[a.id]++;
+				tally[b.id]++;
+				pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:true})
+				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+"TIE"+"<br>";
+			}
+		}
+	}
+
+	// Was there one who won all????
+	var topWinners = [];
+	
+	for(var id in tally){
+		if(tally[id]==model.candidates.length-1){
+			topWinners.push(id);
+		}
+	}
+	var unanimousWin = topWinners.length == 1
+	
+
+	pairs = pairs.sort(function(x,y) {return x.margin<y.margin}) // sort in descending order
+		
+
+	// if there was a tie, then try to break the tie
+	if (! unanimousWin) {
+		var showdead = true // option: should we show the dead candidates?
+		var tieBreakerWinners = []
+		var hadawin = new Set()
+		var dead = new Set()
+		var surviving = new Set()
+		var survivedq = function (w3) {
+			if (! dead.has(w3)) { // this guy hasn't lost yet, so make sure he's in the survivor list
+				surviving.add(w3)
+			}
+			return
+		}
+		for (var i = 0; i < pairs.length; i++) { // i represents the strongest pair to be eliminated
+			var w3 = pairs[i].winI
+			var l3 = pairs[i].loseI
+			if (pairs[i].tie) {
+				survivedq(w3)
+				survivedq(l3)
+			} else if (surviving.size == 1 && surviving.has(l3) && dead.has(w3)) { 
+				// check if there is a conflict 
+				// if we're about to remove our last survivor, don't do it
+				pairs[i].conflict = true
+			} else {
+				dead.add(l3)
+				surviving.delete(l3)
+				survivedq(w3)
+			}
+			pairs[i].survivors = (Array.from(surviving)).map(x => model.candidates[x].id)
+			if (showdead) pairs[i].dead = (Array.from(dead)).map(x => model.candidates[x].id)
+		}
+		topWinners = (Array.from(surviving)).map(x => model.candidates[x].id)
+	}
+
+
+
+
+	var color = _colorWinner(model, topWinners);
+	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
+
+	if (!options.sidebar) return
+		
+	if (unanimousWin) {
+		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
+	}
+
+	// add text
+
+	if (! unanimousWin) {
+		text += "(also, cross out the conflicts)<br>";
+		text += "(left list: had a win & no loss)<br>"
+		var keepShowingSurvivors = true
+	}
+	for (var i in pairs) {
+		if (reverseExplanation) i = pairs.length - i - 1
+		var a = model.candidates[pairs[i].winI]
+		var b = model.candidates[pairs[i].loseI]
+		
+		if (pairs[i].conflict) {
+			var begintext = "<del>"
+			var endtext = "</del><br>" // "conflict"
+		} else {
+			var begintext = ""
+			var endtext = "<br>"
+		}
+		if (! unanimousWin) { // this is the block that shows the survivors
+			survivorstext = ""
+			if (keepShowingSurvivors) {
+				for (var ic in pairs[i].survivors) {
+					var c = pairs[i].survivors[ic]
+					survivorstext = survivorstext + _icon(c)
+				}
+				if (showdead) {
+					survivorstext = survivorstext + ">"
+					for (var ic in pairs[i].dead) {
+						var c = pairs[i].dead[ic]
+						survivorstext = survivorstext + _icon(c)
+					}
+					var extraspace = model.candidates.length - pairs[i].survivors.length - pairs[i].dead.length
+					survivorstext = survivorstext + "&nbsp;&nbsp;&nbsp;"
+				} else {
+					var extraspace = model.candidates.length - pairs[i].survivors.length
+				}
+				if (pairs[i].survivors.length == 1 && pairs[i].dead.length + 1 == model.candidates.length) keepShowingSurvivors = false
+				for (var j = 0; j < extraspace; j++) {
+					survivorstext = survivorstext + "&nbsp;&nbsp;&nbsp;"
+				}
+			} else {
+				var spacelength = Math.round(model.candidates.length * 3.4 + 6)
+				for (var j = 0; j < spacelength; j++) {
+					survivorstext = survivorstext + "&nbsp;"
+				}
+			}
+			begintext = survivorstext + begintext
+		}
+		
+		if (pairs[i].tie) {
+			if(reverseExplanation) {
+				text += begintext + _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
+			} else {
+				text += begintext + "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
+				//text += _icon(b.id)+" ties  "+_icon(a.id) + endtext
+			}
+		} else {
+			if(reverseExplanation) {
+				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
+			} else {
+				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
+			}
+		}
+		
+	}
+
+	text += "<br>";
+	if (topWinners.length >= 2) {
+		text += _tietext(topWinners);
+		text = "<b>TIE</b> <br> <br>" + text;
+	} else {
+		topWinner = topWinners[0]
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
@@ -984,7 +1197,7 @@ Election.pluralityWithPrimary = function(model, options){
 	var ptallies = _tally_primary(model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
-	// if ("not working" == ptallies) { // not a good set up
+	// if ("we gotta problem" == ptallies) {
 	// 	model.colors = ["#aaa"]
 	// 	return
 	// }
@@ -1289,6 +1502,14 @@ var _tally_primary = function(model, tallyFunc){
 		}
 		caninprimary[votebelong].push(model.candidates[c])
 	}
+
+	// make sure there are candidates in each primary
+	// problem = false
+	// for ( var j in caninprimary){
+	// 	if (caninprimary[j].length == 0) problem = true
+	// }
+	// if (problem) return "we gotta problem"
+
 	for ( var j = 0; j < model.voters.length; j++){
 		
 		// Create the tally

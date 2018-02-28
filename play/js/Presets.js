@@ -838,7 +838,87 @@ preFrontrunnerIds: ["square","hexagon"],
 }
 
 
+} else if (htmlname == "election27.html") {
+	config = 
+{
+	candidatePositions: [[92,69],[210,70],[245,182],[149,250],[55,180]],
+	voterPositions: [[101,189],[148,91],[195,202]],
+	// description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
+	// features: undefined,
+	system: "ezSchulze",
+	candidates: 5,
+	voters: 3,
+	// doFullStrategyConfig: undefined,
+	// second_strategy: false,
+	// doPercentFirst: undefined,
+	arena_size: 300,
+	arena_border: 0,
+	spread_factor_voters: 1,
+	// unstrategic: "normalize",
+	// strategic: "normalize frontrunners only",
+	// autoPoll: "Auto",
+	// configversion: 1,
+	// snowman: false,
+	// x_voters: false,
+	// median_mean: 1,
+	// utility_shape: "linear",
+	// oneVoter: false,
+	featurelist: [],
+	// sandboxsave: true,
+	hidegearconfig: true
+	// preFrontrunnerIds: ["square","triangle"],
+	// voterStrategies: ["zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale."],
+	// voterPercentStrategy: [0,0,0,0,0,0,0,0,0,0],
+	// voter_group_count: [50,50,50,50,50,50,50,50,50,50],
+	// voter_group_spread: [190,190,190,190,190,190,190,190,190,190],
+	// keyyee: "off",
+	// yeefilter: ["square","triangle","hexagon","pentagon","bob"],
+	// computeMethod: "ez",
+	// pixelsize: 60,
+	// filename: "sandbox.html",
+	// presethtmlname: "sandbox.html",
+}
 
+} else if (htmlname == "election28.html") {
+	config = 
+{
+	candidatePositions: [[92,69],[210,70],[245,182],[149,250],[55,180]],
+	voterPositions: [[101,189],[148,91],[195,202]],
+	// description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
+	// features: undefined,
+	system: "ezRankPair",
+	candidates: 5,
+	voters: 3,
+	// doFullStrategyConfig: undefined,
+	// second_strategy: false,
+	// doPercentFirst: undefined,
+	arena_size: 300,
+	arena_border: 0,
+	spread_factor_voters: 1,
+	// unstrategic: "normalize",
+	// strategic: "normalize frontrunners only",
+	// autoPoll: "Auto",
+	// configversion: 1,
+	// snowman: false,
+	// x_voters: false,
+	// median_mean: 1,
+	// utility_shape: "linear",
+	// oneVoter: false,
+	featurelist: [],
+	// sandboxsave: true,
+	hidegearconfig: true
+	// preFrontrunnerIds: ["square","triangle"],
+	// voterStrategies: ["zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale.","zero strategy. judge on an absolute scale."],
+	// voterPercentStrategy: [0,0,0,0,0,0,0,0,0,0],
+	// voter_group_count: [50,50,50,50,50,50,50,50,50,50],
+	// voter_group_spread: [190,190,190,190,190,190,190,190,190,190],
+	// keyyee: "off",
+	// yeefilter: ["square","triangle","hexagon","pentagon","bob"],
+	// computeMethod: "ez",
+	// pixelsize: 60,
+	// filename: "sandbox.html",
+	// presethtmlname: "sandbox.html",
+}
 
     } else if (htmlname == "sandbox.html") {
 		config = 
