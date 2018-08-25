@@ -152,8 +152,36 @@ THE SPOILER EFFECT
 			</p>
 			<iframe src="play/election27.html" width="900" height="380" scrolling="no"></iframe>
 		</div>
+		
 		<div class="words">
 
+
+			<h2>
+				Schulze
+			</h2>
+
+			<p>
+				Schulze is pretty much Minimax, except better.  Schulze breaks ties in a way that aligns with the intent of a Condorcet winner; there's a tie, so it sees who is tied, and just picks from that group.  The candidates with the least losses are automatically in that group, and also we add in anybody that beat them (and anybody that beats anybody we add).  Then we have a group that beats everyone, and we pick from that group.  After that, it's just minimax.  Resolve the tie by making the smallest change you can; remove the smallest tie.  And keep making that Condorcet group each step (this is called the Schwartz set if you want to tell your friends).
+
+				<b>Try it out below.</b>
+			</p>
+
+		</div>
+		<div class="sim-test">
+
+			<p class="caption-test">
+				Schulze
+				<br>
+			</p>
+			<iframe src="play/election29.html" width="900" height="380" scrolling="no"></iframe>
+		</div>
+
+
+		<div class="words">
+
+			<h2>
+				Ranked Pairs
+			</h2>
 			<p>
 				Ranked pairs is a lot like Minimax. If there's a clear winner that beats everyone head-to-head, then they are the winner.
 				If there isn't a clear winner, then we follow some rules. If you're just interested in the #1 winner and not #2, then

@@ -428,6 +428,314 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 
 	// if there was a tie, then try to break the tie
 	if (! unanimousWin) {
+
+		// switch to indexing the candidates by numbers instead of names
+		var lossesI=[]
+		for (var j = 0; j < model.candidates.length; j++) {
+			//lossesI[j] = losses[model.candidates[j]]
+			lossesI.push(losses[model.candidates[j].id])
+		}
+
+		// find the Schwartz set
+		schwartz = []
+
+		// find the lowest loss candidates and add them to the schwarz set
+
+		max3 = model.candidates.length
+		for(var j = 0; j < model.candidates.length; j++){ // see who wins 
+			if(lossesI[j]<max3){
+				max3 = lossesI[j]
+				schwartz = []
+				schwartz.push(j)
+			} else if (lossesI[j]==max3){
+				schwartz.push(j)
+			}
+		}
+		// add anybody that beat them (not tied)
+		var jp
+		for (var j = 0; j < pairs.length; j++) {
+			jp = pairs[j]
+			if ( schwartz.includes(jp.loseI) && ! jp.tie && ! schwartz.includes(jp.winI) ) {
+				schwartz.push(jp.winI)
+				j = -1 // restart loop
+			}
+		}
+		schwartzFirst =  (Array.from(schwartz)).map(x => model.candidates[x].id)
+		
+
+
+
+		var tieBreakerWinners = []
+		for (var i = pairs.length - 1; i > 0; i--) { // i represents the strongest pair to be eliminated
+			
+
+			if (! pairs[i].tie) {
+				losses[model.candidates[pairs[i].loseI].id] -- // eliminate loss
+				lossesI[pairs[i].loseI] -- // eliminate loss
+			}
+			if (i > 0 && pairs[i].margin == pairs[i-1].margin) { // check if there is a tie for weakest win
+				continue
+			}
+
+
+			// find the Schwartz set
+			schwartz = []
+
+			// find the lowest loss candidates and add them to the schwarz set
+
+			max3 = model.candidates.length
+			for(var j = 0; j < model.candidates.length; j++){ // see who wins 
+				if(lossesI[j]<max3){
+					max3 = lossesI[j]
+					schwartz = []
+					schwartz.push(j)
+				} else if (lossesI[j]==max3){
+					schwartz.push(j)
+				}
+			}
+			// add anybody that beat them (not tied)
+			var jp
+			for (var j = 0; j < i; j++) { // don't look at pairs that are already eliminated
+				jp = pairs[j]
+				if ( schwartz.includes(jp.loseI) && ! jp.tie && ! schwartz.includes(jp.winI) ) {
+					schwartz.push(jp.winI)
+					j = -1 // restart loop
+				}
+			}
+			
+			// store schwartz set to display later
+			pairs[i].schwartz = (Array.from(schwartz)).map(x => model.candidates[x].id)
+
+			// count losses
+
+			var schwartzlosses = []
+			for(var j = 0; j < model.candidates.length; j++){ 
+				schwartzlosses[j] = 0
+			} 
+		
+			
+			for (var j = 0; j < pairs.length; j++) { 
+				jp = pairs[j]
+				if ( schwartz.includes(jp.loseI) && ! jp.tie && schwartz.includes(jp.winI) ) {
+					schwartzlosses[jp.loseI]++
+				}
+			}
+			
+			//////////////////////// doesn't work yet
+			
+
+
+			// finda winner in the Schwartz set
+
+			for(var j in schwartz){ // see who wins 
+				var guy = schwartz[j]
+				if(lossesI[guy]==0){
+					tieBreakerWinners.push(model.candidates[guy].id);
+				}
+			}
+			if (tieBreakerWinners.length > 0) break; // stop if someone won
+
+		}
+		topWinners = tieBreakerWinners
+		var strongestElimination = i
+	}
+
+
+
+
+	var color = _colorWinner(model, topWinners);
+	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
+	if (!options.sidebar) return
+		
+	if (unanimousWin) {
+		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
+	} else {
+		schwartztext = ""
+		for (var j in model.candidatesById) { // go through the candidate names in order and display the ones that are in the schwartz set.
+			if( schwartzFirst.includes(j)) {
+				schwartztext = schwartztext + _icon(j)	
+			}
+		}
+		schwartztext += " is Schwartz set.<br>"
+		text += schwartztext
+	}
+
+	// add text
+	for (var i in pairs) {
+		if (reverseExplanation) i = pairs.length - i - 1
+		var a = model.candidates[pairs[i].winI]
+		var b = model.candidates[pairs[i].loseI]
+		
+		if (i >= strongestElimination) {
+			var begintext = "<del>"
+			var endtext = "</del><br>"
+		} else {
+			var begintext = ""
+			var endtext = "<br>"
+		}
+
+
+		if (! unanimousWin) {
+			schwartztext = ""
+			if (pairs[i].hasOwnProperty("schwartz")) {
+				for (var j in model.candidatesById) { // go through the candidate names in order and display the ones that are in the schwartz set.
+					if( pairs[i].schwartz.includes(j)) {
+						schwartztext = schwartztext + _icon(j)	
+					}
+				}
+				var extraspace = model.candidates.length - pairs[i].schwartz.length
+				var spaces = Math.round(extraspace * 3.4 + 0)
+				for (var j = 0; j < spaces; j++) {
+					schwartztext = schwartztext + "&nbsp;"
+				}
+				schwartztext += "&larr;"
+			} else {
+				var spacelength = Math.round(model.candidates.length * 3.4 + 4)
+				for (var j = 0; j < spacelength; j++) {
+					schwartztext = schwartztext + "&nbsp;"
+				}
+			}
+			begintext = schwartztext + begintext
+		}
+
+		if (pairs[i].tie) {
+			if(reverseExplanation) {
+				text += begintext + _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
+			} else {
+				text += begintext + "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
+				//text += _icon(b.id)+" ties  "+_icon(a.id) + endtext
+			}
+		} else {
+			if(reverseExplanation) {
+				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
+			} else {
+				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
+			}
+		}
+		
+	}
+
+	// sort losses
+	var sortedlosses = []
+	for(var i = 0; i < model.candidates.length; i++) sortedlosses.push({name:model.candidates[i].id,losses:losses[model.candidates[i].id]})
+	sortedlosses.sort(function(a,b) {return a.losses>b.losses})
+
+	text += "<br>";
+	if (topWinners.length >= 2) {
+		text += "<b>Eliminate the weakest losses until someone in the Schwartz set has 0 losses.</b><br>"
+		for(var i=0; i<sortedlosses.length; i++){
+			var c = sortedlosses[i].name;
+			text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+		}
+		text += _tietext(topWinners);
+		text = "<b>TIE</b> <br> <br>" + text;
+	} else {
+		topWinner = topWinners[0]
+		if (unanimousWin) {
+			
+		} else {
+			text += "<b>Eliminate the weakest wins until someone in the Schwartz set has 0 losses.<br>"
+			for(var i=0; i<sortedlosses.length; i++){
+				var c = sortedlosses[i].name;
+				text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+			}
+		}
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+	}
+	
+	// what's the loop?
+
+	model.caption.innerHTML = text;
+
+};
+
+// PairElimination
+Election.minimax = function(model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
+
+	var reverseExplanation = true
+
+	var text = "";
+	text += "<span class='small'>";
+	if (reverseExplanation) {
+		text += "<b>who lost the least, one-on-one?</b><br>";
+	} else {
+		text += "<b>who had the strongest wins, one-on-one?</b><br>";
+	}
+
+	var ballots = model.getBallots();
+
+	// Create the WIN tally
+	var tally = {};
+	var losses = {};
+	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
+	for(var candidateID in model.candidatesById) losses[candidateID] = 0;
+
+	// For each combination... who's the better ranking?
+	pairs = []
+	for(var i=0; i<model.candidates.length-1; i++){
+		var a = model.candidates[i];
+		for(var j=i+1; j<model.candidates.length; j++){
+			var b = model.candidates[j];
+
+			// Actually figure out who won.
+			var aWins = 0;
+			var bWins = 0;
+			for(var k=0; k<ballots.length; k++){
+				var rank = ballots[k].rank;
+				if(rank.indexOf(a.id)<rank.indexOf(b.id)){
+					aWins++; // a wins!
+				}else{
+					bWins++; // b wins!
+				}
+			}
+
+			// WINNER?
+			var winner = (aWins>bWins) ? a : b;
+			var loser = (aWins>bWins) ? b : a;
+			if (aWins != bWins) {
+				tally[winner.id]++;
+				losses[loser.id]++;
+
+				// Text.
+				var by,to;
+				if(winner==a){
+					by = aWins;
+					to = bWins;
+					pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:false})
+				}else{
+					by = bWins;
+					to = aWins;
+					pairs.push({winI:j,loseI:i,winN:bWins,loseN:aWins,margin:bWins-aWins,tie:false})
+				}
+				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins by "+by+" to "+to+"<br>";
+			} else { //tie
+				tally[a.id]++;
+				tally[b.id]++;
+				pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:true})
+				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+"TIE"+"<br>";
+			}
+		}
+	}
+
+	// Was there one who won all????
+	var topWinners = [];
+	
+	for(var id in tally){
+		if(tally[id]==model.candidates.length-1){
+			topWinners.push(id);
+		}
+	}
+	var unanimousWin = topWinners.length == 1
+	
+
+	pairs = pairs.sort(function(x,y) {return x.margin<y.margin}) // sort in descending order
+		
+
+	// if there was a tie, then try to break the tie
+	if (! unanimousWin) {
 		var tieBreakerWinners = []
 		for (var i = pairs.length - 1; i >= 0; i--) { // i represents the strongest pair to be eliminated
 			
@@ -685,18 +993,22 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 				}
 				if (showdead) {
 					survivorstext = survivorstext + ">"
+					var deadtext = ""
 					for (var ic in pairs[i].dead) {
 						var c = pairs[i].dead[ic]
-						survivorstext = survivorstext + _icon(c)
+						deadtext = _icon(c) + deadtext
 					}
+					survivorstext = survivorstext + deadtext
 					var extraspace = model.candidates.length - pairs[i].survivors.length - pairs[i].dead.length
 					survivorstext = survivorstext + "&nbsp;&nbsp;&nbsp;"
 				} else {
 					var extraspace = model.candidates.length - pairs[i].survivors.length
 				}
 				if (pairs[i].survivors.length == 1 && pairs[i].dead.length + 1 == model.candidates.length) keepShowingSurvivors = false
-				for (var j = 0; j < extraspace; j++) {
-					survivorstext = survivorstext + "&nbsp;&nbsp;&nbsp;"
+				
+				var spaces = Math.round(extraspace * 3.4 + 0)
+				for (var j = 0; j < spaces; j++) {
+					survivorstext = survivorstext + "&nbsp;"
 				}
 			} else {
 				var spacelength = Math.round(model.candidates.length * 3.4 + 6)
