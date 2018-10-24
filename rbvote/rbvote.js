@@ -2392,6 +2392,131 @@ function readvotes()
    return true;
 }
 
+
+function readballots(ballots)
+{
+   var absent, beat = new Array(), i, ignoreinput, j, k, l, nextcand, rating = new Array(), regexp = new RegExp(), rvotecomment, rvoteinput,
+       rvoteline = new Array(), tiebreakinput;
+
+   // goal:  pvote, rvote, candtonum, numtocand, rvotenum, rvotetie, numtotb, tbtonum, equalranks, schwartz, smith    
+   tiebreakinput = ""
+   // candtonum is numbers indexed by candidate names
+   // numtocand is names indexed by numbers
+   
+   // convert candidate names to numbers
+   numtocand = Object.keys(model.candidatesById)
+   candtonum = new Object();
+   for (i in numtocand) candtonum[numtocand[i]] = i;
+
+   // convert ballot format to rvote format
+   rvote = new Array();
+   rvotenum = new Array();
+   rvotetie = new Array();
+   for (i in ballots) 
+   {
+      rvotenum[rvotenum.length] = 1  
+      rvote[rvote.length] = new Array();
+      rvotetie[rvotetie.length] = new Array();
+      var b = ballots[i].rank
+      for (j in b) {
+              rvote[i][rvote[i].length] = candtonum[b[j]]
+              rvotetie[i][rvotetie[i].length] = false
+      }
+      rvotetie[i].pop()
+   }
+
+   numtotb = new Array();
+   tbtonum = new Array();
+   for (i in numtocand) {
+      numtotb[numtotb.length] = 0;
+   }
+   i = Math.random();
+   i = Math.floor(i * rvote.length);
+   for (j in rvote[i]) {
+        tbtonum[tbtonum.length] = rvote[i][j];
+   }
+   for (i in tbtonum)
+      numtotb[tbtonum[i]] = i;
+   equalranks = false;
+   for (i in rvotetie)
+      for (j in rvotetie[i])
+         if (rvotetie[i][j])
+            equalranks = true;
+   pvote = new Array();
+   for (i in numtocand)
+   {
+      pvote[i] = new Array();
+      for (j in numtocand)
+         pvote[i][j] = 0;
+   }
+   for (i in rvote)
+   {
+      k = 0;
+      for (j in rvote[i])
+      {
+         rating[rvote[i][j]] = k;
+         if (j < rvotetie[i].length && !rvotetie[i][j])
+            ++k;
+      }
+      for (j in numtocand)
+         for (k in numtocand)
+            if (j < k)
+               if (rating[j] < rating[k])
+                  pvote[j][k] += 2 * rvotenum[i];
+               else if (rating[j] > rating[k])
+                  pvote[k][j] += 2 * rvotenum[i];
+               else
+               {
+                  pvote[j][k] += rvotenum[i];
+                  pvote[k][j] += rvotenum[i];
+               }
+   }
+   for (i in numtocand)
+   {
+      beat[beat.length] = new Array();
+      for (j in numtocand)
+         beat[i][beat[i].length] = i != j && pvote[i][j] > pvote[j][i];
+      rating[i] = true;
+   }
+   for (i in beat)
+      for (j in beat[i])
+         if (i != j)
+            for (k in numtocand)
+               if (i != k && j != k && beat[i][k] && beat[j][i])
+                  beat[j][k] = true;
+   for (i in beat)
+      for (j in beat[i])
+         if (i != j && !beat[i][j] && beat[j][i])
+            rating[i] = false;
+   schwartz = new Array();
+   for (i in numtocand)
+      if (rating[i])
+         schwartz[schwartz.length] = i;
+   for (i in beat)
+   {
+      for (j in beat[i])
+         if (i != j && pvote[i][j] == pvote[j][i])
+            beat[i][j] = true;
+      rating[i] = true;
+   }
+   for (i in beat)
+      for (j in beat[i])
+         if (i != j)
+            for (k in numtocand)
+               if (i != k && j != k && beat[i][k] && beat[j][i])
+                  beat[j][k] = true;
+   for (i in beat)
+      for (j in beat[i])
+         if (i != j && !beat[i][j] && beat[j][i])
+            rating[i] = false;
+   smith = new Array();
+   for (i in numtocand)
+      if (rating[i])
+         smith[smith.length] = i;
+   return true;
+}
+
+
 return{
     calcall:calcall,
     calcbald:calcbald,
@@ -2409,6 +2534,7 @@ return{
     calcschu:calcschu,
     calcsimp:calcsimp,
     calcsmal:calcsmal,
-    calctide:calctide
+    calctide:calctide,
+    readballots:readballots
   }
 }();

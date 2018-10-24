@@ -33,7 +33,7 @@ function main(config){
 	}
 
 	var initialConfig
-	var allnames = ["systems","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
+	var allnames = ["systems","rbvote","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 	var doms = {}  // for hiding menus, later
 	var stratsliders = [] // for hiding sliders, later
 	var groupsliders = [] // for hiding sliders, later
@@ -51,6 +51,7 @@ function main(config){
 		// version 2 stuff
 		// if (config.configversion >= 2) { // for future}
 		config.system = config.system || "FPTP";
+		config.rbsystem = config.rbsystem || "Tideman";
 		config.candidates = config.candidates || 3;
 		config.voters = config.voters || 1;
 		config.snowman = config.snowman || false;
@@ -157,6 +158,7 @@ function main(config){
 				model.votersRealName = voters.filter( function(x){return x.num==config.voters && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
 			}
 			model.system = config.system;
+			model.rbsystem = config.rbsystem
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.autoPoll = config.autoPoll
 			// model.primaries = config.primaries
@@ -168,11 +170,15 @@ function main(config){
 			model.utility_shape = config.utility_shape;
 			model.arena_border = config.arena_border;
 			var votingSystem = votingSystems.filter(function(system){
-				return(system.name==model.system);
+				return(system.name==config.system);
 			})[0];
 			model.voterType = votingSystem.voter;
 			model.ballotType = window[votingSystem.ballot];
 			model.election = votingSystem.election;
+			var rbVotingSystem = rbVotingSystems.filter(function(system){
+				return(system.name==config.rbsystem);
+			})[0];
+			model.rbelection = rbVotingSystem.rbelection;
 
 			// Voters
 			var num = model.numOfVoters;
@@ -350,7 +356,8 @@ function main(config){
 		var votingSystems = [
 			{name:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
 			{name:"+Primary", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.pluralityWithPrimary},
-			{name:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo, margin:100},
+			{name:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo, margin:4},
+			{name:"RBVote", realname:"Rob Legrand's RBVote (Ranked Ballot Vote)", voter:RankedVoter, ballot:"RankedBallot", election:Election.rbvote},
 			{name:"IRV", realname:"Instant Runoff Voting.  Sometimes called RCV Ranked Choice Voting but I call it IRV because there are many ways to have ranked ballots.", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv, margin:4},
 			{name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda},
 			{name:"Minimax", realname:"Minimax Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.minimax, margin:4},
@@ -368,6 +375,22 @@ function main(config){
 
 			// update config...
 			config.system = data.name;
+
+			// update gui
+			var turnOnRBVote = (data.name == "RBVote")
+			var xlist = ["rbvote"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if ( turnOnRBVote) {
+					featureset.add(xi)
+					doms[xi].hidden = false
+				} else {
+					featureset.delete(xi)
+					doms[xi].hidden = true
+				}
+			}
+			config.featurelist = Array.from(featureset)
 
 			// no reset...
 			model.voterType = data.voter;
@@ -391,8 +414,46 @@ function main(config){
 		doms["systems"] = chooseSystem.dom
 
 
-		
-		
+
+		// Which RB voting system?
+		var rbVotingSystems = [
+			{name:"Baldwin",rbelection:rbvote.calcbald, margin:4},
+			{name:"Black",rbelection:rbvote.calcblac},
+			{name:"Borda",rbelection:rbvote.calcbord, margin:4},
+			{name:"Bucklin",rbelection:rbvote.calcbuck},
+			{name:"Carey",rbelection:rbvote.calccare, margin:4},
+			{name:"Coombs",rbelection:rbvote.calccoom},
+			{name:"Copeland",rbelection:rbvote.calccope, margin:4},
+			{name:"Dodgson",rbelection:rbvote.calcdodg},
+			{name:"Hare",rbelection:rbvote.calchare, margin:4},
+			{name:"Nanson",rbelection:rbvote.calcnans},
+			{name:"Raynaud",rbelection:rbvote.calcrayn, margin:4},
+			{name:"Schulze",rbelection:rbvote.calcschu},
+			{name:"Simpson",rbelection:rbvote.calcsimp, margin:4},
+			{name:"Small",rbelection:rbvote.calcsmal},
+			{name:"Tideman",rbelection:rbvote.calctide}
+			]
+		var onChooseRBSystem = function(data){
+
+			// update config...
+			config.rbsystem = data.name;
+			model.rbelection = data.rbelection
+
+			model.pollResults = undefined
+			model.update();
+
+		};
+		window.chooseRBSystem = new ButtonGroup({
+			label: "which RB voting system?",
+			width: 108,
+			data: rbVotingSystems,
+			onChoose: onChooseRBSystem
+		});
+		document.querySelector("#left").appendChild(chooseRBSystem.dom);
+		chooseRBSystem.dom.hidden = true
+		doms["rbvote"] = chooseRBSystem.dom
+
+
 		// How many voters?
 		var voters = [
 			{realname: "Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
@@ -1473,6 +1534,7 @@ function main(config){
 		// Select the UI!
 		var selectUI = function(){
 			if(window.chooseSystem) chooseSystem.highlight("name", model.system);
+			if(window.chooseRBSystem) chooseRBSystem.highlight("name", model.rbsystem);
 			if(window.chooseCandidates) chooseCandidates.highlight("num", model.numOfCandidates);
 			if(window.chooseVoters) chooseVoters.highlight("realname", model.votersRealName);
 			if(groupsliders) {

@@ -1054,6 +1054,36 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 
 };
 
+Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
+
+	var reverseExplanation = false
+
+	var text = "";
+
+	var ballots = model.getBallots();
+
+	rbvote.readballots(ballots)
+	result = model.rbelection() // e.g. result = rbvote.calctide()
+	
+
+
+	topWinners = [result.winner]
+
+
+	var color = _colorWinner(model, topWinners);
+
+	if (!options.sidebar) return
+		
+		topWinner = topWinners[0]
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+	
+	model.caption.innerHTML = text;
+
+};
+
 Election.rrv = function(model, options){
 
 	var numreps = 3
