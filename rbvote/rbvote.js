@@ -135,19 +135,19 @@ function calcall()
 function calcbald(onlyone)
 {
    var consider = new Array(), elim, elimset, i, j, nconsider, result = new Object(), score = new Array(), str1, str2, worstscore;
-   var makestring = returnstring || onlyone // calling from betterballot
+
    var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
-   //   ms      rwd      rs      oo
-   //   T       F        T       T      betterballot
-   //   T       T        F       T      rbvote
-   //   T       F        T       F      betterballot
-   //   F       F        F       F      rbvote
+   //     rwd      rs      oo
+   //     F        T       T      betterballot
+   //     T        F       T      rbvote
+   //     F        T       F      betterballot
+   //     F        F       F      rbvote
    if (readwritedocument)
    {
       if (!readvotes())
          return;
    }
-   if (makestring)
+   if (onlyone)
    {
       str1 = "<html><head><title>Baldwin election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
@@ -177,7 +177,7 @@ function calcbald(onlyone)
                if (i != j && consider[j])
                   score[i] += pvote[i][j] - pvote[j][i];
          }
-      if (makestring)
+      if (onlyone)
       {
          str2 += "<table border cellpadding=3>\n";
          for (i in numtocand)
@@ -199,7 +199,7 @@ function calcbald(onlyone)
       elim = elimset[0];
       if (elimset.length == 1)
       {
-         if (makestring)
+         if (onlyone)
             str2 += "<span class=\"cand\">" + numtocand[elim] + "</span> has the single worst Borda score and so is eliminated.</p>\n";
       }
       else
@@ -208,7 +208,7 @@ function calcbald(onlyone)
             if (numtotb[elimset[i]] > numtotb[elim])
                elim = elimset[i];
          result.tiebreak = true;
-         if (makestring)
+         if (onlyone)
          {
             if (elimset.length == nconsider)
                str2 += "All of the candidates";
@@ -225,7 +225,7 @@ function calcbald(onlyone)
       --nconsider;
       if (nconsider <= 1)
          break;
-      if (makestring)
+      if (onlyone)
          str2 += "<p>The reduced pairwise matrix:</p>\n" +
                  printpmatrix(pvote, consider) +
                  "<p>The candidates&rsquo; new Borda scores:</p>\n";
@@ -233,7 +233,7 @@ function calcbald(onlyone)
    for (i in consider)
       if (consider[i])
          result.winner = numtocand[i];
-   if (makestring)
+   if (onlyone)
    {
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Baldwin election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
@@ -256,10 +256,15 @@ function calcbald(onlyone)
 function calcblac(onlyone)
 {
    var bestscore = -Number.MAX_VALUE, i, j, result = new Object(), score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Black election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -353,8 +358,16 @@ function calcblac(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Black election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -362,10 +375,15 @@ function calcblac(onlyone)
 function calcbord(onlyone)
 {
    var bestscore = -Number.MAX_VALUE, i, j, result = new Object(), score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Borda election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -431,8 +449,16 @@ function calcbord(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Borda election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -440,7 +466,9 @@ function calcbord(onlyone)
 function calcbuck(onlyone)
 {
    var bestscore = 0, i, j, quota, result = new Object(), score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
@@ -450,6 +478,9 @@ function calcbuck(onlyone)
                "another method.");
          return;
       }
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Bucklin election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -524,8 +555,16 @@ function calcbuck(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Bucklin election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -533,7 +572,9 @@ function calcbuck(onlyone)
 function calccare(onlyone)
 {
    var consider = new Array(), elimset, i, j, nconsider, quota, result = new Object(), score = new Array(), str1, str2;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
@@ -543,6 +584,9 @@ function calccare(onlyone)
                "method.");
          return;
       }
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Carey election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -638,8 +682,16 @@ function calccare(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Carey election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -647,7 +699,9 @@ function calccare(onlyone)
 function calccoom(onlyone)
 {
    var consider = new Array(), elim, elimset, i, j, nconsider, result = new Object(), score = new Array(), str1, str2, worstscore;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
@@ -657,6 +711,9 @@ function calccoom(onlyone)
                "method.");
          return;
       }
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Coombs election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -745,8 +802,16 @@ function calccoom(onlyone)
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "<p><span class=\"cand\">" + result.winner + "</span> is the only remaining candidate and so wins the election.</p>\n" +
               "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -754,10 +819,15 @@ function calccoom(onlyone)
 function calccope(onlyone)
 {
    var bestscore = 0, i, j, result = new Object(), score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Copeland election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -827,8 +897,16 @@ function calccope(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Copeland election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -836,10 +914,15 @@ function calccope(onlyone)
 function calcdodg(onlyone)
 {
    var bestscore = Number.MAX_VALUE, i, j, result = new Object(), score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Dodgson election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -905,8 +988,16 @@ function calcdodg(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Dodgson election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -914,7 +1005,9 @@ function calcdodg(onlyone)
 function calchare(onlyone)
 {
    var consider = new Array(), elim, elimset, i, j, nconsider, result = new Object(), score = new Array(), str1, str2, worstscore;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
@@ -924,6 +1017,9 @@ function calchare(onlyone)
                "method.");
          return;
       }
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Hare election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1029,8 +1125,16 @@ function calchare(onlyone)
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "<p><span class=\"cand\">" + result.winner + "</span> is the only remaining candidate and so wins the election.</p>\n" +
               "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1038,10 +1142,15 @@ function calchare(onlyone)
 function calcheit(onlyone)
 {
    var beat = new Array(), beatall, highest, i, j, k, l, loser, nclear, ncontra, nimplied, result = new Object(), seen = new Array(), str1, str2;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Heitzig election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1217,8 +1326,16 @@ findloop:
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Heitzig election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1227,10 +1344,15 @@ findloop:
 {
    var beat = new Array(), beatlength, beatold = new Array(), beatstr = new Array(), beatstrold = new Array(), i, j, k, result = new Object(),
        score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>LeGrand election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1336,8 +1458,16 @@ findloop:
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the LeGrand election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1345,10 +1475,15 @@ findloop:
 function calcnans(onlyone)
 {
    var consider = new Array(), elimset, i, j, nconsider, result = new Object(), score = new Array(), str1, str2;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Nanson election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1441,8 +1576,16 @@ function calcnans(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Nanson election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1450,10 +1593,15 @@ function calcnans(onlyone)
 function calcrayn(onlyone)
 {
    var consider = new Array(), elim, elimset, i, j, nconsider, result = new Object(), score = new Array(), str1, str2, worstscore;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Raynaud election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1545,8 +1693,16 @@ function calcrayn(onlyone)
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "<p><span class=\"cand\">" + result.winner + "</span> is the only remaining candidate and so wins the election.</p>\n" +
               "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1554,10 +1710,15 @@ function calcrayn(onlyone)
 function calcschu(onlyone)
 {
    var beat = new Array(), beatstr = new Array(), i, j, k, result = new Object(), score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Schulze election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1646,8 +1807,16 @@ function calcschu(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Schulze election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1655,10 +1824,15 @@ function calcschu(onlyone)
 function calcsimp(onlyone)
 {
    var bestscore = -Number.MAX_VALUE, i, j, result = new Object(), score = new Array(), str1, str2, winset = new Array();
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Simpson election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1725,8 +1899,16 @@ function calcsimp(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Simpson election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1734,10 +1916,15 @@ function calcsimp(onlyone)
 function calcsmal(onlyone)
 {
    var bestscore, consider = new Array(), elimset, i, j, nconsider, result = new Object(), score = new Array(), str1, str2;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Small election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -1837,8 +2024,16 @@ function calcsmal(onlyone)
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Small election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -1846,10 +2041,15 @@ function calcsmal(onlyone)
 function calctide(onlyone)
 {
    var beat = new Array(), beatall, highest, i, j, k, l, loser, nclear, ncontra, nimplied, result = new Object(), seen = new Array(), str1, str2;
-   if (onlyone)
+
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (onlyone)
+   {
       str1 = "<html><head><title>Tideman election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -2025,8 +2225,16 @@ findloop:
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Tideman election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
