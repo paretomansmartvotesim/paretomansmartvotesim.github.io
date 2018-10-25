@@ -1063,7 +1063,9 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 	var ballots = model.getBallots();
 
 	rbvote.readballots(ballots)
-	result = model.rbelection() // e.g. result = rbvote.calctide()
+	rbvote.setreturnstring()
+	rbvote.returnstring = true
+	result = model.rbelection(true) // e.g. result = rbvote.calctide()
 	
 
 
@@ -1073,7 +1075,7 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 	var color = _colorWinner(model, topWinners);
 
 	if (!options.sidebar) return
-		
+		text += result.str	
 		topWinner = topWinners[0]
 		text += "</span>";
 		text += "<br>";

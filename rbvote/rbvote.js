@@ -1,7 +1,12 @@
 rbvote = function(){
 
 var pvote, rvote, candtonum, numtocand, rvotenum, rvotetie, numtotb, tbtonum, equalranks, schwartz, smith, i
+var returnstring = false
 
+function setreturnstring()
+{
+        returnstring = true
+}
 function calcall()
 {
    var result, str, strmeth = new Array(), tbused = false;
@@ -130,10 +135,20 @@ function calcall()
 function calcbald(onlyone)
 {
    var consider = new Array(), elim, elimset, i, j, nconsider, result = new Object(), score = new Array(), str1, str2, worstscore;
-   if (onlyone)
+   var makestring = returnstring || onlyone // calling from betterballot
+   var readwritedocument = ( ! returnstring ) && onlyone // calling from rbvote
+   //   ms      rwd      rs      oo
+   //   T       F        T       T      betterballot
+   //   T       T        F       T      rbvote
+   //   T       F        T       F      betterballot
+   //   F       F        F       F      rbvote
+   if (readwritedocument)
    {
       if (!readvotes())
          return;
+   }
+   if (makestring)
+   {
       str1 = "<html><head><title>Baldwin election results</title>\n" +
              "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head>\n" +
              "<body bgcolor=\"#c0c8d0\" text=\"#000000\">\n" +
@@ -162,7 +177,7 @@ function calcbald(onlyone)
                if (i != j && consider[j])
                   score[i] += pvote[i][j] - pvote[j][i];
          }
-      if (onlyone)
+      if (makestring)
       {
          str2 += "<table border cellpadding=3>\n";
          for (i in numtocand)
@@ -184,7 +199,7 @@ function calcbald(onlyone)
       elim = elimset[0];
       if (elimset.length == 1)
       {
-         if (onlyone)
+         if (makestring)
             str2 += "<span class=\"cand\">" + numtocand[elim] + "</span> has the single worst Borda score and so is eliminated.</p>\n";
       }
       else
@@ -193,7 +208,7 @@ function calcbald(onlyone)
             if (numtotb[elimset[i]] > numtotb[elim])
                elim = elimset[i];
          result.tiebreak = true;
-         if (onlyone)
+         if (makestring)
          {
             if (elimset.length == nconsider)
                str2 += "All of the candidates";
@@ -210,7 +225,7 @@ function calcbald(onlyone)
       --nconsider;
       if (nconsider <= 1)
          break;
-      if (onlyone)
+      if (makestring)
          str2 += "<p>The reduced pairwise matrix:</p>\n" +
                  printpmatrix(pvote, consider) +
                  "<p>The candidates&rsquo; new Borda scores:</p>\n";
@@ -218,14 +233,22 @@ function calcbald(onlyone)
    for (i in consider)
       if (consider[i])
          result.winner = numtocand[i];
-   if (onlyone)
+   if (makestring)
    {
       str1 += "<table border cellpadding=3><tr><td><span class=\"cand\">" + result.winner + "</span> wins the Baldwin election" +
               (result.tiebreak ? " using the tiebreaking ranking " + printtiebreak() : "") + ".</td></tr></table>\n";
       str2 += "<p><span class=\"cand\">" + result.winner + "</span> is the only remaining candidate and so wins the election.</p>\n" +
               "</body></html>";
+   }
+   if (readwritedocument)
+   {
       document.write(str1 + str2);
       document.close();
+   }
+   else if (onlyone) 
+   {
+        result.str = str1 + str2
+        return result
    }
    else
       return result;
@@ -2535,6 +2558,8 @@ return{
     calcsimp:calcsimp,
     calcsmal:calcsmal,
     calctide:calctide,
-    readballots:readballots
+    readballots:readballots,
+    returnstring:returnstring,
+    setreturnstring:setreturnstring
   }
 }();
