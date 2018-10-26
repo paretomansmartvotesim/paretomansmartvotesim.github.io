@@ -2256,7 +2256,7 @@ function printpmatrix(pmatrix, consider)
    else if (nconsider == 1)
       return "<p><em>Error!&nbsp; Only one candidate left!</em></p>";
    str = "<p><table border cellpadding=3>\n" +
-         "<tr align=\"center\"><td colspan=2 rowspan=2></td><th colspan=" + nconsider + ">against</th></tr>\n" +
+         "<tr align=\"center\"><td colspan=2 rowspan=2></td><th class=\"against\" colspan=" + nconsider + ">against</th></tr>\n" +
          "<tr align=\"center\">";
    for (i in pmatrix)
       if (consider[i])
@@ -2269,7 +2269,7 @@ function printpmatrix(pmatrix, consider)
          if (firstcand)
          {
             firstcand = false;
-            str += "<th rowspan=" + nconsider + ">for</th>";
+            str += "<th class=\"for\" rowspan=" + nconsider + ">for</th>";
          }
          str += "<td class=\"for\"><span class=\"cand\">" + numtocand[i] + "</span></td>";
          for (j in pmatrix[i])
@@ -2284,6 +2284,8 @@ function printpmatrix(pmatrix, consider)
 }
 function printrvote(consider)
 {
+   if (returnstring) return "-- skipped --" // don't put the ballots in the string
+
    var i, j, nconsider = 0, str;
    if (typeof consider != "object")
    {
@@ -2635,7 +2637,9 @@ function readballots(ballots)
    // numtocand is names indexed by numbers
    
    // convert candidate names to numbers
-   numtocand = Object.keys(model.candidatesById)
+   
+   numtocand = Object.keys( (model.candidatesById))
+   numtoiconcand = Object.keys( (model.candidatesById)) .map(x => _icon(x) )
    candtonum = new Object();
    for (i in numtocand) candtonum[numtocand[i]] = i;
 

@@ -1074,13 +1074,23 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 	var color = _colorWinner(model, topWinners);
 
 	if (!options.sidebar) return
-		text += result.str	
-		topWinner = topWinners[0]
-		text += "</span>";
-		text += "<br>";
-		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
-		text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
 	
+	// replace some of the html in the output of rbvote to make it match the style of betterballot
+	var rbvote_string = (result.str).replace("style.css","../play/css/rbvote.css").replace()
+	var intext = Object.keys(model.candidatesById)
+	var outtext = Object.keys(model.candidatesById).map(x => _icon(x))
+	for (var i in intext) {
+		rbvote_string = rbvote_string.replace(new RegExp(intext[i],"g"),outtext[i])
+	}
+	rbvote_string = rbvote_string.replace('<th rowspan="5">for</th>',)
+
+	text += rbvote_string
+	topWinner = topWinners[0]
+	text += "</span>";
+	text += "<br>";
+	text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
+	text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+
 	model.caption.innerHTML = text;
 
 };
