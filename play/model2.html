@@ -34,6 +34,8 @@ Loader.onload = function(){
 		});
 		model.addCandidate("square", 50, 125);
 		model.addCandidate("triangle", 250, 125);
+		model.preFrontrunnerIds = ["square","triangle"];
+		model.voters[0].unstrategic = "zero strategy. judge on an absolute scale.";
 
 	};
 	model.onUpdate = function(){
