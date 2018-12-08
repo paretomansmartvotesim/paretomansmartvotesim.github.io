@@ -423,7 +423,7 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 	var unanimousWin = topWinners.length == 1
 	
 
-	pairs = pairs.sort(function(x,y) {return x.margin<y.margin}) // sort in descending order
+	pairs = pairs.sort(function(x,y) {return y.margin - x.margin}) // sort in descending order
 		
 
 	// if there was a tie, then try to break the tie
@@ -618,7 +618,7 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 	// sort losses
 	var sortedlosses = []
 	for(var i = 0; i < model.candidates.length; i++) sortedlosses.push({name:model.candidates[i].id,losses:losses[model.candidates[i].id]})
-	sortedlosses.sort(function(a,b) {return a.losses>b.losses})
+	sortedlosses.sort(function(a,b) {return a.losses - b.losses})
 
 	text += "<br>";
 	if (topWinners.length >= 2) {
@@ -731,7 +731,7 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	var unanimousWin = topWinners.length == 1
 	
 
-	pairs = pairs.sort(function(x,y) {return x.margin<y.margin}) // sort in descending order
+	pairs = pairs.sort(function(x,y) {return y.margin - x.margin}) // sort in descending order
 		
 
 	// if there was a tie, then try to break the tie
@@ -803,7 +803,7 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	// sort losses
 	var sortedlosses = []
 	for(var i = 0; i < model.candidates.length; i++) sortedlosses.push({name:model.candidates[i].id,losses:losses[model.candidates[i].id]})
-	sortedlosses.sort(function(a,b) {return a.losses>b.losses})
+	sortedlosses.sort(function(a,b) {return a.losses - b.losses})
 
 	text += "<br>";
 	if (topWinners.length >= 2) {
@@ -916,7 +916,7 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 	var unanimousWin = topWinners.length == 1
 	
 
-	pairs = pairs.sort(function(x,y) {return x.margin<y.margin}) // sort in descending order
+	pairs = pairs.sort(function(x,y) {return y.margin - x.margin}) // sort in descending order
 		
 
 	// if there was a tie, then try to break the tie
