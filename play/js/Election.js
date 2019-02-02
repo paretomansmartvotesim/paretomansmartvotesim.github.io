@@ -22,7 +22,7 @@ Election.score = function(model, options){
 
 
 	var winners = _countWinner(tally);
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 
 	if (options.sidebar) {
 
@@ -88,7 +88,7 @@ Election.star = function(model, options){
 	if (bWins > aWins) {
 		winner = frontrunners[1]
 	}
-	var color = _colorWinner(model, [winner]);
+	var color = _colorWinner(options.sidebar,model, [winner]);
 
 	if (model.dotop2) model.top2 = frontrunners.slice(0,2)
 
@@ -159,7 +159,7 @@ Election.three21 = function(model, options){
 	if (bWins > aWins) {
 		winner = finalists[1]
 	}
-	var color = _colorWinner(model, [winner]);
+	var color = _colorWinner(options.sidebar,model, [winner]);
 	
 	if (model.dotop2) model.top2 = finalists.slice(0,2)
 
@@ -214,7 +214,7 @@ Election.approval = function(model, options){
 
 	var winners = _countWinner(tally);
 
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 	
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 
@@ -310,7 +310,7 @@ Election.condorcet = function(model, options){
 	}
 	// probably it would be better to find the smith set but this is okay for now
 	topWinners = _countWinner(tally);
-	var color = _colorWinner(model, topWinners);
+	var color = _colorWinner(options.sidebar,model, topWinners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 	
@@ -543,7 +543,7 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 
 
 
-	var color = _colorWinner(model, topWinners);
+	var color = _colorWinner(options.sidebar,model, topWinners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 		
@@ -761,7 +761,7 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 
 
 
-	var color = _colorWinner(model, topWinners);
+	var color = _colorWinner(options.sidebar,model, topWinners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 		
@@ -956,7 +956,7 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 
 
 
-	var color = _colorWinner(model, topWinners);
+	var color = _colorWinner(options.sidebar,model, topWinners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 
 	if (!options.sidebar) return
@@ -1071,7 +1071,7 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 	topWinners = [result.winner]
 
 
-	var color = _colorWinner(model, topWinners);
+	var color = _colorWinner(options.sidebar,model, topWinners);
 
 	if (!options.sidebar) return
 	
@@ -1160,7 +1160,7 @@ Election.rrv = function(model, options){
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
 			}
-			var color = _colorWinner(model, [winner]);
+			var color = _colorWinner(false,model, [winner]);
 			text += "";
 			//text += _icon(winner)+" has the highest score, so...";
 			text += "</span>";
@@ -1171,7 +1171,7 @@ Election.rrv = function(model, options){
 
 		model.caption.innerHTML = text;
 	}
-	var color = _colorWinner(model, winnerslist.concat().sort());
+	var color = _colorWinner(options.sidebar,model, winnerslist.concat().sort());
 	
 	// if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)  
 	if (model.dotop2) model.top2 = winnerslist.slice(0,2)  /// TODO: see if this actually works 
@@ -1188,7 +1188,7 @@ Election.borda = function(model, options){
 		}
 	});
 	var winners = _countWinner(tally);
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 
@@ -1311,7 +1311,7 @@ Election.irv = function(model, options){
 	}
 	
 	
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 
 	if (!options.sidebar) return
 
@@ -1450,7 +1450,7 @@ Election.stv = function(model, options){
 	}
 	
 	
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 
 	if (!options.sidebar) return
 
@@ -1461,7 +1461,7 @@ Election.stv = function(model, options){
 	text = "<br>" + text
 	for (var i in winners) {
 		var winner = winners[i]
-		var color = _colorWinner(model, [winner]);
+		var color = _colorWinner(false,model, [winner]);
 		// END!
 		text += "</span>";
 		text += "<br>";
@@ -1507,7 +1507,7 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 	model.candidates = oldcandidates
 
 	var winners = _countWinner(tally);
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 
@@ -1573,7 +1573,7 @@ Election.pluralityWithPrimary = function(model, options){
 	model.candidates = oldcandidates
 
 	var winners = _countWinner(tally);
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 
@@ -1634,7 +1634,7 @@ Election.plurality = function(model, options){
 		tally[ballot.vote]++;
 	});
 	var winners = _countWinner(tally);
-	var color = _colorWinner(model, winners);
+	var color = _colorWinner(options.sidebar,model, winners);
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 
@@ -1994,7 +1994,7 @@ var _countLoser = function(tally){
 	return winners;
 }
 
-var _colorWinner = function(model, winners){
+var _colorWinner = function(sidebar, model, winners){
 	if (winners.length > 1) {
 		var color = "#ccc"; // grey
 		var colors = []
@@ -2010,6 +2010,7 @@ var _colorWinner = function(model, winners){
 	if (model.yeeon) model.canvas.style.borderColor = "#fff"
 	model.winners = winners;
 	model.color = color;
+	if (sidebar) model.realwinners = winners;
 	return color;
 }
 

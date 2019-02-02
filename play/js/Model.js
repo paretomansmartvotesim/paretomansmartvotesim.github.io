@@ -591,15 +591,17 @@ function Model(config){
 			self.voterCenter.draw(ctx)
 		}
 
+
+		function drawStroked(text, x, y) {
+			ctx.font = "40px Sans-serif"
+			ctx.strokeStyle = 'black';
+			ctx.lineWidth = 4;
+			ctx.strokeText(text, x, y);
+			ctx.fillStyle = 'white';
+			ctx.fillText(text, x, y);
+		}
+
 		if(self.yeeon){
-			function drawStroked(text, x, y) {
-				ctx.font = "40px Sans-serif"
-				ctx.strokeStyle = 'black';
-				ctx.lineWidth = 4;
-				ctx.strokeText(text, x, y);
-				ctx.fillStyle = 'white';
-				ctx.fillText(text, x, y);
-			}
 			ctx.textAlign = "center";
 			ctx.globalAlpha = 0.9
 			drawStroked("yee-yee!",x*2,y*2+50);
@@ -610,6 +612,23 @@ function Model(config){
 			ctx.fillRect(x*2-dot,y*2-dot,dot*2,dot*2);
 			ctx.globalAlpha = 1
 		}
+
+		
+		if(model.realwinners) {
+			var objWinners = model.realwinners.map(x => model.candidatesById[x])
+			if (objWinners.length > 1) {
+				for (i in objWinners) {
+					var ox = objWinners[i].x
+					var oy = objWinners[i].y
+					drawStroked("TIE",ox*2,oy*2-35);
+				}
+			} else {
+				var ox = objWinners[0].x
+				var oy = objWinners[0].y
+				drawStroked("WIN",ox*2,oy*2-35);
+			}
+		}
+
 	}
 
 	// HELPERS:
