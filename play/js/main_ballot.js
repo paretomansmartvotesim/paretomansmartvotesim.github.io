@@ -6,6 +6,7 @@ function main(config){
 	config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"];
 	config.showChoiceOfStrategy = config.showChoiceOfStrategy || false
 	config.showChoiceOfFrontrunners = config.showChoiceOfFrontrunners || false
+	config.doStarStrategy = config.doStarStrategy || false
 	
 	// make a copy of the config
 	var initialConfig = JSON.parse(JSON.stringify(config));
@@ -35,6 +36,7 @@ function main(config){
 			model.addCandidate("hexagon", 216, 216);
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.voters[0].unstrategic = config.strategy;
+			model.doStarStrategy = config.doStarStrategy;
 		};
 
 		// CREATE A BALLOT

@@ -13,7 +13,7 @@ function ScoreVoter(model){
 
 	self.getBallot = function(x, y, strategy){
 
-		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.")
+		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || self.model.doStarStrategy
 		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
 			tally = model.pollResults
 

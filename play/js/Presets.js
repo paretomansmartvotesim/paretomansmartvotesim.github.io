@@ -1070,17 +1070,19 @@ preFrontrunnerIds: ["square","hexagon"],
 		config = 
 {
 	system: "Score",
-	strategy: "starnormfrontrunners", // for now we are using an "off-menu" option.  We should make versions of each of hte strategies for star.
+	strategy: "normalize frontrunners only",
 	preFrontrunnerIds: ["square","triangle"],
-	showChoiceOfFrontrunners: true
+	showChoiceOfFrontrunners: true,
+	doStarStrategy: true
 }
     } else if (htmlname == "ballot10.html") {
 		config = 
 {
 	system: "Three",
-	strategy: "starnormfrontrunners",
+	strategy: "normalize frontrunners only",
 	preFrontrunnerIds: ["square","triangle"],
-	showChoiceOfFrontrunners: true
+	showChoiceOfFrontrunners: true,
+	doStarStrategy: true
 }
     } else if (htmlname == "ballot11.html") {
 		config = 
