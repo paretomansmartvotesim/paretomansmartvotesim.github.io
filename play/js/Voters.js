@@ -798,6 +798,7 @@ if (!self.x_voters) {
 		// Circle!
 		var size = 20;
 		//self.type.drawCircle(ctx, self.x, self.y, size, ballot);
+		if(self.highlight) ctx.globalAlpha = 0.8
 		_drawBlank(ctx, self.x, self.y, size)
 		
 		// Face!
@@ -819,6 +820,7 @@ if (!self.x_voters) {
 		ctx.textAlign = "center";
 		drawStroked(self.vid+1,x+0*textsize,y+0*textsize);
 
+		if(self.highlight) ctx.globalAlpha = 1
 	};
 
 }
@@ -867,6 +869,7 @@ function SingleVoter(config){
 	// DRAW!
 	self.draw = function(ctx){
 
+		if(self.highlight) ctx.globalAlpha = 0.8
 		// Background, for showing HOW the decision works...
 		self.type.drawBG(ctx, self.x, self.y, self.ballot);
 
@@ -879,7 +882,8 @@ function SingleVoter(config){
 		var x = self.x*2;
 		var y = self.y*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
-
+		
+		if(self.highlight) ctx.globalAlpha = 1
 	};
 
 
@@ -904,6 +908,7 @@ function VoterCenter(config){
 	self.draw = function(ctx){
 		size = self.size
 		
+		if(self.highlight) ctx.globalAlpha = 0.8
 		_drawBlank(ctx, self.x, self.y, size);
 		
 		// Face!
@@ -912,6 +917,7 @@ function VoterCenter(config){
 		var y = self.y*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 
+		if(self.highlight) ctx.globalAlpha = 1
 	};
 
 }

@@ -21,7 +21,11 @@ function Candidate(config){
 		var size = self.size*2;
 
 		// Draw image instead!
+		//if(self.highlight) ctx.filter = "brightness(150%)"
+		if(self.highlight) ctx.globalAlpha = 0.8
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		if(self.highlight) ctx.globalAlpha = 1
+		//if(self.highlight) ctx.filter = "brightness(100%)"
 
 	};
 

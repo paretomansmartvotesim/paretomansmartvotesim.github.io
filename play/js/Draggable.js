@@ -60,9 +60,27 @@ function DraggableManager(model){
 		}else if(self.isOver()){
 			// If over anything, grab cursor!
 			model.canvas.setAttribute("cursor", "grab");
+			// also, highlight one object
+			// set all objects to not highlight
+			for(var i=model.draggables.length-1; i>=0; i--){ // top DOWN.
+				var d = model.draggables[i];
+				d.highlight = false
+			}
+			var flashydude = self.isOver()
+			if (flashydude) flashydude.highlight = true
+			model.update()
+			self.lastwas = "hovering"
 		}else{
 			// Otherwise no cursor
 			model.canvas.setAttribute("cursor", "");
+			if ( self.lastwas == "hovering"){
+				for(var i=model.draggables.length-1; i>=0; i--){ // top DOWN.
+					var d = model.draggables[i];
+					d.highlight = false
+				}
+				model.update()	
+			}
+			self.lastwas = "nothovering"
 		}
 	});
 	subscribe(model.id+"-mousedown", function(){
