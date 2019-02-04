@@ -1638,8 +1638,39 @@ Election.plurality = function(model, options){
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 	if (!options.sidebar) return
 
+
 	// Caption
 	var winner = winners[0];
+
+	if(options.verbose) {
+		text = "<span class='small'>";
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i].id;
+			text += c+": "+tally[c];
+			text+=" votes";
+			if(i<model.candidates.length-1) text+=", ";
+		}
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+		
+		model.caption.innerHTML = text;
+		return
+	} else if (options.model3) {
+		text = "<span class='small'>";
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i].id;
+			text += c+": "+tally[c];
+			if(i<model.candidates.length-1) text+=", ";
+		}
+		text += "</span>";
+		text += "<br>";
+		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+		
+		model.caption.innerHTML = text;
+		return
+
+	}
 	var text = "";
 	text += "<span class='small'>";
 	if ("Auto" == model.autoPoll) text += polltext;

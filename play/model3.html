@@ -40,7 +40,7 @@ Loader.onload = function(){
 
 	};
 	model.onUpdate = function(){
-		Election.plurality(model);
+		Election.plurality(model, {sidebar:true, model3:true});
 	};
 	model.init();
 
