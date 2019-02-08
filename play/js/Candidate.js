@@ -13,6 +13,8 @@ function Candidate(config){
 	self.img = new Image();
 	self.img.src = _graphics.img;
 
+	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
+	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
 
 		// RETINA
@@ -23,7 +25,9 @@ function Candidate(config){
 		// Draw image instead!
 		//if(self.highlight) ctx.filter = "brightness(150%)"
 		if(self.highlight) ctx.globalAlpha = 0.8
+		self.drawBackAnnotation(x,y,ctx)
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = 1
 		//if(self.highlight) ctx.filter = "brightness(100%)"
 

@@ -785,6 +785,8 @@ if (!self.x_voters) {
 	};
 
 	// DRAW!
+	self.drawBackAnnotation = function(x,y,ctx) {}
+	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
 
 		// DRAW ALL THE POINTS
@@ -799,6 +801,7 @@ if (!self.x_voters) {
 		var size = 20;
 		//self.type.drawCircle(ctx, self.x, self.y, size, ballot);
 		if(self.highlight) ctx.globalAlpha = 0.8
+		self.drawBackAnnotation(x,y,ctx)
 		_drawBlank(ctx, self.x, self.y, size)
 		
 		// Face!
@@ -820,6 +823,7 @@ if (!self.x_voters) {
 		ctx.textAlign = "center";
 		drawStroked(self.vid+1,x+0*textsize,y+0*textsize);
 
+		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = 1
 	};
 
@@ -867,10 +871,13 @@ function SingleVoter(config){
 	};
 
 	// DRAW!
+	self.drawBackAnnotation = function(x,y,ctx) {}
+	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
 
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Background, for showing HOW the decision works...
+		self.drawBackAnnotation(x,y,ctx)
 		self.type.drawBG(ctx, self.x, self.y, self.ballot);
 
 		// Circle!
@@ -883,6 +890,7 @@ function SingleVoter(config){
 		var y = self.y*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		
+		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = 1
 	};
 
@@ -905,10 +913,13 @@ function VoterCenter(config){
 	self.img.src = "img/voter_face.png";
 
 	// DRAW!
+	self.drawBackAnnotation = function(x,y,ctx) {}
+	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
 		size = self.size
 		
 		if(self.highlight) ctx.globalAlpha = 0.8
+		self.drawBackAnnotation(x,y,ctx)
 		_drawBlank(ctx, self.x, self.y, size);
 		
 		// Face!
@@ -916,6 +927,7 @@ function VoterCenter(config){
 		var x = self.x*2;
 		var y = self.y*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		self.drawAnnotation(x,y,ctx)
 
 		if(self.highlight) ctx.globalAlpha = 1
 	};
