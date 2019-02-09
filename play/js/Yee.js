@@ -167,10 +167,11 @@ function Yee(model) {
 				for(var j=0; j<model.voters.length; j++){
 					model.voters[j].update();
 				}
-				model.election(model, {sidebar:false});
+				var result = model.election(model, {sidebar:false});
 
-				var a = model.color; // updated color
-				if (a == "#ccc") {model.gridb[i] = model.colors;}
+
+				var a = result.color; // updated color
+				if (a == "#ccc") {model.gridb[i] = result.colors;}
 				model.gridx.push(x);
 				model.gridy.push(y);
 				model.gridl.push(a);

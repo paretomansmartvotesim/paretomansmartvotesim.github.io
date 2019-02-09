@@ -22,7 +22,8 @@ Election.score = function(model, options){
 
 
 	var winners = _countWinner(tally);
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+	var color = result.color
 
 	if (options.sidebar) {
 
@@ -49,10 +50,11 @@ Election.score = function(model, options){
 			text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
 		}
 
-		model.caption.innerHTML = text;
+		result.text = text;
 	}
 	
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
+	return result;
 };
 
 Election.star = function(model, options){
@@ -84,21 +86,26 @@ Election.star = function(model, options){
 		}
 	}
 
-	var winner = frontrunners[0]
 	if (bWins > aWins) {
-		winner = frontrunners[1]
+		var winners = [frontrunners[1]]
+	} else if (aWins > bWins) {
+		var winners = [frontrunners[0]]
+	} else {
+		var winners = frontrunners // tie
 	}
-	var color = _colorWinner(options.sidebar,model, [winner]);
+	var result = _result(winners,model)
+	var color = result.color
+
 
 	if (model.dotop2) model.top2 = frontrunners.slice(0,2)
 
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 
 	// NO WINNER?! OR TIE?!?!
-	if(!winner){
+	if(winners.length > 1){
 
-		var text = "<b>NOBODY WINS</b>";
-		model.caption.innerHTML = text;
+		var text = "<b>TIE</b>";
+		result.text = text;
 
 	}else{
 
@@ -116,12 +123,13 @@ Election.star = function(model, options){
 		text += _icon(frontrunners[0])+_percentFormat(model, aWins)+". "+_icon(frontrunners[1]) +_percentFormat(model, bWins) + "<br>";
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
-		model.caption.innerHTML = text;
+		text += "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS <br> <br>" + text;
+		result.text = text;
 
 	}
 
+	return result;
 };
 
 Election.three21 = function(model, options){
@@ -155,21 +163,26 @@ Election.three21 = function(model, options){
 		}
 	}
 
-	var winner = finalists[0]
+
 	if (bWins > aWins) {
-		winner = finalists[1]
+		var winners = [finalists[1]]
+	} else if (aWins > bWins) {
+		var winners = [finalists[0]]
+	} else {
+		var winners = finalists // tie
 	}
-	var color = _colorWinner(options.sidebar,model, [winner]);
+	var result = _result(winners,model)
+	var color = result.color
 	
 	if (model.dotop2) model.top2 = finalists.slice(0,2)
 
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 
 	// NO WINNER?! OR TIE?!?!
-	if(!winner){
+	if(winners.length > 1){
 
-		var text = "<b>NOBODY WINS</b>";
-		model.caption.innerHTML = text;
+		var text = "<b>TIE</b>";
+		result.text = text;
 
 	}else{
 
@@ -194,12 +207,13 @@ Election.three21 = function(model, options){
 		text += _icon(finalists[0])+": "+_percentFormat(model, aWins)+"; "+_icon(finalists[1]) +": "+_percentFormat(model, bWins)+", so...<br>";
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
-		model.caption.innerHTML = text;
+		text += "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS";
+		text = "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS <br> <br>" + text;
+		result.text = text;
 
 	}
 
+	return result;
 };
 
 Election.approval = function(model, options){
@@ -214,13 +228,15 @@ Election.approval = function(model, options){
 
 	var winners = _countWinner(tally);
 
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+	var color = result.color
+
 	
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 
 	
 
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 
 	// Caption
 	var winner = winners[0];
@@ -244,7 +260,8 @@ Election.approval = function(model, options){
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
 		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
 	}
-	model.caption.innerHTML = text;
+	result.text = text;
+	return result;
 };
 
 Election.condorcet = function(model, options){
@@ -310,9 +327,10 @@ Election.condorcet = function(model, options){
 	}
 	// probably it would be better to find the smith set but this is okay for now
 	topWinners = _countWinner(tally);
-	var color = _colorWinner(options.sidebar,model, topWinners);
+	var result = _result(topWinners,model)
+    var color = result.color
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 	
 	var topWinner = topWinners[0];
 	// Winner... or NOT!!!!
@@ -340,8 +358,9 @@ Election.condorcet = function(model, options){
 
 	// what's the loop?
 
-	model.caption.innerHTML = text;
+	result.text = text;
 
+	return result;
 };
 
 // PairElimination
@@ -542,10 +561,10 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 
 
 
-
-	var color = _colorWinner(options.sidebar,model, topWinners);
+    var result = _result(topWinners,model)
+    var color = result.color
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 		
 	if (unanimousWin) {
 		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
@@ -648,8 +667,9 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 	
 	// what's the loop?
 
-	model.caption.innerHTML = text;
+	result.text = text;
 
+	return result;
 };
 
 // PairElimination
@@ -759,11 +779,10 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	}
 
 
-
-
-	var color = _colorWinner(options.sidebar,model, topWinners);
+    var result = _result(topWinners,model)
+    var color = result.color
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 		
 	if (unanimousWin) {
 		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
@@ -833,8 +852,9 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	
 	// what's the loop?
 
-	model.caption.innerHTML = text;
+	result.text = text;
 
+	return result;
 };
 
 // PairElimination
@@ -956,10 +976,12 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 
 
 
-	var color = _colorWinner(options.sidebar,model, topWinners);
+	
+    var result = _result(topWinners,model)
+    var color = result.color
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
 
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 		
 	if (unanimousWin) {
 		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
@@ -1050,8 +1072,9 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 	
 	// what's the loop?
 
-	model.caption.innerHTML = text;
+	result.text = text;
 
+	return result;
 };
 
 Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
@@ -1064,19 +1087,21 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 
 	rbvote.setreturnstring() // tell rbvote that we might want return strings (unless we're not doing the sidebar)
 	rbvote.readballots(ballots)
-	result = model.rbelection(options.sidebar) // e.g. result = rbvote.calctide() // having a sidebar display means we want to construct explanation strings
+	resultRB = model.rbelection(options.sidebar) // e.g. result = rbvote.calctide() // having a sidebar display means we want to construct explanation strings
 	
 
 
-	topWinners = [result.winner]
+	topWinners = [resultRB.winner]
 
 
-	var color = _colorWinner(options.sidebar,model, topWinners);
 
-	if (!options.sidebar) return
+    var result = _result(topWinners,model)
+    var color = result.color
+
+	if (!options.sidebar) return result 
 	
 	// replace some of the html in the output of rbvote to make it match the style of betterballot
-	var rbvote_string = (result.str).replace("style.css","../play/css/rbvote.css").replace()
+	var rbvote_string = (resultRB.str).replace("style.css","../play/css/rbvote.css").replace()
 	var intext = Object.keys(model.candidatesById)
 	var outtext = Object.keys(model.candidatesById).map(x => _icon(x))
 	for (var i in intext) {
@@ -1091,8 +1116,9 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 	text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
 	text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
 
-	model.caption.innerHTML = text;
+	result.text = text;
 
+	return result;
 };
 
 Election.rrv = function(model, options){
@@ -1143,6 +1169,8 @@ Election.rrv = function(model, options){
 		candidates.splice(candidates.indexOf(winner),1)
 	}
 
+	var result = _result(winnerslist.concat().sort(),model)
+
 	if (options.sidebar) {
 
 		// Caption
@@ -1160,7 +1188,7 @@ Election.rrv = function(model, options){
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
 			}
-			var color = _colorWinner(false,model, [winner]);
+			var color = _colorsWinners([winner],model)[0]
 			text += "";
 			//text += _icon(winner)+" has the highest score, so...";
 			text += "</span>";
@@ -1169,12 +1197,13 @@ Election.rrv = function(model, options){
 			text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;
 		}
 
-		model.caption.innerHTML = text;
+		result.text = text;
 	}
-	var color = _colorWinner(options.sidebar,model, winnerslist.concat().sort());
-	
+
 	// if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)  
 	if (model.dotop2) model.top2 = winnerslist.slice(0,2)  /// TODO: see if this actually works 
+
+	return result;
 };
 
 Election.borda = function(model, options){
@@ -1188,9 +1217,11 @@ Election.borda = function(model, options){
 		}
 	});
 	var winners = _countWinner(tally);
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+	var color = result.color
+
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 
 	// Caption
 	var text = "";
@@ -1213,7 +1244,8 @@ Election.borda = function(model, options){
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
 		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
 	}
-	model.caption.innerHTML = text;
+	result.text = text;
+	return result;
 };
 
 Election.irv = function(model, options){
@@ -1235,6 +1267,21 @@ Election.irv = function(model, options){
 		candidates.push(model.candidates[i].id);
 	}
 	var loserslist = []
+
+	if(options.sidebar) {
+		// var ov = model.voters // original voters
+		// var temp = JSON.parse(JSON.stringify(model.voters)) // save the voters before changing them
+		// model.voters = temp
+		// var vt = []
+		// for (var i=0; i<model.voters.length; i++) {
+		// 	vt[i]=[]
+		// 	for (varj=0; j < model.voters[i].ballots.length; j++)
+		// 	vt[i][j] = []
+		// 	Object.create(model.voters[i].ballots) // new copy
+		// }
+		// model.voters = vt
+		// // model.voters = model.voters.map( x => Object.create(x)) // new copy
+	}
 	while(!resolved){
 
 		if (options.sidebar) text += "<b>round "+roundNum+":</b><br>";
@@ -1304,6 +1351,19 @@ Election.irv = function(model, options){
 		if (options.sidebar) text += "<br>"
 	
 	}
+	if(options.sidebar) {
+		
+		for(var i=0; i<model.voters.length; i++){
+			var voter = model.voters[i];
+			voter.update();
+		}
+		// for (var i=0; i<model.voters.length; i++) {
+		// 	model.voters[i].ballots = temp[i].ballots // originals
+		// }
+		// model.voters = temp // restore the original ballots
+		// model.voters = ov
+	}
+
 	if (model.dotop2) {
 		loserslist = loserslist.concat(_sortTallyRev(tally))
 		var ll = loserslist.length
@@ -1311,9 +1371,11 @@ Election.irv = function(model, options){
 	}
 	
 	
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+	var color = result.color
 
-	if (!options.sidebar) return
+
+	if (!options.sidebar) return result
 
 	if (resolved == "tie") {
 		text += _tietext(winners);
@@ -1326,8 +1388,9 @@ Election.irv = function(model, options){
 		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;	
 	}
 
-	model.caption.innerHTML = text;
+	result.text = text;
 
+	return result;
 };
 
 Election.stv = function(model, options){
@@ -1450,9 +1513,11 @@ Election.stv = function(model, options){
 	}
 	
 	
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+	var color = result.color
 
-	if (!options.sidebar) return
+
+	if (!options.sidebar) return result
 
 	if (resolved == "tie") {
 		text += _tietext(tiedlosers);
@@ -1461,7 +1526,7 @@ Election.stv = function(model, options){
 	text = "<br>" + text
 	for (var i in winners) {
 		var winner = winners[i]
-		var color = _colorWinner(false,model, [winner]);
+		var color = _colorsWinners([winner],model)[0]
 		// END!
 		text += "</span>";
 		text += "<br>";
@@ -1469,12 +1534,13 @@ Election.stv = function(model, options){
 		text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;	
 	}
 
-	model.caption.innerHTML = text;
+	result.text = text;
 
 	// we messed around with the rankings, so lets put them back
 	for(var j=0; j<model.voters.length; j++){
 		model.voters[j].update();
 	}
+	return result;
 };
 
 Election.toptwo = function(model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
@@ -1507,9 +1573,11 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 	model.candidates = oldcandidates
 
 	var winners = _countWinner(tally);
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+	var color = result.color
+
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 
 	// Caption
 	var winner = winners[0];
@@ -1540,7 +1608,8 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 		text += _tietext(winners);
 		text = "<b>TIE</b> <br> <br>" + text;
 	}
-	model.caption.innerHTML = text;
+	result.text = text;
+	return result
 };
 
 Election.pluralityWithPrimary = function(model, options){
@@ -1570,12 +1639,19 @@ Election.pluralityWithPrimary = function(model, options){
 	var tally = _tally(model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
+
+	// return original candidates and update voters' ballots 
+	// TODO: make this better.
 	model.candidates = oldcandidates
+	var ptallies = _tally_primary(model, function(tally, ballot){
+		tally[ballot.vote]++;
+	});
 
 	var winners = _countWinner(tally);
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+	var color = result.color
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 
 	// Caption
 	var winner = winners[0];
@@ -1613,8 +1689,8 @@ Election.pluralityWithPrimary = function(model, options){
 		text += _tietext(winners);
 		text = "<b>TIE</b> <br> <br>" + text;
 	}
-	model.caption.innerHTML = text;
-
+	result.text = text;
+	return result
 }
 
 
@@ -1625,6 +1701,7 @@ Election.plurality = function(model, options){
 	// 	return
 	// }
 	options = options || {};
+	var result = {}
 
 	
 	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"plurality")
@@ -1634,9 +1711,11 @@ Election.plurality = function(model, options){
 		tally[ballot.vote]++;
 	});
 	var winners = _countWinner(tally);
-	var color = _colorWinner(options.sidebar,model, winners);
+	var result = _result(winners,model)
+    var color = result.color
+	
 	if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)
-	if (!options.sidebar) return
+	if (!options.sidebar) return result
 
 
 	// Caption
@@ -1654,8 +1733,8 @@ Election.plurality = function(model, options){
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
 		
-		model.caption.innerHTML = text;
-		return
+		result.text = text;
+		return result
 	} else if (options.model3) {
 		text = "<span class='small'>";
 		for(var i=0; i<model.candidates.length; i++){
@@ -1667,8 +1746,8 @@ Election.plurality = function(model, options){
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
 		
-		model.caption.innerHTML = text;
-		return
+		result.text = text;
+		return result
 
 	}
 	var text = "";
@@ -1693,7 +1772,8 @@ Election.plurality = function(model, options){
 		text += _tietext(winners);
 		text = "<b>TIE</b> <br> <br>" + text;
 	}
-	model.caption.innerHTML = text;
+	result.text = text;
+	return result
 };
 
 var doPollAndUpdateBallots = function(model,options,electiontype){
@@ -2025,24 +2105,37 @@ var _countLoser = function(tally){
 	return winners;
 }
 
-var _colorWinner = function(sidebar, model, winners){
-	if (winners.length > 1) {
-		var color = "#ccc"; // grey
-		var colors = []
-		for (i in winners) {
-			var c1 = (winners[i]) ? Candidate.graphics[winners[i]].fill : "";
-			colors.push(c1)
-		}
-		model.colors = colors;
+var _colorsWinners = function(winners,model){
+	return winners.map( x => (x) ? model.candidatesById[x].fill : "" );
+}
+
+function _oneColor(colors){
+	if (colors.length > 1) {
+		return "#ccc"; // grey
 	} else {
-		var color = (winners[0]) ? Candidate.graphics[winners[0]].fill : "";
+		return colors[0]
 	}
-	model.canvas.style.borderColor = color;
+}
+
+function _result(winners,model) {
+	result = {}
+    var colors = _colorsWinners(winners,model)
+    var color = _oneColor(colors)
+    result.winners = winners
+    result.colors = colors
+    result.color = color
+	return result
+}
+
+function _storeResult(model, result){
+	if(result.text) model.caption.innerHTML = result.text;
+	model.canvas.style.borderColor = result.color;
 	if (model.yeeon) model.canvas.style.borderColor = "#fff"
-	model.winners = winners;
-	model.color = color;
-	if (sidebar) model.realwinners = winners;
-	return color;
+	model.winners = result.winners;
+	model.colors = result.colors;
+	model.color = result.color;
+	model.realwinners = result.winners;
+	return
 }
 
 function _tietext(winners) {

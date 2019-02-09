@@ -126,8 +126,8 @@ function Model(config){
 			c.update();
 		}
 
-		self.election(self,self.optionsForElection);
-
+		var result = self.election(self,self.optionsForElection);
+		if (result) _storeResult(model,result)
 
 		// do the center voter thing
 		if (typeof self.voterCenter !== 'undefined') { // does the voterCenter exist?  If so then calculate it.
