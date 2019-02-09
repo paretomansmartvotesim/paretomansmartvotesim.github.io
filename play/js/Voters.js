@@ -903,14 +903,182 @@ function VoterCenter(config){
 	Draggable.call(self, config);
 
 	// Passed properties
+	var model = config.model
 	self.id = config.id;
 	self.size = 30;
-
 	
 	self.points = [[0,0]];
 	
 	self.img = new Image();  // use the face
 	self.img.src = "img/voter_face.png";
+
+	self.findVoterCenter = function(){ // calculate the center of the voter groups
+		var x = 0
+		var y = 0
+		var totalnumbervoters = 0
+		for(var i=0; i<model.voters.length; i++){
+			var voter = model.voters[i]
+			var numbervoters = voter.ballots.length
+			x += voter.x * numbervoters
+			y += voter.y * numbervoters
+			totalnumbervoters += numbervoters
+		}
+		x/=totalnumbervoters
+		y/=totalnumbervoters
+		
+
+		var method = model.median_mean // 1,2,3
+		// 1 is the mean
+		// 2 is the geometric median
+		// 3 is a 1-d median along 4 projections
+		// 4 is a 1-d median along 2 projections
+		// 5 is 2 medians using the usual median method
+
+		if (method == 5) {
+			var median = function(values) {
+
+				values.sort( function(a,b) {return a - b;} );
+			
+				var half = Math.floor(values.length/2);
+			
+				if(values.length % 2)
+					return values[half];
+				else
+					return (values[half-1] + values[half]) / 2.0;
+			}
+			xvals = []
+			yvals = []
+			for(i=0; i<model.voters.length; i++){
+				voter = model.voters[i]
+				for(m=0; m<voter.points.length; m++) {
+					point = voter.points[m]
+					xvals.push(point[0]+voter.x)
+					yvals.push(point[1]+voter.y)
+				}
+			}
+			x = median(xvals)
+			y = median(yvals)
+		} else if (method != 1) { // try to find geometric median ... still thinking about whether this is a good idea.
+			// first for centers
+			var d, voter, yv,xv,xd,yd,itnv,moved,xt,yt,j,i,dg,m,point
+			
+			if (method == 2) {
+				var distancemeasure = function(xd,yd) {
+					return Math.sqrt(xd*xd+yd*yd)
+				}
+			} else if (method == 3) {
+				var distancemeasure = function(xd,yd) {
+					return Math.abs(xd) + Math.abs(yd) + Math.abs(xd+yd) + Math.abs(xd-yd)
+				}
+			} else if (method == 4) {
+				var distancemeasure = function(xd,yd) {
+					return Math.abs(xd) + Math.abs(yd)// + Math.abs(xd+yd) + Math.abs(xd-yd)
+				}
+			}
+
+			d = 0
+			for(i=0; i<model.voters.length; i++){
+				voter = model.voters[i]
+				xv = voter.x
+				yv = voter.y
+				xd = xv - x
+				yd = yv - y
+				d += distancemeasure(xd,yd) * voter.ballots.length // d is total distance, not average
+			}
+			if (1) {
+				for (var a = 200; a > .1; ) {
+					xt = [x-a,x+a,x-a,x+a] // try these points
+					yt = [y-a,y-a,y+a,y+a]
+					moved = false
+					for (j in xt) {
+						xg = xt[j] // the guess
+						yg = yt[j]
+						// calculate distance
+						dg=0
+						for(i=0; i<model.voters.length; i++){
+							voter = model.voters[i]
+							xv = voter.x
+							yv = voter.y
+							xd = xv - xg
+							yd = yv - yg
+							dg += distancemeasure(xd,yd) * voter.ballots.length
+						}
+						if (dg < d) { // we found a better point
+							d=dg * 1
+							x=xg * 1
+							y=yg * 1
+							moved = true
+						}
+					}
+					if(!moved) a*=.5
+				}
+			}
+			// now we do it again for all the individual points within the voter group
+			
+			d=0
+			for(i=0; i<model.voters.length; i++){
+				
+				voter = model.voters[i]
+				for(m=0; m<voter.points.length; m++) {
+					point = voter.points[m]
+					xv = point[0]+voter.x
+					yv = point[1]+voter.y
+					xd = xv - x
+					yd = yv - y
+					d += distancemeasure(xd,yd)
+				}
+			}
+			for (var a = 200; a > .1; ) {
+				xt = [x-a,x+a,x-a,x+a] // try these points
+				yt = [y-a,y-a,y+a,y+a]
+				moved = false
+				for (j in xt) {
+					xg = xt[j] // the guess
+					yg = yt[j]
+					// calculate distance
+					dg=0
+					for(i=0; i<model.voters.length; i++){
+						voter = model.voters[i]
+						for(m=0; m<voter.points.length; m++) {
+							point = voter.points[m]
+							xv = point[0]+voter.x
+							yv = point[1]+voter.y
+							xd = xv - xg
+							yd = yv - yg
+							dg += distancemeasure(xd,yd)
+						}
+					}
+					if (dg < d) { // we found a better point
+						d=dg * 1
+						x=xg * 1
+						y=yg * 1
+						moved = true
+					}
+				}
+				if(!moved) a*=.5
+			}
+		} 
+		return {x:x,y:y}
+	}
+
+	//self.findVoterCenter()
+
+	// update
+	self.update = function() {// do the center voter thing
+		if(Mouse.dragging == self) {
+			var oldcenter = self.findVoterCenter()
+			var changecenter = {x:self.x - oldcenter.x, y:self.y - oldcenter.y}
+			for(var i=0; i<model.voters.length; i++){
+				model.voters[i].x += changecenter.x
+				model.voters[i].y += changecenter.y
+			}
+		} else {
+			var recenter = self.findVoterCenter()
+			self.x = recenter.x
+			self.y = recenter.y
+		}
+	}
+
 
 	// DRAW!
 	self.drawBackAnnotation = function(x,y,ctx) {}

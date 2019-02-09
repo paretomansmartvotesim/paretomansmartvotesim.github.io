@@ -7,12 +7,6 @@ and RENDER IT INTO THE CAPTION
 
 var Election = {};
 
-// function Election(config) {
-// 	var self = this
-// 	Model.call(self, config);
-
-
-// }
 
 Election.score = function(model, options){
 
