@@ -141,6 +141,9 @@ function main(config){
 		document.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
 
+		
+		model.election = Election.plurality;
+		model.optionsForElection = {sidebar:true}
 
 		// INIT!
 		model.onInit = function(){
@@ -289,9 +292,7 @@ function main(config){
 			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
 			
 		};
-		model.election = Election.plurality;
 		model.onUpdate = function(){
-			model.election(model, {sidebar:true});
 			
 			// CREATE A BALLOT
 			var myNode = document.querySelector("#right");

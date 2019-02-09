@@ -5,3 +5,13 @@ Math.TAU = Math.PI*2;
 function _icon(name){
 	return "<img src='img/icon/"+name+".png'/>";
 }
+
+
+function _drawStroked(text, x, y, ctx) {
+	ctx.font = "40px Sans-serif"
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 4;
+	ctx.strokeText(text, x, y);
+	ctx.fillStyle = 'white';
+	ctx.fillText(text, x, y);
+}

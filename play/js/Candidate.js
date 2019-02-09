@@ -15,6 +15,12 @@ function Candidate(config){
 
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
+	self.drawTie = function(ctx) {
+		_drawStroked("TIE",self.x*2,self.y*2-35,ctx);
+	}	
+	self.drawWin = function(ctx) {
+		_drawStroked("WIN",self.x*2,self.y*2-35,ctx);
+	}	
 	self.draw = function(ctx){
 
 		// RETINA
