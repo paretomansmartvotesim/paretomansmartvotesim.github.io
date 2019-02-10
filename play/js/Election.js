@@ -2134,7 +2134,6 @@ function _storeResult(model, result){
 	model.winners = result.winners;
 	model.colors = result.colors;
 	model.color = result.color;
-	model.realwinners = result.winners;
 	return
 }
 

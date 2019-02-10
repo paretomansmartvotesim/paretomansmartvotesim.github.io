@@ -16,10 +16,10 @@ function Candidate(config){
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawTie = function(ctx) {
-		_drawStroked("TIE",self.x*2,self.y*2-35,ctx);
+		_drawStroked("TIE",self.x*2,self.y*2-35,40,ctx);
 	}	
 	self.drawWin = function(ctx) {
-		_drawStroked("WIN",self.x*2,self.y*2-35,ctx);
+		_drawStroked("WIN",self.x*2,self.y*2-35,40,ctx);
 	}	
 	self.draw = function(ctx){
 
@@ -30,11 +30,12 @@ function Candidate(config){
 
 		// Draw image instead!
 		//if(self.highlight) ctx.filter = "brightness(150%)"
+		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		self.drawAnnotation(x,y,ctx)
-		if(self.highlight) ctx.globalAlpha = 1
+		if(self.highlight) ctx.globalAlpha = temp
 		//if(self.highlight) ctx.filter = "brightness(100%)"
 
 	};

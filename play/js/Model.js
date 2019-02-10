@@ -189,8 +189,8 @@ function Model(config){
 		}
 		
 		// draw text next to the winners
-		if(model.realwinners) {
-			var objWinners = model.realwinners.map(x => model.candidatesById[x])
+		if(model.winners) {
+			var objWinners = model.winners.map(x => model.candidatesById[x])
 			if (objWinners.length > 1) {
 				for (i in objWinners) {
 					objWinners[i].drawTie(ctx)

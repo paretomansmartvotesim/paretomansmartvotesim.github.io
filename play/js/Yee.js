@@ -197,6 +197,7 @@ function Yee(model) {
 	self.drawBackground = function() {
 		
 		if(model.yeeon){
+			var temp = ctx.globalAlpha
 			ctx.globalAlpha = 1
 			ctx.fillStyle = "#fff"
 			ctx.fillRect(0,0,canvas.width,canvas.height)  // draw a white background
@@ -249,7 +250,7 @@ function Yee(model) {
 					ctx.fillRect(model.gridx[k]-pixelsize*.5, model.gridy[k]-pixelsize*.5, pixelsize, pixelsize);
 				}
 			}
-			ctx.globalAlpha = 1
+			ctx.globalAlpha = temp
 			// Draw axes
 			//var background = new Image();
 			//background.src = "../play/img/axis.png";
@@ -266,10 +267,11 @@ function Yee(model) {
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = 8;
 			ctx.fillStyle = 'white';
+			var temp = ctx.globalAlpha
 			ctx.globalAlpha = 0.3
 			ctx.fill();
 			ctx.stroke();
-			ctx.globalAlpha = 1
+			ctx.globalAlpha = temp
 		}
 	}
 	
@@ -278,14 +280,15 @@ function Yee(model) {
 		// make the candidate that is moving say "yee-yee!"
 		if(model.yeeon){
 			ctx.textAlign = "center";
+			var temp = ctx.globalAlpha
 			ctx.globalAlpha = 0.9
-			_drawStroked("yee-yee!",x,y+50,ctx);
+			_drawStroked("yee-yee!",x,y+50,40,ctx);
 			var dot = 3
 			ctx.fillStyle = "#000"
 			ctx.fillRect(x-dot-1,y-dot-1,dot*2+2,dot*2+2);
 			ctx.fillStyle = "#fff"
 			ctx.fillRect(x-dot,y-dot,dot*2,dot*2);
-			ctx.globalAlpha = 1
+			ctx.globalAlpha = temp
 		}
 	}
 }

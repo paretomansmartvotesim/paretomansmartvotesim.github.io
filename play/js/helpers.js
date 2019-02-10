@@ -7,8 +7,8 @@ function _icon(name){
 }
 
 
-function _drawStroked(text, x, y, ctx) {
-	ctx.font = "40px Sans-serif"
+function _drawStroked(text, x, y, textsize, ctx) {
+	ctx.font = textsize + "px Sans-serif"
 	ctx.strokeStyle = 'black';
 	ctx.lineWidth = 4;
 	ctx.strokeText(text, x, y);

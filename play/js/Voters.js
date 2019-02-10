@@ -798,33 +798,26 @@ if (!self.x_voters) {
 			self.type.drawCircle(ctx, x, y, 10, ballot);
 		}
 		// Circle!
+		var x = self.x*2;
+		var y = self.y*2;
 		var size = 20;
 		//self.type.drawCircle(ctx, self.x, self.y, size, ballot);
+		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
 		_drawBlank(ctx, self.x, self.y, size)
 		
 		// Face!
 		size = size*2;
-		var x = self.x*2;
-		var y = self.y*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		
 		// Number ID
 		var textsize = 20
-		function drawStroked(text, x, y) {
-			ctx.font = textsize + "px Sans-serif"
-			ctx.strokeStyle = 'black';
-			ctx.lineWidth = 4;
-			ctx.strokeText(text, x, y);
-			ctx.fillStyle = 'white';
-			ctx.fillText(text, x, y);
-		}
 		ctx.textAlign = "center";
-		drawStroked(self.vid+1,x+0*textsize,y+0*textsize);
+		_drawStroked(self.vid+1,x+0*textsize,y+0*textsize,textsize,ctx);
 
 		self.drawAnnotation(x,y,ctx)
-		if(self.highlight) ctx.globalAlpha = 1
+		if(self.highlight) ctx.globalAlpha = temp
 	};
 
 }
@@ -874,7 +867,10 @@ function SingleVoter(config){
 	self.drawBackAnnotation = function(x,y,ctx) {}
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
+		var x = self.x*2;
+		var y = self.y*2;
 
+		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Background, for showing HOW the decision works...
 		self.drawBackAnnotation(x,y,ctx)
@@ -886,12 +882,10 @@ function SingleVoter(config){
 
 		// Face!
 		size = size*2;
-		var x = self.x*2;
-		var y = self.y*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		
 		self.drawAnnotation(x,y,ctx)
-		if(self.highlight) ctx.globalAlpha = 1
+		if(self.highlight) ctx.globalAlpha = temp
 	};
 
 
@@ -1084,20 +1078,20 @@ function VoterCenter(config){
 	self.drawBackAnnotation = function(x,y,ctx) {}
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
+		var x = self.x*2;
+		var y = self.y*2;
 		size = self.size
-		
+		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
 		_drawBlank(ctx, self.x, self.y, size);
 		
 		// Face!
 		size = size*2;
-		var x = self.x*2;
-		var y = self.y*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		self.drawAnnotation(x,y,ctx)
 
-		if(self.highlight) ctx.globalAlpha = 1
+		if(self.highlight) ctx.globalAlpha = temp
 	};
 
 }
