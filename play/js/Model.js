@@ -187,6 +187,9 @@ function Model(config){
 		if ((typeof self.voterCenter !== 'undefined') && model.getTotalVoters() != 1) {
 			self.voterCenter.draw(ctx)
 		}
+
+		// draw the Yee object last so it is easy to see.
+		if (self.yeeon && self.yeeobject) self.yeeobject.draw(ctx)
 		
 		// draw text next to the winners
 		if(model.winners) {
