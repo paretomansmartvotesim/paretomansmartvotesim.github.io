@@ -48,11 +48,11 @@ function main(ballotType){
 		"img/ballot_fptp.png",
 		"img/ballot_ranked.png",
 		"img/ballot_approval.png",
-		"img/ballot_range.png",
+		"img/ballot_range_original.png",
 
 		// The boxes
 		"img/ballot_box.png",
-		"img/ballot_rate.png"
+		"img/ballot_rate_original.png"
 
 	]);
 
