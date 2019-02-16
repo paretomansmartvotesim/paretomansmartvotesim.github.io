@@ -1001,8 +1001,8 @@ preFrontrunnerIds: ["square","hexagon"],
 	// presethtmlname: "sandbox.html",
 }
 
-    } else if (htmlname == "sandbox.html") {
-		config = 
+} else if (htmlname == "sandbox.html") {
+	config = 
 {
 	description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
 	features: 4,
