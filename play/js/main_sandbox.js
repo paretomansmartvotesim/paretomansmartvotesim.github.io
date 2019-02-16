@@ -44,79 +44,83 @@ function main(config){
 	var maxVoters = 10 // there is a bug where the real max is one less than this
 
 	var loadDefaults = function() {
-		// Defaults...
-		config = config || {};
-		config.configversion = config.configversion || 1
-		
-		// version 2 stuff
-		// if (config.configversion >= 2) { // for future}
-		config.system = config.system || "FPTP";
-		config.rbsystem = config.rbsystem || "Tideman";
-		config.candidates = config.candidates || 3;
-		config.voters = config.voters || 1;
-		config.snowman = config.snowman || false;
-		config.x_voters = config.x_voters || false;
-		config.spread_factor_voters = config.spread_factor_voters || 1;
-		config.arena_size = config.arena_size || 300;
-		config.median_mean = config.median_mean || 1;
-		config.utility_shape = config.utility_shape || "linear";
-		if (config.arena_border === undefined) config.arena_border = 2;
-		//config.votersRealName = config.votersRealName || "Single Voter";
-		config.oneVoter = config.oneVoter || false;
 
-		config.features = config.features || 0; // 1-basic, 2-voters, 3-candidates, 4-save
+
+
+		// Voter defaults
+
+		// we want individual strategies to be loaded in, if they are there
+		// if we have a blank slate, then we want to fill in with strategic
+		if (config.strategic && config.voterStrategies === undefined) {
+			config.voterStrategies = []
+			for (var i = 0; i < maxVoters; i++) {
+				config.voterStrategies[i] = config.strategic
+			}	
+		}
+		config.voterStrategies = config.voterStrategies || []
+		config.voterPercentStrategy = config.voterPercentStrategy || []
+		config.voter_group_count = config.voter_group_count || []
+		config.voter_group_spread = config.voter_group_spread || []
+		for (var i = 0; i < maxVoters; i++) {
+			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
+			config.voterPercentStrategy[i] = config.voterPercentStrategy[i] || 0
+			config.voter_group_count[i] = config.voter_group_count[i] || 50
+			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
+		}
+
+		// helper
+		var all_candidate_names = Object.keys(Candidate.graphics)
+
+		// Defaults...
+		var defaults = {
+			configversion:1,
+			system: "FPTP",
+			rbsystem: "Tideman",
+			candidates: 3,
+			voters: 1,
+			snowman: false,
+			x_voters: false,
+			spread_factor_voters: 1,
+			arena_size: 300,
+			median_mean: 1,
+			utility_shape: "linear",
+			arena_border: 2,
+			oneVoter: false,
+			// votersRealName: "Single Voter",
+			features: 0,
+			sandboxsave: false,
+			featurelist: ["systems"],
+			doPercentFirst: false,
+			doFullStrategyConfig: false,
+			hidegearconfig: false,
+			preFrontrunnerIds: ["square","triangle"],
+			autoPoll: "Manual",
+			// primaries: "No",
+			description: "",
+			unstrategic: "zero strategy. judge on an absolute scale.",
+			strategic: "zero strategy. judge on an absolute scale.",
+			second_strategy: true,
+			keyyee: "off",
+			yeefilter: all_candidate_names,
+			computeMethod: "ez",
+			pixelsize: 60
+		}
+		_fillInDefaults(config,defaults)
+
+		// Feature List!
+		// config.features: 1-basic, 2-voters, 3-candidates, 4-save
 		if (       config.features == 0 && ! config.featurelist) {config.featurelist = ["systems"]  // old spec
 		} else if (config.features == 1) {config.featurelist = ["systems"]
 		} else if (config.features == 2) {config.featurelist = ["systems","voters"]
 		} else if (config.features == 3) {config.featurelist = ["systems","voters","candidates"]
 		} else if (config.features == 4) {config.featurelist = ["systems","voters","candidates"]; config.sandboxsave = true;}
-		config.sandboxsave = config.sandboxsave || false;
-		config.featurelist = config.featurelist || ["systems"]
-		config.doPercentFirst = config.doPercentFirst || false;
 		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
-		config.doFullStrategyConfig = config.doFullStrategyConfig || false;
 		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","yee"])
 		// clear the grandfathered config settings
 		config.doPercentFirst = undefined
 		config.features = undefined
 		config.doFullStrategyConfig = undefined
-		config.hidegearconfig = config.hidegearconfig || false;
 		
-		config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"]
-		config.autoPoll = config.autoPoll || "Manual"
-		// config.primaries = config.primaries || "No"
-		config.voterStrategies = config.voterStrategies || []
-		config.description = config.description || ""
-		for (var i = 0; i < maxVoters; i++) {
-			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
-		}
-		if (config.strategic && config.voterStrategies === undefined) {
-			for (var i = 0; i < maxVoters; i++) {
-				config.voterStrategies[i] = config.strategic
-			}	
-		}
-		config.voterPercentStrategy = config.voterPercentStrategy || []
-		for (var i = 0; i < maxVoters; i++) {
-			config.voterPercentStrategy[i] = config.voterPercentStrategy[i] || 0
-		}
-		config.voter_group_count = config.voter_group_count || []
-		for (var i = 0; i < maxVoters; i++) {
-			config.voter_group_count[i] = config.voter_group_count[i] || 50
-		}
-		config.voter_group_spread = config.voter_group_spread || []
-		for (var i = 0; i < maxVoters; i++) {
-			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
-		}
-		
-		config.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
-		config.strategic = config.strategic || "zero strategy. judge on an absolute scale.";
-		if (config.second_strategy === undefined) config.second_strategy = true;
-		config.keyyee = (config.keyyee === undefined) ? "off" : config.keyyee;
-		var all_candidate_names = Object.keys(Candidate.graphics)
-		config.yeefilter = config.yeefilter || all_candidate_names;
-		config.computeMethod = config.computeMethod || "ez";
-		config.pixelsize = config.pixelsize || 60;
-		if (config.arena_border === undefined) config.arena_border = 2;  // very important to use this triple equals === syntax rather than the ||
 		var url = window.location.pathname;
 		var filename = url.substring(url.lastIndexOf('/')+1);
 		config.filename = filename
@@ -148,7 +152,21 @@ function main(config){
 		// INIT!
 		model.onInit = function(){
 
+
 			// Based on config... what should be what?
+			_copySomeAttributes(model,config,
+				["system",
+				"rbsystem",
+				"preFrontrunnerIds",
+				"autoPoll",
+				"computeMethod",
+				"pixelsize",
+				"spread_factor_voters",
+				"arena_size",
+				"median_mean",
+				"utility_shape",
+				"arena_border"
+			])
 			model.numOfCandidates = config.candidates;
 			model.numOfVoters = config.voters;
 			if (config.x_voters) {
@@ -160,18 +178,7 @@ function main(config){
 			} else {
 				model.votersRealName = voters.filter( function(x){return x.num==config.voters && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
 			}
-			model.system = config.system;
-			model.rbsystem = config.rbsystem
-			model.preFrontrunnerIds = config.preFrontrunnerIds;
-			model.autoPoll = config.autoPoll
 			// model.primaries = config.primaries
-			model.computeMethod = config.computeMethod;
-			model.pixelsize = config.pixelsize;
-			model.spread_factor_voters = config.spread_factor_voters;
-			model.arena_size = config.arena_size;
-			model.median_mean = config.median_mean;
-			model.utility_shape = config.utility_shape;
-			model.arena_border = config.arena_border;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==config.system);
 			})[0];
@@ -226,26 +233,29 @@ function main(config){
 				} else {
 					var dist1 = GaussianVoters
 				}
-				model.addVoters({
+				var voterConfig = {
 					dist: dist1,
 					type: model.voterType,
 					strategy: config.voterStrategies[i],
 					percentStrategy: config.voterPercentStrategy[i],
 					group_count: config.voter_group_count[i],
 					group_spread: config.voter_group_spread[i],
-					preFrontrunnerIds: config.preFrontrunnerIds,
-					unstrategic: config.unstrategic,
 					second_strategy: config.second_strategy,
 					vid: i,
-					snowman: config.snowman,
-					x_voters: config.x_voters,
-					spread_factor_voters: config.spread_factor_voters,
-					arena_size: config.arena_size,
-					arena_border: config.arena_border,
 					num:(4-num),
 					x:pos[0] * model.arena_size / 300 , //+ (model.arena_size - 300) * .5
 					y:pos[1] * model.arena_size / 300 //+ (model.arena_size - 300) * .5
-				});
+				}
+				_copySomeAttributes(voterConfig,config,[
+					"preFrontrunnerIds",
+					"unstrategic",
+					"snowman",
+					"x_voters",
+					"spread_factor_voters",
+					"arena_size",
+					"arena_border"
+				])
+				model.addVoters(voterConfig);
 			}
 			model.addVoterCenter()
 

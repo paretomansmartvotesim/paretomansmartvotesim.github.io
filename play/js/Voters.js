@@ -654,25 +654,35 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 	Draggable.call(self, config);
 
 	// NUM
-	self.num = config.num || 3;
-	self.vid = config.vid || 0;
-	self.snowman = config.snowman || false;
-	self.x_voters = config.x_voters || false;
-	self.spread_factor_voters = config.spread_factor_voters || 1
+	_fillInSomeDefaults(self,config,[
+		"num",
+		"vid",
+		"snowman",
+		"x_voters",
+		"spread_factor_voters"
+	])
+	_fillInDefaults(self,{
+		num: 3,
+		vid: 0,
+		snowman: false,
+		x_voters: false,
+		spread_factor_voters: 1
+	})
+	_copySomeAttributes(self,config,[
+		"percentStrategy",
+		"second_strategy",
+		"group_count",
+		"group_spread",
+		"strategy",
+		"unstrategic",
+		"preFrontrunnerIds"
+	])
 
 	// WHAT TYPE?
 	self.type = new config.type(self.model);
 	self.setType = function(newType){
 		self.type = new newType(self.model);
 	};
-	
-	self.percentStrategy = config.percentStrategy
-	self.second_strategy = config.second_strategy
-	self.group_count = config.group_count
-	self.group_spread = config.group_spread
-	self.strategy = config.strategy
-	self.unstrategic = config.unstrategic
-	self.preFrontrunnerIds = config.preFrontrunnerIds
 
 	self.img = new Image();  // use the face
 	self.img.src = "img/voter_face.png";
@@ -829,17 +839,21 @@ function SingleVoter(config){
 
 
 	// not sure if we need all these, but just in case
-	self.num = 1;
-	self.vid = 0;
-	self.snowman = false;
-	self.x_voters = false;
-	self.percentStrategy = config.percentStrategy
-	self.second_strategy = config.second_strategy
-	self.group_count = config.group_count
-	self.group_spread = config.group_spread
-	self.strategy = config.unstrategic // at first glance this doesn't seem right, but there is only one group of voters.
-	self.unstrategic = config.unstrategic
-	self.preFrontrunnerIds = config.preFrontrunnerIds
+	Object.assign(self,{
+		num: 1,
+		vid: 0,
+		snowman: false,
+		x_voters: false,
+	})
+	_copySomeAttributes(self,config,[
+		"percentStrategy",
+		"second_strategy",
+		"group_count",
+		"group_spread",
+		"unstrategic",
+		"preFrontrunnerIds"
+	])
+	self.strategy = self.unstrategic // at first glance this doesn't seem right, but there is only one group of voters.
 
 
 	// WHAT TYPE?

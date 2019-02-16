@@ -11,19 +11,17 @@ function Model(config){
 	var self = this;
 
 	// Properties
-	config = config || {};
-	self.id = config.id || "model";
-	self.size = config.size || 300;
-	self.scale = config.scale || 1; // TO DO: actually USE this.
-	
-	if (config.border === undefined) config.border = 10
-	self.border = config.border; // used to be 10, then I got rid of the border.
+	_fillInDefaults(self,config)
+	_fillInDefaults(self,{
+		id:"model",
+		size:300,
+		scale:1,
+		border:10,
+		preFrontrunnerIds:["square","triangle","hexagon"],
+		unstrategic:"zero strategy. judge on an absolute scale.",
+		optionsForElection:{sidebar:true}
+	})
 
-	self.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle","hexagon"];
-	self.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
-	self.optionsForElection = config.optionsForElection || {sidebar:true}
-
-	
 
 	// RETINA canvas, whatever.
 	var canvas = document.createElement("canvas");
