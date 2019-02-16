@@ -1735,7 +1735,7 @@ Election.plurality = function(model, options){
 		
 		result.text = text;
 		return result
-	} else if (options.model3) {
+	} else if (options.original) {
 		text = "<span class='small'>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;

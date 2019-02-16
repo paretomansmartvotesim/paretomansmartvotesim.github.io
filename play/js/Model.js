@@ -16,8 +16,14 @@ function Model(config){
 	self.size = config.size || 300;
 	self.scale = config.scale || 1; // TO DO: actually USE this.
 	
-	if (config.border === undefined) config.border = 2
+	if (config.border === undefined) config.border = 10
 	self.border = config.border; // used to be 10, then I got rid of the border.
+
+	self.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle","hexagon"];
+	self.unstrategic = config.unstrategic || "zero strategy. judge on an absolute scale.";
+	self.optionsForElection = config.optionsForElection || {sidebar:true}
+
+	
 
 	// RETINA canvas, whatever.
 	var canvas = document.createElement("canvas");

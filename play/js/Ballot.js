@@ -19,7 +19,11 @@ function ScoreBallot(config){
 
 	var self = this;
 	config = config || {};
-	config.bg = "img/ballot_range.png";
+	if (config.startAt1) {
+		config.bg = "img/ballot_range_original.png";
+	} else {
+		config.bg = "img/ballot_range.png";
+	}
 	if (inSandbox) {
 		config.bg = "img/ballot5_range.png";
 	}
@@ -45,7 +49,11 @@ function ScoreBallot(config){
 		}
 		for(var cID in ballot){
 			var score = ballot[cID];
-			self.boxes[cID].gotoFrame(score+1);
+			if (config.startAt1) {
+				self.boxes[cID].gotoFrame(score-1);
+			} else {
+				self.boxes[cID].gotoFrame(score+1);
+			}
 		}
 	};
 
@@ -248,13 +256,23 @@ function Ballot(config){
 			frame:frame
 		});
 	};
+	
 	self.createRate = function(x,y,frame){
-		return self.createSprite({
-			img: "img/ballot_rate.png",
-			x:x, y:y,
-			w:216, h:40, // 270, 50
-			frame:frame
-		});
+		if (config.startAt1) {
+			return self.createSprite({
+				img: "img/ballot_rate_original.png",
+				x:x, y:y,
+				w:225, h:50,
+				frame:frame
+			});
+		} else {
+			return self.createSprite({
+				img: "img/ballot_rate.png",
+				x:x, y:y,
+				w:216, h:40,
+				frame:frame
+			});
+		}
 	};
 	self.createThree = function(x,y,frame){
 		return self.createSprite({

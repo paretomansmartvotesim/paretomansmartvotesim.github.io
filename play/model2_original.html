@@ -12,10 +12,11 @@
 <script src="js/Loader.js"></script>
 <script src="js/Mouse.js"></script>
 <script src="js/Draggable.js"></script>
-<script src="js/Model.js"></script>
+<script src="js/Model.js"></script> <script src="js/Yee.js"></script>
 <script src="js/Candidate.js"></script>
 <script src="js/Voters.js"></script>
 <script src="js/Election.js"></script>
+<script src="js/seedrandom.min.js"></script>
 
 <script>
 Loader.onload = function(){
@@ -33,10 +34,8 @@ Loader.onload = function(){
 		});
 		model.addCandidate("square", 50, 125);
 		model.addCandidate("triangle", 250, 125);
-
-	};
-	model.onUpdate = function(){
-		Election.plurality(model, {verbose:true});
+		model.election = Election.plurality
+		model.optionsForElection = {sidebar:true,verbose:true}
 	};
 	model.init();
 

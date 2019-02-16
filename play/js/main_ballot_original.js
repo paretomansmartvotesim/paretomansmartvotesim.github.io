@@ -17,7 +17,9 @@ function main(ballotType){
 			model.addVoters({
 				dist: SingleVoter,
 				type: VoterType,
-				x:81, y:92
+				x:81, y:92,
+				preFrontrunnerIds: ["square","triangle","hexagon"],
+				unstrategic: "zero strategy. judge on an absolute scale."
 			});
 			model.addCandidate("square", 41, 50);
 			model.addCandidate("triangle", 153, 95);
@@ -25,7 +27,7 @@ function main(ballotType){
 		};
 
 		// CREATE A BALLOT
-		window.ballot = new BallotType();
+		window.ballot = new BallotType({startAt1:true});
 		document.body.appendChild(ballot.dom);
 		model.onUpdate = function(){
 			ballot.update(model.voters[0].ballot);
