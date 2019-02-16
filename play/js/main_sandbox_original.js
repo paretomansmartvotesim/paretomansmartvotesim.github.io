@@ -66,7 +66,7 @@ function main(config){
 
 			// Based on config... what should be what?
 			model.numOfCandidates = config.candidates;
-			model.numOfVoters = config.voters;
+			model.numVoterGroups = config.voters;
 			model.system = config.system;
 			var votingSystem = votingSystems.filter(function(system){
 				return(system.name==model.system);
@@ -75,7 +75,7 @@ function main(config){
 			model.election = votingSystem.election;
 
 			// Voters
-			var num = model.numOfVoters;
+			var num = model.numVoterGroups;
 			var voterPositions;
 			if(num==1){
 				voterPositions = [[150,150]];
@@ -263,7 +263,7 @@ function main(config){
 		var selectUI = function(){
 			if(window.chooseSystem) chooseSystem.highlight("name", model.system);
 			if(window.chooseCandidates) chooseCandidates.highlight("num", model.numOfCandidates);
-			if(window.chooseVoters) chooseVoters.highlight("num", model.numOfVoters);
+			if(window.chooseVoters) chooseVoters.highlight("num", model.numVoterGroups);
 		};
 		selectUI();
 

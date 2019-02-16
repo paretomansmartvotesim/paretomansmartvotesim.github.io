@@ -32,6 +32,7 @@ function main(config){
 
 	}
 
+
 	var initialConfig
 	var allnames = ["systems","rbvote","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 	var doms = {}  // for hiding menus, later
@@ -45,12 +46,11 @@ function main(config){
 
 	var loadDefaults = function() {
 
-
+		// Load the defaults.  This runs at the start and after loading a preset.
 
 		// Voter defaults
-
 		// we want individual strategies to be loaded in, if they are there
-		// if we have a blank slate, then we want to fill in with strategic
+		// if we have a blank slate, then we want to fill in with the variable "strategic"
 		if (config.strategic && config.voterStrategies === undefined) {
 			config.voterStrategies = []
 			for (var i = 0; i < maxVoters; i++) {
@@ -63,10 +63,18 @@ function main(config){
 		config.voter_group_spread = config.voter_group_spread || []
 		for (var i = 0; i < maxVoters; i++) {
 			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
-			config.voterPercentStrategy[i] = config.voterPercentStrategy[i] || 0
+			if(config.voterPercentStrategy[i] == undefined) config.voterPercentStrategy[i] = 0
 			config.voter_group_count[i] = config.voter_group_count[i] || 50
 			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
 		}
+
+
+		// change old variable names to new names to preserve backward compatibility with urls and presets
+		if(config.candidates != undefined) config.numOfCandidates = config.candidates
+		if(config.voters != undefined) config.numVoterGroups = config.voters
+		// clear grandfathered variables
+		config.candidates = undefined
+		config.voters = undefined
 
 		// helper
 		var all_candidate_names = Object.keys(Candidate.graphics)
@@ -76,8 +84,8 @@ function main(config){
 			configversion:1,
 			system: "FPTP",
 			rbsystem: "Tideman",
-			candidates: 3,
-			voters: 1,
+			numOfCandidates: 3,
+			numVoterGroups: 1,
 			snowman: false,
 			x_voters: false,
 			spread_factor_voters: 1,
@@ -107,7 +115,7 @@ function main(config){
 		}
 		_fillInDefaults(config,defaults)
 
-		// Feature List!
+		// Feature List...
 		// config.features: 1-basic, 2-voters, 3-candidates, 4-save
 		if (       config.features == 0 && ! config.featurelist) {config.featurelist = ["systems"]  // old spec
 		} else if (config.features == 1) {config.featurelist = ["systems"]
@@ -156,6 +164,8 @@ function main(config){
 			// Based on config... what should be what?
 			_copySomeAttributes(model,config,
 				["system",
+				"numOfCandidates",
+				"numVoterGroups",
 				"rbsystem",
 				"preFrontrunnerIds",
 				"autoPoll",
@@ -167,16 +177,14 @@ function main(config){
 				"utility_shape",
 				"arena_border"
 			])
-			model.numOfCandidates = config.candidates;
-			model.numOfVoters = config.voters;
 			if (config.x_voters) {
-				model.votersRealName = voters.filter( function(x){return x.x_voters || false})[0].realname
+				model.votersRealName = numVoterGroups.filter( function(x){return x.x_voters || false})[0].realname
 			} else if (config.snowman) {
-				model.votersRealName = voters.filter( function(x){return x.snowman || false})[0].realname	
+				model.votersRealName = numVoterGroups.filter( function(x){return x.snowman || false})[0].realname	
 			} else if (config.oneVoter) {
-				model.votersRealName = voters.filter( function(x){return x.oneVoter || false})[0].realname	
+				model.votersRealName = numVoterGroups.filter( function(x){return x.oneVoter || false})[0].realname	
 			} else {
-				model.votersRealName = voters.filter( function(x){return x.num==config.voters && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
+				model.votersRealName = numVoterGroups.filter( function(x){return x.num==config.numVoterGroups && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
 			}
 			// model.primaries = config.primaries
 			var votingSystem = votingSystems.filter(function(system){
@@ -191,7 +199,7 @@ function main(config){
 			model.rbelection = rbVotingSystem.rbelection;
 
 			// Voters
-			var num = model.numOfVoters;
+			var num = model.numVoterGroups;
 			var voterPositions;
 			if (config.snowman) {
 				voterPositions =  [[150,83],[150,150],[150,195]]
@@ -463,7 +471,7 @@ function main(config){
 
 
 		// How many voters?
-		var voters = [
+		var numVoterGroups = [
 			{realname: "Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
 			{realname: "One Group", name:"1", num:1, margin:5},
 			{realname: "Two Groups", name:"2", num:2, margin:5},
@@ -474,8 +482,8 @@ function main(config){
 		var onChooseVoters = function(data){
 
 			// update config...
-			config.voters = data.num;
-			//model.numOfVoters = data.num;
+			config.numVoterGroups = data.num;
+			//model.numVoterGroups = data.num;
 			
 			config.snowman = data.snowman || false;
 			config.x_voters = data.x_voters || false;
@@ -520,7 +528,7 @@ function main(config){
 		window.chooseVoters = new ButtonGroup({
 			label: "how many groups of voters?",
 			width: 32,
-			data: voters,
+			data: numVoterGroups,
 			onChoose: onChooseVoters
 		});
 		document.querySelector("#left").appendChild(chooseVoters.dom);
@@ -623,7 +631,7 @@ function main(config){
 		var slfn = function(slider,n) {
 			// update config...
 				config.voter_group_count[n] = slider.value;
-				if (n<model.numOfVoters) {
+				if (n<model.numVoterGroups) {
 					model.voters[n].group_count = config.voter_group_count[n]
 				}
 				config.candidatePositions = save().candidatePositions;
@@ -681,7 +689,7 @@ function main(config){
 		var slfn = function(slider,n) {
 			// update config...
 				config.voter_group_spread[n] = slider.value;
-				if (n<model.numOfVoters) {
+				if (n<model.numVoterGroups) {
 					model.voters[n].group_spread = config.voter_group_spread[n]
 				}
 				config.candidatePositions = save().candidatePositions;
@@ -719,7 +727,7 @@ function main(config){
 		var onChooseCandidates = function(data){
 
 			// update config...
-			config.candidates = data.num;
+			config.numOfCandidates = data.num;
 
 			// save voters before switching!
 			config.voterPositions = save().voterPositions;
@@ -985,7 +993,7 @@ function main(config){
 		var slfn = function(slider,n) {
 			// update config...
 				config.voterPercentStrategy[n] = slider.value;
-				if (n<model.numOfVoters) {
+				if (n<model.numVoterGroups) {
 					model.voters[n].percentStrategy = config.voterPercentStrategy[n]
 					model.update();
 				}
