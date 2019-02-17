@@ -9,11 +9,10 @@ function main(config){
 	if(ONLY_ONCE) return;
 	ONLY_ONCE=true;
 
-	///////////////////////////////////////////////////////////////
-	// ACTUALLY... IF THERE'S DATA IN THE QUERY STRING, OVERRIDE //
-	///////////////////////////////////////////////////////////////
-
-	var _getParameterByName = function(name, url){
+	// Look at the URL and see if we are loading a saved model
+	// Use "config" for the data.
+	var modelData = _getParameterByName("m");
+	function _getParameterByName(name){
 		var url = window.top.location.href;
 		name = name.replace(/[\[\]]/g, "\\$&");
 		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -22,14 +21,9 @@ function main(config){
 		if (!results[2]) return '';
 		return decodeURIComponent(results[2].replace(/\+/g, " ")).replace("}/","}"); //not sure how that / got there.
 	};
-	var modelData = _getParameterByName("m");
 	if(modelData){
-
-		// Parse!
 		var data = JSON.parse(modelData);
-
 		config = data;
-
 	}
 
 
