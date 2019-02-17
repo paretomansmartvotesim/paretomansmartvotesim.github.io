@@ -35,12 +35,11 @@ Loader.onload = function(){
 		model.addCandidate({id:"square", x:50, y:125});
 		model.addCandidate({id:"triangle", x:250, y:125});
 		model.addCandidate({id:"hexagon", x:280, y:280});
+		model.election = Election.plurality;
+		model.optionsForElection =  {sidebar:true, original:true}
 		model.preFrontrunnerIds = ["square","triangle"];
 		model.voters[0].unstrategic = "zero strategy. judge on an absolute scale.";
 
-	};
-	model.onUpdate = function(){
-		Election.plurality(model, {sidebar:true, model3:true});
 	};
 	model.init();
 
