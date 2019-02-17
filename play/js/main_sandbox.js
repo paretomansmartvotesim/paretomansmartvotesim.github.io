@@ -1150,7 +1150,7 @@ function main(config){
 		];
 		var onChoosePoll = function(data){
 			if (data.name == "Poll") {
-				var won = model.winners
+				var won = model.result.winners
 				config.preFrontrunnerIds = won
 			} else {
 				model.dotop2 = true // not yet implemented

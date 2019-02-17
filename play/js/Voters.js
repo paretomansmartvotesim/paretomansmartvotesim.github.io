@@ -388,7 +388,7 @@ function RankedVoter(model){
 			// who do we have first?
 			var ourFirst = rank[0]
 			// who was first?
-			var weLost = ! self.model.winners.includes(ourFirst)
+			var weLost = ! self.model.result.winners.includes(ourFirst)
 
 			if ( weLost ) {
 				// find out if our second choice could win head to head
@@ -399,8 +399,8 @@ function RankedVoter(model){
 						break // there is no better candidate, so let's just keep the same strategy
 					}
 					var ourguyWins = true
-					for (var iwinguy in self.model.winners) {
-						var winguy = self.model.winners[iwinguy]
+					for (var iwinguy in self.model.result.winners) {
+						var winguy = self.model.result.winners[iwinguy]
 						var ours = tally.head2head[ourguy][winguy]
 						var theirs = tally.head2head[winguy][ourguy]
 						if (theirs > ours) ourguyWins = false

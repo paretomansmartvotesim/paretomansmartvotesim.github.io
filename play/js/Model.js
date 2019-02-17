@@ -130,8 +130,7 @@ function Model(config){
 			c.update();
 		}
 
-		var result = self.election(self,self.optionsForElection);
-		if (result) _storeResult(model,result)
+		model.result = self.election(self,self.optionsForElection);
 
 		// do the center voter thing
 		if (typeof self.voterCenter !== 'undefined') { // does the voterCenter exist?  If so then calculate it.
@@ -155,6 +154,7 @@ function Model(config){
 		// Clear it all!
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 
+		if (model.result) _drawResult(model)
 
 		// DRAW 'EM ALL.
 		// Draw voters' BG first, then candidates, then voters.
@@ -196,8 +196,8 @@ function Model(config){
 		if (self.yeeon && self.yeeobject) self.yeeobject.draw(ctx)
 		
 		// draw text next to the winners
-		if(model.winners) {
-			var objWinners = model.winners.map(x => model.candidatesById[x])
+		if(model.result.winners) {
+			var objWinners = model.result.winners.map(x => model.candidatesById[x])
 			if (objWinners.length > 1) {
 				for (i in objWinners) {
 					objWinners[i].drawTie(ctx)

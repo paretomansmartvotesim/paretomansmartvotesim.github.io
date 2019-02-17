@@ -1620,7 +1620,7 @@ Election.pluralityWithPrimary = function(model, options){
 		tally[ballot.vote]++;
 	});
 	// if ("we gotta problem" == ptallies) {
-	// 	model.colors = ["#aaa"]
+	// 	model.result.colors = ["#aaa"]
 	// 	return
 	// }
 
@@ -1782,9 +1782,9 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 
 	var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 	var skipthis =  true
-	for(var i=0;i<model.voters.length;i++){
-		if (! not_f.includes(model.voters[i].unstrategic)) skipthis = false
-		if (! not_f.includes(model.voters[i].strategy)) skipthis = false
+	for(var i=0;i<model.voters.length;i++){ // someone is looking at frontrunners, then don't skipthis
+		if (! not_f.includes(model.voters[i].unstrategic) && model.voters[0].percentStrategy != 100) skipthis = false
+		if (! not_f.includes(model.voters[i].strategy) && model.voters[0].percentStrategy != 0) skipthis = false
 	}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
 	if (skipthis) return ""
 
@@ -2127,13 +2127,10 @@ function _result(winners,model) {
 	return result
 }
 
-function _storeResult(model, result){
-	if(result.text) model.caption.innerHTML = result.text;
-	model.canvas.style.borderColor = result.color;
+function _drawResult(model){
+	if(model.result.text) model.caption.innerHTML = model.result.text;
+	model.canvas.style.borderColor = model.result.color;
 	if (model.yeeon) model.canvas.style.borderColor = "#fff"
-	model.winners = result.winners;
-	model.colors = result.colors;
-	model.color = result.color;
 	return
 }
 
