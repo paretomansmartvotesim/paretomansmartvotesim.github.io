@@ -149,6 +149,7 @@ function Model(config){
 	};
 
 
+	self.onDraw = function(){}; // TO IMPLEMENT
 	self.draw = function() {
 		
 		// Clear it all!
@@ -206,6 +207,7 @@ function Model(config){
 				objWinners[0].drawWin(ctx)
 			}
 		}
+		self.onDraw();
 
 	}
 

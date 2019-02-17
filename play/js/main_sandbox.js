@@ -238,7 +238,7 @@ function main(config){
 			}
 
 		};
-		model.onUpdate = function(){
+		model.onDraw = function(){
 			
 			// CREATE A BALLOT
 			var myNode = document.querySelector("#right");
@@ -249,12 +249,12 @@ function main(config){
 			if (config.oneVoter) {
 				window.ballot = new model.ballotType();
 				document.querySelector("#right").appendChild(ballot.dom);
-			} else {
-				document.querySelector("#right").appendChild(model.caption);
 			}
+			document.querySelector("#right").appendChild(model.caption);
 			
 			if (config.oneVoter) {
 				ballot.update(model.voters[0].ballot);
+				model.caption.innerHTML = "<br />" + ballot.toText(model.voters[0].ballot);
 			}
 		};
 

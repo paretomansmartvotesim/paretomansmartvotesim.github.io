@@ -57,6 +57,34 @@ function ScoreBallot(config){
 		}
 	};
 
+	self.toText = function(ballot){
+
+		// todo: star preferences
+
+		var text = ""
+		text += "<span class='small' style> Vote: </span> <br />" 
+		cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
+
+		if (0){
+			for(var i=0; i < cIDs.length; i++){
+				cID = cIDs[i]
+				var score = ballot[cID]
+				text += _icon(cID) + ":" + score
+				text += "<br />"
+			}
+		}
+		if (1){
+			for(var i=0; i < cIDs.length; i++){
+				cID = cIDs[i]
+				var score = ballot[cID]
+				for (var j=0; j < score; j++) {
+					text += _icon(cID) 
+				}
+				text += "<br />"
+			}
+		}
+		return text
+	}
 }
 
 function ThreeBallot(config){
@@ -94,6 +122,48 @@ function ThreeBallot(config){
 		}
 	};
 
+	self.toText = function(ballot){
+		var text = ""
+		if (0){
+			text += "<span class='small' style> Vote: </span> <br />" 
+			cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
+			for(var i in cIDs){
+				cID = cIDs[i]
+				var score = ballot[cID]
+				text += _icon(cID) + ":" + score
+				text += "<br />"
+			}
+		}
+		groups = [[],[],[]]
+		for (cID in ballot) {
+			var score = ballot[cID]
+			groups[score].push(cID)
+		}
+		text +=  "<pre><span class='small' style>   Good:</span>" 
+		var good = groups[2]
+		for (i in good) {
+			text += _icon(good[i])
+		}
+		text += "<br /><span class='small' style>Not Bad:</span>" 
+		for (i in good) {
+			text += _icon(good[i])
+		}
+		var okay = groups[1]
+		for (i in okay) {
+			text += _icon(okay[i])
+		}
+		text += "</pre>"
+		if(0) {
+			text += "<br /> preferences:<br />"
+			for(var i = 2; i > -1; i--){
+				if (i<2) text += ">"
+				for(j in groups[i]){
+					text += _icon(groups[i][j])
+				}
+			}
+		}
+		return text
+	}
 }
 
 function ApprovalBallot(config){
@@ -134,6 +204,16 @@ function ApprovalBallot(config){
 
 	};
 
+	self.toText = function(ballot){
+		var text = "<span class='small' style> Approved </span> <br />" 
+		
+		for(var i=0; i<ballot.approved.length; i++){
+			// if (i>0) text += ">"
+			var candidate = ballot.approved[i];
+			text += _icon(candidate)
+		}
+		return text
+	}
 }
 
 function RankedBallot(config){
@@ -171,6 +251,28 @@ function RankedBallot(config){
 		}
 	};
 
+	self.toText = function(ballot){
+		var text = "<span class='small' style> Preferences: </span> <br />" 
+		
+		for(var i=0; i<ballot.rank.length; i++){
+			if (i>0) text += ">"
+			var candidate = ballot.rank[i];
+			text += _icon(candidate)
+		}
+		text += "<br />"
+		text += "<br />"	
+
+		// pairs
+		text += "<span class='small' style> Pair Preferences:  <br />" 
+		for(var i=0; i<ballot.rank.length; i++){
+			for(var j=i+1; j<ballot.rank.length; j++){
+				text += _icon(ballot.rank[i]) + ">"
+				text += _icon(ballot.rank[j]) + "<br />"
+			}
+		}
+		text += "</span>"
+		return text
+	}
 }
 
 function PluralityBallot(config){
@@ -202,7 +304,10 @@ function PluralityBallot(config){
 		}
 		self.boxes[vote].gotoFrame(1); // ...except for the one.
 	};
-
+	self.toText = function(ballot){
+		var text = "<span class='small' style> One vote for </span> " 
+		return text + _icon(ballot.vote)
+	}
 }
 
 function Ballot(config){
