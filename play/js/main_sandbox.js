@@ -198,7 +198,7 @@ function main(config){
 			model.voterType = expVotingSystem(config).voter
 			model.election = expVotingSystem(config).election
 			model.ballotType = window[expVotingSystem(config).ballot];
-			model.rbelection = expRbVotingSystem(config).election
+			model.rbelection = expRbVotingSystem(config).rbelection
 			exp_addVoters(config).map(x => model.addVoters(x))
 			model.addVoterCenter()
 			exp_addCandidates(config).map(x => model.addCandidate(x))

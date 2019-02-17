@@ -196,7 +196,7 @@ function Model(config){
 		if (self.yeeon && self.yeeobject) self.yeeobject.draw(ctx)
 		
 		// draw text next to the winners
-		if(model.result.winners) {
+		if(model.result && model.result.winners) {
 			var objWinners = model.result.winners.map(x => model.candidatesById[x])
 			if (objWinners.length > 1) {
 				for (i in objWinners) {
