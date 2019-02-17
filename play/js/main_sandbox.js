@@ -25,6 +25,7 @@ function main(config){
 	if(modelData){
 		var data = JSON.parse(modelData);
 		config = data;
+		
 	}
 
 	// Initialize variables
@@ -40,10 +41,56 @@ function main(config){
 	var maxVoters = 10 // there is a bug where the real max is one less than this
 
 	
-	var loadDefaults = function() {
+	function cleanConfig(config) {
 		// Load the defaults.  This runs at the start and after loading a preset.
 
-		// Voter defaults
+
+		// FILENAME
+		var url = window.location.pathname;
+		var filename = url.substring(url.lastIndexOf('/')+1);
+		config.filename = filename
+		config.presethtmlname = filename;
+
+
+		// GRANDFATHER
+		// change old variable names to new names to preserve backward compatibility with urls and presets
+		// and clear grandfathered variables
+		function newname(config,oldname,newname) {
+			if(config[oldname] != undefined) config[newname] = config[oldname]
+			delete config[oldname]
+		}
+		newname(config,"candidates","numOfCandidates")
+		newname(config,"voters","numVoterGroups")
+		newname(config,"s","system")
+		if(config.c != undefined) { // grandfather in the variables
+			config.numOfCandidates = config.c.length
+			config.numVoterGroups = config.v.length
+			config.features = 4
+		}
+		newname(config,"c","candidatePositions")
+		newname(config,"v","voterPositions")
+		newname(config,"d","description")
+		// Feature List...
+		// config.features: 1-basic, 2-voters, 3-candidates, 4-save
+		if ( config.featurelist == undefined) {
+			config.featurelist = fl()
+			function fl() {
+				switch(config.features){
+					case 1: return ["systems"]
+					case 2: return ["systems","voters"]
+					case 3: return ["systems","voters","candidates"]
+					case 4: 
+						config.sandboxsave = true
+						return ["systems","voters","candidates"] 	}	}	}
+		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
+		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","yee"])
+		// clear the grandfathered config settings
+		delete config.doPercentFirst
+		delete config.features
+		delete config.doFullStrategyConfig
+		
+
+		// VOTER DEFAULTS
 		// we want individual strategies to be loaded in, if they are there
 		// if we have a blank slate, then we want to fill in with the variable "strategic"
 		if (config.strategic && config.voterStrategies === undefined) {
@@ -63,19 +110,12 @@ function main(config){
 			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
 		}
 
-
-		// change old variable names to new names to preserve backward compatibility with urls and presets
-		if(config.candidates != undefined) config.numOfCandidates = config.candidates
-		if(config.voters != undefined) config.numVoterGroups = config.voters
-		// clear grandfathered variables
-		config.candidates = undefined
-		config.voters = undefined
-
 		// helper
 		var all_candidate_names = Object.keys(Candidate.graphics)
 
-		// Defaults...
-		var defaults = {
+		// DEFAULTS
+		
+		_fillInDefaults(config, {
 			configversion:1,
 			system: "FPTP",
 			rbsystem: "Tideman",
@@ -90,11 +130,8 @@ function main(config){
 			arena_border: 2,
 			oneVoter: false,
 			// votersRealName: "Single Voter",
-			features: 0,
 			sandboxsave: false,
 			featurelist: ["systems"],
-			doPercentFirst: false,
-			doFullStrategyConfig: false,
 			hidegearconfig: false,
 			preFrontrunnerIds: ["square","triangle"],
 			autoPoll: "Manual",
@@ -107,33 +144,14 @@ function main(config){
 			yeefilter: all_candidate_names,
 			computeMethod: "ez",
 			pixelsize: 60
-		}
-		_fillInDefaults(config,defaults)
+		})
 
-		// Feature List...
-		// config.features: 1-basic, 2-voters, 3-candidates, 4-save
-		if (       config.features == 0 && ! config.featurelist) {config.featurelist = ["systems"]  // old spec
-		} else if (config.features == 1) {config.featurelist = ["systems"]
-		} else if (config.features == 2) {config.featurelist = ["systems","voters"]
-		} else if (config.features == 3) {config.featurelist = ["systems","voters","candidates"]
-		} else if (config.features == 4) {config.featurelist = ["systems","voters","candidates"]; config.sandboxsave = true;}
-		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","yee"])
-		// clear the grandfathered config settings
-		config.doPercentFirst = undefined
-		config.features = undefined
-		config.doFullStrategyConfig = undefined
-		
-		var url = window.location.pathname;
-		var filename = url.substring(url.lastIndexOf('/')+1);
-		config.filename = filename
-		config.presethtmlname = filename;
 
-		initialConfig = JSON.parse(JSON.stringify(config));
 
 	}
-	loadDefaults()
-	
+	cleanConfig(config)
+	initialConfig = _jcopy(config);
+
 	Loader.onload = function(){
 
 		////////////////////////
@@ -391,6 +409,13 @@ function main(config){
 		doms["rbvote"] = chooseRBSystem.dom
 
 
+
+
+
+
+
+
+
 		// How many voters?
 		var numVoterGroups = [
 			{realname: "Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
@@ -583,6 +608,8 @@ function main(config){
 		x_voter_sliders[0] = makeslider3("","choose number of voter groups",slfn,containchecks3,i)
 		doms["custom_number_voters"] = button_group_3
 		
+
+
 
 
 
@@ -1319,7 +1346,8 @@ function main(config){
 				var firstletter = data.htmlname[0]
 				if (firstletter == 'e' || firstletter == 's') {
 					config = loadpreset(data.htmlname)
-					loadDefaults()
+					cleanConfig(config)
+					initialConfig = _jcopy(config);
 					set_layout_wrt_arena(config.arena_size)
 					model.size = config.arena_size
 					model.resize()
@@ -1341,7 +1369,8 @@ function main(config){
 					if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("strategy")}
 					config.oneVoter = true
 					config.arena_size = 300
-					loadDefaults()
+					cleanConfig(config)
+					initialConfig = _jcopy(config);
 					set_layout_wrt_arena(config.arena_size)
 					model.size = config.arena_size
 					model.resize()
@@ -1465,7 +1494,8 @@ function main(config){
 
 			// model.reset();
 			// setInPosition();
-			loadDefaults()
+			cleanConfig(config)
+			initialConfig = _jcopy(config);
 			set_layout_wrt_arena(config.arena_size)
 			model.size = config.arena_size
 			model.resize()
