@@ -108,7 +108,7 @@ function main(config){
 				var x = 150 - r*Math.cos(angle);
 				var y = 150 - r*Math.sin(angle);
 				var id = _candidateIDs[i];
-				model.addCandidate(id, x, y);
+				model.addCandidate({id:id, x:x, y:y});
 				angle += Math.TAU/num;
 			}
 

@@ -31,9 +31,9 @@ function main(config){
 				frontrunners: config.frontrunners,
 				x:81, y:92
 			});
-			model.addCandidate("square", 41, 50);
-			model.addCandidate("triangle", 173, 95);
-			model.addCandidate("hexagon", 216, 216);
+			model.addCandidate({id:"square", x:41, y:50});
+			model.addCandidate({id:"triangle", x:173, y:95});
+			model.addCandidate({id:"hexagon", x:216, y:216});
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.voters[0].unstrategic = config.strategy;
 			model.doStarStrategy = config.doStarStrategy;

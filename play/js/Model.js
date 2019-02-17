@@ -65,14 +65,14 @@ function Model(config){
 	self.candidates = [];
 	self.candidatesById = {};
 	self.voters = [];
-	self.addCandidate = function(id, x, y){
+	self.addCandidate = function(c){
 		var candidate = new Candidate({
 			model: self,
-			id:id, x:x, y:y
+			id:c.id, x:c.x, y:c.y
 		});
 		self.candidates.push(candidate);
 		self.draggables.push(candidate);
-		self.candidatesById[id] = candidate;
+		self.candidatesById[c.id] = candidate;
 	};
 	self.addVoters = function(config){
 		config.model = self;

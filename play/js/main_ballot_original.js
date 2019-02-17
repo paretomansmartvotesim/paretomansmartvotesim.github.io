@@ -21,9 +21,9 @@ function main(ballotType){
 				preFrontrunnerIds: ["square","triangle","hexagon"],
 				unstrategic: "zero strategy. judge on an absolute scale."
 			});
-			model.addCandidate("square", 41, 50);
-			model.addCandidate("triangle", 153, 95);
-			model.addCandidate("hexagon", 216, 216);
+			model.addCandidate({id:"square", x:41, y:50});
+			model.addCandidate({id:"triangle", x:153, y:95});
+			model.addCandidate({id:"hexagon", x:216, y:216});
 		};
 
 		// CREATE A BALLOT

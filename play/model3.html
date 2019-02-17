@@ -32,9 +32,9 @@ Loader.onload = function(){
 			type: PluralityVoter,
 			x:155, y:125
 		});
-		model.addCandidate("square", 50, 125);
-		model.addCandidate("triangle", 250, 125);
-		model.addCandidate("hexagon", 280, 280);
+		model.addCandidate({id:"square", x:50, y:125});
+		model.addCandidate({id:"triangle", x:250, y:125});
+		model.addCandidate({id:"hexagon", x:280, y:280});
 		model.preFrontrunnerIds = ["square","triangle"];
 		model.voters[0].unstrategic = "zero strategy. judge on an absolute scale.";
 

@@ -1914,7 +1914,7 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 		voter.update();
 	}
 	if (options.sidebar){
-		model.draw()
+		// model.draw() // not sure why this was here
 	}
 	if (1) {
 		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.

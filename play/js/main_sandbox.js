@@ -9,6 +9,7 @@ function main(config){
 	if(ONLY_ONCE) return;
 	ONLY_ONCE=true;
 
+	// READ URL
 	// Look at the URL and see if we are loading a saved model
 	// Use "config" for the data.
 	var modelData = _getParameterByName("m");
@@ -26,7 +27,7 @@ function main(config){
 		config = data;
 	}
 
-
+	// Initialize variables
 	var initialConfig
 	var allnames = ["systems","rbvote","voters","custom_number_voters","group_count","group_spread","candidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 	var doms = {}  // for hiding menus, later
@@ -38,8 +39,8 @@ function main(config){
 	// workaround
 	var maxVoters = 10 // there is a bug where the real max is one less than this
 
+	
 	var loadDefaults = function() {
-
 		// Load the defaults.  This runs at the start and after loading a preset.
 
 		// Voter defaults
@@ -151,158 +152,73 @@ function main(config){
 		model.election = Election.plurality;
 		model.optionsForElection = {sidebar:true}
 
+
 		// INIT!
 		model.onInit = function(){
 
 
+			// model //
 			// Based on config... what should be what?
-			_copySomeAttributes(model,config,
+			_copySomeAttributes(model,config,  // This set of attributes is copied from config to model
 				["system",
 				"numOfCandidates",
 				"numVoterGroups",
 				"rbsystem",
 				"preFrontrunnerIds",
 				"autoPoll",
+				// "primaries",
 				"computeMethod",
 				"pixelsize",
 				"spread_factor_voters",
 				"arena_size",
 				"median_mean",
 				"utility_shape",
-				"arena_border"
+				"arena_border",
+				"yeefilter"
 			])
-			if (config.x_voters) {
-				model.votersRealName = numVoterGroups.filter( function(x){return x.x_voters || false})[0].realname
-			} else if (config.snowman) {
-				model.votersRealName = numVoterGroups.filter( function(x){return x.snowman || false})[0].realname	
-			} else if (config.oneVoter) {
-				model.votersRealName = numVoterGroups.filter( function(x){return x.oneVoter || false})[0].realname	
-			} else {
-				model.votersRealName = numVoterGroups.filter( function(x){return x.num==config.numVoterGroups && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
-			}
-			// model.primaries = config.primaries
-			var votingSystem = votingSystems.filter(function(system){
-				return(system.name==config.system);
-			})[0];
-			model.voterType = votingSystem.voter;
-			model.ballotType = window[votingSystem.ballot];
-			model.election = votingSystem.election;
-			var rbVotingSystem = rbVotingSystems.filter(function(system){
-				return(system.name==config.rbsystem);
-			})[0];
-			model.rbelection = rbVotingSystem.rbelection;
-
-			// Voters
-			var num = model.numVoterGroups;
-			var voterPositions;
-			if (config.snowman) {
-				voterPositions =  [[150,83],[150,150],[150,195]]
-			}else if(config.x_voters) {
-				voterPositions =  [[65,150],[150,150],[235,150],[150,65]]
-				if (1) {//(num > 4) {
-
-
-					var points = [];
-					var angle = 0;
-					var _radius = 0;
-					var _radius_norm = 0;
-					var _spread_factor = 600 * .2
-					var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
-					for (var count = 0; count < num; count++) {
-						angle = theta * count
-						_radius_norm = Math.sqrt((count+.5)/num)
-						_radius = _radius_norm * _spread_factor
-
-						var x = Math.cos(angle)*_radius  + 150 ;
-						var y = Math.sin(angle)*_radius  + 150 ;
-						points.push([x,y]);
-					}
-					voterPositions = points
-
-				}
-			}else if(num==1){
-				voterPositions = [[150,150]];
-			}else if(num==2){
-				voterPositions = [[95,150],[205,150]];
-			}else if(num==3){
-				voterPositions = [[65,150],[150,150],[235,150]];
-
-			}
-			for(var i=0; i<num; i++){
-				var pos = voterPositions[i];
-				if (config.oneVoter) {
-					var dist1 = SingleVoter
-				} else {
-					var dist1 = GaussianVoters
-				}
-				var voterConfig = {
-					dist: dist1,
-					type: model.voterType,
-					strategy: config.voterStrategies[i],
-					percentStrategy: config.voterPercentStrategy[i],
-					group_count: config.voter_group_count[i],
-					group_spread: config.voter_group_spread[i],
-					second_strategy: config.second_strategy,
-					vid: i,
-					num:(4-num),
-					x:pos[0] * model.arena_size / 300 , //+ (model.arena_size - 300) * .5
-					y:pos[1] * model.arena_size / 300 //+ (model.arena_size - 300) * .5
-				}
-				_copySomeAttributes(voterConfig,config,[
-					"preFrontrunnerIds",
-					"unstrategic",
-					"snowman",
-					"x_voters",
-					"spread_factor_voters",
-					"arena_size",
-					"arena_border"
-				])
-				model.addVoters(voterConfig);
-			}
+			model.votersRealName = exp_votersRealName(config) // this set of attributes is calculated based on config
+			model.voterType = expVotingSystem(config).voter
+			model.election = expVotingSystem(config).election
+			model.ballotType = window[expVotingSystem(config).ballot];
+			model.rbelection = expRbVotingSystem(config).election
+			exp_addVoters(config).map(x => model.addVoters(x))
 			model.addVoterCenter()
-
-			// Candidates, in a circle around the center.
-			var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
-			var angle = 0;
-			var num = model.numOfCandidates;
-			switch(num){
-				case 3: angle=Math.TAU/12; break;
-				case 4: angle=Math.TAU/8; break;
-				case 5: angle=Math.TAU/6.6; break;
-			}
-			for(var i=0; i<num; i++){
-				var r = 100;
-				var x = 150 - r*Math.cos(angle) + (model.arena_size - 300) * .5;
-				var y = 150 - r*Math.sin(angle) + (model.arena_size - 300) * .5;
-				var id = _candidateIDs[i];
-				model.addCandidate(id, x, y);
-				angle += Math.TAU/num;
-			}
+			exp_addCandidates(config).map(x => model.addCandidate(x))
+			model.yeeobject = expYeeObject(config,model)
+			model.yeeon = (model.yeeobject != undefined) ? true : false
 			
+			// UI //
+			// Make the UI look correct.  The UI is not part of the "model".
 			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
 			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
 			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
-			
-			// Yee diagram
-			if (config.kindayee == "can") {
-				model.yeeobject = model.candidatesById[config.keyyee]
-			} else if (config.kindayee=="voter") {
-				model.yeeobject = model.voters[config.keyyee]
-			} else if (config.kindayee=="off") {
-				model.yeeobject = undefined
-			} else if (config.kindayee=="center") { 
-				model.yeeobject = model.voterCenter
-			} else { // if yeeobject is not defined
-				model.yeeobject = undefined
-			}
-			if (model.yeeobject) {model.yeeon = true} else {model.yeeon = false}
-
-			model.yeefilter = config.yeefilter
-			
-
 			// hide some menus
 			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
 			
+			// helpers //
+			function exp_addVoters(config) { // Give configuration to each voter group.
+				var addVoters = expVoterPositionsAndDistributions(config) // Attributes set by the "how many groups of voters" menu. e.g. Positions and Distributions
+				for(var i=0; i<config.numVoterGroups; i++){
+					var voterConfig = { // This set of attributes requires further computing
+						type: expVotingSystem(config).voter,
+						strategy: config.voterStrategies[i],
+						percentStrategy: config.voterPercentStrategy[i],
+						group_count: config.voter_group_count[i],
+						group_spread: config.voter_group_spread[i]
+					}
+					_copySomeAttributes(voterConfig,config,[ // This set of attributes is just copied over
+						"second_strategy",
+						"preFrontrunnerIds",
+						"unstrategic",
+						"spread_factor_voters",
+						"arena_size",
+						"arena_border"
+					])
+					Object.assign(addVoters[i], voterConfig)
+				}
+				return addVoters
+			}
+
 		};
 		model.onUpdate = function(){
 			
@@ -381,6 +297,12 @@ function main(config){
 			{name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
 			{name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv}
 		];
+		function expVotingSystem(config) {
+			var votingSystem = votingSystems.filter(function(system){
+				return(system.name==config.system);
+			})[0];
+			return votingSystem;
+		}
 		var onChooseSystem = function(data){
 
 			// update config...
@@ -424,7 +346,6 @@ function main(config){
 		doms["systems"] = chooseSystem.dom
 
 
-
 		// Which RB voting system?
 		var rbVotingSystems = [
 			{name:"Baldwin",rbelection:rbvote.calcbald, margin:4},
@@ -442,7 +363,13 @@ function main(config){
 			{name:"Simpson",rbelection:rbvote.calcsimp, margin:4},
 			{name:"Small",rbelection:rbvote.calcsmal},
 			{name:"Tideman",rbelection:rbvote.calctide}
-			]
+			]	
+		function expRbVotingSystem(config) {
+			var votingSystem = rbVotingSystems.filter(function(system){
+				return(system.name==config.rbsystem);
+			})[0];
+			return votingSystem;
+		}
 		var onChooseRBSystem = function(data){
 
 			// update config...
@@ -473,6 +400,77 @@ function main(config){
 			{realname: "Different Sized Groups (like a snowman)", name:"&#x2603;", num:3, snowman:true, margin:6},
 			{realname: "Custom Number of Voters and Sizes and Spreads", name:"X", num:4, x_voters:true},
 		];
+		function exp_votersRealName(config) { // when we load from a config
+			if (config.x_voters) {
+				return numVoterGroups.filter( function(x){return x.x_voters || false})[0].realname
+			} else if (config.snowman) {
+				return numVoterGroups.filter( function(x){return x.snowman || false})[0].realname	
+			} else if (config.oneVoter) {
+				return numVoterGroups.filter( function(x){return x.oneVoter || false})[0].realname	
+			} else {
+				return numVoterGroups.filter( function(x){return x.num==config.numVoterGroups && (x.oneVoter || false) == false && (x.snowman || false) == false})[0].realname	
+			}
+		}
+		function expVoterPositionsAndDistributions(config) {
+			var num = config.numVoterGroups;
+			var voterPositions;
+			if (config.snowman) {
+				voterPositions =  [[150,83],[150,150],[150,195]]
+			}else if(config.x_voters) {
+				voterPositions =  [[65,150],[150,150],[235,150],[150,65]]
+				if (1) {//(num > 4) {
+
+
+					var points = [];
+					var angle = 0;
+					var _radius = 0;
+					var _radius_norm = 0;
+					var _spread_factor = 600 * .2
+					var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
+					for (var count = 0; count < num; count++) {
+						angle = theta * count
+						_radius_norm = Math.sqrt((count+.5)/num)
+						_radius = _radius_norm * _spread_factor
+
+						var x = Math.cos(angle)*_radius  + 150 ;
+						var y = Math.sin(angle)*_radius  + 150 ;
+						points.push([x,y]);
+					}
+					voterPositions = points
+
+				}
+			}else if(num==1){
+				voterPositions = [[150,150]];
+			}else if(num==2){
+				voterPositions = [[95,150],[205,150]];
+			}else if(num==3){
+				voterPositions = [[65,150],[150,150],[235,150]];
+
+			}
+			var addVoters = []
+			for(var i=0; i<num; i++){
+				var pos = voterPositions[i];
+				if (config.oneVoter) {
+					var dist = SingleVoter
+				} else {
+					var dist = GaussianVoters
+				}
+				var voterConfig = {
+					dist: dist,
+					vid: i,
+					num:(4-num),
+					x:pos[0] * model.arena_size / 300 , //+ (model.arena_size - 300) * .5
+					y:pos[1] * model.arena_size / 300 //+ (model.arena_size - 300) * .5
+				}
+				_copySomeAttributes(voterConfig,config,[
+					"snowman",
+					"x_voters"
+				])
+				addVoters.push(voterConfig);
+			
+			}
+			return addVoters
+		}
 		var onChooseVoters = function(data){
 
 			// update config...
@@ -718,6 +716,27 @@ function main(config){
 			{name:"four", num:4, margin:4},
 			{name:"five", num:5}
 		];
+		function exp_addCandidates(config) { // expanding upon what the button means for the model
+			addCandidates = []
+			// Candidates, in a circle around the center.
+			var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
+			var angle = 0;
+			var num = config.numOfCandidates;
+			switch(num){
+				case 3: angle=Math.TAU/12; break;
+				case 4: angle=Math.TAU/8; break;
+				case 5: angle=Math.TAU/6.6; break;
+			}
+			for(var i=0; i<num; i++){
+				var r = 100;
+				var x = 150 - r*Math.cos(angle) + (config.arena_size - 300) * .5; // probably replace "model" with "config", but maybe this will cause a bug
+				var y = 150 - r*Math.sin(angle) + (config.arena_size - 300) * .5; // TODO check for bug
+				var id = _candidateIDs[i];
+				addCandidates.push({id:id, x:x, y:y});
+				angle += Math.TAU/num;
+			}
+			return addCandidates
+		}
 		var onChooseCandidates = function(data){
 
 			// update config...
@@ -1155,20 +1174,27 @@ function main(config){
 			{name:"9",realname:"ninth voter group",kindayee:"voter",keyyee:8,margin:8},
 			
 		];
+		
+		function expYeeObject(config,model) {
+			// Yee diagram
+			if (config.kindayee == "can") {
+				return model.candidatesById[config.keyyee]
+			} else if (config.kindayee=="voter") {
+				return model.voters[config.keyyee]
+			} else if (config.kindayee=="off") {
+				return undefined
+			} else if (config.kindayee=="center") { 
+				return model.voterCenter
+			} else { // if yeeobject is not defined
+				return undefined
+			}
+		}
 		var onChooseyeeobject = function(data){
 
 			config.kindayee = data.kindayee
-			if (data.kindayee == "can") {
-				model.yeeobject = model.candidatesById[data.keyyee]
-			} else if (data.kindayee=="voter") {
-				model.yeeobject = model.voters[data.keyyee]
-			} else if (data.kindayee=="off") {
-				model.yeeobject = undefined
-			} else if (data.kindayee=="center") {
-				model.yeeobject = model.voterCenter
-			}
-			if (model.yeeobject) {model.yeeon = true} else {model.yeeon = false}
 			config.keyyee = data.keyyee
+			model.yeeobject = expYeeObject(config,model)
+			model.yeeon = (model.yeeobject != undefined) ? true : false
 			model.update();
 
 			// gui
