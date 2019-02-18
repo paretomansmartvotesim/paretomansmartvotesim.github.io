@@ -204,8 +204,8 @@ function main(config){
 			model.yeeobject = expYeeObject(config,model)
 			model.yeeon = (model.yeeobject != undefined) ? true : false
 			
-			// UI //
-			// Make the UI look correct.  The UI is not part of the "model".
+			// MENU //
+			// Make the MENU look correct.  The MENU is not part of the "model".
 			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
 			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
 			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
@@ -1399,7 +1399,7 @@ function main(config){
 					model.onInit();
 					setInPosition();
 					// UPDATE MENU //
-					selectUI();
+					selectMENU();
 				} else if (firstletter == 'b') {
 					// UPDATE MAIN //
 					//document.location.replace(data.htmlname);
@@ -1427,7 +1427,7 @@ function main(config){
 					model.onInit();
 					setInPosition();
 					// UPDATE MENU //
-					selectUI();
+					selectMENU();
 				}
 			}
 		};
@@ -1441,7 +1441,7 @@ function main(config){
 		document.querySelector("#left").insertBefore(choosepresetconfig.dom,doms["systems"]);
 		
 		if(window.choosepresetconfig) choosepresetconfig.highlight("htmlname", config.presethtmlname);
-		// only do this once.  Otherwise it would be in SelectUI
+		// only do this once.  Otherwise it would be in SelectMENU
 
 
 		var pixelsize = [{name:"60",val:60,margin:4},{name:"30",val:30,margin:4},{name:"12",val:12,margin:4},{name:"6",val:6}]
@@ -1555,7 +1555,7 @@ function main(config){
 			model.onInit();
 			setInPosition();
 			// UPDATE MENU //
-			selectUI();
+			selectMENU();
 			
 		};
 		window.choose_arena_size = new ButtonGroup({
@@ -1653,9 +1653,9 @@ function main(config){
 		model.onInit(); // NOT init, coz don't update yet...
 		setInPosition();
 
-		// seems that we update the UI based on the model sometimes and the config other times.
-		// Select the UI!
-		var selectUI = function(){
+		// seems that we update the MENU based on the model sometimes and the config other times.
+		// Select the MENU!
+		var selectMENU = function(){
 			if(window.chooseSystem) chooseSystem.highlight("name", model.system);
 			if(window.chooseRBSystem) chooseRBSystem.highlight("name", model.rbsystem);
 			if(window.chooseCandidates) chooseCandidates.highlight("num", model.numOfCandidates);
@@ -1713,7 +1713,7 @@ function main(config){
 			if(window.choose_utility_shape) choose_utility_shape.highlight("name", config.utility_shape);
 			
 		};
-		selectUI();
+		selectMENU();
 		//onChoose_arena_size({val: config.arena_size})
 
 
@@ -1739,8 +1739,8 @@ function main(config){
 			setInPosition();
 
 			// UPDATE MENU //
-			// Back to ol' UI
-			selectUI();
+			// Back to ol' MENU
+			selectMENU();
 
 		};
 		document.body.appendChild(resetDOM);

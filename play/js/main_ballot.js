@@ -115,11 +115,11 @@ function main(config){
 			document.body.appendChild(chooseFrun.dom);
 		}
 		
-		var selectUI = function(){
+		var selectMENU = function(){
 			if(window.chooseVoterStrategyOn) chooseVoterStrategyOn.highlight("realname", model.voters[0].unstrategic);
 			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
 		};
-		selectUI();
+		selectMENU();
 		
 		//////////////////////////
 		//////// RESET... ////////
@@ -137,8 +137,8 @@ function main(config){
 			model.onInit();
 			//setInPosition();
 			model.update()
-			// Back to ol' UI
-			selectUI();
+			// Back to ol' MENU
+			selectMENU();
 			console.log(initialConfig)
 		};
 		document.body.appendChild(resetDOM);
