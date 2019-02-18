@@ -158,9 +158,8 @@ function main(config){
 		// THE FRIGGIN' MODEL //
 		////////////////////////
 
-		// the only use of the model config so far: sandboxsave
-		var model_config = {size: config.arena_size, border: config.arena_border}
-		window.model = new Model(model_config);
+		var init_model_config = {size: config.arena_size, border: config.arena_border}
+		window.model = new Model(init_model_config);
 		document.querySelector("#center").appendChild(model.dom);
 		model.dom.removeChild(model.caption);
 		document.querySelector("#right").appendChild(model.caption);
@@ -323,10 +322,7 @@ function main(config){
 		}
 		var onChooseSystem = function(data){
 
-			// update config...
-			config.system = data.name;
-
-			// update gui
+			// UPDATE MENU //
 			var turnOnRBVote = (data.name == "RBVote")
 			var xlist = ["rbvote"]
 			var featureset = new Set(config.featurelist)
@@ -340,13 +336,15 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
+
+			// UPDATE CONFIG //
+			config.system = data.name;
 			config.featurelist = Array.from(featureset)
 
-			// no reset...
+			// UPDATE MODEL //
 			model.system = config.system
 			model.voterType = data.voter;
 			model.ballotType = window[data.ballot];
-			
 			for(var i=0;i<model.voters.length;i++){
 				model.voters[i].setType(data.voter);
 			}
@@ -391,11 +389,12 @@ function main(config){
 		}
 		var onChooseRBSystem = function(data){
 
-			// update config...
+			// UPDATE CONFIG //
 			config.rbsystem = data.name;
+
+			// UPDATE MODEL //
 			model.rbsystem = data.name;
 			model.rbelection = data.rbelection
-
 			model.pollResults = undefined
 			model.update();
 
@@ -500,22 +499,8 @@ function main(config){
 		}
 		var onChooseVoters = function(data){
 
-			// update config...
-			config.numVoterGroups = data.num;
-			//model.numVoterGroups = data.num;
 			
-			config.snowman = data.snowman || false;
-			config.x_voters = data.x_voters || false;
-			config.oneVoter = data.oneVoter || false;
-			model.votersRealName = data.realname;
-			// save candidates before switching!
-			config.candidatePositions = save().candidatePositions;
-
-			// reset!
-			config.voterPositions = null;
-			model.reset();
-			setInPosition();
-			
+			// UPDATE MENU //
 			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
 			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
 			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
@@ -533,9 +518,6 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
-			config.featurelist = Array.from(featureset)
-
-			// gui 
 			for(var i=0;i<(maxVoters-1);i++) {
 				if (i < data.num) {
 					chooseyeeobject.dom.childNodes[8+i].hidden=false
@@ -543,6 +525,24 @@ function main(config){
 					chooseyeeobject.dom.childNodes[8+i].hidden=true
 				}
 			}
+
+			// UPDATE CONFIG //
+			config.featurelist = Array.from(featureset)
+			config.numVoterGroups = data.num;
+			config.snowman = data.snowman || false;
+			config.x_voters = data.x_voters || false;
+			config.oneVoter = data.oneVoter || false;
+			// save candidates before switching!
+			config.candidatePositions = save().candidatePositions;
+			// reset!
+			config.voterPositions = null;
+
+			// UPDATE MODEL//
+			//model.numVoterGroups = data.num;
+			model.votersRealName = data.realname;
+			model.reset();
+			setInPosition();
+
 		};
 		window.chooseVoters = new ButtonGroup({
 			label: "how many groups of voters?",
@@ -587,18 +587,13 @@ function main(config){
 		var containchecks3 = button_group_3.appendChild(document.createElement('div'));
 		containchecks3.id="containsliders"
 		var slfn = function(slider,n) {
-			config.voters = slider.value;
-			config.candidatePositions = save().candidatePositions;
 
-			// reset!
-			config.voterPositions = null;
-			model.reset();
-			setInPosition();
+			// UPDATE MENU //
+			
 			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
 			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
 			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<slider.value) ?  "display:inline": "display:none")
 			
-			// gui 
 			for(var i=0;i<maxVoters-1;i++) {
 				if (i < slider.value) {
 					chooseyeeobject.dom.childNodes[8+i].hidden=false
@@ -606,6 +601,16 @@ function main(config){
 					chooseyeeobject.dom.childNodes[8+i].hidden=true
 				}
 			}
+
+			// UPDATE CONFIG //
+			config.voters = slider.value;
+			config.candidatePositions = save().candidatePositions;
+			config.voterPositions = null;
+
+			// UPDATE MODEL //
+			// reset!
+			model.reset();
+			setInPosition();
 		}
 		x_voter_sliders[0] = makeslider3("","choose number of voter groups",slfn,containchecks3,i)
 		doms["custom_number_voters"] = button_group_3
@@ -650,17 +655,20 @@ function main(config){
 		var containchecks1 = button_group.appendChild(document.createElement('div'));
 		containchecks1.id="containsliders"
 		var slfn = function(slider,n) {
-			// update config...
-				config.voter_group_count[n] = slider.value;
-				if (n<model.numVoterGroups) {
-					model.voters[n].group_count = config.voter_group_count[n]
-				}
-				config.candidatePositions = save().candidatePositions;
 
-				// reset!
-				config.voterPositions = save().voterPositions;
-				model.reset();
-				setInPosition();
+			// UPDATE CONFIG //
+			// update config...
+			config.voter_group_count[n] = slider.value;
+			config.candidatePositions = save().candidatePositions;
+			config.voterPositions = save().voterPositions;
+
+			// UPDATE MODEL //
+			// reset!
+			if (n<model.numVoterGroups) {
+				model.voters[n].group_count = config.voter_group_count[n]
+			}
+			model.reset();
+			setInPosition();
 		}
 		for (var i = 0; i < maxVoters; i++) {
 			groupsliders.push(makeslider1("","choose number",slfn,containchecks1,i))
@@ -708,17 +716,18 @@ function main(config){
 		var containchecks2 = button_group_2.appendChild(document.createElement('div'));
 		containchecks2.id="containsliders"
 		var slfn = function(slider,n) {
-			// update config...
-				config.voter_group_spread[n] = slider.value;
-				if (n<model.numVoterGroups) {
-					model.voters[n].group_spread = config.voter_group_spread[n]
-				}
-				config.candidatePositions = save().candidatePositions;
+			// UPDATE CONFIG //
+			config.voter_group_spread[n] = slider.value;
+			config.candidatePositions = save().candidatePositions;
+			config.voterPositions = save().voterPositions;
 
-				// reset!
-				config.voterPositions = save().voterPositions;
-				model.reset();
-				setInPosition();
+			// UPDATE MODEL //
+			if (n<model.numVoterGroups) {
+				model.voters[n].group_spread = config.voter_group_spread[n]
+			}
+			// reset!
+			model.reset();
+			setInPosition();
 		}
 		for (var i = 0; i < maxVoters; i++) {
 			spreadsliders.push(makeslider2("","choose width in pixels",slfn,containchecks2,i))
@@ -768,14 +777,14 @@ function main(config){
 		}
 		var onChooseCandidates = function(data){
 
-			// update config...
+			// UPDATE CONFIG //
 			config.numOfCandidates = data.num;
-
 			// save voters before switching!
 			config.voterPositions = save().voterPositions;
-
-			// reset!
 			config.candidatePositions = null;
+
+			// UPDATE MODEL //
+			// reset!
 			model.reset();
 			setInPosition();
 
@@ -807,17 +816,8 @@ function main(config){
 		// {name:"SNTF", realname:"starnormfrontrunners"}
 		var onChooseVoterStrategyOff = function(data){
 
-			// update config...
-			// only the middle percent (for the yellow triangle)
 
-			// no reset...
-			config.unstrategic = data.realname; 
-			for(var i=0;i<model.voters.length;i++){
-				model.voters[i].unstrategic = config.unstrategic
-			}
-			model.update();
-
-			// gui update
+			// UPDATE MENU //
 			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
 			for(var i=0;i<model.voters.length;i++){
@@ -843,9 +843,17 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
+
+			// UPDATE CONFIG //
 			config.featurelist = Array.from(featureset)
+			config.unstrategic = data.realname; 
 
-
+			// UPDATE MODEL //
+			for(var i=0;i<model.voters.length;i++){
+				model.voters[i].unstrategic = config.unstrategic
+			}
+			// no reset...
+			model.update();
 		};
 		window.chooseVoterStrategyOff = new ButtonGroup({
 			label: "what's voters' strategy?",
@@ -866,17 +874,8 @@ function main(config){
 		];
 		var onChoose_second_strategy = function(data){
 
-			// update config and model
-			var b = data.isOn
-			config.second_strategy = b
-			model.second_strategy = b
-			for(var i=0;i<model.voters.length;i++){
-				model.voters[i].second_strategy = b
-			}
-			model.update();
 
-
-			// update gui
+			// UPDATE MENU //
 			var xlist = ["strategy","percentstrategy"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
@@ -889,7 +888,20 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
+
+			// UPDATE CONFIG
 			config.featurelist = Array.from(featureset)
+			var b = data.isOn
+			config.second_strategy = b
+
+			// UPDATE MODEL
+			model.second_strategy = b
+			for(var i=0;i<model.voters.length;i++){
+				model.voters[i].second_strategy = b
+			}
+			model.update();
+
+
 
 
 
@@ -925,20 +937,7 @@ function main(config){
 		
 		var onChooseVoterStrategyOn = function(data){
 
-			// update config...
-			// only the middle percent (for the yellow triangle)
-
-			// no reset...
-			for (var i = 0; i < maxVoters; i++) {
-				config.voterStrategies[i] = data.realname
-			}
-			for(var i=0;i<model.voters.length;i++){
-				model.voters[i].strategy = config.voterStrategies[i]
-			}
-			model.update();
-
-
-			// gui update
+			// UPDATE MENU //
 			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
 			for(var i=0;i<model.voters.length;i++){
@@ -957,8 +956,19 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
+
+			// UPDATE CONFIG //
 			config.featurelist = Array.from(featureset)
-			
+			for (var i = 0; i < maxVoters; i++) {
+				config.voterStrategies[i] = data.realname
+			}
+
+			// UPDATE MODEL //
+			for(var i=0;i<model.voters.length;i++){
+				model.voters[i].strategy = config.voterStrategies[i]
+			}
+			// no reset...
+			model.update();
 		};
 		window.chooseVoterStrategyOn = new ButtonGroup({
 			label: "what's voters' 2nd strategy?",
@@ -979,9 +989,10 @@ function main(config){
 			];
 			var onChoosePercentStrategy = function(data){
 
-				// update config...
+				// UPDATE CONFIG //
 				config.voterPercentStrategy[0] = data.num;
 
+				// UPDATE MODEL //
 				// no reset...
 				for(var i=0;i<model.voters.length;i++){
 					model.voters[i].percentStrategy = config.voterPercentStrategy[i]
@@ -1033,12 +1044,14 @@ function main(config){
 		var containchecks0 = aba.appendChild(document.createElement('div'));
 		containchecks0.id="containsliders"
 		var slfn = function(slider,n) {
-			// update config...
-				config.voterPercentStrategy[n] = slider.value;
-				if (n<model.numVoterGroups) {
-					model.voters[n].percentStrategy = config.voterPercentStrategy[n]
-					model.update();
-				}
+			// UPDATE CONFIG //
+			config.voterPercentStrategy[n] = slider.value;
+			
+			// UPDATE MODEL //
+			if (n<model.numVoterGroups) {
+				model.voters[n].percentStrategy = config.voterPercentStrategy[n]
+				model.update();
+			}
 		}
 		for (var i = 0; i < maxVoters; i++) {
 			stratsliders.push(makeslider0("","choosepercent",slfn,containchecks0,i))
@@ -1076,11 +1089,8 @@ function main(config){
 			{name:"Manual",realname:"Press the poll button to find the frontrunners once."}
 		];
 		var onChooseAutoPoll = function(data){
-			config.autoPoll = data.name
-			model.autoPoll = data.name
-			model.update()
 
-			// gui
+			// UPDATE MENU //
 			var xlist = ["poll","frontrunners"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
@@ -1093,7 +1103,14 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
+
+			// UPDATE CONFIG //
 			config.featurelist = Array.from(featureset)
+			config.autoPoll = data.name
+
+			// UPDATE MODEL //
+			model.autoPoll = data.name
+			model.update()
 
 		};
 		window.chooseAutoPoll = new ButtonGroup({
@@ -1119,8 +1136,7 @@ function main(config){
 		];
 		var onChooseFrun = function(data){
 
-			// update config...
-			// no reset...
+			// UPDATE CONFIG //
 			var preFrontrunnerSet = new Set(config.preFrontrunnerIds)
 			if (data.isOn) {
 				preFrontrunnerSet.add(data.realname)
@@ -1128,6 +1144,9 @@ function main(config){
 				preFrontrunnerSet.delete(data.realname)
 			}
 			config.preFrontrunnerIds = Array.from(preFrontrunnerSet)
+
+			// UPDATE MODEL
+			// no reset...
 			model.preFrontrunnerIds = config.preFrontrunnerIds
 			model.update();
 
@@ -1151,19 +1170,26 @@ function main(config){
 			{name:"Poll 2",realname:"Find the top 2 frontrunners."}
 		];
 		var onChoosePoll = function(data){
-			if (data.name == "Poll") {
+
+			// get poll results
+			if (data.name == "Poll") { // get last poll
 				var won = model.result.winners
-				config.preFrontrunnerIds = won
-			} else {
+			} else { // do new poll
 				model.dotop2 = true // not yet implemented
 				model.update()
 				model.dotop2 = false
-				config.preFrontrunnerIds = model.top2
+				var won = model.top2
 				model.top2 = []
 			}
 			
+			// UPDATE MENU //
+			if(window.chooseFrun) chooseFrun.highlight("realname", won);
+			
+			// UPDATE CONFIG //
+			config.preFrontrunnerIds = won
+
+			// UPDATE MODEL //
 			model.preFrontrunnerIds = config.preFrontrunnerIds
-			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
 			model.update();
 
 		};
@@ -1220,13 +1246,7 @@ function main(config){
 		}
 		var onChooseyeeobject = function(data){
 
-			config.kindayee = data.kindayee
-			config.keyyee = data.keyyee
-			model.yeeobject = expYeeObject(config,model)
-			model.yeeon = (model.yeeobject != undefined) ? true : false
-			model.update();
-
-			// gui
+			// UPDATE MENU //
 			var xlist = ["choose_pixel_size","yeefilter"]
 			var featureset = new Set(config.featurelist)
 			for (var i in xlist){
@@ -1239,8 +1259,17 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
+
+			// UPDATE CONFIG //
 			config.featurelist = Array.from(featureset)
-			
+			config.kindayee = data.kindayee
+			config.keyyee = data.keyyee
+
+			// UPDATE MODEL //
+			model.yeeobject = expYeeObject(config,model)
+			model.yeeon = (model.yeeobject != undefined) ? true : false
+			model.update();
+
 		};
 		window.chooseyeeobject = new ButtonGroup({
 			label: "which object for yee map?",
@@ -1268,6 +1297,7 @@ function main(config){
 		];
 		var onChooseyeefilter = function(data){
 			
+			// UPDATE CONFIG //
 			var yeefilterset = new Set(config.yeefilter)
 			if (data.isOn) {
 				yeefilterset.add(data.realname)
@@ -1275,6 +1305,8 @@ function main(config){
 				yeefilterset.delete(data.realname)
 			}
 			config.yeefilter = Array.from(yeefilterset)
+
+			// UPDATE MODEL //
 			model.yeefilter = config.yeefilter
 			model.update();
 
@@ -1300,6 +1332,8 @@ function main(config){
 		for (i in allnames) gearconfig.push({name:i,realname:allnames[i],margin:1})
 
 		var onChoosegearconfig = function(data){
+
+			// UPDATE MENU //
 			var featureset = new Set(config.featurelist)
 			if (data.isOn) {
 				featureset.add(data.realname)
@@ -1308,6 +1342,8 @@ function main(config){
 				featureset.delete(data.realname)
 				doms[data.realname].hidden = true
 			}
+
+			// UPDATE CONFIG //
 			config.featurelist = Array.from(featureset)
 
 		};
@@ -1321,8 +1357,13 @@ function main(config){
 		choosegearconfig.dom.hidden = true
 		document.querySelector("#left").insertBefore(choosegearconfig.dom,doms["systems"]);
 
-		// get current filename, in order to go back to the original intended preset
 
+
+
+
+
+
+		// get current filename, in order to go back to the original intended preset
 
 		// var presetnames = ["O","SA"]
 		// var presethtmlnames = [config.filename,"sandbox.html"]
@@ -1338,8 +1379,6 @@ function main(config){
 		// TODO
 		for (var i=1;i<=12;i++) {presetnames.push("b"+i) ; presethtmlnames.push("ballot"+i+".html") ; presetdescription.push("ballot"+i+".html")}
 		
-
-
 		var presetconfig = []
 		for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],htmlname:presethtmlnames[i],margin:4})
 
@@ -1347,18 +1386,24 @@ function main(config){
 			if (data.isOn) {
 				var firstletter = data.htmlname[0]
 				if (firstletter == 'e' || firstletter == 's') {
+					// UPDATE CONFIG //
 					config = loadpreset(data.htmlname)
 					cleanConfig(config)
+					// UPDATE MAIN //
 					initialConfig = _jcopy(config);
 					set_layout_wrt_arena(config.arena_size)
+					// UPDATE MODEL //
 					model.size = config.arena_size
 					model.resize()
 					model.reset(true);
 					model.onInit();
 					setInPosition();
+					// UPDATE MENU //
 					selectUI();
 				} else if (firstletter == 'b') {
+					// UPDATE MAIN //
 					//document.location.replace(data.htmlname);
+					// UPDATE CONFIG //
 					ballotconfig = loadpreset(data.htmlname)
 					var systemTranslator = {Plurality:"FPTP",Ranked:"Condorcet",Approval:"Approval",Score:"Score",Three:"3-2-1"}
 					config = {}
@@ -1372,13 +1417,16 @@ function main(config){
 					config.oneVoter = true
 					config.arena_size = 300
 					cleanConfig(config)
+					// UPDATE MAIN //
 					initialConfig = _jcopy(config);
 					set_layout_wrt_arena(config.arena_size)
+					// UPDATE MODEL //
 					model.size = config.arena_size
 					model.resize()
 					model.reset(true);
 					model.onInit();
 					setInPosition();
+					// UPDATE MENU //
 					selectUI();
 				}
 			}
@@ -1398,7 +1446,9 @@ function main(config){
 
 		var pixelsize = [{name:"60",val:60,margin:4},{name:"30",val:30,margin:4},{name:"12",val:12,margin:4},{name:"6",val:6}]
 		var onChoosePixelsize = function(data){
+			// UPDATE CONFIG //
 			config.pixelsize = data.val
+			// UPDATE MODEL //
 			model.pixelsize = data.val
 			model.update()
 		};
@@ -1415,7 +1465,9 @@ function main(config){
 
 		var computeMethod = [{name:"gpu",margin:4},{name:"js",margin:4},{name:"ez"}]
 		var onChooseComputeMethod = function(data){
+			// UPDATE CONFIG //
 			config.computeMethod = data.name
+			// UPDATE MODEL //
 			model.computeMethod = data.name
 			model.update()
 		};
@@ -1430,17 +1482,16 @@ function main(config){
 		
 		var spread_factor_voters = [{name:"1",val:1,margin:4},{name:"2",val:2,margin:4},{name:"5",val:5}]
 		var onChoose_spread_factor_voters = function(data){
+			// UPDATE CONFIG //
 			config.spread_factor_voters = data.val
-			model.spread_factor_voters = data.val
-
 			// // save candidates before switching!
 			config.candidatePositions = save().candidatePositions; // not sure if needed
-
 			// // reset!
 			config.voterPositions = null; // not sure if needed
+			// UPDATE MODEL //
+			model.spread_factor_voters = data.val
 			model.reset();
 			setInPosition();
-
 		};
 		window.choose_spread_factor_voters = new ButtonGroup({
 			label: "Voter Spread:",
@@ -1481,29 +1532,29 @@ function main(config){
 			document.getElementById("reset").style.top = (470 + addsome) + "px"
 		}
 		var onChoose_arena_size = function(data){
-			model_config.size = data.val
-			model.size = data.val
+			// UPDATE CONFIG //
 			config.arena_size = data.val
-			
 			if ("300" == data.val) config.spread_factor_voters = 1
 			if ("600" == data.val) config.spread_factor_voters = 2
-			model.spread_factor_voters = config.spread_factor_voters
-			
-			//window.model = new Model(model_config);
-
 			config.voterPositions = save().voterPositions;
 			config.candidatePositions = save().candidatePositions;
-
-			// model.reset();
-			// setInPosition();
 			cleanConfig(config)
+			// UPDATE MAIN //
 			initialConfig = _jcopy(config);
 			set_layout_wrt_arena(config.arena_size)
+			// init_model_config.size = data.val
+			// window.model = new Model(init_model_config);
+			// UPDATE MODEL //
+			model.size = data.val			
+			model.spread_factor_voters = config.spread_factor_voters
+			// model.reset();
+			// setInPosition();
 			model.size = config.arena_size
 			model.resize()
 			model.reset(true);
 			model.onInit();
 			setInPosition();
+			// UPDATE MENU //
 			selectUI();
 			
 		};
@@ -1520,10 +1571,11 @@ function main(config){
 		var median_mean = [{name:"median",val:2,margin:4},{name:"mean",val:1}]
 
 		var onChoose_median_mean = function(data){
+			// UPDATE CONFIG //
 			config.median_mean = data.val
+			// UPDATE MODEL //
 			model.median_mean = data.val
 			model.update()
-			
 		};
 		window.choose_median_mean = new ButtonGroup({
 			label: "Median or Mean:",
@@ -1542,10 +1594,11 @@ function main(config){
 			{name:"log"}]
 
 		var onChoose_utility_shape = function(data){
+			// UPDATE CONFIG //
 			config.utility_shape = data.name
+			// UPDATE MODEL //
 			model.utility_shape = data.name
 			model.update()
-			
 		};
 		window.choose_utility_shape = new ButtonGroup({
 			label: "Utility Shape:",
@@ -1562,6 +1615,7 @@ function main(config){
 		
 		var gearicon = [{name:"config"}]
 		var onChoosegearicon = function(data){
+			// UPDATE MENU //
 			if (data.isOn) {
 				choosegearconfig.dom.hidden = false
 				choosepresetconfig.dom.hidden = false
@@ -1599,6 +1653,7 @@ function main(config){
 		model.onInit(); // NOT init, coz don't update yet...
 		setInPosition();
 
+		// seems that we update the UI based on the model sometimes and the config other times.
 		// Select the UI!
 		var selectUI = function(){
 			if(window.chooseSystem) chooseSystem.highlight("name", model.system);
@@ -1630,7 +1685,6 @@ function main(config){
 					choose_second_strategy.highlight("name", "2");
 				}
 			}
-			
 			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
 			if(stratsliders) {
 				for (i in stratsliders) {
@@ -1639,11 +1693,8 @@ function main(config){
 			}
 			if(window.chooseAutoPoll) chooseAutoPoll.highlight("name", config.autoPoll)
 			// if(window.choosePrimaries) choosePrimaries.highlight("name", config.primaries)
-
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
 			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);
-			
-			// gui 
 			if(window.chooseyeeobject){
 				for(var i=0;i<maxVoters-1;i++) {
 					if (i < config.voters) {
@@ -1653,7 +1704,6 @@ function main(config){
 					}
 				}
 			}
-			
 			if(window.choosegearconfig) choosegearconfig.highlight("realname", config.featurelist);
 			if(window.chooseComputeMethod) chooseComputeMethod.highlight("name", config.computeMethod);
 			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
@@ -1679,12 +1729,16 @@ function main(config){
 		resetDOM.style.left = "350px";
 		resetDOM.onclick = function(){
 
+			// UPDATE CONFIG //
 			config = JSON.parse(JSON.stringify(initialConfig)); // RESTORE IT!
+
+			// UPDATE MODEL //
 			// Reset manually, coz update LATER.
 			model.reset(true);
 			model.onInit();
 			setInPosition();
 
+			// UPDATE MENU //
 			// Back to ol' UI
 			selectUI();
 
@@ -1696,7 +1750,9 @@ function main(config){
 		////// SAVE POSITION //////
 		///////////////////////////
 
-		window.save = function(log){
+		window.save = function(log){ 
+			// The positions of voters and candidates are not held in config.
+			// So, we need to save them occasionally.
 
 			// Candidate positions
 			var positions = [];
@@ -1730,32 +1786,24 @@ function main(config){
 
 		};
 
-		window.jsave = function(log){
-			var sofar = window.save()
-			
-			// Description
-			var description = document.getElementById("description_text") || {value:""};
-			config.description = description.value;
-			
+		window.console_out = function(log,config){
+			// helper function to output the config to the console.
 			var logtext = ''
-			for (i in sofar) logtext += i + ": " +JSON.stringify(sofar[i]) + ',\n'
 			for (i in config) {
-				if (i == "candidatePositions" || i == "voterPositions") {
-					// skip
-				} else {
 					logtext += i + ": " +JSON.stringify(config[i]) + ',\n'
-				}
 			}
 			var aloc = window.location.pathname.split('/')
 			//logtext += "\n\npaste this JSON into" + aloc[aloc.length-2] + "/" + aloc[aloc.length-1]
 			logtext += "\n\npaste this JSON into /play/js/Presets.js under option " + aloc[aloc.length-1]
 			console.log(logtext)
 			if (log==2) console.log(JSON.stringify(config))
-			
-			for (i in sofar) config[i] = sofar[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
-			return config
 		}
-
+		window.jsave = function(){
+			// I used to use jsave() to output to console for debugging.
+			var pos = window.save()  // saves the candidate and voter positions in the config.
+			for (i in pos) config[i] = pos[i] 
+			console_out(1,config)
+		}
 
 		//////////////////////////////////
 		/////// SAVE & SHARE, YO! ////////
@@ -1780,28 +1828,46 @@ function main(config){
 			}
 			// Move that reset button
 			if (config.sandboxsave) {
-				resetDOM.style.top = (470 - 300 + model_config.size) + "px";
+				resetDOM.style.top = (470 - 300 + config.arena_size) + "px";
 				resetDOM.style.left = "235px";
 			} else {
 				resetDOM.style.top = "340px";
 				resetDOM.style.left = "245px";
 			}
+
+
+			
 			// Create a "save" button
 			var saveDOM = document.createElement("div");
 			saveDOM.id = "save";
 			saveDOM.innerHTML = "save:";
 			if (config.sandboxsave) {
-				saveDOM.style.top = (470 - 300 + model_config.size) + "px";
+				saveDOM.style.top = (470 - 300 + config.arena_size) + "px";
 				saveDOM.style.left = "350px";
 			} else {
 				saveDOM.style.top = "340px";
 				saveDOM.style.left = "350px";
 			}
 			saveDOM.onclick = function(){
+				// UPDATE CONFIG //
 				config.sandboxsave = true // this seems to fix a bug
-				_saveModel();
+				var pos = window.save()  // saves the candidate and voter positions in the config.
+				for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
+				// Description
+				var description = document.getElementById("description_text") || {value:""};
+				config.description = description.value;
+				// UPDATE MAIN //
+				initialConfig = _jcopy(config); // now the reset button will restore these saved settings
+				// UPDATE SAVE URL //
+				_writeURL(config);
+				// CONSOLE OUTPUT //
+				console_out(1,config)  // updates config with positions and gives a log of settings to copy and paste
+				
+
 			};
 			document.body.appendChild(saveDOM);
+
+
 
 			// The share link textbox
 			linkText = document.createElement("input");
@@ -1873,16 +1939,10 @@ function main(config){
 	// ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
 	
 	
-	var _saveModel = function(){
-
-		jsave(1)  // updates config with positions and gives a log of settings to copy and paste
-		
+	var _writeURL = function(config){
+	
 		// URI ENCODE!
 		var uri = encodeURIComponent(JSON.stringify(config));
-
-		// ALSO TURN IT INTO INITIAL CONFIG. _parseModel
-		
-		initialConfig = JSON.parse(JSON.stringify(config)); // RESTORE IT!
 		
 		// Put it in the save link box!
 		
