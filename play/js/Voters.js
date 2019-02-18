@@ -106,6 +106,58 @@ function ScoreVoter(model){
 
 	};
 
+	self.toText = function(ballot,system,rbsystem){
+
+		// todo: star preferences
+
+		var text = ""
+		text += "<span class='small' style> Vote: </span> <br />" 
+		cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
+
+		if (0){
+			for(var i=0; i < cIDs.length; i++){
+				cID = cIDs[i]
+				var score = ballot[cID]
+				text += _icon(cID) + ":" + score
+				text += "<br />"
+			}
+		}
+		if (1){
+			for(var i=0; i < cIDs.length; i++){
+				cID = cIDs[i]
+				var score = ballot[cID]
+				for (var j=0; j < score; j++) {
+					text += _icon(cID) 
+				}
+				text += "<br />"
+			}
+		}
+		if (system == "STAR") {
+			
+			text += "<span class='small'>"
+			text += " Pair Preferences:  <br />"
+			text += "<pre>" 
+			for(var i=1; i<cIDs.length; i++){
+				text += ""
+				for(var j=0; j<i; j++){
+					if (j>0) text += "  "
+					text += _icon(cIDs[j])
+					if (ballot[cIDs[j]] > ballot[cIDs[i]]) {
+						text += ">"
+					} else text += "="
+					text += _icon(cIDs[i])
+				} 
+				// 01  
+				// 02  12
+				// 03  13  23
+				text += "</span>"
+				text += "<br />"
+				text += "<br />"
+			}
+			text += "</pre>"
+		}
+		return text
+	}
 }
 // helper functions for strategies
 
@@ -301,6 +353,74 @@ function ThreeVoter(model){
 
 	self.maxscore = 2
 
+	
+	self.toText = function(ballot,system,rbsystem){
+		var text = ""
+		cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
+		if (0){
+			text += "<span class='small' style> Vote: </span> <br />" 
+			for(var i in cIDs){
+				cID = cIDs[i]
+				var score = ballot[cID]
+				text += _icon(cID) + ":" + score
+				text += "<br />"
+			}
+		}
+		groups = [[],[],[]]
+		for (cID in ballot) {
+			var score = ballot[cID]
+			groups[score].push(cID)
+		}
+		text +=  "<pre><span class='small' style>   Good:</span>" 
+		var good = groups[2]
+		for (i in good) {
+			text += _icon(good[i])
+		}
+		text +=  "<br />"
+		text +=  "<br />"
+		text += "<span class='small' style>Not Bad:</span>" 
+		for (i in good) {
+			text += _icon(good[i])
+		}
+		var okay = groups[1]
+		for (i in okay) {
+			text += _icon(okay[i])
+		}
+		text += "</pre>"
+		if(0) {
+			text += "<br /> preferences:<br />"
+			for(var i = 2; i > -1; i--){
+				if (i<2) text += ">"
+				for(j in groups[i]){
+					text += _icon(groups[i][j])
+				}
+			}
+		}
+		
+		text += "<span class='small'>"
+		text += " Pair Preferences:  <br />"
+		text += "<pre>" 
+		for(var i=1; i<cIDs.length; i++){
+			text += ""
+			for(var j=0; j<i; j++){
+				if (j>0) text += "  "
+				text += _icon(cIDs[j])
+				if (ballot[cIDs[j]] > ballot[cIDs[i]]) {
+					text += ">"
+				} else text += "="
+				text += _icon(cIDs[i])
+			} 
+			// 01  
+			// 02  12
+			// 03  13  23
+			text += "</span>"
+			text += "<br />"
+			text += "<br />"
+		}
+		text += "</pre>"
+		return text
+	}
+
 }
 
 function ApprovalVoter(model){
@@ -348,6 +468,16 @@ function ApprovalVoter(model){
 
 	};
 
+	self.toText = function(ballot,system,rbsystem){
+		var text = "<span class='small' style> Approved </span> <br />" 
+		
+		for(var i=0; i<ballot.approved.length; i++){
+			// if (i>0) text += ">"
+			var candidate = ballot.approved[i];
+			text += _icon(candidate)
+		}
+		return text
+	}
 }
 
 function RankedVoter(model){
@@ -472,6 +602,165 @@ function RankedVoter(model){
 
 	};
 
+	self.toText = function(ballot,system,rbsystem){
+
+		var text = ""
+		
+		// var onlyPoints = ["Borda"]
+		// var onlyPointsRB = ["Baldwin","Borda"]
+		// var noPreferenceChainRB = ["Black"]
+		// var onlyPreferenceChain = ["IRV","STV"]
+		// var onlyPreferenceChainRB = ["Bucklin","Carey","Coombs","Hare"]
+		// var onlyPairsRB = ["Copeland","Dodgson",]
+		regular = {
+			"IRV": 			{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
+			"Borda": 		{doChain:false, doPairs:false, doPoints:true , message:""},
+			"Minimax": 		{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Schulze": 		{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"RankedPair":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Condorcet":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"STV": 			{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."}
+		}
+			
+		rb = {
+			"Baldwin":	{doChain:true , doPairs:false, doPoints:true , message:"Points are assigned in each elimination round.  In round 1, they are as follows:"},
+			"Black":	{doChain:true , doPairs:true , doPoints:true , message:"These preferences are tallied by pairs. <br /><br /> If there is no Condorcet winner, then borda points are used."},
+			"Borda":	{doChain:false, doPairs:false, doPoints:true , message:""},
+			"Bucklin":	{doChain:false, doPairs:false, doPoints:false, message:"Round 1: only count 1's.  <br /> Round 2: include 1's and 2's.  <br /> Keep including more until approval gets above 50%."},
+			"Carey":	{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
+			"Coombs":	{doChain:true , doPairs:false, doPoints:false, message:"Only tally the bottom choice during elimination rounds."},
+			"Copeland":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Dodgson":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Hare":		{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
+			"Nanson":	{doChain:true , doPairs:false, doPoints:true , message:"Points are assigned in each elimination round.  In round 1, they are as follows:"},
+			"Raynaud":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Schulze":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Simpson":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Small":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+			"Tideman":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."}
+		}
+		if (system=="RBVote") {
+			var pick = rb[rbsystem]
+		} else {
+			var pick = regular[system]
+		}
+
+		if(system=="RBVote" && rbsystem=="Bucklin") {
+			// put a 1 in each ranking
+			text += "<pre>"
+			text += "    1 2 3 4 5"
+			text += "<br />"
+			text += "<br />"
+			for(var i=0; i<ballot.rank.length; i++) {
+				text += _icon(ballot.rank[i])
+				text += "  "
+				for(var j=0; j<ballot.rank.length; j++) {
+					if (j>0) text += " "
+					if (i==j) {
+						text += "1"
+					} else {
+						text += "0"
+					}
+				}
+				text += "<br />"
+			}
+			text += "</pre>"		
+		}
+
+		if (pick.doChain || pick.doPairs) {
+			text += "<span class='small' style> Preferences: </span> <br />" 
+			for(var i=0; i<ballot.rank.length; i++){
+				if (i>0) text += ">"
+				var candidate = ballot.rank[i];
+				text += _icon(candidate)
+			}
+			text += "<br />"
+			text += "<br />"
+		}
+
+		if (pick.message != "") {
+			text += "<span class='small' style>"
+			text += pick.message
+			text += "</span>"
+			text += "<br />"
+			text += "<br />"
+		}	
+
+		if (pick.doPairs) {
+			if(0){
+				text += "<span class='small'>"
+				// text += "Pair Preferences:  <br />" 
+				for(var i=1; i<ballot.rank.length; i++){
+					text += "<span style='float:left'>"
+					for(var j=0; j<ballot.rank.length-i; j++){
+						if (j>0) text += "&nbsp;&nbsp;&nbsp;&nbsp;"
+						text += _icon(ballot.rank[j]) + ">"
+						text += _icon(ballot.rank[j+i])
+					} 
+					// 01  12
+					// 02  13
+					text += "</span>"
+					text += "<br />"
+				}
+				text += "</span>"
+			}
+			if (0) {
+				text += "<span class='small'> Pair Preferences:  <br /><pre>" 
+				for(var i=1; i<ballot.rank.length; i++){
+					text += "<span style='float:left'>"
+					for(var j=1; j<i; j++){
+						text += "   "
+					}
+					for(var j=0; j<ballot.rank.length-i; j++){
+						if (j>0) text += " "
+						text += _icon(ballot.rank[j]) + ">"
+						text += _icon(ballot.rank[j+i])
+					} 
+					// 01  12
+					// 02  13
+					text += "</span>"
+					text += "<br />"
+					text += "<br />"
+				}
+				text += "</pre></span>"
+			}
+			if(1){
+				text += "<span class='small'>"
+				// text += " Pair Preferences:  <br />"
+				text += "<pre>" 
+				for(var i=1; i<ballot.rank.length; i++){
+					text += ""
+					for(var j=0; j<i; j++){
+						if (j>0) text += "  "
+						text += _icon(ballot.rank[j]) + ">"
+						text += _icon(ballot.rank[i])
+					} 
+					// 01  
+					// 02  12
+					// 03  13  23
+					text += "</span>"
+					text += "<br />"
+					text += "<br />"
+				}
+				text += "</pre>"
+			}
+		}
+
+		if (pick.doPoints) {
+			text += "<span class='small' style> Points: </span><br />" 
+			var numCandidates = ballot.rank.length
+			for(var i=0; i<ballot.rank.length; i++){
+				var candidate = ballot.rank[i];
+				var score = numCandidates - i
+				for (var j=0; j < score; j++) {
+					text += _icon(candidate) 
+				}
+				text += "<br />"
+			}
+		}
+
+		return text
+	}
 }
 
 function PluralityVoter(model){
@@ -565,6 +854,11 @@ function PluralityVoter(model){
 		if (self.model.yeeon) {ctx.stroke();}
 
 	};
+
+	self.toText = function(ballot,system,rbsystem){
+		var text = "<span class='small' style> One vote for </span> " 
+		return text + _icon(ballot.vote)
+	}
 
 }
 

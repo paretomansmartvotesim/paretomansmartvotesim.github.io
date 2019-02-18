@@ -254,7 +254,7 @@ function main(config){
 			
 			if (config.oneVoter) {
 				ballot.update(model.voters[0].ballot);
-				model.caption.innerHTML = "<br />" + ballot.toText(model.voters[0].ballot);
+				model.caption.innerHTML = "<br />" + model.voters[0].type.toText(model.voters[0].ballot,model.system,model.rbsystem);
 			}
 		};
 
@@ -343,6 +343,7 @@ function main(config){
 			config.featurelist = Array.from(featureset)
 
 			// no reset...
+			model.system = config.system
 			model.voterType = data.voter;
 			model.ballotType = window[data.ballot];
 			
@@ -392,6 +393,7 @@ function main(config){
 
 			// update config...
 			config.rbsystem = data.name;
+			model.rbsystem = data.name;
 			model.rbelection = data.rbelection
 
 			model.pollResults = undefined
