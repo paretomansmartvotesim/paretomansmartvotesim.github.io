@@ -971,6 +971,11 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 		"unstrategic",
 		"preFrontrunnerIds"
 	])
+	_fillInDefaults(self,{
+		strategy:"zero strategy. judge on an absolute scale.",
+		unstrategic:"zero strategy. judge on an absolute scale.",
+		preFrontrunnerIds:["square","triangle"]
+	})
 
 	// WHAT TYPE?
 	self.type = new config.type(self.model);
@@ -1147,6 +1152,10 @@ function SingleVoter(config){
 		"unstrategic",
 		"preFrontrunnerIds"
 	])
+	_fillInDefaults(self,{
+		unstrategic:"zero strategy. judge on an absolute scale.",
+		preFrontrunnerIds:["square","triangle"]
+	})
 	self.strategy = self.unstrategic // at first glance this doesn't seem right, but there is only one group of voters.
 
 

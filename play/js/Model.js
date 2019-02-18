@@ -17,8 +17,6 @@ function Model(config){
 		size:300,
 		scale:1,
 		border:10,
-		preFrontrunnerIds:["square","triangle","hexagon"],
-		unstrategic:"zero strategy. judge on an absolute scale.",
 		optionsForElection:{sidebar:true}
 	})
 
