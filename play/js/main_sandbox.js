@@ -115,32 +115,37 @@ function main(config){
 
 		// DEFAULTS
 		
+		// defaults that are not needed in Model.js (only in main_sandbox.js)
 		_fillInDefaults(config, {
 			configversion:1,
-			system: "FPTP",
-			rbsystem: "Tideman",
-			numOfCandidates: 3,
-			numVoterGroups: 1,
 			snowman: false,
 			x_voters: false,
-			spread_factor_voters: 1,
-			arena_size: 300,
-			median_mean: 1,
-			utility_shape: "linear",
-			arena_border: 2,
 			oneVoter: false,
 			// votersRealName: "Single Voter",
 			sandboxsave: false,
 			featurelist: ["systems"],
 			hidegearconfig: false,
+			description: "",
+			keyyee: "off",
+		})
+
+		// defaults that are also set in Model.js
+		_fillInDefaults(config, {
+			system: "FPTP",
+			rbsystem: "Tideman",
+			numOfCandidates: 3,
+			numVoterGroups: 1,
+			spread_factor_voters: 1,
+			arena_size: 300,
+			median_mean: 1,
+			utility_shape: "linear",
+			arena_border: 2,
 			preFrontrunnerIds: ["square","triangle"],
 			autoPoll: "Manual",
 			// primaries: "No",
-			description: "",
 			unstrategic: "zero strategy. judge on an absolute scale.",
 			strategic: "zero strategy. judge on an absolute scale.",
 			second_strategy: true,
-			keyyee: "off",
 			yeefilter: all_candidate_names,
 			computeMethod: "ez",
 			pixelsize: 60
@@ -191,7 +196,10 @@ function main(config){
 				"median_mean",
 				"utility_shape",
 				"arena_border",
-				"yeefilter"
+				"yeefilter",
+				"unstrategic",
+				"strategic",
+				"second_strategy"
 			])
 			model.votersRealName = exp_votersRealName(config) // this set of attributes is calculated based on config
 			model.voterType = expVotingSystem(config).voter
@@ -227,9 +235,7 @@ function main(config){
 						"second_strategy",
 						"preFrontrunnerIds",
 						"unstrategic",
-						"spread_factor_voters",
-						"arena_size",
-						"arena_border"
+						"spread_factor_voters"
 					])
 					Object.assign(addVoters[i], voterConfig)
 				}

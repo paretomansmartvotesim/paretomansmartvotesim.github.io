@@ -26,6 +26,15 @@ function _fillInDefaults(to,from) {
 	}
 }
 
+function _fillInDefaultsByAddress(to,from) {
+	from = from || {}
+	to = to || {} // maybe don't need this line?
+	for (var name in from) {
+		if(to[name] == undefined) to[name] = from[name];
+	}
+}
+
+
 function _fillInSomeDefaults(to,from,names) {
 	from = from || {}
 	for (var i in names) {

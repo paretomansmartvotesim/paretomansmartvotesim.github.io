@@ -52,6 +52,45 @@ function Model(config){
 		self.caption.style.width = self.dom.style.width;
 	}
 
+	// Properties used later
+	
+	// helper
+	var all_candidate_names = Object.keys(Candidate.graphics)
+	// defaults that are also in main_sandbox.js in the cleanConfig function
+	_fillInDefaults(self, {
+		system: "FPTP",
+		rbsystem: "Tideman",
+		numOfCandidates: 3,
+		numVoterGroups: 1,
+		spread_factor_voters: 1,
+		arena_size: 300,
+		median_mean: 1,
+		utility_shape: "linear",
+		arena_border: 2,
+		preFrontrunnerIds: ["square","triangle"],
+		autoPoll: "Manual",
+		// primaries: "No",
+		unstrategic: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
+		strategic: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
+		second_strategy: true,// maybe should be for voter, not model
+		yeefilter: all_candidate_names,
+		computeMethod: "ez",
+		pixelsize: 60
+	})
+
+	// defaults that are calculated in model.OnInit in main_sandbox()
+	_fillInDefaults(self, {
+		votersRealName: "Single Voter",
+		yeeobject: undefined,
+		yeeon: false
+	})
+	_fillInDefaultsByAddress(self, {
+		voterType: PluralityVoter,
+		election: Election.plurality,
+		ballotType: PluralityBallot,
+		rbelection: rbvote.calctide,
+	})
+
 	// MAH MOUSE
 	self.mouse = new Mouse(self.id, self.canvas);
 

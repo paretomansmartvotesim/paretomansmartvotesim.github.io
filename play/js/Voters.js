@@ -945,37 +945,20 @@ var  _erfinv  = function(x){ // from https://stackoverflow.com/a/12556710
 function GaussianVoters(config){ // this config comes from addVoters in main_sandbox
 
 	var self = this;
+
+	_fillInDefaults(config,{ 
+		x:150 , //+ (model.arena_size - 300) * .5
+		y:150, //+ (model.arena_size - 300) * .5
+	})
 	Draggable.call(self, config);
 
-	// NUM
-	_fillInSomeDefaults(self,config,[
-		"num",
-		"vid",
-		"snowman",
-		"x_voters",
-		"spread_factor_voters"
-	])
-	_fillInDefaults(self,{
-		num: 3,
-		vid: 0,
-		snowman: false,
-		x_voters: false,
-		spread_factor_voters: 1
+	_voterClassConfigHelper(self,config)
+	
+	_fillInDefaultsByAddress(self,{
+		dist: GaussianVoters,
+		type: PluralityVoter,
 	})
-	_copySomeAttributes(self,config,[
-		"percentStrategy",
-		"second_strategy",
-		"group_count",
-		"group_spread",
-		"strategy",
-		"unstrategic",
-		"preFrontrunnerIds"
-	])
-	_fillInDefaults(self,{
-		strategy:"zero strategy. judge on an absolute scale.",
-		unstrategic:"zero strategy. judge on an absolute scale.",
-		preFrontrunnerIds:["square","triangle"]
-	})
+
 
 	// WHAT TYPE?
 	self.type = new config.type(self.model);
@@ -1131,30 +1114,64 @@ if (!self.x_voters) {
 
 }
 
-function SingleVoter(config){
+function _voterClassConfigHelper(self,config) {
+	// a helper for configuring 
 
-	var self = this;
-	Draggable.call(self, config);
-
-
+	// NUM
+	_fillInSomeDefaults(self,config,[ // this works better for gaussian voter
+		"num",
+		"vid",
+		"snowman",
+		"x_voters",
+		"spread_factor_voters"
+	])
 	// not sure if we need all these, but just in case
-	Object.assign(self,{
-		num: 1,
-		vid: 0,
-		snowman: false,
-		x_voters: false,
-	})
-	_copySomeAttributes(self,config,[
+	_copySomeAttributes(self,config,[ // config has these
 		"percentStrategy",
 		"second_strategy",
 		"group_count",
 		"group_spread",
+		"strategy",
 		"unstrategic",
 		"preFrontrunnerIds"
 	])
-	_fillInDefaults(self,{
+	
+	// all the defaults, just in case
+	_fillInDefaults(self,{ 
+		// FIRST group in expVoterPositionsAndDistributions
+		num: 3,
+		vid: 0,
+		snowman: false,
+		x_voters: false,
+		// SECOND group in "exp_addVoters"
+		// same for all voter groups in model
 		unstrategic:"zero strategy. judge on an absolute scale.",
-		preFrontrunnerIds:["square","triangle"]
+		preFrontrunnerIds:["square","triangle"],
+		second_strategy: false,
+		spread_factor_voters: 1,
+		// could vary between voters
+		strategy: "zero strategy. judge on an absolute scale.",
+		percentStrategy: 0,
+		group_count: 50,
+		group_spread: 190
+	})
+}
+
+function SingleVoter(config){
+
+	var self = this;
+
+	_fillInDefaults(config,{ 
+		x:150 , //+ (model.arena_size - 300) * .5
+		y:150, //+ (model.arena_size - 300) * .5
+	})
+	Draggable.call(self, config);
+
+	_voterClassConfigHelper(self,config)
+	
+	_fillInDefaultsByAddress(self,{
+		dist: SingleVoter,
+		type: PluralityVoter,
 	})
 	self.strategy = self.unstrategic // at first glance this doesn't seem right, but there is only one group of voters.
 
