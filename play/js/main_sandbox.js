@@ -214,9 +214,9 @@ function main(config){
 			
 			// MENU //
 			// Make the MENU look correct.  The MENU is not part of the "model".
-			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
-			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
-			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<config.voters) ?  "display:inline": "display:none")
+			for (i in stratsliders) stratsliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+			for (i in groupsliders) groupsliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+			for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 			// hide some menus
 			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
 			
@@ -609,7 +609,7 @@ function main(config){
 			}
 
 			// UPDATE CONFIG //
-			config.voters = slider.value;
+			config.numVoterGroups = slider.value;
 			config.candidatePositions = save().candidatePositions;
 			config.voterPositions = null;
 
@@ -1672,7 +1672,7 @@ function main(config){
 				}
 			}
 			if(x_voter_sliders) {
-				x_voter_sliders[0].value = config.voters
+				x_voter_sliders[0].value = config.numVoterGroups
 			}
 			if(spreadsliders) {
 				for (i in spreadsliders) {
@@ -1703,7 +1703,7 @@ function main(config){
 			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);
 			if(window.chooseyeeobject){
 				for(var i=0;i<maxVoters-1;i++) {
-					if (i < config.voters) {
+					if (i < config.numVoterGroups) {
 						window.chooseyeeobject.dom.childNodes[8+i].hidden=false
 					} else {
 						window.chooseyeeobject.dom.childNodes[8+i].hidden=true
