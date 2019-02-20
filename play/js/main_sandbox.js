@@ -148,7 +148,8 @@ function main(config){
 			second_strategy: true,
 			yeefilter: all_candidate_names,
 			computeMethod: "ez",
-			pixelsize: 60
+			pixelsize: 60,
+			optionsForElection: {sidebar:true} // sandboxes have this default
 		})
 
 
@@ -170,13 +171,12 @@ function main(config){
 		document.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
 
-		
-		model.election = Election.plurality;
-		model.optionsForElection = {sidebar:true}
-
-
 		// INIT!
 		model.onInit = function(){
+
+
+			// run the config and model routines 
+			// don't run the resets
 
 
 			// model //
@@ -199,7 +199,8 @@ function main(config){
 				"yeefilter",
 				"unstrategic",
 				"strategic",
-				"second_strategy"
+				"second_strategy",
+				"optionsForElection"
 			])
 			model.votersRealName = exp_votersRealName(config) // this set of attributes is calculated based on config
 			model.voterType = expVotingSystem(config).voter
@@ -299,6 +300,7 @@ function main(config){
 		//////////////////////////////////
 		// BUTTONS - WHAT VOTING SYSTEM //
 		//////////////////////////////////
+
 
 
 		// Which voting system?
@@ -1371,22 +1373,25 @@ function main(config){
 
 		// get current filename, in order to go back to the original intended preset
 
-		// var presetnames = ["O","SA"]
-		// var presethtmlnames = [config.filename,"sandbox.html"]
-		// var presetdescription = ["original intended preset","sandbox"]
+		var presetconfig = _buildPresetConfig({nElection:14,nBallot:12})
+		function _buildPresetConfig(c) {
+			// var presetnames = ["O","SA"]
+			// var presethtmlnames = [config.filename,"sandbox.html"]
+			// var presetdescription = ["original intended preset","sandbox"]
+			var presetnames = ["S"]
+			var presethtmlnames = ["sandbox.html"]
+			var presetdescription = ["sandbox"]
 
-		var presetnames = ["S"]
-		var presethtmlnames = ["sandbox.html"]
-		var presetdescription = ["sandbox"]
-
-		// and fill in the rest
-		for (var i=1;i<=14;i++) {presetnames.push("e"+i) ; presethtmlnames.push("election"+i+".html") ; presetdescription.push("election"+i+".html")}
-		presetnames.push("O") ; presethtmlnames.push(filename) ; presetdescription.push("original intended preset")
-		// TODO
-		for (var i=1;i<=12;i++) {presetnames.push("b"+i) ; presethtmlnames.push("ballot"+i+".html") ; presetdescription.push("ballot"+i+".html")}
-		
-		var presetconfig = []
-		for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],htmlname:presethtmlnames[i],margin:4})
+			// and fill in the rest
+			for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presethtmlnames.push("election"+i+".html") ; presetdescription.push("election"+i+".html")}
+			presetnames.push("O") ; presethtmlnames.push(filename) ; presetdescription.push("original intended preset")
+			// TODO
+			for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presethtmlnames.push("ballot"+i+".html") ; presetdescription.push("ballot"+i+".html")}
+			
+			var presetconfig = []
+			for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],htmlname:presethtmlnames[i],margin:4})
+			return presetconfig
+		}
 
 		var onChoosepresetconfig = function(data){
 			if (data.isOn) {
