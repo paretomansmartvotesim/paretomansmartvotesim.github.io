@@ -1,4 +1,5 @@
 function Draggable(config){
+	// sanity rules: Draggable class creation code cannot read attributes from model.
 
 	var self = this;
 

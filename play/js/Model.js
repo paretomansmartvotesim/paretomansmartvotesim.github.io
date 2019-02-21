@@ -80,7 +80,7 @@ function Model(config){
 
 	// defaults that are calculated in model.OnInit in main_sandbox()
 	_fillInDefaults(self, {
-		votersRealName: "Single Voter",
+		howManyVoterGroupsRealName: "Single Voter",
 		yeeobject: undefined,
 		yeeon: false
 	})
@@ -123,7 +123,7 @@ function Model(config){
 			model: self,
 			id:id
 		});
-		self.voterCenter = voterCenter
+		self.voterCenter = voterCenter // no need for more than one votercenter.
 		self.draggables.push(voterCenter);
 	};
 	self.election = function(model,options){};

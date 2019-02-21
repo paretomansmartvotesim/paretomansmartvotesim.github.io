@@ -3,6 +3,8 @@
 ///////// TYPES OF VOTER ////////////
 /////////////////////////////////////
 
+// sanity rules: class creation code cannot read attributes from model.
+
 function ScoreVoter(model){
 
 	var self = this;
@@ -942,13 +944,15 @@ var  _erfinv  = function(x){ // from https://stackoverflow.com/a/12556710
 ///////// SINGLE OR GAUSSIAN ////////////
 /////////////////////////////////////////
 
+// sanity rules: class creation code cannot read attributes from model.
+
 function GaussianVoters(config){ // this config comes from addVoters in main_sandbox
 
 	var self = this;
 
 	_fillInDefaults(config,{ 
-		x:150 , //+ (model.arena_size - 300) * .5
-		y:150, //+ (model.arena_size - 300) * .5
+		x:150 , //+ (config.arena_size - 300) * .5
+		y:150, //+ (config.arena_size - 300) * .5
 	})
 	Draggable.call(self, config);
 
