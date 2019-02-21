@@ -30,7 +30,7 @@ function main(config){
 
 	// Initialize variables
 	var initialConfig
-	var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
+	var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","strategyOne","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 	var doms = {}  // for hiding menus, later
 	var x_voter_sliders = [] // for hiding sliders, later
 	
@@ -80,7 +80,7 @@ function main(config){
 						config.sandboxsave = true
 						return ["systems","howManyVoterGroups","howManyCandidates"] 	}	}	}
 		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","yee"])
+		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["strategyOne","second strategy","yee"])
 		// clear the grandfathered config settings
 		delete config.doPercentFirst
 		delete config.features
@@ -196,7 +196,6 @@ function main(config){
 				"utility_shape",
 				"arena_border",
 				"yeefilter",
-				"unstrategic",
 				"strategic",
 				"second_strategy",
 				"optionsForElection"
@@ -205,6 +204,10 @@ function main(config){
 			model.yeeon = (model.yeeobject != undefined) ? true : false
 			
 			_reincarnateDraggables()
+
+			// hide some menus
+			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
+
 		};
 		model.onDraw = function(){
 			
@@ -856,69 +859,87 @@ function main(config){
 		}
 
 
-		// unstrategic
-
-		var strategyOff = [
-			{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
-			{name:"N", realname:"normalize", margin:5},
-			{name:"F", realname:"normalize frontrunners only", margin:5},
-			{name:"F+", realname:"best frontrunner", margin:5},
-			{name:"F-", realname:"not the worst frontrunner"}
-		];
-		// old ones
-		// {name:"FL", realname:"justfirstandlast", margin:5},
-		// {name:"T", realname:"threshold"},
-		// {name:"SNTF", realname:"starnormfrontrunners"}
-		var onChooseVoterStrategyOff = function(data){
 
 
-			// UPDATE MENU //
-			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
-			for(var i=0;i<model.voters.length;i++){
-				if (! not_f.includes(config.voterStrategies[i])) turnOffFrontrunnerControls = false
-			}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
-			var xlist = ["frontrunners","autoPoll","poll"]
-			var featureset = new Set(config.featurelist)
-			for (var i in xlist){
-				var xi = xlist[i]
-				if ( ! turnOffFrontrunnerControls) {
-					featureset.add(xi)
-					doms[xi].hidden = false
-				} else {
-					featureset.delete(xi)
-					doms[xi].hidden = true
+		var strategyOne = new function() { // strategy 1 AKA unstrategic voters' strategy
+			var self = this
+			self.name = "strategyOne"
+			self.list = [
+				{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
+				{name:"N", realname:"normalize", margin:5},
+				{name:"F", realname:"normalize frontrunners only", margin:5},
+				{name:"F+", realname:"best frontrunner", margin:5},
+				{name:"F-", realname:"not the worst frontrunner"}
+			];
+			self.onChoose = function(data){
+				// UPDATE CONFIG //
+				config.unstrategic = data.realname; 
+				// UPDATE MENU //
+				var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+				var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
+				if (config.second_strategy) {
+					for(var i=0;i<config.voterStrategies.length;i++){
+						if (! not_f.includes(config.voterStrategies[i])){
+							turnOffFrontrunnerControls = false
+						}
+					}
 				}
-			}
-			if (config.autoPoll == "Auto") {
-				var xlist = ["frontrunners","poll"]
+				var xlist = ["frontrunners","autoPoll","poll"]
+				var featureset = new Set(config.featurelist)
 				for (var i in xlist){
 					var xi = xlist[i]
-					featureset.delete(xi)
-					doms[xi].hidden = true
+					if ( ! turnOffFrontrunnerControls) {
+						featureset.add(xi)
+						doms[xi].hidden = false
+					} else {
+						featureset.delete(xi)
+						doms[xi].hidden = true
+					}
 				}
+				if (config.autoPoll == "Auto") {
+					var xlist = ["frontrunners","poll"]
+					for (var i in xlist){
+						var xi = xlist[i]
+						featureset.delete(xi)
+						doms[xi].hidden = true
+					}
+				}
+				// UPDATE CONFIG //
+				config.featurelist = Array.from(featureset)
+				// UPDATE MODEL //
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].unstrategic = config.unstrategic
+				}
+				model.update();
+			};
+			self.choose = new ButtonGroup({
+				label: "what's voters' strategy?",
+				width: 40,
+				data: self.list,
+				onChoose: self.onChoose
+			});
+			self.init = function(model,config) {return} // init is per voterGroup
+				model.unstrategic = config.unstrategic
+			self.perVoterGroupInit = function(voterConfig,config,i) {
+				voterConfig.unstrategic = config.unstrategic
 			}
-
-			// UPDATE CONFIG //
-			config.featurelist = Array.from(featureset)
-			config.unstrategic = data.realname; 
-
-			// UPDATE MODEL //
-			for(var i=0;i<model.voters.length;i++){
-				model.voters[i].unstrategic = config.unstrategic
+			self.select = function(config) {
+				self.choose.highlight("realname", config.unstrategic);
+			
 			}
-			// no reset...
-			model.update();
-		};
-		window.chooseVoterStrategyOff = new ButtonGroup({
-			label: "what's voters' strategy?",
-			width: 40,
-			data: strategyOff,
-			onChoose: onChooseVoterStrategyOff
-		});
-		document.querySelector("#left").appendChild(chooseVoterStrategyOff.dom);
-		doms["unstrategic"] = chooseVoterStrategyOff.dom
-		
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
+			perVoterGroupItems.push(self)
+		}
+
+
+
+
+
+
+
+
 
 
 
@@ -1370,7 +1391,7 @@ function main(config){
 		
 		// gear config - decide which menu items to do
 
-		// var allnames = ["systems","howManyVoterGroups","howManyCandidates","strategy","percentstrategy","unstrategic","frontrunners","poll","yee"] // not "save"
+		// var allnames = ["systems","howManyVoterGroups","howManyCandidates","strategy","percentstrategy","strategyOne","frontrunners","poll","yee"] // not "save"
 		var gearconfig = []
 		for (i in allnames) gearconfig.push({name:i,realname:allnames[i],margin:1})
 
@@ -1710,7 +1731,6 @@ function main(config){
 					chooseVoterStrategyOn.highlight("realname", model.voters[0].strategy);
 				}
 			}
-			if(window.chooseVoterStrategyOff) chooseVoterStrategyOff.highlight("realname", model.voters[0].unstrategic);
 			if(window.choose_second_strategy) {
 				if (config.second_strategy) {
 					choose_second_strategy.highlight("name", "2");
@@ -1721,15 +1741,6 @@ function main(config){
 			// if(window.choosePrimaries) choosePrimaries.highlight("name", config.primaries)
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
 			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);
-			if(window.chooseyeeobject){
-				for(var i=0;i<maxVoters-1;i++) {
-					if (i < config.numVoterGroups) {
-						window.chooseyeeobject.dom.childNodes[8+i].hidden=false
-					} else {
-						window.chooseyeeobject.dom.childNodes[8+i].hidden=true
-					}
-				}
-			}
 			if(window.choosegearconfig) choosegearconfig.highlight("realname", config.featurelist);
 			if(window.chooseComputeMethod) chooseComputeMethod.highlight("name", config.computeMethod);
 			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
