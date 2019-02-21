@@ -32,9 +32,7 @@ function main(config){
 	var initialConfig
 	var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 	var doms = {}  // for hiding menus, later
-	var stratsliders = [] // for hiding sliders, later
 	var x_voter_sliders = [] // for hiding sliders, later
-	var spreadsliders = [] // for hiding sliders, later
 	
 	// workaround
 	var maxVoters = 10 // there is a bug where the real max is one less than this
@@ -434,9 +432,9 @@ function main(config){
 
 				
 				// // UPDATE MENU //
-				// for (i in stratsliders) stratsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
+				// for (i in percentstrategy.choose.sliders) stratsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
 				// for (i in group_count.choose.sliders) group_count.choose.sliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
-				// for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
+				// for (i in group_spread.choose.sliders) group_spread.choose.sliders[i].setAttribute("style",(i<data.num) ?  "display:inline": "display:none")
 
 				// UPDATE CONFIG //
 				// add the configuration for the voter groups when "X" is chosen
@@ -484,9 +482,9 @@ function main(config){
 
 				// UPDATE MENU //
 				// Make the MENU look correct.  The MENU is not part of the "model".
-				for (i in stratsliders) stratsliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+				for (i in percentstrategy.choose.sliders) percentstrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 				for (i in group_count.choose.sliders) group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
-				for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+				for (i in group_spread.choose.sliders) group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 
 				// hide some menus
 				for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
@@ -512,9 +510,7 @@ function main(config){
 				for(var i=0; i<config.numVoterGroups; i++){
 					var voterConfig = { // This set of attributes requires further computing
 						type: systems.listByName(config).voter,
-						strategy: config.voterStrategies[i],
-						percentStrategy: config.voterPercentStrategy[i],
-						group_spread: config.voter_group_spread[i]
+						strategy: config.voterStrategies[i]
 					}
 					perVoterGroupItems.map(x=>{
 						x.perVoterGroupInit(voterConfig,config,i)
@@ -614,7 +610,6 @@ function main(config){
 		}
 		// if the last option X is selected, we need a selection for number of voters
 
-		
 		var makeslider = function(cf) {
 			var self = this
 			self.slider = document.createElement("input");
@@ -663,7 +658,6 @@ function main(config){
 			}
 		}
 
-
 		var xHowManyVoterGroups = new function() {
 			
 			var self = this
@@ -688,9 +682,9 @@ function main(config){
 			}		
 			self.init = function(model,config) {
 				// UPDATE MENU //
-				for (i in stratsliders) stratsliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+				for (i in percentstrategy.choose.sliders) percentstrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 				for (i in group_count.choose.sliders) group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
-				for (i in spreadsliders) spreadsliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+				for (i in group_spread.choose.sliders) group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 				for(var i=0;i<maxVoters-1;i++) {
 					if (i < config.numVoterGroups) {
 						chooseyeeobject.dom.childNodes[8+i].hidden=false
@@ -716,8 +710,6 @@ function main(config){
 			items.push(self)
 		}
 		
-
-		
 		var group_count = new function() {  // group count
 			var self = this
 			self.name = "group_count"
@@ -725,13 +717,9 @@ function main(config){
 			self.onChoose = function(slider,n) {
 				// UPDATE CONFIG //
 				config.voter_group_count[n] = slider.value;
-				// get ready for _reincarnateDraggables()
 				config.candidatePositions = save().candidatePositions; 
 				config.voterPositions = save().voterPositions;
-
 				// UPDATE MODEL //
-				// self.nInit(model,config,n)
-
 				_reincarnateDraggables()
 				model.reset()
 				model.update();
@@ -754,81 +742,54 @@ function main(config){
 			document.querySelector("#left").appendChild(self.choose.dom)
 			doms[self.name] = self.choose.dom
 			self.select = function(config) {
-				for (i in group_count.choose.sliders) {
-					group_count.choose.sliders[i].value = config.voter_group_count[i]
+				for (i in self.choose.sliders) {
+					self.choose.sliders[i].value = config.voter_group_count[i]
 				}
 			}
 			items.push(self)
 			perVoterGroupItems.push(self)
 		}
 
+		var group_spread = new function() {  // group count
+			var self = this
+			self.name = "group_spread"
 
-
-
-
-
-
-
-
-
-		
-		// group spread
-		
-		var button_group_2 = document.createElement('div')
-		button_group_2.className = "button-group"
-		document.querySelector("#left").appendChild(button_group_2)
-		var button_group_2_label = document.createElement('div')
-		button_group_2_label.className = "button-group-label"
-		button_group_2_label.innerHTML = "how spread out is the group?";
-		button_group_2.appendChild(button_group_2_label)
-
-		
-
-		var containchecks2 = button_group_2.appendChild(document.createElement('div'));
-		containchecks2.id="containsliders"
-		var slfn = function(slider,n) {
-			// UPDATE CONFIG //
-			config.voter_group_spread[n] = slider.value;
-			config.candidatePositions = save().candidatePositions;
-			config.voterPositions = save().voterPositions;
-
-			// UPDATE MODEL //
-			if (n<model.numVoterGroups) {
-				model.voters[n].group_spread = config.voter_group_spread[n]
+			self.onChoose = function(slider,n) {
+				// UPDATE CONFIG //
+				config.voter_group_spread[n] = slider.value;
+				config.candidatePositions = save().candidatePositions; 
+				config.voterPositions = save().voterPositions;
+				// UPDATE MODEL //
+				_reincarnateDraggables()
+				model.reset()
+				model.update();
+				setInPosition();
+			}		
+			self.init = function(model,config) {return} // init is per voterGroup
+			self.perVoterGroupInit = function(voterConfig,config,i) {
+				voterConfig.group_spread = config.voter_group_spread[i]
 			}
-			// reset!
-			model.reset();
-			setInPosition();
-		}
-		
-		for (var i = 0; i < maxVoters; i++) {
-			var slide2 = {
+			self.choose = new sliderSet({
 				max: "500",
 				min:"10",
 				value:"250",
 				chtext:"",
 				chid:"choose width in pixels",
-				chfn:slfn,
-				containchecks:containchecks2,
-				n:i
+				chfn:self.onChoose,
+				num:maxVoters,
+				labelText: "how spread out is the group?"
+			})
+			document.querySelector("#left").appendChild(self.choose.dom)
+			doms[self.name] = self.choose.dom
+			self.select = function(config) {
+				for (i in self.choose.sliders) {
+					self.choose.sliders[i].value = config.voter_group_spread[i]
+				}
 			}
-			spreadsliders.push(new makeslider(slide2).slider)
+			items.push(self)
+			perVoterGroupItems.push(self)
 		}
-		doms["group_spread"] = button_group_2
 
-
-
-
-
-
-
-
-
-
-
-
-
-		
 		var howManyCandidates = new function() { // how many candidates?
 			var self = this
 			self.name = "howManyCandidates"
@@ -894,17 +855,6 @@ function main(config){
 			items.push(self)
 		}
 
-
-
-
-
-
-
-
-
-
-
-		
 
 		// unstrategic
 
@@ -1115,70 +1065,64 @@ function main(config){
 
 		}
 		
-		
-		
-		// percentstrategy
-		
-		var aba = document.createElement('div')
-		aba.className = "button-group"
-		document.querySelector("#left").appendChild(aba)
-		var aba2 = document.createElement('div')
-		aba2.className = "button-group-label"
-		aba2.innerHTML = "what % use this 2nd strategy?";
-		aba.appendChild(aba2)
+		var percentstrategy = new function() {  // group count
+			var self = this
+			self.name = "percentstrategy"
 
-		
-
-		var containchecks0 = aba.appendChild(document.createElement('div'));
-		containchecks0.id="containsliders"
-		var slfn = function(slider,n) {
-			// UPDATE CONFIG //
-			config.voterPercentStrategy[n] = slider.value;
-			
-			// UPDATE MODEL //
-			if (n<model.numVoterGroups) {
+			self.onChoose = function(slider,n) {
+				// UPDATE CONFIG //
+				config.voterPercentStrategy[n] = slider.value;
+				// UPDATE MODEL //
 				model.voters[n].percentStrategy = config.voterPercentStrategy[n]
 				model.update();
+			}		
+			self.init = function(model,config) {return} // init is per voterGroup
+			self.perVoterGroupInit = function(voterConfig,config,i) {
+				voterConfig.percentStrategy = config.voterPercentStrategy[i]
 			}
-		}
-		
-		for (var i = 0; i < maxVoters; i++) {
-			var slide0 = {
+			self.choose = new sliderSet({
 				max: "100",
 				min:"0",
 				value:"50",
 				chtext:"",
 				chid:"choosepercent",
-				chfn:slfn,
-				containchecks:containchecks0,
-				n:i
+				chfn:self.onChoose,
+				num:maxVoters,
+				labelText: "what % use this 2nd strategy?"
+			})
+			document.querySelector("#left").appendChild(self.choose.dom)
+			doms[self.name] = self.choose.dom
+			self.select = function(config) {
+				for (i in self.choose.sliders) {
+					self.choose.sliders[i].value = config.voterPercentStrategy[i]
+				}
 			}
-			stratsliders.push(new makeslider(slide0).slider)
+			items.push(self)
+			perVoterGroupItems.push(self)
+		}	
+
+		if (0) { // are there primaries?
+			// 
+			
+			// var primaries = [
+			// 	{name:"Yes",realname:"Yes", margin:5},
+			// 	{name:"No",realname:"No"}
+			// ];
+			// var onChoosePrimaries = function(data){
+			// 	config.primaries = data.name
+			// 	model.primaries = data.name
+			// 	model.update()
+
+			// };
+			// window.choosePrimaries = new ButtonGroup({
+			// 	label: "Primaries?",
+			// 	width: 72,
+			// 	data: primaries,
+			// 	onChoose: onChoosePrimaries
+			// });
+			// document.querySelector("#left").appendChild(choosePrimaries.dom);
+			// doms["primaries"] = choosePrimaries.dom
 		}
-		doms["percentstrategy"] = aba
-
-
-		// // are there primaries?
-		
-		// var primaries = [
-		// 	{name:"Yes",realname:"Yes", margin:5},
-		// 	{name:"No",realname:"No"}
-		// ];
-		// var onChoosePrimaries = function(data){
-		// 	config.primaries = data.name
-		// 	model.primaries = data.name
-		// 	model.update()
-
-		// };
-		// window.choosePrimaries = new ButtonGroup({
-		// 	label: "Primaries?",
-		// 	width: 72,
-		// 	data: primaries,
-		// 	onChoose: onChoosePrimaries
-		// });
-		// document.querySelector("#left").appendChild(choosePrimaries.dom);
-		// doms["primaries"] = choosePrimaries.dom
-		
 
 
 		// do a poll to find frontrunner
@@ -1761,12 +1705,6 @@ function main(config){
 			items.map(x=>
 				x.select(config)
 			)
-			if(spreadsliders) {
-				for (i in spreadsliders) {
-					spreadsliders[i].value = config.voter_group_spread[i]
-				}
-			}
-			if(window.choosePercentStrategy) choosePercentStrategy.highlight("num", model.voters[0].percentStrategy);
 			if(window.chooseVoterStrategyOn) {
 				if (model.voters[0].strategy != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
 					chooseVoterStrategyOn.highlight("realname", model.voters[0].strategy);
@@ -1779,11 +1717,6 @@ function main(config){
 				}
 			}
 			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
-			if(stratsliders) {
-				for (i in stratsliders) {
-					stratsliders[i].value = config.voterPercentStrategy[i]
-				}
-			}
 			if(window.chooseAutoPoll) chooseAutoPoll.highlight("name", config.autoPoll)
 			// if(window.choosePrimaries) choosePrimaries.highlight("name", config.primaries)
 			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
