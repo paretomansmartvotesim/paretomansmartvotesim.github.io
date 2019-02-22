@@ -25,19 +25,10 @@ function main(config){
 	if(modelData){
 		var data = JSON.parse(modelData);
 		config = data;
-		
 	}
 
-	// Initialize variables
-	var initialConfig
-	var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","strategyOne","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
-	var doms = {}  // for hiding menus, later
-	var x_voter_sliders = [] // for hiding sliders, later
-	
-	// workaround
-	var maxVoters = 10 // there is a bug where the real max is one less than this
+	var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
 
-	
 	function cleanConfig(config) {
 		// Load the defaults.  This runs at the start and after loading a preset.
 
@@ -156,7 +147,7 @@ function main(config){
 
 	}
 	cleanConfig(config)
-	initialConfig = _jcopy(config);
+	var initialConfig = _jcopy(config);
 
 	Loader.onload = function(){
 
@@ -173,16 +164,11 @@ function main(config){
 
 		// INIT!
 		model.onInit = function(){
-
-
-			// run the config and model routines 
-			// don't run the resets
-
-			items.map(x=>
-				x.init(model,config) // init writes to model and reads from config.  Sanity rule: init does not read from model.
-			)
-			// model //
+			// configure the model and the menu
 			// Based on config... what should be what?
+			items.map(x=> {
+				if(x.configureModelAndMenu != undefined) x.configureModelAndMenu(model,config) // init writes to model and reads from config.  Sanity rule: init does not read from model.
+			})
 			_copySomeAttributes(model,config,  // This set of attributes is copied from config to model
 				[
 				"preFrontrunnerIds",
@@ -203,10 +189,17 @@ function main(config){
 			model.yeeobject = expYeeObject(config,model)
 			model.yeeon = (model.yeeobject != undefined) ? true : false
 			
-			_reincarnateDraggables()
+			// init model
+			_reincarnateDraggables() // configure and initialize voterSet, candidateSet, and voterCenter
 
-			// hide some menus
-			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
+			// update Menu
+			_updateMenu()
+
+			// update VoterSet
+			_updateVoterSet()
+
+			// update model
+			model.update()
 
 		};
 		model.onDraw = function(){
@@ -229,6 +222,58 @@ function main(config){
 			}
 		};
 
+		function _updateMenu() {
+			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
+		}
+
+		function _updateVoterSet() {
+			items.map(i=> {
+				if(i.voterSetUpdate != undefined) i.voterSetUpdate(config) 
+			})
+		}
+
+		function _reincarnateDraggables() { // configure and initialize voterSet, candidateSet, and voterCenter.  And 
+			
+			// save current positions to config ... we might overwrite these with 
+			// config.candidatePositions = save().candidatePositions;
+			// config.voterPositions = save().voterPositions;
+			
+			model.reset(true) // just zero out draggables, voters, and candidates
+			voterSetConfig(config).map(x => 	// configure voterSet
+				model.addVoters(x)				// init voters
+			)
+			howManyCandidates.configureCandidateSet(config).map(x =>  // configure candidateSet
+				model.addCandidate(x) 	// init candidates
+			)
+			model.addVoterCenter() // init voterCenter
+		}
+		function voterSetConfig(config) {
+			// Give configuration to each voter group.
+				
+			voterSetConfig = [] // create empty voter group config
+			for ( var i=0; i < config.numVoterGroups; i++) voterSetConfig[i]={}
+			
+			items.map(x=>{ // configure each voter group
+				if(x.configureVoterSet) x.configureVoterSet(voterSetConfig,config)
+			})
+			for(var i=0; i<config.numVoterGroups; i++){
+				var voterConfig = { // This set of attributes requires further computing
+					type: systems.listByName(config).voter,
+					strategy: config.voterStrategies[i]
+				}
+				_copySomeAttributes(voterConfig,config,[ // This set of attributes is just copied over
+					"second_strategy",
+					"preFrontrunnerIds",
+					"unstrategic",
+					"spread_factor_voters"
+				])
+				Object.assign(voterSetConfig[i], voterConfig)
+				items.map(x=>{ // configure each voter group
+					if(x.configureVoterGroup) x.configureVoterGroup(voterSetConfig[i],config,i)
+				})
+			}
+			return voterSetConfig
+		}
 		// In Position!
 		var setInPosition = function(){ // runs when we change the config for number of voters  or candidates
 
@@ -262,13 +307,67 @@ function main(config){
 		};
 
 		
+		///////////////////
+		// SLIDERS CLASS //
+		///////////////////
+		
+		var makeslider = function(cf) {
+			var self = this
+			self.slider = document.createElement("input");
+			self.slider.type = "range";
+			self.slider.max = cf.max;
+			self.slider.min = cf.min;
+			self.slider.value = cf.value;
+			//self.slider.setAttribute("width","20px");
+			self.slider.id = cf.chid;
+			self.slider.n = cf.n
+			self.slider.chfn = cf.chfn
+			self.slider.class = "slider";
+			self.slider.addEventListener('input', function() {self.slider.chfn(self.slider,self.slider.n)}, true);
+			var label = document.createElement('label')
+			label.htmlFor = cf.chid;
+			label.appendChild(document.createTextNode(cf.chtext));
+			cf.containchecks.appendChild(self.slider);
+			//cf.containchecks.appendChild(label);
+			self.slider.innerHTML = cf.chtext;
+		} // https://stackoverflow.com/a/866249/8210071
+
+		var sliderSet = function(cf){
+			var self = this
+			self.dom = document.createElement('div')
+			self.dom.className = "button-group"
+			if (cf.labelText) {
+				var button_group_label = document.createElement('div')
+				button_group_label.className = "button-group-label"
+				button_group_label.innerHTML = cf.labelText;
+				self.dom.appendChild(button_group_label)
+			}
+	
+			cf.containchecks = self.dom.appendChild(document.createElement('div'));
+			cf.containchecks.id="containsliders"
+			self.sliders = []
+			if(cf.num) {
+				for (var i = 0; i < cf.num; i++) {	
+					cf.n = i
+					var slider = new makeslider(cf)
+					self.sliders.push(slider.slider)
+				}
+			} else {
+				cf.n = 0
+				var slider = new makeslider(cf)
+				self.sliders.push(slider.slider)
+			}
+		}
+
 		//////////////////////////////////
 		// BUTTONS - WHAT VOTING SYSTEM //
 		//////////////////////////////////
 
+		// Initialize variables
 		var items = []
-		var perVoterGroupItems = []
-
+		var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","strategyOne","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
+		var doms = {}  // for hiding menus, later
+	
 		var systems = new function() { // Which voting system?
 			// "new function () {code}" means make an object "this", and run "code" in a new scope
 			// I made a singleton class so we can use "self" instead of saying "systems" (or another button group name).  
@@ -323,7 +422,7 @@ function main(config){
 				config.featurelist = Array.from(featureset)
 
 				// UPDATE MODEL //
-				self.init(model,config)
+				self.configureModelAndMenu(model,config)
 				model.update();
 
 			};
@@ -333,7 +432,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.init = function(model,config) {
+			self.configureModelAndMenu= function(model,config) {
 				var s = self.listByName(config)
 				model.election = s.election
 				model.system = config.system;
@@ -384,7 +483,7 @@ function main(config){
 				config.rbsystem = data.name;
 
 				// UPDATE MODEL //
-				self.init(model,config)
+				self.configureModelAndMenu(model,config)
 				model.update();
 
 			};
@@ -394,7 +493,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.init = function(model,config) {
+			self.configureModelAndMenu= function(model,config) {
 				model.rbsystem = config.rbsystem
 				model.rbelection = self.listByName(config).rbelection
 				model.pollResults = undefined
@@ -468,7 +567,7 @@ function main(config){
 
 
 				// UPDATE MENU AND MODEL//
-				self.init(model,config)
+				self.configureModelAndMenu(model,config)
 				_reincarnateDraggables()
 				model.update()
 				// model.reset();
@@ -481,7 +580,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.init = function(model,config) {
+			self.configureModelAndMenu = function(model,config) {
 
 				// UPDATE MENU //
 				// Make the MENU look correct.  The MENU is not part of the "model".
@@ -507,28 +606,8 @@ function main(config){
 				model.numVoterGroups = config.numVoterGroups
 				model.howManyVoterGroupsRealName = config.howManyVoterGroupsRealName
 			}
-			self.exp_addVoters = function(config) { // Give configuration to each voter group.
-				var addVoters = self.expVoterPositionsAndDistributions(config) // Attributes set by the "how many groups of voters" menu. e.g. Positions and Distributions
-				
-				for(var i=0; i<config.numVoterGroups; i++){
-					var voterConfig = { // This set of attributes requires further computing
-						type: systems.listByName(config).voter,
-						strategy: config.voterStrategies[i]
-					}
-					perVoterGroupItems.map(x=>{
-						x.perVoterGroupInit(voterConfig,config,i)
-					})
-					_copySomeAttributes(voterConfig,config,[ // This set of attributes is just copied over
-						"second_strategy",
-						"preFrontrunnerIds",
-						"unstrategic",
-						"spread_factor_voters"
-					])
-					Object.assign(addVoters[i], voterConfig)
-				}
-				return addVoters
-			}
-			self.expVoterPositionsAndDistributions = function(config) {
+			self.configureVoterSet = function(voterSetConfig,config) {
+				 // Attributes set by the "how many groups of voters" menu. e.g. Positions and Distributions
 				var num = config.numVoterGroups;
 				var voterPositions;
 				if (config.snowman) {
@@ -564,7 +643,6 @@ function main(config){
 					voterPositions = [[65,150],[150,150],[235,150]];
 
 				}
-				var addVoters = []
 				for(var i=0; i<num; i++){
 					var pos = voterPositions[i];
 					if (config.oneVoter) {
@@ -583,10 +661,8 @@ function main(config){
 						"snowman",
 						"x_voters"
 					])
-					addVoters.push(voterConfig);
-				
+					Object.assign(voterSetConfig[i],voterConfig)				
 				}
-				return addVoters
 			}
 			self.select = function(config) {
 				self.choose.highlight("realname", config.howManyVoterGroupsRealName);
@@ -596,77 +672,9 @@ function main(config){
 			items.push(self)
 		}
 
-		function _reincarnateDraggables() {
-			
-			// save current positions to config ... we might overwrite these with 
-			// config.candidatePositions = save().candidatePositions;
-			// config.voterPositions = save().voterPositions;
-			
-			model.reset(true) // just zero out draggables, voters, and candidates
-			howManyVoterGroups.exp_addVoters(config).map(x => 
-				model.addVoters(x)
-			)
-			howManyCandidates.exp_addCandidates(config).map(x => 
-				model.addCandidate(x) // this is not optimal but works
-			)
-			model.addVoterCenter() // again, not optimal, but works
-		}
-		// if the last option X is selected, we need a selection for number of voters
-
-		var makeslider = function(cf) {
-			var self = this
-			self.slider = document.createElement("input");
-			self.slider.type = "range";
-			self.slider.max = cf.max;
-			self.slider.min = cf.min;
-			self.slider.value = cf.value;
-			//self.slider.setAttribute("width","20px");
-			self.slider.id = cf.chid;
-			self.slider.n = cf.n
-			self.slider.chfn = cf.chfn
-			self.slider.class = "slider";
-			self.slider.addEventListener('input', function() {self.slider.chfn(self.slider,self.slider.n)}, true);
-			var label = document.createElement('label')
-			label.htmlFor = cf.chid;
-			label.appendChild(document.createTextNode(cf.chtext));
-			cf.containchecks.appendChild(self.slider);
-			//cf.containchecks.appendChild(label);
-			self.slider.innerHTML = cf.chtext;
-		} // https://stackoverflow.com/a/866249/8210071
-
-		var sliderSet = function(cf){
-			var self = this
-			self.dom = document.createElement('div')
-			self.dom.className = "button-group"
-			if (cf.labelText) {
-				var button_group_label = document.createElement('div')
-				button_group_label.className = "button-group-label"
-				button_group_label.innerHTML = cf.labelText;
-				self.dom.appendChild(button_group_label)
-			}
-	
-			cf.containchecks = self.dom.appendChild(document.createElement('div'));
-			cf.containchecks.id="containsliders"
-			self.sliders = []
-			if(cf.num) {
-				for (var i = 0; i < cf.num; i++) {	
-					cf.n = i
-					var slider = new makeslider(cf)
-					self.sliders.push(slider.slider)
-				}
-			} else {
-				cf.n = 0
-				var slider = new makeslider(cf)
-				self.sliders.push(slider.slider)
-			}
-		}
-
-		var xHowManyVoterGroups = new function() {
-			
+		var xHowManyVoterGroups = new function() { // if the last option X is selected, we need a selection for number of voters
 			var self = this
 			self.name = "xHowManyVoterGroups"
-
-
 			self.onChoose = function(slider,n) {
 
 	
@@ -677,13 +685,13 @@ function main(config){
 				config.voterPositions = null;
 	
 				// UPDATE MODEL //
-				self.init(model,config)
+				self.configureModelAndMenu(model,config)
 				// reset!
 				_reincarnateDraggables()
 				model.update();
 				setInPosition();
 			}		
-			self.init = function(model,config) {
+			self.configureModelAndMenu= function(model,config) {
 				// UPDATE MENU //
 				for (i in percentstrategy.choose.sliders) percentstrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 				for (i in group_count.choose.sliders) group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
@@ -728,8 +736,7 @@ function main(config){
 				model.update();
 				setInPosition();
 			}		
-			self.init = function(model,config) {return} // init is per voterGroup
-			self.perVoterGroupInit = function(voterConfig,config,i) {
+			self.configureVoterGroup = function(voterConfig,config,i) {
 				voterConfig.group_count = config.voter_group_count[i]
 			}
 			self.choose = new sliderSet({
@@ -750,7 +757,6 @@ function main(config){
 				}
 			}
 			items.push(self)
-			perVoterGroupItems.push(self)
 		}
 
 		var group_spread = new function() {  // group count
@@ -767,9 +773,8 @@ function main(config){
 				model.reset()
 				model.update();
 				setInPosition();
-			}		
-			self.init = function(model,config) {return} // init is per voterGroup
-			self.perVoterGroupInit = function(voterConfig,config,i) {
+			}
+			self.configureVoterGroup = function(voterConfig,config,i) {
 				voterConfig.group_spread = config.voter_group_spread[i]
 			}
 			self.choose = new sliderSet({
@@ -790,7 +795,6 @@ function main(config){
 				}
 			}
 			items.push(self)
-			perVoterGroupItems.push(self)
 		}
 
 		var howManyCandidates = new function() { // how many candidates?
@@ -802,7 +806,7 @@ function main(config){
 				{name:"four", num:4, margin:4},
 				{name:"five", num:5}
 			];
-			self.exp_addCandidates = function(config) { // expanding upon what the button means for the model
+			self.configureCandidateSet = function(config) { // expanding upon what the button means for the model
 				addCandidates = []
 				// Candidates, in a circle around the center.
 				var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
@@ -832,7 +836,7 @@ function main(config){
 				config.candidatePositions = null;
 
 				// UPDATE MODEL //
-				self.init(model,config)
+				self.configureModelAndMenu(model,config)
 				_reincarnateDraggables()
 				model.update()
 				// model.reset();
@@ -846,7 +850,7 @@ function main(config){
 				onChoose: self.onChoose
 			});
 			
-			self.init = function(model,config) {
+			self.configureModelAndMenu= function(model,config) {
 				model.numOfCandidates = config.numOfCandidates
 			}
 
@@ -857,9 +861,6 @@ function main(config){
 			doms[self.name] = self.choose.dom
 			items.push(self)
 		}
-
-
-
 
 		var strategyOne = new function() { // strategy 1 AKA unstrategic voters' strategy
 			var self = this
@@ -918,9 +919,10 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.init = function(model,config) {return} // init is per voterGroup
+			self.configureModelAndMenu= function(model,config){
 				model.unstrategic = config.unstrategic
-			self.perVoterGroupInit = function(voterConfig,config,i) {
+			}
+			self.configureVoterGroup = function(voterConfig,config,i) {
 				voterConfig.unstrategic = config.unstrategic
 			}
 			self.select = function(config) {
@@ -930,12 +932,7 @@ function main(config){
 			document.querySelector("#left").appendChild(self.choose.dom);
 			doms[self.name] = self.choose.dom
 			items.push(self)
-			perVoterGroupItems.push(self)
 		}
-
-
-
-
 
 
 
@@ -949,8 +946,6 @@ function main(config){
 			{realname: "opton for 2nd strategy", name:"2"}
 		];
 		var onChoose_second_strategy = function(data){
-
-
 			// UPDATE MENU //
 			var xlist = ["strategy","percentstrategy"]
 			var featureset = new Set(config.featurelist)
@@ -964,23 +959,16 @@ function main(config){
 					doms[xi].hidden = true
 				}
 			}
-
 			// UPDATE CONFIG
 			config.featurelist = Array.from(featureset)
 			var b = data.isOn
 			config.second_strategy = b
-
 			// UPDATE MODEL
 			model.second_strategy = b
 			for(var i=0;i<model.voters.length;i++){
 				model.voters[i].second_strategy = b
 			}
 			model.update();
-
-
-
-
-
 		};
 		window.choose_second_strategy = new ButtonGroup({
 			label: "",
@@ -992,7 +980,8 @@ function main(config){
 		document.querySelector("#left").appendChild(choose_second_strategy.dom);
 		doms["second strategy"] = choose_second_strategy.dom
 		
-		
+
+
 
 
 		
@@ -1097,8 +1086,7 @@ function main(config){
 				model.voters[n].percentStrategy = config.voterPercentStrategy[n]
 				model.update();
 			}		
-			self.init = function(model,config) {return} // init is per voterGroup
-			self.perVoterGroupInit = function(voterConfig,config,i) {
+			self.configureVoterGroup = function(voterConfig,config,i) {
 				voterConfig.percentStrategy = config.voterPercentStrategy[i]
 			}
 			self.choose = new sliderSet({
@@ -1119,7 +1107,6 @@ function main(config){
 				}
 			}
 			items.push(self)
-			perVoterGroupItems.push(self)
 		}	
 
 		if (0) { // are there primaries?
