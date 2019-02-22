@@ -4,6 +4,12 @@ window.HACK_BIG_RANGE = true;
 window.ONLY_ONCE = false;
 
 function main(config){
+	// First we load the config,
+	// Then we configure the model, the voterset, and the menu.
+	// Configuring means getting ready for the voter and candidate creation.
+	// Then we initialize the model and the voterset.
+	// Then we update the model and menu.
+	// Then wait for mouse events.
 
 	// ONCE.
 	if(ONLY_ONCE) return;
@@ -71,7 +77,7 @@ function main(config){
 						config.sandboxsave = true
 						return ["systems","howManyVoterGroups","howManyCandidates"] 	}	}	}
 		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["strategyOne","second strategy","yee"])
+		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","yee"])
 		// clear the grandfathered config settings
 		delete config.doPercentFirst
 		delete config.features
@@ -164,11 +170,10 @@ function main(config){
 
 		// INIT!
 		model.onInit = function(){
+
 			// configure the model and the menu
 			// Based on config... what should be what?
-			items.map(x=> {
-				if(x.configureModelAndMenu != undefined) x.configureModelAndMenu(model,config) // init writes to model and reads from config.  Sanity rule: init does not read from model.
-			})
+			_configureModelAndMenu()
 			_copySomeAttributes(model,config,  // This set of attributes is copied from config to model
 				[
 				"preFrontrunnerIds",
@@ -183,7 +188,6 @@ function main(config){
 				"arena_border",
 				"yeefilter",
 				"strategic",
-				"second_strategy",
 				"optionsForElection"
 			])			
 			model.yeeobject = expYeeObject(config,model)
@@ -193,7 +197,7 @@ function main(config){
 			_reincarnateDraggables() // configure and initialize voterSet, candidateSet, and voterCenter
 
 			// update Menu
-			_updateMenu()
+			_showHideMenus()
 
 			// update VoterSet
 			_updateVoterSet()
@@ -222,13 +226,17 @@ function main(config){
 			}
 		};
 
-		function _updateMenu() {
+		function _configureModelAndMenu() {
+			items.map(x=> {
+				if(x.configureModelAndMenu != undefined) x.configureModelAndMenu(model,config) // init writes to model and reads from config.  Sanity rule: init does not read from model.
+			})
+		}
+		function _showHideMenus() {
 			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
 		}
-
 		function _updateVoterSet() {
 			items.map(i=> {
-				if(i.voterSetUpdate != undefined) i.voterSetUpdate(config) 
+				if(i.updateVoterSet != undefined) i.updateVoterSet(model,config) 
 			})
 		}
 
@@ -239,7 +247,7 @@ function main(config){
 			// config.voterPositions = save().voterPositions;
 			
 			model.reset(true) // just zero out draggables, voters, and candidates
-			voterSetConfig(config).map(x => 	// configure voterSet
+			configureVoterSet(config).map(x => 	// configure voterSet
 				model.addVoters(x)				// init voters
 			)
 			howManyCandidates.configureCandidateSet(config).map(x =>  // configure candidateSet
@@ -247,7 +255,7 @@ function main(config){
 			)
 			model.addVoterCenter() // init voterCenter
 		}
-		function voterSetConfig(config) {
+		function configureVoterSet(config) {
 			// Give configuration to each voter group.
 				
 			voterSetConfig = [] // create empty voter group config
@@ -258,13 +266,10 @@ function main(config){
 			})
 			for(var i=0; i<config.numVoterGroups; i++){
 				var voterConfig = { // This set of attributes requires further computing
-					type: systems.listByName(config).voter,
-					strategy: config.voterStrategies[i]
+					type: systems.listByName(config).voter
 				}
 				_copySomeAttributes(voterConfig,config,[ // This set of attributes is just copied over
-					"second_strategy",
 					"preFrontrunnerIds",
-					"unstrategic",
 					"spread_factor_voters"
 				])
 				Object.assign(voterSetConfig[i], voterConfig)
@@ -365,7 +370,7 @@ function main(config){
 
 		// Initialize variables
 		var items = []
-		var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","strategyOne","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
+		var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 		var doms = {}  // for hiding menus, later
 	
 		var systems = new function() { // Which voting system?
@@ -589,7 +594,7 @@ function main(config){
 				for (i in group_spread.choose.sliders) group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 
 				// hide some menus
-				for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
+				_showHideMenus()
 
 				// reflect the number of voters
 				for(var i=0;i<(maxVoters-1);i++) {
@@ -862,9 +867,9 @@ function main(config){
 			items.push(self)
 		}
 
-		var strategyOne = new function() { // strategy 1 AKA unstrategic voters' strategy
+		var strategy1 = new function() { // strategy 1 AKA unstrategic voters' strategy
 			var self = this
-			self.name = "strategyOne"
+			self.name = "unstrategic"
 			self.list = [
 				{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
 				{name:"N", realname:"normalize", margin:5},
@@ -874,8 +879,7 @@ function main(config){
 			];
 			self.onChoose = function(data){
 				// UPDATE CONFIG //
-				config.unstrategic = data.realname; 
-				// UPDATE MENU //
+				config.unstrategic = data.realname;
 				var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 				var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
 				if (config.second_strategy) {
@@ -891,10 +895,8 @@ function main(config){
 					var xi = xlist[i]
 					if ( ! turnOffFrontrunnerControls) {
 						featureset.add(xi)
-						doms[xi].hidden = false
 					} else {
 						featureset.delete(xi)
-						doms[xi].hidden = true
 					}
 				}
 				if (config.autoPoll == "Auto") {
@@ -905,12 +907,11 @@ function main(config){
 						doms[xi].hidden = true
 					}
 				}
-				// UPDATE CONFIG //
 				config.featurelist = Array.from(featureset)
 				// UPDATE MODEL //
-				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].unstrategic = config.unstrategic
-				}
+				self.configureModelAndMenu(model,config)
+				self.updateVoterSet(model,config)
+				_showHideMenus()
 				model.update();
 			};
 			self.choose = new ButtonGroup({
@@ -919,15 +920,150 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.configureModelAndMenu= function(model,config){
+			self.configureModelAndMenu = function(model,config){
 				model.unstrategic = config.unstrategic
 			}
 			self.configureVoterGroup = function(voterConfig,config,i) {
 				voterConfig.unstrategic = config.unstrategic
 			}
+			self.updateVoterSet = function(model,config) {
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].unstrategic = config.unstrategic
+				}
+			}
 			self.select = function(config) {
 				self.choose.highlight("realname", config.unstrategic);
-			
+			}
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
+		}
+
+		var enableStrategy2 = new function() { // Is there a 2nd strategy?
+			var self = this
+			self.name = "second strategy"
+			self.list = [
+				{realname: "opton for 2nd strategy", name:"2"}
+			];
+			self.onChoose = function(data){
+				// UPDATE CONFIG //
+				var xlist = ["strategy","percentstrategy"]
+				var featureset = new Set(config.featurelist)
+				for (var i in xlist){
+					var xi = xlist[i]
+					if (data.isOn) {
+						featureset.add(xi)
+					} else {
+						featureset.delete(xi)
+					}
+				}
+				config.featurelist = Array.from(featureset)
+				config.second_strategy = data.isOn
+				
+				self.configureModelAndMenu(model,config)
+				// UPDATE MENU
+				_showHideMenus()
+				// UPDATE MODEL
+				self.updateVoterSet(model,config)
+				model.update();
+			};
+			self.choose = new ButtonGroup({
+				label: "",
+				width: 40,
+				data: self.list,
+				onChoose: self.onChoose,
+				isCheckbox: true
+			});
+			self.configureModelAndMenu = function(model,config){
+				model.second_strategy = config.second_strategy
+			}
+			// self.configureVoterGroup = function(voterConfig,config,i) { // maybe not needed
+			// 	voterConfig.second_strategy = config.second_strategy
+			// }
+			self.updateVoterSet = function(model,config) {
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].second_strategy = config.second_strategy
+				}
+			}
+			self.select = function(config) {
+				if (config.second_strategy) {
+					self.choose.highlight("name", "2");
+				}
+			}
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
+		}
+
+		var strategy2 = new function() { // strategy 2 AKA strategic voters' strategy
+			var self = this
+			self.name = "strategy"
+			self.list = [
+				{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
+				{name:"N", realname:"normalize", margin:5},
+				{name:"F", realname:"normalize frontrunners only", margin:5},
+				{name:"F+", realname:"best frontrunner", margin:5},
+				{name:"F-", realname:"not the worst frontrunner"}
+			];
+			self.onChoose = function(data){
+				// UPDATE CONFIG //
+				config.strategic = data.realname
+				for (var i = 0; i < maxVoters; i++) {
+					config.voterStrategies[i] = data.realname
+				}
+				var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+				var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
+				if (config.second_strategy) {
+					for(var i=0;i<config.voterStrategies.length;i++){
+						if (! not_f.includes(config.voterStrategies[i])){
+							turnOffFrontrunnerControls = false
+						}
+					}
+				}
+				var xlist = ["frontrunners","autoPoll","poll"]
+				var featureset = new Set(config.featurelist)
+				for (var i in xlist){
+					var xi = xlist[i]
+					if ( ! turnOffFrontrunnerControls) {
+						featureset.add(xi)
+					} else {
+						featureset.delete(xi)
+					}
+				}
+				if (config.autoPoll == "Auto") {
+					var xlist = ["frontrunners","poll"]
+					for (var i in xlist){
+						var xi = xlist[i]
+						featureset.delete(xi)
+					}
+				}
+				config.featurelist = Array.from(featureset)
+
+				// UPDATE MODEL //
+				self.configureModelAndMenu(model,config)
+				self.updateVoterSet(model,config)
+				_showHideMenus()
+				model.update();
+			};
+			self.choose = new ButtonGroup({
+				label: "what's voters' 2nd strategy?",
+				width: 40,
+				data: self.list,
+				onChoose: self.onChoose
+			});
+			self.configureVoterGroup = function(voterConfig,config,i) {
+				voterConfig.strategy = config.voterStrategies[i]
+			}
+			self.configureModelAndMenu = function(model,config){
+				model.strategic = config.strategic
+			}
+			self.updateVoterSet = function(model,config) {
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].strategy = config.voterStrategies[i]
+				}
+			}
+			self.select = function(config) {
+				self.choose.highlight("realname", config.strategic);
 			}
 			document.querySelector("#left").appendChild(self.choose.dom);
 			doms[self.name] = self.choose.dom
@@ -935,114 +1071,7 @@ function main(config){
 		}
 
 
-
-
-
-
-
-
-		// Is there a 2nd strategy?
-		var second_strategy = [
-			{realname: "opton for 2nd strategy", name:"2"}
-		];
-		var onChoose_second_strategy = function(data){
-			// UPDATE MENU //
-			var xlist = ["strategy","percentstrategy"]
-			var featureset = new Set(config.featurelist)
-			for (var i in xlist){
-				var xi = xlist[i]
-				if (data.isOn) {
-					featureset.add(xi)
-					doms[xi].hidden = false
-				} else {
-					featureset.delete(xi)
-					doms[xi].hidden = true
-				}
-			}
-			// UPDATE CONFIG
-			config.featurelist = Array.from(featureset)
-			var b = data.isOn
-			config.second_strategy = b
-			// UPDATE MODEL
-			model.second_strategy = b
-			for(var i=0;i<model.voters.length;i++){
-				model.voters[i].second_strategy = b
-			}
-			model.update();
-		};
-		window.choose_second_strategy = new ButtonGroup({
-			label: "",
-			width: 40,
-			data: second_strategy,
-			onChoose: onChoose_second_strategy,
-			isCheckbox: true
-		});
-		document.querySelector("#left").appendChild(choose_second_strategy.dom);
-		doms["second strategy"] = choose_second_strategy.dom
 		
-
-
-
-
-		
-		// strategy
-		
-		var strategyOn = [
-			{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
-			{name:"N", realname:"normalize", margin:5},
-			{name:"F", realname:"normalize frontrunners only", margin:5},
-			{name:"F+", realname:"best frontrunner", margin:5},
-			{name:"F-", realname:"not the worst frontrunner"}
-		];
-		// old ones
-		// {name:"FL", realname:"justfirstandlast", margin:5},
-		// {name:"T", realname:"threshold"},
-		// {name:"SNTF", realname:"starnormfrontrunners"}
-			
-		
-		var onChooseVoterStrategyOn = function(data){
-
-			// UPDATE MENU //
-			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
-			for(var i=0;i<model.voters.length;i++){
-				if (! not_f.includes(config.voterStrategies[i])) turnOffFrontrunnerControls = false
-			}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
-			
-			var xlist = ["frontrunners","autoPoll","poll"]
-			var featureset = new Set(config.featurelist)
-			for (var i in xlist){
-				var xi = xlist[i]
-				if ( ! turnOffFrontrunnerControls) {
-					featureset.add(xi)
-					doms[xi].hidden = false
-				} else {
-					featureset.delete(xi)
-					doms[xi].hidden = true
-				}
-			}
-
-			// UPDATE CONFIG //
-			config.featurelist = Array.from(featureset)
-			for (var i = 0; i < maxVoters; i++) {
-				config.voterStrategies[i] = data.realname
-			}
-
-			// UPDATE MODEL //
-			for(var i=0;i<model.voters.length;i++){
-				model.voters[i].strategy = config.voterStrategies[i]
-			}
-			// no reset...
-			model.update();
-		};
-		window.chooseVoterStrategyOn = new ButtonGroup({
-			label: "what's voters' 2nd strategy?",
-			width: 40,
-			data: strategyOn,
-			onChoose: onChooseVoterStrategyOn
-		});
-		document.querySelector("#left").appendChild(chooseVoterStrategyOn.dom);
-		doms["strategy"] = chooseVoterStrategyOn.dom
 
 		if(0){
 
@@ -1378,7 +1407,7 @@ function main(config){
 		
 		// gear config - decide which menu items to do
 
-		// var allnames = ["systems","howManyVoterGroups","howManyCandidates","strategy","percentstrategy","strategyOne","frontrunners","poll","yee"] // not "save"
+		// var allnames = ["systems","howManyVoterGroups","howManyCandidates","strategy","percentstrategy","unstrategic","frontrunners","poll","yee"] // not "save"
 		var gearconfig = []
 		for (i in allnames) gearconfig.push({name:i,realname:allnames[i],margin:1})
 
@@ -1710,17 +1739,12 @@ function main(config){
 		// seems that we update the MENU based on the model sometimes and the config other times.
 		// Select the MENU!
 		var selectMENU = function(){
-			items.map(x=>
-				x.select(config)
-			)
+			items.map(x=> {
+				if(x.select) x.select(config)
+			})
 			if(window.chooseVoterStrategyOn) {
 				if (model.voters[0].strategy != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
 					chooseVoterStrategyOn.highlight("realname", model.voters[0].strategy);
-				}
-			}
-			if(window.choose_second_strategy) {
-				if (config.second_strategy) {
-					choose_second_strategy.highlight("name", "2");
 				}
 			}
 			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
