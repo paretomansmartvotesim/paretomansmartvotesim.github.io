@@ -1,19 +1,46 @@
-window.FULL_SANDBOX = window.FULL_SANDBOX || false;
-window.HACK_BIG_RANGE = true;
-
-window.ONLY_ONCE = false;
-
 function main(config){
 	// First we load the config,
-	// Then we configure the model, the voterset, and the menu.
-	// Configuring means getting ready for the voter and candidate creation.
-	// Then we initialize the model and the voterset.
 	// Then we update the model and menu.
 	// Then wait for mouse events.
 
-	// ONCE.
-	if(ONLY_ONCE) return;
-	ONLY_ONCE=true;
+
+		// DEFAULTS
+
+		// helper
+		var all_candidate_names = Object.keys(Candidate.graphics)
+		var defaults = {
+			configversion:1,
+			sandboxsave: false,
+			featurelist: ["systems"],
+			hidegearconfig: false,
+			description: "",
+			keyyee: "off",
+			snowman: false, // section
+			x_voters: false,
+			oneVoter: false,
+			system: "FPTP", // section
+			rbsystem: "Tideman",
+			numOfCandidates: 3,
+			numVoterGroups: 1,
+			xNumVoterGroups: 4,
+			howManyVoterGroupsRealName: "One Group",
+			spread_factor_voters: 1,
+			arena_size: 300,
+			median_mean: 1,
+			utility_shape: "linear",
+			arena_border: 2,
+			preFrontrunnerIds: ["square","triangle"],
+			autoPoll: "Manual",
+			// primaries: "No",
+			unstrategic: "zero strategy. judge on an absolute scale.",
+			strategic: "zero strategy. judge on an absolute scale.",
+			second_strategy: true,
+			yeefilter: all_candidate_names,
+			computeMethod: "ez",
+			pixelsize: 60,
+			optionsForElection: {sidebar:true} // sandboxes have this default
+
+		}
 
 	// READ URL
 	// Look at the URL and see if we are loading a saved model
@@ -104,50 +131,8 @@ function main(config){
 			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
 		}
 
-		// helper
-		var all_candidate_names = Object.keys(Candidate.graphics)
 
-		// DEFAULTS
-		
-		// defaults that are not needed in Model.js (only in main_sandbox.js)
-		_fillInDefaults(config, {
-			configversion:1,
-			sandboxsave: false,
-			featurelist: ["systems"],
-			hidegearconfig: false,
-			description: "",
-			keyyee: "off"
-		})
-
-		_fillInDefaults(config, {
-			snowman: false,
-			x_voters: false,
-			oneVoter: false
-		})
-
-		_fillInDefaults(config, {
-			system: "FPTP",
-			rbsystem: "Tideman",
-			numOfCandidates: 3,
-			numVoterGroups: 1,
-			xNumVoterGroups: 4,
-			howManyVoterGroupsRealName: "One Group",
-			spread_factor_voters: 1,
-			arena_size: 300,
-			median_mean: 1,
-			utility_shape: "linear",
-			arena_border: 2,
-			preFrontrunnerIds: ["square","triangle"],
-			autoPoll: "Manual",
-			// primaries: "No",
-			unstrategic: "zero strategy. judge on an absolute scale.",
-			strategic: "zero strategy. judge on an absolute scale.",
-			second_strategy: true,
-			yeefilter: all_candidate_names,
-			computeMethod: "ez",
-			pixelsize: 60,
-			optionsForElection: {sidebar:true} // sandboxes have this default
-		})
+		_fillInDefaults(config, defaults)
 
 
 
@@ -173,11 +158,9 @@ function main(config){
 
 			// configure the model and the menu
 			// Based on config... what should be what?
-			_configureModelAndMenu()
+			_configureMM()
 			_copySomeAttributes(model,config,  // This set of attributes is copied from config to model
 				[
-				"preFrontrunnerIds",
-				"autoPoll",
 				// "primaries",
 				"computeMethod",
 				"pixelsize",
@@ -187,23 +170,20 @@ function main(config){
 				"utility_shape",
 				"arena_border",
 				"yeefilter",
-				"strategic",
 				"optionsForElection"
 			])			
-			model.yeeobject = expYeeObject(config,model)
-			model.yeeon = (model.yeeobject != undefined) ? true : false
 			
 			// init model
 			_reincarnateDraggables() // configure and initialize voterSet, candidateSet, and voterCenter
 
-			// update Menu
-			_showHideMenus()
-
 			// update VoterSet
-			_updateVoterSet()
+			//_updateVoterSet() // dont need this
 
 			// update model
 			model.update()
+
+			// update Menu
+			_showHideMenus()
 
 		};
 		model.onDraw = function(){
@@ -226,19 +206,19 @@ function main(config){
 			}
 		};
 
-		function _configureModelAndMenu() {
+		function _configureMM() {
 			items.map(x=> {
-				if(x.configureModelAndMenu != undefined) x.configureModelAndMenu(model,config) // init writes to model and reads from config.  Sanity rule: init does not read from model.
+				if(x.configureMM != undefined) x.configureMM(model,config) // init writes to model and reads from config.  Sanity rule: init does not read from model.
 			})
 		}
 		function _showHideMenus() {
 			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
 		}
-		function _updateVoterSet() {
-			items.map(i=> {
-				if(i.updateVoterSet != undefined) i.updateVoterSet(model,config) 
-			})
-		}
+		// function _updateVoterSet() {
+		// 	items.map(i=> {
+		// 		if(i.updateVoterSet != undefined) i.updateVoterSet(model,config) 
+		// 	})
+		// }
 
 		function _reincarnateDraggables() { // configure and initialize voterSet, candidateSet, and voterCenter.  And 
 			
@@ -250,7 +230,7 @@ function main(config){
 			configureVoterSet(config).map(x => 	// configure voterSet
 				model.addVoters(x)				// init voters
 			)
-			howManyCandidates.configureCandidateSet(config).map(x =>  // configure candidateSet
+			howManyCandidates.configureCS(config).map(x =>  // configure candidateSet
 				model.addCandidate(x) 	// init candidates
 			)
 			model.addVoterCenter() // init voterCenter
@@ -265,16 +245,13 @@ function main(config){
 				if(x.configureVoterSet) x.configureVoterSet(voterSetConfig,config)
 			})
 			for(var i=0; i<config.numVoterGroups; i++){
-				var voterConfig = { // This set of attributes requires further computing
-					type: systems.listByName(config).voter
-				}
+				var voterConfig = {}
 				_copySomeAttributes(voterConfig,config,[ // This set of attributes is just copied over
-					"preFrontrunnerIds",
 					"spread_factor_voters"
 				])
 				Object.assign(voterSetConfig[i], voterConfig)
 				items.map(x=>{ // configure each voter group
-					if(x.configureVoterGroup) x.configureVoterGroup(voterSetConfig[i],config,i)
+					if(x.configureVG) x.configureVG(voterSetConfig[i],config,i)
 				})
 			}
 			return voterSetConfig
@@ -415,10 +392,8 @@ function main(config){
 					var xi = xlist[i]
 					if ( turnOnRBVote) {
 						featureset.add(xi)
-						doms[xi].hidden = false
 					} else {
 						featureset.delete(xi)
-						doms[xi].hidden = true
 					}
 				}
 
@@ -427,7 +402,8 @@ function main(config){
 				config.featurelist = Array.from(featureset)
 
 				// UPDATE MODEL //
-				self.configureModelAndMenu(model,config)
+				self.configureMM(model,config)
+				_showHideMenus()
 				model.update();
 
 			};
@@ -437,7 +413,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.configureModelAndMenu= function(model,config) {
+			self.configureMM= function(model,config) {
 				var s = self.listByName(config)
 				model.election = s.election
 				model.system = config.system;
@@ -447,6 +423,9 @@ function main(config){
 					v.setType( s.voter ); // calls "new VoterType(model)"
 				}) // this only matters to model.onInit if the number of voters doesn't change
 				model.pollResults = undefined
+			}
+			self.configureVG = function(voterConfig,config,i) {
+				voterConfig.type = self.listByName(config).voter
 			}
 			self.select = function(config) {
 				self.choose.highlight("name", config.system)
@@ -488,7 +467,7 @@ function main(config){
 				config.rbsystem = data.name;
 
 				// UPDATE MODEL //
-				self.configureModelAndMenu(model,config)
+				self.configureMM(model,config)
 				model.update();
 
 			};
@@ -498,7 +477,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.configureModelAndMenu= function(model,config) {
+			self.configureMM= function(model,config) {
 				model.rbsystem = config.rbsystem
 				model.rbelection = self.listByName(config).rbelection
 				model.pollResults = undefined
@@ -572,7 +551,7 @@ function main(config){
 
 
 				// UPDATE MENU AND MODEL//
-				self.configureModelAndMenu(model,config)
+				self.configureMM(model,config)
 				_reincarnateDraggables()
 				model.update()
 				// model.reset();
@@ -585,7 +564,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.configureModelAndMenu = function(model,config) {
+			self.configureMM = function(model,config) {
 
 				// UPDATE MENU //
 				// Make the MENU look correct.  The MENU is not part of the "model".
@@ -599,9 +578,9 @@ function main(config){
 				// reflect the number of voters
 				for(var i=0;i<(maxVoters-1);i++) {
 					if (i < config.numVoterGroups) {
-						chooseyeeobject.dom.childNodes[8+i].hidden=false
+						yeeobject.choose.dom.childNodes[8+i].hidden=false
 					} else {
-						chooseyeeobject.dom.childNodes[8+i].hidden=true
+						yeeobject.choose.dom.childNodes[8+i].hidden=true
 					}
 				}
 				
@@ -690,22 +669,22 @@ function main(config){
 				config.voterPositions = null;
 	
 				// UPDATE MODEL //
-				self.configureModelAndMenu(model,config)
+				self.configureMM(model,config)
 				// reset!
 				_reincarnateDraggables()
 				model.update();
 				setInPosition();
 			}		
-			self.configureModelAndMenu= function(model,config) {
+			self.configureMM= function(model,config) {
 				// UPDATE MENU //
 				for (i in percentstrategy.choose.sliders) percentstrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 				for (i in group_count.choose.sliders) group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 				for (i in group_spread.choose.sliders) group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 				for(var i=0;i<maxVoters-1;i++) {
 					if (i < config.numVoterGroups) {
-						chooseyeeobject.dom.childNodes[8+i].hidden=false
+						yeeobject.choose.dom.childNodes[8+i].hidden=false
 					} else {
-						chooseyeeobject.dom.childNodes[8+i].hidden=true
+						yeeobject.choose.dom.childNodes[8+i].hidden=true
 					}
 				}
 			}
@@ -741,7 +720,7 @@ function main(config){
 				model.update();
 				setInPosition();
 			}		
-			self.configureVoterGroup = function(voterConfig,config,i) {
+			self.configureVG = function(voterConfig,config,i) {
 				voterConfig.group_count = config.voter_group_count[i]
 			}
 			self.choose = new sliderSet({
@@ -779,7 +758,7 @@ function main(config){
 				model.update();
 				setInPosition();
 			}
-			self.configureVoterGroup = function(voterConfig,config,i) {
+			self.configureVG = function(voterConfig,config,i) {
 				voterConfig.group_spread = config.voter_group_spread[i]
 			}
 			self.choose = new sliderSet({
@@ -811,7 +790,7 @@ function main(config){
 				{name:"four", num:4, margin:4},
 				{name:"five", num:5}
 			];
-			self.configureCandidateSet = function(config) { // expanding upon what the button means for the model
+			self.configureCS = function(config) { // expanding upon what the button means for the model
 				addCandidates = []
 				// Candidates, in a circle around the center.
 				var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
@@ -841,7 +820,7 @@ function main(config){
 				config.candidatePositions = null;
 
 				// UPDATE MODEL //
-				self.configureModelAndMenu(model,config)
+				self.configureMM(model,config)
 				_reincarnateDraggables()
 				model.update()
 				// model.reset();
@@ -854,11 +833,9 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			
-			self.configureModelAndMenu= function(model,config) {
+			self.configureMM= function(model,config) {
 				model.numOfCandidates = config.numOfCandidates
 			}
-
 			self.select = function(config) {
 				self.choose.highlight("num", config.numOfCandidates);
 			}
@@ -878,39 +855,15 @@ function main(config){
 				{name:"F-", realname:"not the worst frontrunner"}
 			];
 			self.onChoose = function(data){
-				// UPDATE CONFIG //
+				// LOAD CONFIG //
 				config.unstrategic = data.realname;
-				var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-				var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
-				if (config.second_strategy) {
-					for(var i=0;i<config.voterStrategies.length;i++){
-						if (! not_f.includes(config.voterStrategies[i])){
-							turnOffFrontrunnerControls = false
-						}
-					}
+				_loadConfigForStrategyButtons(config)
+				// CONFIGURE MM //
+				self.configureMM(model,config)
+				// UPDATE //
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].unstrategic = config.unstrategic
 				}
-				var xlist = ["frontrunners","autoPoll","poll"]
-				var featureset = new Set(config.featurelist)
-				for (var i in xlist){
-					var xi = xlist[i]
-					if ( ! turnOffFrontrunnerControls) {
-						featureset.add(xi)
-					} else {
-						featureset.delete(xi)
-					}
-				}
-				if (config.autoPoll == "Auto") {
-					var xlist = ["frontrunners","poll"]
-					for (var i in xlist){
-						var xi = xlist[i]
-						featureset.delete(xi)
-						doms[xi].hidden = true
-					}
-				}
-				config.featurelist = Array.from(featureset)
-				// UPDATE MODEL //
-				self.configureModelAndMenu(model,config)
-				self.updateVoterSet(model,config)
 				_showHideMenus()
 				model.update();
 			};
@@ -920,16 +873,11 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.configureModelAndMenu = function(model,config){
+			self.configureMM = function(model,config){
 				model.unstrategic = config.unstrategic
 			}
-			self.configureVoterGroup = function(voterConfig,config,i) {
+			self.configureVG = function(voterConfig,config,i) {
 				voterConfig.unstrategic = config.unstrategic
-			}
-			self.updateVoterSet = function(model,config) {
-				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].unstrategic = config.unstrategic
-				}
 			}
 			self.select = function(config) {
 				self.choose.highlight("realname", config.unstrategic);
@@ -939,6 +887,36 @@ function main(config){
 			items.push(self)
 		}
 
+		function _loadConfigForStrategyButtons(config) {			
+			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
+			if (config.second_strategy) {
+				for(var i=0;i<config.voterStrategies.length;i++){
+					if (! not_f.includes(config.voterStrategies[i])){
+						turnOffFrontrunnerControls = false
+					}
+				}
+			}
+			var xlist = ["frontrunners","autoPoll","poll"]
+			var featureset = new Set(config.featurelist)
+			for (var i in xlist){
+				var xi = xlist[i]
+				if ( ! turnOffFrontrunnerControls) {
+					featureset.add(xi)
+				} else {
+					featureset.delete(xi)
+				}
+			}
+			if (config.autoPoll == "Auto") {
+				var xlist = ["frontrunners","poll"]
+				for (var i in xlist){
+					var xi = xlist[i]
+					featureset.delete(xi)
+				}
+			}
+			config.featurelist = Array.from(featureset)
+		}
+
 		var enableStrategy2 = new function() { // Is there a 2nd strategy?
 			var self = this
 			self.name = "second strategy"
@@ -946,7 +924,7 @@ function main(config){
 				{realname: "opton for 2nd strategy", name:"2"}
 			];
 			self.onChoose = function(data){
-				// UPDATE CONFIG //
+				// LOAD CONFIG //
 				var xlist = ["strategy","percentstrategy"]
 				var featureset = new Set(config.featurelist)
 				for (var i in xlist){
@@ -959,12 +937,15 @@ function main(config){
 				}
 				config.featurelist = Array.from(featureset)
 				config.second_strategy = data.isOn
+				_loadConfigForStrategyButtons(config)
 				
-				self.configureModelAndMenu(model,config)
-				// UPDATE MENU
+				self.configureMM(model,config)
+				// CONFIGURE MM
 				_showHideMenus()
-				// UPDATE MODEL
-				self.updateVoterSet(model,config)
+				// UPDATE
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].second_strategy = config.second_strategy
+				}
 				model.update();
 			};
 			self.choose = new ButtonGroup({
@@ -974,17 +955,12 @@ function main(config){
 				onChoose: self.onChoose,
 				isCheckbox: true
 			});
-			self.configureModelAndMenu = function(model,config){
+			self.configureMM = function(model,config){
 				model.second_strategy = config.second_strategy
 			}
-			// self.configureVoterGroup = function(voterConfig,config,i) { // maybe not needed
+			// self.configureVG = function(voterConfig,config,i) { // maybe not needed
 			// 	voterConfig.second_strategy = config.second_strategy
 			// }
-			self.updateVoterSet = function(model,config) {
-				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].second_strategy = config.second_strategy
-				}
-			}
 			self.select = function(config) {
 				if (config.second_strategy) {
 					self.choose.highlight("name", "2");
@@ -1011,37 +987,13 @@ function main(config){
 				for (var i = 0; i < maxVoters; i++) {
 					config.voterStrategies[i] = data.realname
 				}
-				var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-				var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
-				if (config.second_strategy) {
-					for(var i=0;i<config.voterStrategies.length;i++){
-						if (! not_f.includes(config.voterStrategies[i])){
-							turnOffFrontrunnerControls = false
-						}
-					}
-				}
-				var xlist = ["frontrunners","autoPoll","poll"]
-				var featureset = new Set(config.featurelist)
-				for (var i in xlist){
-					var xi = xlist[i]
-					if ( ! turnOffFrontrunnerControls) {
-						featureset.add(xi)
-					} else {
-						featureset.delete(xi)
-					}
-				}
-				if (config.autoPoll == "Auto") {
-					var xlist = ["frontrunners","poll"]
-					for (var i in xlist){
-						var xi = xlist[i]
-						featureset.delete(xi)
-					}
-				}
-				config.featurelist = Array.from(featureset)
+				_loadConfigForStrategyButtons(config)
 
 				// UPDATE MODEL //
-				self.configureModelAndMenu(model,config)
-				self.updateVoterSet(model,config)
+				self.configureMM(model,config)
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].strategy = config.voterStrategies[i]
+				}
 				_showHideMenus()
 				model.update();
 			};
@@ -1051,27 +1003,22 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			self.configureVoterGroup = function(voterConfig,config,i) {
+			self.configureVG = function(voterConfig,config,i) {
 				voterConfig.strategy = config.voterStrategies[i]
 			}
-			self.configureModelAndMenu = function(model,config){
+			self.configureMM = function(model,config){
 				model.strategic = config.strategic
-			}
-			self.updateVoterSet = function(model,config) {
-				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].strategy = config.voterStrategies[i]
-				}
 			}
 			self.select = function(config) {
 				self.choose.highlight("realname", config.strategic);
+				// if (config.voterStrategies[0] != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
+				// 	self.choose.highlight("realname", config.voterStrategies[0]);
+				// }
 			}
 			document.querySelector("#left").appendChild(self.choose.dom);
 			doms[self.name] = self.choose.dom
 			items.push(self)
 		}
-
-
-		
 
 		if(0){
 
@@ -1109,13 +1056,14 @@ function main(config){
 			self.name = "percentstrategy"
 
 			self.onChoose = function(slider,n) {
-				// UPDATE CONFIG //
+				// LOAD CONFIG //
 				config.voterPercentStrategy[n] = slider.value;
+				// _loadConfigForStrategyButtons(config) // not necessary
 				// UPDATE MODEL //
 				model.voters[n].percentStrategy = config.voterPercentStrategy[n]
 				model.update();
 			}		
-			self.configureVoterGroup = function(voterConfig,config,i) {
+			self.configureVG = function(voterConfig,config,i) {
 				voterConfig.percentStrategy = config.voterPercentStrategy[i]
 			}
 			self.choose = new sliderSet({
@@ -1161,284 +1109,289 @@ function main(config){
 			// doms["primaries"] = choosePrimaries.dom
 		}
 
-
-		// do a poll to find frontrunner
-		
-		var autoPoll = [
-			{name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
-			{name:"Manual",realname:"Press the poll button to find the frontrunners once."}
-		];
-		var onChooseAutoPoll = function(data){
-
-			// UPDATE MENU //
-			var xlist = ["poll","frontrunners"]
-			var featureset = new Set(config.featurelist)
-			for (var i in xlist){
-				var xi = xlist[i]
-				if (data.name == "Manual") {
-					featureset.add(xi)
-					doms[xi].hidden = false
-				} else {
-					featureset.delete(xi)
-					doms[xi].hidden = true
+		var autoPoll = new function() { // do a poll to find frontrunner
+			var self = this
+			self.name = "autoPoll"
+			self.list = [
+				{name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
+				{name:"Manual",realname:"Press the poll button to find the frontrunners once."}
+			];
+			self.onChoose = function(data){
+				// LOAD CONFIG //
+				config.autoPoll = data.name
+				var xlist = ["poll","frontrunners"]
+				var featureset = new Set(config.featurelist)
+				for (var i in xlist){
+					var xi = xlist[i]
+					if (data.name == "Manual") {
+						featureset.add(xi)
+					} else {
+						featureset.delete(xi)
+					}
 				}
+				config.featurelist = Array.from(featureset)
+				// CONFIGURE AND UPDATE MODEL AND MENUS//
+				self.configureMM(model,config)
+				_showHideMenus()
+				model.update();
+			};
+			self.configureMM = function(model,config){
+				model.autoPoll = config.autoPoll
 			}
-
-			// UPDATE CONFIG //
-			config.featurelist = Array.from(featureset)
-			config.autoPoll = data.name
-
-			// UPDATE MODEL //
-			model.autoPoll = data.name
-			model.update()
-
-		};
-		window.chooseAutoPoll = new ButtonGroup({
-			label: "AutoPoll to find new frontrunner:",
-			width: 72,
-			data: autoPoll,
-			onChoose: onChooseAutoPoll
-		});
-		document.querySelector("#left").appendChild(chooseAutoPoll.dom);
-		doms["autoPoll"] = chooseAutoPoll.dom
-		
-		
-		
-		// frontrunners
-		
-		var h1 = function(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
-		var frun = [
-			{name:h1("square"),realname:"square",margin:5},
-			{name:h1("triangle"),realname:"triangle",margin:5},
-			{name:h1("hexagon"),realname:"hexagon",margin:5},
-			{name:h1("pentagon"),realname:"pentagon",margin:5},
-			{name:h1("bob"),realname:"bob"}
-		];
-		var onChooseFrun = function(data){
-
-			// UPDATE CONFIG //
-			var preFrontrunnerSet = new Set(config.preFrontrunnerIds)
-			if (data.isOn) {
-				preFrontrunnerSet.add(data.realname)
-			} else {
-				preFrontrunnerSet.delete(data.realname)
+			self.select = function(config) {
+				self.choose.highlight("name", config.autoPoll)
 			}
-			config.preFrontrunnerIds = Array.from(preFrontrunnerSet)
-
-			// UPDATE MODEL
-			// no reset...
-			model.preFrontrunnerIds = config.preFrontrunnerIds
-			model.update();
-
-		};
-		window.chooseFrun = new ButtonGroup({
-			label: "who are the frontrunners?",
-			width: 40,
-			data: frun,
-			onChoose: onChooseFrun,
-			isCheckbox: true
-		});
-		document.querySelector("#left").appendChild(chooseFrun.dom);
-		doms["frontrunners"] = chooseFrun.dom
-		
-		
-		
-		// do a poll to find frontrunner
-		
-		var poll = [
-			{name:"Poll",margin:5},
-			{name:"Poll 2",realname:"Find the top 2 frontrunners."}
-		];
-		var onChoosePoll = function(data){
-
-			// get poll results
-			if (data.name == "Poll") { // get last poll
-				var won = model.result.winners
-			} else { // do new poll
-				model.dotop2 = true // not yet implemented
-				model.update()
-				model.dotop2 = false
-				var won = model.top2
-				model.top2 = []
-			}
-			
-			// UPDATE MENU //
-			if(window.chooseFrun) chooseFrun.highlight("realname", won);
-			
-			// UPDATE CONFIG //
-			config.preFrontrunnerIds = won
-
-			// UPDATE MODEL //
-			model.preFrontrunnerIds = config.preFrontrunnerIds
-			model.update();
-
-		};
-		window.choosePoll = new ButtonGroup({
-			label: "Poll to find new frontrunner:",
-			width: 52,
-			data: poll,
-			onChoose: onChoosePoll,
-			justButton: true
-		});
-		document.querySelector("#left").appendChild(choosePoll.dom);
-		doms["poll"] = choosePoll.dom
-
-
-
-		
-		
-		// yee
-
-		var h1 = function(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
-		var yeeobject = [
-			{name:h1("square"),realname:"square",keyyee:"square",kindayee:"can",margin:4},
-			{name:h1("triangle"),realname:"triangle",keyyee:"triangle",kindayee:"can",margin:4},
-			{name:h1("hexagon"),realname:"hexagon",keyyee:"hexagon",kindayee:"can",margin:4},
-			{name:h1("pentagon"),realname:"pentagon",keyyee:"pentagon",kindayee:"can",margin:4},
-			{name:h1("bob"),realname:"bob",keyyee:"bob",kindayee:"can",margin:28},
-			{name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5},
-			{name:"A",realname:"all voters",keyyee:"mean",kindayee:"center",margin:28},
-			{name:"1",realname:"first voter group",kindayee:"voter",keyyee:0,margin:4},
-			{name:"2",realname:"second voter group",kindayee:"voter",keyyee:1,margin:4},
-			{name:"3",realname:"third voter group",kindayee:"voter",keyyee:2,margin:4},
-			{name:"4",realname:"fourth voter group",kindayee:"voter",keyyee:3,margin:4},
-			{name:"5",realname:"fifth voter group",kindayee:"voter",keyyee:4,margin:4},
-			{name:"6",realname:"sixth voter group",kindayee:"voter",keyyee:5,margin:4},
-			{name:"7",realname:"seventh voter group",kindayee:"voter",keyyee:6,margin:4},
-			{name:"8",realname:"eighth voter group",kindayee:"voter",keyyee:7,margin:4},
-			{name:"9",realname:"ninth voter group",kindayee:"voter",keyyee:8,margin:8},
-			
-		];
-		
-		function expYeeObject(config,model) {
-			// Yee diagram
-			if (config.kindayee == "can") {
-				return model.candidatesById[config.keyyee]
-			} else if (config.kindayee=="voter") {
-				return model.voters[config.keyyee]
-			} else if (config.kindayee=="off") {
-				return undefined
-			} else if (config.kindayee=="center") { 
-				return model.voterCenter
-			} else { // if yeeobject is not defined
-				return undefined
-			}
+			self.choose = new ButtonGroup({
+				label: "AutoPoll to find new frontrunner:",
+				width: 72,
+				data: self.list,
+				onChoose: self.onChoose
+			});
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
 		}
-		var onChooseyeeobject = function(data){
+		
+		function _iconButton(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
 
-			// UPDATE MENU //
-			var xlist = ["choose_pixel_size","yeefilter"]
-			var featureset = new Set(config.featurelist)
-			for (var i in xlist){
-				var xi = xlist[i]
-				if (model.yeeobject) {
-					featureset.add(xi)
-					doms[xi].hidden = false
+		var frun = new function() { // frontrunners
+			var self = this
+			self.name = "frontrunners"
+			self.list = [
+				{name:_iconButton("square"),realname:"square",margin:5},
+				{name:_iconButton("triangle"),realname:"triangle",margin:5},
+				{name:_iconButton("hexagon"),realname:"hexagon",margin:5},
+				{name:_iconButton("pentagon"),realname:"pentagon",margin:5},
+				{name:_iconButton("bob"),realname:"bob"}
+			];
+			self.onChoose = function(data){
+				// LOAD CONFIG //
+				var preFrontrunnerSet = new Set(config.preFrontrunnerIds)
+				if (data.isOn) {
+					preFrontrunnerSet.add(data.realname)
 				} else {
-					featureset.delete(xi)
-					doms[xi].hidden = true
+					preFrontrunnerSet.delete(data.realname)
+				}
+				config.preFrontrunnerIds = Array.from(preFrontrunnerSet)
+				// CONFIGURE AND UPDATE MODEL //
+				self.configureMM(model,config)
+				model.update();
+			};
+			self.configureMM = function(model,config){
+				model.preFrontrunnerIds = config.preFrontrunnerIds
+			}
+			self.configureVG = function(voterConfig,config,i) {
+				voterConfig.preFrontrunnerIds = config.preFrontrunnerIds
+			}
+			self.select = function(config) {
+				self.choose.highlight("realname", model.preFrontrunnerIds);
+			}
+			self.choose = new ButtonGroup({
+				label: "who are the frontrunners?",
+				width: 40,
+				data: self.list,
+				onChoose: self.onChoose,
+				isCheckbox: true
+			});
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
+		}
+
+		var poll = new function() { // do a poll to find frontrunner
+			var self = this
+			self.name = "poll"
+			self.list = [
+				{name:"Poll",margin:5},
+				{name:"Poll 2",realname:"Find the top 2 frontrunners."}
+			];
+			self.onChoose = function(data){
+				// DO CALCULATIONS //
+				// get poll results
+				if (data.name == "Poll") { // get last poll
+					var won = model.result.winners
+				} else { // do new poll
+					model.dotop2 = true // not yet implemented
+					model.update()
+					model.dotop2 = false
+					var won = model.top2
+					model.top2 = []
+				}
+				// SHOW CALCULATIONS //
+				frun.choose.highlight("realname", won);
+				// UPDATE CONFIG //
+				config.preFrontrunnerIds = won
+				// CONFIGURE AND UPDATE MODEL //
+				model.preFrontrunnerIds = config.preFrontrunnerIds // no need to run this at model init
+				model.update();
+			};
+			self.choose = new ButtonGroup({
+				label: "Poll to find new frontrunner:",
+				width: 52,
+				data: self.list,
+				onChoose: self.onChoose,
+				justButton: true
+			});
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
+		}
+
+		var yeeobject = new function() { // yee
+			var self = this
+			self.name = "yee"
+			self.list = [
+				{name:_iconButton("square"),realname:"square",keyyee:"square",kindayee:"can",margin:4},
+				{name:_iconButton("triangle"),realname:"triangle",keyyee:"triangle",kindayee:"can",margin:4},
+				{name:_iconButton("hexagon"),realname:"hexagon",keyyee:"hexagon",kindayee:"can",margin:4},
+				{name:_iconButton("pentagon"),realname:"pentagon",keyyee:"pentagon",kindayee:"can",margin:4},
+				{name:_iconButton("bob"),realname:"bob",keyyee:"bob",kindayee:"can",margin:28},
+				{name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5},
+				{name:"A",realname:"all voters",keyyee:"mean",kindayee:"center",margin:28},
+				{name:"1",realname:"first voter group",kindayee:"voter",keyyee:0,margin:4},
+				{name:"2",realname:"second voter group",kindayee:"voter",keyyee:1,margin:4},
+				{name:"3",realname:"third voter group",kindayee:"voter",keyyee:2,margin:4},
+				{name:"4",realname:"fourth voter group",kindayee:"voter",keyyee:3,margin:4},
+				{name:"5",realname:"fifth voter group",kindayee:"voter",keyyee:4,margin:4},
+				{name:"6",realname:"sixth voter group",kindayee:"voter",keyyee:5,margin:4},
+				{name:"7",realname:"seventh voter group",kindayee:"voter",keyyee:6,margin:4},
+				{name:"8",realname:"eighth voter group",kindayee:"voter",keyyee:7,margin:4},
+				{name:"9",realname:"ninth voter group",kindayee:"voter",keyyee:8,margin:8},
+			];
+			self.expYeeObject = function(config,model) {
+				// Yee diagram
+				if (config.kindayee == "can") {
+					return model.candidatesById[config.keyyee]
+				} else if (config.kindayee=="voter") {
+					return model.voters[config.keyyee]
+				} else if (config.kindayee=="off") {
+					return undefined
+				} else if (config.kindayee=="center") { 
+					return model.voterCenter
+				} else { // if yeeobject is not defined
+					return undefined
 				}
 			}
+			self.onChoose = function(data){
+				// LOAD CONFIG //
+				config.kindayee = data.kindayee
+				config.keyyee = data.keyyee
+				var yeeob = self.expYeeObject(config,model)
+				var xlist = ["choose_pixel_size","yeefilter"]
+				var featureset = new Set(config.featurelist)
+				for (var i in xlist){
+					var xi = xlist[i]
+					if (yeeob) {
+						featureset.add(xi)
+					} else {
+						featureset.delete(xi)
+					}
+				}
+				config.featurelist = Array.from(featureset)
 
-			// UPDATE CONFIG //
-			config.featurelist = Array.from(featureset)
-			config.kindayee = data.kindayee
-			config.keyyee = data.keyyee
-
-			// UPDATE MODEL //
-			model.yeeobject = expYeeObject(config,model)
-			model.yeeon = (model.yeeobject != undefined) ? true : false
-			model.update();
-
-		};
-		window.chooseyeeobject = new ButtonGroup({
-			label: "which object for yee map?",
-			width: 20,
-			data: yeeobject,
-			onChoose: onChooseyeeobject
-		});
-		chooseyeeobject.dom.childNodes[6].style.width = "68px"
-		chooseyeeobject.dom.setAttribute("id","yee")
-		document.querySelector("#left").appendChild(chooseyeeobject.dom);
-		doms["yee"] = chooseyeeobject.dom
-		
-		
-		
-		
-		// yee filter
-
-		var h1 = function(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
-		var yeefilter = [
-			{name:h1("square"),realname:"square",keyyee:"square",margin:4},
-			{name:h1("triangle"),realname:"triangle",keyyee:"triangle",margin:4},
-			{name:h1("hexagon"),realname:"hexagon",keyyee:"hexagon",margin:4},
-			{name:h1("pentagon"),realname:"pentagon",keyyee:"pentagon",margin:4},
-			{name:h1("bob"),realname:"bob",keyyee:"bob"}
-		];
-		var onChooseyeefilter = function(data){
-			
-			// UPDATE CONFIG //
-			var yeefilterset = new Set(config.yeefilter)
-			if (data.isOn) {
-				yeefilterset.add(data.realname)
-			} else {
-				yeefilterset.delete(data.realname)
+				// CONFIGURE AND UPDATE MODEL AND MENUS //
+				self.configureMM(model,config)
+				_showHideMenus()
+				model.update();
+			};
+			self.configureMM = function(model,config){
+				model.yeeobject = self.expYeeObject(config,model)
+				model.yeeon = (model.yeeobject != undefined) ? true : false
 			}
-			config.yeefilter = Array.from(yeefilterset)
-
-			// UPDATE MODEL //
-			model.yeefilter = config.yeefilter
-			model.update();
-
-		};
-		window.chooseyeefilter = new ButtonGroup({
-			label: "filter yee map?",
-			width: 20,
-			data: yeefilter,
-			onChoose: onChooseyeefilter,
-			isCheckbox: true
-		});
-		chooseyeefilter.dom.setAttribute("id","yeefilter")
-		document.querySelector("#left").appendChild(chooseyeefilter.dom);
-		doms["yeefilter"] = chooseyeefilter.dom
-		
-		
-		
-		
-		// gear config - decide which menu items to do
-
-		// var allnames = ["systems","howManyVoterGroups","howManyCandidates","strategy","percentstrategy","unstrategic","frontrunners","poll","yee"] // not "save"
-		var gearconfig = []
-		for (i in allnames) gearconfig.push({name:i,realname:allnames[i],margin:1})
-
-		var onChoosegearconfig = function(data){
-
-			// UPDATE MENU //
-			var featureset = new Set(config.featurelist)
-			if (data.isOn) {
-				featureset.add(data.realname)
-				doms[data.realname].hidden = false
-			} else {
-				featureset.delete(data.realname)
-				doms[data.realname].hidden = true
+			self.select = function(config) {
+				self.choose.highlight("keyyee", config.keyyee);
 			}
+			self.choose = new ButtonGroup({
+				label: "which object for yee map?",
+				width: 20,
+				data: self.list,
+				onChoose: self.onChoose
+			});
+			self.choose.dom.childNodes[6].style.width = "68px"
+			self.choose.dom.setAttribute("id","yee")
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
+		}
 
-			// UPDATE CONFIG //
-			config.featurelist = Array.from(featureset)
+		var yeefilter = new function() { 	// yee filter
+			var self = this
+			self.name = "yeefilter"
+			self.list = [
+				{name:_iconButton("square"),realname:"square",keyyee:"square",margin:4},
+				{name:_iconButton("triangle"),realname:"triangle",keyyee:"triangle",margin:4},
+				{name:_iconButton("hexagon"),realname:"hexagon",keyyee:"hexagon",margin:4},
+				{name:_iconButton("pentagon"),realname:"pentagon",keyyee:"pentagon",margin:4},
+				{name:_iconButton("bob"),realname:"bob",keyyee:"bob"}
+			];
+			self.onChoose = function(data){
+				// LOAD CONFIG //
+				var yeefilterset = new Set(config.yeefilter)
+				if (data.isOn) {
+					yeefilterset.add(data.realname)
+				} else {
+					yeefilterset.delete(data.realname)
+				}
+				config.yeefilter = Array.from(yeefilterset)
+				// CONFIGURE AND UPDATE MODEL //
+				self.configureMM(model,config)
+				model.update();
+			};
+			self.configureMM = function(model,config){
+				model.yeefilter = config.yeefilter
+			}
+			self.select = function(config) {
+				self.choose.highlight("realname", config.yeefilter);
+			}
+			self.choose = new ButtonGroup({
+				label: "filter yee map?",
+				width: 20,
+				data: self.list,
+				onChoose: self.onChoose,
+				isCheckbox: true
+			});
+			self.choose.dom.setAttribute("id","yeefilter")
+			document.querySelector("#left").appendChild(self.choose.dom);
+			doms[self.name] = self.choose.dom
+			items.push(self)
+		}
 
-		};
-		window.choosegearconfig = new ButtonGroup({
-			label: "which menu options are displayed?",
-			width: 18,
-			data: gearconfig,
-			onChoose: onChoosegearconfig,
-			isCheckbox: true
-		});
-		choosegearconfig.dom.hidden = true
-		document.querySelector("#left").insertBefore(choosegearconfig.dom,doms["systems"]);
+		var gearconfig = new function() { 	// gear config - decide which menu items to do
+			var self = this
+			// self.name = "gearconfig"
+			self.list = []
+			for (i in allnames) self.list.push({name:i,realname:allnames[i],margin:1})
+			self.onChoose = function(data){
+				// LOAD CONFIG //
+				var featureset = new Set(config.featurelist)
+				if (data.isOn) {
+					featureset.add(data.realname)
+					doms[data.realname].hidden = false
+				} else {
+					featureset.delete(data.realname)
+					doms[data.realname].hidden = true
+				}
+				config.featurelist = Array.from(featureset)
+				// CONFIGURE AND UPDATE MENU //
+				_showHideMenus()
+			};
+			self.select = function(config) {
+				self.choose.highlight("realname", config.featurelist);
+			}
+			self.choose = new ButtonGroup({
+				label: "which menu options are displayed?",
+				width: 18,
+				data: self.list,
+				onChoose: self.onChoose,
+				isCheckbox: true
+			});
+			self.choose.dom.hidden = true
+			document.querySelector("#left").insertBefore(self.choose.dom,doms["systems"]);
+			// doms[self.name] = self.choose.dom
+			items.push(self)
+		}
 
-
-
+		
 
 
 
@@ -1700,7 +1653,7 @@ function main(config){
 		var onChoosegearicon = function(data){
 			// UPDATE MENU //
 			if (data.isOn) {
-				choosegearconfig.dom.hidden = false
+				gearconfig.choose.dom.hidden = false
 				choosepresetconfig.dom.hidden = false
 				chooseComputeMethod.dom.hidden = false
 				choose_spread_factor_voters.dom.hidden = false
@@ -1708,7 +1661,7 @@ function main(config){
 				choose_median_mean.dom.hidden = false
 				choose_utility_shape.dom.hidden = false
 			} else {
-				choosegearconfig.dom.hidden = true
+				gearconfig.choose.dom.hidden = true
 				choosepresetconfig.dom.hidden = true
 				chooseComputeMethod.dom.hidden = true
 				choose_spread_factor_voters.dom.hidden = true
@@ -1724,7 +1677,7 @@ function main(config){
 			onChoose: onChoosegearicon,
 			isCheckbox: true
 		});
-		document.querySelector("#left").insertBefore(choosegearicon.dom,choosegearconfig.dom);
+		document.querySelector("#left").insertBefore(choosegearicon.dom,gearconfig.choose.dom);
 		
 		if(config.hidegearconfig) choosegearicon.dom.hidden = true
 		
@@ -1736,23 +1689,23 @@ function main(config){
 		model.onInit(); // NOT init, coz don't update yet...
 		setInPosition();
 
+
+
+
+
+
+
+
+
+
+
 		// seems that we update the MENU based on the model sometimes and the config other times.
 		// Select the MENU!
 		var selectMENU = function(){
 			items.map(x=> {
 				if(x.select) x.select(config)
 			})
-			if(window.chooseVoterStrategyOn) {
-				if (model.voters[0].strategy != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
-					chooseVoterStrategyOn.highlight("realname", model.voters[0].strategy);
-				}
-			}
-			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
-			if(window.chooseAutoPoll) chooseAutoPoll.highlight("name", config.autoPoll)
 			// if(window.choosePrimaries) choosePrimaries.highlight("name", config.primaries)
-			if(window.chooseyeeobject) chooseyeeobject.highlight("keyyee", config.keyyee);
-			if(window.chooseyeefilter) chooseyeefilter.highlight("realname", config.yeefilter);
-			if(window.choosegearconfig) choosegearconfig.highlight("realname", config.featurelist);
 			if(window.chooseComputeMethod) chooseComputeMethod.highlight("name", config.computeMethod);
 			if(window.choosePixelsize) choosePixelsize.highlight("name", config.pixelsize);
 			if(window.choose_spread_factor_voters) choose_spread_factor_voters.highlight("name", config.spread_factor_voters);

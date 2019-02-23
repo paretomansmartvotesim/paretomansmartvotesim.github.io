@@ -6,7 +6,6 @@ function _icon(name){
 	return "<img src='img/icon/"+name+".png'/>";
 }
 
-
 function _drawStroked(text, x, y, textsize, ctx) {
 	ctx.font = textsize + "px Sans-serif"
 	ctx.strokeStyle = 'black';
