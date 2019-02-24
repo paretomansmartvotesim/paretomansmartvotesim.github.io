@@ -10,54 +10,24 @@ function Model(config){
 
 	var self = this;
 
-	// Properties
-	_fillInDefaults(self,config)
-	_fillInDefaults(self,{
+	// CREATE DATA STRUCTURE
+	self.voters = [];
+	self.candidates = [];
+	self.dom = document.createElement("div");
+
+	
+	// CONFIGURE DEFAULTS
+	// helper
+	var all_candidate_names = Object.keys(Candidate.graphics)
+	Object.assign(self,{
+		// values used in init
 		id:"model",
 		size:300,
 		scale:1,
 		border:10,
-		optionsForElection:{sidebar:true}
-	})
-
-
-	// RETINA canvas, whatever.
-	var canvas = document.createElement("canvas");
-	canvas.setAttribute("class", "interactive");
-	canvas.width = canvas.height = self.size*2; // retina!
-	canvas.style.width = canvas.style.height = self.size+"px";
-	canvas.style.borderWidth = self.border+"px";
-	//canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
-	var ctx = canvas.getContext("2d");
-	self.canvas = canvas;
-	self.ctx = ctx;
-
-	// My DOM: title + canvas + caption
-	self.dom = document.createElement("div");
-	self.dom.setAttribute("class", "model");
-	self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
-	self.title = document.createElement("div");
-	self.title.id = "title";
-	self.caption = document.createElement("div");
-	self.caption.id = "caption";
-	self.caption.style.width = self.dom.style.width;
-	self.dom.appendChild(self.title);
-	self.dom.appendChild(self.canvas);
-	self.dom.appendChild(self.caption);
-
-	self.resize = function() {
-		canvas.width = canvas.height = self.size*2; // retina!
-		canvas.style.width = canvas.style.height = self.size+"px";
-		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
-		self.caption.style.width = self.dom.style.width;
-	}
-
-	// Properties used later
-	
-	// helper
-	var all_candidate_names = Object.keys(Candidate.graphics)
+		optionsForElection:{sidebar:true},
+	// values used later
 	// defaults that are also in main_sandbox.js in the cleanConfig function
-	_fillInDefaults(self, {
 		system: "FPTP",
 		rbsystem: "Tideman",
 		numOfCandidates: 3,
@@ -75,81 +45,92 @@ function Model(config){
 		second_strategy: true,// maybe should be for voter, not model
 		yeefilter: all_candidate_names,
 		computeMethod: "ez",
-		pixelsize: 60
-	})
-
-	// defaults that are calculated in model.OnInit in main_sandbox()
-	_fillInDefaults(self, {
+		pixelsize: 60,
+		//
 		howManyVoterGroupsRealName: "Single Voter",
 		yeeobject: undefined,
-		yeeon: false
-	})
-	_fillInDefaultsByAddress(self, {
+		yeeon: false,
+		//
 		voterType: PluralityVoter,
 		election: Election.plurality,
 		ballotType: PluralityBallot,
-		rbelection: rbvote.calctide,
+		rbelection: rbvote.calctide
 	})
-
-	// MAH MOUSE
-	self.mouse = new Mouse(self.id, self.canvas);
-
-	// Draggables
-	self.draggables = [];
-	self.draggableManager = new DraggableManager(self);
-
-	// Candidates & Voter(s)
-	self.candidates = [];
-	self.candidatesById = {};
-	self.voters = [];
-	self.addCandidate = function(c){
-		var candidate = new Candidate({
-			model: self,
-			id:c.id, x:c.x, y:c.y
-		});
-		self.candidates.push(candidate);
-		self.draggables.push(candidate);
-		self.candidatesById[c.id] = candidate;
-	};
-	self.addVoters = function(config){
-		config.model = self;
-		var DistClass = config.dist;
-		var voters = new DistClass(config);
-		self.voters.push(voters);
-		self.draggables.push(voters);
-	};
-	self.addVoterCenter = function(id){
-		var voterCenter = new VoterCenter({
-			model: self,
-			id:id
-		});
-		self.voterCenter = voterCenter // no need for more than one votercenter.
-		self.draggables.push(voterCenter);
-	};
-	self.election = function(model,options){};
+	
 	self.yee = new Yee(self);
+	
+	self.initDOM = function() {
+		// RETINA canvas, whatever.
+		self.canvas = document.createElement("canvas");
+		self.canvas.setAttribute("class", "interactive");
+		self.canvas.width = self.canvas.height = self.size*2; // retina!
+		self.canvas.style.width = self.canvas.style.height = self.size+"px";
+		self.canvas.style.borderWidth = self.border+"px";
+		//self.canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
+		self.ctx = self.canvas.getContext("2d");
+		
+
+		// My DOM: title + canvas + caption
+		self.dom = document.createElement("div");
+		self.dom.setAttribute("class", "model");
+		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
+		self.title = document.createElement("div");
+		self.title.id = "title";
+		self.caption = document.createElement("div");
+		self.caption.id = "caption";
+		self.caption.style.width = self.dom.style.width;
+		self.dom.appendChild(self.title);
+		self.dom.appendChild(self.canvas);
+		self.dom.appendChild(self.caption);
+
+		// MAH MOUSE
+		self.mouse = new Mouse(self.id, self.canvas);
+	}
+
+	self.resize = function() {
+		self.canvas.width = self.canvas.height = self.size*2; // retina!
+		self.canvas.style.width = self.canvas.style.height = self.size+"px";
+		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
+		self.caption.style.width = self.dom.style.width;
+	}
+
+
+	self.initMODEL = function() {
+		// Draggables
+		self.draggables = [];
+		self.draggableManager = new DraggableManager(self);
+
+		// Candidates & Voter(s)
+		self.candidatesById = {};
+		for (var i=0; i<self.candidates.length; i++) {
+			var c = self.candidates[i]
+			self.candidatesById[c.id] = c;
+			self.draggables.push(c);
+		}
+		for (var i=0; i<self.voters.length; i++) {
+			var v = self.voters[i]
+			self.draggables.push(v);
+		}
+		if(self.voterCenter) self.draggables.push(self.voterCenter)
+	}
+	self.election = function(model,options){};
 
 	// Init!
-	self.onInit = function(){}; // TO IMPLEMENT
-	self.init = function(){
-		self.onInit();
+	self.start = function(){  // TO IMPLEMENT FURTHER IN CALLER
 		self.update();
 	};
 
 	// Reset!
-	self.reset = function(noInit){
+	self.reset = function(){
+		// RE-CREATE DATA STRUCTURE
 		self.candidates = [];
-		self.candidatesById = {};
 		self.voters = [];
-		self.draggables = [];
-		if(!noInit) self.init();
+		// START - combination of CREATE, CONFIGURE, INIT, UPDATE
+		self.start();
 	};
 
 	// Update!
 	self.onUpdate = function(){}; // TO IMPLEMENT
-	
-	
-
 	self.update = function(){
 
 		// Move the one that's being dragged, if any
@@ -190,7 +171,7 @@ function Model(config){
 	self.draw = function() {
 		
 		// Clear it all!
-		ctx.clearRect(0,0,canvas.width,canvas.height);
+		self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
 
 		if (model.result) _drawResult(model)
 
@@ -200,7 +181,7 @@ function Model(config){
 		// Draw axes
 		//var background = new Image();
 		//background.src = "../play/img/axis.png";
-		//ctx.drawImage(background,0,0);
+		//self.ctx.drawImage(background,0,0);
 		self.yee.drawBackground()
 		
 		// reset annotations
@@ -218,30 +199,30 @@ function Model(config){
 		
 		for(var i=0; i<self.voters.length; i++){
 			var voter = self.voters[i];
-			voter.draw(ctx);
+			voter.draw(self.ctx);
 		}
 		for(var i=0; i<self.candidates.length; i++){
 			var c = self.candidates[i];
-			c.draw(ctx);
+			c.draw(self.ctx);
 		}
 
 		//voterCenter.update()
 		if ((typeof self.voterCenter !== 'undefined') && model.getTotalVoters() != 1) {
-			self.voterCenter.draw(ctx)
+			self.voterCenter.draw(self.ctx)
 		}
 
 		// draw the Yee object last so it is easy to see.
-		if (self.yeeon && self.yeeobject) self.yeeobject.draw(ctx)
+		if (self.yeeon && self.yeeobject) self.yeeobject.draw(self.ctx)
 		
 		// draw text next to the winners
 		if(model.result && model.result.winners) {
 			var objWinners = model.result.winners.map(x => model.candidatesById[x])
 			if (objWinners.length > 1) {
 				for (i in objWinners) {
-					objWinners[i].drawTie(ctx)
+					objWinners[i].drawTie(self.ctx)
 				}
 			} else {
-				objWinners[0].drawWin(ctx)
+				objWinners[0].drawWin(self.ctx)
 			}
 		}
 		self.onDraw();

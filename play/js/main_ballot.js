@@ -1,4 +1,4 @@
-window.ONLY_ONCE = false;
+
 function main(config){
 
 	ballotType = config.system;
@@ -10,34 +10,48 @@ function main(config){
 	
 	// make a copy of the config
 	var initialConfig = JSON.parse(JSON.stringify(config));
-	
-	// ONCE.
-	if(ONLY_ONCE) return;
-	ONLY_ONCE=true;
 
+	// CONFIGURE
 	var VoterType = window[ballotType+"Voter"];
 	var BallotType = window[ballotType+"Ballot"];
 
+	// INIT
 	Loader.onload = function(){
 
-		// SELF CONTAINED MODEL
-		window.model = new Model({ size:250, border:2 });
+		// CREATE
+		window.model = new Model();
+
+		// CONFIGURE
+		model.size = 250
+		model.border = 2
+
+		// INIT
+		model.initDOM()
 		document.body.appendChild(model.dom);
-		model.onInit = function(){
-			model.addVoters({
-				dist: SingleVoter,
-				type: VoterType,
-				unstrategic: config.strategy,
-				frontrunners: config.frontrunners,
-				x:81, y:92
-			});
-			model.addCandidate({id:"square", x:41, y:50});
-			model.addCandidate({id:"triangle", x:173, y:95});
-			model.addCandidate({id:"hexagon", x:216, y:216});
+		model.start = function(){
+			// CREATE
+			model.voters.push(new SingleVoter(model))
+			model.candidates.push(new Candidate(model))
+			model.candidates.push(new Candidate(model))
+			model.candidates.push(new Candidate(model))
+			// CONFIGURE
+			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), unstrategic: config.strategy, frontrunners: config.frontrunners} )
+			Object.assign( model.candidates[0],{x: 41, y: 50, id:"square"} )
+			Object.assign( model.candidates[1],{x:153, y: 95, id:"triangle"} )
+			Object.assign( model.candidates[2],{x:216, y:216, id:"hexagon"} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.voters[0].unstrategic = config.strategy;
 			model.doStarStrategy = config.doStarStrategy;
+			// INIT
+			model.initMODEL()
+			model.voters[0].init()
+			model.candidates[0].init()
+			model.candidates[1].init()
+			model.candidates[2].init()
+			// UPDATE
+			model.update()
 		};
+
 
 		// CREATE A BALLOT
 		window.ballot = new BallotType();
@@ -46,10 +60,8 @@ function main(config){
 			ballot.update(model.voters[0].ballot);
 		};
 
-
-		
-		// Init!
-		model.init();
+		// UPDATE
+		model.start();
 		
 		if(config.showChoiceOfStrategy) {
 			
@@ -130,21 +142,18 @@ function main(config){
 		resetDOM.id = "reset";
 		resetDOM.innerHTML = "reset";
 		resetDOM.onclick = function(){
-
-			config = JSON.parse(JSON.stringify(initialConfig)); // RESTORE IT!
-			// Reset manually, coz update LATER.
-			model.reset(true);
-			model.onInit();
-			//setInPosition();
-			model.update()
-			// Back to ol' MENU
-			selectMENU();
-			console.log(initialConfig)
+			// LOAD 
+			config = JSON.parse(JSON.stringify(initialConfig)); 
+			// CREATE, CONFIGURE, INIT, UPDATE
+			model.reset()
+			// UPDATE
+			selectMENU()
 		};
 		document.body.appendChild(resetDOM);
 		
 	};
-
+	
+	// UPDATE
 	Loader.load([
 		
 		// the peeps

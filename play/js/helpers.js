@@ -62,3 +62,10 @@ function _copySomeAttributes(to,from,names) {
 function _jcopy(a) {
 	return JSON.parse(JSON.stringify(a))
 }
+
+function _objF(obj,f) { // run function if it exists for each item of an object
+	for(var item in obj ) {
+		if (obj[item][f]) obj[item][f]()
+	} 
+	// for example: run ui.menu.systems.configure(), ui.menu.howManyCandidates.configure(), et al.
+}

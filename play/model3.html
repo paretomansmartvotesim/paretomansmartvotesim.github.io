@@ -23,30 +23,42 @@
 <script>
 Loader.onload = function(){
 
-	// SELF CONTAINED MODEL
-	window.model = new Model();
-	document.body.appendChild(model.dom);
-	model.onInit = function(){
+	// CREATE
 
-		// Voters & Candidates
-		model.addVoters({
-			dist: GaussianVoters,
-			type: PluralityVoter,
-			x:155, y:125
-		});
-		model.addCandidate({id:"square", x:50, y:125});
-		model.addCandidate({id:"triangle", x:250, y:125});
-		model.addCandidate({id:"hexagon", x:280, y:280});
+	window.model = new Model();
+	
+	// INIT
+	model.initDOM()
+	document.body.appendChild(model.dom);
+
+	model.start = function(){
+		// CREATE
+		model.voters.push(new GaussianVoters(model))
+		model.candidates.push(new Candidate(model))
+		model.candidates.push(new Candidate(model))
+		model.candidates.push(new Candidate(model))
+		// CONFIGURE
+		Object.assign( model.voters[0],    {x:155, y:125, type: new PluralityVoter(model)} )
+		Object.assign( model.candidates[0],{x: 50, y:125, id:"square"} )
+		Object.assign( model.candidates[1],{x:250, y:125, id:"triangle"} )
+		Object.assign( model.candidates[2],{x:280, y:280, id:"hexagon"} )
+		// INIT
+		model.initMODEL()
+		model.voters[0].init()
+		model.candidates[0].init()
+		model.candidates[1].init()
+		model.candidates[2].init()
 		model.election = Election.plurality;
 		model.optionsForElection =  {sidebar:true, original:true}
-		model.preFrontrunnerIds = ["square","triangle"];
-		model.voters[0].unstrategic = "zero strategy. judge on an absolute scale.";
-
+		// UPDATE
+		model.update()
 	};
-	model.init();
-
-	// CREATE A RESET BUTTON
+	model.onUpdate = function(){
+		Election.plurality(model);
+	};
+	
 	var resetDOM = document.createElement("div");
+	document.body.appendChild(resetDOM);
 	resetDOM.id = "reset";
 	resetDOM.innerHTML = "reset";
 	resetDOM.style.top = "415px";
@@ -54,8 +66,9 @@ Loader.onload = function(){
 	resetDOM.onclick = function(){
 		model.reset();
 	};
-	document.body.appendChild(resetDOM);
-
+	
+	// UPDATE
+	model.start();
 };
 Loader.load([
 	"img/voter_face.png",

@@ -1,13 +1,16 @@
-function Draggable(config){
+function Draggable(model){
 	// sanity rules: Draggable class creation code cannot read attributes from model.
 
 	var self = this;
-
-	// Passed properties
-	self.x = config.x;
-	self.y = config.y;
-	self.model = config.model;
-	self.radius = config.radius || 30;
+	// CONFIGURE DEFAULTS
+	self.x = 0
+	self.y = 0
+	self.radius = 25
+	
+	self.init = function () {
+		self.offX = 0;
+		self.offY = 0;
+	}
 
 	self.hitTest = function(x,y){
 		var dx = x-self.x;
@@ -41,7 +44,6 @@ function Draggable(config){
 function DraggableManager(model){
 
 	var self = this;
-	self.model = model;
 
 	// Helper: is Over anything?
 	self.isOver = function(){

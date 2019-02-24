@@ -1,18 +1,20 @@
-function Candidate(config){
+function Candidate(model){
 
 	var self = this;
-	Draggable.call(self, config);
+	Draggable.call(self, model);
 
-	// Passed properties
-	self.id = config.id;
+	// CONFIGURE DEFAULTS
+	self.id = 'square'
 	self.size = 40;
 
-	// GRAPHICS
-	var _graphics = Candidate.graphics[self.id];
-	self.fill = _graphics.fill;
-	self.img = new Image();
-	self.img.src = _graphics.img;
+	self.init = function () {
 
+		// GRAPHICS
+		var _graphics = Candidate.graphics[self.id];
+		self.fill = _graphics.fill;
+		self.img = new Image();
+		self.img.src = _graphics.img;
+	}
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawTie = function(ctx) {

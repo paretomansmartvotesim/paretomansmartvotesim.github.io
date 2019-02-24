@@ -8,15 +8,14 @@
 function ScoreVoter(model){
 
 	var self = this;
-	self.model = model;
 	self.maxscore = 5;
 	self.minscore = 0;
 	self.defaultMax = window.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.getBallot = function(x, y, strategy){
 
-		doStar =  (self.model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || self.model.doStarStrategy
-		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
+		doStar =  (model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
+		if (model.autoPoll == "Auto" && model.pollResults) {
 			tally = model.pollResults
 
 			var factor = self.poll_threshold_factor
@@ -30,9 +29,9 @@ function ScoreVoter(model){
 				if (tally[can] > threshold) viable.push(can)
 			}
 		} else {
-			viable = self.model.preFrontrunnerIds
+			viable = model.preFrontrunnerIds
 		}
-		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,viable,self.model.candidates,self.defaultMax,doStar,self.model.utility_shape)
+		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,viable,model.candidates,self.defaultMax,doStar,model.utility_shape)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -50,8 +49,8 @@ function ScoreVoter(model){
 		var scorange = self.maxscore - self.minscore
 		var step = (self.radiusLast - self.radiusFirst)/scorange;
 		// Draw big ol' circles.
-		var f = utility_function(self.model.utility_shape)
-		var finv = inverse_utility_function(self.model.utility_shape)
+		var f = utility_function(model.utility_shape)
+		var finv = inverse_utility_function(model.utility_shape)
 		for(var i=0;i<scorange;i++){
 			//var dist = step*(i+.5) + self.radiusFirst
 
@@ -76,12 +75,12 @@ function ScoreVoter(model){
 
 		// There are #Candidates*5 slices
 		// Fill 'em in in order -- and the rest is gray.
-		var totalSlices = self.model.candidates.length*(self.maxscore-self.minscore);
+		var totalSlices = model.candidates.length*(self.maxscore-self.minscore);
 		var leftover = totalSlices;
 		var slices = [];
 		totalScore = 0;
-		for(var i=0; i<self.model.candidates.length; i++){
-			var c = self.model.candidates[i];
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i];
 			var cID = c.id;
 			var score = ballot[cID] - self.minscore;
 			leftover -= score;
@@ -175,9 +174,9 @@ function utility_function(utility_shape) {
 }
 
 function inverse_utility_function(utility_shape) {
-	if (self.model.utility_shape == "quadratic") {
+	if (model.utility_shape == "quadratic") {
 		var finv = x => Math.sqrt(x)
-	} else if (self.model.utility_shape == "log") {
+	} else if (model.utility_shape == "log") {
 		var finv = x => Math.exp(x) - .1
 	} else { // "linear"
 		var finv = x => x
@@ -440,8 +439,8 @@ function ApprovalVoter(model){
 
 		// Anyone close enough. If anyone.
 		var approved = [];
-		for(var i=0; i<self.model.candidates.length; i++){
-			var c = self.model.candidates[i];
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i];
 			if(scores[c.id] == 1){
 				approved.push(c.id);
 			}
@@ -463,7 +462,7 @@ function ApprovalVoter(model){
 
 		// Draw 'em slices
 		for(var i=0; i<ballot.approved.length; i++){
-			var candidate = self.model.candidatesById[ballot.approved[i]];
+			var candidate = model.candidatesById[ballot.approved[i]];
 			slices.push({ num:1, fill:candidate.fill });
 		}
 		_drawSlices(ctx, x, y, size, slices, ballot.approved.length);
@@ -485,23 +484,22 @@ function ApprovalVoter(model){
 function RankedVoter(model){
 
 	var self = this;
-	self.model = model;
 
 	self.getBallot = function(x, y, strategy){
 
 		// Rank the peeps I'm closest to...
 		var rank = [];
-		for(var i=0;i<self.model.candidates.length;i++){
-			rank.push(self.model.candidates[i].id);
+		for(var i=0;i<model.candidates.length;i++){
+			rank.push(model.candidates[i].id);
 		}
 		rank = rank.sort(function(a,b){
 
-			var c1 = self.model.candidatesById[a];
+			var c1 = model.candidatesById[a];
 			var x1 = c1.x-x;
 			var y1 = c1.y-y;
 			var d1 = x1*x1+y1*y1;
 
-			var c2 = self.model.candidatesById[b];
+			var c2 = model.candidatesById[b];
 			var x2 = c2.x-x;
 			var y2 = c2.y-y;
 			var d2 = x2*x2+y2*y2;
@@ -511,7 +509,7 @@ function RankedVoter(model){
 		});
 
 		var considerFrontrunners =  (strategy != "normalize"  &&  strategy != "zero strategy. judge on an absolute scale.")
-		if (considerFrontrunners && self.model.election == Election.irv && self.model.autoPoll == "Auto" && self.model.pollResults) {
+		if (considerFrontrunners && model.election == Election.irv && model.autoPoll == "Auto" && model.pollResults) {
 			// we can do an irv strategy here
 
 			// so first figure out if our candidate is winning
@@ -520,7 +518,7 @@ function RankedVoter(model){
 			// who do we have first?
 			var ourFirst = rank[0]
 			// who was first?
-			var weLost = ! self.model.result.winners.includes(ourFirst)
+			var weLost = ! model.result.winners.includes(ourFirst)
 
 			if ( weLost ) {
 				// find out if our second choice could win head to head
@@ -531,8 +529,8 @@ function RankedVoter(model){
 						break // there is no better candidate, so let's just keep the same strategy
 					}
 					var ourguyWins = true
-					for (var iwinguy in self.model.result.winners) {
-						var winguy = self.model.result.winners[iwinguy]
+					for (var iwinguy in model.result.winners) {
+						var winguy = model.result.winners[iwinguy]
 						var ours = tally.head2head[ourguy][winguy]
 						var theirs = tally.head2head[winguy][ourguy]
 						if (theirs > ours) ourguyWins = false
@@ -572,7 +570,7 @@ function RankedVoter(model){
 
 			// To which candidate...
 			var rank = ballot.rank[i];
-			var c = self.model.candidatesById[rank];
+			var c = model.candidatesById[rank];
 			var cx = c.x*2; // RETINA
 			var cy = c.y*2; // RETINA
 
@@ -596,7 +594,7 @@ function RankedVoter(model){
 
 		for(var i=0; i<ballot.rank.length; i++){
 			var rank = ballot.rank[i];
-			var candidate = self.model.candidatesById[rank];
+			var candidate = model.candidatesById[rank];
 			slices.push({ num:(n-i), fill:candidate.fill });
 		}
 
@@ -768,13 +766,12 @@ function RankedVoter(model){
 function PluralityVoter(model){
 
 	var self = this;
-	self.model = model;
 	self.maxscore = 1; // just for autopoll
 
 	self.getBallot = function(x, y, strategy){
 
-		if (self.model.autoPoll == "Auto" && self.model.pollResults) {
-			// if (self.model.autoPoll == "Auto" && (typeof self.model.pollResults !== 'undefined')) {
+		if (model.autoPoll == "Auto" && model.pollResults) {
+			// if (model.autoPoll == "Auto" && (typeof model.pollResults !== 'undefined')) {
 			tally = model.pollResults
 
 			var factor = self.poll_threshold_factor
@@ -788,18 +785,18 @@ function PluralityVoter(model){
 				if (tally[can] > threshold) viable.push(can)
 			}
 		} else {
-			var viable = self.model.preFrontrunnerIds
+			var viable = model.preFrontrunnerIds
 		}
 
 		// Who am I closest to? Use their fill
 		var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
 		
-		if (self.model.election == Election.pluralityWithPrimary) checkOnlyFrontrunners = false // workaround
+		if (model.election == Election.pluralityWithPrimary) checkOnlyFrontrunners = false // workaround
 		
 		var closest = null;
 		var closestDistance = Infinity;
-		for(var j=0;j<self.model.candidates.length;j++){
-			var c = self.model.candidates[j];
+		for(var j=0;j<model.candidates.length;j++){
+			var c = model.candidates[j];
 			if(checkOnlyFrontrunners && ! viable.includes(c.id)  ) {
 				continue // skip this candidate because he isn't one of the 2 or more frontrunners, so we can't vote for him
 			}
@@ -853,7 +850,7 @@ function PluralityVoter(model){
 		ctx.beginPath();
 		ctx.arc(x, y, size, 0, Math.TAU, true);
 		ctx.fill();
-		if (self.model.yeeon) {ctx.stroke();}
+		if (model.yeeon) {ctx.stroke();}
 
 	};
 
@@ -897,7 +894,7 @@ var _drawSlices = function(ctx, x, y, size, slices, totalSlices){
 
 	}
 	
-	if (self.model.yeeon) {
+	if (model.yeeon) {
 		// Just draw a circle.		
 		ctx.strokeStyle = 'rgb(0,0,0)';
 		ctx.lineWidth = 1; // border
@@ -946,15 +943,15 @@ var  _erfinv  = function(x){ // from https://stackoverflow.com/a/12556710
 
 // sanity rules: class creation code cannot read attributes from model.
 
-function GaussianVoters(config){ // this config comes from addVoters in main_sandbox
+function GaussianVoters(model){ // this config comes from addVoters in main_sandbox
 
 	var self = this;
-
-	_fillInDefaults(config,{ 
-		x:150 , //+ (config.arena_size - 300) * .5
-		y:150, //+ (config.arena_size - 300) * .5
-	})
-	Draggable.call(self, config);
+	Draggable.call(self, model);
+	var config = {}
+	
+	// CONFIGURE DEFAULTS
+	self.num = 3
+	self.type = new PluralityVoter(model)
 
 	_voterClassConfigHelper(self,config)
 	
@@ -964,83 +961,86 @@ function GaussianVoters(config){ // this config comes from addVoters in main_san
 	})
 
 
-	// WHAT TYPE?
-	self.type = new config.type(self.model);
+	self.init = function () {
+				
+		// HACK: larger grab area
+		// self.radius = 50;
+		if (!self.x_voters) {
+			// SPACINGS, dependent on NUM
+			var spacings = [0, 12, 12, 12, 12, 20, 30, 50, 100];
+			if (self.snowman) {
+				if (self.vid == 0) {
+					spacings.splice(3)
+				} else if (self.vid == 1) {
+					spacings = [0,12,12,12]
+				} else if (self.vid == 2) {
+					spacings.splice(4)
+				}
+				//spacings.splice(2+self.vid)
+			} else if(self.num==1){
+				spacings.splice(4);
+			} else if(self.num==2){
+				spacings.splice(5);
+			} else if (self.num==3){
+				spacings = [0, 10, 11, 12, 15, 20, 30, 50, 100];
+			}
+			
+			// Create 100+ points, in a Gaussian-ish distribution!
+			var points = [[0,0]];
+			self.points = points;
+			var _radius = 0,
+				_RINGS = spacings.length;
+			for(var i=1; i<_RINGS; i++){
+
+				var spacing = spacings[i];
+				_radius += spacing;
+
+				var circum = Math.TAU*_radius;
+				var num = Math.floor(circum/(spacing-1));
+				if (self.snowman && self.vid == 1 && i==3){
+					num = 10
+				}
+
+				// HACK TO MAKE IT PRIME - 137 VOTERS
+				//if(i==_RINGS-1) num += 3;
+
+				var err = 0.01; // yeah whatever
+				for(var angle=0; angle<Math.TAU-err; angle+=Math.TAU/num){
+					var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
+					var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
+					points.push([x,y]);
+				}
+
+			}
+		} else {
+			var points = [];
+			self.points = points;
+			var angle = 0;
+			var _radius = 0;
+			var _radius_norm = 0;
+			var _spread_factor = 2 * Math.exp(.01*self.group_spread) * Math.sqrt(self.group_count/20) // so the slider is exponential
+			var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
+			for (var count = 0; count < self.group_count; count++) {
+				angle = theta * count
+				_radius_norm = Math.sqrt(1-(count+.5)/self.group_count)
+				_radius = _erfinv(_radius_norm) * _spread_factor
+				var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
+				var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
+				points.push([x,y]);
+			}
+			self.points = points
+		}
+	}
+
+
 	self.setType = function(newType){
-		self.type = new newType(self.model);
+		self.type = new newType(model);
 	};
 
 	self.img = new Image();  // use the face
 	self.img.src = "img/voter_face.png";
 
 
-	// HACK: larger grab area
-	self.radius = 50;
-if (!self.x_voters) {
-	// SPACINGS, dependent on NUM
-	var spacings = [0, 12, 12, 12, 12, 20, 30, 50, 100];
-	if (self.snowman) {
-		if (self.vid == 0) {
-			spacings.splice(3)
-		} else if (self.vid == 1) {
-			spacings = [0,12,12,12]
-		} else if (self.vid == 2) {
-			spacings.splice(4)
-		}
-		//spacings.splice(2+self.vid)
-	} else if(self.num==1){
-		spacings.splice(4);
-	} else if(self.num==2){
-		spacings.splice(5);
-	} else if (self.num==3){
-		spacings = [0, 10, 11, 12, 15, 20, 30, 50, 100];
-	}
-	
-	// Create 100+ points, in a Gaussian-ish distribution!
-	var points = [[0,0]];
-	self.points = points;
-	var _radius = 0,
-		_RINGS = spacings.length;
-	for(var i=1; i<_RINGS; i++){
-
-		var spacing = spacings[i];
-		_radius += spacing;
-
-		var circum = Math.TAU*_radius;
-		var num = Math.floor(circum/(spacing-1));
-		if (self.snowman && self.vid == 1 && i==3){
-			num = 10
-		}
-
-		// HACK TO MAKE IT PRIME - 137 VOTERS
-		//if(i==_RINGS-1) num += 3;
-
-		var err = 0.01; // yeah whatever
-		for(var angle=0; angle<Math.TAU-err; angle+=Math.TAU/num){
-			var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
-			var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
-			points.push([x,y]);
-		}
-
-	}
-} else {
-	var points = [];
-	self.points = points;
-	var angle = 0;
-	var _radius = 0;
-	var _radius_norm = 0;
-	var _spread_factor = 2 * Math.exp(.01*self.group_spread) * Math.sqrt(self.group_count/20) // so the slider is exponential
-	var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
-	for (var count = 0; count < self.group_count; count++) {
-		angle = theta * count
-		_radius_norm = Math.sqrt(1-(count+.5)/self.group_count)
-		_radius = _erfinv(_radius_norm) * _spread_factor
-		var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
-		var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
-		points.push([x,y]);
-	}
-	self.points = points
-}
 
 	// UPDATE! Get all ballots.
 	self.ballots = [];
@@ -1051,8 +1051,8 @@ if (!self.x_voters) {
 		// from http://davidbau.com/encode/seedrandom.js
 		Math.seedrandom('hi');
 		
-		for(var i=0; i<points.length; i++){
-			var p = points[i];
+		for(var i=0; i<self.points.length; i++){
+			var p = self.points[i];
 			var x = self.x + p[0];
 			var y = self.y + p[1];
 			
@@ -1085,14 +1085,18 @@ if (!self.x_voters) {
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
 
-		// DRAW ALL THE POINTS
-		for(var i=0; i<points.length; i++){
-			var p = points[i];
+		// DRAW ALL THE points
+		for(var i=0; i<self.points.length; i++){
+			var p = self.points[i];
 			var x = self.x + p[0];
 			var y = self.y + p[1];
 			var ballot = self.ballots[i];
 			self.type.drawCircle(ctx, x, y, 10, ballot);
 		}
+		
+		 // Don't draw a individual group under a votercenter, which looks weird.
+		if(model.voterCenter && model.voters.length == 1) return
+
 		// Circle!
 		var x = self.x*2;
 		var y = self.y*2;
@@ -1106,11 +1110,14 @@ if (!self.x_voters) {
 		// Face!
 		size = size*2;
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
-		
+
 		// Number ID
 		var textsize = 20
 		ctx.textAlign = "center";
-		_drawStroked(self.vid+1,x+0*textsize,y+0*textsize,textsize,ctx);
+		
+		if(model.voters.length != 1) {
+			_drawStroked(self.vid+1,x+0*textsize,y+0*textsize,textsize,ctx);
+		}
 
 		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = temp
@@ -1161,15 +1168,13 @@ function _voterClassConfigHelper(self,config) {
 	})
 }
 
-function SingleVoter(config){
+function SingleVoter(model){
 
 	var self = this;
-
-	_fillInDefaults(config,{ 
-		x:150 , //+ (model.arena_size - 300) * .5
-		y:150, //+ (model.arena_size - 300) * .5
-	})
-	Draggable.call(self, config);
+	Draggable.call(self, model);
+	var config = {}
+	
+	self.type = new PluralityVoter(model);
 
 	_voterClassConfigHelper(self,config)
 	
@@ -1180,22 +1185,29 @@ function SingleVoter(config){
 	self.strategy = self.unstrategic // at first glance this doesn't seem right, but there is only one group of voters.
 
 
-	// WHAT TYPE?
-	self.type = new config.type(self.model);
+	// CONFIGURE DEFAULTS
+	self.type = new PluralityVoter(model)
+
 	self.setType = function(newType){
-		self.type = new newType(self.model);
+		self.type = new newType(model);
 	};
 
-	// Image!
-	self.img = new Image();
-	self.img.src = "img/voter_face.png";
+	self.init = function () {
+		self.setType = function(newType){
+			self.type = new newType(model);
+		};
 
-	
-	self.points = [[0,0]];
+		// Image!
+		self.img = new Image();
+		self.img.src = "img/voter_face.png";
 
-	// UPDATE!
-	self.ballot = null;
-	self.ballots = [];
+		
+		self.points = [[0,0]];
+
+		// UPDATE!
+		self.ballot = null;
+		self.ballots = [];
+	}
 	self.update = function(){
 		self.ballot = self.type.getBallot(self.x, self.y, self.unstrategic);
 		self.ballots = [self.ballot]
@@ -1229,22 +1241,19 @@ function SingleVoter(config){
 
 }
 
-function VoterCenter(config){
+function VoterCenter(model){
 
 	var self = this;
-	Draggable.call(self, config);
-
-	// Passed properties
-	var model = config.model
-	self.id = config.id;
+	Draggable.call(self, model);
+	
+	// LOAD
+	self.id = "voterCenter";
 	self.size = 30;
-	
 	self.points = [[0,0]];
-	
 	self.img = new Image();  // use the face
 	self.img.src = "img/voter_face.png";
-
 	self.findVoterCenter = function(){ // calculate the center of the voter groups
+		// UPDATE
 		var x = 0
 		var y = 0
 		var totalnumbervoters = 0
@@ -1392,11 +1401,8 @@ function VoterCenter(config){
 		} 
 		return {x:x,y:y}
 	}
-
-	//self.findVoterCenter()
-
-	// update
 	self.update = function() {// do the center voter thing
+		// UPDATE
 		if(Mouse.dragging == self) {
 			var oldcenter = self.findVoterCenter()
 			var changecenter = {x:self.x - oldcenter.x, y:self.y - oldcenter.y}
@@ -1411,11 +1417,11 @@ function VoterCenter(config){
 		}
 	}
 
-
 	// DRAW!
 	self.drawBackAnnotation = function(x,y,ctx) {}
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
+		// UPDATE
 		var x = self.x*2;
 		var y = self.y*2;
 		size = self.size

@@ -1,10 +1,9 @@
 
 function Yee(model) {
 	var self = this
-	var ctx = model.ctx
-	var canvas = model.canvas
 
 	self.calculate = function(){
+		var ctx = model.ctx
 		// model.pixelsize= 30.0;
 		var pixelsize = model.pixelsize;
 		WIDTH = ctx.canvas.width;
@@ -195,12 +194,13 @@ function Yee(model) {
 	}
 	
 	self.drawBackground = function() {
+		var ctx = model.ctx
 		
 		if(model.yeeon){
 			var temp = ctx.globalAlpha
 			ctx.globalAlpha = 1
 			ctx.fillStyle = "#fff"
-			ctx.fillRect(0,0,canvas.width,canvas.height)  // draw a white background
+			ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height)  // draw a white background
 			ctx.fill()
 			ctx.globalAlpha = .9
 			var pixelsize = model.pixelsize;
