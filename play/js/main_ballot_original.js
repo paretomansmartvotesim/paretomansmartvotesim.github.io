@@ -19,7 +19,7 @@ function main(ballotType){
 				type: VoterType,
 				x:81, y:92,
 				preFrontrunnerIds: ["square","triangle","hexagon"],
-				unstrategic: "zero strategy. judge on an absolute scale."
+				firstStrategy: "zero strategy. judge on an absolute scale."
 			});
 			model.addCandidate({id:"square", x:41, y:50});
 			model.addCandidate({id:"triangle", x:153, y:95});

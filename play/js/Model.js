@@ -40,14 +40,14 @@ function Model(config){
 		preFrontrunnerIds: ["square","triangle"],
 		autoPoll: "Manual",
 		// primaries: "No",
-		unstrategic: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
+		firstStrategy: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
 		strategic: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
-		second_strategy: true,// maybe should be for voter, not model
+		doTwoStrategies: true,// maybe should be for voter, not model
 		yeefilter: all_candidate_names,
 		computeMethod: "ez",
 		pixelsize: 60,
 		//
-		howManyVoterGroupsRealName: "Single Voter",
+		nVoterGroupsRealName: "Single Voter",
 		yeeobject: undefined,
 		yeeon: false,
 		//

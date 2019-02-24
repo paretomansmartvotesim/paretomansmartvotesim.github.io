@@ -2,7 +2,7 @@
 function main(config){
 
 	ballotType = config.system;
-	config.strategy = config.strategy || "zero strategy. judge on an absolute scale.";
+	config.secondStrategy = config.secondStrategy || "zero strategy. judge on an absolute scale.";
 	config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"];
 	config.showChoiceOfStrategy = config.showChoiceOfStrategy || false
 	config.showChoiceOfFrontrunners = config.showChoiceOfFrontrunners || false
@@ -35,12 +35,12 @@ function main(config){
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
 			// CONFIGURE
-			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), unstrategic: config.strategy, frontrunners: config.frontrunners} )
+			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), firstStrategy: config.secondStrategy, frontrunners: config.frontrunners} )
 			Object.assign( model.candidates[0],{x: 41, y: 50, id:"square"} )
 			Object.assign( model.candidates[1],{x:153, y: 95, id:"triangle"} )
 			Object.assign( model.candidates[2],{x:216, y:216, id:"hexagon"} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
-			model.voters[0].unstrategic = config.strategy;
+			model.voters[0].firstStrategy = config.secondStrategy;
 			model.doStarStrategy = config.doStarStrategy;
 			// INIT
 			model.initMODEL()
@@ -77,8 +77,8 @@ function main(config){
 			// {name:"T", realname:"threshold"},
 			// {name:"SNTF", realname:"starnormfrontrunners"}
 			var onChooseVoterStrategyOn = function(data){
-				config.strategy = data.realname; 
-				model.voters[0].unstrategic = config.strategy; 
+				config.secondStrategy = data.realname; 
+				model.voters[0].firstStrategy = config.secondStrategy; 
 				model.update();
 				
 			};
@@ -128,7 +128,7 @@ function main(config){
 		}
 		
 		var selectMENU = function(){
-			if(window.chooseVoterStrategyOn) chooseVoterStrategyOn.highlight("realname", model.voters[0].unstrategic);
+			if(window.chooseVoterStrategyOn) chooseVoterStrategyOn.highlight("realname", model.voters[0].firstStrategy);
 			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
 		};
 		selectMENU();

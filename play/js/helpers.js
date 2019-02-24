@@ -67,5 +67,5 @@ function _objF(obj,f) { // run function if it exists for each item of an object
 	for(var item in obj ) {
 		if (obj[item][f]) obj[item][f]()
 	} 
-	// for example: run ui.menu.systems.configure(), ui.menu.howManyCandidates.configure(), et al.
+	// for example: run ui.menu.systems.configure(), ui.menu.nCandidates.configure(), et al.
 }

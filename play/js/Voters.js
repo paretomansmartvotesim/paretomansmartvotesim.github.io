@@ -1065,10 +1065,10 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 					var r1 = (34*i) % 100 + .5;
 				}
 			}	
-			if (r1 < self.percentStrategy && self.second_strategy) { 
-				var strategy = self.strategy // yes
+			if (r1 < self.percentStrategy && self.doTwoStrategies) { 
+				var strategy = self.secondStrategy // yes
 			} else {
-				var strategy = self.unstrategic; // no e.g. 
+				var strategy = self.firstStrategy; // no e.g. 
 			}
 			
 			// choose the threshold of voters
@@ -1139,11 +1139,11 @@ function _voterClassConfigHelper(self,config) {
 	// not sure if we need all these, but just in case
 	_copySomeAttributes(self,config,[ // config has these
 		"percentStrategy",
-		"second_strategy",
+		"doTwoStrategies",
 		"group_count",
 		"group_spread",
-		"strategy",
-		"unstrategic",
+		"secondStrategy",
+		"firstStrategy",
 		"preFrontrunnerIds"
 	])
 	
@@ -1156,12 +1156,12 @@ function _voterClassConfigHelper(self,config) {
 		x_voters: false,
 		// SECOND group in "exp_addVoters"
 		// same for all voter groups in model
-		unstrategic:"zero strategy. judge on an absolute scale.",
+		firstStrategy:"zero strategy. judge on an absolute scale.",
 		preFrontrunnerIds:["square","triangle"],
-		second_strategy: false,
+		doTwoStrategies: false,
 		spread_factor_voters: 1,
 		// could vary between voters
-		strategy: "zero strategy. judge on an absolute scale.",
+		secondStrategy: "zero strategy. judge on an absolute scale.",
 		percentStrategy: 0,
 		group_count: 50,
 		group_spread: 190
@@ -1182,7 +1182,7 @@ function SingleVoter(model){
 		dist: SingleVoter,
 		type: PluralityVoter,
 	})
-	self.strategy = self.unstrategic // at first glance this doesn't seem right, but there is only one group of voters.
+	self.secondStrategy = self.firstStrategy // at first glance this doesn't seem right, but there is only one group of voters.
 
 
 	// CONFIGURE DEFAULTS
@@ -1209,7 +1209,7 @@ function SingleVoter(model){
 		self.ballots = [];
 	}
 	self.update = function(){
-		self.ballot = self.type.getBallot(self.x, self.y, self.unstrategic);
+		self.ballot = self.type.getBallot(self.x, self.y, self.firstStrategy);
 		self.ballots = [self.ballot]
 	};
 

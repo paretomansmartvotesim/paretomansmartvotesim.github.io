@@ -24,7 +24,7 @@ function main(config){
 		numOfCandidates: 3,
 		numVoterGroups: 1,
 		xNumVoterGroups: 4,
-		howManyVoterGroupsRealName: "One Group",
+		nVoterGroupsRealName: "One Group",
 		spread_factor_voters: 1,
 		arena_size: 300,
 		median_mean: 1,
@@ -33,9 +33,9 @@ function main(config){
 		preFrontrunnerIds: ["square","triangle"],
 		autoPoll: "Manual",
 		// primaries: "No",
-		unstrategic: "zero strategy. judge on an absolute scale.",
+		firstStrategy: "zero strategy. judge on an absolute scale.",
 		strategic: "zero strategy. judge on an absolute scale.",
-		second_strategy: true,
+		doTwoStrategies: true,
 		yeefilter: all_candidate_names,
 		computeMethod: "ez",
 		pixelsize: 60,
@@ -101,7 +101,7 @@ function main(config){
 						config.sandboxsave = true
 						return ["systems","voters","candidates"] 	}	}	}
 		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["unstrategic","second strategy","yee"])
+		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee"])
 		// clear the grandfathered config settings
 		delete config.doPercentFirst
 		delete config.features
@@ -112,17 +112,26 @@ function main(config){
 		if (config.featurelist) {
 			var menuNameTranslator = {
 				"systems":"systems",
-				"voters":"howManyVoterGroups",
-				"candidates":"howManyCandidates",
-				"unstrategic":"unstrategic",
-				"second strategy":"second_strategy",
+				"voters":"nVoterGroups",
+				"nVoterGroups":"nVoterGroups",
+				"candidates":"nCandidates",
+				"nCandidates":"nCandidates",
+				"unstrategic":"firstStrategy",
+				"firstStrategy":"firstStrategy",
+				"second strategy":"doTwoStrategies",
+				"doTwoStrategies":"doTwoStrategies",
 				"yee":"yee",
-				"rbvote":"rbsystems",
-				"custom_number_voters":"xHowManyVoterGroups",
+				"rbvote":"rbSystems",
+				"rbsystems":"rbSystems",
+				"rbSystems":"rbSystems",
+				"custom_number_voters":"xVoterGroups",
+				"xHowManyVoterGroups":"xVoterGroups",
+				"xVoterGroups":"xVoterGroups",
 				"group_count":"group_count",
 				"group_spread":"group_spread",
-				"strategy":"strategy",
-				"percentstrategy":"percentstrategy",
+				"strategy":"secondStrategy",
+				"percentstrategy":"percentStrategy",
+				"percentStrategy":"percentStrategy",
 				"choose_pixel_size":"choose_pixel_size",
 				"yeefilter":"yeefilter",
 				"poll":"poll",
@@ -244,19 +253,19 @@ function main(config){
 			// UPDATE MENU //
 			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
 			// Make the MENU look correct.  The MENU is not part of the "model".
-			for (i in ui.menu.percentstrategy.choose.sliders) ui.menu.percentstrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+			for (i in ui.menu.percentStrategy.choose.sliders) ui.menu.percentStrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 			for (i in ui.menu.group_count.choose.sliders) ui.menu.group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 			for (i in ui.menu.group_spread.choose.sliders) ui.menu.group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 
 			// reflect the number of voters
 			for(var i=0;i<(maxVoters-1);i++) {
 				if (i < config.numVoterGroups) {
-					ui.menu.yeeobject.choose.dom.childNodes[8+i].hidden=false
+					ui.menu.yee.choose.dom.childNodes[8+i].hidden=false
 				} else {
-					ui.menu.yeeobject.choose.dom.childNodes[8+i].hidden=true
+					ui.menu.yee.choose.dom.childNodes[8+i].hidden=true
 				}
 			}
-			if (config.numVoterGroups == 1) ui.menu.yeeobject.choose.dom.childNodes[8+0].hidden=true
+			if (config.numVoterGroups == 1) ui.menu.yee.choose.dom.childNodes[8+0].hidden=true
 		}
 		// In Position!
 		var setInPosition = function(){ // runs when we change the config for number of voters  or candidates
@@ -351,7 +360,7 @@ function main(config){
 
 		// Initialize variables
 		var items = []
-		var allnames = ["systems","rbsystems","howManyVoterGroups","xHowManyVoterGroups","group_count","group_spread","howManyCandidates","strategy","second strategy","percentstrategy","unstrategic","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
+		var allnames = ["systems","rbSystems","nVoterGroups","xVoterGroups","group_count","group_spread","nCandidates","secondStrategy","doTwoStrategies","percentStrategy","firstStrategy","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
 		var doms = {}  // for hiding menus, later
 	
 		ui.menu.systems = new function() { // Which voting system?
@@ -390,7 +399,7 @@ function main(config){
 				// LOAD INPUT
 				config.system = data.name;
 				var turnOnRBVote = (data.name == "RBVote")
-				var xlist = ["rbsystems"]
+				var xlist = ["rbSystems"]
 				var featureset = new Set(config.featurelist)
 				for (var i in xlist){
 					var xi = xlist[i]
@@ -432,9 +441,9 @@ function main(config){
 			doms[self.name] = self.choose.dom
 		}
 
-		ui.menu.rbsystems = new function() { // Which RB voting system?
+		ui.menu.rbSystems = new function() { // Which RB voting system?
 			var self = this
-			self.name = "rbsystems"
+			self.name = "rbSystems"
 			self.list = [
 				{name:"Baldwin",rbelection:rbvote.calcbald, margin:4},
 				{name:"Black",rbelection:rbvote.calcblac},
@@ -485,9 +494,9 @@ function main(config){
 			doms[self.name] = self.choose.dom
 		}
 
-		ui.menu.howManyVoterGroups = new function() { // How many voters?
+		ui.menu.nVoterGroups = new function() { // How many voters?
 			var self = this
-			self.name = "howManyVoterGroups"
+			self.name = "nVoterGroups"
 
 			self.list = [
 				{realname: "Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
@@ -511,7 +520,7 @@ function main(config){
 			self.onChoose = function(data){
 				// LOAD INPUT
 				// add the configuration for the voter groups when "X" is chosen
-				var xlist = ["group_count","group_spread","xHowManyVoterGroups"]
+				var xlist = ["group_count","group_spread","xVoterGroups"]
 				var featureset = new Set(config.featurelist)
 				for (var i in xlist){
 					var xi = xlist[i]
@@ -527,7 +536,7 @@ function main(config){
 				} else {
 					config.numVoterGroups = data.num;
 				}
-				config.howManyVoterGroupsRealName = data.realname // this set of attributes is calculated based on config
+				config.nVoterGroupsRealName = data.realname // this set of attributes is calculated based on config
 				config.snowman = data.snowman || false;
 				config.x_voters = data.x_voters || false;
 				config.oneVoter = data.oneVoter || false;
@@ -551,7 +560,7 @@ function main(config){
 			self.configure = function() {	
 				// MODEL //
 				model.numVoterGroups = config.numVoterGroups
-				model.howManyVoterGroupsRealName = config.howManyVoterGroupsRealName
+				model.nVoterGroupsRealName = config.nVoterGroupsRealName
 				var num = config.numVoterGroups;		
 				if (config.voterPositions) {
 					for(var i=0; i<num; i++){
@@ -622,7 +631,7 @@ function main(config){
 				}
 			}
 			self.select = function() {
-				self.choose.highlight("realname", config.howManyVoterGroupsRealName);
+				self.choose.highlight("realname", config.nVoterGroupsRealName);
 			}
 			self.choose = new ButtonGroup({
 				label: "how many groups of voters?",
@@ -635,9 +644,9 @@ function main(config){
 			items.push(self)
 		}
 
-		ui.menu.xHowManyVoterGroups = new function() { // if the last option X is selected, we need a selection for number of voters
+		ui.menu.xVoterGroups = new function() { // if the last option X is selected, we need a selection for number of voters
 			var self = this
-			self.name = "xHowManyVoterGroups"
+			self.name = "xVoterGroups"
 			self.onChoose = function(slider,n) {
 				// LOAD INPUT
 				config.xNumVoterGroups = slider.value;
@@ -649,7 +658,7 @@ function main(config){
 					model.voters.push(new GaussianVoters(model))
 				}
 				// CONFIGURE
-				ui.menu.howManyVoterGroups.configure() // same settings in this other button
+				ui.menu.nVoterGroups.configure() // same settings in this other button
 				// INIT
 				model.initMODEL()
 				for(var i=0; i<model.voters.length; i++) {
@@ -762,9 +771,9 @@ function main(config){
 			items.push(self)
 		}
 
-		ui.menu.howManyCandidates = new function() { // how many candidates?
+		ui.menu.nCandidates = new function() { // how many candidates?
 			var self = this
-			self.name = "howManyCandidates"
+			self.name = "nCandidates"
 			self.list = [
 				{name:"two", num:2, margin:4},
 				{name:"three", num:3, margin:4},
@@ -839,9 +848,9 @@ function main(config){
 			doms[self.name] = self.choose.dom
 		}
 
-		ui.menu.strategy1 = new function() { // strategy 1 AKA unstrategic voters' strategy
+		ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
 			var self = this
-			self.name = "unstrategic"
+			self.name = "firstStrategy"
 			self.list = [
 				{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
 				{name:"N", realname:"normalize", margin:5},
@@ -851,7 +860,7 @@ function main(config){
 			];
 			self.onChoose = function(data){
 				// LOAD INPUT
-				config.unstrategic = data.realname;
+				config.firstStrategy = data.realname;
 				// CONFIGURE FEATURELIST
 				_loadConfigForStrategyButtons(config)
 				// CONFIGURE
@@ -867,13 +876,13 @@ function main(config){
 				onChoose: self.onChoose
 			});
 			self.configure = function() {
-				model.unstrategic = config.unstrategic
+				model.firstStrategy = config.firstStrategy
 				for (var i=0; i<config.numVoterGroups; i++) {
-					model.voters[i].unstrategic = config.unstrategic
+					model.voters[i].firstStrategy = config.firstStrategy
 				}
 			}
 			self.select = function() {
-				self.choose.highlight("realname", config.unstrategic);
+				self.choose.highlight("realname", config.firstStrategy);
 			}
 			document.querySelector("#left").appendChild(self.choose.dom);
 			doms[self.name] = self.choose.dom
@@ -881,8 +890,8 @@ function main(config){
 
 		function _loadConfigForStrategyButtons(config) {			
 			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-			var turnOffFrontrunnerControls =  not_f.includes(config.unstrategic)
-			if (config.second_strategy) {
+			var turnOffFrontrunnerControls =  not_f.includes(config.firstStrategy)
+			if (config.doTwoStrategies) {
 				for(var i=0;i<config.voterStrategies.length;i++){
 					if (! not_f.includes(config.voterStrategies[i])){
 						turnOffFrontrunnerControls = false
@@ -909,15 +918,15 @@ function main(config){
 			config.featurelist = Array.from(featureset)
 		}
 
-		ui.menu.enableStrategy2 = new function() { // Is there a 2nd strategy?
+		ui.menu.doTwoStrategies = new function() { // Is there a 2nd strategy?
 			var self = this
-			self.name = "second strategy"
+			self.name = "doTwoStrategies"
 			self.list = [
 				{realname: "opton for 2nd strategy", name:"2"}
 			];
 			self.onChoose = function(data){
 				// LOAD INPUT
-				var xlist = ["strategy","percentstrategy"]
+				var xlist = ["secondStrategy","percentStrategy"]
 				var featureset = new Set(config.featurelist)
 				for (var i in xlist){
 					var xi = xlist[i]
@@ -928,7 +937,7 @@ function main(config){
 					}
 				}
 				config.featurelist = Array.from(featureset)
-				config.second_strategy = data.isOn
+				config.doTwoStrategies = data.isOn
 				// CONFIGURE FEATURELIST
 				_loadConfigForStrategyButtons(config)
 				// CONFIGURE
@@ -938,13 +947,13 @@ function main(config){
 				menu_update()
 			};
 			self.configure = function() {
-				model.second_strategy = config.second_strategy
+				model.doTwoStrategies = config.doTwoStrategies
 				for (var i=0; i<config.numVoterGroups; i++) {
-					model.voters[i].second_strategy = config.second_strategy
+					model.voters[i].doTwoStrategies = config.doTwoStrategies
 				}
 			}
 			self.select = function() {
-				if (config.second_strategy) {
+				if (config.doTwoStrategies) {
 					self.choose.highlight("name", "2");
 				}
 			}
@@ -959,9 +968,9 @@ function main(config){
 			doms[self.name] = self.choose.dom
 		}
 
-		ui.menu.strategy2 = new function() { // strategy 2 AKA strategic voters' strategy
+		ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
 			var self = this
-			self.name = "strategy"
+			self.name = "secondStrategy"
 			self.list = [
 				{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
 				{name:"N", realname:"normalize", margin:5},
@@ -986,7 +995,7 @@ function main(config){
 			self.configure = function() {
 				model.strategic = config.strategic
 				for (var i=0; i<config.numVoterGroups; i++) {
-					model.voters[i].strategy = config.voterStrategies[i]
+					model.voters[i].secondStrategy = config.voterStrategies[i]
 				}
 			}
 			self.select = function() {
@@ -1036,9 +1045,9 @@ function main(config){
 
 		}
 		
-		ui.menu.percentstrategy = new function() {  // group count
+		ui.menu.percentStrategy = new function() {  // group count
 			var self = this
-			self.name = "percentstrategy"
+			self.name = "percentStrategy"
 
 			self.onChoose = function(slider,n) {
 				// LOAD INPUT
@@ -1144,7 +1153,7 @@ function main(config){
 		
 		function _iconButton(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
 
-		ui.menu.frun = new function() { // frontrunners
+		ui.menu.frontrunners = new function() { // frontrunners
 			var self = this
 			self.name = "frontrunners"
 			self.list = [
@@ -1209,7 +1218,7 @@ function main(config){
 					model.top2 = []
 				}
 				// SHOW CALCULATIONS //
-				ui.menu.frun.choose.highlight("realname", won);
+				ui.menu.frontrunners.choose.highlight("realname", won);
 				// UPDATE CONFIG //
 				config.preFrontrunnerIds = won
 				// CONFIGURE AND UPDATE MODEL //
@@ -1227,7 +1236,7 @@ function main(config){
 			doms[self.name] = self.choose.dom
 		}
 
-		ui.menu.yeeobject = new function() { // yee
+		ui.menu.yee = new function() { // yee
 			var self = this
 			self.name = "yee"
 			self.list = [
@@ -1380,10 +1389,6 @@ function main(config){
 			// doms[self.name] = self.choose.dom
 		}
 
-		
-
-
-
 		ui.menu.presetconfig = new function() { // pick a preset
 			var self = this
 			self.name = "presetconfig"  // no name needed
@@ -1424,12 +1429,12 @@ function main(config){
 						var systemTranslator = {Plurality:"FPTP",Ranked:"Condorcet",Approval:"Approval",Score:"Score",Three:"3-2-1"}
 						config = {}
 						config.system = systemTranslator[ballotconfig.system]
-						var s = ballotconfig.strategy || "zero strategy. judge on an absolute scale."
+						var s = ballotconfig.secondStrategy || "zero strategy. judge on an absolute scale."
 						config.voterStrategies = [s,s,s]
 						config.preFrontrunnerIds = ballotconfig.preFrontrunnerIds
 						config.featurelist = []
 						if (ballotconfig.showChoiceOfFrontrunners) {config.featurelist.push("frontrunners")}
-						if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("strategy")}
+						if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("secondStrategy")}
 						config.oneVoter = true
 						config.arena_size = 300
 					}
@@ -1459,15 +1464,7 @@ function main(config){
 			self.choose.highlight("htmlname", config.presethtmlname); // only do this once.  Otherwise it would be in updateUI
 		}
 
-
-
-
-
-
-
-
-
-		ui.menu.pixelsize = new function() {
+		ui.menu.choose_pixel_size = new function() {
 			var self = this
 			self.name = "choose_pixel_size"
 			self.list = [
@@ -1502,16 +1499,9 @@ function main(config){
 			items.push(self)
 		}
 
-
-
-
-
-
-
-
 		ui.menu.computeMethod = new function () {
 			var self = this
-			// self.name = 
+			// self.name = computeMethod
 			self.list = [
 				{name:"gpu",margin:4},
 				{name:"js",margin:4},
@@ -1541,28 +1531,9 @@ function main(config){
 			document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-		
 		ui.menu.spread_factor_voters = new function () {
 			var self = this
+			// self.name = spread_factor_voters
 			self.list = [
 				{name:"1",val:1,margin:4},
 				{name:"2",val:2,margin:4},
@@ -1599,21 +1570,9 @@ function main(config){
 			document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
 		ui.menu.arena_size = new function () {
 			var self = this
-			// self.name = 
+			// self.name = arena_size
 			self.list = [
 				{name:"300",val:300,margin:4},
 				{name:"600",val:600}
@@ -1672,7 +1631,7 @@ function main(config){
 		
 		ui.menu.median_mean = new function () {
 			var self = this
-			// self.name = 
+			// self.name = median_mean
 			self.list = [
 				{name:"median",val:2,margin:4},
 				{name:"mean",val:1}
@@ -1702,10 +1661,9 @@ function main(config){
 			document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		}
 
-
 		ui.menu.utility_shape = new function () {
 			var self = this
-			// self.name = 
+			// self.name = utility_shape
 			self.list = [
 				{name:"linear",margin:4},
 				{name:"quadratic",margin:4},
@@ -1735,12 +1693,10 @@ function main(config){
 			document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		}
 
-
-
 		ui.menu.gearicon = new function () {
-		// gear button (combines with above)
+			// gear button (combines with above)
 			var self = this
-			// self.name = 
+			// self.name = gearicon
 			self.list = [
 				{name:"config"}
 			]
@@ -1779,7 +1735,7 @@ function main(config){
 
 		ui.menu.gearoff = new function () {
 			var self = this
-			// self.name = 
+			// self.name = gearoff
 			self.list = [
 				{name:"are you sure?",realname:"You won't be able to get the config back, so I'd recommend saving first and then disabling the config and then saving again.  That way you still have a copy that you can edit later if you made a mistake."}
 			]

@@ -1786,7 +1786,7 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 	var skipthis =  true
 	for(var i=0;i<model.voters.length;i++){ // someone is looking at frontrunners, then don't skipthis
 		if (! not_f.includes(model.voters[i].unstrategic) && model.voters[0].percentStrategy != 100) skipthis = false
-		if (! not_f.includes(model.voters[i].strategy) && model.voters[0].percentStrategy != 0) skipthis = false
+		if (! not_f.includes(model.voters[i].secondStrategy) && model.voters[0].percentStrategy != 0) skipthis = false
 	}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
 	if (skipthis) return ""
 
