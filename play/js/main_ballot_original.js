@@ -40,12 +40,15 @@ function main(ballotType){
 			model.candidates[1].init()
 			model.candidates[2].init()
 			// UPDATE
+			if(ballotType=="Score") {
+				model.voters[0].type.minscore = 1
+			}
 			model.update()
 		};
 
 
 		// CREATE A BALLOT
-		window.ballot = new BallotType();
+		window.ballot = new BallotType({startAt1:true});
 		document.body.appendChild(ballot.dom);
 		model.onUpdate = function(){
 			ballot.update(model.voters[0].ballot);

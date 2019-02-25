@@ -10,7 +10,7 @@ function ScoreVoter(model){
 	var self = this;
 	self.maxscore = 5;
 	self.minscore = 0;
-	self.defaultMax = window.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
+	self.defaultMax = model.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.getBallot = function(x, y, strategy){
 
