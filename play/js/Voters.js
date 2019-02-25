@@ -1182,7 +1182,6 @@ function SingleVoter(model){
 		dist: SingleVoter,
 		type: PluralityVoter,
 	})
-	self.secondStrategy = self.firstStrategy // at first glance this doesn't seem right, but there is only one group of voters.
 
 
 	// CONFIGURE DEFAULTS

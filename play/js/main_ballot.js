@@ -77,8 +77,8 @@ function main(config){
 			// {name:"T", realname:"threshold"},
 			// {name:"SNTF", realname:"starnormfrontrunners"}
 			var onChooseVoterStrategyOn = function(data){
-				config.secondStrategy = data.realname; 
-				model.voters[0].firstStrategy = config.secondStrategy; 
+				config.firstStrategy = data.realname; 
+				model.voters[0].firstStrategy = config.firstStrategy; 
 				model.update();
 				
 			};
