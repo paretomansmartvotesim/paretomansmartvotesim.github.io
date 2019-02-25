@@ -113,7 +113,7 @@ function Model(config){
 		}
 		if(self.voterCenter) self.draggables.push(self.voterCenter)
 	}
-	self.election = function(model,options){};
+	self.election = function(self,options){};
 
 	// Init!
 	self.start = function(){  // TO IMPLEMENT FURTHER IN CALLER
@@ -148,7 +148,7 @@ function Model(config){
 			c.update();
 		}
 
-		model.result = self.election(self,self.optionsForElection);
+		self.result = self.election(self,self.optionsForElection);
 
 		// do the center voter thing
 		if (typeof self.voterCenter !== 'undefined') { // does the voterCenter exist?  If so then calculate it.
@@ -173,7 +173,7 @@ function Model(config){
 		// Clear it all!
 		self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
 
-		if (model.result) _drawResult(model)
+		if (self.result) _drawResult(self)
 
 		// DRAW 'EM ALL.
 		// Draw voters' BG first, then candidates, then voters.
@@ -191,8 +191,8 @@ function Model(config){
 			draggable.drawBackAnnotation = (function(){});
 		}
 
-		if(model.yeeobject) model.yeeobject.drawBackAnnotation = self.yee.drawYeeGuyBackground
-		if(model.yeeobject) model.yeeobject.drawAnnotation = self.yee.drawYeeAnnotation
+		if(self.yeeobject) self.yeeobject.drawBackAnnotation = self.yee.drawYeeGuyBackground
+		if(self.yeeobject) self.yeeobject.drawAnnotation = self.yee.drawYeeAnnotation
 		
 		//set annotations
 
@@ -207,7 +207,7 @@ function Model(config){
 		}
 
 		//voterCenter.update()
-		if ((typeof self.voterCenter !== 'undefined') && model.getTotalVoters() != 1) {
+		if ((typeof self.voterCenter !== 'undefined') && self.getTotalVoters() != 1) {
 			self.voterCenter.draw(self.ctx)
 		}
 
@@ -215,8 +215,8 @@ function Model(config){
 		if (self.yeeon && self.yeeobject) self.yeeobject.draw(self.ctx)
 		
 		// draw text next to the winners
-		if(model.result && model.result.winners) {
-			var objWinners = model.result.winners.map(x => model.candidatesById[x])
+		if(self.result && self.result.winners) {
+			var objWinners = self.result.winners.map(x => self.candidatesById[x])
 			if (objWinners.length > 1) {
 				for (i in objWinners) {
 					objWinners[i].drawTie(self.ctx)

@@ -99,11 +99,11 @@ function ScoreVoter(model){
 		// FILL 'EM IN
 
 		if(totalScore==0){
-			_drawBlank(ctx, x, y, size);
+			_drawBlank(model, ctx, x, y, size);
 			return;
 		}
 
-		_drawSlices(ctx, x, y, size, slices, totalSlices);
+		_drawSlices(model, ctx, x, y, size, slices, totalSlices);
 
 	};
 
@@ -456,7 +456,7 @@ function ApprovalVoter(model){
 		// If none, whatever.
 		var slices = [];
 		if(ballot.approved.length==0){
-			_drawBlank(ctx, x, y, size);
+			_drawBlank(model, ctx, x, y, size);
 			return;
 		}
 
@@ -465,7 +465,7 @@ function ApprovalVoter(model){
 			var candidate = model.candidatesById[ballot.approved[i]];
 			slices.push({ num:1, fill:candidate.fill });
 		}
-		_drawSlices(ctx, x, y, size, slices, ballot.approved.length);
+		_drawSlices(model, ctx, x, y, size, slices, ballot.approved.length);
 
 	};
 
@@ -598,7 +598,7 @@ function RankedVoter(model){
 			slices.push({ num:(n-i), fill:candidate.fill });
 		}
 
-		_drawSlices(ctx, x, y, size, slices, totalSlices);
+		_drawSlices(model, ctx, x, y, size, slices, totalSlices);
 
 	};
 
@@ -862,7 +862,7 @@ function PluralityVoter(model){
 }
 
 // helper method...
-var _drawSlices = function(ctx, x, y, size, slices, totalSlices){
+var _drawSlices = function(model, ctx, x, y, size, slices, totalSlices){
 
 	// RETINA
 	x = x*2;
@@ -905,9 +905,9 @@ var _drawSlices = function(ctx, x, y, size, slices, totalSlices){
 	}
 
 };
-var _drawBlank = function(ctx, x, y, size){
+var _drawBlank = function(model, ctx, x, y, size){
 	var slices = [{ num:1, fill:"#bbb" }];
-	_drawSlices(ctx, x, y, size, slices, 1);
+	_drawSlices(model, ctx, x, y, size, slices, 1);
 };
 
 
@@ -950,17 +950,10 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	var config = {}
 	
 	// CONFIGURE DEFAULTS
-	self.num = 3
+	_voterClassConfigHelper(self)
 	self.type = new PluralityVoter(model)
 
-	_voterClassConfigHelper(self,config)
 	
-	_fillInDefaultsByAddress(self,{
-		dist: GaussianVoters,
-		type: PluralityVoter,
-	})
-
-
 	self.init = function () {
 				
 		// HACK: larger grab area
@@ -1032,15 +1025,12 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		}
 	}
 
-
 	self.setType = function(newType){
 		self.type = new newType(model);
 	};
 
 	self.img = new Image();  // use the face
 	self.img.src = "img/voter_face.png";
-
-
 
 	// UPDATE! Get all ballots.
 	self.ballots = [];
@@ -1105,7 +1095,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		_drawBlank(ctx, self.x, self.y, size)
+		_drawBlank(model, ctx, self.x, self.y, size)
 		
 		// Face!
 		size = size*2;
@@ -1125,29 +1115,9 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 }
 
-function _voterClassConfigHelper(self,config) {
+function _voterClassConfigHelper(self) {
 	// a helper for configuring 
 
-	// NUM
-	_fillInSomeDefaults(self,config,[ // this works better for gaussian voter
-		"num",
-		"vid",
-		"snowman",
-		"x_voters",
-		"spread_factor_voters"
-	])
-	// not sure if we need all these, but just in case
-	_copySomeAttributes(self,config,[ // config has these
-		"percentStrategy",
-		"doTwoStrategies",
-		"group_count",
-		"group_spread",
-		"secondStrategy",
-		"firstStrategy",
-		"preFrontrunnerIds"
-	])
-	
-	// all the defaults, just in case
 	_fillInDefaults(self,{ 
 		// FIRST group in expVoterPositionsAndDistributions
 		num: 3,
@@ -1172,29 +1142,16 @@ function SingleVoter(model){
 
 	var self = this;
 	Draggable.call(self, model);
-	var config = {}
-	
-	self.type = new PluralityVoter(model);
-
-	_voterClassConfigHelper(self,config)
-	
-	_fillInDefaultsByAddress(self,{
-		dist: SingleVoter,
-		type: PluralityVoter,
-	})
-
 
 	// CONFIGURE DEFAULTS
-	self.type = new PluralityVoter(model)
+	_voterClassConfigHelper(self)
+	self.type = new PluralityVoter(model);
 
 	self.setType = function(newType){
 		self.type = new newType(model);
 	};
 
 	self.init = function () {
-		self.setType = function(newType){
-			self.type = new newType(model);
-		};
 
 		// Image!
 		self.img = new Image();
@@ -1427,7 +1384,7 @@ function VoterCenter(model){
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		_drawBlank(ctx, self.x, self.y, size);
+		_drawBlank(model, ctx, self.x, self.y, size);
 		
 		// Face!
 		size = size*2;

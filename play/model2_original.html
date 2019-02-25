@@ -24,23 +24,33 @@
 <script>
 Loader.onload = function(){
 
-	// SELF CONTAINED MODEL
+	// CREATE
 	window.model = new Model();
+	// INIT
+	model.initDOM()
 	document.body.appendChild(model.dom);
-	model.onInit = function(){
 
-		// Voters & Candidates
-		model.addVoters({
-			dist: GaussianVoters,
-			type: PluralityVoter,
-			x:150, y:150
-		});
-		model.addCandidate({id:"square", x:50, y:125});
-		model.addCandidate({id:"triangle", x:250, y:125});
+	model.start = function(){
+		// CREATE
+		model.voters.push(new GaussianVoters(model))
+		model.candidates.push(new Candidate(model))
+		model.candidates.push(new Candidate(model))
+		// CONFIGURE
+		Object.assign( model.voters[0],    {x:150, y:150, type: new PluralityVoter(model)} )
+		Object.assign( model.candidates[0],{x: 50, y:125, id:"square"} )
+		Object.assign( model.candidates[1],{x:250, y:125, id:"triangle"} )
+		// INIT
+		model.initMODEL()
+		model.voters[0].init()
+		model.candidates[0].init()
+		model.candidates[1].init()
 		model.election = Election.plurality
 		model.optionsForElection = {sidebar:true,verbose:true}
+		// UPDATE
+		model.update()
+
 	};
-	model.init();
+	model.start();
 
 };
 Loader.load([

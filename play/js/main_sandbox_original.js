@@ -1,20 +1,25 @@
-window.FULL_SANDBOX = window.FULL_SANDBOX || false;
-window.HACK_BIG_RANGE = true;
-
-window.ONLY_ONCE = false;
-
 function main(config){
 
-	// ONCE.
-	if(ONLY_ONCE) return;
-	ONLY_ONCE=true;
+	// Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
+	// LOAD DEFAULTS and INPUT
+	var defaults = {
+		system: "FPTP",
+		candidates: 3,
+		voters: 1,
+		features: 1 // 1-basic, 2-voters, 3-candidates, 4-save
+	}	
+	var url = window.top.location.href;
+
+
+	// CONFIGURE - configure data structures based on LOAD to be ready for INIT
+	// in this case: config, initialConfig are the data structures.
+
+	_fillInDefaults(config,defaults)
 	///////////////////////////////////////////////////////////////
 	// ACTUALLY... IF THERE'S DATA IN THE QUERY STRING, OVERRIDE //
 	///////////////////////////////////////////////////////////////
-
-	var _getParameterByName = function(name, url){
-		var url = window.top.location.href;
+	var _getParameterByName = function(name,url){
 		name = name.replace(/[\[\]]/g, "\\$&");
 		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
 		results = regex.exec(url);
@@ -22,12 +27,10 @@ function main(config){
 		if (!results[2]) return '';
 		return decodeURIComponent(results[2].replace(/\+/g, " "));
 	};
-	var modelData = _getParameterByName("m");
+	var modelData = _getParameterByName("m",url);
 	if(modelData){
-
 		// Parse!
 		var data = JSON.parse(modelData);
-
 		// Turn into initial config
 		config = {
 			features: 4,
@@ -38,268 +41,375 @@ function main(config){
 			voterPositions: data.v,
 			description: data.d
 		};
-
 	}
-
-	// Defaults...
-	config = config || {};
-	config.system = config.system || "FPTP";
-	config.candidates = config.candidates || 3;
-	config.voters = config.voters || 1;
-	config.features = config.features || 1; // 1-basic, 2-voters, 3-candidates, 4-save
 	var initialConfig = JSON.parse(JSON.stringify(config));
 
+
+
+	// INIT - initialize all data structures
 	Loader.onload = function(){
 
 		////////////////////////
 		// THE FRIGGIN' MODEL //
 		////////////////////////
 
-		window.model = new Model();
+		// CREATE
+			
+		var ui = {}
+		
+		var model = new Model();
+		ui.model = model
+
+		// CONFIGURE DEFAULTS
+		model.electionOptions = {sidebar:true}
+		model.HACK_BIG_RANGE = true;
+
+		// INIT
+		ui.model = model
+		model.initDOM()
 		document.querySelector("#center").appendChild(model.dom);
 		model.dom.removeChild(model.caption);
 		document.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
-
-		// INIT!
-		model.onInit = function(){
-
-			// Based on config... what should be what?
-			model.numOfCandidates = config.candidates;
-			model.numVoterGroups = config.voters;
-			model.system = config.system;
-			var votingSystem = votingSystems.filter(function(system){
-				return(system.name==model.system);
-			})[0];
-			model.voterType = votingSystem.voter;
-			model.election = votingSystem.election;
-
-			// Voters
-			var num = model.numVoterGroups;
-			var voterPositions;
-			if(num==1){
-				voterPositions = [[150,150]];
-			}else if(num==2){
-				voterPositions = [[150,100],[150,200]];
-			}else if(num==3){
-				voterPositions = [[150,115],[115,180],[185,180]];
+		model.start = function(){
+			// CREATE
+			for(var i=0; i<config.candidates; i++) model.candidates.push(new Candidate(model))
+			for(var i=0; i<config.voters; i++) model.voters.push(new GaussianVoters(model))
+			// CONFIGURE
+			//     expand config to calculate some values to add to the model			
+			//     load expanded config into the model
+			//     configure writes to model and reads from config.  Sanity rule: configure does not read from model.
+			_menuF("configure")   
+			// INIT
+			model.initMODEL()
+			for (var i=0; i<model.candidates.length; i++) {
+				model.candidates[i].init()
 			}
-			for(var i=0; i<num; i++){
-				var pos = voterPositions[i];
-				model.addVoters({
-					dist: GaussianVoters,
-					type: model.voterType,
-					num:(4-num),
-					x:pos[0], y:pos[1]
-				});
+			for (var i=0; i<model.voters.length; i++) {
+				model.voters[i].init()
 			}
-
-			// Candidates, in a circle around the center.
-			var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
-			var angle = 0;
-			var num = model.numOfCandidates;
-			switch(num){
-				case 3: angle=Math.TAU/12; break;
-				case 4: angle=Math.TAU/8; break;
-				case 5: angle=Math.TAU/6.6; break;
-			}
-			for(var i=0; i<num; i++){
-				var r = 100;
-				var x = 150 - r*Math.cos(angle);
-				var y = 150 - r*Math.sin(angle);
-				var id = _candidateIDs[i];
-				model.addCandidate({id:id, x:x, y:y});
-				angle += Math.TAU/num;
-			}
-
-		};
-		model.election = Election.plurality;
-		model.onUpdate = function(){
-			model.election(model, {sidebar:true});
+			model.update()
 		};
 
-		// In Position!
-		var setInPosition = function(){
-
-			var positions;
-			
-			// CANDIDATE POSITIONS
-			positions = config.candidatePositions;
-			if(positions){
-				for(var i=0; i<positions.length; i++){
-					var position = positions[i];
-					var candidate = model.candidates[i];
-					candidate.x = position[0];
-					candidate.y = position[1];
-				}
-			}
-
-			// VOTER POSITION
-			positions = config.voterPositions;
-			if(positions){
-				for(var i=0; i<positions.length; i++){
-					var position = positions[i];
-					var voter = model.voters[i];
-					voter.x = position[0];
-					voter.y = position[1];
-				}
-			}
-
-			// update!
-			model.update();
-
-		};
-
-
+		// helper
+		function _menuF(f) { // run function if it exists for each menu item
+			for(var item in ui.menu ) {
+				if (ui.menu[item][f]) ui.menu[item][f]()
+			} 
+		}
+		
 		//////////////////////////////////
 		// BUTTONS - WHAT VOTING SYSTEM //
 		//////////////////////////////////
 
+
+		ui.menu = {}
+
 		// Which voting system?
-		var votingSystems = [
-			{name:"FPTP", voter:PluralityVoter, election:Election.plurality, margin:4},
-			{name:"IRV", voter:RankedVoter, election:Election.irv},
-			{name:"Borda", voter:RankedVoter, election:Election.borda, margin:4},
-			{name:"Condorcet", voter:RankedVoter, election:Election.condorcet},
-			{name:"Approval", voter:ApprovalVoter, election:Election.approval, margin:4},
-			{name:"Score", voter:ScoreVoter, election:Election.score}
-		];
-		var onChooseSystem = function(data){
+		ui.menu.systems = new function() { // "new function () {code}" means make an object "this", and run "code" in a new scope
+			// I made a singleton class so we can use "self" instead of saying "systems" (or another button group name).  
+			// This is useful when we want to make another button group and we copy and paste this code.
+			// It might be better to make a class and then an instance, but I think this singleton class is easier.
+			// single = function() {stuff}; var systems = new single()
+			var self = this
+			self.name = "systems"
 
-			// update config...
-			config.system = data.name;
-
-			// no reset...
-			model.voterType = data.voter;
-			for(var i=0;i<model.voters.length;i++){
-				model.voters[i].setType(data.voter);
+			self.list = [
+				{name:"FPTP", voter:PluralityVoter, election:Election.plurality, margin:4},
+				{name:"IRV", voter:RankedVoter, election:Election.irv},
+				{name:"Borda", voter:RankedVoter, election:Election.borda, margin:4},
+				{name:"Condorcet", voter:RankedVoter, election:Election.condorcet},
+				{name:"Approval", voter:ApprovalVoter, election:Election.approval, margin:4},
+				{name:"Score", voter:ScoreVoter, election:Election.score}
+			];
+			self.listByName = function() {
+				var votingSystem = self.list.filter(function(system){
+					return(system.name==config.system);
+				})[0];
+				return votingSystem;
 			}
-			model.election = data.election;
-			model.update();
-
-		};
-		window.chooseSystem = new ButtonGroup({
-			label: "what voting system?",
-			width: 108,
-			data: votingSystems,
-			onChoose: onChooseSystem
-		});
-		document.querySelector("#left").appendChild(chooseSystem.dom);
+			self.onChoose = function(data){
+				// LOAD INPUT
+				config.system = data.name;
+				// CONFIGURE
+				self.configure()
+				// UPDATE
+				model.update();
+			};
+			self.configure = function() {
+				var s = self.listByName()
+				model.election = s.election
+				model.system = config.system;
+				// model.voterType = self.expVoterType()
+				for(var i=0;i<model.voters.length;i++){
+					// model.voters[i].type = new (self.expVoterType())
+					model.voters[i].setType( s.voter ); // calls "new VoterType(model)"
+				}
+			}
+			self.select = function() {
+				self.choose.highlight("name", config.system)
+			}
+			self.choose = new ButtonGroup({
+				label: "what voting system?",
+				width: 108,
+				data: self.list,
+				onChoose: self.onChoose
+			});
+			document.querySelector("#left").appendChild(self.choose.dom);
+		}
 
 		// How many voters?
-		if(initialConfig.features>=2){ // CANDIDATES as feature.
-
-			var voters = [
+		ui.menu.voters = new function() {
+			var self = this
+			self.list = [
 				{name:"one", num:1, margin:5},
 				{name:"two", num:2, margin:5},
 				{name:"three", num:3},
-			];
-			var onChooseVoters = function(data){
-
-				// update config...
+			]
+			self.onChoose = function(data){
+				// LOAD INPUT
 				config.voters = data.num;
-
-				// save candidates before switching!
-				config.candidatePositions = save().candidatePositions;
-
-				// reset!
-				config.voterPositions = null;
-				model.reset();
-				setInPosition();
-
+				config.voterPositions = null
+				// CREATE
+				model.voters = []
+				for(var i=0; i<config.voters; i++) {
+					model.voters.push(new GaussianVoters(model))
+				}
+				// CONFIGURE
+				self.configure()
+				// INIT
+				model.initMODEL()
+				for(var i=0; i<model.voters.length; i++) {
+					model.voters[i].init()
+				}
+				// UPDATE
+				model.update()
 			};
-			window.chooseVoters = new ButtonGroup({
+			self.configure = function() {
+				model.numOfVoters = config.voters;
+				var num = config.voters;
+				if (config.voterPositions) {
+					for(var i=0; i<num; i++){
+						var pos = config.voterPositions[i];
+						Object.assign(model.voters[i], {
+							num:(4-num),
+							x:pos[0], y:pos[1]
+						})
+						model.voters[i].setType( ui.menu.systems.listByName(config).voter ); // calls "new VoterType(model)"
+					}
+				} else {
+					var voterPositions;
+					if(num==1){
+						voterPositions = [[150,150]];
+					}else if(num==2){
+						voterPositions = [[150,100],[150,200]];
+					}else if(num==3){
+						voterPositions = [[150,115],[115,180],[185,180]];
+					}
+
+					var votingSystem = ui.menu.systems.list.filter(function(system){
+						return(system.name==config.system);
+					})[0];
+					for(var i=0; i<num; i++){
+						var pos = voterPositions[i];
+						Object.assign(model.voters[i], {
+							num:(4-num),
+							x:pos[0], y:pos[1]
+						})
+						model.voters[i].setType( ui.menu.systems.listByName(config).voter ); // calls "new VoterType(model)"
+					}
+				}
+			}
+			self.select = function() {
+				self.choose.highlight("num", config.voters)
+			}
+			self.choose = new ButtonGroup({
 				label: "how many groups of voters?",
 				width: 70,
-				data: voters,
-				onChoose: onChooseVoters
+				data: self.list,
+				onChoose: self.onChoose
 			});
-			document.querySelector("#left").appendChild(chooseVoters.dom);
-
+			document.querySelector("#left").appendChild(self.choose.dom);
 		}
 
-		// How many candidates?
-		if(initialConfig.features>=3){ // VOTERS as feature.
-
-			var candidates = [
+		if(initialConfig.features<2){ // VOTERS as feature.
+			ui.menu.voters.choose.dom.hidden = true
+		}
+		
+		// How many voters?
+		ui.menu.candidates = new function() {
+			var self = this
+			self.list = [
 				{name:"two", num:2, margin:4},
 				{name:"three", num:3, margin:4},
 				{name:"four", num:4, margin:4},
 				{name:"five", num:5}
 			];
-			var onChooseCandidates = function(data){
-
-				// update config...
+			self.onChoose = function(data){
+				// LOAD INPUT
 				config.candidates = data.num;
-
-				// save voters before switching!
-				config.voterPositions = save().voterPositions;
-
-				// reset!
-				config.candidatePositions = null;
-				model.reset();
-				setInPosition();
-
+				config.candidatePositions = null
+				// CREATE
+				model.candidates = []
+				for(var i=0; i<config.candidates; i++) {
+					model.candidates.push(new Candidate(model))
+				}
+				// CONFIGURE
+				self.configure()
+				// INIT
+				model.initMODEL()
+				for(var i=0; i<model.candidates.length; i++) {
+					model.candidates[i].init()
+				}
+				// UPDATE
+				model.update()
 			};
-			window.chooseCandidates = new ButtonGroup({
+			self.configure = function() {
+				model.numOfCandidates = config.candidates;
+				// Candidates, in a circle around the center.
+				var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
+				var num = config.candidates;
+				if (config.candidatePositions) {
+					for(var i=0; i<num; i++){
+						var id = _candidateIDs[i];
+						Object.assign(model.candidates[i],{
+							id:id,
+							x:config.candidatePositions[i][0],
+							y:config.candidatePositions[i][1]
+						})
+					}
+				} else {
+					var angle = 0;
+					switch(num){
+						case 3: angle=Math.TAU/12; break;
+						case 4: angle=Math.TAU/8; break;
+						case 5: angle=Math.TAU/6.6; break;
+					}
+					for(var i=0; i<num; i++){
+						var r = 100;
+						var x = 150 - r*Math.cos(angle);
+						var y = 150 - r*Math.sin(angle);
+						var id = _candidateIDs[i];
+						Object.assign(model.candidates[i],{
+							id:id,
+							x:x,
+							y:y
+						})
+						angle += Math.TAU/num;
+					}
+
+				}
+			}
+			self.select = function() {
+				self.choose.highlight("num", config.candidates)
+			}
+			self.choose = new ButtonGroup({
 				label: "how many candidates?",
 				width: 52,
-				data: candidates,
-				onChoose: onChooseCandidates
+				data: self.list,
+				onChoose: self.onChoose
 			});
-			document.querySelector("#left").appendChild(chooseCandidates.dom);
-
+			document.querySelector("#left").appendChild(self.choose.dom);
 		}
 
-
-		///////////////////////
-		//////// INIT! ////////
-		///////////////////////
-
-		model.onInit(); // NOT init, coz don't update yet...
-		setInPosition();
-
-		// Select the UI!
-		var selectUI = function(){
-			if(window.chooseSystem) chooseSystem.highlight("name", model.system);
-			if(window.chooseCandidates) chooseCandidates.highlight("num", model.numOfCandidates);
-			if(window.chooseVoters) chooseVoters.highlight("num", model.numVoterGroups);
-		};
-		selectUI();
-
+		if(initialConfig.features<3){ // CANDIDATES as feature.
+			ui.menu.candidates.choose.dom.hidden = true
+		}
 
 		//////////////////////////
 		//////// RESET... ////////
 		//////////////////////////
 
-		// CREATE A RESET BUTTON
-		var resetDOM = document.createElement("div");
-		resetDOM.id = "reset";
-		resetDOM.innerHTML = "reset";
-		resetDOM.style.top = "340px";
-		resetDOM.style.left = "350px";
-		resetDOM.onclick = function(){
-			
-			config = JSON.parse(JSON.stringify(initialConfig)); // RESTORE IT!
+		ui.arena = {}
+		ui.arena.reset = new function() {
+			var self = this
+			var resetDOM = document.createElement("div");
+			document.body.appendChild(resetDOM);
+			resetDOM.id = "reset";
+			resetDOM.innerHTML = "reset";
+			resetDOM.style.top = "340px";
+			resetDOM.style.left = "350px";
+			resetDOM.onclick = function(){
+				
+				// LOAD INITIAL CONFIG
+				config = JSON.parse(JSON.stringify(initialConfig));
+				// RESET = CREATE, CONFIGURE, INIT, & UPDATE
+				model.reset()
 
-			// Reset manually, coz update LATER.
-			model.reset(true);
-			model.onInit();
-			setInPosition();
-			
-			// Back to ol' UI
-			selectUI();
+				// Back to ol' UI
+				updateUI();
 
-		};
-		document.body.appendChild(resetDOM);
+			};
+			self.dom = resetDOM
+		}
+
+		//////////////////////////////////
+		/////// SAVE & SHARE, YO! ////////
+		//////////////////////////////////
+
+		ui.arena.desc = new function() { // Create a description up top
+			var self = this
+			var descDOM = document.createElement("div");
+			descDOM.id = "description_container";
+			var refNode = document.getElementById("left");
+			document.body.insertBefore(descDOM, refNode);
+			var descText = document.createElement("textarea");
+			descText.id = "description_text";
+			descDOM.appendChild(descText);
+
+			// yay.
+			descText.value = initialConfig.description;
+			self.dom = descDOM
+			self.text = {}
+			self.text.dom = descText
+		}
 
 
+		ui.arena.save = new function() { // Create a "save" button
+			var self = this
+			var saveDOM = document.createElement("div");
+			saveDOM.id = "save";
+			saveDOM.innerHTML = "save:";
+			saveDOM.style.top = "470px";
+			saveDOM.style.left = "120px";
+			saveDOM.onclick = function(){
+				_saveModel();
+			};
+			document.body.appendChild(saveDOM);
+			self.dom = saveDOM
+		}
 
+		ui.arena.linkText = new function() { // The share link textbox
+			var self = this
+			var linkText = document.createElement("input");
+			linkText.id = "savelink";
+			linkText.placeholder = "[when you save your model, a link you can copy will show up here]";
+			linkText.setAttribute("readonly", true);
+			linkText.onclick = function(){
+				linkText.select();
+			};
+			document.body.appendChild(linkText);
+			self.dom = linkText
+		}
+
+		if(initialConfig.features<4){ // SAVE & SHARE as feature.
+			// hide menus
+			ui.arena.desc.dom.hidden = true
+			ui.arena.desc.text.dom.hidden = true
+			ui.arena.save.dom.hidden = true
+			ui.arena.linkText.dom.hidden = true
+		} else {
+			// Move that reset button
+			ui.arena.reset.dom.style.top = "470px";
+			ui.arena.reset.dom.style.left = "0px";
+		}
+	
 		///////////////////////////
 		////// SAVE POSITION //////
 		///////////////////////////
 
-		window.save = function(log){
+		// helpers
+		ui.saveDrags = function(log){
 
 			// Candidate positions
 			var positions = [];
@@ -333,60 +443,63 @@ function main(config){
 
 		};
 
+		// SAVE & PARSE
+		// ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
+		var _saveModel = function(){
 
+			// Data!
+			var data = {};
 
-		//////////////////////////////////
-		/////// SAVE & SHARE, YO! ////////
-		//////////////////////////////////
+			// System?
+			data.s = config.system;
+			console.log("voting system: "+data.s);
 
-		var descText, linkText;
-		if(initialConfig.features>=4){ // SAVE & SHARE as feature.
+			// Positions...
+			var positions = ui.saveDrags(true);
+			data.v = positions.voterPositions;
+			data.c = positions.candidatePositions; 
 
-			// Create a description up top
-			var descDOM = document.createElement("div");
-			descDOM.id = "description_container";
-			var refNode = document.getElementById("left");
-			document.body.insertBefore(descDOM, refNode);
-			descText = document.createElement("textarea");
-			descText.id = "description_text";
-			descDOM.appendChild(descText);
+			// Description
+			var description = document.getElementById("description_text");
+			data.d = description.value;
+			console.log("description: "+data.d);
 
-			// yay.
-			descText.value = initialConfig.description;
+			// URI ENCODE!
+			var uri = encodeURIComponent(JSON.stringify(data));
 
-			// Move that reset button
-			resetDOM.style.top = "470px";
-			resetDOM.style.left = "0px";
-
-			// Create a "save" button
-			var saveDOM = document.createElement("div");
-			saveDOM.id = "save";
-			saveDOM.innerHTML = "save:";
-			saveDOM.style.top = "470px";
-			saveDOM.style.left = "120px";
-			saveDOM.onclick = function(){
-				_saveModel();
+			// ALSO TURN IT INTO INITIAL CONFIG. _parseModel
+			initialConfig = {
+				features: 4,
+				system: data.s,
+				candidates: data.c.length,
+				candidatePositions: data.c,
+				voters: data.v.length,
+				voterPositions: data.v
 			};
-			document.body.appendChild(saveDOM);
 
-			// The share link textbox
-			linkText = document.createElement("input");
-			linkText.id = "savelink";
-			linkText.placeholder = "[when you save your model, a link you can copy will show up here]";
-			linkText.setAttribute("readonly", true);
-			linkText.onclick = function(){
-				linkText.select();
-			};
-			document.body.appendChild(linkText);
+			// Put it in the save link box!
+			var getUrl = window.location;
+			var baseUrl = getUrl.protocol + "//" + getUrl.host; //http://ncase.me/ballot
+			var link = baseUrl + "/sandbox/?m="+uri;
+			var savelink = document.getElementById("savelink");
+			savelink.value = "saving...";
+			setTimeout(function(){
+				savelink.value = link;
+			},750);
 
-			// Create a URL... (later, PARSE!)
-			// save... ?d={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
+		};
 
-		}
-		
-
+		// UPDATE
+		model.start(); 
+		updateUI();  // Select the UI!
+		function updateUI() {
+			_menuF("select")
+		};
 	};
 
+
+
+	// UPDATE - run actions
 	Loader.load([
 		"img/voter_face.png",
 		"img/square.png",
@@ -395,51 +508,6 @@ function main(config){
 		"img/pentagon.png",
 		"img/bob.png"
 	]);
-
-	// SAVE & PARSE
-	// ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
-	var _saveModel = function(){
-
-		// Data!
-		var data = {};
-
-		// System?
-		data.s = config.system;
-		console.log("voting system: "+data.s);
-
-		// Positions...
-		var positions = save(true);
-		data.v = positions.voterPositions;
-		data.c = positions.candidatePositions; 
-
-		// Description
-		var description = document.getElementById("description_text");
-		data.d = description.value;
-		console.log("description: "+data.d);
-
-		// URI ENCODE!
-		var uri = encodeURIComponent(JSON.stringify(data));
-
-		// ALSO TURN IT INTO INITIAL CONFIG. _parseModel
-		initialConfig = {
-			features: 4,
-			system: data.s,
-			candidates: data.c.length,
-			candidatePositions: data.c,
-			voters: data.v.length,
-			voterPositions: data.v
-		};
-
-		// Put it in the save link box!
-		var link = "http://ncase.me/ballot/sandbox?m="+uri;
-		var savelink = document.getElementById("savelink");
-		savelink.value = "saving...";
-		setTimeout(function(){
-			savelink.value = link;
-		},750);
-
-	};
-
 	// FUNNY HACK.
 	setInterval(function(){
 		var ohno = document.getElementById("ohno");

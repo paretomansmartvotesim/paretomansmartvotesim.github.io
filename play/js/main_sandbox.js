@@ -101,7 +101,7 @@ function main(config){
 						config.sandboxsave = true
 						return ["systems","voters","candidates"] 	}	}	}
 		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee"])
+		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon"])
 		// clear the grandfathered config settings
 		delete config.doPercentFirst
 		delete config.features
@@ -122,7 +122,6 @@ function main(config){
 				"doTwoStrategies":"doTwoStrategies",
 				"yee":"yee",
 				"rbvote":"rbSystems",
-				"rbsystems":"rbSystems",
 				"rbSystems":"rbSystems",
 				"custom_number_voters":"xVoterGroups",
 				"xHowManyVoterGroups":"xVoterGroups",
@@ -137,6 +136,7 @@ function main(config){
 				"poll":"poll",
 				"autoPoll":"autoPoll",
 				"frontrunners":"frontrunners",
+				"gearicon":"gearicon"
 				// "primaries":"primaries"
 			}
 			var temp_featurelist = []
@@ -148,7 +148,6 @@ function main(config){
 			config.featurelist = temp_featurelist
 		}
 		
-
 		// VOTER DEFAULTS
 		// we want individual strategies to be loaded in, if they are there
 		// if we have a blank slate, then we want to fill in with the variable "strategic"
@@ -251,7 +250,7 @@ function main(config){
 
 		function menu_update() {
 			// UPDATE MENU //
-			for (i in allnames) if(config.featurelist.includes(allnames[i])) {doms[allnames[i]].hidden = false} else {doms[allnames[i]].hidden = true}
+			for (i in ui.menu) if(config.featurelist.includes(i)) {ui.menu[i].choose.dom.hidden = false} else {ui.menu[i].choose.dom.hidden = true}
 			// Make the MENU look correct.  The MENU is not part of the "model".
 			for (i in ui.menu.percentStrategy.choose.sliders) ui.menu.percentStrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 			for (i in ui.menu.group_count.choose.sliders) ui.menu.group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
@@ -267,38 +266,6 @@ function main(config){
 			}
 			if (config.numVoterGroups == 1) ui.menu.yee.choose.dom.childNodes[8+0].hidden=true
 		}
-		// In Position!
-		var setInPosition = function(){ // runs when we change the config for number of voters  or candidates
-
-			var positions;
-
-			// CANDIDATE POSITIONS
-			positions = config.candidatePositions;
-			if(positions){
-				for(var i=0; i<positions.length; i++){
-					var position = positions[i];
-					var candidate = model.candidates[i];
-					candidate.x = position[0] //+ (model.arena_size - 300) * .5;
-					candidate.y = position[1] //+ (model.arena_size - 300) * .5;
-				}
-			}
-
-			// VOTER POSITION
-			positions = config.voterPositions;
-			if(positions){
-				for(var i=0; i<positions.length; i++){
-					var position = positions[i];
-					var voter = model.voters[i];
-					voter.x = position[0] //+ (model.arena_size - 300) * .5;
-					voter.y = position[1] //+ (model.arena_size - 300) * .5;
-				}
-			}
-
-			// update!
-			model.update();
-
-		};
-
 		
 		///////////////////
 		// SLIDERS CLASS //
@@ -357,12 +324,6 @@ function main(config){
 		//////////////////////////////////
 
 		ui.menu = {}
-
-		// Initialize variables
-		var items = []
-		var allnames = ["systems","rbSystems","nVoterGroups","xVoterGroups","group_count","group_spread","nCandidates","secondStrategy","doTwoStrategies","percentStrategy","firstStrategy","frontrunners","autoPoll","poll","yee","yeefilter","choose_pixel_size"] // ,"primaries"
-		var doms = {}  // for hiding menus, later
-	
 		ui.menu.systems = new function() { // Which voting system?
 			// "new function () {code}" means make an object "this", and run "code" in a new scope
 			// I made a singleton class so we can use "self" instead of saying "systems" (or another button group name).  
@@ -438,7 +399,6 @@ function main(config){
 				self.choose.highlight("name", config.system)
 			}
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.rbSystems = new function() { // Which RB voting system?
@@ -491,7 +451,6 @@ function main(config){
 			}
 			document.querySelector("#left").appendChild(self.choose.dom);
 			self.choose.dom.hidden = true
-			doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.nVoterGroups = new function() { // How many voters?
@@ -543,8 +502,12 @@ function main(config){
 				config.voterPositions = null
 				// CREATE
 				model.voters = []
-				for(var i=0; i<config.numVoterGroups; i++) {
-					model.voters.push(new GaussianVoters(model))
+				if (config.oneVoter) {
+					model.voters.push(new SingleVoter(model))
+				} else {
+					for(var i=0; i<config.numVoterGroups; i++) {
+						model.voters.push(new GaussianVoters(model))
+					}
 				}
 				// CONFIGURE
 				self.configure()
@@ -612,11 +575,6 @@ function main(config){
 					}
 					for(var i=0; i<num; i++){
 						var pos = voterPositions[i];
-						if (config.oneVoter) {
-							var dist = SingleVoter
-						} else {
-							var dist = GaussianVoters
-						}
 						Object.assign(model.voters[i], {
 							vid: i,
 							num:(4-num),
@@ -640,8 +598,6 @@ function main(config){
 				onChoose: self.onChoose
 			});
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
-			items.push(self)
 		}
 
 		ui.menu.xVoterGroups = new function() { // if the last option X is selected, we need a selection for number of voters
@@ -679,11 +635,9 @@ function main(config){
 			})
 			// x_voter_sliders[0] = 
 			document.querySelector("#left").appendChild(self.choose.dom)
-			doms[self.name] = self.choose.dom
 			self.select = function() {
 				self.choose.sliders[0].value = config.xNumVoterGroups // TODO: load x_voters config somehow
 			}
-			items.push(self)
 		}
 		
 		ui.menu.group_count = new function() {  // group count
@@ -725,7 +679,6 @@ function main(config){
 				labelText: "what # voters in each group?"
 			})
 			document.querySelector("#left").appendChild(self.choose.dom)
-			doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.group_spread = new function() {  // group count
@@ -762,13 +715,11 @@ function main(config){
 				labelText: "how spread out is the group?"
 			})
 			document.querySelector("#left").appendChild(self.choose.dom)
-			doms[self.name] = self.choose.dom
 			self.select = function() {
 				for (i in self.choose.sliders) {
 					self.choose.sliders[i].value = config.voter_group_spread[i]
 				}
-			}
-			items.push(self)
+			}			
 		}
 
 		ui.menu.nCandidates = new function() { // how many candidates?
@@ -845,7 +796,6 @@ function main(config){
 				self.choose.highlight("num", config.numOfCandidates);
 			}
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
@@ -885,7 +835,6 @@ function main(config){
 				self.choose.highlight("realname", config.firstStrategy);
 			}
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
 		}
 
 		function _loadConfigForStrategyButtons(config) {			
@@ -964,8 +913,7 @@ function main(config){
 				onChoose: self.onChoose,
 				isCheckbox: true
 			});
-			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
+			document.querySelector("#left").appendChild(self.choose.dom);			
 		}
 
 		ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
@@ -1011,38 +959,6 @@ function main(config){
 				onChoose: self.onChoose
 			});
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
-		}
-
-		if(0){
-
-			var strategyPercent = [
-				{name:"0", num:0, margin:4},
-				{name:"50", num:50, margin:4},
-				{name:"80", num:80, margin:4},
-				{name:"100", num:100}
-			];
-			var onChoosePercentStrategy = function(data){
-
-				// UPDATE CONFIG //
-				config.voterPercentStrategy[0] = data.num;
-
-				// UPDATE MODEL //
-				// no reset...
-				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].percentStrategy = config.voterPercentStrategy[i]
-				}
-				model.update();
-
-			};
-			window.choosePercentStrategy = new ButtonGroup({
-				label: "how many strategize? %",
-				width: 52,
-				data: strategyPercent,
-				onChoose: onChoosePercentStrategy
-			});
-			document.querySelector("#left").appendChild(choosePercentStrategy.dom);
-
 		}
 		
 		ui.menu.percentStrategy = new function() {  // group count
@@ -1066,6 +982,11 @@ function main(config){
 			self.configureN = function(n) {
 				model.voters[n].percentStrategy = config.voterPercentStrategy[n]
 			}
+			self.select = function() {
+				for (i in self.choose.sliders) {
+					self.choose.sliders[i].value = config.voterPercentStrategy[i]
+				}
+			}
 			self.choose = new sliderSet({
 				max: "100",
 				min:"0",
@@ -1077,35 +998,34 @@ function main(config){
 				labelText: "what % use this 2nd strategy?"
 			})
 			document.querySelector("#left").appendChild(self.choose.dom)
-			doms[self.name] = self.choose.dom
-			self.select = function() {
-				for (i in self.choose.sliders) {
-					self.choose.sliders[i].value = config.voterPercentStrategy[i]
-				}
-			}
 		}	
 
 		if (0) { // are there primaries?
-			// 
-			
-			// var primaries = [
-			// 	{name:"Yes",realname:"Yes", margin:5},
-			// 	{name:"No",realname:"No"}
-			// ];
-			// var onChoosePrimaries = function(data){
-			// 	config.primaries = data.name
-			// 	model.primaries = data.name
-			// 	model.update()
-
-			// };
-			// window.choosePrimaries = new ButtonGroup({
-			// 	label: "Primaries?",
-			// 	width: 72,
-			// 	data: primaries,
-			// 	onChoose: onChoosePrimaries
-			// });
-			// document.querySelector("#left").appendChild(choosePrimaries.dom);
-			// doms["primaries"] = choosePrimaries.dom
+			ui.menu.primaries = new function() {
+				var self = this
+				self.list = [
+					{name:"Yes",realname:"Yes", margin:5},
+					{name:"No",realname:"No"}
+				];
+				self.onChoose = function(data){
+					config.primaries = data.name
+					self.configure()
+					model.update()
+				};
+				self.configure = function() {
+					model.primaries = data.name
+				}
+				self.select = function() {
+					self.choose.highlight("name", config.primaries)
+				}
+				self.choose = new ButtonGroup({
+					label: "Primaries?",
+					width: 72,
+					data: self.list,
+					onChoose: self.onChoose
+				});
+				document.querySelector("#left").appendChild(choosePrimaries.dom);
+			}
 		}
 
 		ui.menu.autoPoll = new function() { // do a poll to find frontrunner
@@ -1148,7 +1068,6 @@ function main(config){
 				onChoose: self.onChoose
 			});
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
 		}
 		
 		function _iconButton(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
@@ -1193,9 +1112,7 @@ function main(config){
 				onChoose: self.onChoose,
 				isCheckbox: true
 			});
-			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
-			items.push(self)
+			document.querySelector("#left").appendChild(self.choose.dom);			
 		}
 
 		ui.menu.poll = new function() { // do a poll to find frontrunner
@@ -1233,7 +1150,6 @@ function main(config){
 				justButton: true
 			});
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.yee = new function() { // yee
@@ -1309,7 +1225,6 @@ function main(config){
 			self.choose.dom.childNodes[6].style.width = "68px"
 			self.choose.dom.setAttribute("id",self.name)
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.yeefilter = new function() { 	// yee filter
@@ -1351,24 +1266,24 @@ function main(config){
 			});
 			self.choose.dom.setAttribute("id",self.name)
 			document.querySelector("#left").appendChild(self.choose.dom);
-			doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.gearconfig = new function() { 	// gear config - decide which menu items to do
 			var self = this
 			// self.name = "gearconfig"
 			self.list = []
-			for (i in allnames) self.list.push({name:i,realname:allnames[i],margin:1})
+			var n=1
+			for (var name in ui.menu) {
+				self.list.push({name:n,realname:name,margin:1})
+				n++
+			}
 			self.onChoose = function(data){
 				// LOAD INPUT
 				var featureset = new Set(config.featurelist)
 				if (data.isOn) {
 					featureset.add(data.realname)
-					// ui.menu[data.realname].choose.dom
-					doms[data.realname].hidden = false
 				} else {
 					featureset.delete(data.realname)
-					doms[data.realname].hidden = true
 				}
 				config.featurelist = Array.from(featureset)
 				// UPDATE
@@ -1386,7 +1301,6 @@ function main(config){
 			});
 			self.choose.dom.hidden = true
 			document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
-			// doms[self.name] = self.choose.dom
 		}
 
 		ui.menu.presetconfig = new function() { // pick a preset
@@ -1495,8 +1409,6 @@ function main(config){
 			});
 			document.querySelector("#left").appendChild(self.choose.dom);
 			self.choose.dom.hidden = true
-			doms[self.name] = self.choose.dom
-			items.push(self)
 		}
 
 		ui.menu.computeMethod = new function () {
@@ -1905,8 +1817,6 @@ function main(config){
 			self.dom = linkText
 		}
 
-		_objF(ui.arena,"update")
-
 		///////////////////////////
 		////// SAVE POSITION //////
 		///////////////////////////
@@ -1989,7 +1899,8 @@ function main(config){
 		};
 
 		// UPDATE
-		_objF(ui.menu,"select"); // Select the UI!
+		_objF(ui.arena,"update")
+		_objF(ui.menu,"select");
 		model.start(); 
 	};
 
