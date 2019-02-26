@@ -1785,9 +1785,9 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 	var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 	var skipthis =  true
 	for(var i=0;i<model.voters.length;i++){ // someone is looking at frontrunners, then don't skipthis
-		if (! not_f.includes(model.firstStrategy) && model.voters[0].percentStrategy != 100) skipthis = false
-		if (! not_f.includes(model.voters[i].secondStrategy) && model.voters[0].percentStrategy != 0) skipthis = false
-	}   //not_f.includes(config.unstrategic) && not_f.includes(config.strategic)
+		if (! not_f.includes(model.firstStrategy) && model.voters[0].percentSecondStrategy != 100) skipthis = false
+		if (! not_f.includes(model.voters[i].secondStrategy) && model.voters[0].percentSecondStrategy != 0) skipthis = false
+	}   //not_f.includes(config.firstStrategy) && not_f.includes(config.secondStrategy)
 	if (skipthis) return ""
 
 	// just sets the frontrunners and reruns the ballots, then sets the frontrunners back to normal, but keeps the altered ballots.

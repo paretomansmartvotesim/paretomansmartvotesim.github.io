@@ -34,7 +34,7 @@ function main(config){
 		autoPoll: "Manual",
 		// primaries: "No",
 		firstStrategy: "zero strategy. judge on an absolute scale.",
-		strategic: "zero strategy. judge on an absolute scale.",
+		secondStrategy: "zero strategy. judge on an absolute scale.",
 		doTwoStrategies: true,
 		yeefilter: all_candidate_names,
 		computeMethod: "ez",
@@ -88,6 +88,18 @@ function main(config){
 		newname(config,"v","voterPositions")
 		newname(config,"d","description")
 
+		// GRANDFATHER OLD NAMES OF VARIABLES
+		if(config.unstrategic) config.firstStrategy = config.unstrategic
+		if(config.strategic) config.secondStrategy = config.strategic
+		if(config.strategy) config.secondStrategy = config.strategy
+		if(config.voterStrategies) config.secondStrategies = _jcopy(config.voterStrategies)
+		if(config.voterPercentStrategy) config.percentSecondStrategy = _jcopy(config.voterPercentStrategy)
+		delete config.unstrategic
+		delete config.strategic
+		delete config.strategy
+		delete config.voterStrategies
+		delete config.voterPercentStrategy
+
 		// GRANDFATHER Feature List...
 		// config.features: 1-basic, 2-voters, 3-candidates, 4-save
 		if ( config.featurelist == undefined) {
@@ -100,7 +112,7 @@ function main(config){
 					case 4: 
 						config.sandboxsave = true
 						return ["systems","voters","candidates"] 	}	}	}
-		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentstrategy"]);
+		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
 		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon"])
 		// clear the grandfathered config settings
 		delete config.doPercentFirst
@@ -129,8 +141,10 @@ function main(config){
 				"group_count":"group_count",
 				"group_spread":"group_spread",
 				"strategy":"secondStrategy",
-				"percentstrategy":"percentStrategy",
-				"percentStrategy":"percentStrategy",
+				"strategic":"secondStrategy",
+				"secondStrategy":"secondStrategy",
+				"percentstrategy":"percentSecondStrategy",
+				"percentSecondStrategy":"percentSecondStrategy",
 				"choose_pixel_size":"choose_pixel_size",
 				"yeefilter":"yeefilter",
 				"poll":"poll",
@@ -147,23 +161,23 @@ function main(config){
 			}
 			config.featurelist = temp_featurelist
 		}
-		
+
 		// VOTER DEFAULTS
 		// we want individual strategies to be loaded in, if they are there
-		// if we have a blank slate, then we want to fill in with the variable "strategic"
-		if (config.strategic && config.voterStrategies === undefined) {
-			config.voterStrategies = []
+		// if we have a blank slate, then we want to fill in with the variable "secondStrategy"
+		if (config.secondStrategy && config.secondStrategies === undefined) {
+			config.secondStrategies = []
 			for (var i = 0; i < maxVoters; i++) {
-				config.voterStrategies[i] = config.strategic
+				config.secondStrategies[i] = config.secondStrategy
 			}	
 		}
-		config.voterStrategies = config.voterStrategies || []
-		config.voterPercentStrategy = config.voterPercentStrategy || []
+		config.secondStrategies = config.secondStrategies || []
+		config.percentSecondStrategy = config.percentSecondStrategy || []
 		config.voter_group_count = config.voter_group_count || []
 		config.voter_group_spread = config.voter_group_spread || []
 		for (var i = 0; i < maxVoters; i++) {
-			config.voterStrategies[i] = config.voterStrategies[i] || "zero strategy. judge on an absolute scale."
-			if(config.voterPercentStrategy[i] == undefined) config.voterPercentStrategy[i] = 0
+			config.secondStrategies[i] = config.secondStrategies[i] || "zero strategy. judge on an absolute scale."
+			if(config.percentSecondStrategy[i] == undefined) config.percentSecondStrategy[i] = 0
 			config.voter_group_count[i] = config.voter_group_count[i] || 50
 			config.voter_group_spread[i] = config.voter_group_spread[i] || 190
 		}
@@ -252,7 +266,7 @@ function main(config){
 			// UPDATE MENU //
 			for (i in ui.menu) if(config.featurelist.includes(i)) {ui.menu[i].choose.dom.hidden = false} else {ui.menu[i].choose.dom.hidden = true}
 			// Make the MENU look correct.  The MENU is not part of the "model".
-			for (i in ui.menu.percentStrategy.choose.sliders) ui.menu.percentStrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+			for (i in ui.menu.percentSecondStrategy.choose.sliders) ui.menu.percentSecondStrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 			for (i in ui.menu.group_count.choose.sliders) ui.menu.group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 			for (i in ui.menu.group_spread.choose.sliders) ui.menu.group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 
@@ -841,8 +855,8 @@ function main(config){
 			var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 			var turnOffFrontrunnerControls =  not_f.includes(config.firstStrategy)
 			if (config.doTwoStrategies) {
-				for(var i=0;i<config.voterStrategies.length;i++){
-					if (! not_f.includes(config.voterStrategies[i])){
+				for(var i=0;i<config.secondStrategies.length;i++){
+					if (! not_f.includes(config.secondStrategies[i])){
 						turnOffFrontrunnerControls = false
 					}
 				}
@@ -875,7 +889,7 @@ function main(config){
 			];
 			self.onChoose = function(data){
 				// LOAD INPUT
-				var xlist = ["secondStrategy","percentStrategy"]
+				var xlist = ["secondStrategy","percentSecondStrategy"]
 				var featureset = new Set(config.featurelist)
 				for (var i in xlist){
 					var xi = xlist[i]
@@ -928,9 +942,9 @@ function main(config){
 			];
 			self.onChoose = function(data){
 				// LOAD INPUT
-				config.strategic = data.realname
+				config.secondStrategy = data.realname
 				for (var i = 0; i < maxVoters; i++) {
-					config.voterStrategies[i] = data.realname
+					config.secondStrategies[i] = data.realname
 				}
 				// CONFIGURE FEATURELIST
 				_loadConfigForStrategyButtons(config)
@@ -941,15 +955,15 @@ function main(config){
 				menu_update()
 			};
 			self.configure = function() {
-				model.strategic = config.strategic
+				model.secondStrategy = config.secondStrategy
 				for (var i=0; i<config.numVoterGroups; i++) {
-					model.voters[i].secondStrategy = config.voterStrategies[i]
+					model.voters[i].secondStrategy = config.secondStrategies[i]
 				}
 			}
 			self.select = function() {
-				self.choose.highlight("realname", config.strategic);
-				// if (config.voterStrategies[0] != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
-				// 	self.choose.highlight("realname", config.voterStrategies[0]);
+				self.choose.highlight("realname", config.secondStrategy);
+				// if (config.secondStrategies[0] != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
+				// 	self.choose.highlight("realname", config.secondStrategies[0]);
 				// }
 			}
 			self.choose = new ButtonGroup({
@@ -961,13 +975,13 @@ function main(config){
 			document.querySelector("#left").appendChild(self.choose.dom);
 		}
 		
-		ui.menu.percentStrategy = new function() {  // group count
+		ui.menu.percentSecondStrategy = new function() {  // group count
 			var self = this
-			self.name = "percentStrategy"
+			self.name = "percentSecondStrategy"
 
 			self.onChoose = function(slider,n) {
 				// LOAD INPUT
-				config.voterPercentStrategy[n] = slider.value;
+				config.percentSecondStrategy[n] = slider.value;
 				// _loadConfigForStrategyButtons(config) // not necessary
 				// CONFIGURE
 				self.configureN(n)
@@ -980,11 +994,11 @@ function main(config){
 				}
 			}
 			self.configureN = function(n) {
-				model.voters[n].percentStrategy = config.voterPercentStrategy[n]
+				model.voters[n].percentSecondStrategy = config.percentSecondStrategy[n]
 			}
 			self.select = function() {
 				for (i in self.choose.sliders) {
-					self.choose.sliders[i].value = config.voterPercentStrategy[i]
+					self.choose.sliders[i].value = config.percentSecondStrategy[i]
 				}
 			}
 			self.choose = new sliderSet({
@@ -1336,25 +1350,39 @@ function main(config){
 						
 					} else if (firstletter == 'b') {
 						//document.location.replace(data.htmlname);
-
+						// LOAD Defaults
+						var ballotconfig = {
+							system: "Plurality",
+							voterPositions: [[81,92]],
+							candidatePositions: [[41,50],[153,95],[216,216]],
+							firstStrategy: "zero strategy. judge on an absolute scale.",
+							preFrontrunnerIds: ["square","triangle"],
+							showChoiceOfStrategy: false,
+							showChoiceOfFrontrunners: false,
+							doStarStrategy: false
+						}
 						// LOAD Preset
-						ballotconfig = loadpreset(data.htmlname)
+						Object.assign(ballotconfig, loadpreset(data.htmlname) )
 						// get config from ballotconfig
 						var systemTranslator = {Plurality:"FPTP",Ranked:"Condorcet",Approval:"Approval",Score:"Score",Three:"3-2-1"}
-						config = {}
-						config.system = systemTranslator[ballotconfig.system]
-						var s = ballotconfig.secondStrategy || "zero strategy. judge on an absolute scale."
-						config.voterStrategies = [s,s,s]
-						config.preFrontrunnerIds = ballotconfig.preFrontrunnerIds
+						config = {
+							system: systemTranslator[ballotconfig.system],
+							voterPositions: ballotconfig.voterPositions,
+							candidatePositions: ballotconfig.candidatePositions,
+							firstStrategy: ballotconfig.firstStrategy,
+							preFrontrunnerIds: ballotconfig.preFrontrunnerIds,
+							// these are not based on the ballot config
+							oneVoter: true,
+							arena_size: 300
+						}
 						config.featurelist = []
 						if (ballotconfig.showChoiceOfFrontrunners) {config.featurelist.push("frontrunners")}
-						if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("secondStrategy")}
-						config.oneVoter = true
-						config.arena_size = 300
+						if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("firstStrategy")}
 					}
 					// CONFIGURE MAIN
-					config.sandboxsave = true // we're in a sandbox
 					cleanConfig(config)
+					config.sandboxsave = true // we're in a sandbox
+					config.featurelist = Array.from((new Set(config.featurelist)).add("gearicon").add("presetconfig"))
 					initialConfig = _jcopy(config);
 					// CONFIGURE (LOADER)
 					model.size = config.arena_size

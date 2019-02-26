@@ -41,7 +41,7 @@ function Model(config){
 		autoPoll: "Manual",
 		// primaries: "No",
 		firstStrategy: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
-		strategic: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
+		secondStrategy: "zero strategy. judge on an absolute scale.", // maybe should be for voter, not model
 		doTwoStrategies: true,// maybe should be for voter, not model
 		yeefilter: all_candidate_names,
 		computeMethod: "ez",

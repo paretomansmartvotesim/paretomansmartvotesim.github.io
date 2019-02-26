@@ -2,12 +2,15 @@
 function main(config){
 
 	ballotType = config.system;
-	config.secondStrategy = config.secondStrategy || "zero strategy. judge on an absolute scale.";
+	config.firstStrategy = config.firstStrategy || "zero strategy. judge on an absolute scale.";
 	config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"];
 	config.showChoiceOfStrategy = config.showChoiceOfStrategy || false
 	config.showChoiceOfFrontrunners = config.showChoiceOfFrontrunners || false
 	config.doStarStrategy = config.doStarStrategy || false
 	
+	// grandfather name for firstStrategy used only for main_ballot
+	if (config.strategy != undefined) config.firstStrategy = config.strategy
+
 	// make a copy of the config
 	var initialConfig = JSON.parse(JSON.stringify(config));
 
@@ -35,12 +38,14 @@ function main(config){
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
 			// CONFIGURE
-			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), firstStrategy: config.secondStrategy, frontrunners: config.frontrunners} )
 			Object.assign( model.candidates[0],{x: 41, y: 50, id:"square"} )
 			Object.assign( model.candidates[1],{x:153, y: 95, id:"triangle"} )
 			Object.assign( model.candidates[2],{x:216, y:216, id:"hexagon"} )
+			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), 
+				firstStrategy: config.firstStrategy, 
+				frontrunners: config.frontrunners} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
-			model.voters[0].firstStrategy = config.secondStrategy;
+			model.voters[0].firstStrategy = config.firstStrategy;
 			model.doStarStrategy = config.doStarStrategy;
 			// INIT
 			model.initMODEL()

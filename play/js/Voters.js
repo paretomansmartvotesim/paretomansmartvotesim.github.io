@@ -950,7 +950,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	var config = {}
 	
 	// CONFIGURE DEFAULTS
-	_voterClassConfigHelper(self)
+	_fillVoterDefaults(self)
 	self.type = new PluralityVoter(model)
 
 	
@@ -1046,7 +1046,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var x = self.x + p[0];
 			var y = self.y + p[1];
 			
-			if (0) { // two ways to choose which voters are strategic
+			if (0) { // two ways to choose which voters use secondStrategy
 				var r1 = Math.random() * 99.8 + .1;
 			} else {
 				if (!self.x_voters) {
@@ -1055,7 +1055,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 					var r1 = (34*i) % 100 + .5;
 				}
 			}	
-			if (r1 < self.percentStrategy && self.doTwoStrategies) { 
+			if (r1 < self.percentSecondStrategy && self.doTwoStrategies) { 
 				var strategy = self.secondStrategy // yes
 			} else {
 				var strategy = self.firstStrategy; // no e.g. 
@@ -1115,7 +1115,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 }
 
-function _voterClassConfigHelper(self) {
+function _fillVoterDefaults(self) {
 	// a helper for configuring 
 
 	_fillInDefaults(self,{ 
@@ -1132,7 +1132,7 @@ function _voterClassConfigHelper(self) {
 		spread_factor_voters: 1,
 		// could vary between voters
 		secondStrategy: "zero strategy. judge on an absolute scale.",
-		percentStrategy: 0,
+		percentSecondStrategy: 0,
 		group_count: 50,
 		group_spread: 190
 	})
@@ -1144,7 +1144,7 @@ function SingleVoter(model){
 	Draggable.call(self, model);
 
 	// CONFIGURE DEFAULTS
-	_voterClassConfigHelper(self)
+	_fillVoterDefaults(self)
 	self.type = new PluralityVoter(model);
 
 	self.setType = function(newType){
