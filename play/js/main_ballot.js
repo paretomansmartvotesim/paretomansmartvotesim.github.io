@@ -45,7 +45,6 @@ function main(config){
 				firstStrategy: config.firstStrategy, 
 				frontrunners: config.frontrunners} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
-			model.voters[0].firstStrategy = config.firstStrategy;
 			model.doStarStrategy = config.doStarStrategy;
 			// INIT
 			model.initMODEL()

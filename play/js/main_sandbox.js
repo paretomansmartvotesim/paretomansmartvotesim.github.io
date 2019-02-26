@@ -94,11 +94,13 @@ function main(config){
 		if(config.strategy) config.secondStrategy = config.strategy
 		if(config.voterStrategies) config.secondStrategies = _jcopy(config.voterStrategies)
 		if(config.voterPercentStrategy) config.percentSecondStrategy = _jcopy(config.voterPercentStrategy)
+		if(config.second_strategy) config.doTwoStrategies = config.second_strategy
 		delete config.unstrategic
 		delete config.strategic
 		delete config.strategy
 		delete config.voterStrategies
 		delete config.voterPercentStrategy
+		delete config.second_strategy
 
 		// GRANDFATHER Feature List...
 		// config.features: 1-basic, 2-voters, 3-candidates, 4-save
@@ -141,7 +143,6 @@ function main(config){
 				"group_count":"group_count",
 				"group_spread":"group_spread",
 				"strategy":"secondStrategy",
-				"strategic":"secondStrategy",
 				"secondStrategy":"secondStrategy",
 				"percentstrategy":"percentSecondStrategy",
 				"percentSecondStrategy":"percentSecondStrategy",
