@@ -39,7 +39,8 @@ function main(config){
 		yeefilter: all_candidate_names,
 		computeMethod: "ez",
 		pixelsize: 60,
-		optionsForElection: {sidebar:true} // sandboxes have this default
+		optionsForElection: {sidebar:true}, // sandboxes have this default
+		featurelist: ["systems","nVoterGroups","nCandidates","firstStrategy","doTwoStrategies","yee","gearicon"]
 	}
 	var url = window.top.location.href;
 	var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
@@ -69,99 +70,103 @@ function main(config){
 		config.filename = filename
 		config.presethtmlname = filename;
 
-		// GRANDFATHER URL variable names
-		// change old variable names to new names to preserve backward compatibility with urls and presets
-		// and clear grandfathered variables
-		function newname(config,oldname,newname) {
-			if(config[oldname] != undefined) config[newname] = config[oldname]
-			delete config[oldname]
-		}
-		newname(config,"candidates","numOfCandidates")
-		newname(config,"voters","numVoterGroups")
-		newname(config,"s","system")
-		if(config.c != undefined) { // grandfather in the variables
-			config.numOfCandidates = config.c.length
-			config.numVoterGroups = config.v.length
-			config.features = 4
-		}
-		newname(config,"c","candidatePositions")
-		newname(config,"v","voterPositions")
-		newname(config,"d","description")
-
-		// GRANDFATHER OLD NAMES OF VARIABLES
-		if(config.unstrategic) config.firstStrategy = config.unstrategic
-		if(config.strategic) config.secondStrategy = config.strategic
-		if(config.strategy) config.secondStrategy = config.strategy
-		if(config.voterStrategies) config.secondStrategies = _jcopy(config.voterStrategies)
-		if(config.voterPercentStrategy) config.percentSecondStrategy = _jcopy(config.voterPercentStrategy)
-		if(config.second_strategy) config.doTwoStrategies = config.second_strategy
-		delete config.unstrategic
-		delete config.strategic
-		delete config.strategy
-		delete config.voterStrategies
-		delete config.voterPercentStrategy
-		delete config.second_strategy
-
-		// GRANDFATHER Feature List...
-		// config.features: 1-basic, 2-voters, 3-candidates, 4-save
-		if ( config.featurelist == undefined) {
-			config.featurelist = fl()
-			function fl() {
-				switch(config.features){
-					case 1: return ["systems"]
-					case 2: return ["systems","voters"]
-					case 3: return ["systems","voters","candidates"]
-					case 4: 
-						config.sandboxsave = true
-						return ["systems","voters","candidates"] 	}	}	}
-		if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
-		if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon"])
-		// clear the grandfathered config settings
-		delete config.doPercentFirst
-		delete config.features
-		delete config.doFullStrategyConfig
-
-		// GRANDFATHER featurelist step 2
-		// replace old names with new names
-		if (config.featurelist) {
-			var menuNameTranslator = {
-				"systems":"systems",
-				"voters":"nVoterGroups",
-				"nVoterGroups":"nVoterGroups",
-				"candidates":"nCandidates",
-				"nCandidates":"nCandidates",
-				"unstrategic":"firstStrategy",
-				"firstStrategy":"firstStrategy",
-				"second strategy":"doTwoStrategies",
-				"doTwoStrategies":"doTwoStrategies",
-				"yee":"yee",
-				"rbvote":"rbSystems",
-				"rbSystems":"rbSystems",
-				"custom_number_voters":"xVoterGroups",
-				"xHowManyVoterGroups":"xVoterGroups",
-				"xVoterGroups":"xVoterGroups",
-				"group_count":"group_count",
-				"group_spread":"group_spread",
-				"strategy":"secondStrategy",
-				"secondStrategy":"secondStrategy",
-				"percentstrategy":"percentSecondStrategy",
-				"percentSecondStrategy":"percentSecondStrategy",
-				"choose_pixel_size":"choose_pixel_size",
-				"yeefilter":"yeefilter",
-				"poll":"poll",
-				"autoPoll":"autoPoll",
-				"frontrunners":"frontrunners",
-				"gearicon":"gearicon"
-				// "primaries":"primaries"
+		if(config.configversion == undefined || config.configversion == 1) {
+			// GRANDFATHER URL variable names
+			// change old variable names to new names to preserve backward compatibility with urls and presets
+			// and clear grandfathered variables
+			function newname(config,oldname,newname) {
+				if(config[oldname] != undefined) config[newname] = config[oldname]
+				delete config[oldname]
 			}
-			var temp_featurelist = []
-			for (var i=0; i<config.featurelist.length; i++) {
-				var oldName = config.featurelist[i]
-				var newName = menuNameTranslator[oldName]
-				temp_featurelist.push(newName)
+			newname(config,"candidates","numOfCandidates")
+			newname(config,"voters","numVoterGroups")
+			newname(config,"s","system")
+			if(config.c != undefined) { // grandfather in the variables
+				config.numOfCandidates = config.c.length
+				config.numVoterGroups = config.v.length
+				config.features = 4
 			}
-			config.featurelist = temp_featurelist
+			newname(config,"c","candidatePositions")
+			newname(config,"v","voterPositions")
+			newname(config,"d","description")
+	
+			// GRANDFATHER OLD NAMES OF VARIABLES
+			if(config.unstrategic) config.firstStrategy = config.unstrategic
+			if(config.strategic) config.secondStrategy = config.strategic
+			if(config.strategy) config.secondStrategy = config.strategy
+			if(config.voterStrategies) config.secondStrategies = _jcopy(config.voterStrategies)
+			if(config.voterPercentStrategy) config.percentSecondStrategy = _jcopy(config.voterPercentStrategy)
+			if(config.second_strategy) config.doTwoStrategies = config.second_strategy
+			delete config.unstrategic
+			delete config.strategic
+			delete config.strategy
+			delete config.voterStrategies
+			delete config.voterPercentStrategy
+			delete config.second_strategy
+	
+			// GRANDFATHER Feature List...
+			// config.features: 1-basic, 2-voters, 3-candidates, 4-save
+			if ( config.featurelist == undefined) {
+				config.featurelist = fl()
+				function fl() {
+					switch(config.features){
+						case 1: return ["systems"]
+						case 2: return ["systems","voters"]
+						case 3: return ["systems","voters","candidates"]
+						case 4: 
+							config.sandboxsave = true
+							return ["systems","voters","candidates"] 	}	}	}
+			if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
+			if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon"])
+			// clear the grandfathered config settings
+			delete config.doPercentFirst
+			delete config.features
+			delete config.doFullStrategyConfig
+	
+			// GRANDFATHER featurelist step 2
+			// replace old names with new names
+			if (config.featurelist) {
+				var menuNameTranslator = {
+					"systems":"systems",
+					"voters":"nVoterGroups",
+					"nVoterGroups":"nVoterGroups",
+					"candidates":"nCandidates",
+					"nCandidates":"nCandidates",
+					"unstrategic":"firstStrategy",
+					"firstStrategy":"firstStrategy",
+					"second strategy":"doTwoStrategies",
+					"doTwoStrategies":"doTwoStrategies",
+					"yee":"yee",
+					"rbvote":"rbSystems",
+					"rbSystems":"rbSystems",
+					"custom_number_voters":"xVoterGroups",
+					"xHowManyVoterGroups":"xVoterGroups",
+					"xVoterGroups":"xVoterGroups",
+					"group_count":"group_count",
+					"group_spread":"group_spread",
+					"strategy":"secondStrategy",
+					"secondStrategy":"secondStrategy",
+					"percentstrategy":"percentSecondStrategy",
+					"percentSecondStrategy":"percentSecondStrategy",
+					"choose_pixel_size":"choose_pixel_size",
+					"yeefilter":"yeefilter",
+					"poll":"poll",
+					"autoPoll":"autoPoll",
+					"frontrunners":"frontrunners",
+					"gearicon":"gearicon"
+					// "primaries":"primaries"
+				}
+				var temp_featurelist = []
+				for (var i=0; i<config.featurelist.length; i++) {
+					var oldName = config.featurelist[i]
+					var newName = menuNameTranslator[oldName]
+					temp_featurelist.push(newName)
+				}
+				config.featurelist = temp_featurelist
+			}
 		}
+		// we are now generating a new version of config
+		config.configversion = 2
 
 		// VOTER DEFAULTS
 		// we want individual strategies to be loaded in, if they are there

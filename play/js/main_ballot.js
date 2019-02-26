@@ -43,7 +43,7 @@ function main(config){
 			Object.assign( model.candidates[2],{x:216, y:216, id:"hexagon"} )
 			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), 
 				firstStrategy: config.firstStrategy, 
-				frontrunners: config.frontrunners} )
+				preFrontrunnerIds: config.preFrontrunnerIds} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.doStarStrategy = config.doStarStrategy;
 			// INIT
