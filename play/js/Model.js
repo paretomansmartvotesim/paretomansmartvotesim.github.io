@@ -112,6 +112,23 @@ function Model(config){
 			self.draggables.push(v);
 		}
 		if(self.voterCenter) self.draggables.push(self.voterCenter)
+		
+		var expYeeObject = function() {
+			// Yee diagram
+			if (self.kindayee == "can") {
+				return self.candidatesById[self.keyyee]
+			} else if (self.kindayee=="voter") {
+				return self.voters[self.keyyee]
+			} else if (self.kindayee=="off") {
+				return undefined
+			} else if (self.kindayee=="center") { 
+				return self.voterCenter
+			} else { // if yeeobject is not defined
+				return undefined
+			}
+		}
+		self.yeeobject = expYeeObject()
+		self.yeeon = (self.yeeobject != undefined) ? true : false
 	}
 	self.election = function(self,options){};
 

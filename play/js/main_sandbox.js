@@ -1193,30 +1193,15 @@ function main(config){
 				{name:"8",realname:"eighth voter group",kindayee:"voter",keyyee:7,margin:4},
 				{name:"9",realname:"ninth voter group",kindayee:"voter",keyyee:8,margin:8},
 			];
-			self.expYeeObject = function(config,model) {
-				// Yee diagram
-				if (config.kindayee == "can") {
-					return model.candidatesById[config.keyyee]
-				} else if (config.kindayee=="voter") {
-					return model.voters[config.keyyee]
-				} else if (config.kindayee=="off") {
-					return undefined
-				} else if (config.kindayee=="center") { 
-					return model.voterCenter
-				} else { // if yeeobject is not defined
-					return undefined
-				}
-			}
 			self.onChoose = function(data){
 				// LOAD INPUT
 				config.kindayee = data.kindayee
 				config.keyyee = data.keyyee
-				var yeeob = self.expYeeObject(config,model)
 				var xlist = ["choose_pixel_size","yeefilter"]
 				var featureset = new Set(config.featurelist)
 				for (var i in xlist){
 					var xi = xlist[i]
-					if (yeeob) {
+					if (config.kindayee != undefined && config.kindayee != "off") {
 						featureset.add(xi)
 					} else {
 						featureset.delete(xi)
@@ -1225,13 +1210,15 @@ function main(config){
 				config.featurelist = Array.from(featureset)
 				// CONFIGURE
 				self.configure()
+				// INIT
+				model.initMODEL()
 				// UPDATE
 				model.update();
 				menu_update()
 			};
 			self.configure = function() {
-				model.yeeobject = self.expYeeObject(config,model)
-				model.yeeon = (model.yeeobject != undefined) ? true : false
+				model.kindayee = config.kindayee
+				model.keyyee = config.keyyee
 			}
 			self.select = function() {
 				self.choose.highlight("keyyee", config.keyyee);
