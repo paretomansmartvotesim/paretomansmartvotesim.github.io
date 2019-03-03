@@ -196,7 +196,6 @@ function main(config){
 
 
 	// INIT - initialize all data structures
-	Loader.onload = function(){
 
 		////////////////////////
 		// THE FRIGGIN' MODEL //
@@ -1919,6 +1918,8 @@ function main(config){
 	
 		};
 
+		
+	Loader.onload = function(){
 		// UPDATE
 		_objF(ui.arena,"update")
 		_objF(ui.menu,"select");
