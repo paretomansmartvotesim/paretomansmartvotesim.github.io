@@ -57,10 +57,10 @@ function Sandbox() {
         optionsForElection: {sidebar:true}, // sandboxes have this default
         featurelist: ["systems","nVoterGroups","nCandidates","firstStrategy","doTwoStrategies","yee","gearicon"]
     }
+    self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
 
-    // CREATE (model)
-    model = new Model();
+    // CREATE
     var ui = {}
     var config
 	var initialConfig
@@ -1146,7 +1146,7 @@ function Sandbox() {
             }
         }
         self.select = function() {
-            self.choose.highlight("realname", model.preFrontrunnerIds);
+            self.choose.highlight("realname", config.preFrontrunnerIds);
         }
         self.choose = new ButtonGroup({
             label: "who are the frontrunners?",
