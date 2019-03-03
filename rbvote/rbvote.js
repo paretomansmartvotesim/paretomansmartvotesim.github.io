@@ -2626,7 +2626,7 @@ function readvotes()
 }
 
 
-function readballots(ballots)
+function readballots(ballots,model)
 {
    var absent, beat = new Array(), i, ignoreinput, j, k, l, nextcand, rating = new Array(), regexp = new RegExp(), rvotecomment, rvoteinput,
        rvoteline = new Array(), tiebreakinput;

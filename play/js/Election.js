@@ -1088,7 +1088,7 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 	var ballots = model.getBallots();
 
 	rbvote.setreturnstring() // tell rbvote that we might want return strings (unless we're not doing the sidebar)
-	rbvote.readballots(ballots)
+	rbvote.readballots(ballots,model)
 	resultRB = model.rbelection(options.sidebar) // e.g. result = rbvote.calctide() // having a sidebar display means we want to construct explanation strings
 	
 

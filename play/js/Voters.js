@@ -174,9 +174,9 @@ function utility_function(utility_shape) {
 }
 
 function inverse_utility_function(utility_shape) {
-	if (model.utility_shape == "quadratic") {
+	if (utility_shape == "quadratic") {
 		var finv = x => Math.sqrt(x)
-	} else if (model.utility_shape == "log") {
+	} else if (utility_shape == "log") {
 		var finv = x => Math.exp(x) - .1
 	} else { // "linear"
 		var finv = x => x

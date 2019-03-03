@@ -61,6 +61,7 @@ function Sandbox() {
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
 
     // CREATE
+    var model = new Model();
     var ui = {}
     var config
 	var initialConfig
