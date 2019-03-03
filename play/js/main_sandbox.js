@@ -3,7 +3,7 @@ function main(config) {
     
     // CONFIGURE
     s.url = window.location.href;
-    Loader.onload = s.update // this might look like an update but 
+    Loader.onload = s.update // this might look like an update but we're configuring Loader
 
     // INIT
     s.setConfig(config)
@@ -552,7 +552,8 @@ function Sandbox() {
                 }
             }
             // CONFIGURE
-            self.configure()
+            // self.configure()
+            _objF(ui.menu,"configure")
             // INIT
             model.initMODEL()
             for(var i=0; i<model.voters.length; i++) {
