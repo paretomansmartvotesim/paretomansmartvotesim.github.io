@@ -1,4 +1,4 @@
-function main(config) {
+function main(preset) {
     s = new Sandbox()
     
     // CONFIGURE
@@ -6,7 +6,8 @@ function main(config) {
     Loader.onload = s.update // this might look like an update but we're configuring Loader
 
     // INIT
-    s.setConfig(config)
+	s.setConfig(preset.config)
+	if (preset.update) preset.update(s)
     
     // UPDATE
     Loader.load(s.assets);
@@ -63,6 +64,7 @@ function Sandbox() {
     // CREATE
     var model = new Model();
     var ui = {}
+    self.ui = ui
     var config
 	var initialConfig
 
@@ -1363,7 +1365,7 @@ function Sandbox() {
                 if (firstletter == 'e' || firstletter == 's') {
                     
                     // LOAD Preset
-                    config = loadpreset(data.htmlname)
+                    config = loadpreset(data.htmlname).config
                     
                 } else if (firstletter == 'b') {
                     //document.location.replace(data.htmlname);
@@ -1379,7 +1381,7 @@ function Sandbox() {
                         doStarStrategy: false
                     }
                     // LOAD Preset
-                    Object.assign(ballotconfig, loadpreset(data.htmlname) )
+                    Object.assign(ballotconfig, loadpreset(data.htmlname).config )
                     // get config from ballotconfig
                     var systemTranslator = {Plurality:"FPTP",Ranked:"Condorcet",Approval:"Approval",Score:"Score",Three:"3-2-1"}
                     config = {

@@ -1,5 +1,6 @@
 
-function main(config){
+function main(preset){
+	var config = preset.config
 
 	ballotType = config.system;
 	config.firstStrategy = config.firstStrategy || "zero strategy. judge on an absolute scale.";
