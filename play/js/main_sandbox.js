@@ -19,7 +19,6 @@ function main(preset) {
 function Sandbox(modelName) {
 	var self = this
 
-    var basediv = document.querySelector("#" + modelName)
     // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
     // Basic description of main_sandbox.js
@@ -70,7 +69,18 @@ function Sandbox(modelName) {
     var ui = {}
     self.ui = ui
     var config
-	var initialConfig
+    var initialConfig
+    var basediv = document.querySelector("#" + modelName)
+
+    // CREATE div stuff for sandbox
+    function newDivOnBase(name) {
+        var a = document.createElement("div");
+        a.setAttribute("id", name);
+        basediv.appendChild(a);
+    }
+    newDivOnBase("left")
+    newDivOnBase("center")
+    newDivOnBase("right")
 
     // FUNCTIONS and CLASSES for INIT and UPDATE
     self.setConfig = function(c) {
@@ -1349,14 +1359,14 @@ function Sandbox(modelName) {
             // var presethtmlnames = [config.filename,"sandbox.html"]
             // var presetdescription = ["original intended preset","sandbox"]
             var presetnames = ["S"]
-            var presethtmlnames = ["sandbox.html"]
+            var presethtmlnames = ["sandbox"]
             var presetdescription = ["sandbox"]
 
             // and fill in the rest
-            for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presethtmlnames.push("election"+i+".html") ; presetdescription.push("election"+i+".html")}
+            for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presethtmlnames.push("election"+i) ; presetdescription.push("election"+i)}
             presetnames.push("O") ; presethtmlnames.push(filename) ; presetdescription.push("original intended preset")
             // TODO
-            for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presethtmlnames.push("ballot"+i+".html") ; presetdescription.push("ballot"+i+".html")}
+            for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presethtmlnames.push("ballot"+i) ; presetdescription.push("ballot"+i)}
             
             var presetconfig = []
             for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],htmlname:presethtmlnames[i],margin:4})

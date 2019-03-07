@@ -26,3 +26,4 @@ function Loader() {
 	};
 
 }
+window.onload = Loader.windowonload

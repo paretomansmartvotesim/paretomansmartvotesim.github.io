@@ -1,5 +1,8 @@
-function loadpreset(htmlname) {
+function loadpreset(modelName) {
 	
+	// input
+	var htmlname = modelName + '.html'
+
 	// defaults
 	config = []
 	update = function () {
@@ -1317,6 +1320,6 @@ function loadpreset(htmlname) {
 	return {
 		config: config,
 		update: update,
-		modelName: htmlname.slice(0,htmlname.length-5)
+		modelName: modelName
 	}
 }
