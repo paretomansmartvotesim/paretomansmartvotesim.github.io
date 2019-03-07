@@ -100,11 +100,11 @@ Loader.onload = function(){
 		}
 
 		// RANDOMLY SCRAMBLE NEAR THE MOUSE.
-		//Mouse.x = Mouse.x || 0;
-		//Mouse.y = Mouse.y || 0;
-		if(Mouse.x && Mouse.y){
-			var x = Math.floor(Mouse.x/SIZE);
-			var y = Math.floor(Mouse.y/SIZE);
+		//mouse.x = mouse.x || 0;
+		//mouse.y = mouse.y || 0;
+		if(mouse.x && mouse.y){
+			var x = Math.floor(mouse.x/SIZE);
+			var y = Math.floor(mouse.y/SIZE);
 			var neighbors = _getNeighbors(x,y,-1);
 			for(var i=0;i<neighbors.length;i++){
 				var pos = neighbors[i]

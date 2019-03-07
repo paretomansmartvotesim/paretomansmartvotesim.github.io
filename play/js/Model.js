@@ -14,7 +14,6 @@ function Model(modelName){
 	// CREATE DATA STRUCTURE
 	self.voters = [];
 	self.candidates = [];
-    self.basediv = document.querySelector("#" + modelName)
 	self.dom = document.createElement("div");
 	self.id = modelName
 
@@ -154,8 +153,8 @@ function Model(modelName){
 	self.update = function(){
 
 		// Move the one that's being dragged, if any
-		if(Mouse.dragging){
-			Mouse.dragging.moveTo(Mouse.x, Mouse.y);
+		if(self.mouse.dragging){
+			self.mouse.dragging.moveTo(self.mouse.x, self.mouse.y);
 		}
 		
 		// get the ballots
@@ -176,7 +175,7 @@ function Model(modelName){
 		}
 		
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		if (self.yeeon && Mouse.dragging != self.yeeobject) self.yee.calculate()
+		if (self.yeeon && self.mouse.dragging != self.yeeobject) self.yee.calculate()
 		
 		self.draw()
 

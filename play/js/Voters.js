@@ -1359,7 +1359,7 @@ function VoterCenter(model){
 	}
 	self.update = function() {// do the center voter thing
 		// UPDATE
-		if(Mouse.dragging == self) {
+		if(model.mouse.dragging == self) {
 			var oldcenter = self.findVoterCenter()
 			var changecenter = {x:self.x - oldcenter.x, y:self.y - oldcenter.y}
 			for(var i=0; i<model.voters.length; i++){

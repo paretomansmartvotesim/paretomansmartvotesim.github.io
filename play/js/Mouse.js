@@ -12,46 +12,50 @@ function Mouse(id, target){
 	// Events!
 	var _onmousedown = function(event){
 		_onmousemove(event);
-		Mouse.pressed = true;
+		self.pressed = true;
 		publish(self.id+"-mousedown");
 	};
 	var _onmousemove = function(event){
-		Mouse.x = event.offsetX;
-		Mouse.y = event.offsetY;
+		self.x = event.offsetX;
+		self.y = event.offsetY;
 		publish(self.id+"-mousemove");
 	};
 	var _onmouseup = function(){
-		Mouse.pressed = false;
+		self.pressed = false;
 		publish(self.id+"-mouseup");
 	};
 
 	// Add events!
 	target.onmousedown = _onmousedown;
 	target.onmousemove = _onmousemove;
-	window.onmouseup = _onmouseup;
+	var temp = document.onmouseup // this might seem recursive, but it really we're adding another function to call in addition to those already being called.
+	document.onmouseup = function() {
+		if(temp) temp()
+		_onmouseup();
+	}
 
 	// TOUCH.
 	var _onTouchMove;
 	target.addEventListener("touchstart",function(event){
 		_onTouchMove(event);
-	    Mouse.pressed = true;
+	    self.pressed = true;
 		publish(self.id+"-mousedown");
 	},false);
 	target.addEventListener("touchmove", _onTouchMove=function(event){
 
-		Mouse.x = event.changedTouches[0].clientX - target.offsetLeft;
-		Mouse.y = event.changedTouches[0].clientY - target.offsetTop;
-		if(Mouse.x<0) Mouse.x=0;
-		if(Mouse.y<0) Mouse.y=0;
-		if(Mouse.x>target.clientWidth) Mouse.x=target.clientWidth;
-		if(Mouse.y>target.clientHeight) Mouse.y=target.clientHeight;
+		self.x = event.changedTouches[0].clientX - target.offsetLeft;
+		self.y = event.changedTouches[0].clientY - target.offsetTop;
+		if(self.x<0) self.x=0;
+		if(self.y<0) self.y=0;
+		if(self.x>target.clientWidth) self.x=target.clientWidth;
+		if(self.y>target.clientHeight) self.y=target.clientHeight;
 		//console.log(target);
 		publish(self.id+"-mousemove");
 		event.preventDefault();
 		
 	},false);
 	document.body.addEventListener("touchend",function(event){
-	    Mouse.pressed = false;
+	    self.pressed = false;
 		publish(self.id+"-mouseup");
 	},false);
 

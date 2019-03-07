@@ -27,8 +27,8 @@ function Draggable(model){
 	self.offX = 0;
 	self.offY = 0;
 	self.startDrag = function(){
-		self.offX = self.x-Mouse.x;
-		self.offY = self.y-Mouse.y;
+		self.offX = self.x-model.mouse.x;
+		self.offY = self.y-model.mouse.y;
 	};
 
 	self.update = function(){
@@ -48,13 +48,13 @@ function DraggableManager(model){
 	// Helper: is Over anything?
 	self.isOver = function(){
 		if (model.yeeon && model.yeeobject) { // Choose the yee object as a priority
-			if(model.yeeobject.hitTest(Mouse.x, Mouse.y)){
+			if(model.yeeobject.hitTest(model.mouse.x, model.mouse.y)){
 				return model.yeeobject;
 			}
 		}
 		for(var i=model.draggables.length-1; i>=0; i--){ // top DOWN.
 			var d = model.draggables[i];
-			if(d.hitTest(Mouse.x, Mouse.y)){
+			if(d.hitTest(model.mouse.x, model.mouse.y)){
 				return d;
 			}
 		}
@@ -63,7 +63,7 @@ function DraggableManager(model){
 
 	// INTERFACING WITH THE *MOUSE*
 	subscribe(model.id+"-mousemove", function(){
-		if(Mouse.pressed){
+		if(model.mouse.pressed){
 			model.update();
 		}else if(self.isOver()){
 			// If over anything, grab cursor!
@@ -94,11 +94,11 @@ function DraggableManager(model){
 	subscribe(model.id+"-mousedown", function(){
 
 		// Didja grab anything? null if nothing.
-		Mouse.dragging = self.isOver();
+		model.mouse.dragging = self.isOver();
 
 		// If so...
-		if(Mouse.dragging){
-			Mouse.dragging.startDrag();
+		if(model.mouse.dragging){
+			model.mouse.dragging.startDrag();
 			model.update();
 
 			// GrabBING cursor!
@@ -108,7 +108,7 @@ function DraggableManager(model){
 
 	});
 	subscribe(model.id+"-mouseup", function(){
-		Mouse.dragging = null;
+		model.mouse.dragging = null;
 	});
 
 }
