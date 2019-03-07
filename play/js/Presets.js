@@ -1,18 +1,12 @@
-main_preset()
-
-function main_preset() {
-	var url = window.location.pathname;
-	var htmlname = url.substring(url.lastIndexOf('/') + 1);
-	var preset = loadpreset(htmlname)
-	main(preset)
-}
-
 function loadpreset(htmlname) {
 	
+	// defaults
 	config = []
 	update = function () {
 		return
 	}
+
+	// helpers
 	update_original = function (s) {
 		s.ui.menu.systems.choose.buttons.forEach(x => x.dom.hidden = (["FPTP", "IRV", "Borda", "Condorcet", "Approval", "Score"].includes(x.dom.innerHTML)) ? false : true)
 		s.ui.menu.systems.choose.buttons.forEach(x => x.dom.style.marginRight = "4px")
@@ -22,6 +16,7 @@ function loadpreset(htmlname) {
 		s.ui.menu.nCandidates.choose.buttons.forEach(x => x.dom.hidden = (["two", "three", "four", "five"].includes(x.dom.innerHTML)) ? false : true)
 	}
 	
+	// configurations
 	if (htmlname == "election1.html") {
 		config = {
 
@@ -1321,6 +1316,7 @@ function loadpreset(htmlname) {
 	}
 	return {
 		config: config,
-		update: update
+		update: update,
+		modelName: htmlname.slice(0,htmlname.length-5)
 	}
 }

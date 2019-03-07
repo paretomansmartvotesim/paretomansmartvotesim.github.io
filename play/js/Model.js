@@ -6,14 +6,17 @@ A MODEL:
 
 ***************************/
 
-function Model(config){
+function Model(modelName){
 
 	var self = this;
+
 
 	// CREATE DATA STRUCTURE
 	self.voters = [];
 	self.candidates = [];
+    self.basediv = document.querySelector("#" + modelName)
 	self.dom = document.createElement("div");
+	self.id = modelName
 
 	
 	// CONFIGURE DEFAULTS

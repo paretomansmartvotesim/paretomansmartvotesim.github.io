@@ -1,21 +1,25 @@
 function main(preset) {
-    s = new Sandbox()
+
+
+    var s = new Sandbox(preset.modelName)
+    var l = new Loader()
     
     // CONFIGURE
     s.url = window.location.href;
-    Loader.onload = s.update // this might look like an update but we're configuring Loader
+    l.onload = s.update // this might look like an update but we're configuring Loader
 
     // INIT
 	s.setConfig(preset.config)
 	if (preset.update) preset.update(s)
     
     // UPDATE
-    Loader.load(s.assets);
+    l.load(s.assets);
 }
 
-function Sandbox() {
+function Sandbox(modelName) {
 	var self = this
 
+    var basediv = document.querySelector("#" + modelName)
     // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
     // Basic description of main_sandbox.js
@@ -62,7 +66,7 @@ function Sandbox() {
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
 
     // CREATE
-    var model = new Model();
+    var model = new Model(modelName);
     var ui = {}
     self.ui = ui
     var config
@@ -106,9 +110,9 @@ function Sandbox() {
         // INIT (model)
         ui.model = model
         model.initDOM()
-        document.querySelector("#center").appendChild(model.dom);
+        basediv.querySelector("#center").appendChild(model.dom);
         model.dom.removeChild(model.caption);
-        document.querySelector("#right").appendChild(model.caption);
+        basediv.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
 
 		// INIT (menu)
@@ -276,16 +280,16 @@ function Sandbox() {
     model.onDraw = function(){
         
         // CREATE A BALLOT
-        var myNode = document.querySelector("#right");
+        var myNode = basediv.querySelector("#right");
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }  // remove old one, if there was one
-        // document.querySelector("#ballot").remove()	
+        // basediv.querySelector("#ballot").remove()	
         if (config.oneVoter) {
             var ballot = new model.ballotType();
-            document.querySelector("#right").appendChild(ballot.dom);
+            basediv.querySelector("#right").appendChild(ballot.dom);
         }
-        document.querySelector("#right").appendChild(model.caption);
+        basediv.querySelector("#right").appendChild(model.caption);
         
         if (config.oneVoter) {
             ballot.update(model.voters[0].ballot);
@@ -443,7 +447,7 @@ function Sandbox() {
         self.select = function() {
             self.choose.highlight("name", config.system)
         }
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.rbSystems = new function() { // Which RB voting system?
@@ -494,7 +498,7 @@ function Sandbox() {
         self.select = function() {
             self.choose.highlight("name", config.rbsystem)
         }
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
         self.choose.dom.hidden = true
     }
 
@@ -643,7 +647,7 @@ function Sandbox() {
             data: self.list,
             onChoose: self.onChoose
         });
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.xVoterGroups = new function() { // if the last option X is selected, we need a selection for number of voters
@@ -680,7 +684,7 @@ function Sandbox() {
             chfn:self.onChoose
         })
         // x_voter_sliders[0] = 
-        document.querySelector("#left").appendChild(self.choose.dom)
+        basediv.querySelector("#left").appendChild(self.choose.dom)
         self.select = function() {
             self.choose.sliders[0].value = config.xNumVoterGroups // TODO: load x_voters config somehow
         }
@@ -724,7 +728,7 @@ function Sandbox() {
             num:maxVoters,
             labelText: "what # voters in each group?"
         })
-        document.querySelector("#left").appendChild(self.choose.dom)
+        basediv.querySelector("#left").appendChild(self.choose.dom)
     }
 
     ui.menu.group_spread = new function() {  // group count
@@ -760,7 +764,7 @@ function Sandbox() {
             num:maxVoters,
             labelText: "how spread out is the group?"
         })
-        document.querySelector("#left").appendChild(self.choose.dom)
+        basediv.querySelector("#left").appendChild(self.choose.dom)
         self.select = function() {
             for (i in self.choose.sliders) {
                 self.choose.sliders[i].value = config.voter_group_spread[i]
@@ -841,7 +845,7 @@ function Sandbox() {
         self.select = function() {
             self.choose.highlight("num", config.numOfCandidates);
         }
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
@@ -880,7 +884,7 @@ function Sandbox() {
         self.select = function() {
             self.choose.highlight("realname", config.firstStrategy);
         }
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     function _loadConfigForStrategyButtons(config) {			
@@ -959,7 +963,7 @@ function Sandbox() {
             onChoose: self.onChoose,
             isCheckbox: true
         });
-        document.querySelector("#left").appendChild(self.choose.dom);			
+        basediv.querySelector("#left").appendChild(self.choose.dom);			
     }
 
     ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
@@ -1004,7 +1008,7 @@ function Sandbox() {
             data: self.list,
             onChoose: self.onChoose
         });
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.percentSecondStrategy = new function() {  // group count
@@ -1043,7 +1047,7 @@ function Sandbox() {
             num:maxVoters,
             labelText: "what % use this 2nd strategy?"
         })
-        document.querySelector("#left").appendChild(self.choose.dom)
+        basediv.querySelector("#left").appendChild(self.choose.dom)
     }	
 
     if (0) { // are there primaries?
@@ -1070,7 +1074,7 @@ function Sandbox() {
                 data: self.list,
                 onChoose: self.onChoose
             });
-            document.querySelector("#left").appendChild(choosePrimaries.dom);
+            basediv.querySelector("#left").appendChild(choosePrimaries.dom);
         }
     }
 
@@ -1113,7 +1117,7 @@ function Sandbox() {
             data: self.list,
             onChoose: self.onChoose
         });
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     function _iconButton(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
@@ -1158,7 +1162,7 @@ function Sandbox() {
             onChoose: self.onChoose,
             isCheckbox: true
         });
-        document.querySelector("#left").appendChild(self.choose.dom);			
+        basediv.querySelector("#left").appendChild(self.choose.dom);			
     }
 
     ui.menu.poll = new function() { // do a poll to find frontrunner
@@ -1195,7 +1199,7 @@ function Sandbox() {
             onChoose: self.onChoose,
             justButton: true
         });
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.yee = new function() { // yee
@@ -1257,7 +1261,7 @@ function Sandbox() {
         });
         self.choose.dom.childNodes[6].style.width = "68px"
         self.choose.dom.setAttribute("id",self.name)
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.yeefilter = new function() { 	// yee filter
@@ -1298,7 +1302,7 @@ function Sandbox() {
             isCheckbox: true
         });
         self.choose.dom.setAttribute("id",self.name)
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.gearconfig = new function() { 	// gear config - decide which menu items to do
@@ -1333,7 +1337,7 @@ function Sandbox() {
             isCheckbox: true
         });
         self.choose.dom.hidden = true
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.presetconfig = new function() { // pick a preset
@@ -1421,7 +1425,7 @@ function Sandbox() {
             onChoose: self.onChoose
         });
         self.choose.dom.hidden = true
-		document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+		basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		self.init_sandbox = function() {
 			self.choose.highlight("htmlname", config.presethtmlname); // only do this once.  Otherwise it would be in updateUI
 		}
@@ -1456,7 +1460,7 @@ function Sandbox() {
             data: self.list,
             onChoose: self.onChoose
         });
-        document.querySelector("#left").appendChild(self.choose.dom);
+        basediv.querySelector("#left").appendChild(self.choose.dom);
         self.choose.dom.hidden = true
     }
 
@@ -1489,7 +1493,7 @@ function Sandbox() {
             onChoose: self.onChoose
         });
         self.choose.dom.hidden = true
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.spread_factor_voters = new function () {
@@ -1528,7 +1532,7 @@ function Sandbox() {
             onChoose: self.onChoose
         });
         self.choose.dom.hidden = true
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.arena_size = new function () {
@@ -1587,7 +1591,7 @@ function Sandbox() {
             onChoose: self.onChoose
         });
         self.choose.dom.hidden = true
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.median_mean = new function () {
@@ -1619,7 +1623,7 @@ function Sandbox() {
             onChoose: self.onChoose
         });
         self.choose.dom.hidden = true
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.utility_shape = new function () {
@@ -1651,7 +1655,7 @@ function Sandbox() {
             onChoose: self.onChoose
         });
         self.choose.dom.hidden = true
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.gearicon = new function () {
@@ -1690,7 +1694,7 @@ function Sandbox() {
             onChoose: self.onChoose,
             isCheckbox: true
         });
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.gearconfig.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.gearconfig.choose.dom);
         self.init_sandbox = function() {
             if(config.hidegearconfig) self.choose.dom.hidden = true
         }
@@ -1724,7 +1728,7 @@ function Sandbox() {
             onChoose: self.onChoose,
             isCheckbox: true
         });
-        document.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
         self.choose.dom.hidden = true
     }
     //////////////////////////
@@ -1747,7 +1751,7 @@ function Sandbox() {
             // UPDATE MENU //
             _objF(ui.menu,"select");
         };
-        document.body.appendChild(resetDOM);
+        basediv.appendChild(resetDOM);
         self.update = function () {
             // Move that reset button
             if (config.sandboxsave) {
@@ -1770,8 +1774,8 @@ function Sandbox() {
         var self = this
         var descDOM = document.createElement("div");
         descDOM.id = "description_container";
-        var refNode = document.getElementById("left");
-        document.body.insertBefore(descDOM, refNode);
+        var refNode = basediv.querySelector("#left");
+        basediv.insertBefore(descDOM, refNode);
         var descText = document.createElement("textarea");
         descText.id = "description_text";
         descDOM.appendChild(descText);
@@ -1785,14 +1789,14 @@ function Sandbox() {
 
                 addsome = config.arena_size - 300
 
-                document.getElementById("center").style.height = (320 + addsome) + "px"
-                document.getElementById("center").style.width = (320 + addsome) + "px"
+                basediv.querySelector("#center").style.height = (320 + addsome) + "px"
+                basediv.querySelector("#center").style.width = (320 + addsome) + "px"
 
                 // #description_container
-                document.getElementById("description_container").style.width = (800 + addsome) + "px"
+                basediv.querySelector("#description_container").style.width = (800 + addsome) + "px"
 
                 // #description_container textarea
-                document.getElementById("description_text").style.width = (778 + addsome) + "px"
+                basediv.querySelector("#description_text").style.width = (778 + addsome) + "px"
 
                 descDOM.hidden = false
                 descText.hidden = false
@@ -1819,7 +1823,7 @@ function Sandbox() {
             var pos = savePositions()  // saves the candidate and voter positions in the config.
             for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
             // Description
-            var description = document.getElementById("description_text") || {value:""};
+            var description = basediv.querySelector("#description_text") || {value:""};
             config.description = description.value;
             // UPDATE MAIN //
             initialConfig = _jcopy(config); // now the reset button will restore these saved settings
@@ -1830,7 +1834,7 @@ function Sandbox() {
             
 
         };
-        document.body.appendChild(saveDOM);
+        basediv.appendChild(saveDOM);
         self.update = function () {
             if (config.sandboxsave) {
                 var addsome = config.arena_size - 300
@@ -1853,7 +1857,7 @@ function Sandbox() {
         linkText.onclick = function(){
             linkText.select();
         };
-        document.body.appendChild(linkText);
+        basediv.appendChild(linkText);
         self.update = function () {
             if (config.sandboxsave) {
                 linkText.style.width = (82 + addsome) + "px"	
@@ -1943,7 +1947,7 @@ function Sandbox() {
         for (var i=1; i < restofurl.length - 2; i++) {baseUrl += "/" + restofurl[i];}
         var link = baseUrl + "/sandbox/?m="+uri;
         
-        var savelink = document.getElementById("savelink");
+        var savelink = basediv.querySelector("#savelink");
         savelink.value = "saving...";
         setTimeout(function(){
             savelink.value = link;
