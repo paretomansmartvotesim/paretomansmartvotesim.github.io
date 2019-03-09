@@ -3,7 +3,8 @@ BALLOT DESIGN
 **********************/
 
 
-#ballot{
+.div-election #ballot,
+.div-sandbox #ballot{
 
 	width: 210px;
 	height: 195px;
@@ -21,7 +22,8 @@ BALLOT DESIGN
 	
 }
 
-#ballot .ballot_sprite{
+.div-election #ballot .ballot_sprite,
+.div-sandbox #ballot .ballot_sprite{
 	position: absolute;
 	background-size: 100% auto;
 }

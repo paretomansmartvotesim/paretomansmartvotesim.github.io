@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <base href="play/" />
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/model.css">
+    <link rel="stylesheet" type="text/css" href="css/ballot.css">
+    <link rel="stylesheet" type="text/css" href="css/election.css">
+    <link rel="stylesheet" type="text/css" href="css/sandbox.css">
+    <link rel="stylesheet" type="text/css" href="css/ballotInSandbox.css">
+    <script src="js/helpers.js"></script>
+    <script src="js/minpubsub.js"></script>
+    <script src="js/Loader.js"></script>
+    <script src="js/Mouse.js"></script>
+    <script src="js/Draggable.js"></script>
+
+    <script src="js/gpu.js-develop/bin/gpu-core.js"></script>
+    <script src="js/gpu.js-develop/bin/gpu.js"></script>
+    <script src="js/FastYee.js"></script>
+
+    <script src="js/Model.js"></script>
+    <script src="js/Yee.js"></script>
+    <script src="js/Candidate.js"></script>
+    <script src="js/Voters.js"></script>
+    <script src="js/Election.js"></script>
+    <script src="js/Buttons.js"></script>
+    <script src="js/Ballot.js"></script>
+    <script src="../rbvote/rbvote.js"></script>
+    <script src="js/seedrandom.min.js"></script>
+
+    <script src="js/main_ballot.js"></script>
+    <script src="js/main_sandbox.js"></script>
+    <script src="js/Presets.js"></script>
+</head>
+
+<body>
+    <div id="content">
+        <div class="sim-intro">
+            <div class="contain-model">
+                <div id="model1" class="div-model">
+                </div>
+                <script src="js/model1.js">
+                </script>
+            </div>
+        </div>
+        <div class="sim-intro">
+            <div class="contain-model">
+                <div id="model2" class="div-model">
+                </div>
+                <script src="js/model2.js">
+                </script>
+            </div>
+        </div>
+        <div class="sim-intro">
+            <div class="contain-model">
+                <div id="model3" class="div-model" style="min-height:480px;">
+                </div>
+                <script src="js/model3.js">
+                </script>
+            </div>
+        </div>
+        <div class="sim-ballot">
+            <div class="contain-model">
+                <div id="ballot4" class="div-ballot div-model" style="min-height:350px;" scrolling="no">
+                </div>
+                <script>
+                    main_ballot(loadpreset("ballot4"))
+                </script>
+            </div>
+        </div>
+        <div class="sim-test">
+            <div class="contain-model">
+                <div id="election1" class="div-election div-model" style="min-height:400px;" scrolling="no">
+                </div>
+                <script>
+                    main(loadpreset("election1"))
+                </script>
+            </div>
+        </div>
+    </div>
+    <div id="sandbox-section">
+        <div class="sim-sandbox">
+            <div class="contain-model">
+                <div id="sandbox_original" class="div-sandbox div-election div-model" style="min-height:508px"
+                    scrolling="no">
+                </div>
+                <script>
+                    main(loadpreset("sandbox_original"))
+                </script>
+            </div>
+        </div>
+    </div>
+    <div id="sandbox-section">
+        <div class="sim-sandbox">
+            <div class="contain-model">
+                <div id="sandbox" class="div-sandbox div-election div-model" style="min-height:802px" scrolling="no">
+                </div>
+                <script>
+                    main(loadpreset("sandbox"))
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

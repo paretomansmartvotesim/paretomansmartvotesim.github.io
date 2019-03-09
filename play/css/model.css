@@ -1,4 +1,5 @@
-body{
+.div-model{
+	display:inline-block;
 	margin: 0px;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 25px;
@@ -12,52 +13,44 @@ body{
 }
 
 /*********************
-Preloading image assets...
-**********************/
-
-#offscreen{
-	position:absolute;
-	top:-1000px;
-	left:-1000px;
-}
-
-/*********************
 THE MAIN MODEL ITSELF
 **********************/
 
-.model{
+.div-model .model{
 	overflow: hidden;
 	float:left;
 }
-.model .interactive{
+.div-model .model .interactive{
     /* background-image: url(../img/axis.png); */
-    background-size: 100% 100%;
+    /* background-size: 100% 100%; */
     border: 2px solid #ccc;
 }
-.model .interactive[cursor=grab]{
+.div-model .model .interactive[cursor=grab]{
 	cursor: -webkit-grab;
 	cursor: -moz-grab;
 	cursor: grab;
 }
-.model .interactive[cursor=grabbing]{
+.div-model .model .interactive[cursor=grabbing]{
 	cursor: -webkit-grabbing;
 	cursor: -moz-grabbing;
 	cursor: grabbing;
 }
-#caption{
+.div-model #caption{
 	cursor: default;
 	margin-top:10px;
 	text-align: center;
 }
-#caption .small{
+.div-model #caption .small{
 	font-size: 0.75em;
 }
+
 
 /*********************
 DAT RESET BUTTON
 **********************/
 
-#reset, #save{
+#reset,
+#save{
 	cursor: pointer;
     background: #aaa;
     color: #fff;
@@ -78,12 +71,14 @@ DAT RESET BUTTON
     -o-transition: all 0.1s;
     transition: all 0.1s;
 }
-#reset:hover, #save:hover{
+#reset:hover,
+ #save:hover{
 	margin-top:-2px;
 	background: #bbb;
 	border-bottom-color: #999;
 }
-#reset:active, #save:active{
+#reset:active,
+#save:active{
 	margin-top:2px;
 	background: #999;
 	border-bottom-color: #777;

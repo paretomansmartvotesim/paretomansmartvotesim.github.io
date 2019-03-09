@@ -2,7 +2,7 @@
 BALLOT DESIGN
 **********************/
 
-#ballot{
+.div-ballot #ballot{
 
 	width: 375px;
 	height: 250px;
@@ -22,23 +22,23 @@ BALLOT DESIGN
 	
 
 }
-#ballot .ballot_sprite{
+.div-ballot #ballot .ballot_sprite{
 	position: absolute;
 	background-size: 100% auto;
 }
 
-.button-group{
+.div-ballot .button-group{
 	margin-left: 0px;
 	float:left;
 	clear:both;
 }
 
-#reset {
+.div-ballot #reset {
 	top: 270px;
 	left: 275px
 }
 
-.model {
+.div-ballot .model {
 	height:260px;
 	margin-bottom: 10px;
 }

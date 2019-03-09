@@ -5,58 +5,60 @@ Election/Sandbox design:
 - caption to the right
 
 ************/
+.div-election{
+    position:relative;
+}
 
-#left, #center, #right{
+.div-election #left, 
+.div-election #center, 
+.div-election #right{
 	float:left;
-	height: 320px;
+	min-height: 320px;
 }
-#left{
-	width:220px;
+.div-election #left{
+	width:230px;
     padding-right: 20px;
-	height: 371px;
 }
-#center{
+.div-election #center{
 	width:320px;
-	height: 370px;
 }
-#right{
+.div-election #right{
 	width: 220px;
 	padding-left: 20px;
 	overflow-y: auto;
 }
-#caption{
+.div-election #caption{
 	text-align: left;
-	font-size: 23px;
 	line-height: 1.0em;
 }
-#caption .small{
+.div-election #caption .small{
 	font-size: 15px;
 	line-height: 1.0em;
 }
-.buttonshape img{
+.div-election .buttonshape img{
 	height: 1em;
 	position: relative;
 	top:0px;
 }
 
 
-#right img{
+.div-election #right img{
 	height: 1em;
 	position: relative;
 	top:2px;
 }
 
-.button-group{
+.div-election .button-group{
 	overflow: hidden;
     margin-bottom: 0px;
 }
-.button-group-label{
+.div-election .button-group-label{
 	font-weight: bold;
     font-size: 15px;
     margin-bottom: 2px;
     line-height: 1.1em;
 }
-.button{
+.div-election .button{
 	float: left;
 	cursor: pointer;
     background: #bbb;
@@ -77,52 +79,52 @@ Election/Sandbox design:
     -o-transition: all 0.1s;
     transition: all 0.1s;
 }
-.button:hover{
+.div-election .button:hover{
 	background: #ccc;
 }
-.button:active{
+.div-election .button:active{
 	background: #ccc;
 }
-.button[on=yes]{
+.div-election .button[on=yes]{
 	background: #333;
 	color: #fff;
 }
-.button[on=yes]:hover{
+.div-election .button[on=yes]:hover{
 	background: #555;
 }
 .button[on=yes]:active{
 	background: #111;
 }
 
-::-webkit-scrollbar {
+.div-election::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
-::-webkit-scrollbar-thumb {
+.div-election::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
-#ohno{
+.div-election #ohno{
 	font-size: 2em;
 	position: relative;
 	top:10px;
 }
 
-input[type=range]{
+.div-election input[type=range]{
     border: 0px solid white; 
 	display:inline;
 	/* transform: rotate(270deg); */
 }
 
-#containsliders{
+.div-election #containsliders{
 	line-height: 0px;
 	font-size: 0px;
 }
 
 
-input[type="range"] { 
+.div-election input[type="range"] { 
     margin: 0px;
     -webkit-appearance: none;
     position: relative;
@@ -141,14 +143,14 @@ input[type="range"] {
 
 /* Beginning of Slider Stuff  - note that the height is changed later in sandbox.css */
 
-::-webkit-slider-runnable-track {
+.div-election::-webkit-slider-runnable-track {
     background: #ccc;
 }
 
 /*
  * 1. Set to 0 height and width, and remove border for a slider without a thumb
  */
-::-webkit-slider-thumb {
+ .div-election::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 20px; /* 1 */
     height: 20px; /* 1 */
@@ -157,12 +159,12 @@ input[type="range"] {
     border: 2px solid #555; /* 1 */
 }
 
-::-moz-range-track {
+.div-election::-moz-range-track {
     height: 20px;
     background: #ccc;
 }
 
-::-moz-range-thumb {
+.div-election::-moz-range-thumb {
     background: #fff;
     height: 20px;
     width: 20px;
@@ -172,11 +174,11 @@ input[type="range"] {
     box-sizing: border-box;
 }
 
-::-ms-fill-lower { 
+.div-election::-ms-fill-lower { 
     background: #001;
 }
 
-::-ms-thumb { 
+.div-election::-ms-thumb { 
     background: #fff;
     border: 2px solid #555;
     height: 20px;
@@ -184,22 +186,22 @@ input[type="range"] {
     box-sizing: border-box;
 }
 
-::-ms-ticks-after { 
+.div-election::-ms-ticks-after { 
     display: none; 
 }
 
-::-ms-ticks-before { 
+.div-election::-ms-ticks-before { 
     display: none; 
 }
 
-::-ms-track { 
+.div-election::-ms-track { 
     background: #ccc;
     color: transparent;
     height: 20px;
     border: none;
 }
 
-::-ms-tooltip { 
+.div-election::-ms-tooltip { 
     display: none;
 }
 

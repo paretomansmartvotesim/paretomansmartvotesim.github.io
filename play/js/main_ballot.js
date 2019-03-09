@@ -1,6 +1,8 @@
 
-function main(preset){
+function main_ballot(preset){
 	var config = preset.config
+
+	var l = new Loader()
 
 	ballotType = config.system;
 	config.firstStrategy = config.firstStrategy || "zero strategy. judge on an absolute scale.";
@@ -8,7 +10,7 @@ function main(preset){
 	config.showChoiceOfStrategy = config.showChoiceOfStrategy || false
 	config.showChoiceOfFrontrunners = config.showChoiceOfFrontrunners || false
 	config.doStarStrategy = config.doStarStrategy || false
-	
+
 	// grandfather name for firstStrategy used only for main_ballot
 	if (config.strategy != undefined) config.firstStrategy = config.strategy
 
@@ -20,10 +22,10 @@ function main(preset){
 	var BallotType = window[ballotType+"Ballot"];
 
 	// INIT
-	Loader.onload = function(){
+	l.onload = function(){
 
 		// CREATE
-		window.model = new Model();
+		var model = new Model();
 
 		// CONFIGURE
 		model.size = 250
@@ -31,7 +33,9 @@ function main(preset){
 
 		// INIT
 		model.initDOM()
-		document.body.appendChild(model.dom);
+
+		var basediv = document.querySelector("#" + preset.modelName)
+		basediv.appendChild(model.dom);
 		model.start = function(){
 			// CREATE
 			model.voters.push(new SingleVoter(model))
@@ -42,8 +46,8 @@ function main(preset){
 			Object.assign( model.candidates[0],{x: 41, y: 50, id:"square"} )
 			Object.assign( model.candidates[1],{x:153, y: 95, id:"triangle"} )
 			Object.assign( model.candidates[2],{x:216, y:216, id:"hexagon"} )
-			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), 
-				firstStrategy: config.firstStrategy, 
+			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model),
+				firstStrategy: config.firstStrategy,
 				preFrontrunnerIds: config.preFrontrunnerIds} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.doStarStrategy = config.doStarStrategy;
@@ -59,17 +63,17 @@ function main(preset){
 
 
 		// CREATE A BALLOT
-		window.ballot = new BallotType();
-		document.body.appendChild(ballot.dom);
+		var ballot = new BallotType();
+		basediv.appendChild(ballot.dom)
 		model.onUpdate = function(){
 			ballot.update(model.voters[0].ballot);
 		};
 
 		// UPDATE
 		model.start();
-		
+
 		if(config.showChoiceOfStrategy) {
-			
+
 			var strategyOn = [
 				{name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
 				{name:"N", realname:"normalize", margin:4},
@@ -82,22 +86,22 @@ function main(preset){
 			// {name:"T", realname:"threshold"},
 			// {name:"SNTF", realname:"starnormfrontrunners"}
 			var onChooseVoterStrategyOn = function(data){
-				config.firstStrategy = data.realname; 
-				model.voters[0].firstStrategy = config.firstStrategy; 
+				config.firstStrategy = data.realname;
+				model.voters[0].firstStrategy = config.firstStrategy;
 				model.update();
-				
+
 			};
-			window.chooseVoterStrategyOn = new ButtonGroup({
+			var chooseVoterStrategyOn = new ButtonGroup({
 				label: "which strategy?",
 				width: 42,
 				data: strategyOn,
 				onChoose: onChooseVoterStrategyOn
 			});
-			document.body.appendChild(chooseVoterStrategyOn.dom);
+			basediv.appendChild(chooseVoterStrategyOn.dom);
 		}
-			
+
 		if(config.showChoiceOfFrontrunners) {
-			
+
 			var h1 = function(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>";};
 			var frun = [
 				{name:h1("square"),realname:"square",margin:4},
@@ -107,7 +111,7 @@ function main(preset){
 				//{name:h1("bob"),realname:"bob"}
 			];
 			var onChooseFrun = function(data){
-				
+
 				// update config...
 				// no reset...
 				if (data.isOn) {
@@ -117,27 +121,27 @@ function main(preset){
 					if (index > -1) {
 						config.preFrontrunnerIds.splice(index, 1);
 					}
-				} 
+				}
 				model.preFrontrunnerIds = config.preFrontrunnerIds
 				model.update();
-				
+
 			};
-			window.chooseFrun = new ButtonGroup({
+			var chooseFrun = new ButtonGroup({
 				label: "who are the frontrunners?",
 				width: 42,
 				data: frun,
 				onChoose: onChooseFrun,
 				isCheckbox: true
 			});
-			document.body.appendChild(chooseFrun.dom);
+			basediv.appendChild(chooseFrun.dom);
 		}
-		
+
 		var selectMENU = function(){
-			if(window.chooseVoterStrategyOn) chooseVoterStrategyOn.highlight("realname", model.voters[0].firstStrategy);
-			if(window.chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
+			if(chooseVoterStrategyOn) chooseVoterStrategyOn.highlight("realname", model.voters[0].firstStrategy);
+			if(chooseFrun) chooseFrun.highlight("realname", model.preFrontrunnerIds);
 		};
 		selectMENU();
-		
+
 		//////////////////////////
 		//////// RESET... ////////
 		//////////////////////////
@@ -147,26 +151,26 @@ function main(preset){
 		resetDOM.id = "reset";
 		resetDOM.innerHTML = "reset";
 		resetDOM.onclick = function(){
-			// LOAD 
-			config = JSON.parse(JSON.stringify(initialConfig)); 
+			// LOAD
+			config = JSON.parse(JSON.stringify(initialConfig));
 			// CREATE, CONFIGURE, INIT, UPDATE
 			model.reset()
 			// UPDATE
 			selectMENU()
 		};
-		document.body.appendChild(resetDOM);
-		
+		basediv.appendChild(resetDOM);
+
 	};
-	
+
 	// UPDATE
-	Loader.load([
-		
+	l.load([
+
 		// the peeps
 		"img/voter_face.png",
 		"img/square.png",
 		"img/triangle.png",
 		"img/hexagon.png",
-		
+
 		// Ballot instructions
 		"img/ballot_fptp.png",
 		"img/ballot_ranked.png",
