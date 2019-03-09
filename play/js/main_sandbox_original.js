@@ -501,12 +501,12 @@ function main(config){
 
 	// UPDATE - run actions
 	Loader.load([
-		"img/voter_face.png",
-		"img/square.png",
-		"img/triangle.png",
-		"img/hexagon.png",
-		"img/pentagon.png",
-		"img/bob.png"
+		"play/img/voter_face.png",
+		"play/img/square.png",
+		"play/img/triangle.png",
+		"play/img/hexagon.png",
+		"play/img/pentagon.png",
+		"play/img/bob.png"
 	]);
 	// FUNNY HACK.
 	setInterval(function(){

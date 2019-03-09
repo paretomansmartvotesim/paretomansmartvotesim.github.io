@@ -1030,7 +1030,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	};
 
 	self.img = new Image();  // use the face
-	self.img.src = "img/voter_face.png";
+	self.img.src = "play/img/voter_face.png";
 
 	// UPDATE! Get all ballots.
 	self.ballots = [];
@@ -1155,7 +1155,7 @@ function SingleVoter(model){
 
 		// Image!
 		self.img = new Image();
-		self.img.src = "img/voter_face.png";
+		self.img.src = "play/img/voter_face.png";
 
 		
 		self.points = [[0,0]];
@@ -1207,7 +1207,7 @@ function VoterCenter(model){
 	self.size = 30;
 	self.points = [[0,0]];
 	self.img = new Image();  // use the face
-	self.img.src = "img/voter_face.png";
+	self.img.src = "play/img/voter_face.png";
 	self.findVoterCenter = function(){ // calculate the center of the voter groups
 		// UPDATE
 		var x = 0

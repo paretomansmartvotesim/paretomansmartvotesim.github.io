@@ -70,19 +70,22 @@ li{
 }
 .sim-intro, .sim-ballot, .sim-test, .sim-sandbox{
 	margin: 0 auto;
-	overflow: auto;
-	text-align: center;
 }
-.contain-model{
-	display: inline-block;
-	position: relative;
-	margin: 0px auto 25px auto;
+.sim-intro{
+	width: 600px;
 }
 .sim-ballot{
+	width: 670px;
 	margin: 35px auto 50px auto;
 }
 .sim-test{
+	width: 850px;
 	margin: 50px auto 40px auto;
+}
+.contain-model{
+	position: relative;
+	margin: 0px auto 25px auto;
+	text-align: center;
 }
 #content p.quote{
 	border-radius: 5px;
@@ -129,6 +132,9 @@ li{
 	margin-top: 50px;
 	border-bottom: 5px solid rgba(0,0,0,0.2);
 	padding: 30px 0;
+}
+.sim-sandbox{
+	width:850px;
 }
 .sim-sandbox .div-sandbox{
 	background:#fff;

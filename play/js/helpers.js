@@ -3,7 +3,7 @@ Math.TAU = Math.PI*2;
 
 // For the election sandbox code
 function _icon(name){
-	return "<img src='img/icon/"+name+".png'/>";
+	return "<img src='play/img/icon/"+name+".png'/>";
 }
 
 function _drawStroked(text, x, y, textsize, ctx) {

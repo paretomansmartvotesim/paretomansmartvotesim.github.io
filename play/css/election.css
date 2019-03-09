@@ -5,9 +5,6 @@ Election/Sandbox design:
 - caption to the right
 
 ************/
-.div-election{
-    position:relative;
-}
 
 .div-election #left, 
 .div-election #center, 
@@ -23,13 +20,13 @@ Election/Sandbox design:
 	width:320px;
 }
 .div-election #right{
-	width: 220px;
+    width: 220px;
 	padding-left: 20px;
-	overflow-y: auto;
 }
 .div-election #caption{
 	text-align: left;
-	line-height: 1.0em;
+    line-height: 1.0em;
+    font-size: 23px;
 }
 .div-election #caption .small{
 	font-size: 15px;

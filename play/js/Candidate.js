@@ -48,23 +48,23 @@ function Candidate(model){
 // id => img & fill
 Candidate.graphics = {
 	square: {
-		img: "img/square.png",
+		img: "play/img/square.png",
 		fill: "hsl(240,80%,70%)"
 	},
 	triangle: {
-		img: "img/triangle.png",
+		img: "play/img/triangle.png",
 		fill: "hsl(45,80%,70%)"
 	},
 	hexagon: {
-		img: "img/hexagon.png",
+		img: "play/img/hexagon.png",
 		fill: "hsl(0,80%,70%)"
 	},
 	pentagon: {
-		img: "img/pentagon.png",
+		img: "play/img/pentagon.png",
 		fill: "hsl(90,80%,70%)"
 	},
 	bob: {
-		img: "img/bob.png",
+		img: "play/img/bob.png",
 		fill: "hsl(30,80%,70%)"
 	}
 };

@@ -63,7 +63,7 @@ function main_ballot(preset){
 
 
 		// CREATE A BALLOT
-		var ballot = new BallotType();
+		var ballot = new BallotType(model);
 		basediv.appendChild(ballot.dom)
 		model.onUpdate = function(){
 			ballot.update(model.voters[0].ballot);
@@ -166,20 +166,20 @@ function main_ballot(preset){
 	l.load([
 
 		// the peeps
-		"img/voter_face.png",
-		"img/square.png",
-		"img/triangle.png",
-		"img/hexagon.png",
+		"play/img/voter_face.png",
+		"play/img/square.png",
+		"play/img/triangle.png",
+		"play/img/hexagon.png",
 
 		// Ballot instructions
-		"img/ballot_fptp.png",
-		"img/ballot_ranked.png",
-		"img/ballot_approval.png",
-		"img/ballot_range.png",
+		"play/img/ballot_fptp.png",
+		"play/img/ballot_ranked.png",
+		"play/img/ballot_approval.png",
+		"play/img/ballot_range.png",
 
 		// The boxes
-		"img/ballot_box.png",
-		"img/ballot_rate.png"
+		"play/img/ballot_box.png",
+		"play/img/ballot_rate.png"
 
 	]);
 

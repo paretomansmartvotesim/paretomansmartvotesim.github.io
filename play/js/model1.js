@@ -41,8 +41,8 @@ l.onload = function(){
 
 };
 l.load([
-"img/voter_face.png",
-"img/square.png",
-"img/triangle.png",
-"img/hexagon.png"
+"play/img/voter_face.png",
+"play/img/square.png",
+"play/img/triangle.png",
+"play/img/hexagon.png"
 ]);

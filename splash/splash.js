@@ -1,4 +1,6 @@
-Loader.onload = function(){
+var l = new Loader()
+
+l.onload = function(){
 
 	// Properties
 	var width = 1500;
@@ -147,7 +149,7 @@ Loader.onload = function(){
 	_draw();
 
 };
-Loader.load(["vote.png"]);
+l.load(["vote.png"]);
 
 window.isOnScreen = true;
 window.addEventListener("message", function(event){

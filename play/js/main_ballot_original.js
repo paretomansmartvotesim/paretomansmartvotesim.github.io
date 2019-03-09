@@ -16,6 +16,7 @@ function main(ballotType){
 		// CONFIGURE
 		model.size = 250
 		model.border = 2
+		model.startAt1 = true
 
 		// INIT
 		model.initDOM()
@@ -48,7 +49,7 @@ function main(ballotType){
 
 
 		// CREATE A BALLOT
-		window.ballot = new BallotType({startAt1:true});
+		window.ballot = new BallotType(model);
 		document.body.appendChild(ballot.dom);
 		model.onUpdate = function(){
 			ballot.update(model.voters[0].ballot);
@@ -62,20 +63,20 @@ function main(ballotType){
 	Loader.load([
 		
 		// the peeps
-		"img/voter_face.png",
-		"img/square.png",
-		"img/triangle.png",
-		"img/hexagon.png",
+		"play/img/voter_face.png",
+		"play/img/square.png",
+		"play/img/triangle.png",
+		"play/img/hexagon.png",
 		
 		// Ballot instructions
-		"img/ballot_fptp.png",
-		"img/ballot_ranked.png",
-		"img/ballot_approval.png",
-		"img/ballot_range_original.png",
+		"play/img/ballot_fptp.png",
+		"play/img/ballot_ranked.png",
+		"play/img/ballot_approval.png",
+		"play/img/ballot_range_original.png",
 
 		// The boxes
-		"img/ballot_box.png",
-		"img/ballot_rate_original.png"
+		"play/img/ballot_box.png",
+		"play/img/ballot_rate_original.png"
 
 	]);
 

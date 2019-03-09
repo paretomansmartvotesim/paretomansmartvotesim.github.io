@@ -1,10 +1,12 @@
 .div-model{
 	display:inline-block;
+	position: relative;
 	margin: 0px;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 25px;
 	line-height: 1.2em;
 	color:#333;
+	text-align: left;	
 
 	-moz-user-select: none;
 	-webkit-user-select: none;

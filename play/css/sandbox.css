@@ -1,12 +1,3 @@
-
-.div-sandbox{
-    position:relative;
-}
-
-.div-sandbox #right{
-	float:left;
-}
-
 .div-sandbox #reset, .div-sandbox  #save{
     background: #fff;
     color: #888;

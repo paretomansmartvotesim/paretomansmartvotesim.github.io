@@ -6,28 +6,19 @@ What does the base Ballot class need to do?
 
 ******************/
 
-
-// are we in a sandbox or election?
-var url = window.location.pathname;
-var filename = url.substring(url.lastIndexOf('/')+1);
-var firstletter = filename[0]
-var inSandbox = (firstletter == "e" || firstletter == "s")
-var sc = 1 // scale factor also is present in  setting width and height in ballotInSandbox.css
-if(inSandbox) {sc = 210/375}
-
-function ScoreBallot(config){
+function ScoreBallot(model){
 
 	var self = this;
-	config = config || {};
-	if (config.startAt1) {
-		config.bg = "img/ballot_range_original.png";
+	model = model || {};
+	if (model.startAt1) {
+		model.bg = "play/img/ballot_range_original.png";
 	} else {
-		config.bg = "img/ballot_range.png";
+		model.bg = "play/img/ballot_range.png";
 	}
-	if (inSandbox) {
-		config.bg = "img/ballot5_range.png";
+	if (model.inSandbox) {
+		model.bg = "play/img/ballot5_range.png";
 	}
-	Ballot.call(self, config);
+	Ballot.call(self, model);
 
 	// BOXES!
 	self.boxes = {
@@ -35,7 +26,7 @@ function ScoreBallot(config){
 		triangle: self.createRate(133, 143, 3),
 		hexagon: self.createRate(133, 184, 1)
 	}
-	if (inSandbox) {
+	if (model.inSandbox) {
 		self.boxes["pentagon"] = self.createRate(133, 226, 1)
 		self.boxes["bob"] = self.createRate(133, 268, 1)
 	};
@@ -49,7 +40,7 @@ function ScoreBallot(config){
 		}
 		for(var cID in ballot){
 			var score = ballot[cID];
-			if (config.startAt1) {
+			if (model.startAt1) {
 				self.boxes[cID].gotoFrame(score-1);
 			} else {
 				self.boxes[cID].gotoFrame(score+1);
@@ -59,15 +50,15 @@ function ScoreBallot(config){
 
 }
 
-function ThreeBallot(config){
+function ThreeBallot(model){
 
 	var self = this;
-	config = config || {};
-	config.bg = "img/ballot_range3.png";
-	if (inSandbox) {
-		config.bg = "img/ballot5_range3.png";
+	model = model || {};
+	model.bg = "play/img/ballot_range3.png";
+	if (model.inSandbox) {
+		model.bg = "play/img/ballot5_range3.png";
 	}
-	Ballot.call(self, config);
+	Ballot.call(self, model);
 
 	// BOXES!
 	self.boxes = {
@@ -75,7 +66,7 @@ function ThreeBallot(config){
 		triangle: self.createThree(133, 143, 3),
 		hexagon: self.createThree(133, 184, 1)
 	};
-	if (inSandbox) {
+	if (model.inSandbox) {
 		self.boxes["pentagon"] = self.createThree(133, 226, 1)
 		self.boxes["bob"] = self.createThree(133, 268, 1)
 	};
@@ -96,15 +87,15 @@ function ThreeBallot(config){
 
 }
 
-function ApprovalBallot(config){
+function ApprovalBallot(model){
 
 	var self = this;
-	config = config || {};
-	config.bg = "img/ballot_approval.png";
-	if (inSandbox) {
-		config.bg = "img/ballot5_approval.png";
+	model = model || {};
+	model.bg = "play/img/ballot_approval.png";
+	if (model.inSandbox) {
+		model.bg = "play/img/ballot5_approval.png";
 	}
-	Ballot.call(self, config);
+	Ballot.call(self, model);
 
 	// BOXES!
 	self.boxes = {
@@ -112,7 +103,7 @@ function ApprovalBallot(config){
 		triangle: self.createBox(26, 140, 1),
 		hexagon: self.createBox(26, 184, 0)
 	};
-	if (inSandbox) {
+	if (model.inSandbox) {
 		self.boxes["pentagon"] = self.createBox(26, 228, 0)
 		self.boxes["bob"] = self.createBox(26, 272, 0)
 	};
@@ -136,15 +127,15 @@ function ApprovalBallot(config){
 
 }
 
-function RankedBallot(config){
+function RankedBallot(model){
 
 	var self = this;
-	config = config || {};
-	config.bg = "img/ballot_ranked.png";
-	if (inSandbox) {
-		config.bg = "img/ballot5_ranked.png";
+	model = model || {};
+	model.bg = "play/img/ballot_ranked.png";
+	if (model.inSandbox) {
+		model.bg = "play/img/ballot5_ranked.png";
 	}
-	Ballot.call(self, config);
+	Ballot.call(self, model);
 
 	// BOXES!
 	self.boxes = {
@@ -152,7 +143,7 @@ function RankedBallot(config){
 		triangle: self.createBox(26, 140, 1),
 		hexagon: self.createBox(26, 184, 0)
 	};
-	if (inSandbox) {
+	if (model.inSandbox) {
 		self.boxes["pentagon"] = self.createBox(26, 228, 0)
 		self.boxes["bob"] = self.createBox(26, 272, 0)
 	};
@@ -173,15 +164,15 @@ function RankedBallot(config){
 
 }
 
-function PluralityBallot(config){
+function PluralityBallot(model){
 
 	var self = this;
-	config = config || {};
-	config.bg = "img/ballot_fptp.png";
-	if (inSandbox) {
-		config.bg = "img/ballot5_fptp.png";
+	model = model || {};
+	model.bg = "play/img/ballot_fptp.png";
+	if (model.inSandbox) {
+		model.bg = "play/img/ballot5_fptp.png";
 	}
-	Ballot.call(self, config);
+	Ballot.call(self, model);
 
 	// BOXES!
 	self.boxes = {
@@ -189,7 +180,7 @@ function PluralityBallot(config){
 		triangle: self.createBox(26, 140, 1),
 		hexagon: self.createBox(26, 184, 0)
 	};
-	if (inSandbox) {
+	if (model.inSandbox) {
 		self.boxes["pentagon"] = self.createBox(26, 228, 0)
 		self.boxes["bob"] = self.createBox(26, 272, 0)
 	};
@@ -204,17 +195,20 @@ function PluralityBallot(config){
 	};
 }
 
-function Ballot(config){
+function Ballot(model){
 
 	var self = this;
 
 	// Create DOM, I s'pose
 	self.dom = document.createElement("div");
 	self.dom.id = "ballot";
-	self.dom.style.backgroundImage = "url("+config.bg+")"; // Background image...
+	if (model.bg) self.dom.style.backgroundImage = "url("+model.bg+")"; // Background image...
 
 	// Create Sprite method!
 	self.createSprite = function(config){
+
+		var sc = 1
+		if(model.inSandbox) {sc = 210/375}
 
 		var sprite = {};
 
@@ -240,16 +234,16 @@ function Ballot(config){
 
 	};
 	self.createBox = function(x,y,frame){
-		if (inSandbox) {
+		if (model.inSandbox) {
 			return self.createSprite({
-				img: "img/ballot5_box.png",
+				img: "play/img/ballot5_box.png",
 				x:x, y:y,
 				w:50, h:50,
 				frame:frame
 			});	
 		}
 		return self.createSprite({
-			img: "img/ballot_box.png",
+			img: "play/img/ballot_box.png",
 			x:x, y:y,
 			w:50, h:50,
 			frame:frame
@@ -257,16 +251,16 @@ function Ballot(config){
 	};
 	
 	self.createRate = function(x,y,frame){
-		if (config.startAt1) {
+		if (model.startAt1) {
 			return self.createSprite({
-				img: "img/ballot_rate_original.png",
+				img: "play/img/ballot_rate_original.png",
 				x:x, y:y,
 				w:225, h:50,
 				frame:frame
 			});
 		} else {
 			return self.createSprite({
-				img: "img/ballot_rate.png",
+				img: "play/img/ballot_rate.png",
 				x:x, y:y,
 				w:216, h:40,
 				frame:frame
@@ -275,7 +269,7 @@ function Ballot(config){
 	};
 	self.createThree = function(x,y,frame){
 		return self.createSprite({
-			img: "img/ballot_three.png",
+			img: "play/img/ballot_three.png",
 			x:x, y:y,
 			w:225, h:50,
 			frame:frame

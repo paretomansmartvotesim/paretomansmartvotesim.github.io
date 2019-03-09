@@ -83,6 +83,9 @@ function Sandbox(modelName) {
     newDivOnBase("right")
 
     // FUNCTIONS and CLASSES for INIT and UPDATE
+
+    model.inSandbox = true
+
     self.setConfig = function(c) {
         config = c
         // INIT - initialize all data structures
@@ -296,7 +299,8 @@ function Sandbox(modelName) {
         }  // remove old one, if there was one
         // basediv.querySelector("#ballot").remove()	
         if (config.oneVoter) {
-            var ballot = new model.ballotType();
+            var BallotType = model.ballotType
+            var ballot = new BallotType(model);
             basediv.querySelector("#right").appendChild(ballot.dom);
         }
         basediv.querySelector("#right").appendChild(model.caption);
@@ -1364,7 +1368,7 @@ function Sandbox(modelName) {
 
             // and fill in the rest
             for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presethtmlnames.push("election"+i) ; presetdescription.push("election"+i)}
-            presetnames.push("O") ; presethtmlnames.push(filename) ; presetdescription.push("original intended preset")
+            presetnames.push("O") ; presethtmlnames.push(modelName) ; presetdescription.push("original intended preset")
             // TODO
             for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presethtmlnames.push("ballot"+i) ; presetdescription.push("ballot"+i)}
             
@@ -1437,7 +1441,7 @@ function Sandbox(modelName) {
         self.choose.dom.hidden = true
 		basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		self.init_sandbox = function() {
-			self.choose.highlight("htmlname", config.presethtmlname); // only do this once.  Otherwise it would be in updateUI
+			self.choose.highlight("htmlname", modelName); // only do this once.  Otherwise it would be in updateUI
 		}
     }
 
@@ -1975,23 +1979,23 @@ function Sandbox(modelName) {
     self.assets = [
         
         // the peeps
-        "img/voter_face.png",
-        "img/square.png",
-        "img/triangle.png",
-        "img/hexagon.png",
-        "img/pentagon.png",
-        "img/bob.png",
+        "play/img/voter_face.png",
+        "play/img/square.png",
+        "play/img/triangle.png",
+        "play/img/hexagon.png",
+        "play/img/pentagon.png",
+        "play/img/bob.png",
 
         // Ballot instructions
-        "img/ballot5_fptp.png",
-        "img/ballot5_ranked.png",
-        "img/ballot5_approval.png",
-        "img/ballot5_range.png",
+        "play/img/ballot5_fptp.png",
+        "play/img/ballot5_ranked.png",
+        "play/img/ballot5_approval.png",
+        "play/img/ballot5_range.png",
 
         // The boxes
-        "img/ballot5_box.png",
-        "img/ballot_rate.png",
-        "img/ballot_three.png"
+        "play/img/ballot5_box.png",
+        "play/img/ballot_rate.png",
+        "play/img/ballot_three.png"
 
     ];
 
