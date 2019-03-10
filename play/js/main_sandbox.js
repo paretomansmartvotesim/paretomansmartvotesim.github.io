@@ -1793,7 +1793,11 @@ function Sandbox(modelName) {
         basediv.insertBefore(descDOM, refNode);
         var descText = document.createElement("textarea");
         descText.id = "description_text";
-        descDOM.appendChild(descText);
+
+        containText = document.createElement("div");
+        containText.id = "double_description_container";
+        descDOM.appendChild(containText);
+        containText.appendChild(descText);
 		// yay.
 		self.init_sandbox = function() {
 			descText.value = initialConfig.description;
@@ -1807,11 +1811,6 @@ function Sandbox(modelName) {
                 basediv.querySelector("#center").style.height = (320 + addsome) + "px"
                 basediv.querySelector("#center").style.width = (320 + addsome) + "px"
 
-                // #description_container
-                basediv.querySelector("#description_container").style.width = (800 + addsome) + "px"
-
-                // #description_container textarea
-                basediv.querySelector("#description_text").style.width = (778 + addsome) + "px"
 
                 descDOM.hidden = false
                 descText.hidden = false

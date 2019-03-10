@@ -369,7 +369,12 @@ function main(preset){
 			basediv.insertBefore(descDOM, refNode);
 			var descText = document.createElement("textarea");
 			descText.id = "description_text";
-			descDOM.appendChild(descText);
+			
+			containText = document.createElement("div");
+			containText.id = "double_description_container";
+			descDOM.appendChild(containText);
+			containText.appendChild(descText);
+			// yay.
 
 			// yay.
 			descText.value = initialConfig.description;

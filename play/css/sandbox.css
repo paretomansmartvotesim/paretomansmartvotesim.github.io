@@ -20,7 +20,8 @@
 	clear: both;
 	overflow: hidden;
 	height: 120px;
-	margin-bottom: 15px;
+    margin-bottom: 15px;
+    width:100%;
 }
 .div-sandbox textarea, .div-sandbox input{
 	display: block;
@@ -29,10 +30,14 @@
     font-family: Arial, sans-serif;
 }
 .div-sandbox #description_container textarea{
-    width: 1078px;
     height: 97px;
     padding: 10px;
     font-size: 16px;
+    width: 100%;
+    margin: 0 0 0 -10px;
+}
+.div-sandbox div#double_description_container {
+    margin: 0 12px;
 }
 
 .div-sandbox #savelink{
