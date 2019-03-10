@@ -2,7 +2,7 @@
 BALLOT DESIGN
 **********************/
 
-#ballot{
+.div-ballot #ballot{
 
 	width: 375px;
 	height: 250px;
@@ -20,7 +20,7 @@ BALLOT DESIGN
 	position: relative;
 
 }
-#ballot .ballot_sprite{
+.div-ballot #ballot .ballot_sprite{
 	position: absolute;
 	background-size: 100% auto;
 }

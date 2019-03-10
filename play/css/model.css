@@ -22,11 +22,14 @@ THE MAIN MODEL ITSELF
 	overflow: hidden;
 	float:left;
 }
+.div-model-original .model .interactive{
+    background-image: url(../img/axis.png);
+	background-size: 100% 100%;
+}
 .div-model .model .interactive{
-    /* background-image: url(../img/axis.png); */
-    /* background-size: 100% 100%; */
     border: 2px solid #ccc;
 }
+
 .div-model .model .interactive[cursor=grab]{
 	cursor: -webkit-grab;
 	cursor: -moz-grab;

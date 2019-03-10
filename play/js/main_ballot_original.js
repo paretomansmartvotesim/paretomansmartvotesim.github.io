@@ -1,17 +1,15 @@
-window.ONLY_ONCE = false;
-function main(ballotType){
 
-	// ONCE.
-	if(ONLY_ONCE) return;
-	ONLY_ONCE=true;
+function main_ballot(preset){
+	var ballotType = preset.config.system
 
 	var VoterType = window[ballotType+"Voter"];
 	var BallotType = window[ballotType+"Ballot"];
 
-	Loader.onload = function(){
+	var l = new Loader()
+	l.onload = function(){
 
 		// CREATE
-		window.model = new Model();
+		var model = new Model();
 
 		// CONFIGURE
 		model.size = 250
@@ -20,7 +18,9 @@ function main(ballotType){
 
 		// INIT
 		model.initDOM()
-		document.body.appendChild(model.dom);
+
+		var basediv = document.querySelector("#" + preset.modelName)
+		basediv.appendChild(model.dom);
 		model.start = function(){
 			// CREATE
 			model.voters.push(new SingleVoter(model))
@@ -49,8 +49,8 @@ function main(ballotType){
 
 
 		// CREATE A BALLOT
-		window.ballot = new BallotType(model);
-		document.body.appendChild(ballot.dom);
+		var ballot = new BallotType(model);
+		basediv.appendChild(ballot.dom);
 		model.onUpdate = function(){
 			ballot.update(model.voters[0].ballot);
 		};
@@ -60,7 +60,7 @@ function main(ballotType){
 
 	};
 
-	Loader.load([
+	l.load([
 		
 		// the peeps
 		"play/img/voter_face.png",

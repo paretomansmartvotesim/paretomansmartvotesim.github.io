@@ -1,4 +1,18 @@
-function main(config){
+function main(preset){
+
+	var config = preset.config
+	var modelName = preset.modelName
+    var basediv = document.querySelector("#" + modelName)
+    // CREATE div stuff for sandbox
+    function newDivOnBase(name) {
+        var a = document.createElement("div");
+        a.setAttribute("id", name);
+        basediv.appendChild(a);
+    }
+    newDivOnBase("left")
+    newDivOnBase("center")
+	newDivOnBase("right")
+	
 
 	// Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
@@ -45,9 +59,9 @@ function main(config){
 	var initialConfig = JSON.parse(JSON.stringify(config));
 
 
-
+	var l = new Loader()
 	// INIT - initialize all data structures
-	Loader.onload = function(){
+	l.onload = function(){
 
 		////////////////////////
 		// THE FRIGGIN' MODEL //
@@ -67,9 +81,9 @@ function main(config){
 		// INIT
 		ui.model = model
 		model.initDOM()
-		document.querySelector("#center").appendChild(model.dom);
+		basediv.querySelector("#center").appendChild(model.dom);
 		model.dom.removeChild(model.caption);
-		document.querySelector("#right").appendChild(model.caption);
+		basediv.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
 		model.start = function(){
 			// CREATE
@@ -155,7 +169,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			document.querySelector("#left").appendChild(self.choose.dom);
+			basediv.querySelector("#left").appendChild(self.choose.dom);
 		}
 
 		// How many voters?
@@ -229,7 +243,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			document.querySelector("#left").appendChild(self.choose.dom);
+			basediv.querySelector("#left").appendChild(self.choose.dom);
 		}
 
 		if(initialConfig.features<2){ // VOTERS as feature.
@@ -309,7 +323,7 @@ function main(config){
 				data: self.list,
 				onChoose: self.onChoose
 			});
-			document.querySelector("#left").appendChild(self.choose.dom);
+			basediv.querySelector("#left").appendChild(self.choose.dom);
 		}
 
 		if(initialConfig.features<3){ // CANDIDATES as feature.
@@ -324,7 +338,7 @@ function main(config){
 		ui.arena.reset = new function() {
 			var self = this
 			var resetDOM = document.createElement("div");
-			document.body.appendChild(resetDOM);
+			basediv.appendChild(resetDOM);
 			resetDOM.id = "reset";
 			resetDOM.innerHTML = "reset";
 			resetDOM.style.top = "340px";
@@ -351,8 +365,8 @@ function main(config){
 			var self = this
 			var descDOM = document.createElement("div");
 			descDOM.id = "description_container";
-			var refNode = document.getElementById("left");
-			document.body.insertBefore(descDOM, refNode);
+			var refNode = basediv.querySelector("#left");
+			basediv.insertBefore(descDOM, refNode);
 			var descText = document.createElement("textarea");
 			descText.id = "description_text";
 			descDOM.appendChild(descText);
@@ -375,7 +389,7 @@ function main(config){
 			saveDOM.onclick = function(){
 				_saveModel();
 			};
-			document.body.appendChild(saveDOM);
+			basediv.appendChild(saveDOM);
 			self.dom = saveDOM
 		}
 
@@ -388,7 +402,7 @@ function main(config){
 			linkText.onclick = function(){
 				linkText.select();
 			};
-			document.body.appendChild(linkText);
+			basediv.appendChild(linkText);
 			self.dom = linkText
 		}
 
@@ -460,7 +474,7 @@ function main(config){
 			data.c = positions.candidatePositions; 
 
 			// Description
-			var description = document.getElementById("description_text");
+			var description = basediv.querySelector("#description_text");
 			data.d = description.value;
 			console.log("description: "+data.d);
 
@@ -481,7 +495,7 @@ function main(config){
 			var getUrl = window.location;
 			var baseUrl = getUrl.protocol + "//" + getUrl.host; //http://ncase.me/ballot
 			var link = baseUrl + "/sandbox/?m="+uri;
-			var savelink = document.getElementById("savelink");
+			var savelink = basediv.querySelector("#savelink");
 			savelink.value = "saving...";
 			setTimeout(function(){
 				savelink.value = link;
@@ -500,7 +514,7 @@ function main(config){
 
 
 	// UPDATE - run actions
-	Loader.load([
+	l.load([
 		"play/img/voter_face.png",
 		"play/img/square.png",
 		"play/img/triangle.png",
@@ -510,7 +524,7 @@ function main(config){
 	]);
 	// FUNNY HACK.
 	setInterval(function(){
-		var ohno = document.getElementById("ohno");
+		var ohno = basediv.querySelector("#ohno");
 		if(!ohno) return;
 		var x = Math.round(Math.random()*10-5);
 		var y = Math.round(Math.random()*10)+10;

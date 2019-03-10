@@ -6,49 +6,49 @@ Election/Sandbox design:
 
 ************/
 
-#left, #center, #right{
+.div-election #left, .div-election #center, .div-election #right{
 	float:left;
 	height: 320px;
 }
-#left{
+.div-election #left{
 	width:220px;
 	padding-right: 20px;
 }
-#center{
+.div-election #center{
 	width:320px;
 }
-#right{
+.div-election #right{
 	width:220px;
 	padding-left: 20px;
 	overflow-y: auto;
 }
-#caption{
+.div-election #caption{
 	text-align: left;
 	font-size: 23px;
 	line-height: 1.0em;
 }
-#caption .small{
+.div-election #caption .small{
 	font-size: 15px;
 	line-height: 1.0em;
 }
 
-#right img{
+.div-election #right img{
 	height: 1em;
 	position: relative;
 	top:2px;
 }
 
-.button-group{
+.div-election .button-group{
 	overflow: hidden;
 	margin-bottom: 10px;
 }
-.button-group-label{
+.div-election .button-group-label{
 	font-weight: bold;
     font-size: 19px;
     margin-bottom: 5px;
     line-height: 1.1em;
 }
-.button{
+.div-election .button{
 	float: left;
 	cursor: pointer;
     background: #bbb;
@@ -67,34 +67,34 @@ Election/Sandbox design:
     -o-transition: all 0.1s;
     transition: all 0.1s;
 }
-.button:hover{
+.div-election .button:hover{
 	background: #ddd;
 }
-.button:active{
+.div-election .button:active{
 	background: #aaa;
 }
-.button[on=yes]{
+.div-election .button[on=yes]{
 	background: #333;
 	color: #fff;
 }
-.button[on=yes]:hover{
+.div-election .button[on=yes]:hover{
 	background: #555;
 }
-.button[on=yes]:active{
+.div-election .button[on=yes]:active{
 	background: #111;
 }
 
-::-webkit-scrollbar {
+.div-election::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
-::-webkit-scrollbar-thumb {
+.div-election::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
-#ohno{
+.div-election #ohno{
 	font-size: 2em;
 	position: relative;
 	top:10px;

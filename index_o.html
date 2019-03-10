@@ -36,9 +36,9 @@
 	
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="play/css/model.css">
-    <link rel="stylesheet" type="text/css" href="play/css/ballot.css">
-    <link rel="stylesheet" type="text/css" href="play/css/election.css">
-    <link rel="stylesheet" type="text/css" href="play/css/sandbox.css">
+    <link rel="stylesheet" type="text/css" href="play/css/ballot_original.css">
+    <link rel="stylesheet" type="text/css" href="play/css/election_original.css">
+    <link rel="stylesheet" type="text/css" href="play/css/sandbox_original.css">
     <link rel="stylesheet" type="text/css" href="play/css/ballotInSandbox.css">
     <script src="play/js/helpers.js"></script>
     <script src="play/js/minpubsub.js"></script>
@@ -60,8 +60,8 @@
     <script src="rbvote/rbvote.js"></script>
     <script src="play/js/seedrandom.min.js"></script>
 
-    <script src="play/js/main_ballot.js"></script>
-    <script src="play/js/main_sandbox.js"></script>
+    <script src="play/js/main_ballot_original.js"></script>
+    <script src="play/js/main_sandbox_original.js"></script>
     <script src="play/js/Presets.js"></script>
 
 </head>
@@ -89,7 +89,7 @@ THE SPOILER EFFECT
 
 - - - - - - - - - -->
 
-<div class="words">
+<div class="words words-original">
 
 	<p>No, this is not about the 2016 U.S. election. Not <em>just</em> that, anyway.</p>
 
@@ -104,14 +104,14 @@ THE SPOILER EFFECT
 	</p>
 	
 	<div class="contain-model">
-		<div id="model1" class="div-model">
+		<div id="model1" class="div-model div-model-original">
 		</div>
 		<script src="play/js/model1.js">
 		</script>
 	</div>
 
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>It's a tough choice. Triangle's got some sharp points, but Square understands more sides! Alas, in the end, you can only vote for one.</p>
 
@@ -124,13 +124,13 @@ THE SPOILER EFFECT
 		<b>drag the candidates &amp; voter<span class="underline">s</span> around.<br>(to move voters, drag the <em>middle</em> of the crowd)<br>watch how that changes the election:</b>
 	</p>
 	<div class="contain-model">
-		<div id="model2" class="div-model">
+		<div id="model2" class="div-model div-model-original">
 		</div>
 		<script src="play/js/model2.js">
 		</script>
 	</div>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>Now let's consider a different election. Say Tracy Triangle is <em>already</em> beating Steven Square in the polls, and a third candidate, Henry Hexagon <img src="play/img/hexagon.png"/>, sees this. (Hexagon's supporters like how he tackles problems from more angles) Inspired by her success, Hexagon swoops in and takes a political position close to Triangle's.</p>
 
@@ -146,13 +146,13 @@ THE SPOILER EFFECT
 		and see what happens:</b>
 	</p>
 	<div class="contain-model">
-		<div id="model3" class="div-model" style="min-height:460px; width:320px">
+		<div id="model3" class="div-model div-model-original" style="min-height:460px; width:320px">
 		</div>
 		<script src="play/js/model3.js">
 		</script>
 	</div>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>That's right. Steven Square, our <em>least</em> popular candidate, now wins! This is because when you have two good candidates, they "steal" votes from each other, letting a bad third candidate win.</p>
 
@@ -186,7 +186,7 @@ THE ALTERNATIVE BALLOTS
 <div class="banner">
 	<img src="img/part1.png"/>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>Now, some of you may have a couple objections!</p>
 
@@ -205,14 +205,14 @@ THE ALTERNATIVE BALLOTS
 	<p class="ballot_caption">same as before. click &amp; drag<br>the candidates and voter</p>
 
 	<div class="contain-model">
-		<div id="ballot1" class="div-ballot div-model" style="min-height:350px;" scrolling="no">
+		<div id="ballot1" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
 		</div>
 		<script>
 			main_ballot(loadpreset("ballot1"))
 		</script>
 	</div>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p><strong>How To Count:</strong> Simply add up the votes. Whoever gets the most votes, wins.</p>
 
@@ -226,7 +226,7 @@ THE ALTERNATIVE BALLOTS
 	<p class="ballot_caption">again, click &amp; drag</p>
 
 	<div class="contain-model">
-		<div id="ballot2" class="div-ballot div-model" style="min-height:350px;" scrolling="no">
+		<div id="ballot2" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
 		</div>
 		<script>
 			main_ballot(loadpreset("ballot2"))
@@ -234,7 +234,7 @@ THE ALTERNATIVE BALLOTS
 	</div>
 
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p><strong>How To Count:</strong> There's actually <em>several</em> different ways to count these kinds of ballots. Here, I'll just show you the top three:</p>
 
@@ -282,14 +282,14 @@ THE ALTERNATIVE BALLOTS
 	<p class="ballot_caption">yup, stiiiiill click &amp; drag</p>
 
 	<div class="contain-model">
-		<div id="ballot3" class="div-ballot div-model" style="min-height:350px;" scrolling="no">
+		<div id="ballot3" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
 		</div>
 		<script>
 			main_ballot(loadpreset("ballot3"))
 		</script>
 	</div>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p><strong>How To Count:</strong> Simply add up the approvals. Whoever gets the most approvals, wins.</p>
 
@@ -304,7 +304,7 @@ THE ALTERNATIVE BALLOTS
 	<p class="ballot_caption">you guessed it</p>
 
 	<div class="contain-model">
-		<div id="ballot4" class="div-ballot div-model" style="min-height:350px;" scrolling="no">
+		<div id="ballot4" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
 		</div>
 		<script>
 			main_ballot(loadpreset("ballot4"))
@@ -312,7 +312,7 @@ THE ALTERNATIVE BALLOTS
 	</div>
 
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p><strong>How To Count:</strong> Simply add up the ratings. Whoever has the highest average score, wins. Kind of like Amazon reviews, but with democracy. (Note: this is <em>not</em> a ranking method, because two candidates can have the <em>same</em> score.)</p>
 
@@ -332,7 +332,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 <div class="banner">
 	<img src="img/part2.png"/>
 </div>
-<div class="words">
+<div class="words words-original">
 	<p>Remember that simulation of the spoiler effect from earlier? Well, here it is again, but now you can switch between the six different voting methods! Here's the &quot;spoiler effect&quot; simulation again. See how different voting methods deal with potential spoilers:</p>
 </div>
 <div class="sim-test">
@@ -346,14 +346,14 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election1" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election1" class="div-election div-model div-model-original" style="min-height:380px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election1"))
 		</script>
 	</div>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>As you could see, <em>every</em> voting method except First Past The Post is immune to the spoiler effect. So, that's it, right? Ding dong, the glitch is dead? Just pick any other alternative voting method and be done with it?</p>
 
@@ -370,7 +370,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election2" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election2" class="div-election div-model div-model-original" style="min-height:380px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election2"))
@@ -378,7 +378,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</div>
 
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>What happened?
 	Originally, <img src="play/img/hexagon.png"/> is eliminated in the first round, so
@@ -409,7 +409,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election3" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election3" class="div-election div-model div-model-original" style="min-height:380px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election3"))
@@ -417,7 +417,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</div>
 
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>Yup. Borda Count has a <em>reverse</em> spoiler effect. Instead of one good candidate hurting another good candidate by moving closer, with Borda Count, one bad candidate can <em>help</em> another bad candidate by moving closer.</p>
 
@@ -443,7 +443,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election4" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election4" class="div-election div-model div-model-original" style="min-height:380px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election4"))
@@ -451,7 +451,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</div>
 
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>Now, in actual practice – not that any government actually uses this voting method – when Condorcet fails to find a winner, the election falls back to another method like Borda Count. But if you do that, it'll get the glitches of its backup method. So it goes.</p>
 
@@ -534,14 +534,14 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</span>
 	</p>
 	<div class="contain-model">
-		<div id="election5" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election5" class="div-election div-model div-model-original" style="min-height:380px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election5"))
 		</script>
 	</div>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p>Anyway.</p>
 
@@ -563,7 +563,7 @@ CONCLUSION. OPEN LETTER
 <div class="banner">
 	<img src="img/part3.png"/>
 </div>
-<div class="words">
+<div class="words words-original">
 
 	<p><em>ahem</em></p>
 
@@ -649,7 +649,7 @@ SANDBOX
 	<div class="sim-sandbox">
 		<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE! <a href="sandbox">(link to <em>just</em> this)</a></h1>
 		<div class="contain-model">
-			<div id="sandbox_original" class="div-sandbox div-election div-model" style="min-height:508px"
+			<div id="sandbox_original" class="div-sandbox div-election div-model div-model-original" style="min-height:508px"
 				scrolling="no">
 			</div>
 			<script>
@@ -657,7 +657,7 @@ SANDBOX
 			</script>
 		</div>
 	</div>
-	<div class="words">
+	<div class="words words-original">
 		<p>
 		One hope for Sandbox Mode is that readers can debate with me and each other <em>using</em> this tool!
 		Not just telling me I'm wrong, but <em>showing</em> me I'm wrong.
