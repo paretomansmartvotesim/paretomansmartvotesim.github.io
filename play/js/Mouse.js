@@ -43,8 +43,11 @@ function Mouse(id, target){
 	},false);
 	target.addEventListener("touchmove", _onTouchMove=function(event){
 
-		self.x = event.changedTouches[0].clientX - target.offsetLeft;
-		self.y = event.changedTouches[0].clientY - target.offsetTop;
+		var rect = target.getBoundingClientRect()
+		self.x = event.changedTouches[0].clientX - rect.left
+		self.y = event.changedTouches[0].clientY - rect.top
+		// self.x = event.changedTouches[0].clientX - target.offsetLeft;
+		// self.y = event.changedTouches[0].clientY - target.offsetTop;
 		if(self.x<0) self.x=0;
 		if(self.y<0) self.y=0;
 		if(self.x>target.clientWidth) self.x=target.clientWidth;
