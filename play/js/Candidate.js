@@ -18,9 +18,11 @@ function Candidate(model){
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawTie = function(ctx) {
+		ctx.textAlign = "center";
 		_drawStroked("TIE",self.x*2,self.y*2-35,40,ctx);
 	}	
 	self.drawWin = function(ctx) {
+		ctx.textAlign = "center";
 		_drawStroked("WIN",self.x*2,self.y*2-35,40,ctx);
 	}	
 	self.draw = function(ctx){

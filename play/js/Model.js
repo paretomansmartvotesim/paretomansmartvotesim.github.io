@@ -86,13 +86,13 @@ function Model(modelName){
 		self.dom.appendChild(self.caption);
 
 		// MAH MOUSE
-		self.mouse = new Mouse(self.id, self.canvas);
+		self.mouse = new Mouse(self.id, self.canvas);	
 	}
 
 	self.resize = function() {
 		self.canvas.width = self.canvas.height = self.size*2; // retina!
 		self.canvas.style.width = self.canvas.style.height = self.size+"px";
-		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
+		// self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders! // not sure why this is here
 		self.caption.style.width = self.dom.style.width;
 	}
 

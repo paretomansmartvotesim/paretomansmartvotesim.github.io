@@ -3,7 +3,7 @@ l.onload = function(){
 
 	// CREATE
 
-	window.model = new Model();
+	var model = new Model();
 
 	// INIT
 	model.initDOM()

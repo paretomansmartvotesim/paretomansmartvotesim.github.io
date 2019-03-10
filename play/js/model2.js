@@ -2,7 +2,7 @@ var l = new Loader()
 l.onload = function(){
 
 	// CREATE
-	window.model = new Model();
+	var model = new Model();
 	// INIT
 	model.initDOM()
 	var modelName = "model2"
