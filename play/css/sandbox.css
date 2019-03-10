@@ -53,19 +53,19 @@
 .div-sandbox input[type="range"] {
     height: 8px;
 }
-.div-sandbox::-webkit-slider-thumb {
+.div-sandbox ::-webkit-slider-thumb {
     height: 8px; /* 1 */
 }
-.div-sandbox::-moz-range-track {
+.div-sandbox ::-moz-range-track {
     height: 8px;
 }
-.div-sandbox::-moz-range-thumb {
+.div-sandbox ::-moz-range-thumb {
     height: 8px;
 }
-.div-sandbox::-ms-thumb { 
+.div-sandbox ::-ms-thumb { 
     height: 8px;
 }
-.div-sandbox::-ms-track { 
+.div-sandbox ::-ms-track { 
     height: 8px;
 }
 /* end of slider stuff */

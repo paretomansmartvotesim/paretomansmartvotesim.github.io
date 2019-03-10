@@ -139,7 +139,7 @@ function Sandbox(modelName) {
         // Load the defaults.  This runs at the start and after loading a preset.
 
         // FILENAME
-        config.presethtmlname = self.url.substring(self.url.lastIndexOf('/')+1);
+        // config.presethtmlname = self.url.substring(self.url.lastIndexOf('/')+1);
 
         if(config.configversion == undefined || config.configversion == 1) {
             // GRANDFATHER URL variable names
@@ -1360,30 +1360,31 @@ function Sandbox(modelName) {
         self.list = _buildPresetConfig({nElection:14,nBallot:12})
         function _buildPresetConfig(c) {
             // var presetnames = ["O","SA"]
-            // var presethtmlnames = [config.filename,"sandbox.html"]
+            // var presetModelNames = [config.filename,"sandbox.html"]
             // var presetdescription = ["original intended preset","sandbox"]
             var presetnames = ["S"]
-            var presethtmlnames = ["sandbox"]
+            var presetModelNames = ["sandbox"]
             var presetdescription = ["sandbox"]
 
             // and fill in the rest
-            for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presethtmlnames.push("election"+i) ; presetdescription.push("election"+i)}
-            presetnames.push("O") ; presethtmlnames.push(modelName) ; presetdescription.push("original intended preset")
+            for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presetModelNames.push("election"+i) ; presetdescription.push("election"+i)}
+            presetnames.push("O") ; presetModelNames.push(modelName) ; presetdescription.push("original intended preset")
             // TODO
-            for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presethtmlnames.push("ballot"+i) ; presetdescription.push("ballot"+i)}
+            for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presetModelNames.push("ballot"+i) ; presetdescription.push("ballot"+i)}
             
             var presetconfig = []
-            for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],htmlname:presethtmlnames[i],margin:4})
+            for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],modelName:presetModelNames[i],margin:4})
             return presetconfig
         }
         self.onChoose = function(data){
             if (data.isOn) {
                 // LOAD MAIN
-                var firstletter = data.htmlname[0]
+                var preset = loadpreset(data.modelName)
+                var firstletter = data.modelName[0]
                 if (firstletter == 'e' || firstletter == 's') {
                     
                     // LOAD Preset
-                    config = loadpreset(data.htmlname).config
+                    config = loadpreset(data.modelName).config
                     
                 } else if (firstletter == 'b') {
                     //document.location.replace(data.htmlname);
@@ -1399,7 +1400,7 @@ function Sandbox(modelName) {
                         doStarStrategy: false
                     }
                     // LOAD Preset
-                    Object.assign(ballotconfig, loadpreset(data.htmlname).config )
+                    Object.assign(ballotconfig, loadpreset(data.modelName).config )
                     // get config from ballotconfig
                     var systemTranslator = {Plurality:"FPTP",Ranked:"Condorcet",Approval:"Approval",Score:"Score",Three:"3-2-1"}
                     config = {
@@ -1441,7 +1442,7 @@ function Sandbox(modelName) {
         self.choose.dom.hidden = true
 		basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		self.init_sandbox = function() {
-			self.choose.highlight("htmlname", modelName); // only do this once.  Otherwise it would be in updateUI
+			self.choose.highlight("modelName", modelName); // only do this once.  Otherwise it would be in updateUI
 		}
     }
 

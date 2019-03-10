@@ -4,10 +4,11 @@ function loadpreset(modelName) {
 	var htmlname = modelName + '.html'
 
 	// defaults
-	config = []
-	update = function () {
+	var config = []
+	var update = function () {
 		return
 	}
+	var type
 
 	// helpers
 	update_original = function (s) {
@@ -41,6 +42,8 @@ function loadpreset(modelName) {
 
 		}
 		update = update_original
+		type = "election"
+		type = "election"
 	} else if (htmlname == "election2.html") {
 		config = {
 

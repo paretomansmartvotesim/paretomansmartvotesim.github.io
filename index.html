@@ -78,7 +78,6 @@ SPLASH!
 	<img src="img/logo.png"/>
 </div>
 
-</div>
 
 <div id="content">
 
@@ -89,6 +88,28 @@ THE SPOILER EFFECT
 
 - - - - - - - - - -->
 
+<div class="words" style="text-align: center">
+	<div style="width:250px; display: inline-block">
+		<div id="mainmenu" class = "div-election">
+		</div>
+	</div>
+	<script>
+		var menu = new ButtonGroup({
+			label: "Pages",
+			width: 240,
+			data: [{name:"Original",url:"original.html",margin:5},
+				{name:"Approval",url:"approval_superman.html",margin:5},
+				{name:"Strategy, 321, STAR",url:"newer.html",margin:5},
+				{name:"Log",url:"log.html",margin:5},
+				{name:"Sandbox",url:"sandbox/"}	],
+			onChoose: function(data) {
+				window.location.assign(data.url)
+			}
+		});
+		document.querySelector("#mainmenu").appendChild(menu.dom)
+	</script>
+
+</div>
 <div class="words">
 
 	<p>No, this is not about the 2016 U.S. election. Not <em>just</em> that, anyway.</p>
@@ -346,7 +367,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election1" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election1" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election1"))
@@ -370,7 +391,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election2" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election2" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election2"))
@@ -409,7 +430,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election3" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election3" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election3"))
@@ -443,7 +464,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</p>
 
 	<div class="contain-model">
-		<div id="election4" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election4" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election4"))
@@ -534,7 +555,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 	</span>
 	</p>
 	<div class="contain-model">
-		<div id="election5" class="div-election div-model" style="min-height:400px;" scrolling="no">
+		<div id="election5" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
 		</div>
 		<script>
 			main(loadpreset("election5"))
@@ -649,7 +670,7 @@ SANDBOX
 	<div class="sim-sandbox">
 		<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE! <a href="sandbox">(link to <em>just</em> this)</a></h1>
 		<div class="contain-model">
-			<div id="sandbox_original" class="div-sandbox div-election div-model" style="min-height:508px"
+			<div id="sandbox_original" class="div-sandbox div-election div-ballot-in-sandbox div-model" style="min-height:508px"
 				scrolling="no">
 			</div>
 			<script>

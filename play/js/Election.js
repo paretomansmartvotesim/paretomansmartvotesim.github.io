@@ -1083,7 +1083,7 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 
 	var reverseExplanation = false
 
-	var text = "<span>";
+	var text = "<span class='small'>";
 
 	var ballots = model.getBallots();
 

@@ -1,9 +1,4 @@
-a {text-decoration: none}
-a:active {color: #3030a0}
-a:hover {bottom: 1px; position: relative; text-decoration: underline}
-a:link {color: #000080}
-a:visited {color: #6060c0}
-h1 {font-size: 15px;}
+.div-election h1 {font-size: 15px;}
 td.against {background-color: #ffffff; font-family: monospace}
 td.cfail1 {background-color: #ff5050}
 td.cfail2 {background-color: #ff6060}
@@ -36,4 +31,4 @@ th.for {background-color: #c0ffc0; font-family: monospace}
 .email {font-family: monospace}
 .endtag {font-size: 60%; font-style: italic; margin-left: 2em}
 .url {font-family: monospace}
-#caption {font-size: 11px;}
+/* .div-election #caption {font-size: 11px;} */

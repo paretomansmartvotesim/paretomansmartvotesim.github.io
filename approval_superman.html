@@ -30,78 +30,45 @@
 	<meta property="og:image" content="http://ncase.me/ballot/social/thumbnail.png">
 	<meta property="og:description" content="an addendum to ncase's interactive guide to alternative voting methods">
 
-	<!-- Styles -->
-	<link rel="stylesheet" type="text/css" href="css/index.css">
 	<base target="_blank">
+
+
+	<!-- Styles -->	
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="play/css/model.css">
+    <link rel="stylesheet" type="text/css" href="play/css/ballot.css">
+    <link rel="stylesheet" type="text/css" href="play/css/election.css">
+    <link rel="stylesheet" type="text/css" href="play/css/sandbox.css">
+	<link rel="stylesheet" type="text/css" href="play/css/ballotInSandbox.css">
+	
+	<!-- Scripts -->
+    <script src="play/js/helpers.js"></script>
+    <script src="play/js/minpubsub.js"></script>
+    <script src="play/js/Loader.js"></script>
+    <script src="play/js/Mouse.js"></script>
+    <script src="play/js/Draggable.js"></script>
+
+    <script src="play/js/gpu.js-develop/bin/gpu-core.js"></script>
+    <script src="play/js/gpu.js-develop/bin/gpu.js"></script>
+    <script src="play/js/FastYee.js"></script>
+
+    <script src="play/js/Model.js"></script>
+    <script src="play/js/Yee.js"></script>
+    <script src="play/js/Candidate.js"></script>
+    <script src="play/js/Voters.js"></script>
+    <script src="play/js/Election.js"></script>
+    <script src="play/js/Buttons.js"></script>
+    <script src="play/js/Ballot.js"></script>
+    <script src="rbvote/rbvote.js"></script>
+    <script src="play/js/seedrandom.min.js"></script>
+
+    <script src="play/js/main_ballot.js"></script>
+    <script src="play/js/main_sandbox.js"></script>
+    <script src="play/js/Presets.js"></script>
 
 </head>
 
 <body>
-
-	<!-- preloading images-->
-	<div style="display: none;">
-		<script type="text/javascript">
-			<!--//--><![CDATA[//><!--
-			var images = new Array()
-
-			function preload() {
-				for (i = 0; i < preload.arguments.length; i++) {
-					images[i] = new Image()
-					images[i].src = preload.arguments[i]
-				}
-			}
-			preload(
-				"play/img/voters.png",
-				"play/img/axis.png",
-				"play/img/ballot_approval.png",
-				"play/img/ballot_box.png",
-				"play/img/ballot_fptp.png",
-				"play/img/ballot_range.png",
-				"play/img/ballot_range3.png",
-				"play/img/ballot_ranked.png",
-				"play/img/ballot_rate.png",
-				"play/img/ballot_three.png",
-				"play/img/bob.png",
-				"play/img/checkbox.png",
-				"play/img/hexagon.png",
-				"play/img/pentagon.png",
-				"play/img/square.png",
-				"play/img/triangle.png",
-				"play/img/voter.png",
-				"play/img/voter_face.png",
-				"play/img/icon/bob.png",
-				"play/img/icon/hexagon.png",
-				"play/img/icon/pentagon.png",
-				"play/img/icon/square.png",
-				"play/img/icon/triangle.png"
-			)
-			//--><!]]>
-		</script>
-
-		<img src="play/img/voters.png">
-		<img src="play/img/axis.png">
-		<img src="play/img/ballot_approval.png">
-		<img src="play/img/ballot_box.png">
-		<img src="play/img/ballot_fptp.png">
-		<img src="play/img/ballot_range.png">
-		<img src="play/img/ballot_range3.png">
-		<img src="play/img/ballot_ranked.png">
-		<img src="play/img/ballot_rate.png">
-		<img src="play/img/ballot_three.png">
-		<img src="play/img/bob.png">
-		<img src="play/img/checkbox.png">
-		<img src="play/img/hexagon.png">
-		<img src="play/img/pentagon.png">
-		<img src="play/img/square.png">
-		<img src="play/img/triangle.png">
-		<img src="play/img/voter.png">
-		<img src="play/img/voter_face.png">
-		<img src="play/img/icon/bob.png">
-		<img src="play/img/icon/hexagon.png">
-		<img src="play/img/icon/pentagon.png">
-		<img src="play/img/icon/square.png">
-		<img src="play/img/icon/triangle.png">
-	</div>
 
 	<!-- - - - - - - - -
 
@@ -159,7 +126,15 @@ THE SPOILER EFFECT
 				Approval Voting Basics: Pick the Better Candidates
 				<br>
 			</p>
-			<iframe src="play/election16.html" width="900" height="380" scrolling="no"></iframe>
+			
+			<div class="contain-model">
+				<div id="election16" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election16"))
+				</script>
+			</div>
+
 		</div>
 		<div class="words">
 
@@ -179,8 +154,13 @@ THE SPOILER EFFECT
 				<br>
 			</p>
 
-			<iframe src="play/election17.html" width="900" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election17" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election17"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 
@@ -196,8 +176,13 @@ THE SPOILER EFFECT
 				Approval Election
 				<br>
 			</p>
-			<iframe src="play/election18.html" width="900" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election18" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election18"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 			<p>
@@ -213,8 +198,13 @@ THE SPOILER EFFECT
 				Choose One (the way we vote now)
 				<br>
 			</p>
-			<iframe src="play/election19.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election19" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election19"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 			<p>
@@ -231,8 +221,13 @@ THE SPOILER EFFECT
 				Risky Choose One (the Real way we vote now)
 				<br>
 			</p>
-			<iframe src="play/election20.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election20" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election20"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 
@@ -250,8 +245,13 @@ THE SPOILER EFFECT
 				A Risky Choose One Election (Our General Election)
 				<br>
 			</p>
-			<iframe src="play/election21.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election21" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election21"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 
@@ -303,8 +303,13 @@ THE SPOILER EFFECT
 				Sandbox so far
 				<br>
 			</p>
-			<iframe src="play/election22.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election22" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election22"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 			<p>
@@ -339,8 +344,13 @@ THE SPOILER EFFECT
 				Map of Winner
 				<br>
 			</p>
-			<iframe src="play/election23.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election23" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election23"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 
@@ -373,8 +383,13 @@ THE SPOILER EFFECT
 				The Winners' Circle
 				<br>
 			</p>
-			<iframe src="play/election24.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election24" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election24"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 
@@ -399,8 +414,13 @@ THE SPOILER EFFECT
 				The Spoiler Effect
 				<br>
 			</p>
-			<iframe src="play/election25.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election25" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election25"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 
@@ -418,8 +438,13 @@ THE SPOILER EFFECT
 				Primary Shennanigans: Divide and Conquer
 				<br>
 			</p>
-			<iframe src="play/election26.html" width="802" height="380" scrolling="no"></iframe>
-
+			<div class="contain-model">
+				<div id="election26" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+				</div>
+				<script>
+					main(loadpreset("election26"))
+				</script>
+			</div>
 		</div>
 		<div class="words">
 			<b>Final Recap:</b>
@@ -480,13 +505,17 @@ SANDBOX
 
 - - - - - - - - - -->
 
-		<div id="sandbox">
+		<div id="sandbox-section">
 			<div class="sim-sandbox">
-				<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE!
-					<a href="sandbox">(link to
-						<em>just</em> this)</a>
-				</h1>
-				<iframe id="sandbox_iframe" src="sandbox/sandbox.html" width="1102" height="1040"" scrolling="no"></iframe>
+				<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE! <a href="sandbox">(link to <em>just</em> this)</a></h1>
+				<div class="contain-model">
+					<div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" style="min-height:808px"
+						scrolling="no">
+					</div>
+					<script>
+						main(loadpreset("sandbox"))
+					</script>
+				</div>
 			</div>
 			<div class="words">
 				<p>

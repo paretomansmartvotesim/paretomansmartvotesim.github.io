@@ -93,11 +93,11 @@ Election/Sandbox design:
 	background: #111;
 }
 
-.div-election::-webkit-scrollbar {
+.div-election ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
-.div-election::-webkit-scrollbar-thumb {
+.div-election ::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
@@ -140,14 +140,14 @@ Election/Sandbox design:
 
 /* Beginning of Slider Stuff  - note that the height is changed later in sandbox.css */
 
-.div-election::-webkit-slider-runnable-track {
+.div-election ::-webkit-slider-runnable-track {
     background: #ccc;
 }
 
 /*
  * 1. Set to 0 height and width, and remove border for a slider without a thumb
  */
- .div-election::-webkit-slider-thumb {
+ .div-election ::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 20px; /* 1 */
     height: 20px; /* 1 */
@@ -156,12 +156,12 @@ Election/Sandbox design:
     border: 2px solid #555; /* 1 */
 }
 
-.div-election::-moz-range-track {
+.div-election ::-moz-range-track {
     height: 20px;
     background: #ccc;
 }
 
-.div-election::-moz-range-thumb {
+.div-election ::-moz-range-thumb {
     background: #fff;
     height: 20px;
     width: 20px;
@@ -171,11 +171,11 @@ Election/Sandbox design:
     box-sizing: border-box;
 }
 
-.div-election::-ms-fill-lower { 
+.div-election ::-ms-fill-lower { 
     background: #001;
 }
 
-.div-election::-ms-thumb { 
+.div-election ::-ms-thumb { 
     background: #fff;
     border: 2px solid #555;
     height: 20px;
@@ -183,22 +183,22 @@ Election/Sandbox design:
     box-sizing: border-box;
 }
 
-.div-election::-ms-ticks-after { 
+.div-election ::-ms-ticks-after { 
     display: none; 
 }
 
-.div-election::-ms-ticks-before { 
+.div-election ::-ms-ticks-before { 
     display: none; 
 }
 
-.div-election::-ms-track { 
+.div-election ::-ms-track { 
     background: #ccc;
     color: transparent;
     height: 20px;
     border: none;
 }
 
-.div-election::-ms-tooltip { 
+.div-election ::-ms-tooltip { 
     display: none;
 }
 

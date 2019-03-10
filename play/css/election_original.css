@@ -84,11 +84,11 @@ Election/Sandbox design:
 	background: #111;
 }
 
-.div-election::-webkit-scrollbar {
+.div-election ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
-.div-election::-webkit-scrollbar-thumb {
+.div-election ::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);

@@ -29,77 +29,44 @@
 	<meta property="og:image" content="http://ncase.me/ballot/social/thumbnail.png">
 	<meta property="og:description" content="an addendum to ncase's interactive guide to alternative voting methods">
 
-	<!-- Styles -->
-	<link rel="stylesheet" type="text/css" href="css/index.css">
 	<base target="_blank">
 
+	<!-- Styles -->	
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="play/css/model.css">
+    <link rel="stylesheet" type="text/css" href="play/css/ballot.css">
+    <link rel="stylesheet" type="text/css" href="play/css/election.css">
+    <link rel="stylesheet" type="text/css" href="play/css/sandbox.css">
+	<link rel="stylesheet" type="text/css" href="play/css/ballotInSandbox.css">
+	
+	<!-- Scripts -->
+    <script src="play/js/helpers.js"></script>
+    <script src="play/js/minpubsub.js"></script>
+    <script src="play/js/Loader.js"></script>
+    <script src="play/js/Mouse.js"></script>
+    <script src="play/js/Draggable.js"></script>
+
+    <script src="play/js/gpu.js-develop/bin/gpu-core.js"></script>
+    <script src="play/js/gpu.js-develop/bin/gpu.js"></script>
+    <script src="play/js/FastYee.js"></script>
+
+    <script src="play/js/Model.js"></script>
+    <script src="play/js/Yee.js"></script>
+    <script src="play/js/Candidate.js"></script>
+    <script src="play/js/Voters.js"></script>
+    <script src="play/js/Election.js"></script>
+    <script src="play/js/Buttons.js"></script>
+    <script src="play/js/Ballot.js"></script>
+    <script src="rbvote/rbvote.js"></script>
+    <script src="play/js/seedrandom.min.js"></script>
+
+    <script src="play/js/main_ballot.js"></script>
+    <script src="play/js/main_sandbox.js"></script>
+	<script src="play/js/Presets.js"></script>
+	
 </head>
 <body>
 	
-	<!-- preloading images-->
-	<div style="display: none;">
-		<script type="text/javascript">
-			<!--//--><![CDATA[//><!--
-				var images = new Array()
-				function preload() {
-					for (i = 0; i < preload.arguments.length; i++) {
-						images[i] = new Image()
-						images[i].src = preload.arguments[i]
-					}
-				}
-				preload(
-					"play/img/voters.png",
-			"play/img/axis.png",
-			"play/img/ballot_approval.png",
-			"play/img/ballot_box.png",
-			"play/img/ballot_fptp.png",
-			"play/img/ballot_range.png",
-			"play/img/ballot_range3.png",
-			"play/img/ballot_ranked.png",
-			"play/img/ballot_rate.png",
-			"play/img/ballot_three.png",
-			"play/img/bob.png",
-			"play/img/checkbox.png",
-			"play/img/hexagon.png",
-			"play/img/pentagon.png",
-			"play/img/square.png",
-			"play/img/triangle.png",
-			"play/img/voter.png",
-			"play/img/voter_face.png",
-			"play/img/icon/bob.png",
-			"play/img/icon/hexagon.png",
-			"play/img/icon/pentagon.png",
-			"play/img/icon/square.png",
-			"play/img/icon/triangle.png"
-				)
-			//--><!]]>
-		</script>
-		
-		<img src="play/img/voters.png">
-		<img src="play/img/axis.png">
-		<img src="play/img/ballot_approval.png">
-		<img src="play/img/ballot_box.png">
-		<img src="play/img/ballot_fptp.png">
-		<img src="play/img/ballot_range.png">
-		<img src="play/img/ballot_range3.png">
-		<img src="play/img/ballot_ranked.png">
-		<img src="play/img/ballot_rate.png">
-		<img src="play/img/ballot_three.png">
-		<img src="play/img/bob.png">
-		<img src="play/img/checkbox.png">
-		<img src="play/img/hexagon.png">
-		<img src="play/img/pentagon.png">
-		<img src="play/img/square.png">
-		<img src="play/img/triangle.png">
-		<img src="play/img/voter.png">
-		<img src="play/img/voter_face.png">
-		<img src="play/img/icon/bob.png">
-		<img src="play/img/icon/hexagon.png">
-		<img src="play/img/icon/pentagon.png">
-		<img src="play/img/icon/square.png">
-		<img src="play/img/icon/triangle.png">
-	</div>
-
 <!-- - - - - - - - -
 
 SPLASH!
@@ -146,12 +113,16 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-ballot">
+		<div class="sim-continer">
+			<h2 class="ballot_title" style="margin-bottom: 0.15em;">UNSTRATEGIC BALLOT</h2>
+			<p class="ballot_caption">Judge, don't choose.</p>
 
-		<h2 class="ballot_title" style="margin-bottom: 0.15em;">UNSTRATEGIC BALLOT</h2>
-		<p class="ballot_caption">Judge, don't choose.</p>
-
-		<iframe src="play/ballot4.html" width="655" height="256" scrolling="no"></iframe>
-
+			<div id="ballot4" class="div-ballot div-model" style="min-height:350px;" scrolling="no">
+			</div>
+			<script>
+				main_ballot(loadpreset("ballot4"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 		<p><em>Description: this should just be an unstrategic score voter, as in ncase's thing. Allow ballot picture to show 0 scores.</em></p>
@@ -186,12 +157,16 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-ballot">
+		<div class="sim-continer">
+			<h2 class="ballot_title" style="margin-bottom: 0.15em;">Normalizing Voter</h2>
+			<p class="ballot_caption">Best is 5. Worst is 1.</p>
 
-		<h2 class="ballot_title" style="margin-bottom: 0.15em;">Normalizing Voter</h2>
-		<p class="ballot_caption">Best is 5. Worst is 1.</p>
-
-		<iframe src="play/ballot5.html" width="655" height="256" scrolling="no"></iframe>
-
+			<div id="ballot5" class="div-ballot div-model" style="min-height:350px;" scrolling="no">
+			</div>
+			<script>
+				main_ballot(loadpreset("ballot5"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 		<p><em>Description: this should be like ncase's "drag the voter" examples, with a normalizing score voter. This voter should have a series of circles, where the closest one intersects the closest candidate and the farthest one the farthest candidate. Thus, as you moved the voter or candidates the circles would change size.</em></p>
@@ -200,12 +175,16 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-test">
-
-		<p class="caption-test">
-		non-optimal<br>
-		</p>
-		<iframe src="play/election7.html" width="900" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<p class="caption-test">
+			non-optimal<br>
+			</p>
+			<div id="election7" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("election7"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 		<p><em>This should be a score voting scenario with 100% normalizing voters. the voter median around (0,0), and candidates square (3,0), triangle (-2,0), pentagon (-4,0). Pentagon voters are not enthusiastic enough about triangle so square wins, even though triangle is higher utility. Removing penta fixes the problem.  </em></p>
@@ -214,27 +193,36 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-test">
-
-		<p class="caption-test">
-		Strategists win<br>
-		</p>
-		<iframe src="play/election8.html" width="802" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<p class="caption-test">
+			Strategists win<br>
+			</p>
+			<div id="election8" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("election8"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 		<p><em>groups of voters at (-4,0)non-normalizing and (4,0)normalizing. Cands at (-2.5,.5), (-2,0), (0,0), (2,0), (2.5,.5). (2,0) wins. </em></p>
 
-	<p>Is that kind of thing realistic? Perhaps not in the form above; few voters would be so unstrategic as not to normalize. But actually, normalizing as above is a pretty weak strategy. To strategize even more strongly, voters could somehow assess which two candidates were the frontrunners, and use them as the endpoints for normalization. Mostly, this means casting an approval-like ballot that gives every candidate either a 5 or a 0. For instance, in the election below, the voter believes that the red hexagon and the blue square are the frontrunners. Compare the strongly strategic voter below with the normalized voter in the second example above.</p>
+	<p>Is that kind of thing realistic? Perhaps not in the form above; few voters would be so unstrategic as not to normalize. But actually, normalizing as above is a pretty weak strategy. To strategize even more strongly, voters could somehow assess which two candidates were the frontrunners, and use them as the endpoints for normalization. Mostly, this means casting an approval-like ballot that gives every candidate either a 5 or a 0. For instance, in the election below, the voter believes triangle and square are the frontrunners. Compare the strongly strategic voter below with the normalized voter in the second example above.</p>
 
 
 	</div>
 	<div class="sim-ballot">
+		<div class="sim-continer">
+			<h2 class="ballot_title" style="margin-bottom: 0.15em;">Strong Strategic Voter</h2>
+			<p class="ballot_caption">Almost like strategic approval.</p>
 
-		<h2 class="ballot_title" style="margin-bottom: 0.15em;">Strong Strategic Voter</h2>
-		<p class="ballot_caption">Almost like strategic approval.</p>
 
-		<iframe src="play/ballot8.html" width="655" height="380" scrolling="no"></iframe>
-
+			<div id="ballot8" class="div-election div-ballot div-model" style="min-height:350px;" scrolling="no">
+			</div>
+			<script>
+				main_ballot(loadpreset("ballot8"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 
@@ -246,25 +234,31 @@ THE SPOILER EFFECT
 		
 		</div>
 	<div class="sim-ballot">
-
-		<h2 class="ballot_title" style="margin-bottom: 0.15em;">Best Frontrunner</h2>
-		<p class="ballot_caption">And everybody you like better.</p>
-
-		<iframe src="play/ballot11.html" width="655" height="380" scrolling="no"></iframe>
-
+			<div class="sim-continer">
+				<h2 class="ballot_title" style="margin-bottom: 0.15em;">Best Frontrunner</h2>
+				<p class="ballot_caption">And everybody you like better.</p>	
+				<div id="ballot11" class="div-election div-ballot div-model" style="min-height:350px;" scrolling="no">
+				</div>
+				<script>
+					main_ballot(loadpreset("ballot11"))
+				</script>
+			</div>
 	</div>
 	<div class="words">	
 		
 	<p> A more risk-averse, safe strategic voter could avoid the worst frontrunner by voting for everyone better.</p>
 		
-		</div>
+	</div>
 	<div class="sim-ballot">
-
-		<h2 class="ballot_title" style="margin-bottom: 0.15em;">Not the Worst Frontrunner</h2>
-		<p class="ballot_caption">Just everybody you like better.</p>
-
-		<iframe src="play/ballot12.html" width="655" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+				<h2 class="ballot_title" style="margin-bottom: 0.15em;">Not the Worst Frontrunner</h2>
+				<p class="ballot_caption">Just everybody you like better.</p>	
+			<div id="ballot12" class="div-election div-ballot div-model" style="min-height:350px;" scrolling="no">
+			</div>
+			<script>
+				main_ballot(loadpreset("ballot12"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 	<p> These two strategies are really just different extremes of the strong strategic voter.</p>
@@ -280,12 +274,16 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-test">
-
-		<p class="caption-test">
-		Playing Chicken<br>
-		</p>
-		<iframe src="play/election10.html" width="802" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<p class="caption-test">
+			Playing Chicken<br>
+			</p>
+			<div id="election10" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("election10"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 
@@ -298,20 +296,28 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-test">
-
-		<p class="caption-test">
-		Playing Chicken with Different Methods<br>
-		</p>
-		<iframe src="play/election11.html" width="802" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<p class="caption-test">
+				Playing Chicken with Different Methods<br>
+			</p>
+			<div id="election11" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("election11"))
+			</script>
+		</div>
 	</div>
 	<div class="sim-test">
-
-		<p class="caption-test">
-		Center Squeeze<br>
-		</p>
-		<iframe src="play/election12.html" width="802" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<p class="caption-test">
+				Center Squeeze<br>
+			</p>
+			<div id="election12" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("election12"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 
@@ -325,12 +331,15 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-ballot">
-
-		<h2 class="ballot_title" style="margin-bottom: 0.15em;">Star Strong</h2>
-		<p class="ballot_caption">Keeps a space for the best.</p>
-
-		<iframe src="play/ballot9.html" width="655" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<h2 class="ballot_title" style="margin-bottom: 0.15em;">Star Strong</h2>
+			<p class="ballot_caption">Keeps a space for the best.</p>
+			<div id="ballot9" class="div-election div-ballot div-model" style="min-height:350px;" scrolling="no">
+			</div>
+			<script>
+				main_ballot(loadpreset("ballot9"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 
@@ -340,12 +349,16 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-test">
-
-		<p class="caption-test">
-		Chicken Star<br>
-		</p>
-		<iframe src="play/election13.html" width="802" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<p class="caption-test">
+			Chicken Star<br>
+			</p>
+			<div id="election13" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("election13"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 
@@ -357,12 +370,15 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-ballot">
-
-		<h2 class="ballot_title" style="margin-bottom: 0.15em;">321 Strategic</h2>
-		<p class="ballot_caption">Approval with an extra level.</p>
-
-		<iframe src="play/ballot10.html" width="655" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<h2 class="ballot_title" style="margin-bottom: 0.15em;">321 Strategic</h2>
+			<p class="ballot_caption">Approval with an extra level.</p>
+			<div id="ballot10" class="div-election div-ballot div-model" style="min-height:350px;" scrolling="no">
+			</div>
+			<script>
+				main_ballot(loadpreset("ballot10"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 
@@ -372,12 +388,16 @@ THE SPOILER EFFECT
 
 	</div>
 	<div class="sim-test">
-
-		<p class="caption-test">
-		321 Chicken<br>
-		</p>
-		<iframe src="play/election14.html" width="802" height="380" scrolling="no"></iframe>
-
+		<div class="sim-continer">
+			<p class="caption-test">
+				321 Chicken<br>
+			</p>
+			<div id="election14" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("election14"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 
@@ -394,10 +414,17 @@ SANDBOX
 
 - - - - - - - - - -->
 
-<div id="sandbox">
+<div id="sandbox-section">
 	<div class="sim-sandbox">
 		<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE! <a href="sandbox">(link to <em>just</em> this)</a></h1>
-		<iframe id="sandbox_iframe" src="sandbox/sandbox.html" width="1102" height="1040"" scrolling="no"></iframe>
+		<div class="contain-model">
+			<div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" style="min-height:808px"
+				scrolling="no">
+			</div>
+			<script>
+				main(loadpreset("sandbox"))
+			</script>
+		</div>
 	</div>
 	<div class="words">
 		<p>
