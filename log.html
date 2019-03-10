@@ -32,39 +32,39 @@
 
 	<base target="_blank">
 
-	<!-- Styles -->	
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="play/css/model.css">
-    <link rel="stylesheet" type="text/css" href="play/css/ballot.css">
-    <link rel="stylesheet" type="text/css" href="play/css/election.css">
-    <link rel="stylesheet" type="text/css" href="play/css/sandbox.css">
+	<!-- Styles -->
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="play/css/model.css">
+	<link rel="stylesheet" type="text/css" href="play/css/ballot.css">
+	<link rel="stylesheet" type="text/css" href="play/css/election.css">
+	<link rel="stylesheet" type="text/css" href="play/css/sandbox.css">
 	<link rel="stylesheet" type="text/css" href="play/css/ballotInSandbox.css">
-	
+
 	<!-- Scripts -->
-    <script src="play/js/helpers.js"></script>
-    <script src="play/js/minpubsub.js"></script>
-    <script src="play/js/Loader.js"></script>
-    <script src="play/js/Mouse.js"></script>
-    <script src="play/js/Draggable.js"></script>
+	<script src="play/js/helpers.js"></script>
+	<script src="play/js/minpubsub.js"></script>
+	<script src="play/js/Loader.js"></script>
+	<script src="play/js/Mouse.js"></script>
+	<script src="play/js/Draggable.js"></script>
 
-    <script src="play/js/gpu.js-develop/bin/gpu-core.js"></script>
-    <script src="play/js/gpu.js-develop/bin/gpu.js"></script>
-    <script src="play/js/FastYee.js"></script>
+	<script src="play/js/gpu.js-develop/bin/gpu-core.js"></script>
+	<script src="play/js/gpu.js-develop/bin/gpu.js"></script>
+	<script src="play/js/FastYee.js"></script>
 
-    <script src="play/js/Model.js"></script>
-    <script src="play/js/Yee.js"></script>
-    <script src="play/js/Candidate.js"></script>
-    <script src="play/js/Voters.js"></script>
-    <script src="play/js/Election.js"></script>
-    <script src="play/js/Buttons.js"></script>
-    <script src="play/js/Ballot.js"></script>
-    <script src="rbvote/rbvote.js"></script>
-    <script src="play/js/seedrandom.min.js"></script>
+	<script src="play/js/Model.js"></script>
+	<script src="play/js/Yee.js"></script>
+	<script src="play/js/Candidate.js"></script>
+	<script src="play/js/Voters.js"></script>
+	<script src="play/js/Election.js"></script>
+	<script src="play/js/Buttons.js"></script>
+	<script src="play/js/Ballot.js"></script>
+	<script src="rbvote/rbvote.js"></script>
+	<script src="play/js/seedrandom.min.js"></script>
 
-    <script src="play/js/main_ballot.js"></script>
-    <script src="play/js/main_sandbox.js"></script>
+	<script src="play/js/main_ballot.js"></script>
+	<script src="play/js/main_sandbox.js"></script>
 	<script src="play/js/Presets.js"></script>
-	
+
 </head>
 
 <body>
@@ -82,7 +82,7 @@ SPLASH!
 
 	</div>
 
-		<!-- - - - - - - - -
+	<!-- - - - - - - - -
 
 LOG
 
@@ -109,7 +109,7 @@ LOG
 			</p>
 
 		</div>
-		
+
 		<div class="sim-test">
 			<div class="sim-container">
 				<p class="caption-test">
@@ -131,7 +131,7 @@ LOG
 			</h2>
 
 			<p>
-				Schulze breaks ties in a way that aligns with the intent of a Condorcet winner; Schulze takes all the pairs of candidates and strings the pairs together into chains.  At the beginning of the chain is the winner and at the end the loser.  The strength of a chain is only as strong as its weakest link.  There are many chains between any pair of candidates.  The strongest chain is found for each pair.  Magically, there is only one candidate who goes undefeated.  This is a really cool way to break ties.
+				Schulze breaks ties in a way that aligns with the intent of a Condorcet winner; Schulze takes all the pairs of candidates and strings the pairs together into chains. At the beginning of the chain is the winner and at the end the loser. The strength of a chain is only as strong as its weakest link. There are many chains between any pair of candidates. The strongest chain is found for each pair. Magically, there is only one candidate who goes undefeated. This is a really cool way to break ties.
 				<b>Try it out below.</b>
 			</p>
 
@@ -159,7 +159,7 @@ LOG
 			</h2>
 
 			<p>
-				Here's an alternative way to count Schulze that is a lot like Minimax, but with an extra rule.  Also, I may have the implementation incorrect, but it seems to work.  Again, this Schulze Alternative breaks ties in a way that aligns with the intent of a Condorcet winner; there's a tie, so it sees who is tied, and just picks from that group.  The candidates with the least losses are automatically in that group, and also we add in anybody that beat them (and anybody that beats anybody we add).  Then we have a group that beats everyone, and we pick from that group.  After that, it's just minimax.  Resolve the tie by making the smallest change you can; remove the smallest tie.  And keep making that Condorcet group each step (this is called the Schwartz set if you want to tell your friends).
+				Here's an alternative way to count Schulze that is a lot like Minimax, but with an extra rule. Also, I may have the implementation incorrect, but it seems to work. Again, this Schulze Alternative breaks ties in a way that aligns with the intent of a Condorcet winner; there's a tie, so it sees who is tied, and just picks from that group. The candidates with the least losses are automatically in that group, and also we add in anybody that beat them (and anybody that beats anybody we add). Then we have a group that beats everyone, and we pick from that group. After that, it's just minimax. Resolve the tie by making the smallest change you can; remove the smallest tie. And keep making that Condorcet group each step (this is called the Schwartz set if you want to tell your friends).
 
 				<b>Try it out below.</b>
 			</p>
@@ -198,7 +198,7 @@ LOG
 		<div class="sim-test">
 			<div class="sim-container">
 				<p class="caption-test">
-						Ranked Pairs
+					Ranked Pairs
 					<br>
 				</p>
 				<div id="election28" class="div-election div-ballot-in-sandbox div-model" style="min-height:400px;" scrolling="no">
@@ -223,8 +223,7 @@ SANDBOX
 			<div class="sim-sandbox">
 				<div class="sim-container">
 					<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE! <a href="sandbox">(link to <em>just</em> this)</a></h1>
-					<div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" style="min-height:808px"
-						scrolling="no">
+					<div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" style="min-height:808px" scrolling="no">
 					</div>
 					<script>
 						main(loadpreset("sandbox"))
