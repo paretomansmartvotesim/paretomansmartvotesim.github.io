@@ -29,16 +29,28 @@ BALLOT DESIGN
 
 .div-ballot .button-group{
 	margin-left: 0px;
+	text-align: left;
 	float:left;
 	clear:both;
 }
 
 .div-ballot #reset {
+	margin-top: 10px;
 	top: 270px;
 	left: 275px
 }
 
 .div-ballot .model {
 	height:260px;
-	margin-bottom: 10px;
+}
+
+.div-ballot #b-left {
+	display:inline-block;
+	float:left;
+	width:254px;
+	text-align: center;	
+}
+.div-ballot #b-right {
+	display:inline-block;
+	width:500px;
 }

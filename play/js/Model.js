@@ -93,6 +93,7 @@ function Model(modelName){
 		self.canvas.width = self.canvas.height = self.size*2; // retina!
 		self.canvas.style.width = self.canvas.style.height = self.size+"px";
 		// self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders! // not sure why this is here
+		self.dom.style.width = self.canvas.style.width;
 		self.caption.style.width = self.dom.style.width;
 	}
 

@@ -6,7 +6,7 @@
 	font-size: 25px;
 	line-height: 1.2em;
 	color:#333;
-	text-align: left;	
+	text-align: center;		
 
 	-moz-user-select: none;
 	-webkit-user-select: none;
@@ -19,8 +19,8 @@ THE MAIN MODEL ITSELF
 **********************/
 
 .div-model .model{
+	text-align: left;
 	overflow: hidden;
-	float:left;
 }
 .div-model-original .model .interactive{
     background-image: url(../img/axis.png);
@@ -56,6 +56,7 @@ DAT RESET BUTTON
 
 #reset,
 #save{
+	display: inline-block;
 	cursor: pointer;
     background: #aaa;
     color: #fff;
@@ -68,8 +69,8 @@ DAT RESET BUTTON
     padding: 2px 0;
     border-radius: 5px;
     border-bottom: 2px solid #888;
-    position: absolute;
-    margin-top:0px;
+	margin-top:10px;
+    margin-right: 9px;
 
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;

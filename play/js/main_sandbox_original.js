@@ -389,7 +389,7 @@ function main(preset){
 			var saveDOM = document.createElement("div");
 			saveDOM.id = "save";
 			saveDOM.innerHTML = "save:";
-			saveDOM.style.top = "470px";
+			saveDOM.style.top = "460px";
 			saveDOM.style.left = "120px";
 			saveDOM.onclick = function(){
 				_saveModel();
@@ -416,10 +416,11 @@ function main(preset){
 			ui.arena.desc.dom.hidden = true
 			ui.arena.desc.text.dom.hidden = true
 			ui.arena.save.dom.hidden = true
+			ui.arena.save.dom.style.display = "none"
 			ui.arena.linkText.dom.hidden = true
 		} else {
 			// Move that reset button
-			ui.arena.reset.dom.style.top = "470px";
+			ui.arena.reset.dom.style.top = "460px";
 			ui.arena.reset.dom.style.left = "0px";
 		}
 	

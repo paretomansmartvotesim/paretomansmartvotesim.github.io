@@ -123,7 +123,13 @@ function Sandbox(modelName) {
         // INIT (model)
         ui.model = model
         model.initDOM()
-        basediv.querySelector("#center").appendChild(model.dom);
+        var centerDiv = basediv.querySelector("#center")
+        if (centerDiv.hasChildNodes()){
+            var firstNode = centerDiv.childNodes[0]
+            centerDiv.insertBefore(model.dom,firstNode);
+        } else {
+            centerDiv.appendChild(model.dom)
+        }
         model.dom.removeChild(model.caption);
         basediv.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
@@ -1756,8 +1762,6 @@ function Sandbox(modelName) {
         var resetDOM = document.createElement("div");
         resetDOM.id = "reset";
         resetDOM.innerHTML = "reset";
-        resetDOM.style.top = "340px";
-        resetDOM.style.left = "350px";
         resetDOM.onclick = function(){
             // LOAD INITIAL CONFIG
             config = _jcopy(initialConfig); // RESTORE IT!
@@ -1766,18 +1770,7 @@ function Sandbox(modelName) {
             // UPDATE MENU //
             _objF(ui.menu,"select");
         };
-        basediv.appendChild(resetDOM);
-        self.update = function () {
-            // Move that reset button
-            if (config.sandboxsave) {
-                var addsome = config.arena_size - 300
-                resetDOM.style.top = (470 + addsome) + "px";
-                resetDOM.style.left = "235px";
-            } else {
-                resetDOM.style.top = "340px";
-                resetDOM.style.left = "245px";
-            }
-        }
+        basediv.querySelector("#center").appendChild(resetDOM);
         self.dom = resetDOM
     }
 
@@ -1805,20 +1798,12 @@ function Sandbox(modelName) {
         self.update = function () {
             
             if (config.sandboxsave) {
-
-                addsome = config.arena_size - 300
-
-                basediv.querySelector("#center").style.height = (320 + addsome) + "px"
-                basediv.querySelector("#center").style.width = (320 + addsome) + "px"
-
-
+                basediv.querySelector("#center").style.width = config.arena_size + model.border*2 + "px"
                 descDOM.hidden = false
                 descText.hidden = false
             } else {
                 descDOM.hidden = true
                 descText.hidden = true
-            }
-            if (! config.sandboxsave) { 
             }
         }
         self.dom = descDOM
@@ -1848,17 +1833,7 @@ function Sandbox(modelName) {
             
 
         };
-        basediv.appendChild(saveDOM);
-        self.update = function () {
-            if (config.sandboxsave) {
-                var addsome = config.arena_size - 300
-                saveDOM.style.top = (470 + addsome) + "px";
-                saveDOM.style.left = "350px";
-            } else {
-                saveDOM.style.top = "340px";
-                saveDOM.style.left = "350px";
-            }
-        }
+        basediv.querySelector("#center").appendChild(saveDOM);
         self.dom = saveDOM
     }
 
@@ -1871,20 +1846,7 @@ function Sandbox(modelName) {
         linkText.onclick = function(){
             linkText.select();
         };
-        basediv.appendChild(linkText);
-        self.update = function () {
-            if (config.sandboxsave) {
-                linkText.style.width = (82 + addsome) + "px"	
-                linkText.style.top = (471 + addsome) + "px";
-            } else {
-                linkText.style.position = "absolute";
-                linkText.style.top = "340px";
-                linkText.style.left = "460px";
-                linkText.style.height = "30px";
-                linkText.style.width = "90px";
-            }
-
-        }
+        basediv.querySelector("#center").appendChild(linkText);
         self.dom = linkText
     }
 

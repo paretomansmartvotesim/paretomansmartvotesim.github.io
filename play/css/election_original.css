@@ -6,6 +6,10 @@ Election/Sandbox design:
 
 ************/
 
+.div-election{
+	text-align: left;
+}
+
 .div-election #left, .div-election #center, .div-election #right{
 	float:left;
 	height: 320px;
@@ -98,4 +102,8 @@ Election/Sandbox design:
 	font-size: 2em;
 	position: relative;
 	top:10px;
+}
+
+#reset, #save{
+	position:absolute;
 }

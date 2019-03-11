@@ -24,7 +24,6 @@
     width:100%;
 }
 .div-sandbox textarea, .div-sandbox input{
-	display: block;
     border: 1px solid #bbb;
     resize: none;
     font-family: Arial, sans-serif;
@@ -41,12 +40,12 @@
 }
 
 .div-sandbox #savelink{
-	position: absolute;
-    top: 771px;
-    left: 460px;
-    width: 382px;
-    height: 15px;
-    padding: 8px;
+    margin-top: 10px;
+    position: relative;
+    top: -3px;
+    width: 300px;
+    height: 19px;
+    padding: 0px;
     font-size: 12px;
 }
 

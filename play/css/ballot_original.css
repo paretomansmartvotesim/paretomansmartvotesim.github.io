@@ -24,3 +24,7 @@ BALLOT DESIGN
 	position: absolute;
 	background-size: 100% auto;
 }
+
+.div-ballot .model{
+	float:left;
+}

@@ -10,14 +10,16 @@ Election/Sandbox design:
 .div-election #center, 
 .div-election #right{
 	float:left;
-	min-height: 320px;
+    min-height: 320px;
+    text-align: left;
 }
 .div-election #left{
-	width:230px;
+	max-width:230px;
     padding-right: 20px;
 }
 .div-election #center{
-	width:320px;
+    text-align: center;
+    width:300px;
 }
 .div-election #right{
     width: 220px;
@@ -133,7 +135,9 @@ Election/Sandbox design:
 	
 }
 
-
+#savelink{
+    width:300px;
+}
 
 
 

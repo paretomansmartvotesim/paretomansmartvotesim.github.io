@@ -35,7 +35,18 @@ function main_ballot(preset){
 		model.initDOM()
 
 		var basediv = document.querySelector("#" + preset.modelName)
-		basediv.appendChild(model.dom);
+
+			
+		// CREATE div stuff
+		function newDivOnBase(name) {
+			var a = document.createElement("div");
+			a.setAttribute("id", name);
+			basediv.appendChild(a);
+		}
+		newDivOnBase("b-left")
+		newDivOnBase("b-right")
+
+		basediv.querySelector("#b-left").appendChild(model.dom);
 		model.start = function(){
 			// CREATE
 			model.voters.push(new SingleVoter(model))
@@ -64,7 +75,7 @@ function main_ballot(preset){
 
 		// CREATE A BALLOT
 		var ballot = new BallotType(model);
-		basediv.appendChild(ballot.dom)
+		basediv.querySelector("#b-right").appendChild(ballot.dom)
 		model.onUpdate = function(){
 			ballot.update(model.voters[0].ballot);
 		};
@@ -97,7 +108,7 @@ function main_ballot(preset){
 				data: strategyOn,
 				onChoose: onChooseVoterStrategyOn
 			});
-			basediv.appendChild(chooseVoterStrategyOn.dom);
+			basediv.querySelector("#b-left").appendChild(chooseVoterStrategyOn.dom);
 		}
 
 		if(config.showChoiceOfFrontrunners) {
@@ -133,7 +144,7 @@ function main_ballot(preset){
 				onChoose: onChooseFrun,
 				isCheckbox: true
 			});
-			basediv.appendChild(chooseFrun.dom);
+			basediv.querySelector("#b-left").appendChild(chooseFrun.dom);
 		}
 
 		var selectMENU = function(){
@@ -158,7 +169,7 @@ function main_ballot(preset){
 			// UPDATE
 			selectMENU()
 		};
-		basediv.appendChild(resetDOM);
+		basediv.querySelector("#b-left").appendChild(resetDOM);
 
 	};
 
