@@ -841,7 +841,7 @@ function PluralityVoter(model){
 		y = y*2;
 
 		// What fill?
-		var fill = Candidate.graphics[ballot.vote].fill;
+		var fill = Candidate.graphics[model.skin][ballot.vote].fill;
 		ctx.fillStyle = fill;
 		ctx.strokeStyle = 'rgb(0,0,0)';
 		ctx.lineWidth = 1; // border

@@ -31,7 +31,7 @@ l.onload = function(){
   };
   model.onUpdate = function(){
     var id = model.voters[0].ballot.vote;
-    var color = Candidate.graphics[id].fill;
+    var color = Candidate.graphics[model.skin][id].fill;
     var text = "VOTES FOR <b style='color:"+color+"'>"+id.toUpperCase()+"</b>";
     model.caption.innerHTML = text;
   };

@@ -27,7 +27,7 @@ function Sandbox(modelName) {
     // Then wait for mouse events.
 
     // LOAD DEFAULTS and INPUT
-    var all_candidate_names = Object.keys(Candidate.graphics) // helper
+    var all_candidate_names = Object.keys(Candidate.graphics["Nicky"]) // helper
     var defaults = {
         configversion:1,
         sandboxsave: false,
@@ -47,6 +47,7 @@ function Sandbox(modelName) {
         spread_factor_voters: 1,
         arena_size: 300,
         median_mean: 1,
+        skin: "Nicky",
         utility_shape: "linear",
         arena_border: 2,
         preFrontrunnerIds: ["square","triangle"],
@@ -1647,6 +1648,42 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
+    ui.menu.skin = new function () {
+        var self = this
+        // self.name = median_mean
+        self.list = [
+            {name:"Nicky",realname:"The original style skin by Nicky Case",margin:4},
+            {name:"Bees",realname:"The Bee mode style for Unsplit."}
+        ]
+
+        self.onChoose = function(data){
+            // LOAD
+            config.skin = data.name
+            // CONFIGURE
+            self.configure()
+            // INIT
+            for(var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.skin = config.skin
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.skin);
+        }
+        self.choose = new ButtonGroup({
+            label: "Skin:",
+            width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.choose.dom.hidden = true
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+    }
+
     ui.menu.utility_shape = new function () {
         var self = this
         // self.name = utility_shape
@@ -1698,6 +1735,7 @@ function Sandbox(modelName) {
                 ui.menu.spread_factor_voters,
                 ui.menu.arena_size,
                 ui.menu.median_mean,
+                ui.menu.skin,
                 ui.menu.utility_shape,
                 ui.menu.gearoff
             ]
@@ -1947,6 +1985,13 @@ function Sandbox(modelName) {
         "play/img/hexagon.png",
         "play/img/pentagon.png",
         "play/img/bob.png",
+
+
+        "play/img/blue_bee.png",
+        "play/img/yellow_bee.png",
+        "play/img/red_bee.png",
+        "play/img/green_bee.png",
+        "play/img/orange_bee.png",
 
         // Ballot instructions
         "play/img/ballot5_fptp.png",
