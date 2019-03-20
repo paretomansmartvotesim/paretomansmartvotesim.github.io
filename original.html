@@ -104,7 +104,7 @@ THE SPOILER EFFECT
 				<p class="caption" style="margin-top:30px">
 					<b><span style="font-size:2.5em;">click &amp; drag</span><br>the candidates and the voter:</b>
 				</p>
-				<div id="model1" class="div-model div-model-original">
+				<div id="model1" class="div-model div-model-theme-Nicky">
 				</div>
 				<script src="play/js/model1.js">
 				</script>
@@ -123,7 +123,7 @@ THE SPOILER EFFECT
 				<p class="caption">
 					<b>drag the candidates &amp; voter<span class="underline">s</span> around.<br>(to move voters, drag the <em>middle</em> of the crowd)<br>watch how that changes the election:</b>
 				</p>
-				<div id="model2" class="div-model div-model-original">
+				<div id="model2" class="div-model div-model-theme-Nicky">
 				</div>
 				<script src="play/js/model2.js">
 				</script>
@@ -144,7 +144,7 @@ THE SPOILER EFFECT
 						drag <img src="play/img/hexagon.png"> to <i>just under</i> <img src="play/img/triangle.png">,<br>
 						and see what happens:</b>
 				</p>
-				<div id="model3" class="div-model div-model-original" style="min-height:460px;">
+				<div id="model3" class="div-model div-model-theme-Nicky" style="min-height:460px;">
 				</div>
 				<script src="play/js/model3.js">
 				</script>
@@ -201,10 +201,10 @@ THE ALTERNATIVE BALLOTS
 			<div class="sim-container">
 				<h2 class="ballot_title" style="margin-bottom: 0.2em;">FIRST PAST THE POST (FPTP)</h2>
 				<p class="ballot_caption">same as before. click &amp; drag<br>the candidates and voter</p>
-				<div id="ballot1" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
+				<div id="ballot1" class="div-ballot div-model div-model-theme-Nicky" style="min-height:256px;" scrolling="no">
 				</div>
 				<script>
-					main_ballot(loadpreset("ballot1"))
+					main_ballot(Object.assign(loadpreset("ballot1"),{theme:"Nicky"}))
 				</script>
 			</div>
 		</div>
@@ -220,7 +220,7 @@ THE ALTERNATIVE BALLOTS
 			<div class="sim-container">
 				<h2 class="ballot_title" style="margin-bottom: 0.15em;">RANKED VOTING</h2>
 				<p class="ballot_caption">again, click &amp; drag</p>
-				<div id="ballot2" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
+				<div id="ballot2" class="div-ballot div-model div-model-theme-Nicky" style="min-height:256px;" scrolling="no">
 				</div>
 				<script>
 					main_ballot(loadpreset("ballot2"))
@@ -274,7 +274,7 @@ THE ALTERNATIVE BALLOTS
 			<div class="sim-container">
 				<h2 class="ballot_title" style="margin-bottom: 0.15em;">APPROVAL VOTING</h2>
 				<p class="ballot_caption">yup, stiiiiill click &amp; drag</p>
-				<div id="ballot3" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
+				<div id="ballot3" class="div-ballot div-model div-model-theme-Nicky" style="min-height:256px;" scrolling="no">
 				</div>
 				<script>
 					main_ballot(loadpreset("ballot3"))
@@ -294,7 +294,7 @@ THE ALTERNATIVE BALLOTS
 			<div class="sim-container">
 				<h2 class="ballot_title" style="margin-bottom: 0.15em;">SCORE VOTING</h2>
 				<p class="ballot_caption">you guessed it</p>
-				<div id="ballot4" class="div-ballot div-model div-model-original" style="min-height:256px;" scrolling="no">
+				<div id="ballot4" class="div-ballot div-model div-model-theme-Nicky" style="min-height:256px;" scrolling="no">
 				</div>
 				<script>
 					main_ballot(loadpreset("ballot4"))
@@ -335,7 +335,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 						(note: in the rare cases there's a tie, i just randomly pick a winner)
 					</span>
 				</p>
-				<div id="election1" class="div-election div-ballot-in-sandbox div-model div-model-original" style="min-height:380px;" scrolling="no">
+				<div id="election1" class="div-election div-ballot-in-sandbox div-model div-model-theme-Nicky" style="min-height:380px;" scrolling="no">
 				</div>
 				<script>
 					main(loadpreset("election1"))
@@ -357,7 +357,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 				<p class="caption-test">
 					drag the voters <img src="play/img/voters.png"> <em>slowly</em> up towards <img src="play/img/triangle.png">:
 				</p>
-				<div id="election2" class="div-election div-ballot-in-sandbox div-model div-model-original" style="min-height:380px;" scrolling="no">
+				<div id="election2" class="div-election div-ballot-in-sandbox div-model div-model-theme-Nicky" style="min-height:380px;" scrolling="no">
 				</div>
 				<script>
 					main(loadpreset("election2"))
@@ -394,7 +394,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 				<p class="caption-test">
 					drag <img src="play/img/hexagon.png"> to <em>just slightly left</em> of <img src="play/img/square.png">:
 				</p>
-				<div id="election3" class="div-election div-ballot-in-sandbox div-model div-model-original" style="min-height:380px;" scrolling="no">
+				<div id="election3" class="div-election div-ballot-in-sandbox div-model div-model-theme-Nicky" style="min-height:380px;" scrolling="no">
 				</div>
 				<script>
 					main(loadpreset("election3"))
@@ -426,7 +426,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 					create your own “condorcet cycle”!<br>
 					move the voters <img src="play/img/voters.png"> in such a way that NOBODY wins:
 				</p>
-				<div id="election4" class="div-election div-ballot-in-sandbox div-model div-model-original" style="min-height:380px;" scrolling="no">
+				<div id="election4" class="div-election div-ballot-in-sandbox div-model div-model-theme-Nicky" style="min-height:380px;" scrolling="no">
 				</div>
 				<script>
 					main(loadpreset("election4"))
@@ -517,7 +517,7 @@ HOW DO THE ALTERNATIVES HOLD UP?
 						and Johnson <img src="play/img/triangle.png"> wins Borda??
 					</span>
 				</p>
-				<div id="election5" class="div-election div-ballot-in-sandbox div-model div-model-original" style="min-height:380px;" scrolling="no">
+				<div id="election5" class="div-election div-ballot-in-sandbox div-model div-model-theme-Nicky" style="min-height:380px;" scrolling="no">
 				</div>
 				<script>
 					main(loadpreset("election5"))
@@ -632,7 +632,7 @@ SANDBOX
 			<div class="sim-sandbox">
 				<div class="sim-container">
 					<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE! <a href="sandbox/original.html">(link to <em>just</em> this)</a></h1>
-					<div id="sandbox_original" class="div-sandbox div-election div-ballot-in-sandbox div-model div-model-original" style="min-height:508px" scrolling="no">
+					<div id="sandbox_original" class="div-sandbox div-election div-ballot-in-sandbox div-model div-model-theme-Nicky" style="min-height:508px" scrolling="no">
 					</div>
 					<script>
 						main(loadpreset("sandbox_original"))

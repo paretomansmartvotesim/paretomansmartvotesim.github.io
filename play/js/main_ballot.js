@@ -10,6 +10,7 @@ function main_ballot(preset){
 	config.showChoiceOfStrategy = config.showChoiceOfStrategy || false
 	config.showChoiceOfFrontrunners = config.showChoiceOfFrontrunners || false
 	config.doStarStrategy = config.doStarStrategy || false
+	config.theme = config.theme || "Default"
 
 	// grandfather name for firstStrategy used only for main_ballot
 	if (config.strategy != undefined) config.firstStrategy = config.strategy
@@ -62,6 +63,7 @@ function main_ballot(preset){
 				preFrontrunnerIds: config.preFrontrunnerIds} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.doStarStrategy = config.doStarStrategy;
+			model.theme = config.theme
 			// INIT
 			model.initMODEL()
 			model.voters[0].init()

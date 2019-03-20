@@ -20,7 +20,7 @@ function Model(modelName){
 	
 	// CONFIGURE DEFAULTS
 	// helper
-	var all_candidate_names = Object.keys(Candidate.graphics["Nicky"])
+	var all_candidate_names = Object.keys(Candidate.graphics["Default"])
 	Object.assign(self,{
 		// values used in init
 		id:"model",

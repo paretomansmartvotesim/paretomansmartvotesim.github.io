@@ -22,11 +22,17 @@ THE MAIN MODEL ITSELF
 	text-align: left;
 	overflow: hidden;
 }
-.div-model-original .model .interactive{
+.div-model-theme-Default .model .interactive{
+    background-image: none;
+}
+.div-model-theme-Nicky .model .interactive{
     background-image: url(../img/axis.png);
-	background-size: 100% 100%;
+}
+.div-model-theme-Bees .model .interactive{
+    background-image: url(../img/honeycomb.png);
 }
 .div-model .model .interactive{
+	background-size: 100% 100%;
     border: 2px solid #ccc;
 }
 

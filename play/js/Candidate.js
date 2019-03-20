@@ -10,7 +10,7 @@ function Candidate(model){
 	self.init = function () {
 
 		// GRAPHICS
-		var _graphics = Candidate.graphics[model.skin][self.id];
+		var _graphics = Candidate.graphics[model.theme][self.id];
 		self.fill = _graphics.fill;
 		self.img = new Image();
 		self.img.src = _graphics.img;
@@ -49,6 +49,28 @@ function Candidate(model){
 // CONSTANTS: the GRAPHICS!
 // id => img & fill
 Candidate.graphics = {
+	Default: {
+		square: {
+			img: "play/img/square.png",
+			fill: "hsl(240,80%,70%)"
+		},
+		triangle: {
+			img: "play/img/triangle.png",
+			fill: "hsl(45,80%,70%)"
+		},
+		hexagon: {
+			img: "play/img/hexagon.png",
+			fill: "hsl(0,80%,70%)"
+		},
+		pentagon: {
+			img: "play/img/pentagon.png",
+			fill: "hsl(90,80%,70%)"
+		},
+		bob: {
+			img: "play/img/bob.png",
+			fill: "hsl(30,80%,70%)"
+		}
+	},	
 	Nicky: {
 		square: {
 			img: "play/img/square.png",

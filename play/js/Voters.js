@@ -841,7 +841,7 @@ function PluralityVoter(model){
 		y = y*2;
 
 		// What fill?
-		var fill = Candidate.graphics[model.skin][ballot.vote].fill;
+		var fill = Candidate.graphics[model.theme][ballot.vote].fill;
 		ctx.fillStyle = fill;
 		ctx.strokeStyle = 'rgb(0,0,0)';
 		ctx.lineWidth = 1; // border
@@ -1075,15 +1075,22 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
 
-		// DRAW ALL THE points
-		for(var i=0; i<self.points.length; i++){
-			var p = self.points[i];
-			var x = self.x + p[0];
-			var y = self.y + p[1];
-			var ballot = self.ballots[i];
-			self.type.drawCircle(ctx, x, y, 10, ballot);
+		if (model.showVoters != undefined && model.showVoters == false) {
+			var drawVoters = false
+		} else {
+			var drawVoters = true
 		}
-		
+		if (drawVoters) {
+			// DRAW ALL THE points
+			for(var i=0; i<self.points.length; i++){
+				var p = self.points[i];
+				var x = self.x + p[0];
+				var y = self.y + p[1];
+				var ballot = self.ballots[i];
+				self.type.drawCircle(ctx, x, y, 10, ballot);
+			}
+		}
+
 		 // Don't draw a individual group under a votercenter, which looks weird.
 		if(model.voterCenter && model.voters.length == 1) return
 

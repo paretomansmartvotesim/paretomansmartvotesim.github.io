@@ -27,7 +27,7 @@ function Sandbox(modelName) {
     // Then wait for mouse events.
 
     // LOAD DEFAULTS and INPUT
-    var all_candidate_names = Object.keys(Candidate.graphics["Nicky"]) // helper
+    var all_candidate_names = Object.keys(Candidate.graphics["Default"]) // helper
     var defaults = {
         configversion:1,
         sandboxsave: false,
@@ -47,7 +47,7 @@ function Sandbox(modelName) {
         spread_factor_voters: 1,
         arena_size: 300,
         median_mean: 1,
-        skin: "Nicky",
+        theme: "Default",
         utility_shape: "linear",
         arena_border: 2,
         preFrontrunnerIds: ["square","triangle"],
@@ -142,7 +142,7 @@ function Sandbox(modelName) {
 
     }
 
-    function cleanConfig(config) {
+   function cleanConfig(config) {
         // Load the defaults.  This runs at the start and after loading a preset.
 
         // FILENAME
@@ -1648,34 +1648,45 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
-    ui.menu.skin = new function () {
+    ui.menu.theme = new function () {
         var self = this
         // self.name = median_mean
         self.list = [
-            {name:"Nicky",realname:"The original style skin by Nicky Case",margin:4},
+            {name:"Default",realname:"Default",margin:4},
+            {name:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
             {name:"Bees",realname:"The Bee mode style for Unsplit."}
         ]
 
         self.onChoose = function(data){
             // LOAD
-            config.skin = data.name
+            config.theme = data.name
             // CONFIGURE
             self.configure()
-            // INIT
+            // INIT MODEL
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
+            // INIT SANDBOX
+            for (var i = 0; i < self.list.length; i++) {
+               basediv.classList.remove("div-model-theme-" + self.list[i].name)
+            }
+            basediv.classList.add("div-model-theme-" + model.theme)
             // UPDATE
             model.update()
         };
         self.configure = function() {
-            model.skin = config.skin
+            model.theme = config.theme
+            if (config.theme == "Bees") {
+                model.showVoters = false
+            } else {
+                model.showVoters = true
+            }
         }
         self.select = function() {
-            self.choose.highlight("name", config.skin);
+            self.choose.highlight("name", config.theme);
         }
         self.choose = new ButtonGroup({
-            label: "Skin:",
+            label: "Theme:",
             width: 68,
             data: self.list,
             onChoose: self.onChoose
@@ -1735,7 +1746,7 @@ function Sandbox(modelName) {
                 ui.menu.spread_factor_voters,
                 ui.menu.arena_size,
                 ui.menu.median_mean,
-                ui.menu.skin,
+                ui.menu.theme,
                 ui.menu.utility_shape,
                 ui.menu.gearoff
             ]
@@ -1970,7 +1981,9 @@ function Sandbox(modelName) {
     };
 
     self.update = function(){
-        // UPDATE
+        // UPDATE SANDBOX
+        
+        basediv.classList.add("div-model-theme-" + config.theme)
         _objF(ui.arena,"update")
         _objF(ui.menu,"select");
         model.start(); 
