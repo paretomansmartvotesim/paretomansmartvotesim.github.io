@@ -10,6 +10,7 @@ function main_ballot(preset){
 
 		// CREATE
 		var model = new Model();
+        model.createDOM()
 
 		// CONFIGURE
 		model.size = 250

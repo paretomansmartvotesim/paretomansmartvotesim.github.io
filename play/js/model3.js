@@ -4,6 +4,7 @@ l.onload = function(){
 	// CREATE
 
 	var model = new Model();
+	model.createDOM()
 
 	// INIT
 	model.initDOM()

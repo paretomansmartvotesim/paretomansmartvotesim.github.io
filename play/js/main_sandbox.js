@@ -69,6 +69,7 @@ function Sandbox(modelName) {
     var model = new Model(modelName);
     var ui = {}
     self.ui = ui
+    ui.model = model
     var config
     var initialConfig
     var basediv = document.querySelector("#" + modelName)
@@ -82,6 +83,17 @@ function Sandbox(modelName) {
     newDivOnBase("left")
     newDivOnBase("center")
     newDivOnBase("right")
+    model.createDOM()
+    var centerDiv = basediv.querySelector("#center")
+    if (centerDiv.hasChildNodes()){
+        var firstNode = centerDiv.childNodes[0]
+        centerDiv.insertBefore(model.dom,firstNode);
+    } else {
+        centerDiv.appendChild(model.dom)
+    }
+    model.dom.removeChild(model.caption);
+    basediv.querySelector("#right").appendChild(model.caption);
+    model.caption.style.width = "";
 
     // FUNCTIONS and CLASSES for INIT and UPDATE
 
@@ -108,38 +120,7 @@ function Sandbox(modelName) {
         }
         cleanConfig(config)
         initialConfig = _jcopy(config);
-
-
-        ////////////////////////
-        // THE FRIGGIN' MODEL //
-        ////////////////////////
     
-    
-        // CONFIGURE DEFAULTS (model)
-        model.size = config.arena_size
-        model.border = config.arena_border
-        model.electionOptions = {sidebar:true}
-        model.HACK_BIG_RANGE = true;
-    
-        // INIT (model)
-        ui.model = model
-        model.initDOM()
-        var centerDiv = basediv.querySelector("#center")
-        if (centerDiv.hasChildNodes()){
-            var firstNode = centerDiv.childNodes[0]
-            centerDiv.insertBefore(model.dom,firstNode);
-        } else {
-            centerDiv.appendChild(model.dom)
-        }
-        model.dom.removeChild(model.caption);
-        basediv.querySelector("#right").appendChild(model.caption);
-		model.caption.style.width = "";
-
-		// INIT (menu)
-		ui.menu.presetconfig.init_sandbox()
-		ui.menu.gearicon.init_sandbox()
-		ui.arena.desc.init_sandbox()
-
     }
 
    function cleanConfig(config) {
@@ -284,7 +265,12 @@ function Sandbox(modelName) {
             // load expanded config into the model
             // configure writes to model and reads from config.  Sanity rule: configure does not read from model.
         _objF(ui.menu,"configure")
+        // CONFIGURE DEFAULTS (model)
+        model.border = config.arena_border
+        model.electionOptions = {sidebar:true}
+        model.HACK_BIG_RANGE = true;
         // INIT
+        model.initDOM()
         model.initMODEL()
         for (var i=0; i<model.candidates.length; i++) {
             model.candidates[i].init()
@@ -292,6 +278,11 @@ function Sandbox(modelName) {
         for (var i=0; i<model.voters.length; i++) {
             model.voters[i].init()
         }
+		// INIT (menu)
+		ui.menu.presetconfig.init_sandbox()
+		ui.menu.gearicon.init_sandbox()
+		ui.arena.desc.init_sandbox()
+        ui.menu.theme.init_sandbox();
         // UPDATE
         model.update()
         menu_update()
@@ -1432,7 +1423,7 @@ function Sandbox(modelName) {
                 // CONFIGURE (LOADER)
                 model.size = config.arena_size
                 // INIT (LOADER)
-                model.resize()
+                model.initDOM()
                 // RESET = CREATE, CONFIGURE, INIT, & UPDATE (FOR MODEL)
                 model.reset()
                 // UPDATE (MENU AND ARENA)
@@ -1581,7 +1572,7 @@ function Sandbox(modelName) {
                 model.candidates[i].y *= ratio
             }
             // INIT (LOADER)	
-            model.resize()
+            model.initDOM()
             // INIT
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
@@ -1667,10 +1658,7 @@ function Sandbox(modelName) {
                 model.candidates[i].init()
             }
             // INIT SANDBOX
-            for (var i = 0; i < self.list.length; i++) {
-               basediv.classList.remove("div-model-theme-" + self.list[i].name)
-            }
-            basediv.classList.add("div-model-theme-" + model.theme)
+            self.init_sandbox()
             // UPDATE
             model.update()
         };
@@ -1678,9 +1666,17 @@ function Sandbox(modelName) {
             model.theme = config.theme
             if (config.theme == "Bees") {
                 model.showVoters = false
+                model.doBuzz = true
             } else {
                 model.showVoters = true
+                model.doBuzz = false
             }
+        }
+        self.init_sandbox = function() {
+            for (var i = 0; i < self.list.length; i++) {
+               basediv.classList.remove("div-model-theme-" + self.list[i].name)
+            }
+            basediv.classList.add("div-model-theme-" + model.theme)
         }
         self.select = function() {
             self.choose.highlight("name", config.theme);
@@ -1987,6 +1983,13 @@ function Sandbox(modelName) {
         _objF(ui.arena,"update")
         _objF(ui.menu,"select");
         model.start(); 
+        
+        setInterval(function(){
+            if (model.doBuzz) {
+                model.buzz()
+                model.update()
+            }
+        },60)
     };
 
     self.assets = [

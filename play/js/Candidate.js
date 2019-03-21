@@ -10,6 +10,7 @@ function Candidate(model){
 	self.init = function () {
 
 		// GRAPHICS
+		if (model.theme == undefined) model.theme = "Default"
 		var _graphics = Candidate.graphics[model.theme][self.id];
 		self.fill = _graphics.fill;
 		self.img = new Image();

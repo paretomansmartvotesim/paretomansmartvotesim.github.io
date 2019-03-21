@@ -3,6 +3,7 @@ l.onload = function(){
 
 	// CREATE
 	var model = new Model();
+	model.createDOM()
 	// INIT
 	model.initDOM()
 	var modelName = "model2"

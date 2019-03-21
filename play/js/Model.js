@@ -61,26 +61,19 @@ function Model(modelName){
 	
 	self.yee = new Yee(self);
 	
-	self.initDOM = function() {
-		// RETINA canvas, whatever.
+	self.createDOM = function() {
 		self.canvas = document.createElement("canvas");
 		self.canvas.setAttribute("class", "interactive");
-		self.canvas.width = self.canvas.height = self.size*2; // retina!
-		self.canvas.style.width = self.canvas.style.height = self.size+"px";
-		self.canvas.style.borderWidth = self.border+"px";
-		//self.canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
 		self.ctx = self.canvas.getContext("2d");
-		
 
 		// My DOM: title + canvas + caption
 		self.dom = document.createElement("div");
 		self.dom.setAttribute("class", "model");
-		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
 		self.title = document.createElement("div");
 		self.title.id = "title";
 		self.caption = document.createElement("div");
 		self.caption.id = "caption";
-		self.caption.style.width = self.dom.style.width;
+
 		self.dom.appendChild(self.title);
 		self.dom.appendChild(self.canvas);
 		self.dom.appendChild(self.caption);
@@ -89,14 +82,16 @@ function Model(modelName){
 		self.mouse = new Mouse(self.id, self.canvas);	
 	}
 
-	self.resize = function() {
+	self.initDOM = function() {
+		// RETINA canvas, whatever.
 		self.canvas.width = self.canvas.height = self.size*2; // retina!
 		self.canvas.style.width = self.canvas.style.height = self.size+"px";
-		// self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders! // not sure why this is here
-		self.dom.style.width = self.canvas.style.width;
+		self.canvas.style.borderWidth = self.border+"px";
+		//self.canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
+		
+		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
 		self.caption.style.width = self.dom.style.width;
 	}
-
 
 	self.initMODEL = function() {
 		// Draggables
@@ -267,5 +262,16 @@ function Model(modelName){
 		return count;
 	};
 
+	var buzzing = false
+	var seed = 1
+	self.buzz = function() {
+		if (buzzing) return
+		seed++
+		Math.seedrandom(seed);
+		for(var i=0; i<self.candidates.length; i++){
+			var c = self.candidates[i];
+			c.moveTo( c.x + Math.round(Math.random()*10-5), c.y + Math.round(Math.random()*10-5) );
+		}
+	}
 };
 

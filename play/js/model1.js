@@ -3,6 +3,7 @@ l.onload = function(){
 
   // CREATE
   var model = new Model();
+  model.createDOM()
   // CONFIGURE
   model.border = 2
   // INIT

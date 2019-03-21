@@ -73,6 +73,7 @@ function main(preset){
 		
 		var model = new Model();
 		ui.model = model
+        model.createDOM()
 
 		// CONFIGURE DEFAULTS
 		model.electionOptions = {sidebar:true}
