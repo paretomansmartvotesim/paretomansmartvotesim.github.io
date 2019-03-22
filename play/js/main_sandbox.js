@@ -1899,7 +1899,7 @@ function Sandbox(modelName) {
     ////// SAVE POSITION //////
     ///////////////////////////
 
-    savePositions = function(log){ 
+    var savePositions = function(log){ 
         // The positions of voters and candidates are not held in config.
         // So, we need to save them occasionally.
 
