@@ -1209,6 +1209,24 @@ function loadpreset(modelName) {
 			// presethtmlname: "sandbox.html",
 		}
 
+	} else if (htmlname == "elect_bees.html") {
+		config = {
+			candidatePositions: [
+				[92, 69],
+				[210, 70],
+				[245, 182],
+				[149, 250],
+				[55, 180]
+			],
+			voterPositions: [
+				[150, 150],
+			],
+			candidates: 5,
+			theme: "Bees",
+			featurelist: [],
+			hidegearconfig: true,
+		}
+
 	} else if (htmlname == "sandbox.html") {
 		config = {
 			description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
