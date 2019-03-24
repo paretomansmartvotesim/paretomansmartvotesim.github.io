@@ -6,9 +6,9 @@ function Yee(model) {
 		var ctx = model.ctx
 		// model.pixelsize= 30.0;
 		var pixelsize = model.pixelsize;
-		WIDTH = ctx.canvas.width;
-		HEIGHT = ctx.canvas.height;
-		doArrayWay = model.computeMethod != "ez"
+		var WIDTH = ctx.canvas.width;
+		var HEIGHT = ctx.canvas.height;
+		var doArrayWay = model.computeMethod != "ez"
 		var winners
 		if (doArrayWay) { // note that voterCenter is not yet implemented in the array way.  Only if "ez" is selected will the yee diagram work
 			// put candidate information into arrays
@@ -16,7 +16,7 @@ function Yee(model) {
 			var f=[] // , fA = [], fAid = [], xf = [], yf = [], fillf = [] // frontrunners
 			var movethisidx, whichtypetomove
 			var i = 0
-			for (can in model.candidatesById) {
+			for (var can in model.candidatesById) {
 				var c = model.candidatesById[can]
 				canAid.push(can)
 				// canA.push(c)
@@ -45,8 +45,8 @@ function Yee(model) {
 			var av = [], xv = [], yv = [] , vg = [] , xvcenter = [] , yvcenter = []// candidates
 			var movethisidx, whichtypetomove
 			var i = 0
-			for (vidx in model.voters) {
-				v = model.voters[vidx]
+			for (var vidx in model.voters) {
+				var v = model.voters[vidx]
 				av.push(v)
 				xvcenter.push(v.x*2)
 				yvcenter.push(v.y*2)
@@ -54,8 +54,8 @@ function Yee(model) {
 					movethisidx = i
 					whichtypetomove = "voter"
 				}
-				for (j in v.points) {
-					p = v.points[j]
+				for (var j in v.points) {
+					var p = v.points[j]
 					xv.push((p[0] + v.x)*2)
 					yv.push((p[1] + v.y)*2)
 					vg.push(i)
@@ -74,8 +74,8 @@ function Yee(model) {
 			// need to compile yee and decide when to recompile
 			// basically the only reason to recompile is when the number of voters or candidates changes
 			
-			lv = xv.length
-			lc = xc.length
+			var lv = xv.length
+			var lc = xc.length
 			model.fastyeesettings = [lc,lv,WIDTH,HEIGHT,pixelsize]
 			function arraysEqual(arr1, arr2) {
 				arr1 = arr1 || [0]
@@ -89,7 +89,7 @@ function Yee(model) {
 
 				return true;
 			}
-			recompileyee = !arraysEqual(model.fastyeesettings,model.oldfastyeesettings)
+			var recompileyee = !arraysEqual(model.fastyeesettings,model.oldfastyeesettings)
 			//(model.fastyeesettings || 0) != (model.oldfastyeesettings || 0))
 			model.oldfastyeesettings = model.fastyeesettings
 			if (recompileyee) {
@@ -193,6 +193,71 @@ function Yee(model) {
 		}
 	}
 	
+	self.winSeek = function(can) {
+
+		// this function will find the closest point where a candidate wins.
+
+		var temp = {o: model.yeeobject,
+			b:model.gridb,
+			x:model.gridx,
+			y:model.gridy,
+			l:model.gridl
+		}
+		var xMe = can.x
+		var yMe = can.y
+
+		// do calculations
+		model.yeeobject = can
+		self.calculate()
+		
+		// find closest winning point
+		var colorMe = can.fill
+		var dist
+		var minDist = Infinity
+		var kGoal
+		for(var k=0;k<model.gridl.length;k++) {
+			var ca = model.gridl[k]
+			var check = false
+			if (ca=="#ccc") { // make stripes instead of gray
+				var cb = model.gridb[k]
+				if (cb.includes(colorMe)) {
+					check = true
+				}
+			} else {
+				if (colorMe == ca)
+					check = true
+			}
+			if (check) {
+				dist = d2(model.gridx[k]-xMe, model.gridy[k]-yMe)
+				if (dist < minDist) {
+					minDist = dist
+					kGoal = k
+				}
+			}
+		}
+		function d2(x,y) {
+			return x**2 + y**2
+		}
+
+		if(kGoal != undefined) {
+			var goal = {
+				x:model.gridx[kGoal],
+				y:model.gridy[kGoal]
+			}
+		} else {
+			var goal = undefined
+		}
+
+
+		model.yeeobject = temp.o
+		model.gridb=temp.b
+		model.gridx=temp.x
+		model.gridy=temp.y
+		model.gridl=temp.l
+
+		return goal
+	}
+
 	self.drawBackground = function() {
 		var ctx = model.ctx
 		

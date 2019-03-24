@@ -262,10 +262,51 @@ function Model(modelName){
 		return count;
 	};
 
-	var buzzing = false
+	var finding = false
 	var seed = 1
+	var goal = []
 	self.buzz = function() {
-		if (buzzing) return
+		
+		// find goal
+		if (!finding) {
+			finding = true
+			for(var i=0; i<self.candidates.length; i++){
+				var can = self.candidates[i]
+				goal[i] = self.yee.winSeek(can)
+			}
+			finding = false
+		}
+			
+		// move toward goal or center
+		for(var i=0; i<self.candidates.length; i++){
+			var c = self.candidates[i];
+			if (goal[i]) {
+				var g = goal[i]
+			} else {
+				if (1) {
+					continue // skip this guy
+				} else {
+					// move toward center
+					var g = {
+						x: self.canvas.width * .5,
+						y: self.canvas.height * .5
+					}
+				}
+			}
+			var diff = {
+				x: g.x * .5 - c.x,
+				y: g.y * .5 - c.y
+			}
+			lenDiff = Math.sqrt(diff.x**2 + diff.y**2)
+			var unit = {
+				x: diff.x / lenDiff,
+				y: diff.y / lenDiff
+			}
+			var speed = 1
+			c.moveTo( c.x + unit.x * speed, c.y + unit.y * speed);
+		}
+
+		// random movement
 		seed++
 		Math.seedrandom(seed);
 		for(var i=0; i<self.candidates.length; i++){
