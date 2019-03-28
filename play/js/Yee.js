@@ -118,65 +118,147 @@ function Yee(model) {
 				voterso[i].y = model.voters[i].y
 			}
 		}
-		var i=0
-		for(var x=.5*pixelsize, cx=0; x<=WIDTH; x+= pixelsize, cx++) {
-			for(var y=.5*pixelsize, cy=0; y<=HEIGHT; y+= pixelsize, cy++) {
-				if (doArrayWay) {
-					var winner = Math.round(winners[i])
-					if (winner > lc) { // we have a set of winners to decode
-						//winner = 3 + lc* (2+lc*(4))
-						//var decode = function (winner) {
-							wl = []
-							for (var s = 0; s < lc; s++) {
-								if (winner <= lc) {break}
-								wl.push(winner % lc)
-								winner = Math.floor(winner / lc)
-							}
-							wl.push(winner)
-						//	return wl
-						//}
-						colorlist = []
-						for (w in wl) {colorlist.push(Candidate.graphics[model.theme][canAid[wl[w]] || "square"].fill)}
-						model.gridb[i] = colorlist
-						var a = "#ccc" // grey is actually a code for "look for more colors"
-					} else {
-						var a = Candidate.graphics[model.theme][canAid[winner] || "square"].fill
-					}
-					// if (a == "#ccc") {a = "#ddd"} // hack for now, but will deal with ties later
+
+		// model.hexgrid
+		// make grid
+
+
+		model.grid = "hexagon"
+		if (model.grid == "square") { // square grid
+			for(var x=.5*pixelsize ; x<=WIDTH; x+= pixelsize) {
+				for(var y=.5*pixelsize; y<=HEIGHT; y+= pixelsize) {
 					model.gridx.push(x);
 					model.gridy.push(y);
-					model.gridl.push(a);
-					i++;
-					continue;
 				}
-				model.yeeobject.x = x * .5;
-				model.yeeobject.y = y * .5;
-				// update positions of all the voters if the voterCenter is the yee object
-				if (model.yeeobject == model.voterCenter) {
-					var changecenter = {
-						x:model.yeeobject.x - saveo.x, 
-						y:model.yeeobject.y - saveo.y
-					}
-					for(var j=0; j<model.voters.length; j++){
-						model.voters[j].x = voterso[j].x + changecenter.x
-						model.voters[j].y = voterso[j].y + changecenter.y
-					}
-				}
-				
-				for(var j=0; j<model.voters.length; j++){
-					model.voters[j].update();
-				}
-				var result = model.election(model, {sidebar:false});
-
-
-				var a = result.color; // updated color
-				if (a == "#ccc") {model.gridb[i] = result.colors;}
-				model.gridx.push(x);
-				model.gridy.push(y);
-				model.gridl.push(a);
-				// model.caption.innerHTML = "Calculating " + Math.round(x/WIDTH*100) + "%"; // doesn't work yet 
-				i++
 			}
+		} else { // hex grid
+			model.gridType = "horizontal hexagon"
+			if (model.gridType == "horizontal") {
+				var grids = hexgrid(pixelsize, HEIGHT, WIDTH)
+				model.gridx = grids.w
+				model.gridy = grids.h
+			}
+			 else if (model.gridType == "vertical") {
+				var grids = hexgrid(pixelsize, WIDTH, HEIGHT)
+				model.gridx = grids.h
+				model.gridy = grids.w
+			} else if (model.gridType == "horizontal hexagon") {
+				var grids = hexagon_hexgrid(pixelsize, HEIGHT, WIDTH)
+				model.gridx = grids.w
+				model.gridy = grids.h
+			}
+			 else if (model.gridType == "vertical hexagon") {
+				var grids = hexagon_hexgrid(pixelsize, WIDTH, HEIGHT)
+				model.gridx = grids.h
+				model.gridy = grids.w
+			}
+			function hexgrid(pixelsize, HEIGHT, WIDTH) {
+				var w = []
+				var h = []
+				var hexHeight = pixelsize
+				var hexWidth = pixelsize * 2/Math.sqrt(3)
+				var hexSide = pixelsize * .5
+				var row = 0
+				for( var y = hexHeight * .5; y + hexHeight <= HEIGHT; y += hexHeight / 2, row++) {
+					if (row % 2 == 1) {  
+					var offset = (hexWidth - hexSide)/2 + hexSide
+					var col = 1
+					}  else {
+						var offset = 0.0
+						var col = 0
+					}
+					for ( var x=offset + hexWidth*.5; x+hexWidth <= WIDTH; x += hexWidth + hexSide, col += 2) {
+						w.push(x);
+						h.push(y);
+					}
+				}
+				return {w:w, h:h}
+			}
+			function hexagon_hexgrid(pixelsize, HEIGHT, WIDTH) {
+				var w = []
+				var h = []
+				var hexHeight = pixelsize
+				var hexWidth = pixelsize * 2/Math.sqrt(3)
+				var hexSide = pixelsize * .5
+
+				// default is horizontal flat-top Hexagons
+
+				// how many rings of hexagons fit into the total width?
+				var numWidth = Math.floor( (WIDTH - hexWidth) / (hexWidth + hexSide) )
+				// how many rings of hexagons fit into the total height?
+				var numHeight = Math.floor( (HEIGHT - hexHeight) / (2*hexHeight) )
+
+				// how many rings should we make?
+				var n = Math.min(numWidth,numHeight)
+
+				var centerX = Math.floor(WIDTH/2)
+				var centerY = Math.floor(HEIGHT/2)
+				for (var i = -n; i <= n; i++) {
+					var iPos = Math.abs(i)
+					for (var j = -(2*n-iPos); j <= (2*n-iPos); j+=2) {
+						var x = j * hexHeight/2 + centerX
+						var y = i * (hexWidth+hexSide) / 2 + centerY
+						w.push(x);
+						h.push(y);
+					}
+				}
+				return {w:w, h:h}
+			}
+		}
+
+
+		// get winners
+		for (var i=0; i < model.gridx.length; i++) {
+			var x = model.gridx[i]
+			var y = model.gridy[i]
+			if (doArrayWay) {
+				var winner = Math.round(winners[i])
+				if (winner > lc) { // we have a set of winners to decode
+					//winner = 3 + lc* (2+lc*(4))
+					//var decode = function (winner) {
+						wl = []
+						for (var s = 0; s < lc; s++) {
+							if (winner <= lc) {break}
+							wl.push(winner % lc)
+							winner = Math.floor(winner / lc)
+						}
+						wl.push(winner)
+					//	return wl
+					//}
+					colorlist = []
+					for (w in wl) {colorlist.push(Candidate.graphics[model.theme][canAid[wl[w]] || "square"].fill)}
+					model.gridb[i] = colorlist
+					var a = "#ccc" // grey is actually a code for "look for more colors"
+				} else {
+					var a = Candidate.graphics[model.theme][canAid[winner] || "square"].fill
+				}
+				// if (a == "#ccc") {a = "#ddd"} // hack for now, but will deal with ties later
+				model.gridl.push(a);
+				continue;
+			}
+			model.yeeobject.x = x * .5;
+			model.yeeobject.y = y * .5;
+			// update positions of all the voters if the voterCenter is the yee object
+			if (model.yeeobject == model.voterCenter) {
+				var changecenter = {
+					x:model.yeeobject.x - saveo.x, 
+					y:model.yeeobject.y - saveo.y
+				}
+				for(var j=0; j<model.voters.length; j++){
+					model.voters[j].x = voterso[j].x + changecenter.x
+					model.voters[j].y = voterso[j].y + changecenter.y
+				}
+			}
+			
+			for(var j=0; j<model.voters.length; j++){
+				model.voters[j].update();
+			}
+			var result = model.election(model, {sidebar:false});
+
+
+			model.gridl.push(result.color);
+			model.gridb.push(result.colors)
+			// model.caption.innerHTML = "Calculating " + Math.round(x/WIDTH*100) + "%"; // doesn't work yet 
 		}
 		model.yeeobject.x = saveo.x;
 		model.yeeobject.y = saveo.y;
@@ -312,7 +394,15 @@ function Yee(model) {
 					} else {
 						ctx.fillStyle = translate[ca]
 					}
-					ctx.fillRect(model.gridx[k]-pixelsize*.5, model.gridy[k]-pixelsize*.5, pixelsize, pixelsize);
+					if (model.grid == "square") {
+						ctx.fillRect(model.gridx[k]-pixelsize*.5, model.gridy[k]-pixelsize*.5, pixelsize, pixelsize);
+					} else {
+						// var size = pixelsize / Math.sqrt(3)
+						var size = pixelsize / 2
+						var x = model.gridx[k]
+						var y = model.gridy[k]
+						self.drawHexagon(x,y,size,ctx)
+					}
 				}
 			}
 			ctx.globalAlpha = temp
@@ -323,6 +413,18 @@ function Yee(model) {
 		}
 
 	}
+
+	self.drawHexagon = function(x,y,size,ctx) {
+		ctx.beginPath();
+		ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
+
+		for (var side = 0.5; side < 7.5; side++) {
+			ctx.lineTo(x + size * Math.cos(side * 2 * Math.PI / 6), y + size * Math.sin(side * 2 * Math.PI / 6));
+		}
+		// ctx.fillStyle = fill;
+		ctx.fill();
+	}
+
 	self.drawYeeGuyBackground = function(x,y,ctx){
 		
 		// put circle behind yee candidate

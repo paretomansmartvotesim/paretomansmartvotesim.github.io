@@ -265,53 +265,99 @@ function Model(modelName){
 	var finding = false
 	var seed = 1
 	var goal = []
+	var bounce = undefined
 	self.buzz = function() {
+
+		var motion = "bounce"
 		
-		// find goal
-		if (!finding) {
-			finding = true
-			for(var i=0; i<self.candidates.length; i++){
-				var can = self.candidates[i]
-				goal[i] = self.yee.winSeek(can)
+		if (motion=="goal") {
+			//find goal
+			if (!finding) {
+				finding = true
+				for(var i=0; i<self.candidates.length; i++){
+					var can = self.candidates[i]
+					goal[i] = self.yee.winSeek(can)
+				}
+				finding = false
 			}
-			finding = false
-		}
-			
-		// move toward goal or center
-		for(var i=0; i<self.candidates.length; i++){
-			var c = self.candidates[i];
-			if (goal[i]) {
-				var g = goal[i]
-			} else {
-				if (1) {
-					continue // skip this guy
+				
+			// move toward goal or center
+			for(var i=0; i<self.candidates.length; i++){
+				var c = self.candidates[i];
+				if (self.result) {
+					if (self.result.winners.includes(c.id))
+					{
+						continue // skip this guy because he's winning
+					}
+				}
+				if (goal[i]) {
+					var g = goal[i]
 				} else {
-					// move toward center
-					var g = {
-						x: self.canvas.width * .5,
-						y: self.canvas.height * .5
+					if (1) {
+						continue // skip this guy
+					} else {
+						// move toward center
+						var g = {
+							x: self.canvas.width * .5,
+							y: self.canvas.height * .5
+						}
+					}
+				}
+				var diff = {
+					x: g.x * .5 - c.x,
+					y: g.y * .5 - c.y
+				}
+				lenDiff = Math.sqrt(diff.x**2 + diff.y**2)
+				var unit = {
+					x: diff.x / lenDiff,
+					y: diff.y / lenDiff
+				}
+				var speed = 5
+				c.moveTo( c.x + unit.x * speed, c.y + unit.y * speed);
+			}
+	
+			// random movement
+			seed++
+			Math.seedrandom(seed);
+			var stepsize = 1
+			for(var i=0; i<self.candidates.length; i++){
+				var c = self.candidates[i];
+				c.moveTo( c.x + Math.round((Math.random()*2-1)*stepsize), c.y + Math.round((Math.random()*2-1)*stepsize) );
+			}
+		} else if (motion == "bounce") {
+			// bouncing
+	
+			if (bounce == undefined) {
+				bounce = []
+			
+				for(var i=0; i<self.candidates.length; i++){
+					var c = self.candidates[i];
+					var x = c.x - self.canvas.width * .25
+					var y = c.y - self.canvas.height * .25
+			
+					var lenC = Math.sqrt(x**2 + y**2)
+					bounce[i] = {
+						x: y / lenC,
+						y: -x / lenC
 					}
 				}
 			}
-			var diff = {
-				x: g.x * .5 - c.x,
-				y: g.y * .5 - c.y
+			var speed = 10
+			for(var i=0; i<self.candidates.length; i++){
+				var c = self.candidates[i];
+				c.moveTo( c.x + bounce[i].x * speed, c.y + bounce[i].y * speed)
+				// r = Math.sqrt(c.x**2 + c.y**2)
+				// if (r > modelName.size * .5) {
+				// 	// reverse the radial component of the bounce
+				// 	theta_approx = c.y/c.x
+				// 	c.x = r * theta_approx
+				// 	c.y = r * 
+				// }
+				if (c.x < 0 || c.x > self.canvas.width * .5) bounce[i].x = - bounce[i].x
+				if (c.y < 0 || c.y > self.canvas.height * .5) bounce[i].y = - bounce[i].y
 			}
-			lenDiff = Math.sqrt(diff.x**2 + diff.y**2)
-			var unit = {
-				x: diff.x / lenDiff,
-				y: diff.y / lenDiff
-			}
-			var speed = 1
-			c.moveTo( c.x + unit.x * speed, c.y + unit.y * speed);
-		}
-
-		// random movement
-		seed++
-		Math.seedrandom(seed);
-		for(var i=0; i<self.candidates.length; i++){
-			var c = self.candidates[i];
-			c.moveTo( c.x + Math.round(Math.random()*10-5), c.y + Math.round(Math.random()*10-5) );
+			// radial
+		
 		}
 	}
 };
