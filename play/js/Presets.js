@@ -1223,7 +1223,7 @@ function loadpreset(modelName) {
 			],
 			candidates: 5,
 			theme: "Bees",
-			featurelist: [],
+			featurelist: ["yee"],
 			hidegearconfig: true,
 		}
 
