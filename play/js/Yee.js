@@ -122,8 +122,11 @@ function Yee(model) {
 		// model.hexgrid
 		// make grid
 
-
-		model.grid = "hexagon"
+		if (model.theme == "Bees") {
+			model.grid = "hexagon"
+		} else {
+			model.grid = "square"
+		}
 		if (model.grid == "square") { // square grid
 			for(var x=.5*pixelsize ; x<=WIDTH; x+= pixelsize) {
 				for(var y=.5*pixelsize; y<=HEIGHT; y+= pixelsize) {
