@@ -80,6 +80,7 @@ function Model(modelName){
 
 		// MAH MOUSE
 		self.mouse = new Mouse(self.id, self.canvas);	
+		self.draggableManager = new DraggableManager(self);
 	}
 
 	self.initDOM = function() {
@@ -96,7 +97,6 @@ function Model(modelName){
 	self.initMODEL = function() {
 		// Draggables
 		self.draggables = [];
-		self.draggableManager = new DraggableManager(self);
 
 		// Candidates & Voter(s)
 		self.candidatesById = {};
