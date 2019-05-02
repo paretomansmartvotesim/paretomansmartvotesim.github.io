@@ -149,8 +149,18 @@ function Model(modelName){
 	self.update = function(){
 
 		// Move the one that's being dragged, if any
+		var xMove = self.mouse.x
+		var yMove = self.mouse.y
 		if(self.mouse.dragging){
-			self.mouse.dragging.moveTo(self.mouse.x, self.mouse.y);
+			if (self.mode = "tetris") {
+				if (self.mouse.dragging.isCandidate) { // move candidate in the candidate region
+					yMove = Math.max(self.yDimOne + 50,yMove)
+				} else { // This is a voter
+					//yMove = Math.min(50,yMove)
+					yMove = self.yDimOne
+				}
+			}
+			self.mouse.dragging.moveTo(xMove,yMove);
 		}
 		
 		// get the ballots

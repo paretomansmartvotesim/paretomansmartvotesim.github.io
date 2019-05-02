@@ -4,6 +4,7 @@ function Candidate(model){
 	Draggable.call(self, model);
 
 	// CONFIGURE DEFAULTS
+	self.isCandidate = true
 	self.id = 'square'
 	self.size = 40;
 

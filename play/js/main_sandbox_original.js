@@ -78,6 +78,7 @@ function main(preset){
 		// CONFIGURE DEFAULTS
 		model.electionOptions = {sidebar:true}
 		model.HACK_BIG_RANGE = true;
+		model.yDimOne = 100
 
 		// INIT
 		ui.model = model

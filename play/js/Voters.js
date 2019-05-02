@@ -1023,6 +1023,46 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			}
 			self.points = points
 		}
+		if (1 && model.mode == "tetris") {  // cool method doesn't work
+
+			for (var i = 0; i < self.points.length; i++) {
+				points[i][0] = self.points[i][0]
+				points[i][1] = 0
+				var diameter2 = 30
+				var yNewUp, yNewDown
+				var yMax = 0
+				var yMin = 10000
+				var noneighbors = true
+				for (var k = 0; k < i; k++) {
+					xDiff2 = (points[k][0] - points[i][0])**2
+					if (xDiff2 < diameter2) {
+						noneighbors = false
+						yDiff = Math.sqrt(diameter2-xDiff2)
+						yNewUp = yDiff + points[k][1]
+						yNewDown = - yDiff + points[k][1]
+						if (yNewUp > yMax) {
+							yMax = yNewUp
+						}
+						if (yNewDown < yMin) {
+							yMin = yNewDown
+						}
+					}
+				}
+				if (noneighbors) {
+					yChoose = 0
+				} else if (yMin > 0) {
+					var yChoose = yMin
+				} else {
+					var yChoose = yMax
+				}
+				points[i][1] = yChoose
+			}
+			for (var i = 0; i < points.length; i++) {
+				points[i][1] = -points[i][1]
+			}
+			self.points = points
+		}
+		
 	}
 
 	self.setType = function(newType){

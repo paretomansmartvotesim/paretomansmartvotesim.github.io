@@ -48,6 +48,7 @@ function Sandbox(modelName) {
         arena_size: 300,
         median_mean: 1,
         theme: "Default",
+        mode: "Default",
         utility_shape: "linear",
         arena_border: 2,
         preFrontrunnerIds: ["square","triangle"],
@@ -260,6 +261,11 @@ function Sandbox(modelName) {
             for(var i=0; i<config.numVoterGroups; i++) model.voters.push(new GaussianVoters(model))
         }
         model.voterCenter = new VoterCenter(model)
+
+        // PRE CONFIGURE
+        model.mode = config.mode
+		model.yDimOne = 100
+        
         // CONFIGURE
             // expand config to calculate some values to add to the model			
             // load expanded config into the model
@@ -635,6 +641,12 @@ function Sandbox(modelName) {
                     voterPositions = [[65,150],[150,150],[235,150]];
 
                 }
+                if (model.mode == "tetris") {
+                    for(var i=0; i<num; i++){ 
+                        voterPositions[i][1] = model.yDimOne
+                    }
+                }
+                
                 for(var i=0; i<num; i++){
                     var pos = voterPositions[i];
                     Object.assign(model.voters[i], {
@@ -647,6 +659,12 @@ function Sandbox(modelName) {
                     })
                     model.voters[i].setType( ui.menu.systems.listByName().voter );	
 
+                }
+            }
+                
+            if (model.mode == "tetris") {
+                for(var i=0; i<num; i++){ 
+                    model.voters[i].y = model.yDimOne
                 }
             }
         }
@@ -851,6 +869,12 @@ function Sandbox(modelName) {
                         y:y
                     })
                     angle += Math.TAU/num;
+                }
+            }
+            if (model.mode == "tetris") {
+                var yShrink = 1 - model.yDimOne/config.arena_size
+                for(var i=0; i<num; i++){
+                    model.candidates[i].y = model.yDimOne + model.candidates[i].y * yShrink
                 }
             }
         }
