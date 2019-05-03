@@ -193,9 +193,25 @@ function distF2(model,v,c) { // voter and candidate should be in order
 	if (model.mode == "tetris") {
 		var dx = v.x - c.x
 		var dy = (model.yDimOne + model.yDimBuffer) - c.y
-		//dy = dy * .1
-		dy = dy*dy * .001
-		return Math.abs(dx*dy)
+		var a=3
+		switch (a) {
+			case 1: return Math.abs(dx*dy)
+			case 2: return Math.abs(dx*dy*.1)
+			case 3: return Math.abs(dx*dy*dy*.001)
+			case 4:
+				var adx = Math.abs(dx)
+				var ady = Math.abs(dy)
+				if (adx < 10 || ady < 10) return 0
+				return (adx + ady)*2
+			case 5:
+				var adx = Math.abs(dx)
+				var ady = Math.abs(dy)
+				if (adx < 10 || ady < 10) {
+					var balance = min(adx,ady) / 10
+					return balance * (adx + ady)*2
+				} 
+				return (adx + ady)*2
+		}
 	} else {
 		var dx = v.x - c.x
 		var dy = v.y - c.y
@@ -513,15 +529,17 @@ function RankedVoter(model){
 		rank = rank.sort(function(a,b){
 
 			var c1 = model.candidatesById[a];
-			var x1 = c1.x-x;
-			var y1 = c1.y-y;
-			var d1 = x1*x1+y1*y1;
+			// var x1 = c1.x-x;
+			// var y1 = c1.y-y;
+			// var d1 = x1*x1+y1*y1;
+			var d1 = distF2(model,{x:x,y:y},c1)
 
 			var c2 = model.candidatesById[b];
-			var x2 = c2.x-x;
-			var y2 = c2.y-y;
-			var d2 = x2*x2+y2*y2;
-
+			// var x2 = c2.x-x;
+			// var y2 = c2.y-y;
+			// var d2 = x2*x2+y2*y2;
+			var d2 = distF2(model,{x:x,y:y},c2)
+			
 			return d1-d2;
 
 		});
