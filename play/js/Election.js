@@ -1943,7 +1943,6 @@ var _tally = function(model, tallyFunc){
 
 }
 
-
 var _tally_primary = function(model, tallyFunc){
 
 	var primaries_tallies = []
@@ -1958,9 +1957,10 @@ var _tally_primary = function(model, tallyFunc){
 		var maxdist2 = Infinity
 		var votebelong = 0
 		for ( var j = 0; j < model.voters.length; j++){
-			var dx = model.voters[j].x - can.x
-			var dy = model.voters[j].y - can.y
-			var dist2 = dx*dx + dy*dy
+			var dist2 = distF2(model, model.voters[j], can)
+			// var dx = model.voters[j].x - can.x
+			// var dy = model.voters[j].y - can.y
+			// var dist2 = dx*dx + dy*dy
 			if (dist2 < maxdist2) {
 				votebelong = j
 				maxdist2 = dist2

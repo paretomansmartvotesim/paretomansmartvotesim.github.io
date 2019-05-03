@@ -31,7 +31,7 @@ function ScoreVoter(model){
 		} else {
 			viable = model.preFrontrunnerIds
 		}
-		var scoresfirstlast = dostrategy(x,y,self.minscore,self.maxscore,strategy,viable,model.candidates,self.defaultMax,doStar,model.utility_shape)
+		var scoresfirstlast = dostrategy(model,x,y,self.minscore,self.maxscore,strategy,viable,model.candidates,self.defaultMax,doStar,model.utility_shape)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -185,7 +185,27 @@ function inverse_utility_function(utility_shape) {
 }
 
 
-function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar,utility_shape) {
+function distF(model,v,c) {
+	return Math.sqrt(distF2(model,v,c))
+}
+
+function distF2(model,v,c) { // voter and candidate should be in order
+	if (model.mode == "tetris") {
+		var dx = v.x - c.x
+		var dy = (model.yDimOne + model.yDimBuffer) - c.y
+		//dy = dy * .1
+		dy = dy*dy * .001
+		return Math.abs(dx*dy)
+	} else {
+		var dx = v.x - c.x
+		var dy = v.y - c.y
+		return dx*dx + dy*dy
+	}
+}
+
+
+
+function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,defaultMax,doStar,utility_shape) {
 	
 	// reference
 	// {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:4},
@@ -203,9 +223,7 @@ function dostrategy(x,y,minscore,maxscore,strategy,preFrontrunnerIds,candidates,
 	canAid = []
 	for(var i=0; i<lc; i++){
 		var c = candidates[i];
-		var dx = c.x-x;
-		var dy = c.y-y;
-		var dist = Math.sqrt(dx*dx+dy*dy);
+		var dist = distF2(model,{x:x,y:y},c)
 		dista.push(dist)
 		canAid.push(c.id)
 	}
@@ -800,9 +818,7 @@ function PluralityVoter(model){
 			if(checkOnlyFrontrunners && ! viable.includes(c.id)  ) {
 				continue // skip this candidate because he isn't one of the 2 or more frontrunners, so we can't vote for him
 			}
-			var dx = c.x-x;
-			var dy = c.y-y;
-			var dist = dx*dx+dy*dy;
+			var dist = distF2(model,{x:x,y:y},c)
 			if(dist<closestDistance){
 				closestDistance = dist;
 				closest = c;
