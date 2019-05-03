@@ -10,6 +10,10 @@ function Model(modelName){
 
 	var self = this;
 
+	// CONSTANTS
+	
+	self.yDimOne = 100
+	self.yDimBuffer = 50
 
 	// CREATE DATA STRUCTURE
 	self.voters = [];
@@ -152,9 +156,9 @@ function Model(modelName){
 		var xMove = self.mouse.x
 		var yMove = self.mouse.y
 		if(self.mouse.dragging){
-			if (self.mode = "tetris") {
+			if (self.mode == "tetris") {
 				if (self.mouse.dragging.isCandidate) { // move candidate in the candidate region
-					yMove = Math.max(self.yDimOne + 50,yMove)
+					yMove = Math.max(self.yDimOne + self.yDimBuffer,yMove)
 				} else { // This is a voter
 					//yMove = Math.min(50,yMove)
 					yMove = self.yDimOne

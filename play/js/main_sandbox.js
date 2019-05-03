@@ -264,7 +264,6 @@ function Sandbox(modelName) {
 
         // PRE CONFIGURE
         model.mode = config.mode
-		model.yDimOne = 100
         
         // CONFIGURE
             // expand config to calculate some values to add to the model			

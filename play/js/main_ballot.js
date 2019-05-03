@@ -67,7 +67,7 @@ function main_ballot(preset){
 			model.doStarStrategy = config.doStarStrategy;
 			model.theme = config.theme
 			model.mode = config.mode
-			if (model.mode = "tetris") model.voters[0].y = model.yDimOne  // not tested yet
+			if (model.mode == "tetris") model.voters[0].y = model.yDimOne  // not tested yet
 			// INIT
 			model.initMODEL()
 			model.voters[0].init()
