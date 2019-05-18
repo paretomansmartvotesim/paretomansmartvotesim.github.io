@@ -208,3 +208,13 @@ Election/Sandbox design:
 }
 
 /* end of slider stuff */
+
+.round {
+    border: 3px solid #fff;
+
+}
+.round:hover {
+    background: #eee;
+    border: 3px solid #aaa;
+
+}

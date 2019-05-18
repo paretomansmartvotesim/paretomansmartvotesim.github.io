@@ -1,4 +1,4 @@
-function Draggable(model){
+function Draggable(model){ // Voter and Candidate classes are extended to make them draggable objects in an arena.
 	// sanity rules: Draggable class creation code cannot read attributes from model.
 
 	var self = this;
@@ -12,23 +12,33 @@ function Draggable(model){
 		self.offY = 0;
 	}
 
-	self.hitTest = function(x,y){
-		var dx = x-self.x;
-		var dy = y-self.y;
+	self.hitTest = function(x,y,arena){
+		var a = arena.modelToArena(self)
+		var dx = x-a.x;
+		var dy = y-a.y;
 		var r = self.radius;
 		return((dx*dx+dy*dy) < r*r);
 	};
 
-	self.moveTo = function(x,y){
-		self.x = x+self.offX;
-		self.y = y+self.offY;
+	self.moveTo = function(x,y,arena){
+		var a = {}
+		a.x = x+self.offX
+		a.y = y+self.offY
+		var p = arena.arenaToModel(a,self);
+		self.x = p.x
+		self.y = p.y
+		// self.x = x+self.offX;
+		// self.y = y+self.offY;
 	};
 
 	self.offX = 0;
 	self.offY = 0;
-	self.startDrag = function(){
-		self.offX = self.x-model.mouse.x;
-		self.offY = self.y-model.mouse.y;
+	self.startDrag = function(arena){
+		var a = arena.modelToArena(self)
+		self.offX = a.x-arena.mouse.x;
+		self.offY = a.y-arena.mouse.y;
+		// self.offX = self.x-arena.mouse.x;
+		// self.offY = self.y-arena.mouse.y;
 	};
 
 	self.update = function(){
@@ -41,20 +51,20 @@ function Draggable(model){
 
 }
 
-function DraggableManager(model){
+function DraggableManager(arena,model){
 
 	var self = this;
 
 	// Helper: is Over anything?
 	self.isOver = function(){
 		if (model.yeeon && model.yeeobject) { // Choose the yee object as a priority
-			if(model.yeeobject.hitTest(model.mouse.x, model.mouse.y)){
+			if(model.yeeobject.hitTest(arena.mouse.x, arena.mouse.y,arena)){
 				return model.yeeobject;
 			}
 		}
-		for(var i=model.draggables.length-1; i>=0; i--){ // top DOWN.
-			var d = model.draggables[i];
-			if(d.hitTest(model.mouse.x, model.mouse.y)){
+		for(var i=arena.draggables.length-1; i>=0; i--){ // top DOWN.
+			var d = arena.draggables[i];
+			if(d.hitTest(arena.mouse.x, arena.mouse.y,arena)){
 				return d;
 			}
 		}
@@ -62,16 +72,16 @@ function DraggableManager(model){
 	}
 
 	// INTERFACING WITH THE *MOUSE*
-	subscribe(model.id+"-mousemove", function(){
-		if(model.mouse.pressed){
+	subscribe(arena.id+"-mousemove", function(){
+		if(arena.mouse.pressed){
 			model.update();
 		}else if(self.isOver()){
 			// If over anything, grab cursor!
-			model.canvas.setAttribute("cursor", "grab");
+			arena.canvas.setAttribute("cursor", "grab");
 			// also, highlight one object
 			// set all objects to not highlight
-			for(var i=model.draggables.length-1; i>=0; i--){ // top DOWN.
-				var d = model.draggables[i];
+			for(var i=arena.draggables.length-1; i>=0; i--){ // top DOWN.
+				var d = arena.draggables[i];
 				d.highlight = false
 			}
 			var flashydude = self.isOver()
@@ -80,10 +90,10 @@ function DraggableManager(model){
 			self.lastwas = "hovering"
 		}else{
 			// Otherwise no cursor
-			model.canvas.setAttribute("cursor", "");
+			arena.canvas.setAttribute("cursor", "");
 			if ( self.lastwas == "hovering"){
-				for(var i=model.draggables.length-1; i>=0; i--){ // top DOWN.
-					var d = model.draggables[i];
+				for(var i=arena.draggables.length-1; i>=0; i--){ // top DOWN.
+					var d = arena.draggables[i];
 					d.highlight = false
 				}
 				model.draw()	
@@ -91,24 +101,27 @@ function DraggableManager(model){
 			self.lastwas = "nothovering"
 		}
 	});
-	subscribe(model.id+"-mousedown", function(){
+	subscribe(arena.id+"-mousedown", function(){
 
 		// Didja grab anything? null if nothing.
-		model.mouse.dragging = self.isOver();
+		arena.mouse.dragging = self.isOver();
 
 		// If so...
-		if(model.mouse.dragging){
-			model.mouse.dragging.startDrag();
+		if(arena.mouse.dragging){
+			arena.mouse.dragging.startDrag(arena);
+			if (arena.mouse.ctrlclick) { // we toggled this guy as a winner
+				arena.mouse.dragging.selected = ! arena.mouse.dragging.selected
+			}
 			model.update();
 
 			// GrabBING cursor!
-			model.canvas.setAttribute("cursor", "grabbing");
+			arena.canvas.setAttribute("cursor", "grabbing");
 
 		}
 
 	});
-	subscribe(model.id+"-mouseup", function(){
-		model.mouse.dragging = null;
+	subscribe(arena.id+"-mouseup", function(){
+		arena.mouse.dragging = null;
 	});
 
 }

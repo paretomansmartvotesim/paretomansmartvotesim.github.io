@@ -3,7 +3,7 @@ function Yee(model) {
 	var self = this
 
 	self.calculate = function(){
-		var ctx = model.ctx
+		var ctx = model.arena.ctx
 		// model.pixelsize= 30.0;
 		var pixelsize = model.pixelsize;
 		var WIDTH = ctx.canvas.width;
@@ -344,7 +344,8 @@ function Yee(model) {
 	}
 
 	self.drawBackground = function() {
-		var ctx = model.ctx
+		var arena = model.arena
+		var ctx = arena.ctx
 		
 		if(model.yeeon){
 			var temp = ctx.globalAlpha

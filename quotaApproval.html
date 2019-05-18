@@ -77,7 +77,7 @@ SPLASH!
 
 	<div id="splash" class="banner">
 		<iframe id="splash_iframe" src="splash/splash.html" width="1500" height="400" scrolling="no"></iframe>
-		<img src="img/logo_tetris.png" />
+		<img src="img/logo_quotaApproval.png" />
 	</div>
 
 	</div>
@@ -93,15 +93,15 @@ LOG
 		<div class="words">
 
 			<p>
-				Tetris mode
+				Quota-Approval mode
 			</p>
 
 			<h2>
-				Tetris!
+				Quotas!
 			</h2>
 
 			<p>
-				In tetris mode, you position voters in only one dimension and you use the second dimension to control how broad the candidates are.  Up is broader.
+				In Quota-Approval mode, you position voters in only one dimension and you use the second dimension to control how broad the candidates are.  Up is broader.
 			</p>
 
 		</div>
@@ -111,14 +111,26 @@ LOG
 				<p class="caption-test">
 					Move the candidates and get equal representation for voters.
 				</p>
-				<div id="elect_tetris" class="div-election div-ballot-in-sandbox div-model" scrolling="no">
+				<div id="elect_quotaApproval" class="div-election div-ballot-in-sandbox div-model" scrolling="no">
 				</div>
 				<script>
-					main(loadpreset("elect_tetris"))
+					main(loadpreset("elect_quotaApproval"))
 				</script>
 			</div>
 		</div>
 		<div class="words">
+			<p>
+				The dark bar shows where voters are unrepresented... it's bad.  We want candidates to cover each voter's quota of representation, AKA the dark bar.  The quota is an amount of representation that everyone could have ideally if every voter were represented equally.  I used a gradient-colored bar to show that it is more important to elect a candidate that represents the underrepresented.  The goal is to cover all of the bar, starting with the darker parts of the bar.
+			</p>
+			<p>
+				The quota approval method elects the candidate that reduces the quota the most.  To do this, we use the remaining quota as a weight.  A voter who is already represented has less quota left to count towards the next candidate to elect.  Their vote was already counted.  A candidate they liked was already seated.
+			</p>
+			<p>
+				The light bars that cover each candidate's bars show votes that were already counted.  We don't want to count these votes twice.  So we wash out the color from that part.  Then we count the votes that are still unrepresented.  Most votes wins.
+			</p>
+			<p>
+				
+			</p>
 			<p>Putting it all together, here's a sandbox for you to try out all the different systems and to make your own scenarios:</p>
 		</div>
 

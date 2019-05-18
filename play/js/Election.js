@@ -74,7 +74,7 @@ Election.star = function(model, options){
 	}
 	frontrunners.sort(function(a,b){return tally[b]-tally[a]})
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 	var aWins = 0;
 	var bWins = 0;
 	for(var k=0; k<ballots.length; k++){
@@ -134,7 +134,7 @@ Election.star = function(model, options){
 
 Election.three21 = function(model, options){
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 
 	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"score")
 	
@@ -151,7 +151,7 @@ Election.three21 = function(model, options){
 	var finalists = semifinalists.slice(0,3);
 	finalists.sort(function(a,b){return tallies[0][a]-tallies[0][b]})
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 	var aWins = 0;
 	var bWins = 0;
 	for(var k=0; k<ballots.length; k++){
@@ -270,7 +270,7 @@ Election.condorcet = function(model, options){
 	text += "<span class='small'>";
 	text += "<b>who wins each one-on-one?</b><br>";
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 
 	// Create the WIN tally
 	var tally = {};
@@ -376,7 +376,7 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 		text += "<b>who had the strongest wins, one-on-one?</b><br>";
 	}
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 
 	// Create the WIN tally
 	var tally = {};
@@ -687,7 +687,7 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 		text += "<b>who had the strongest wins, one-on-one?</b><br>";
 	}
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 
 	// Create the WIN tally
 	var tally = {};
@@ -872,7 +872,7 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 		text += "<b>who had the strongest wins, one-on-one?</b><br>";
 	}
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 
 	// Create the WIN tally
 	var tally = {};
@@ -1085,7 +1085,7 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 
 	var text = "<span class='small'>";
 
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 
 	rbvote.setreturnstring() // tell rbvote that we might want return strings (unless we're not doing the sidebar)
 	rbvote.readballots(ballots,model)
@@ -1128,7 +1128,7 @@ Election.rrv = function(model, options){
 	var numreps = 3
 	var maxscore = 5
 	var invmaxscore = 1/maxscore
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 	var ballotweight = []
 	var ballotsum = []
 	for(var i=0; i<ballots.length; i++){
@@ -1185,7 +1185,7 @@ Election.rrv = function(model, options){
 			text += "<br><b>score as %:</b><br>";
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
-				//text += _icon(c)+"'s score: "+((tally[c]/model.getTotalVoters()).toFixed(2))+" out of 5.00<br>";
+				//text += _icon(c)+"'s score: "+((tally[c]/_getTotalVoters(model)).toFixed(2))+" out of 5.00<br>";
 				text += _icon(c)+": "+_percentFormat(model, tally[c] / 5)
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
@@ -1315,7 +1315,7 @@ Election.irv = function(model, options){
 		// Do they have more than 50%?
 		var winners = _countWinner(tally);
 		var winner = winners[0];
-		var ratio = tally[winner]/model.getTotalVoters();
+		var ratio = tally[winner]/_getTotalVoters(model);
 		if(ratio>0.5){
 			if (winners.length >= 2) {	// won't happen bc ratio > .5	
 				resolved = "tie"; 
@@ -1342,7 +1342,7 @@ Election.irv = function(model, options){
 			loser = losers[li];
 			if (options.sidebar) text += "eliminate loser, "+_icon(loser)+".<br>";
 			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
-			var ballots = model.getBallots();
+			var ballots = _getBallots(model);
 			for(var i=0; i<ballots.length; i++){
 				var rank = ballots[i].rank;
 				rank.splice(rank.indexOf(loser), 1); // REMOVE THE LOSER
@@ -1413,7 +1413,7 @@ Election.stv = function(model, options){
 	}
 	var loserslist = []
 	var winnerslist = []
-	var ballots = model.getBallots();	
+	var ballots = _getBallots(model);	
 	var ballotweight = []
 	for(var i=0; i<ballots.length; i++){
 		ballotweight[i] = 1
@@ -1447,7 +1447,7 @@ Election.stv = function(model, options){
 		// Do they have more than 50%?
 		var winners = _countWinner(tally);
 		var winner = winners[0];  // there needs to be a better tiebreaker here. TODO
-		var ratio = tally[winner]/model.getTotalVoters();
+		var ratio = tally[winner]/_getTotalVoters(model);
 		if(ratio>quota){
 			// if (winners.length >= 2) {	// won't happen bc ratio > .5	
 			// 	resolved = "tie"; 
@@ -1460,7 +1460,7 @@ Election.stv = function(model, options){
 			text += "select winner, "+_icon(winner)+".<br><br>";
 			
 			candidates.splice(candidates.indexOf(winner), 1); // remove from candidates...
-			var ballots = model.getBallots();
+			var ballots = _getBallots(model);
 			for(var i=0; i<ballots.length; i++){
 				var rank = ballots[i].rank;
 				if (0 == rank.indexOf(winner)) {
@@ -1495,7 +1495,7 @@ Election.stv = function(model, options){
 			loser = losers[li];
 			text += "eliminate loser, "+_icon(loser)+".<br>";
 			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
-			var ballots = model.getBallots();
+			var ballots = _getBallots(model);
 			for(var i=0; i<ballots.length; i++){
 				var rank = ballots[i].rank;
 				rank.splice(rank.indexOf(loser), 1); // REMOVE THE LOSER
@@ -1544,6 +1544,122 @@ Election.stv = function(model, options){
 	}
 	return result;
 };
+
+Election.quotaApproval = function(model,options) {
+
+	var v = _getVoterArray(model)
+
+	var seats = 3
+	var winners = []
+	var winnersIndexes = []
+	
+	if (options.sidebar) {
+		var text = ""
+		var history = {}
+		history.rounds = []
+		history.v = v
+		history.seats = seats
+		model.round = -1
+	}
+
+	var q = []
+	for (var i=0; i < v.length; i++) {
+		q.push(1)
+	}
+	for (var n = 0; n < model.candidates.length; n++) {
+		var tally = []
+		for (var k = 0; k < model.candidates.length; k++) {
+			tally[k] = 0
+		}
+		for (var i = 0; i < v.length; i++) {
+			var b = v[i].b
+			var quota = Math.max(q[i],0)
+			
+			for (var k = 0; k < b.length; k++) {
+				if (winnersIndexes.includes(k)) continue
+				if (b[k] == 1) {
+					// add up the number of votes
+					tally[k] += quota
+				}
+			}
+		}
+		if(options.sidebar) {
+			text += '<div id="round' + (n+1) + '" class="round">'
+			text += "Round " + (n+1);
+			text += "<br>";
+			for(var i=0; i<model.candidates.length; i++){
+				var c = model.candidates[i].id;
+				text += _icon(c)+" got "+_percentFormat(model, tally[i])+"<br>";
+			}
+			text += "<br>";
+			text += '</div>'
+		}
+		// who won this round?
+		var roundWinners = _countWinner(tally) // need to exclude twice-winners
+		roundWinners = roundWinners.map(x => Number(x))
+		roundWinners.forEach(x => winnersIndexes.push(Number(x)))
+		roundWinnersId = roundWinners.map( x => model.candidates[x].id)
+		roundWinnersId.forEach(x => winners.push(x))
+
+		// subtract off the quota
+		for (var i=0; i < roundWinners.length; i++) {
+			var winnerIndex = roundWinners[i]
+			var sum = tally[winnerIndex]
+			var rep = v.length / sum / seats
+			for (var k=0; k < v.length; k++) { 
+				var b = v[k].b
+				if (b[winnerIndex]) { // if this voter voted for this candidate
+					q[k] -= rep // we could just multiply by b[wI]
+				}
+			}
+		}
+		if (options.sidebar) {
+			var roundHistory = {
+				winners: roundWinners,
+				q:q,
+				tally:tally
+			}
+			history.rounds.push(roundHistory)
+		}
+		if (winners.length >= seats) break
+	}
+
+	
+	if(options.sidebar) {
+		text += '<div id="round' + (n+2) + '" class="round">'
+		text += "Final Winners:";
+		text += "<br>";
+		for(var i=0; i<winners.length; i++){
+			var c = winners[i]
+			text += _icon(c)+" ";
+		}
+		text += "<br>";
+		text += "<br>";
+		text += '</div>'
+	}
+	
+	var result = _result(winners,model)
+	if (options.sidebar) {
+		result.history = history
+		
+		result.text = text
+
+		result.dontredocaption = true // we have an interactive caption
+		model.caption.innerHTML = text
+		// attach caption hover functions
+		for (var i=0; i < n+2; i++) {
+			var cbDraw = function(i) { // a function is returned, so that i has a new scope
+				return function() {
+					model.round = i+1
+					model.draw()
+					model.round = -1
+				}
+			}
+			model.caption.querySelector("#round" + (i+1)).addEventListener("mouseover", cbDraw(i))
+		}
+	}
+	return result
+}
 
 Election.toptwo = function(model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 
@@ -1778,6 +1894,25 @@ Election.plurality = function(model, options){
 	return result
 };
 
+
+// HELPERS:
+function _getBallots(model){
+	var ballots = [];
+	for(var i=0; i<model.voters.length; i++){
+		var voter = model.voters[i];
+		ballots = ballots.concat(voter.ballots);
+	}
+	return ballots;
+};
+function _getTotalVoters(model){
+	var count = 0;
+	for(var i=0; i<model.voters.length; i++){
+		var voter = model.voters[i];
+		count += voter.points.length;
+	}
+	return count;
+};
+
 var doPollAndUpdateBallots = function(model,options,electiontype){
 
 	// check to see if there is a need for checking frontrunners
@@ -1803,7 +1938,7 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 			// this strategy could be further refined by voting for people who will be eliminated but who we like better
 		} else {
 			polltext += "<b>polling for viable candidates: </b><br>";
-			//polltext += "<b>(score > " + (100*threshold/model.getTotalVoters()).toFixed(0) + " = half max)</b><br>"
+			//polltext += "<b>(score > " + (100*threshold/_getTotalVoters(model)).toFixed(0) + " = half max)</b><br>"
 		}
 	}
 	for (var k=0;k<5;k++) { // do the polling many times
@@ -1851,7 +1986,7 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 				var voter = model.voters[i];
 				voter.update();
 			}
-			var ballots = model.getBallots() // kinda double effort here but okay
+			var ballots = _getBallots(model) // kinda double effort here but okay
 			head2head = {}
 			// For each combination... who's the better ranking?
 			for(var i=0; i<model.candidates.length; i++){
@@ -1933,7 +2068,7 @@ var _tally = function(model, tallyFunc){
 	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
 
 	// Count 'em up
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 	for(var i=0; i<ballots.length; i++){
 		tallyFunc(tally, ballots[i]);
 	}
@@ -2007,7 +2142,7 @@ var _tally_i = function(model, tallyFunc){
 	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
 
 	// Count 'em up
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 	for(var i=0; i<ballots.length; i++){
 		tallyFunc(tally, ballots[i], i);
 	}
@@ -2028,7 +2163,7 @@ var _tallies = function(model, levels){
 	}
 
 	// Count 'em up
-	var ballots = model.getBallots();
+	var ballots = _getBallots(model);
 	for(var i=0; i<ballots.length; i++){
 		var ballot = ballots[i]
 		for(var candidate in ballot){
@@ -2129,12 +2264,6 @@ function _result(winners,model) {
 	return result
 }
 
-function _drawResult(model){
-	if(model.result.text) model.caption.innerHTML = model.result.text;
-	model.canvas.style.borderColor = model.result.color;
-	if (model.yeeon) model.canvas.style.borderColor = "#fff"
-	return
-}
 
 function _tietext(winners) {
 	text = "";
@@ -2152,7 +2281,7 @@ function _tietext(winners) {
 }
 
 function _percentFormat(model,count) {
-	var a = "" + (100*count/(model.getTotalVoters())).toFixed(0)
+	var a = "" + (100*count/(_getTotalVoters(model))).toFixed(0)
 	var dopadding = false
 	if (dopadding) {
 		for (var i = a.length; i < 2; i ++) {
@@ -2173,4 +2302,270 @@ function _padAfter(padding,a){
 		a = a + "&nbsp;&nbsp;"
 	}	
 	return a
+}
+
+function _drawBars(arena, model, round) {
+	// sort the voters
+	// according to x
+
+	// if (model.ballotType.name != "ApprovalBallot") return
+	if (model.system != "QuotaApproval") return
+
+	var v = _getVoterArray(model)
+	v.sort(function(a,b){return a.x - b.x})
+
+	// for votes cast, draw rectangles
+	var lineHeight = 6
+	var widthRectangle = arena.canvas.width / v.length
+	var heightRectangle = Math.min(300 / model.candidates.length, 300/10)
+	
+	if (0) { // do later
+		for (var i = 0; i < v.length; i++) {
+			var b = v[i].b
+			for (var k = 0; k < b.length; k++) {
+				if (b[k] == 1) {
+
+					var left = Math.round(i * widthRectangle)
+					var right = Math.round((i+1) * widthRectangle)
+
+					var top = Math.round((k+1/2) * heightRectangle - lineHeight / 2)
+					var bottom = Math.round((k+1/2) * heightRectangle + lineHeight / 2)
+					
+					var color = model.candidates[k].fill
+					arena.ctx.fillStyle = color
+					arena.ctx.fillRect(left,top,right-left,bottom-top)
+					arena.ctx.fill()
+				}
+			}
+		}
+	}
+
+
+	heightRectangle = 100
+
+
+	// draw background for quota and build
+	var base = 600
+	var left = 0
+	var right = arena.canvas.width
+	var top = base - heightRectangle
+	var bottom = base
+	if (0) {
+		var color = "#492"
+		arena.ctx.fillStyle = color
+	} else {
+		var g = arena.ctx.createLinearGradient(0,top,0,bottom)
+		g.addColorStop(0,"#ccc")
+		g.addColorStop(1,"black")
+		arena.ctx.fillStyle = g
+	}
+	arena.ctx.fillRect(left,top,right-left,bottom-top)
+	//arena.ctx.fill()
+
+
+	
+	// calculate quota and build
+	var w = model.result.winners
+	var seats = 3//w.length // how many seats there are to fill.... just count the number of winners
+	var q = []
+	var build = []
+	for (var i=0; i < v.length; i++) {
+		q.push(1)
+		build.push(0)
+	}
+
+	var baralpha = .8
+	arena.ctx.globalAlpha = baralpha
+
+	for (var r=0; (round == -1 && r < model.result.history.rounds.length) || (round > -1 && r < round-1); r++) {
+		var w = model.result.history.rounds[r].winners
+		for (var i=0; i < w.length; i++) {
+			// how many people voted for each winner?
+			var winnerIndex = w[i]
+			var sum = 0
+			for (var k=0; k < v.length; k++) {
+				var b = v[k].b
+				sum += b[winnerIndex] // add the vote to the candidate
+			}
+			var rep = v.length / sum / seats
+
+			for (var k=0; k < v.length; k++) { // subtract the winners from each voter's quota
+				var b = v[k].b
+				if (b[winnerIndex]) {
+					// draw the build
+					var left = Math.round(k * widthRectangle)
+					var right = Math.round((k+1) * widthRectangle)
+					var top = Math.round(base-(build[k] + rep) * heightRectangle)
+					var bottom = Math.round(base-build[k] * heightRectangle)
+					var bucket = Math.round(base- heightRectangle) // where the shadows start
+
+					// white background for bar
+					arena.ctx.globalAlpha = 1
+					arena.ctx.fillStyle = "white"
+					arena.ctx.fillRect(left,top,right-left,bottom-top)
+					arena.ctx.fill()
+					arena.ctx.globalAlpha = baralpha
+
+					var color = model.candidates[winnerIndex].fill
+					arena.ctx.fillStyle = color
+
+					var greyedout = .2
+					if (bottom > bucket) { // bottom is in bucket
+						if (top < bucket) { // top is out of bucket
+							arena.ctx.fillRect(left,bucket,right-left,bottom-bucket)
+							arena.ctx.fill()
+							arena.ctx.globalAlpha = greyedout
+							arena.ctx.fillRect(left,top,right-left,bucket-top)
+							arena.ctx.fill()
+						} else { // entirely in bucket
+							arena.ctx.fillRect(left,top,right-left,bottom-top)
+							arena.ctx.fill()
+						}
+					} else { // entirely out of bucket
+						arena.ctx.globalAlpha = greyedout
+						arena.ctx.fillRect(left,top,right-left,bottom-top)
+						arena.ctx.fill()
+					}
+					arena.ctx.globalAlpha = baralpha
+
+					// calculate the next step
+					q[k] -= rep
+					build[k] += rep
+				}
+			}
+		}
+	}
+			
+	arena.ctx.globalAlpha = 1
+
+	if (0) {
+		// draw the quota
+		for (var i=0; i < q.length; i++) {
+			var quota = Math.max(q[i],0)
+			var left = Math.round(i * widthRectangle)
+			var right = Math.round((i+1) * widthRectangle)
+			var top = Math.round(300 - quota * heightRectangle)
+			var bottom = Math.round(300)
+			arena.ctx.fillStyle = "#ccc"
+			arena.ctx.fillRect(left,top,right-left,bottom-top)
+			arena.ctx.fill()
+
+			// draw the quota for each person
+			for (var k=0; k < model.candidates.length; k++) {
+				var c = model.candidates[k]
+				var color = c.fill
+			}
+		}
+	}
+
+	var pos = 170
+	heightRectangle = 30	
+	for (var i = 0; i < v.length; i++) {
+		var b = v[i].b
+		var quota = Math.max(q[i],0)
+		for (var k = 0; k < b.length; k++) {
+			if (b[k] == 1) {
+				var left = Math.round(i * widthRectangle)
+				var right = Math.round((i+1) * widthRectangle)
+
+				var middle = Math.round(pos+(k+quota) * heightRectangle)
+				var middle2 = Math.round(pos+(k+1-quota) * heightRectangle)
+				var top = Math.round(pos+(k) * heightRectangle)
+				var bottom = Math.round(pos+(k+1) * heightRectangle)
+				
+				var color = model.candidates[k].fill
+				arena.ctx.fillStyle = color
+				arena.ctx.fillRect(left,top,right-left,bottom-top)
+				arena.ctx.fill()
+				
+				arena.ctx.globalAlpha = .7
+				arena.ctx.fillStyle = "white"
+				if (1) {
+					arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+				} else {
+					arena.ctx.fillRect(left,top,right-left,middle2-top)
+				}
+								
+				arena.ctx.globalAlpha = 1
+			}
+		}
+	}
+
+	// labels
+	_drawStroked("Votes",70,150,40,arena.ctx)
+	_drawStroked("Quota",70,480,40,arena.ctx)
+	
+}
+
+
+
+function _getVoterArray(model) {
+	// returns an array of all the voters and their distinguishing info
+
+	var vs = []
+	for (var i = 0; i < model.voters.length; i++) {
+		var voterGroup = model.voters[i]
+		var points = voterGroup.points
+		var xGroup = voterGroup.x
+		var yGroup = voterGroup.y
+		var ballots = voterGroup.ballots
+		for (var k = 0; k < points.length; k++) {
+			var v = {
+				x:  points[k][0] + xGroup,
+				y:  points[k][1] + yGroup,
+				b: []
+			}
+			for (var m = 0; m < model.candidates.length; m++) {
+				v.b[m] = 0 // zero out all the counts
+			}
+			
+		if (model.ballotType.name != "ApprovalBallot") continue // not yet fully functional TODO
+			var ballot = ballots[k].approved
+			for (var n = 0; n < ballot.length; n++) {
+				var id = ballot[n]
+				var index = model.candidatesById[id].i
+				v.b[index] = 1
+			}
+			vs.push(v)
+		}
+	}
+	return vs
+}
+
+
+function _percentileToX(percentile,model) {
+	var v = model.sortedVoters
+	if (v.length == 0) return 0
+	var indexPercentile = (v.length-1) * percentile/100 // fine tuning TODO
+	// linear interpolation
+	var indexLeft = Math.floor(indexPercentile)
+	var frac = indexPercentile - indexLeft
+	var indexRight = indexLeft + 1
+	indexRight = Math.min(indexRight,v.length-1)
+	var left = v[indexLeft].x
+	var right = v[indexRight].x
+	var xNew = left + frac * (right - left)
+	return xNew
+}
+
+function _xToPercentile(x,model) {
+	var v = model.sortedVoters
+	if (v.length == 0) return 0
+	for (var k = 0; k < v.length; k++) {
+		if (x < v[k].x) break
+	}
+	var iLeft = k - 1
+	iLeft = Math.max(iLeft,0)
+	var iRight = k
+	iRight = Math.min(iRight,v.length-1)
+	var left = v[iLeft].x
+	var right = v[iRight].x
+	if (right == left) {
+		var frac = 1
+	} else {
+		var frac = (x - left) / (right - left)
+	}
+	var indexP = iLeft + frac * (iRight - iLeft)
+	var percentile =  indexP / v.length * 100
+	return percentile
 }

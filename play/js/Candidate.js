@@ -2,11 +2,13 @@ function Candidate(model){
 
 	var self = this;
 	Draggable.call(self, model);
+	
 
 	// CONFIGURE DEFAULTS
 	self.isCandidate = true
 	self.id = 'square'
 	self.size = 40;
+	self.selected = false
 
 	self.init = function () {
 
@@ -19,19 +21,22 @@ function Candidate(model){
 	}
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
-	self.drawTie = function(ctx) {
+	self.drawTie = function(ctx,arena) {
 		ctx.textAlign = "center";
-		_drawStroked("TIE",self.x*2,self.y*2-35,40,ctx);
+		var p = arena.modelToArena(self)
+		_drawStroked("TIE",p.x*2,p.y*2-35,40,ctx);
 	}	
-	self.drawWin = function(ctx) {
+	self.drawWin = function(ctx,arena) {
 		ctx.textAlign = "center";
-		_drawStroked("WIN",self.x*2,self.y*2-35,40,ctx);
+		var p = arena.modelToArena(self)
+		_drawStroked("WIN",p.x*2,p.y*2-35,40,ctx);
 	}	
-	self.draw = function(ctx){
+	self.draw = function(ctx,arena){
 
 		// RETINA
-		var x = self.x*2;
-		var y = self.y*2;
+		var p = arena.modelToArena(self)
+		var x = p.x*2;
+		var y = p.y*2;
 		var size = self.size*2;
 
 		// Draw image instead!
@@ -41,6 +46,9 @@ function Candidate(model){
 		self.drawBackAnnotation(x,y,ctx)
 		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		self.drawAnnotation(x,y,ctx)
+		if (self.selected) {
+			_drawStroked("SELECTED",x,y-5,40,ctx);			
+		}
 		if(self.highlight) ctx.globalAlpha = temp
 		//if(self.highlight) ctx.filter = "brightness(100%)"
 

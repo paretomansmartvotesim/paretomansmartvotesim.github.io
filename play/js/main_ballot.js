@@ -11,7 +11,7 @@ function main_ballot(preset){
 	config.showChoiceOfFrontrunners = config.showChoiceOfFrontrunners || false
 	config.doStarStrategy = config.doStarStrategy || false
 	config.theme = config.theme || "Default"
-	config.mode = config.mode || "Default"
+	config.dimensions = config.dimensions || "2D"
 
 	// grandfather name for firstStrategy used only for main_ballot
 	if (config.strategy != undefined) config.firstStrategy = config.strategy
@@ -66,8 +66,8 @@ function main_ballot(preset){
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
 			model.doStarStrategy = config.doStarStrategy;
 			model.theme = config.theme
-			model.mode = config.mode
-			if (model.mode == "tetris") model.voters[0].y = model.yDimOne  // not tested yet
+			model.dimensions = config.dimensions
+			if (model.dimensions == "1D+B") model.voters[0].y = model.yDimOne  // not tested yet
 			// INIT
 			model.initMODEL()
 			model.voters[0].init()

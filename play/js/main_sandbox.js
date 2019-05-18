@@ -48,8 +48,8 @@ function Sandbox(modelName) {
         arena_size: 300,
         median_mean: 1,
         theme: "Default",
-        mode: "Default",
         utility_shape: "linear",
+        dimensions: "2D",
         arena_border: 2,
         preFrontrunnerIds: ["square","triangle"],
         autoPoll: "Manual",
@@ -263,7 +263,7 @@ function Sandbox(modelName) {
         model.voterCenter = new VoterCenter(model)
 
         // PRE CONFIGURE
-        model.mode = config.mode
+        model.dimensions = config.dimensions
         
         // CONFIGURE
             // expand config to calculate some values to add to the model			
@@ -414,7 +414,8 @@ function Sandbox(modelName) {
             {name:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
             {name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
             {name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
-            {name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv}
+            {name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv},
+            {name:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval}
         ];
         self.listByName = function() {
             var votingSystem = self.list.filter(function(system){
@@ -441,6 +442,11 @@ function Sandbox(modelName) {
             // CONFIGURE
             self.configure()
             // UPDATE
+            
+            // TODO: work this out so that the voters get re initialized in the correct place
+            ui.menu.dimensions.onChoose({name:model.dimensions}) 
+            ui.menu.dimensions.select()
+
             model.update();
             menu_update()
         };
@@ -454,6 +460,13 @@ function Sandbox(modelName) {
             var s = self.listByName()
             model.election = s.election
             model.system = config.system;
+            if (config.system == "QuotaApproval") {
+                model.tarena.canvas.hidden = false
+                model.dimensions = "1D+B"
+            } else {
+                model.tarena.canvas.hidden = true
+                model.dimensions = "2D"
+            }
             model.voterType = s.voter // probably don't need
             model.ballotType = window[s.ballot];
             model.voters.map(v=>{
@@ -640,7 +653,7 @@ function Sandbox(modelName) {
                     voterPositions = [[65,150],[150,150],[235,150]];
 
                 }
-                if (model.mode == "tetris") {
+                if (model.dimensions == "1D+B") {
                     for(var i=0; i<num; i++){ 
                         voterPositions[i][1] = model.yDimOne
                     }
@@ -661,7 +674,7 @@ function Sandbox(modelName) {
                 }
             }
                 
-            if (model.mode == "tetris") {
+            if (model.dimensions == "1D+B") {
                 for(var i=0; i<num; i++){ 
                     model.voters[i].y = model.yDimOne
                 }
@@ -870,10 +883,11 @@ function Sandbox(modelName) {
                     angle += Math.TAU/num;
                 }
             }
-            if (model.mode == "tetris") {
-                var yShrink = 1 - model.yDimOne/config.arena_size
+            if (model.dimensions == "1D+B") {
+                var yStart = model.yDimOne + model.yDimBuffer
+                var yShrink = 1 - yStart/config.arena_size
                 for(var i=0; i<num; i++){
-                    model.candidates[i].y = model.yDimOne + model.candidates[i].y * yShrink
+                    model.candidates[i].y = yStart + model.candidates[i].y * yShrink
                 }
             }
         }
@@ -1714,6 +1728,49 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
+    ui.menu.dimensions = new function () {
+        var self = this
+        // self.name = dimensions
+        self.list = [
+            {name:"2D",realname:"Two Position Dimensions",margin:4},
+            {name:"1D+B",realname:"One Position Dimension Horizontally, Plus Broadness in the Vertical Dimension", margin:4},
+            {name:"1D", realname:"One Dimension Horizontally, Vertical Doesn't Matter"}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.dimensions = data.name
+            // CONFIGURE
+            self.configure()
+            // INIT (LOADER)	
+            model.initDOM()
+            // INIT
+            for (var i=0; i<model.voters.length; i++) {
+                model.voters[i].init()
+            }
+            for (var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            // UPDATE
+            model.update()
+            // _objF(ui.arena,"update")
+            // ui.menu.spread_factor_voters.select()
+        };
+        self.configure = function() {
+            model.dimensions = config.dimensions
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.dimensions);
+        }
+        self.choose = new ButtonGroup({
+            label: "Arena Dimensions:",
+            width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.choose.dom.hidden = true
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+    }
+
     ui.menu.utility_shape = new function () {
         var self = this
         // self.name = utility_shape
@@ -1766,6 +1823,7 @@ function Sandbox(modelName) {
                 ui.menu.arena_size,
                 ui.menu.median_mean,
                 ui.menu.theme,
+                ui.menu.dimensions,
                 ui.menu.utility_shape,
                 ui.menu.gearoff
             ]

@@ -13,14 +13,15 @@ function Model(modelName){
 	// CONSTANTS
 	
 	self.yDimOne = 100
-	self.yDimBuffer = 50
+	self.yDimBuffer = 10
 
 	// CREATE DATA STRUCTURE
 	self.voters = [];
 	self.candidates = [];
 	self.dom = document.createElement("div");
 	self.id = modelName
-
+	self.arena = new Arena("arena",self)
+	self.tarena = new Arena("tarena",self)
 	
 	// CONFIGURE DEFAULTS
 	// helper
@@ -66,9 +67,9 @@ function Model(modelName){
 	self.yee = new Yee(self);
 	
 	self.createDOM = function() {
-		self.canvas = document.createElement("canvas");
-		self.canvas.setAttribute("class", "interactive");
-		self.ctx = self.canvas.getContext("2d");
+		self.arena.createDOM()
+		self.tarena.createDOM()
+		self.tarena.canvas.hidden = true
 
 		// My DOM: title + canvas + caption
 		self.dom = document.createElement("div");
@@ -79,42 +80,31 @@ function Model(modelName){
 		self.caption.id = "caption";
 
 		self.dom.appendChild(self.title);
-		self.dom.appendChild(self.canvas);
+		self.dom.appendChild(self.arena.canvas);
+		self.dom.appendChild(self.tarena.canvas);
 		self.dom.appendChild(self.caption);
-
-		// MAH MOUSE
-		self.mouse = new Mouse(self.id, self.canvas);	
-		self.draggableManager = new DraggableManager(self);
 	}
 
 	self.initDOM = function() {
-		// RETINA canvas, whatever.
-		self.canvas.width = self.canvas.height = self.size*2; // retina!
-		self.canvas.style.width = self.canvas.style.height = self.size+"px";
-		self.canvas.style.borderWidth = self.border+"px";
-		//self.canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
+		self.arena.initDOM()
+		self.tarena.initDOM()
 		
 		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
 		self.caption.style.width = self.dom.style.width;
 	}
 
 	self.initMODEL = function() {
-		// Draggables
-		self.draggables = [];
 
-		// Candidates & Voter(s)
+		self.arena.initARENA()
+		self.tarena.initARENA()
+		
 		self.candidatesById = {};
 		for (var i=0; i<self.candidates.length; i++) {
 			var c = self.candidates[i]
 			self.candidatesById[c.id] = c;
-			self.draggables.push(c);
+			c.i = i
 		}
-		for (var i=0; i<self.voters.length; i++) {
-			var v = self.voters[i]
-			self.draggables.push(v);
-		}
-		if(self.voterCenter) self.draggables.push(self.voterCenter)
-		
+
 		var expYeeObject = function() {
 			// Yee diagram
 			if (self.kindayee == "can") {
@@ -151,33 +141,45 @@ function Model(modelName){
 	// Update!
 	self.onUpdate = function(){}; // TO IMPLEMENT
 	self.update = function(){
-
-		// Move the one that's being dragged, if any
-		var xMove = self.mouse.x
-		var yMove = self.mouse.y
-		if(self.mouse.dragging){
-			if (self.mode == "tetris") {
-				if (self.mouse.dragging.isCandidate) { // move candidate in the candidate region
-					yMove = Math.max(self.yDimOne + self.yDimBuffer,yMove)
-				} else { // This is a voter
-					//yMove = Math.min(50,yMove)
-					yMove = self.yDimOne
-				}
-			}
-			self.mouse.dragging.moveTo(xMove,yMove);
-		}
+		self.arena.update();
+		self.tarena.update();
 		
 		// get the ballots
 		for(var i=0; i<self.voters.length; i++){
 			var voter = self.voters[i];
 			voter.update();
 		}
+		// helper for later
+		var v = _getVoterArray(self)
+		self.sortedVoters = v.sort(function(a,b){return a.x - b.x})
+
 		for(var i=0; i<self.candidates.length; i++){
 			var c = self.candidates[i];
 			c.update();
 		}
 
-		self.result = self.election(self,self.optionsForElection);
+		var selected = {}
+		selected.winners = []
+		selected.colors = []
+		for (var i=0; i < self.candidates.length; i++) {
+			var c = self.candidates[i]
+			if (c.selected) {
+				selected.winners.push(c.id)
+				selected.colors.push(c.fill)
+			}
+		}
+		if (selected.winners.length == 1) {
+			selected.winner = selected.winners[0]
+			selected.color = selected.colors[0]
+		} else if (selected.winners.length > 1) {
+			selected.winner = selected.winners[0]
+			selected.color = "#ccc"
+		}
+		if (selected.winners.length > 0) {
+			self.result = selected
+		} else {
+			self.result = self.election(self,self.optionsForElection);
+		}
 
 		// do the center voter thing
 		if (typeof self.voterCenter !== 'undefined') { // does the voterCenter exist?  If so then calculate it.
@@ -185,7 +187,7 @@ function Model(modelName){
 		}
 		
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		if (self.yeeon && self.mouse.dragging != self.yeeobject) self.yee.calculate()
+		if (self.yeeon && self.arena.mouse.dragging != self.yeeobject && self.tarena.mouse.dragging != self.yeeobject) self.yee.calculate()
 		
 		self.draw()
 
@@ -199,13 +201,8 @@ function Model(modelName){
 	self.onDraw = function(){}; // TO IMPLEMENT
 	self.draw = function() {
 		
-		// Clear it all!
-		self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
-
-		if (self.result) _drawResult(self)
-
-		// DRAW 'EM ALL.
-		// Draw voters' BG first, then candidates, then voters.
+		self.arena.clear()
+		self.tarena.clear()
 
 		// Draw axes
 		//var background = new Image();
@@ -213,68 +210,26 @@ function Model(modelName){
 		//self.ctx.drawImage(background,0,0);
 		self.yee.drawBackground()
 		
-		// reset annotations
-		for(var i=0; i<self.draggables.length; i++){
-			var draggable = self.draggables[i];
-			draggable.drawAnnotation = (function(){});
-			draggable.drawBackAnnotation = (function(){});
-		}
+		_drawBars(self.tarena,self,self.round)
 
-		if(self.yeeobject) self.yeeobject.drawBackAnnotation = self.yee.drawYeeGuyBackground
-		if(self.yeeobject) self.yeeobject.drawAnnotation = self.yee.drawYeeAnnotation
-		
-		//set annotations
+		if (self.dimensions == "1D+B") self.arena.drawHorizontal()
+
+		self.arena.draw()
+		self.tarena.draw()
 
 		
-		for(var i=0; i<self.voters.length; i++){
-			var voter = self.voters[i];
-			voter.draw(self.ctx);
-		}
-		for(var i=0; i<self.candidates.length; i++){
-			var c = self.candidates[i];
-			c.draw(self.ctx);
-		}
-
-		//voterCenter.update()
-		if ((typeof self.voterCenter !== 'undefined') && self.getTotalVoters() != 1) {
-			self.voterCenter.draw(self.ctx)
-		}
-
-		// draw the Yee object last so it is easy to see.
-		if (self.yeeon && self.yeeobject) self.yeeobject.draw(self.ctx)
-		
-		// draw text next to the winners
-		if(self.result && self.result.winners) {
-			var objWinners = self.result.winners.map(x => self.candidatesById[x])
-			if (objWinners.length > 1) {
-				for (i in objWinners) {
-					objWinners[i].drawTie(self.ctx)
+		if (self.result) {
+			if(self.result.text) {
+				if (self.result.dontredocaption != true) {
+					self.caption.innerHTML = self.result.text;
 				}
-			} else {
-				objWinners[0].drawWin(self.ctx)
 			}
 		}
+		
 		self.onDraw();
 
 	}
 
-	// HELPERS:
-	self.getBallots = function(){
-		var ballots = [];
-		for(var i=0; i<self.voters.length; i++){
-			var voter = self.voters[i];
-			ballots = ballots.concat(voter.ballots);
-		}
-		return ballots;
-	};
-	self.getTotalVoters = function(){
-		var count = 0;
-		for(var i=0; i<self.voters.length; i++){
-			var voter = self.voters[i];
-			count += voter.points.length;
-		}
-		return count;
-	};
 
 	var finding = false
 	var seed = 1
@@ -346,8 +301,8 @@ function Model(modelName){
 			
 				for(var i=0; i<self.candidates.length; i++){
 					var c = self.candidates[i];
-					var x = c.x - self.canvas.width * .25
-					var y = c.y - self.canvas.height * .25
+					var x = c.x - self.arena.canvas.width * .25
+					var y = c.y - self.arena.canvas.height * .25
 			
 					var lenC = Math.sqrt(x**2 + y**2)
 					bounce[i] = {
@@ -359,7 +314,7 @@ function Model(modelName){
 			var speed = 10
 			for(var i=0; i<self.candidates.length; i++){
 				var c = self.candidates[i];
-				c.moveTo( c.x + bounce[i].x * speed, c.y + bounce[i].y * speed)
+				c.moveTo( c.x + bounce[i].x * speed, c.y + bounce[i].y * speed,self.arena)
 				// r = Math.sqrt(c.x**2 + c.y**2)
 				// if (r > modelName.size * .5) {
 				// 	// reverse the radial component of the bounce
@@ -367,8 +322,8 @@ function Model(modelName){
 				// 	c.x = r * theta_approx
 				// 	c.y = r * 
 				// }
-				if (c.x < 0 || c.x > self.canvas.width * .5) bounce[i].x = - bounce[i].x
-				if (c.y < 0 || c.y > self.canvas.height * .5) bounce[i].y = - bounce[i].y
+				if (c.x < 0 || c.x > self.arena.canvas.width * .5) bounce[i].x = - bounce[i].x
+				if (c.y < 0 || c.y > self.arena.canvas.height * .5) bounce[i].y = - bounce[i].y
 			}
 			// radial
 		
@@ -376,3 +331,184 @@ function Model(modelName){
 	}
 };
 
+function Arena(arenaName, model) {
+	var self = this
+	self.id = arenaName
+	
+	self.createDOM = function() {
+		self.canvas = document.createElement("canvas");
+		self.canvas.setAttribute("class", "interactive");
+		self.ctx = self.canvas.getContext("2d");
+		self.mouse = new Mouse(self.id, self.canvas);	// MAH MOUSE
+		// if (arenaName == "arena") self.draggableManager = new DraggableManager(self,model); // only allow dragging for the main arena... for now.. TODO
+		self.draggableManager = new DraggableManager(self,model); 
+	}
+	self.initDOM = function() {
+		// RETINA canvas, whatever.
+		self.canvas.width = self.canvas.height = model.size*2; // retina!
+		self.canvas.style.width = self.canvas.style.height = model.size+"px";
+		self.canvas.style.borderWidth = model.border+"px";
+		//self.canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
+	}
+
+	self.initARENA = function() {
+
+		// Draggable candidates and voters
+		self.draggables = [];
+		for (var i=0; i<model.candidates.length; i++) {
+			var c = model.candidates[i]
+			self.draggables.push(c);
+		}
+		for (var i=0; i<model.voters.length; i++) {
+			var v = model.voters[i]
+			self.draggables.push(v);
+		}
+		if(model.voterCenter) self.draggables.push(model.voterCenter)
+	}
+
+		
+	self.modelToArena = function(d) {
+		if (arenaName == "tarena") {
+			var xP = _xToPercentile(d.x,model) / 100 * (self.canvas.width/2)
+			// return {x:xP,y:15*d.i+7} // each candidate has his own track
+			return {x:xP,y:15+20+d.i*0}
+		}
+		return d
+	}
+
+	self.arenaToModel = function(d,s) { // d is the new coordinate and s is the old model object
+		if (arenaName == "tarena") {
+			var percentile = d.x/(self.canvas.width/2) * 100
+			percentile = Math.min(100,percentile)
+			percentile = Math.max(0,percentile) // TODO: figure out why I would get a mouse at a negative x
+			var x = _percentileToX(percentile, model)
+			return {x:x,y:s.y}
+		}
+		return d
+	}
+
+	self.update = function(){
+		// Move the one that's being dragged, if any
+		if (arenaName == "arena") {
+			if(self.mouse.dragging){
+				self.mouse.dragging.moveTo(self.mouse.x,self.mouse.y,self);
+				if (model.dimensions == "1D+B") {
+					// apply limits to movement
+					var p = self.arenaToModel(self.mouse,self.mouse.dragging)
+					var yMove = p.y	
+					var offY = self.mouse.dragging.offY
+					var newY = yMove + offY
+					var limYc = model.yDimOne + model.yDimBuffer
+					var limYv = model.yDimOne
+					if (self.mouse.dragging.isCandidate) { // move candidate in the candidate region
+						if (newY < limYc){
+							self.mouse.dragging.y = limYc
+						}
+					} else { // This is a voter
+						// self.mouse.dragging.y = Math.min(50,yMove)
+						if (1 || newY > limYv){
+							self.mouse.dragging.y = limYv
+						}
+					}
+				}
+			}
+		} else {
+			// Move the one that's being dragged, if any
+			if(self.mouse.dragging){
+	
+				// find percentile that the mouse is in
+
+				var p = self.arenaToModel(self.mouse,self.mouse.dragging)
+				self.mouse.dragging.x = p.x
+
+				// var percentile = self.mouse.dragging.x / self.canvas.width * 100
+	
+				// // find a position in space that represents that percentile
+				// if (model.ballotType.name != "ApprovalBallot") return
+				// var xNew = _percentileToX(percentile,model)
+	
+				// // set the dragging candidate to this x
+				// self.mouse.dragging.x = xNew
+			}
+		}
+	}
+
+
+	self.clear = function(){
+		// Clear it all!
+		self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
+	}
+
+	self.drawHorizontal = function() {
+		// draw line through middle
+		var yLine = model.yDimOne + model.yDimBuffer
+		var c = self.ctx
+		c.beginPath();
+		c.moveTo(0,yLine*2);
+		c.lineTo(c.canvas.width,yLine*2);
+		c.lineWidth = 2;
+		c.strokeStyle = "#888";
+		c.stroke();
+	}
+
+	self.draw = function(){
+
+		// DRAW 'EM ALL.
+		// Draw voters' BG first, then candidates, then voters.
+
+
+		//set annotations
+		if (self.id == "arena") {
+			// reset annotations
+			for(var i=0; i<self.draggables.length; i++){
+				var draggable = self.draggables[i];
+				draggable.drawAnnotation = (function(){});
+				draggable.drawBackAnnotation = (function(){});
+			}
+	
+			if(model.yeeobject) model.yeeobject.drawBackAnnotation = model.yee.drawYeeGuyBackground
+			if(model.yeeobject) model.yeeobject.drawAnnotation = model.yee.drawYeeAnnotation
+			
+			for(var i=0; i<model.voters.length; i++){
+				var voter = model.voters[i];
+				voter.draw(self.ctx);
+			}
+		}
+		
+		
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i];
+			c.draw(self.ctx,self);
+		}
+
+		
+		if (self.id == "arena") {
+			//voterCenter.update()
+			if ((typeof model.voterCenter !== 'undefined') && ! (model.voters.length == 1 && model.voters[0].length == 1)) {
+				model.voterCenter.draw(self.ctx)
+			}
+
+			// draw the Yee object last so it is easy to see.
+			if (model.yeeon && model.yeeobject) model.yeeobject.draw(self.ctx,self)
+		}
+		
+		
+		// draw text next to the winners
+		if(model.result && model.result.winners) {
+			var objWinners = model.result.winners.map(x => model.candidatesById[x])
+			if (objWinners.length > 1) {
+				for (i in objWinners) {
+					objWinners[i].drawTie(self.ctx,self)
+				}
+			} else {
+				objWinners[0].drawWin(self.ctx,self)
+			}
+		}
+		
+		if (model.result) {
+			self.canvas.style.borderColor = model.result.color;
+			if (model.yeeon) self.canvas.style.borderColor = "#fff"
+		}
+	}
+
+}

@@ -932,7 +932,7 @@ function loadpreset(modelName) {
 			arena_border: 0,
 			spread_factor_voters: 2,
 			firstStrategy: "normalize frontrunners only",
-			secondStrategy: "normalize frontrunners only",
+			secondStrategy: "zero strategy. judge on an absolute scale.",
 			// snowman: false,
 			// x_voters: false,
 			// median_mean: 1,
@@ -1223,11 +1223,15 @@ function loadpreset(modelName) {
 			],
 			candidates: 5,
 			theme: "Bees",
-			featurelist: ["yee"],
+			// featurelist: ["yee"],
+			featurelist: [],
 			hidegearconfig: true,
+			keyyee: "mean",
+			pixelsize: 30,
+			kindayee: "center",
 		}
 
-	} else if (htmlname == "elect_tetris.html") {
+	} else if (htmlname == "elect_quotaApproval.html") {
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1240,7 +1244,8 @@ function loadpreset(modelName) {
 				[150, 150],
 			],
 			candidates: 5,
-			mode:"tetris",
+			dimensions:"1D+B",
+			system: "QuotaApproval",
 			hidegearconfig: true,
 		}
 

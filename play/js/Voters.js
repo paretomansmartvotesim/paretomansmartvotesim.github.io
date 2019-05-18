@@ -190,10 +190,10 @@ function distF(model,v,c) {
 }
 
 function distF2(model,v,c) { // voter and candidate should be in order
-	if (model.mode == "tetris") {
+	if (model.dimensions == "1D+B") {
 		var dx = v.x - c.x
-		var dy = (model.yDimOne + model.yDimBuffer) - c.y
-		var a=3
+		var dy = c.y - (model.yDimOne + model.yDimBuffer)
+		var a=9
 		switch (a) {
 			case 1: return Math.abs(dx*dy)
 			case 2: return Math.abs(dx*dy*.1)
@@ -211,7 +211,23 @@ function distF2(model,v,c) { // voter and candidate should be in order
 					return balance * (adx + ady)*2
 				} 
 				return (adx + ady)*2
+			case 6:
+				var adx = Math.abs(dx)
+				var ady = Math.abs(dy)
+				return (1/(1/adx+1/ady))**2 /// hmm forgot this square while making this function... so things are weird
+			case 7:
+				return (1/(1/(dx*dx)+100/(dy*dy))) ** 2
+			case 8:
+				var adx = Math.abs(dx)
+				var ady = Math.abs(dy)
+				return (11 / ( 1/adx + 10/ady )) ** 2
+			case 9:
+				var f = .2 * 2 ** (dy/30)
+				return (Math.abs(dx) * f)**2 
 		}
+	} else if (model.dimensions == "1D") {
+		var dx = v.x - c.x
+		return dx*dx
 	} else {
 		var dx = v.x - c.x
 		var dy = v.y - c.y
@@ -239,7 +255,7 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 	canAid = []
 	for(var i=0; i<lc; i++){
 		var c = candidates[i];
-		var dist = distF2(model,{x:x,y:y},c)
+		var dist = distF(model,{x:x,y:y},c)
 		dista.push(dist)
 		canAid.push(c.id)
 	}
@@ -1057,8 +1073,9 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			}
 			self.points = points
 		}
-		if (1 && model.mode == "tetris") {  // cool method doesn't work
+		if (1 && model.dimensions == "1D+B") {  // cool method doesn't work
 
+			self.y = model.yDimOne
 			for (var i = 0; i < self.points.length; i++) {
 				points[i][0] = self.points[i][0]
 				points[i][1] = 0
@@ -1223,7 +1240,7 @@ function SingleVoter(model){
 
 	var self = this;
 	Draggable.call(self, model);
-
+	
 	// CONFIGURE DEFAULTS
 	_fillVoterDefaults(self)
 	self.type = new PluralityVoter(model);
@@ -1440,7 +1457,7 @@ function VoterCenter(model){
 	}
 	self.update = function() {// do the center voter thing
 		// UPDATE
-		if(model.mouse.dragging == self) {
+		if(model.arena.mouse.dragging == self || model.tarena.mouse.dragging == self) {
 			var oldcenter = self.findVoterCenter()
 			var changecenter = {x:self.x - oldcenter.x, y:self.y - oldcenter.y}
 			for(var i=0; i<model.voters.length; i++){
