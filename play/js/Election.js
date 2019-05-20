@@ -2311,8 +2311,7 @@ function _drawBars(arena, model, round) {
 	// if (model.ballotType.name != "ApprovalBallot") return
 	if (model.system != "QuotaApproval") return
 
-	var v = _getVoterArray(model)
-	v.sort(function(a,b){return a.x - b.x})
+	var v = model.getSortedVoters()
 
 	// for votes cast, draw rectangles
 	var lineHeight = 6
@@ -2534,7 +2533,7 @@ function _getVoterArray(model) {
 
 
 function _percentileToX(percentile,model) {
-	var v = model.sortedVoters
+	var v = model.getSortedVoters()
 	if (v.length == 0) return 0
 	var indexPercentile = (v.length-1) * percentile/100 // fine tuning TODO
 	// linear interpolation
@@ -2548,8 +2547,23 @@ function _percentileToX(percentile,model) {
 	return xNew
 }
 
+function _percentileToY(percentile,model) {
+	var v = model.getSortedVoters()
+	if (v.length == 0) return 0
+	var indexPercentile = (v.length-1) * percentile/100 // fine tuning TODO
+	// linear interpolation
+	var indexLeft = Math.floor(indexPercentile)
+	var frac = indexPercentile - indexLeft
+	var indexRight = indexLeft + 1
+	indexRight = Math.min(indexRight,v.length-1)
+	var left = v[indexLeft].y
+	var right = v[indexRight].y
+	var yNew = left + frac * (right - left)
+	return yNew
+}
+
 function _xToPercentile(x,model) {
-	var v = model.sortedVoters
+	var v = model.getSortedVoters()
 	if (v.length == 0) return 0
 	for (var k = 0; k < v.length; k++) {
 		if (x < v[k].x) break

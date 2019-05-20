@@ -121,7 +121,9 @@ function DraggableManager(arena,model){
 
 	});
 	subscribe(arena.id+"-mouseup", function(){
+		
 		arena.mouse.dragging = null;
+		model.update();
 	});
 
 }

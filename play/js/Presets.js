@@ -1244,7 +1244,8 @@ function loadpreset(modelName) {
 				[150, 150],
 			],
 			candidates: 5,
-			dimensions:"1D+B",
+			// dimensions:"1D+B",
+			dimensions:"2D",
 			system: "QuotaApproval",
 			hidegearconfig: true,
 		}

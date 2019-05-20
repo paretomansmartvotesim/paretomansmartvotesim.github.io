@@ -140,6 +140,11 @@ function Model(modelName){
 
 	// Update!
 	self.onUpdate = function(){}; // TO IMPLEMENT
+	self.getSortedVoters = function() {
+		var v = _getVoterArray(self)
+		var x = v.map( (d,i) => v[self.orderOfVoters[i]] )
+		return x
+	}
 	self.update = function(){
 		self.arena.update();
 		self.tarena.update();
@@ -150,9 +155,26 @@ function Model(modelName){
 			voter.update();
 		}
 		// helper for later
-		var v = _getVoterArray(self)
-		self.sortedVoters = v.sort(function(a,b){return a.x - b.x})
-
+		if (self.system == "QuotaApproval") // find order of voters
+		{
+			var v = _getVoterArray(self)
+			if (v.length > 0) {
+				if (self.dimensions == "1D+B" || self.dimensions == "1D") {
+					var m = v.map( function(d, i) {	return { i: i, d: d }; } ) // add an index to each voter
+					m.sort(function(a,b){return a.d.x - b.d.x}) // sort voters
+					self.orderOfVoters = m.map( a => a.i) // get original indices of sorted voters
+				} else { 
+					// 2D
+					if (! (self.arena.mouse.dragging || self.tarena.mouse.dragging) ) {
+						var tsp = new TravelingSalesman(); 
+						tsp.runOnSet(v)
+						var order = tsp.getOrder()
+						self.orderOfVoters  = order
+	
+					}
+				}
+			}
+		}
 		for(var i=0; i<self.candidates.length; i++){
 			var c = self.candidates[i];
 			c.update();
@@ -225,7 +247,7 @@ function Model(modelName){
 				}
 			}
 		}
-		
+
 		self.onDraw();
 
 	}
@@ -369,11 +391,35 @@ function Arena(arenaName, model) {
 		
 	self.modelToArena = function(d) {
 		if (arenaName == "tarena") {
-			var xP = _xToPercentile(d.x,model) / 100 * (self.canvas.width/2)
-			// return {x:xP,y:15*d.i+7} // each candidate has his own track
-			return {x:xP,y:15+20+d.i*0}
+			if (model.dimensions == "2D") {
+				// find closest voter's index
+				var i = _closestVoterIndex(d,model)
+				var xP = i  * (self.canvas.width/2)
+				return {x:xP,y:35}
+			} else {
+				var xP = _xToPercentile(d.x,model) / 100 * (self.canvas.width/2)
+				// return {x:xP,y:15*d.i+7} // each candidate has his own track
+				return {x:xP,y:35}
+			}
 		}
 		return d
+	}
+
+	function _closestVoterIndex(d,model) { // returns where the candidate should be in the sorted list of voters
+		closest = 0
+		min = Infinity
+		var a = _getVoterArray(model)
+		for (var i = 0; i < a.length; i++) {
+			v = a[model.orderOfVoters[i]]
+			var dx = d.x - v.x
+			var dy = d.y - v.y
+			var d2 = dx*dx + dy*dy
+			if (d2 < min) {
+				min = d2
+				closest = i
+			}
+		}
+		return closest / a.length
 	}
 
 	self.arenaToModel = function(d,s) { // d is the new coordinate and s is the old model object
@@ -382,7 +428,13 @@ function Arena(arenaName, model) {
 			percentile = Math.min(100,percentile)
 			percentile = Math.max(0,percentile) // TODO: figure out why I would get a mouse at a negative x
 			var x = _percentileToX(percentile, model)
-			return {x:x,y:s.y}
+
+			if (model.dimensions == "2D") {
+				var y = _percentileToY(percentile, model)
+				return {x:x,y:y}
+			} else {
+				return {x:x,y:s.y}
+			}
 		}
 		return d
 	}
@@ -420,6 +472,9 @@ function Arena(arenaName, model) {
 
 				var p = self.arenaToModel(self.mouse,self.mouse.dragging)
 				self.mouse.dragging.x = p.x
+				if (model.dimensions == "2D") {
+					self.mouse.dragging.y = p.y
+				}
 
 				// var percentile = self.mouse.dragging.x / self.canvas.width * 100
 	
@@ -459,6 +514,7 @@ function Arena(arenaName, model) {
 
 		//set annotations
 		if (self.id == "arena") {
+
 			// reset annotations
 			for(var i=0; i<self.draggables.length; i++){
 				var draggable = self.draggables[i];
@@ -468,7 +524,26 @@ function Arena(arenaName, model) {
 	
 			if(model.yeeobject) model.yeeobject.drawBackAnnotation = model.yee.drawYeeGuyBackground
 			if(model.yeeobject) model.yeeobject.drawAnnotation = model.yee.drawYeeAnnotation
-			
+	
+			if (0) {
+				// draw sort lines
+				var s = model.getSortedVoters()
+				for (var i=0; i<s.length-1; i++) {
+					// draw line from here to next
+					
+					var c = self.ctx
+					var va = s[i]
+					var vb = s[i+1]
+					c.beginPath();
+					c.moveTo(va.x*2	,va.y*2	);
+					c.lineTo(vb.x*2	,vb.y*2	);
+					c.lineWidth = 2;
+					c.strokeStyle = "#888";
+					c.stroke();
+
+				}
+			}
+	
 			for(var i=0; i<model.voters.length; i++){
 				var voter = model.voters[i];
 				voter.draw(self.ctx);
