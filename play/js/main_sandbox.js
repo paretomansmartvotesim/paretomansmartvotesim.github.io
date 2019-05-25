@@ -413,8 +413,9 @@ function Sandbox(modelName) {
             {name:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
             {name:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
             {name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
+            {name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv, margin:4},
+            {name:"RAV", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.rav},
             {name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
-            {name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv},
             {name:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval}
         ];
         self.listByName = function() {
@@ -460,7 +461,7 @@ function Sandbox(modelName) {
             var s = self.listByName()
             model.election = s.election
             model.system = config.system;
-            if (config.system == "QuotaApproval") {
+            if (config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV") {
                 model.tarena.canvas.hidden = false
                 model.dimensions = "1D+B"
             } else {

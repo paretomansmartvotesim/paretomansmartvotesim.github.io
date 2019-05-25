@@ -145,6 +145,10 @@ function Model(modelName){
 		var x = v.map( (d,i) => v[self.orderOfVoters[i]] )
 		return x
 	}
+	self.onDrop = function() {
+		
+	}
+
 	self.update = function(){
 		self.arena.update();
 		self.tarena.update();
@@ -154,8 +158,8 @@ function Model(modelName){
 			var voter = self.voters[i];
 			voter.update();
 		}
-		// helper for later
-		if (self.system == "QuotaApproval") // find order of voters
+		
+		if (self.tarena.canvas.hidden == false) // find order of voters
 		{
 			var v = _getVoterArray(self)
 			if (v.length > 0) {

@@ -1250,6 +1250,25 @@ function loadpreset(modelName) {
 			hidegearconfig: true,
 		}
 
+	} else if (htmlname == "elect_try.html") {
+		config = {
+			candidatePositions: [
+				[92, 69],
+				[210, 70],
+				[245, 182],
+				[149, 250],
+				[55, 180]
+			],
+			voterPositions: [
+				[150, 150],
+			],
+			candidates: 5,
+			dimensions:"1D",
+			// dimensions:"2D",
+			system: "STV",
+			hidegearconfig: true,
+		}
+
 	} else if (htmlname == "sandbox.html") {
 		config = {
 			description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",

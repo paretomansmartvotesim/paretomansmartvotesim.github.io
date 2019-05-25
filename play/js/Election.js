@@ -1127,6 +1127,18 @@ Election.rrv = function(model, options){
 
 	var numreps = 3
 	var maxscore = 5
+
+	if (options.sidebar) {
+		var text = ""
+		var history = {}
+		history.rounds = []
+		var v =  _getVoterArray(model)
+		history.v = v
+		history.seats = numreps
+		history.maxscore = maxscore
+		model.round = -1
+	}
+
 	var invmaxscore = 1/maxscore
 	var ballots = _getBallots(model);
 	var ballotweight = []
@@ -1166,6 +1178,16 @@ Election.rrv = function(model, options){
 			ballotsum[i] += ballot[winner] 
 			ballotweight[i] = 1/(1+ballotsum[i]*invmaxscore)
 		}
+
+		if (options.sidebar) {
+			var roundHistory = {
+				winners:[model.candidatesById[winner].i],
+				q:_jcopy(ballotweight),
+				tally:tally
+			}
+			history.rounds.push(roundHistory)
+
+		}
 		
 		// remove winner from candidates
 		candidates.splice(candidates.indexOf(winner),1)
@@ -1178,6 +1200,8 @@ Election.rrv = function(model, options){
 		// Caption
 		var text = "";
 		for(j=0; j<winnerslist.length;j++){
+			text += '<div id="round' + (j+1) + '" class="round">'
+			text += "Round " + (j+1);
 			text += "<span class='small'>";
 			var tally = tallies[j]
 			var winner = winnerslist[j];
@@ -1186,7 +1210,7 @@ Election.rrv = function(model, options){
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
 				//text += _icon(c)+"'s score: "+((tally[c]/_getTotalVoters(model)).toFixed(2))+" out of 5.00<br>";
-				text += _icon(c)+": "+_percentFormat(model, tally[c] / 5)
+				text += _icon(c)+": "+_percentFormat(model, tally[c] / maxscore)
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
 			}
@@ -1197,9 +1221,180 @@ Election.rrv = function(model, options){
 			text += "";
 			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>";
 			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;
+			text += '</div>'
+		}
+	
+		if(options.sidebar) {
+			text += '<div id="round' + (winnerslist.length+1) + '" class="round">'
+			text += "Final Winners:";
+			text += "<br>";
+			for(var j=0; j<winnerslist.length; j++){
+				var c = winnerslist[j]
+				text += _icon(c)+" ";
+			}
+			text += "<br>";
+			text += "<br>";
+			text += '</div>'
+			
+			result.history = history
+			result.dontredocaption = true // we have an interactive caption
+			result.text = text;
+			
+			model.caption.innerHTML = text
+			// attach caption hover functions
+			for (var i=0; i < winnerslist.length+1; i++) {
+				var cbDraw = function(i) { // a function is returned, so that i has a new scope
+					return function() {
+						model.round = i+1
+						model.draw()
+						model.round = -1
+					}
+				}
+				model.caption.querySelector("#round" + (i+1)).addEventListener("mouseover", cbDraw(i))
+			}
 		}
 
+	}
+
+	// if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)  
+	if (model.dotop2) model.top2 = winnerslist.slice(0,2)  /// TODO: see if this actually works 
+
+	return result;
+};
+
+Election.rav = function(model, options){
+
+	var numreps = 3
+	var maxscore = 1
+
+	if (options.sidebar) {
+		var text = ""
+		var history = {}
+		history.rounds = []
+		var v =  _getVoterArray(model)
+		history.v = v
+		history.seats = numreps
+		history.maxscore = maxscore
+		model.round = -1
+	}
+
+	var invmaxscore = 1/maxscore
+	var ballots = _getBallots(model);
+	var ballotweight = []
+	var ballotsum = []
+	for(var i=0; i<ballots.length; i++){
+		ballotweight[i] = 1
+		ballotsum[i] = 0
+	}
+	var resolved = false
+	var tallies = []
+	var winnerslist = []
+	
+	var candidates = [];
+	for(var i=0; i<model.candidates.length; i++){
+		candidates.push(model.candidates[i].id);
+	}
+	
+	for(var j=0; j<numreps;j++) {
+		// Tally the approvals & get winner!
+		var tally = _tally_i(model, function(tally, ballot, i){
+			var approved = ballot.approved;
+			for(var i=0; i<approved.length; i++) {
+				if (candidates.includes(approved[i])) {
+					tally[approved[i]] += ballotweight[i];
+				}
+			}
+		})
+		tallies.push(tally)
+		
+		var winners = _countWinner(tally);
+		var winner = winners[0] // really we should have a tree of scenarios form here because a whole different group can be chosen from a tiebreaker TODO
+		winnerslist.push(winner)
+		
+
+		//reweight
+		for(var i=0; i<ballots.length; i++){
+			var ballot = ballots[i]
+			var approved = ballot.approved;
+			if (approved.includes(winner)) {
+				ballotsum[i]++
+				ballotweight[i] = 1/(1+ballotsum[i]*invmaxscore)
+			}
+		}
+
+		if (options.sidebar) {
+			var roundHistory = {
+				winners:[model.candidatesById[winner].i],
+				q:_jcopy(ballotweight),
+				tally:tally
+			}
+			history.rounds.push(roundHistory)
+
+		}
+		
+		// remove winner from candidates
+		candidates.splice(candidates.indexOf(winner),1)
+	}
+
+	var result = _result(winnerslist.concat().sort(),model)
+
+	if (options.sidebar) {
+
+		// Caption
+		var text = "";
+		for(j=0; j<winnerslist.length;j++){
+			text += '<div id="round' + (j+1) + '" class="round">'
+			text += "Round " + (j+1);
+			text += "<span class='small'>";
+			var tally = tallies[j]
+			var winner = winnerslist[j];
+			if (j>0) text += "<br><b>After votes go to winner,</b>"
+			text += "<br><b>score as %:</b><br>";
+			for(var i=0; i<model.candidates.length; i++){
+				var c = model.candidates[i].id;
+				//text += _icon(c)+"'s score: "+((tally[c]/_getTotalVoters(model)).toFixed(2))+" out of 5.00<br>";
+				text += _icon(c)+": "+_percentFormat(model, tally[c])
+				if (winner == c) text += " &larr;"//" <--"
+				text += "<br>";
+			}
+			var color = _colorsWinners([winner],model)[0]
+			text += "";
+			//text += _icon(winner)+" has the highest score, so...";
+			text += "</span>";
+			text += "";
+			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>";
+			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;
+			text += '</div>'
+		}
+	
+		if(options.sidebar) {
+			text += '<div id="round' + (winnerslist.length+1) + '" class="round">'
+			text += "Final Winners:";
+			text += "<br>";
+			for(var j=0; j<winnerslist.length; j++){
+				var c = winnerslist[j]
+				text += _icon(c)+" ";
+			}
+			text += "<br>";
+			text += "<br>";
+			text += '</div>'
+		}
+
+		result.history = history
+		result.dontredocaption = true // we have an interactive caption
 		result.text = text;
+		model.caption.innerHTML = text
+		// attach caption hover functions
+		for (var i=0; i < winnerslist.length+1; i++) {
+			var cbDraw = function(i) { // a function is returned, so that i has a new scope
+				return function() {
+					model.round = i+1
+					model.draw()
+					model.round = -1
+				}
+			}
+			model.caption.querySelector("#round" + (i+1)).addEventListener("mouseover", cbDraw(i))
+		}
 	}
 
 	// if (model.dotop2) model.top2 = _sortTally(tally).slice(0,2)  
@@ -1398,12 +1593,28 @@ Election.irv = function(model, options){
 Election.stv = function(model, options){
 
 	var numreps = 3
+
+
+	if (options.sidebar) {
+		var text = ""
+		var history = {}
+		history.rounds = []
+		var v =  _getVoterArray(model)
+		history.v = v
+		history.seats = numreps
+		history.maxscore = 5
+		model.round = -1
+	}
+
 	var quota = 1/(numreps+1)
-	var quotapercent = Math.round(quota * 100)
-	var text = "";
-	text += "<span class='small'>";
-	text += "Find " + numreps + " winners.<br>"
-	text += "Set quota at 1/(1+" + numreps + ") = " + quotapercent + "%.<br><br>"
+
+	if (options.sidebar) {
+		var quotapercent = Math.round(quota * 100)
+		var text = "";
+		text += "<span class='small'>";
+		text += "Find " + numreps + " winners.<br>"
+		text += "Set quota at 1/(1+" + numreps + ") = " + quotapercent + "%.<br><br>"
+	}
 	var resolved = null;
 	var roundNum = 1;
 
@@ -1420,10 +1631,26 @@ Election.stv = function(model, options){
 	}
 	while(!resolved){
 
-		text += "<b>round "+roundNum+":</b><br>";
-		text += "who's voters' #1 choice?<br>";
+		
+		if (options.sidebar) {
+			
+					
+			var stillin = []
+			for (var i=0; i<candidates.length; i++) {
+				stillin.push(model.candidatesById[candidates[i]].i)
+			}
 
-		// Tally the approvals & get winner!
+			var roundHistory = {
+				q:_jcopy(ballotweight),
+				ballots:_jcopy(ballots),
+				stillin: stillin
+			}
+
+			text += '<div id="round' + (roundNum) + '" class="round">'
+			text += "<b>round "+roundNum+":</b><br>";
+			text += "who's voters' #1 choice?<br>";
+		}
+
 		var pre_tally = _tally_i(model, function(tally, ballot, i){
 			var first = ballot.rank[0]; // just count #1
 			tally[first] += ballotweight[i];
@@ -1436,13 +1663,15 @@ Election.stv = function(model, options){
 			tally[cID] = pre_tally[cID];
 		}
 
-		// Say 'em...
-		for(var i=0; i<candidates.length; i++){
-			var c = candidates[i];
-			text += _icon(c)+":"+Math.round(tally[c]);
-			if(i<candidates.length-1) text+=", ";
+		if (options.sidebar) {
+			// Say 'em...
+			for(var i=0; i<candidates.length; i++){
+				var c = candidates[i];
+				text += _icon(c)+":"+Math.round(tally[c]);
+				if(i<candidates.length-1) text+=", ";
+			}
+			text += "<br>";
 		}
-		text += "<br>";
 
 		// Do they have more than 50%?
 		var winners = _countWinner(tally);
@@ -1454,11 +1683,13 @@ Election.stv = function(model, options){
 			// 	break;
 			// }
 			reweight = 1-quota/ratio
-			text += _icon(winner)+" has more than " + quotapercent + "%<br>";
 			winnerslist.push(winner)
 			
-			text += "select winner, "+_icon(winner)+".<br><br>";
-			
+			if (options.sidebar) {
+				text += _icon(winner)+" has more than " + quotapercent + "%<br>";
+				text += "select winner, "+_icon(winner)+".<br><br>";
+			}
+
 			candidates.splice(candidates.indexOf(winner), 1); // remove from candidates...
 			var ballots = _getBallots(model);
 			for(var i=0; i<ballots.length; i++){
@@ -1468,44 +1699,118 @@ Election.stv = function(model, options){
 				}
 				rank.splice(rank.indexOf(winner), 1); // REMOVE THE winner
 			}
-			// And repeat!
-			roundNum++;
 			if (winnerslist.length == numreps) {
 				resolved = "done"
 				break
 			}
-			continue
-		}
-
-		// Otherwise... runoff...
-		var losers = _countLoser(tally);
-		var loser = losers[0];
-		if (losers.length >= candidates.length) {
-			resolved = "tie"; 
-			winnerslist = winnerslist.concat(losers)
-			var tiedlosers = losers
-			break;
-		}
-		loserslist = loserslist.concat(losers)
-
-		// ACTUALLY ELIMINATE
-		
-		//text += "nobody's more than 50%. ";
-		for (var li = 0; li < losers.length ; li++ ) {
-			loser = losers[li];
-			text += "eliminate loser, "+_icon(loser)+".<br>";
-			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
-			var ballots = _getBallots(model);
-			for(var i=0; i<ballots.length; i++){
-				var rank = ballots[i].rank;
-				rank.splice(rank.indexOf(loser), 1); // REMOVE THE LOSER
+		} else {
+			winners = []
+			winner = null
+			// Otherwise... runoff...
+			var losers = _countLoser(tally);
+			var loser = losers[0];
+			if (losers.length >= candidates.length) {
+				resolved = "tie"; 
+				winnerslist = winnerslist.concat(losers)
+				var tiedlosers = losers
+				break;
 			}
-			// And repeat!
-			roundNum++;
-		}
-		text += "<br>"
+			loserslist = loserslist.concat(losers)
+
+			// ACTUALLY ELIMINATE
+			
+			//text += "nobody's more than 50%. ";
+			for (var li = 0; li < losers.length ; li++ ) {
+				loser = losers[li];
+				
+				if (options.sidebar) {
+					text += "eliminate loser, "+_icon(loser)+".<br>";
+				}
+				candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
+				var ballots = _getBallots(model);
+				for(var i=0; i<ballots.length; i++){
+					var rank = ballots[i].rank;
+					rank.splice(rank.indexOf(loser), 1); // REMOVE THE LOSER
+				}
+			}
+			
 	
+		}
+
+		// And repeat!
+		roundNum++;
+
+		if (options.sidebar) {
+			
+			roundHistory.tally = tally
+			roundHistory.ballots = _jcopy(ballots)
+			if (winner) {
+				roundHistory.winners = [model.candidatesById[winner].i]
+			} else {
+				roundHistory.winners = []
+			}
+			history.rounds.push(roundHistory)
+
+			text += "<br>"
+			text += '</div>'
+		}
 	}
+	
+	if (options.sidebar) {
+			
+		roundHistory.tally = tally
+		roundHistory.ballots = _jcopy(ballots)
+		roundHistory.winners = [model.candidatesById[winner].i]
+		history.rounds.push(roundHistory)
+
+		text += "<br>"
+		text += '</div>'
+
+		// push out a final reweight just to evaluate how well the method worked
+		if (1) {
+			var stillin = []
+			for (var i=0; i<candidates.length; i++) {
+				stillin.push(model.candidatesById[candidates[i]].i)
+			}
+
+			var roundHistory = {
+				q:_jcopy(ballotweight),
+				ballots:_jcopy(ballots),
+				stillin: stillin
+			}
+
+			var pre_tally = _tally_i(model, function(tally, ballot, i){
+				var first = ballot.rank[0]; // just count #1
+				tally[first] += ballotweight[i];
+			});
+	
+			// ONLY tally the remaining candidates...
+			var tally = {};
+			for(var i=0; i<candidates.length; i++){
+				var cID = candidates[i];
+				tally[cID] = pre_tally[cID];
+			}
+
+			
+			var winners = _countWinner(tally);
+			var winner = winners[0];  // there needs to be a better tiebreaker here. TODO
+
+			roundHistory.tally = tally
+			roundHistory.ballots = _jcopy(ballots)
+			if (winner) {
+				roundHistory.winners = [model.candidatesById[winner].i]
+			} else {
+				roundHistory.winners = []
+			}
+			history.rounds.push(roundHistory)
+			
+		}
+	}
+	
+	if (options.sidebar) {
+		text += '</div>'
+	}
+
 	winners = winnerslist.sort() 
 
 	if (model.dotop2) { /// TODO: see if this actually works
@@ -1519,29 +1824,47 @@ Election.stv = function(model, options){
 	var color = result.color
 
 
-	if (!options.sidebar) return result
-
-	if (resolved == "tie") {
-		text += _tietext(tiedlosers);
-		// text = "<b>TIE</b> <br> <br>" + text;
-	} 
-	text = "<br>" + text
-	for (var i in winners) {
-		var winner = winners[i]
-		var color = _colorsWinners([winner],model)[0]
-		// END!
-		text += "</span>";
-		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;	
+	if (options.sidebar) {
+		text += '<div id="round' + (roundNum+1) + '" class="round">'
+		if (resolved == "tie") {
+			text += _tietext(tiedlosers);
+			// text = "<b>TIE</b> <br> <br>" + text;
+		} 
+		text = "<br>" + text
+		for (var i in winners) {
+			var winner = winners[i]
+			var color = _colorsWinners([winner],model)[0]
+			// END!
+			text += "</span>";
+			text += "<br>";
+			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;	
+		}
+		text += '</div>'
+	
+		result.history = history
+		result.dontredocaption = true // we have an interactive caption
+		result.text = text;
+		
+		model.caption.innerHTML = text
+		// attach caption hover functions
+		for (var i=0; i < roundNum+1; i++) {
+			var cbDraw = function(i) { // a function is returned, so that i has a new scope
+				return function() {
+					model.round = i+1
+					model.draw()
+					model.round = -1
+				}
+			}
+			model.caption.querySelector("#round" + (i+1)).addEventListener("mouseover", cbDraw(i))
+		}
 	}
-
-	result.text = text;
 
 	// we messed around with the rankings, so lets put them back
 	for(var j=0; j<model.voters.length; j++){
 		model.voters[j].update();
 	}
+
 	return result;
 };
 
@@ -1559,6 +1882,7 @@ Election.quotaApproval = function(model,options) {
 		history.rounds = []
 		history.v = v
 		history.seats = seats
+		history.maxscore = 1
 		model.round = -1
 	}
 
@@ -2309,7 +2633,9 @@ function _drawBars(arena, model, round) {
 	// according to x
 
 	// if (model.ballotType.name != "ApprovalBallot") return
-	if (model.system != "QuotaApproval") return
+	if (model.system != "QuotaApproval" && model.system != "RRV"  && model.system != "RAV" && model.system != "STV") return
+
+
 
 	var v = model.getSortedVoters()
 
@@ -2376,25 +2702,56 @@ function _drawBars(arena, model, round) {
 	var baralpha = .8
 	arena.ctx.globalAlpha = baralpha
 
-	for (var r=0; (round == -1 && r < model.result.history.rounds.length) || (round > -1 && r < round-1); r++) {
-		var w = model.result.history.rounds[r].winners
+
+	if (model.system == "STV") {
+		var hacknum = 1
+	} else {
+		var hacknum = 0
+	}
+	for (var r=0; (round == -1 && r < model.result.history.rounds.length-hacknum) || (round > -1 && r < round-1); r++) {
+		var thisround = model.result.history.rounds[r]
+		var w = thisround.winners
+		if (w.length == 0) continue
 		for (var i=0; i < w.length; i++) {
 			// how many people voted for each winner?
 			var winnerIndex = w[i]
-			var sum = 0
-			for (var k=0; k < v.length; k++) {
-				var b = v[k].b
-				sum += b[winnerIndex] // add the vote to the candidate
+			if (model.system == "STV") {
+				var tally = thisround.tally
+				var sum = tally[model.candidates[winnerIndex].id] // TODO doublecheck
+			} else {
+				var sum = 0
+				for (var k=0; k < v.length; k++) {
+					var b = v[k].b
+					var support = b[winnerIndex] / model.result.history.maxscore
+					sum += support // add the vote to the candidate
+				}
 			}
 			var rep = v.length / sum / seats
 
 			for (var k=0; k < v.length; k++) { // subtract the winners from each voter's quota
-				var b = v[k].b
-				if (b[winnerIndex]) {
+				
+				if (model.system == "STV") {
+					var b = v[k].b
+					for (var m = 0; m < b.length; m++) {
+						var c = b[m]
+						if (thisround.stillin.includes(c)) break
+						// go through the list of people the voter voted for in order until we get to one that is still in the race
+					}
+					if (c == winnerIndex) {
+						var support = thisround.q[model.orderOfVoters[k]]
+					} else {
+						var support = 0
+					}
+				} else { // a scoring system
+					var b = v[k].b
+					var support = b[winnerIndex] / model.result.history.maxscore
+				}
+			
+				if (support > 0) {
 					// draw the build
 					var left = Math.round(k * widthRectangle)
 					var right = Math.round((k+1) * widthRectangle)
-					var top = Math.round(base-(build[k] + rep) * heightRectangle)
+					var top = Math.round(base-(build[k] + rep*support) * heightRectangle)
 					var bottom = Math.round(base-build[k] * heightRectangle)
 					var bucket = Math.round(base- heightRectangle) // where the shadows start
 
@@ -2428,8 +2785,8 @@ function _drawBars(arena, model, round) {
 					arena.ctx.globalAlpha = baralpha
 
 					// calculate the next step
-					q[k] -= rep
-					build[k] += rep
+					q[k] -= rep*support
+					build[k] += rep*support
 				}
 			}
 		}
@@ -2437,42 +2794,88 @@ function _drawBars(arena, model, round) {
 			
 	arena.ctx.globalAlpha = 1
 
-	if (0) {
-		// draw the quota
-		for (var i=0; i < q.length; i++) {
-			var quota = Math.max(q[i],0)
-			var left = Math.round(i * widthRectangle)
-			var right = Math.round((i+1) * widthRectangle)
-			var top = Math.round(300 - quota * heightRectangle)
-			var bottom = Math.round(300)
-			arena.ctx.fillStyle = "#ccc"
-			arena.ctx.fillRect(left,top,right-left,bottom-top)
-			arena.ctx.fill()
-
-			// draw the quota for each person
-			for (var k=0; k < model.candidates.length; k++) {
-				var c = model.candidates[k]
-				var color = c.fill
+	if (0){ // don't draw the weight.. for now
+		if (model.system == "RRV" || model.system == "RAV") {
+			var startpos = 450
+			// draw the quota
+			for (var i=0; i < q.length; i++) {
+				var quota = Math.max(q[i],0)
+				if (r==0) {
+					var quota = 1
+				} else {
+					var quota = Math.max(model.result.history.rounds[r-1].q[model.orderOfVoters[i]],0)
+				}
+				var left = Math.round(i * widthRectangle)
+				var right = Math.round((i+1) * widthRectangle)
+				var top = Math.round(startpos - 1 * heightRectangle)
+				var bottom = Math.round(startpos - (1-quota) * heightRectangle)
+				arena.ctx.fillStyle = "#ccc"
+				arena.ctx.fillRect(left,top,right-left,bottom-top)
+				arena.ctx.fill()
+	
 			}
+			// draw line at bottom
+			var yLine = bottom
+			var c = arena.ctx
+			c.beginPath();
+			c.moveTo(0,yLine*2);
+			c.lineTo(c.canvas.width,yLine*2);
+			c.lineWidth = 2;
+			c.strokeStyle = "#888";
+			c.stroke();
+	
+			_drawStroked("Weight",70,400,40,arena.ctx)
 		}
 	}
 
+	// draw votes for each candidate in this round
 	var pos = 170
 	heightRectangle = 30	
-	for (var i = 0; i < v.length; i++) {
-		var b = v[i].b
-		var quota = Math.max(q[i],0)
-		for (var k = 0; k < b.length; k++) {
-			if (b[k] == 1) {
+
+	
+	if (model.system == "STV") {
+		// use order
+		// use order with history
+		// use calculations from before, in the voting system
+		// grey out the ones that were eliminated that we voted for
+		
+		if (round == -1) {
+			var r = model.result.history.rounds.length - 1
+		} else {
+			var r = round - 1
+		}
+		var thisround = model.result.history.rounds[r]
+
+		var stillin = thisround.stillin
+		// who is still in the race
+		for (var i = 0; i < v.length; i++) {
+			var b = v[i].b
+			if (r==0) {
+				var quota = 1
+			} else {
+				var quota = thisround.q[model.orderOfVoters[i]]
+			}
+
+			for (var k = 0; k < b.length; k++) {
+				var c = b[k]
+				// determine where to draw
 				var left = Math.round(i * widthRectangle)
 				var right = Math.round((i+1) * widthRectangle)
 
-				var middle = Math.round(pos+(k+quota) * heightRectangle)
-				var middle2 = Math.round(pos+(k+1-quota) * heightRectangle)
-				var top = Math.round(pos+(k) * heightRectangle)
-				var bottom = Math.round(pos+(k+1) * heightRectangle)
+				var middle = Math.round(pos+(c+quota*1) * heightRectangle)
+				var middle2 = Math.round(pos+(c+1-quota) * heightRectangle)
+				var top = Math.round(pos+(c) * heightRectangle)
+				var bottom = Math.round(pos+(c+1) * heightRectangle)
 				
-				var color = model.candidates[k].fill
+				var color = model.candidates[c].fill
+				if (stillin.includes(c)) {
+					// draw support in color
+				} else {
+					// draw support in grey
+					// var color = "#ccc"
+					middle = top // just solid grey, no quota stuff
+				}
+
 				arena.ctx.fillStyle = color
 				arena.ctx.fillRect(left,top,right-left,bottom-top)
 				arena.ctx.fill()
@@ -2486,13 +2889,62 @@ function _drawBars(arena, model, round) {
 				}
 								
 				arena.ctx.globalAlpha = 1
+
+				if (stillin.includes(c)) {
+					break
+					// go through the list of people the voter voted for in order until we get to one that is still in the race
+				}
 			}
 		}
+	} else {
+		for (var i = 0; i < v.length; i++) {
+			var b = v[i].b
+			if (model.system == "QuotaApproval") { // workaround for now
+				var quota = Math.max(q[i],0)
+			} else {
+				if (r==0) {
+					var quota = 1
+				} else {
+					var quota = Math.max(model.result.history.rounds[r-1].q[model.orderOfVoters[i]],0)
+				}
+			}
+			
+			for (var k = 0; k < b.length; k++) {
+				
+				var support = b[k] / model.result.history.maxscore
+				if (support > 0) {
+					var left = Math.round(i * widthRectangle)
+					var right = Math.round((i+1) * widthRectangle)
+	
+					var middle = Math.round(pos+(k+quota*support) * heightRectangle)
+					var middle2 = Math.round(pos+(k+1-quota) * heightRectangle)
+					var top = Math.round(pos+(k) * heightRectangle)
+					var bottom = Math.round(pos+(k+support) * heightRectangle)
+					
+					var color = model.candidates[k].fill
+					arena.ctx.fillStyle = color
+					arena.ctx.fillRect(left,top,right-left,bottom-top)
+					arena.ctx.fill()
+					
+					arena.ctx.globalAlpha = .7
+					arena.ctx.fillStyle = "white"
+					if (1) {
+						arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+					} else {
+						arena.ctx.fillRect(left,top,right-left,middle2-top)
+					}
+									
+					arena.ctx.globalAlpha = 1
+				}
+			}
+		}
+	
+
 	}
 
 	// labels
 	_drawStroked("Votes",70,150,40,arena.ctx)
-	_drawStroked("Quota",70,480,40,arena.ctx)
+	_drawStroked("Power",70,480,40,arena.ctx)
 	
 }
 
@@ -2518,14 +2970,33 @@ function _getVoterArray(model) {
 				v.b[m] = 0 // zero out all the counts
 			}
 			
-		if (model.ballotType.name != "ApprovalBallot") continue // not yet fully functional TODO
-			var ballot = ballots[k].approved
-			for (var n = 0; n < ballot.length; n++) {
-				var id = ballot[n]
-				var index = model.candidatesById[id].i
-				v.b[index] = 1
+			if (model.ballotType.name == "ApprovalBallot") { // not yet fully functional TODO
+				
+				var ballot = ballots[k].approved
+				for (var n = 0; n < ballot.length; n++) {
+					var id = ballot[n]
+					var index = model.candidatesById[id].i
+					v.b[index] = 1
+				}
+				vs.push(v)
+			} else if (model.ballotType.name == "ScoreBallot") {
+				var ballot = ballots[k]
+				for (var n = 0; n < model.candidates.length; n++) {
+					var id = model.candidates[n].id
+					v.b[n] = ballot[id]
+				}
+				vs.push(v)
+			} else if (model.ballotType.name == "RankedBallot" && model.system == "STV") {
+				var ballot = ballots[k]
+				for (var n=0; n<ballot.rank.length; n++) {
+					var cid = ballot.rank[n]
+					var ci = model.candidatesById[cid].i
+					// v.b[ci] = n+1
+					v.b[n] = ci
+				}
+				vs.push(v)
+				
 			}
-			vs.push(v)
 		}
 	}
 	return vs
