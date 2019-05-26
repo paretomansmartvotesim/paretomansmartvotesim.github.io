@@ -20,6 +20,7 @@ Election.score = function(model, options){
 	});
 
 
+	var maxscore = 5
 
 	var winners = _countWinner(tally);
 	var result = _result(winners,model)
@@ -35,7 +36,7 @@ Election.score = function(model, options){
 		text += "<b>score as % of max possible: </b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+"'s score: "+_percentFormat(model, tally[c] / 5)+"<br>";
+			text += _icon(c)+"'s score: "+_percentFormat(model, tally[c] / maxscore)+"<br>";
 		}
 		if(!winner | winners.length>=2){
 			// NO WINNER?! OR TIE?!?!
@@ -60,6 +61,9 @@ Election.score = function(model, options){
 Election.star = function(model, options){
 
 	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(model,options,"score")
+
+
+	var maxscore = 5
 
 	// Tally the approvals & get winner!
 	var tally = _tally(model, function(tally, ballot){
@@ -116,7 +120,7 @@ Election.star = function(model, options){
 		text += "<b>pairwise winner of two highest average scores wins</b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+":"+_percentFormat(model, tally[c] / 5)+"<br>";
+			text += _icon(c)+":"+_percentFormat(model, tally[c] / maxscore)+"<br>";
 		}
 		text += "<br>";
 		text += "<b>Final Round between the top two:<br></b>";

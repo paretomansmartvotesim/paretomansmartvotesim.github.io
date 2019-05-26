@@ -164,6 +164,7 @@ function Model(modelName){
 			var v = _getVoterArray(self)
 			if (v.length > 0) {
 				if (self.dimensions == "1D+B" || self.dimensions == "1D") {
+					// easy sort in 1D
 					var m = v.map( function(d, i) {	return { i: i, d: d }; } ) // add an index to each voter
 					m.sort(function(a,b){return a.d.x - b.d.x}) // sort voters
 					self.orderOfVoters = m.map( a => a.i) // get original indices of sorted voters
@@ -241,7 +242,9 @@ function Model(modelName){
 		if (self.dimensions == "1D+B") self.arena.drawHorizontal()
 
 		self.arena.draw()
-		self.tarena.draw()
+		if (self.tarena.canvas.hidden  == false) {
+			self.tarena.draw()
+		}
 
 		
 		if (self.result) {
@@ -395,18 +398,24 @@ function Arena(arenaName, model) {
 		
 	self.modelToArena = function(d) {
 		if (arenaName == "tarena") {
-			if (model.dimensions == "2D") {
-				// find closest voter's index
-				var i = _closestVoterIndex(d,model)
-				var xP = i  * (self.canvas.width/2)
-				return {x:xP,y:35}
+			if (d.isCandidate) {
+				if (model.dimensions == "2D") {
+					// find closest voter's index
+					var i = _closestVoterIndex(d,model)
+					var xP = i  * (self.canvas.width/2)
+					return {x:xP,y:35}
+				} else {
+					var xP = _xToPercentile(d.x,model) / 100 * (self.canvas.width/2)
+					// return {x:xP,y:15*d.i+7} // each candidate has his own track
+					return {x:xP,y:35}
+				}
 			} else {
-				var xP = _xToPercentile(d.x,model) / 100 * (self.canvas.width/2)
-				// return {x:xP,y:15*d.i+7} // each candidate has his own track
-				return {x:xP,y:35}
+				return {x:0,y:-100} // offscreen... move voter offscreen
 			}
+		} else {
+			// just a regular arena
+			return d
 		}
-		return d
 	}
 
 	function _closestVoterIndex(d,model) { // returns where the candidate should be in the sorted list of voters
