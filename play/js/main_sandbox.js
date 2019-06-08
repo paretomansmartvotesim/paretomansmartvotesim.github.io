@@ -27,9 +27,14 @@ function Sandbox(modelName) {
     // Then wait for mouse events.
 
     // LOAD DEFAULTS and INPUT
-    var all_candidate_names = Object.keys(Candidate.graphics["Default"]) // helper
+    var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
+    var yes_all_candidates = {}
+    for (var i = 0; i < all_candidate_names.length; i++) {
+        var a = all_candidate_names[i]
+        yes_all_candidates[a] = true
+    }
     var defaults = {
-        configversion:1,
+        configversion:2.1,
         sandboxsave: false,
         featurelist: ["systems"],
         hidegearconfig: false,
@@ -50,6 +55,8 @@ function Sandbox(modelName) {
         theme: "Default",
         utility_shape: "linear",
         dimensions: "2D",
+        colorChooser: "pick and generate",
+        colorSpace: "hsluv with dark",
         arena_border: 2,
         preFrontrunnerIds: ["square","triangle"],
         autoPoll: "Manual",
@@ -57,11 +64,11 @@ function Sandbox(modelName) {
         firstStrategy: "zero strategy. judge on an absolute scale.",
         secondStrategy: "zero strategy. judge on an absolute scale.",
         doTwoStrategies: true,
-        yeefilter: all_candidate_names,
+        yeefilter: yes_all_candidates,
         computeMethod: "ez",
         pixelsize: 60,
         optionsForElection: {sidebar:true}, // sandboxes have this default
-        featurelist: ["systems","nVoterGroups","nCandidates","firstStrategy","doTwoStrategies","yee","gearicon"]
+        featurelist: ["systems","dimensions","nVoterGroups","firstStrategy","doTwoStrategies","yee","gearicon"]
     }
     self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
@@ -177,7 +184,7 @@ function Sandbox(modelName) {
                             config.sandboxsave = true
                             return ["systems","voters","candidates"] 	}	}	}
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
-            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon"])
+            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions"])
             // clear the grandfathered config settings
             delete config.doPercentFirst
             delete config.features
@@ -188,6 +195,7 @@ function Sandbox(modelName) {
             if (config.featurelist) {
                 var menuNameTranslator = {
                     "systems":"systems",
+                    "dimensions":"dimensions",
                     "voters":"nVoterGroups",
                     "nVoterGroups":"nVoterGroups",
                     "candidates":"nCandidates",
@@ -224,9 +232,27 @@ function Sandbox(modelName) {
                 }
                 config.featurelist = temp_featurelist
             }
+            config.configversion == 2 // updating to next version
         }
-        // we are now generating a new version of config
-        config.configversion = 2
+
+        if (config.configversion == 2) {
+            var oldyeefilter = config.yeefilter
+            var newyeefilter = {}
+            var oldcandidates = ["square","triangle","hexagon","pentagon","bob"]
+            for (var i = 0; i < oldcandidates.length; i++) {
+                var id = oldcandidates[i]
+                if (oldyeefilter.includes(id)) {
+                    newyeefilter[id] = true
+                } else {
+                    newyeefilter[id] = false
+                }
+            }
+            config.yeefilter = newyeefilter
+
+            config.configversion = 2.1 // bump to next version
+        }
+
+        // we are now generating a new version of config.  We are done with grandfathering
 
         // VOTER DEFAULTS
         // we want individual strategies to be loaded in, if they are there
@@ -254,7 +280,13 @@ function Sandbox(modelName) {
     model.start = function(){
 
         // CREATE
-        for(var i=0; i<config.numOfCandidates; i++) model.candidates.push(new Candidate(model))
+        
+        if (config.candidatePositions) {
+            for(var i=0; i<config.candidatePositions.length; i++) model.candidates.push(new Candidate(model))
+        } else {
+            for(var i=0; i<config.numOfCandidates; i++) model.candidates.push(new Candidate(model))
+        }
+
         if (config.oneVoter) {
             model.voters.push(new SingleVoter(model))
         } else {
@@ -276,10 +308,10 @@ function Sandbox(modelName) {
         model.HACK_BIG_RANGE = true;
         // INIT
         model.initDOM()
-        model.initMODEL()
         for (var i=0; i<model.candidates.length; i++) {
             model.candidates[i].init()
         }
+        model.initMODEL()
         for (var i=0; i<model.voters.length; i++) {
             model.voters[i].init()
         }
@@ -322,15 +354,6 @@ function Sandbox(modelName) {
         for (i in ui.menu.group_count.choose.sliders) ui.menu.group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
         for (i in ui.menu.group_spread.choose.sliders) ui.menu.group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 
-        // reflect the number of voters
-        for(var i=0;i<(maxVoters-1);i++) {
-            if (i < config.numVoterGroups) {
-                ui.menu.yee.choose.dom.childNodes[8+i].hidden=false
-            } else {
-                ui.menu.yee.choose.dom.childNodes[8+i].hidden=true
-            }
-        }
-        if (config.numVoterGroups == 1) ui.menu.yee.choose.dom.childNodes[8+0].hidden=true
     }
 
     ///////////////////
@@ -397,6 +420,9 @@ function Sandbox(modelName) {
         // It might be better to make a class and then an instance, but I think this singleton class is easier.
         // single = function() {stuff}; var systems = new single()
         var self = this
+        
+        var autoSwitchDim = false
+        
         self.name = "systems"
         self.list = [
             {name:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
@@ -445,9 +471,10 @@ function Sandbox(modelName) {
             // UPDATE
             
             // TODO: work this out so that the voters get re initialized in the correct place
-            ui.menu.dimensions.onChoose({name:model.dimensions}) 
-            ui.menu.dimensions.select()
-
+            if (autoSwitchDim) {
+                ui.menu.dimensions.onChoose({name:model.dimensions}) 
+                ui.menu.dimensions.select()
+            }
             model.update();
             menu_update()
         };
@@ -461,12 +488,19 @@ function Sandbox(modelName) {
             var s = self.listByName()
             model.election = s.election
             model.system = config.system;
-            if (config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV") {
+            var multiWinnerSystem = ( config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" )
+            if (autoSwitchDim) {
+                if (multiWinnerSystem) {
+                    model.dimensions = "1D+B"
+                } else {
+                    model.dimensions = "2D"
+                }
+            }
+            
+            if (multiWinnerSystem) {
                 model.tarena.canvas.hidden = false
-                model.dimensions = "1D+B"
             } else {
                 model.tarena.canvas.hidden = true
-                model.dimensions = "2D"
             }
             model.voterType = s.voter // probably don't need
             model.ballotType = window[s.ballot];
@@ -533,6 +567,48 @@ function Sandbox(modelName) {
         self.choose.dom.hidden = true
     }
 
+    ui.menu.dimensions = new function () {
+        var self = this
+        // self.name = dimensions
+        self.list = [
+            {name:"2D",realname:"Two Position Dimensions",margin:4},
+            {name:"1D+B",realname:"One Position Dimension Horizontally, Plus Broadness in the Vertical Dimension", margin:4},
+            {name:"1D", realname:"One Dimension Horizontally, Vertical Doesn't Matter"}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.dimensions = data.name
+            // CONFIGURE
+            self.configure()
+            // INIT (LOADER)	
+            model.initDOM()
+            // INIT
+            for (var i=0; i<model.voters.length; i++) {
+                model.voters[i].init()
+            }
+            for (var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            // UPDATE
+            model.update()
+            // _objF(ui.arena,"update")
+            // ui.menu.spread_factor_voters.select()
+        };
+        self.configure = function() {
+            model.dimensions = config.dimensions
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.dimensions);
+        }
+        self.choose = new ButtonGroup({
+            label: "Arena Dimensions:",
+            width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        basediv.querySelector("#left").appendChild(self.choose.dom);
+    }
+
     ui.menu.nVoterGroups = new function() { // How many voters?
         var self = this
         self.name = "nVoterGroups"
@@ -590,8 +666,10 @@ function Sandbox(modelName) {
                 }
             }
             // CONFIGURE
-            // self.configure()
-            _objF(ui.menu,"configure")
+            self.configure()
+            //_objF(ui.menu,"configure")  // TODO: do I need this?
+            ui.menu.firstStrategy.configure()
+            ui.menu.secondStrategy.configure()
             // INIT
             model.initMODEL()
             for(var i=0; i<model.voters.length; i++) {
@@ -708,6 +786,8 @@ function Sandbox(modelName) {
             }
             // CONFIGURE
             ui.menu.nVoterGroups.configure() // same settings in this other button
+            ui.menu.firstStrategy.configure()
+            ui.menu.secondStrategy.configure()
             // INIT
             model.initMODEL()
             for(var i=0; i<model.voters.length; i++) {
@@ -815,6 +895,16 @@ function Sandbox(modelName) {
         }			
     }
 
+    model.onInitModel = function() {
+        // update sandbox buttons
+        var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
+        m.forEach(function(m) {
+            m.choose.buttonConfigs = m.makelist()
+            m.choose.init()
+            m.select()
+        })
+    }
+
     ui.menu.nCandidates = new function() { // how many candidates?
         var self = this
         self.name = "nCandidates"
@@ -828,6 +918,7 @@ function Sandbox(modelName) {
             // LOAD INPUT
             config.numOfCandidates = data.num;
             config.candidatePositions = null
+            config.candidateSerials = null
             // CREATE
             model.candidates = []
             for(var i=0; i<config.numOfCandidates; i++) {
@@ -837,11 +928,21 @@ function Sandbox(modelName) {
             self.configure()
 
             // INIT
-            model.initMODEL()
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
+            model.initMODEL()
             // UPDATE
+            
+            // update sandbox buttons
+            var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
+            m.forEach(function(m) {
+                m.choose.buttonConfigs = m.makelist()
+                m.choose.init()
+                m.select()
+            })
+
+            // update model
             model.update()
         };
         self.choose = new ButtonGroup({
@@ -850,16 +951,25 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.configure = function() { // expanding upon what the button means for the model
+        self.configure = function() { 
+            // expanding upon what the button means for the model
+            // this handles all the candidate creation every time a set of candidates is loaded
             model.numOfCandidates = config.numOfCandidates
             // Candidates, in a circle around the center.
-            var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
+			var _candidateIcons = Object.keys(Candidate.graphicsByIcon["Default"])
             var num = config.numOfCandidates;
             if (config.candidatePositions) {
-                for(var i=0; i<num; i++){
-                    var id = _candidateIDs[i];
+                model.numOfCandidates = config.candidatePositions.length
+                for(var i=0; i<config.candidatePositions.length; i++){
+                    var serial = i
+                    if (config.candidateSerials) {
+                        serial = config.candidateSerials[i]
+                    }
+                    var icon = _candidateIcons[serial % _candidateIcons.length];
+                    var instance = Math.floor(serial / _candidateIcons.length) + 1
                     Object.assign(model.candidates[i],{
-                        id:id,
+                        icon:icon,
+                        instance:instance,
                         x:config.candidatePositions[i][0],
                         y:config.candidatePositions[i][1]
                     })
@@ -875,9 +985,9 @@ function Sandbox(modelName) {
                     var r = 100;
                     var x = 150 - r*Math.cos(angle) + (config.arena_size - 300) * .5; // probably replace "model" with "config", but maybe this will cause a bug
                     var y = 150 - r*Math.sin(angle) + (config.arena_size - 300) * .5; // TODO check for bug
-                    var id = _candidateIDs[i];
+                    var icon = _candidateIcons[i];
                     Object.assign(model.candidates[i],{
-                        id:id,
+                        icon:icon,
                         x:x,
                         y:y
                     })
@@ -896,6 +1006,13 @@ function Sandbox(modelName) {
             self.choose.highlight("num", config.numOfCandidates);
         }
         basediv.querySelector("#left").appendChild(self.choose.dom);
+    }
+
+    model.onAddCandidate = function() {
+        var n = model.candidates.length
+        model.numOfCandidates = n
+        config.numOfCandidates = n
+        ui.menu.nCandidates.select()
     }
 
     ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
@@ -1170,18 +1287,28 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
-    function _iconButton(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>"}
+
+    function _iconButton(id) {
+        return "<span class='buttonshape'>"+model.icon(id)+"</span>"
+    }
 
     ui.menu.frontrunners = new function() { // frontrunners
         var self = this
         self.name = "frontrunners"
-        self.list = [
-            {name:_iconButton("square"),realname:"square",margin:5},
-            {name:_iconButton("triangle"),realname:"triangle",margin:5},
-            {name:_iconButton("hexagon"),realname:"hexagon",margin:5},
-            {name:_iconButton("pentagon"),realname:"pentagon",margin:5},
-            {name:_iconButton("bob"),realname:"bob"}
-        ];
+        self.list = [];
+        self.makelist = function() {
+            var a = []
+            for (var i=0; i < model.candidates.length; i++) {
+                var c = model.candidates[i]
+                a.push({
+                    name:_iconButton(c.id),
+                    realname:c.id,
+                    margin:5
+                })
+            }
+            a[a.length-1].margin = 0
+            return a
+        }
         self.onChoose = function(data){
             // LOAD INPUT
             var preFrontrunnerSet = new Set(config.preFrontrunnerIds)
@@ -1255,24 +1382,37 @@ function Sandbox(modelName) {
     ui.menu.yee = new function() { // yee
         var self = this
         self.name = "yee"
-        self.list = [
-            {name:_iconButton("square"),realname:"square",keyyee:"square",kindayee:"can",margin:4},
-            {name:_iconButton("triangle"),realname:"triangle",keyyee:"triangle",kindayee:"can",margin:4},
-            {name:_iconButton("hexagon"),realname:"hexagon",keyyee:"hexagon",kindayee:"can",margin:4},
-            {name:_iconButton("pentagon"),realname:"pentagon",keyyee:"pentagon",kindayee:"can",margin:4},
-            {name:_iconButton("bob"),realname:"bob",keyyee:"bob",kindayee:"can",margin:28},
-            {name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5},
-            {name:"A",realname:"all voters",keyyee:"mean",kindayee:"center",margin:28},
-            {name:"1",realname:"first voter group",kindayee:"voter",keyyee:0,margin:4},
-            {name:"2",realname:"second voter group",kindayee:"voter",keyyee:1,margin:4},
-            {name:"3",realname:"third voter group",kindayee:"voter",keyyee:2,margin:4},
-            {name:"4",realname:"fourth voter group",kindayee:"voter",keyyee:3,margin:4},
-            {name:"5",realname:"fifth voter group",kindayee:"voter",keyyee:4,margin:4},
-            {name:"6",realname:"sixth voter group",kindayee:"voter",keyyee:5,margin:4},
-            {name:"7",realname:"seventh voter group",kindayee:"voter",keyyee:6,margin:4},
-            {name:"8",realname:"eighth voter group",kindayee:"voter",keyyee:7,margin:4},
-            {name:"9",realname:"ninth voter group",kindayee:"voter",keyyee:8,margin:8},
-        ];
+        self.list = [];
+        self.makelist = function() {
+            var a = []
+            a = a.concat([
+                {name:"A",realname:"all voters",keyyee:"mean",kindayee:"center",margin:28}])
+            for (var i=0; i < model.voters.length; i++) {
+                var v = model.voters[i]
+                a.push({
+                    name:i+1,
+                    realname:"voter group #"+(i+1),
+                    keyyee:i,
+                    kindayee:"voter",
+                    margin:4
+                })
+            }
+            a[a.length-1].margin = 28 // make the last button have some space after it
+            a = a.concat([
+                {name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5,width:68}])
+            a[a.length-1].margin = 200 - 28 - 1 * 22 // make the last button have some space after it
+            for (var i=0; i < model.candidates.length; i++) {
+                var c = model.candidates[i]
+                a.push({
+                    name:_iconButton(c.id),
+                    realname:c.id,
+                    keyyee:c.id,
+                    kindayee:"can",
+                    margin:4
+                })
+            }
+            return a
+        }
         self.onChoose = function(data){
             // LOAD INPUT
             config.kindayee = data.kindayee
@@ -1309,7 +1449,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.childNodes[6].style.width = "68px"
         self.choose.dom.setAttribute("id",self.name)
         basediv.querySelector("#left").appendChild(self.choose.dom);
     }
@@ -1317,26 +1456,37 @@ function Sandbox(modelName) {
     ui.menu.yeefilter = new function() { 	// yee filter
         var self = this
         self.name = "yeefilter"
-        self.list = [
-            {name:_iconButton("square"),realname:"square",keyyee:"square",margin:4},
-            {name:_iconButton("triangle"),realname:"triangle",keyyee:"triangle",margin:4},
-            {name:_iconButton("hexagon"),realname:"hexagon",keyyee:"hexagon",margin:4},
-            {name:_iconButton("pentagon"),realname:"pentagon",keyyee:"pentagon",margin:4},
-            {name:_iconButton("bob"),realname:"bob",keyyee:"bob"}
-        ];
+        self.list = [];
+        self.makelist = function() {
+            var a = []
+            var newList = {}
+            for (var i=0; i < model.candidates.length; i++) {
+                var c = model.candidates[i]
+                a.push({
+                    name:_iconButton(c.id),
+                    realname:c.id,
+                    keyyee:c.id,
+                    margin:4
+                })
+                if (Object.keys(config.yeefilter).includes(c.id)) {
+                    newList[c.id] = config.yeefilter[c.id]
+                } else {
+                    newList[c.id] = true
+                }
+            }
+
+            // update yeefilter
+            config.yeefilter = newList
+            model.yeefilter = newList
+            return a
+        }
         self.onChoose = function(data){
             // LOAD CONFIG //
-            var yeefilterset = new Set(config.yeefilter)
-            if (data.isOn) {
-                yeefilterset.add(data.realname)
-            } else {
-                yeefilterset.delete(data.realname)
-            }
-            config.yeefilter = Array.from(yeefilterset)
+            config.yeefilter[data.realname] = data.isOn
             // CONFIGURE
             self.configure()
             // UPDATE
-            model.update();
+            model.draw();
         };
         self.configure = function() {
             model.yeefilter = config.yeefilter
@@ -1349,7 +1499,7 @@ function Sandbox(modelName) {
             width: 20,
             data: self.list,
             onChoose: self.onChoose,
-            isCheckbox: true
+            isCheckboxBool: true
         });
         self.choose.dom.setAttribute("id",self.name)
         basediv.querySelector("#left").appendChild(self.choose.dom);
@@ -1547,6 +1697,83 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
+    ui.menu.colorChooser = new function () {
+        var self = this
+        // self.name = computeMethod
+        self.list = [
+            {name:"pick and repeat",margin:4},
+            {name:"pick and repeat w/ offset",margin:4},
+            {name:"generate all",margin:4},
+            {name:"pick and generate"}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.colorChooser = data.name
+            // CONFIGURE
+            self.configure()
+            // INIT
+            for(var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            model.initMODEL()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.colorChooser = config.colorChooser
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.colorChooser);
+        }
+        self.choose = new ButtonGroup({
+            label: "Method of Choosing Colors:",
+            width: 220,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.choose.dom.hidden = true
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+    }
+
+    ui.menu.colorSpace = new function () {
+        var self = this
+        // self.name = computeMethod
+        self.list = [
+            {name:"hsluv with dark"}
+            // ,margin:4},
+            // {name:"hsluv light",margin:4},
+            // {name:"cie sampling",margin:4},
+            // {name:"hsl with dark"}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.colorSpace = data.name
+            // CONFIGURE
+            self.configure()
+            // INIT
+            for(var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            // model.initMODEL()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.colorSpace = config.colorSpace
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.colorSpace);
+        }
+        self.choose = new ButtonGroup({
+            label: "Method of Choosing Colors:",
+            width: 220,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.choose.dom.hidden = true
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+    }
+
     ui.menu.spread_factor_voters = new function () {
         var self = this
         // self.name = spread_factor_voters
@@ -1692,6 +1919,7 @@ function Sandbox(modelName) {
             // CONFIGURE
             self.configure()
             // INIT MODEL
+		    model.arena.initARENA()
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
@@ -1721,49 +1949,6 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Theme:",
-            width: 68,
-            data: self.list,
-            onChoose: self.onChoose
-        });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
-    }
-
-    ui.menu.dimensions = new function () {
-        var self = this
-        // self.name = dimensions
-        self.list = [
-            {name:"2D",realname:"Two Position Dimensions",margin:4},
-            {name:"1D+B",realname:"One Position Dimension Horizontally, Plus Broadness in the Vertical Dimension", margin:4},
-            {name:"1D", realname:"One Dimension Horizontally, Vertical Doesn't Matter"}
-        ]
-        self.onChoose = function(data){
-            // LOAD
-            config.dimensions = data.name
-            // CONFIGURE
-            self.configure()
-            // INIT (LOADER)	
-            model.initDOM()
-            // INIT
-            for (var i=0; i<model.voters.length; i++) {
-                model.voters[i].init()
-            }
-            for (var i=0; i<model.candidates.length; i++) {
-                model.candidates[i].init()
-            }
-            // UPDATE
-            model.update()
-            // _objF(ui.arena,"update")
-            // ui.menu.spread_factor_voters.select()
-        };
-        self.configure = function() {
-            model.dimensions = config.dimensions
-        }
-        self.select = function() {
-            self.choose.highlight("name", config.dimensions);
-        }
-        self.choose = new ButtonGroup({
-            label: "Arena Dimensions:",
             width: 68,
             data: self.list,
             onChoose: self.onChoose
@@ -1824,7 +2009,8 @@ function Sandbox(modelName) {
                 ui.menu.arena_size,
                 ui.menu.median_mean,
                 ui.menu.theme,
-                ui.menu.dimensions,
+                ui.menu.colorChooser,
+                ui.menu.colorSpace,
                 ui.menu.utility_shape,
                 ui.menu.gearoff
             ]
@@ -1987,12 +2173,14 @@ function Sandbox(modelName) {
 
         // Candidate positions
         var positions = [];
+        var serials = [];
         for(var i=0; i<model.candidates.length; i++){
             var candidate = model.candidates[i];
             positions.push([
                 Math.round(candidate.x),
                 Math.round(candidate.y)
             ]);
+            serials.push(candidate.serial)
         }
         if(log) console.log("candidatePositions: "+JSON.stringify(positions));
         var candidatePositions = positions;
@@ -2012,7 +2200,8 @@ function Sandbox(modelName) {
         // positions!
         return {
             candidatePositions: candidatePositions,
-            voterPositions: voterPositions
+            voterPositions: voterPositions,
+            candidateSerials: serials
         };
 
     };
@@ -2058,8 +2247,10 @@ function Sandbox(modelName) {
 
     };
 
-    self.update = function(){
+    self.update = function(assets){
         // UPDATE SANDBOX
+
+        model.assets = assets
         
         basediv.classList.add("div-model-theme-" + config.theme)
         _objF(ui.arena,"update")
@@ -2078,12 +2269,18 @@ function Sandbox(modelName) {
         
         // the peeps
         "play/img/voter_face.png",
+
         "play/img/square.png",
         "play/img/triangle.png",
         "play/img/hexagon.png",
         "play/img/pentagon.png",
         "play/img/bob.png",
 
+        "play/img/square.svg",
+        "play/img/triangle.svg",
+        "play/img/hexagon.svg",
+        "play/img/pentagon.svg",
+        "play/img/bob.svg",
 
         "play/img/blue_bee.png",
         "play/img/yellow_bee.png",

@@ -1,23 +1,182 @@
 function Candidate(model){
 
 	var self = this;
-	Draggable.call(self, model);
+	Draggable.call(self);
 	
 
 	// CONFIGURE DEFAULTS
 	self.isCandidate = true
-	self.id = 'square'
+	// it would be better to have a serial number, but for now, use icon and instance
+	self.icon = 'square'
+	self.instance = 1
 	self.size = 40;
 	self.selected = false
 
 	self.init = function () {
-
 		// GRAPHICS
-		if (model.theme == undefined) model.theme = "Default"
-		var _graphics = Candidate.graphics[model.theme][self.id];
-		self.fill = _graphics.fill;
-		self.img = new Image();
-		self.img.src = _graphics.img;
+
+		// Defaults
+		if (model.theme == undefined) model.theme = "Default" // comment: this should already be handled in model.js
+		if (model.colorChooser == undefined) model.colorChooser = "pick and generate"
+		if (model.colorSpace == undefined) model.colorSpace = "hsluv with dark"
+
+		// compose an id
+		if (self.instance > 1) {
+			self.id = self.icon + self.instance
+		} else {
+			self.id = self.icon
+		}
+
+		// what order are we at
+		var chars = Candidate.graphics[model.theme]
+		var char = Candidate.graphicsByIcon[model.theme][self.icon]
+		var charIndex = char.i
+		var serial = charIndex + (self.instance - 1) * chars.length
+		self.serial = serial
+		self.url = char.url
+		// var _graphics = Candidate.graphics[model.theme][self.icon];
+		// self.url = _graphics.img
+		
+		// are we using an svg or an img?
+		// if the model doesn't have assets, then load the files the old way
+		if (model.assets) {
+			if (model.assets[self.url]) {
+				var asset = model.assets[self.url]
+			} else {
+				if (Loader) {
+					if (Loader.assets[self.url]) {
+						var asset = Loader.assets[self.url]
+					}
+				}
+			}
+		}
+
+		// png or svg?
+		var ext = char.url.split('.').pop();
+		self.ext = ext
+		if (ext != "svg") {
+			// if we are using png's then we have to repeat the fill // TODO: fix
+			self.fill = char.fill
+		} else if (model.colorChooser == "pick and generate") {
+			if (self.instance > 1) {
+				// change fill for further rounds
+				self.fill = Color.generate(serial)
+			} else {
+				self.fill = char.fill
+				// self.fill = _graphics.fill;
+			}
+		} else if (model.colorChooser == "pick and repeat w/ offset") {
+			if (self.instance > 1) {
+				// change fill for further rounds
+				var fillIndex = (charIndex + self.instance - 1) % chars.length
+				self.fill = chars[fillIndex].fill
+			} else {
+				self.fill = char.fill
+				// self.fill = _graphics.fill;
+			}
+		} else if (model.colorChooser == "generate all") {
+			self.fill = Color.generate(serial)
+		} else { // "pick and repeat"
+			self.fill = char.fill
+		}
+		
+
+
+		// make an img for canvas
+		// make an embeddable text string for html
+		// This should be the last thing in this function because there are callbacks here.
+		if (asset) {
+			if (ext == "svg") {
+				processSVG(asset)
+				model.nLoading++
+				makeImg()
+			} else { 
+				// png asset
+				// the img is already made
+				self.img = asset
+
+				self.texticon = "<img src='"+self.url+"'/>"
+			}
+		} else { 
+			// no asset, so load the img from a file
+			if (ext == "svg") {
+				model.nLoading++
+				downloadSVGandMakeImg( function() { 
+					// callback
+					self.texticon = self.svg
+					model.update() // draw the UI.. maybe we don't need a whole bunch
+				})
+			} else { 
+				self.srcImg = self.url
+				model.nLoading++
+				makeImg()
+
+				self.texticon = "<img src='"+self.url+"'/>"
+			}
+		}
+
+		function processSVG(asset) {
+			// make self.srcImg and self.svg from asset
+
+			// svg processing
+			// create own class: replace cls-1 with cls-id
+			self.svg = asset
+			self.svg = self.svg.replace(/cls-1/g,"cls-"+self.id)
+			// set style color
+			var stylechange = "<style>.cls-" + self.id + "{fill:" + self.fill + ";}</style>"
+			// add style to svg
+			self.svg  = self.svg.replace("</svg>", stylechange + "</svg>")
+			// deal with tooltext
+			var doToolText = false
+			if (doToolText) { // replace name in tooltext
+				self.svg  = self.svg.replace(/<title>[^<]*<\/title>/, "<title>" + self.id + "</title>")
+			} else { // no tooltext
+				self.svg  = self.svg.replace(/<title>[^<]*<\/title>/, "")
+			}
+
+			// make the img using a Blob
+			var svgblob = new Blob([self.svg], {type: 'image/svg+xml'});
+			self.srcImg = URL.createObjectURL(svgblob); // TODO: fix firefox problems
+			self.texticon = self.svg
+		}
+		
+		function downloadSVGandMakeImg(cb) {
+			// save svg as text
+			var svgText
+			var request = new XMLHttpRequest();
+			request.open("GET", self.url);
+			request.setRequestHeader("Content-Type", "image/svg+xml");
+			request.onload = function(event) { // onload ... not load
+				svgText = event.target.responseText
+				processSVG(svgText)
+				makeImg()
+				cb()
+			}
+			// request.addEventListener("load", function(event) { // onload ... not load
+			// 	svgText = event.target.responseText
+			// 	loaded(src,svgText)
+			// });
+			request.send();
+
+		}
+
+		function makeImg() {
+			self.img = new Image()
+			self.img.src = self.srcImg
+			self.img.onload = function () {
+				// self.datimg = _convertImageToDataURLviaCanvas(self.img, outputFormat)
+				model.nLoading--
+				if (model.nLoading == 0) {
+					model.draw()
+				}
+			}
+		}
+		
+	}
+	
+	self.convertColor = function() {
+		var coloredSvgXml = svgXml.replace(/#3080d0/g,'#e05030');
+		img.src = "data:image/svg+xml;charset=utf-8,"+coloredSvgXml;
 	}
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
@@ -58,71 +217,101 @@ function Candidate(model){
 
 // CONSTANTS: the GRAPHICS!
 // id => img & fill
+
 Candidate.graphics = {
-	Default: {
-		square: {
-			img: "play/img/square.png",
+	Default: [
+		{
+			icon: "square",
+			url: "play/img/square.svg",
 			fill: "hsl(240,80%,70%)"
 		},
-		triangle: {
-			img: "play/img/triangle.png",
+		{
+			icon: "triangle",
+			url: "play/img/triangle.svg",
 			fill: "hsl(45,80%,70%)"
 		},
-		hexagon: {
-			img: "play/img/hexagon.png",
+		{
+			icon: "hexagon",
+			url: "play/img/hexagon.svg",
 			fill: "hsl(0,80%,70%)"
 		},
-		pentagon: {
-			img: "play/img/pentagon.png",
+		{
+			icon: "pentagon",
+			url: "play/img/pentagon.svg",
 			fill: "hsl(90,80%,70%)"
 		},
-		bob: {
-			img: "play/img/bob.png",
+		{
+			icon: "bob",
+			url: "play/img/bob.svg",
 			fill: "hsl(30,80%,70%)"
 		}
-	},	
-	Nicky: {
-		square: {
-			img: "play/img/square.png",
+	],
+	Nicky: [
+		{
+			icon: "square",
+			url: "play/img/square.png",
 			fill: "hsl(240,80%,70%)"
 		},
-		triangle: {
-			img: "play/img/triangle.png",
+		{
+			icon: "triangle",
+			url: "play/img/triangle.png",
 			fill: "hsl(45,80%,70%)"
 		},
-		hexagon: {
-			img: "play/img/hexagon.png",
+		{
+			icon: "hexagon",
+			url: "play/img/hexagon.png",
 			fill: "hsl(0,80%,70%)"
 		},
-		pentagon: {
-			img: "play/img/pentagon.png",
+		{
+			icon: "pentagon",
+			url: "play/img/pentagon.png",
 			fill: "hsl(90,80%,70%)"
 		},
-		bob: {
-			img: "play/img/bob.png",
+		{
+			icon: "bob",
+			url: "play/img/bob.png",
 			fill: "hsl(30,80%,70%)"
 		}
-	},
-	Bees: {
-		square: {
-			img: "play/img/blue_bee.png",
+	],
+	Bees: [
+		{
+			icon: "square",
+			url: "play/img/blue_bee.png",
 			fill: "hsl(240,80%,70%)"
 		},
-		triangle: {
-			img: "play/img/yellow_bee.png",
+		{
+			icon: "triangle",
+			url: "play/img/yellow_bee.png",
 			fill: "hsl(45,80%,70%)"
 		},
-		hexagon: {
-			img: "play/img/red_bee.png",
+		{
+			icon: "hexagon",
+			url: "play/img/red_bee.png",
 			fill: "hsl(0,80%,70%)"
 		},
-		pentagon: {
-			img: "play/img/green_bee.png",
+		{
+			icon: "pentagon",
+			url: "play/img/green_bee.png",
 			fill: "hsl(90,80%,70%)"
 		},
-		bob: {
-			img: "play/img/orange_bee.png",
+		{
+			icon: "bob",
+			url: "play/img/orange_bee.png",
 			fill: "hsl(30,80%,70%)"
 		}
-	}
+	]
 };
+
+// index by icon, as well, and have index stored and ready
+Candidate.graphicsByIcon = {}
+for (var themename in Candidate.graphics) {
+	var theme = Candidate.graphics[themename]
+	Candidate.graphicsByIcon[themename] = {}
+	for (var k = 0; k < theme.length; k++) {
+		var char = theme[k]
+		char.i = k
+		Candidate.graphicsByIcon[themename][char.icon] = char
+	}
+}
+
+

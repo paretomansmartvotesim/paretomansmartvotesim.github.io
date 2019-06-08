@@ -107,3 +107,8 @@ Election/Sandbox design:
 #reset, #save{
 	position:absolute;
 }
+
+svg {
+	width: 1em;
+	height: 1em;
+}

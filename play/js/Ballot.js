@@ -40,6 +40,9 @@ function ScoreBallot(model){
 		}
 		for(var cID in ballot){
 			var score = ballot[cID];
+			
+			var okScore = (score < 6)
+			if (! (self._okCandidate(cID) && okScore)) continue
 			if (model.startAt1) {
 				self.boxes[cID].gotoFrame(score-1);
 			} else {
@@ -81,6 +84,8 @@ function ThreeBallot(model){
 
 		for(var cID in ballot){
 			var score = ballot[cID];
+			var okScore = (score < 6)
+			if (! (self._okCandidate(cID) && okScore)) continue
 			self.boxes[cID].gotoFrame(score+1);
 		}
 	};
@@ -120,6 +125,7 @@ function ApprovalBallot(model){
 		// Check all those who were approved
 		for(var i=0; i<ballot.approved.length; i++){
 			var candidate = ballot.approved[i];
+			if (! (self._okCandidate(candidate))) continue
 			self.boxes[candidate].gotoFrame(1);
 		}
 
@@ -158,6 +164,8 @@ function RankedBallot(model){
 		for(var i=0; i<ballot.rank.length; i++){
 			var candidate = ballot.rank[i];
 			var frame = 2 + i;
+			var okRank = (i < 5)
+			if (! (self._okCandidate(candidate) && okRank)) continue
 			self.boxes[candidate].gotoFrame(frame);
 		}
 	};
@@ -191,7 +199,9 @@ function PluralityBallot(model){
 		for(var box in self.boxes){
 			self.boxes[box].gotoFrame(0); // unchecked...
 		}
-		self.boxes[vote].gotoFrame(1); // ...except for the one.
+		if (Object.keys(self.boxes).includes(vote)) {
+			self.boxes[vote].gotoFrame(1); // ...except for the one.
+		}
 	};
 }
 
@@ -276,4 +286,13 @@ function Ballot(model){
 		});
 	};
 
+	
+	self._okCandidate = function(candidate) {
+		if (model.inSandbox) {
+			return ["square","triangle","hexagon","pentagon","bob"].includes(candidate)
+		} else {
+			return ["square","triangle","hexagon"].includes(candidate)
+		}
+	}
 }
+

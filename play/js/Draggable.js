@@ -1,4 +1,4 @@
-function Draggable(model){ // Voter and Candidate classes are extended to make them draggable objects in an arena.
+function Draggable(){ // Voter and Candidate classes are extended to make them draggable objects in an arena.
 	// sanity rules: Draggable class creation code cannot read attributes from model.
 
 	var self = this;
@@ -72,9 +72,18 @@ function DraggableManager(arena,model){
 	}
 
 	// INTERFACING WITH THE *MOUSE*
-	subscribe(arena.id+"-mousemove", function(){
+	subscribe(model.id + "-" + arena.id+"-mousemove", function(){
 		if(arena.mouse.pressed){
-			model.update();
+			// open the trash can
+			if (arena.mouse.dragging) {
+				if (model.arena.mouse.dragging) {
+					if (model.theme != "Nicky") {
+						// if we are in the main arena, then do the trash test
+						model.arena.trash.test();
+					}
+				}
+				model.update();
+			}
 		}else if(self.isOver()){
 			// If over anything, grab cursor!
 			arena.canvas.setAttribute("cursor", "grab");
@@ -101,16 +110,26 @@ function DraggableManager(arena,model){
 			self.lastwas = "nothovering"
 		}
 	});
-	subscribe(arena.id+"-mousedown", function(){
+	subscribe(model.id + "-" + arena.id+"-mousedown", function(){
 
 		// Didja grab anything? null if nothing.
-		arena.mouse.dragging = self.isOver();
+		var d = self.isOver();
 
 		// If so...
-		if(arena.mouse.dragging){
-			arena.mouse.dragging.startDrag(arena);
+		if(d){
+			
+			// special case.. adding a candidate
+			if (d.istrash) return
+			if (d.isplus) {
+				n = d.doPlus() // plus stuff
+				d = n // switcheroo ... so the candidate pops out of the plus sign
+			}
+
+			// move it
+			arena.mouse.dragging = d
+			d.startDrag(arena);
 			if (arena.mouse.ctrlclick) { // we toggled this guy as a winner
-				arena.mouse.dragging.selected = ! arena.mouse.dragging.selected
+				d.selected = ! d.selected
 			}
 			model.update();
 
@@ -120,12 +139,12 @@ function DraggableManager(arena,model){
 		}
 
 	});
-	subscribe(arena.id+"-mouseup", function(){
-		if (arena.mouse.dragging) {
+	subscribe(model.id + "-" + arena.id+"-mouseup", function(){
+		if (arena.mouse.dragging) { // we are dragging something, not just air
 			model.onDrop()
+			model.update();
 		}
 		arena.mouse.dragging = null;
-		model.update();
 	});
 
 }

@@ -229,11 +229,11 @@ function Yee(model) {
 					//	return wl
 					//}
 					colorlist = []
-					for (w in wl) {colorlist.push(Candidate.graphics[model.theme][canAid[wl[w]] || "square"].fill)}
+					for (w in wl) {colorlist.push(model.candidatesById[canAid[wl[w]] || "square"].fill)}
 					model.gridb[i] = colorlist
 					var a = "#ccc" // grey is actually a code for "look for more colors"
 				} else {
-					var a = Candidate.graphics[model.theme][canAid[winner] || "square"].fill
+					var a = model.candidatesById[canAid[winner] || "square"].fill
 				}
 				// if (a == "#ccc") {a = "#ddd"} // hack for now, but will deal with ties later
 				model.gridl.push(a);
@@ -270,11 +270,6 @@ function Yee(model) {
 				model.voters[i].x = voterso[i].x
 				model.voters[i].y = voterso[i].y
 			}
-		}
-
-		// reload the original ballots
-		for(var j=0; j<model.voters.length; j++){
-			model.voters[j].update();
 		}
 	}
 	
@@ -356,14 +351,19 @@ function Yee(model) {
 			ctx.globalAlpha = .9
 			var pixelsize = model.pixelsize;
 
-			var can_filter_yee = model.yeefilter
+			var can_filter_yee = []
+			for(var id in model.yeefilter) {
+				if (model.yeefilter[id]) {
+					can_filter_yee.push(id)
+				}
+			}
 			var method_1 = (Election.stv == model.election) || (Election.rrv == model.election)  // two methods for filtering colors in the yee diagram
 			if (method_1) {
-				color_filter_yee = can_filter_yee.map(x => Candidate.graphics[model.theme][x].fill)
+				color_filter_yee = can_filter_yee.map(x => model.candidatesById[x].fill)
 			} else {
 				translate = {}
-				for(can in Candidate.graphics[model.theme]) {
-					var colorcan = Candidate.graphics[model.theme][can].fill
+				for(can in model.candidatesById) {
+					var colorcan = model.candidatesById[can].fill
 					translate[colorcan] = can_filter_yee.includes(can) ? colorcan : 'white'
 				}
 			}

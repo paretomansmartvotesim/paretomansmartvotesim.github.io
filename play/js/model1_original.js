@@ -5,6 +5,7 @@ l.onload = function(assets){
   var modelName = "model1"
   var model = new Model(modelName);
   model.assets = assets
+	model.theme = "Nicky"
   model.createDOM()
   // CONFIGURE
   model.border = 2

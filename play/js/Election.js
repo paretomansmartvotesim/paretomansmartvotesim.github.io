@@ -36,15 +36,15 @@ Election.score = function(model, options){
 		text += "<b>score as % of max possible: </b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+"'s score: "+_percentFormat(model, tally[c] / maxscore)+"<br>";
+			text += model.icon(c)+"'s score: "+_percentFormat(model, tally[c] / maxscore)+"<br>";
 		}
 		if(!winner | winners.length>=2){
 			// NO WINNER?! OR TIE?!?!
-			text += _tietext(winners);
+			text += _tietext(model,winners);
 			// text = "<b>TIE</b> <br> <br>" + text;
 		} else {
 			text += "<br>";
-			text += _icon(winner)+" has the highest score, so...<br>";
+			text += model.icon(winner)+" has the highest score, so...<br>";
 			text += "</span>";
 			text += "<br>";
 			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
@@ -120,11 +120,11 @@ Election.star = function(model, options){
 		text += "<b>pairwise winner of two highest average scores wins</b><br>";
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+":"+_percentFormat(model, tally[c] / maxscore)+"<br>";
+			text += model.icon(c)+":"+_percentFormat(model, tally[c] / maxscore)+"<br>";
 		}
 		text += "<br>";
 		text += "<b>Final Round between the top two:<br></b>";
-		text += _icon(frontrunners[0])+_percentFormat(model, aWins)+". "+_icon(frontrunners[1]) +_percentFormat(model, bWins) + "<br>";
+		text += model.icon(frontrunners[0])+_percentFormat(model, aWins)+". "+model.icon(frontrunners[1]) +_percentFormat(model, bWins) + "<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS";
@@ -198,17 +198,17 @@ Election.three21 = function(model, options){
 		text += "<b>Semifinalists:</b><br>";
 		for(var i=0; i<semifinalists.length; i++){
 			var c = semifinalists[i];
-			text += _icon(c)+"'s 'good': "+ _percentFormat(model, tallies[2][c]) +"<br>";
+			text += model.icon(c)+"'s 'good': "+ _percentFormat(model, tallies[2][c]) +"<br>";
 			
 		}
 		text += "<b>Finalists:</b><br>";
 		for(var i=0; i<finalists.length; i++){
 			var c = finalists[i];
-			text += _icon(c)+"'s 'bad': "+_percentFormat(model, tallies[0][c])+"<br>";
+			text += model.icon(c)+"'s 'bad': "+_percentFormat(model, tallies[0][c])+"<br>";
 		}
 		text += "<b>Winner:</b><br>";
 
-		text += _icon(finalists[0])+": "+_percentFormat(model, aWins)+"; "+_icon(finalists[1]) +": "+_percentFormat(model, bWins)+", so...<br>";
+		text += model.icon(finalists[0])+": "+_percentFormat(model, aWins)+"; "+model.icon(finalists[1]) +": "+_percentFormat(model, bWins)+", so...<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS";
@@ -250,15 +250,15 @@ Election.approval = function(model, options){
 	text += "<b>most approvals wins (%)</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
+		text += model.icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	if(!winner | winners.length>=2){
 		// NO WINNER?! OR TIE?!?!
-		text += _tietext(winners);
+		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else {
 		text += "<br>";
-		text += _icon(winner)+" is most approved, so...<br>";
+		text += model.icon(winner)+" is most approved, so...<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
@@ -312,11 +312,11 @@ Election.condorcet = function(model, options){
 					by = bWins;
 					to = aWins;
 				}
-				text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins, "+_percentFormat(model, by)+" to "+_percentFormat(model, to)+"<br>";
+				text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+model.icon(winner.id)+" wins, "+_percentFormat(model, by)+" to "+_percentFormat(model, to)+"<br>";
 			} else { //tie
 				tally[a.id]++;
 				tally[b.id]++;
-				text += _icon(a.id)+" vs "+_icon(b.id)+": "+"TIE"+"<br>";
+				text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
 			}
 		}
 	}
@@ -340,7 +340,7 @@ Election.condorcet = function(model, options){
 	// Winner... or NOT!!!!
 	text += "<br>";
 	if (topWinners.length == 1) {
-		text += _icon(topWinner)+" beats all other candidates in one-on-one races.<br>";
+		text += model.icon(topWinner)+" beats all other candidates in one-on-one races.<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
@@ -348,9 +348,9 @@ Election.condorcet = function(model, options){
 	}else if (topWinners.length >= 2) {
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+" got "+tally[c]+" wins<br>";
+			text += model.icon(c)+" got "+tally[c]+" wins<br>";
 		}
-		text += _tietext(topWinners);
+		text += _tietext(model,topWinners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else {
 		text += "NOBODY beats everyone else in one-on-one races.<br>";
@@ -425,12 +425,12 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 					to = aWins;
 					pairs.push({winI:j,loseI:i,winN:bWins,loseN:aWins,margin:bWins-aWins,tie:false})
 				}
-				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins by "+by+" to "+to+"<br>";
+				//text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+model.icon(winner.id)+" wins by "+by+" to "+to+"<br>";
 			} else { //tie
 				tally[a.id]++;
 				tally[b.id]++;
 				pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:true})
-				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+"TIE"+"<br>";
+				//text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
 			}
 		}
 	}
@@ -571,12 +571,12 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 	if (!options.sidebar) return result
 		
 	if (unanimousWin) {
-		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
+		text += model.icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
 	} else {
 		schwartztext = ""
 		for (var j in model.candidatesById) { // go through the candidate names in order and display the ones that are in the schwartz set.
 			if( schwartzFirst.includes(j)) {
-				schwartztext = schwartztext + _icon(j)	
+				schwartztext = schwartztext + model.icon(j)	
 			}
 		}
 		schwartztext += " is Schwartz set.<br>"
@@ -603,7 +603,7 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 			if (pairs[i].hasOwnProperty("schwartz")) {
 				for (var j in model.candidatesById) { // go through the candidate names in order and display the ones that are in the schwartz set.
 					if( pairs[i].schwartz.includes(j)) {
-						schwartztext = schwartztext + _icon(j)	
+						schwartztext = schwartztext + model.icon(j)	
 					}
 				}
 				var extraspace = model.candidates.length - pairs[i].schwartz.length
@@ -623,16 +623,16 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 
 		if (pairs[i].tie) {
 			if(reverseExplanation) {
-				text += begintext + _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
+				text += begintext + model.icon(a.id)+"&"+model.icon(b.id) + " tie" + endtext	
 			} else {
-				text += begintext + "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
-				//text += _icon(b.id)+" ties  "+_icon(a.id) + endtext
+				text += begintext + "Tie for " + model.icon(a.id)+"&"+model.icon(b.id) + endtext
+				//text += model.icon(b.id)+" ties  "+model.icon(a.id) + endtext
 			}
 		} else {
 			if(reverseExplanation) {
-				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
+				text += begintext + model.icon(b.id)+" lost to "+model.icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
 			} else {
-				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
+				text += begintext + model.icon(a.id)+" beats "+model.icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
 			}
 		}
 		
@@ -648,9 +648,9 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 		text += "<b>Eliminate the weakest losses until someone in the Schwartz set has 0 losses.</b><br>"
 		for(var i=0; i<sortedlosses.length; i++){
 			var c = sortedlosses[i].name;
-			text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+			text += model.icon(c)+" got "+losses[c]+" strong losses<br>";
 		}
-		text += _tietext(topWinners);
+		text += _tietext(model,topWinners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else if (topWinners.length == 0) { // this shouldn't happen
 		text = "<b>TIE</b> <br> <br>" + text;
@@ -662,7 +662,7 @@ Election.schulze = function(model, options){ // Pairs of candidates are sorted b
 			text += "<b>Eliminate the weakest wins until someone in the Schwartz set has 0 losses.<br>"
 			for(var i=0; i<sortedlosses.length; i++){
 				var c = sortedlosses[i].name;
-				text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+				text += model.icon(c)+" got "+losses[c]+" strong losses<br>";
 			}
 		}
 		text += "</span>";
@@ -736,12 +736,12 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 					to = aWins;
 					pairs.push({winI:j,loseI:i,winN:bWins,loseN:aWins,margin:bWins-aWins,tie:false})
 				}
-				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins by "+by+" to "+to+"<br>";
+				//text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+model.icon(winner.id)+" wins by "+by+" to "+to+"<br>";
 			} else { //tie
 				tally[a.id]++;
 				tally[b.id]++;
 				pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:true})
-				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+"TIE"+"<br>";
+				//text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
 			}
 		}
 	}
@@ -791,7 +791,7 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	if (!options.sidebar) return result
 		
 	if (unanimousWin) {
-		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
+		text += model.icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
 	}
 
 	// add text
@@ -810,16 +810,16 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 
 		if (pairs[i].tie) {
 			if(reverseExplanation) {
-				text += begintext + _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
+				text += begintext + model.icon(a.id)+"&"+model.icon(b.id) + " tie" + endtext	
 			} else {
-				text += begintext + "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
-				//text += _icon(b.id)+" ties  "+_icon(a.id) + endtext
+				text += begintext + "Tie for " + model.icon(a.id)+"&"+model.icon(b.id) + endtext
+				//text += model.icon(b.id)+" ties  "+model.icon(a.id) + endtext
 			}
 		} else {
 			if(reverseExplanation) {
-				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
+				text += begintext + model.icon(b.id)+" lost to "+model.icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
 			} else {
-				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
+				text += begintext + model.icon(a.id)+" beats "+model.icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
 			}
 		}
 		
@@ -835,9 +835,9 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 		text += "<b>Eliminate the weakest losses until someone has 0 losses.</b><br>"
 		for(var i=0; i<sortedlosses.length; i++){
 			var c = sortedlosses[i].name;
-			text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+			text += model.icon(c)+" got "+losses[c]+" strong losses<br>";
 		}
-		text += _tietext(topWinners);
+		text += _tietext(model,topWinners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else {
 		topWinner = topWinners[0]
@@ -847,7 +847,7 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 			text += "<b>Eliminate the weakest wins until someone has 0 losses.<br>"
 			for(var i=0; i<sortedlosses.length; i++){
 				var c = sortedlosses[i].name;
-				text += _icon(c)+" got "+losses[c]+" strong losses<br>";
+				text += model.icon(c)+" got "+losses[c]+" strong losses<br>";
 			}
 		}
 		text += "</span>";
@@ -921,12 +921,12 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 					to = aWins;
 					pairs.push({winI:j,loseI:i,winN:bWins,loseN:aWins,margin:bWins-aWins,tie:false})
 				}
-				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+_icon(winner.id)+" wins by "+by+" to "+to+"<br>";
+				//text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+model.icon(winner.id)+" wins by "+by+" to "+to+"<br>";
 			} else { //tie
 				tally[a.id]++;
 				tally[b.id]++;
 				pairs.push({winI:i,loseI:j,winN:aWins,loseN:bWins,margin:aWins-bWins,tie:true})
-				//text += _icon(a.id)+" vs "+_icon(b.id)+": "+"TIE"+"<br>";
+				//text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
 			}
 		}
 	}
@@ -990,7 +990,7 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 	if (!options.sidebar) return result
 		
 	if (unanimousWin) {
-		text += _icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
+		text += model.icon(topWinners[0])+" beats all other candidates in one-on-one races.<br>";
 	}
 
 	// add text
@@ -1017,14 +1017,14 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 			if (keepShowingSurvivors) {
 				for (var ic in pairs[i].survivors) {
 					var c = pairs[i].survivors[ic]
-					survivorstext = survivorstext + _icon(c)
+					survivorstext = survivorstext + model.icon(c)
 				}
 				if (showdead) {
 					survivorstext = survivorstext + ">"
 					var deadtext = ""
 					for (var ic in pairs[i].dead) {
 						var c = pairs[i].dead[ic]
-						deadtext = _icon(c) + deadtext
+						deadtext = model.icon(c) + deadtext
 					}
 					survivorstext = survivorstext + deadtext
 					var extraspace = model.candidates.length - pairs[i].survivors.length - pairs[i].dead.length
@@ -1049,16 +1049,16 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 		
 		if (pairs[i].tie) {
 			if(reverseExplanation) {
-				text += begintext + _icon(a.id)+"&"+_icon(b.id) + " tie" + endtext	
+				text += begintext + model.icon(a.id)+"&"+model.icon(b.id) + " tie" + endtext	
 			} else {
-				text += begintext + "Tie for " + _icon(a.id)+"&"+_icon(b.id) + endtext
-				//text += _icon(b.id)+" ties  "+_icon(a.id) + endtext
+				text += begintext + "Tie for " + model.icon(a.id)+"&"+model.icon(b.id) + endtext
+				//text += model.icon(b.id)+" ties  "+model.icon(a.id) + endtext
 			}
 		} else {
 			if(reverseExplanation) {
-				text += begintext + _icon(b.id)+" lost to "+_icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
+				text += begintext + model.icon(b.id)+" lost to "+model.icon(a.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext
 			} else {
-				text += begintext + _icon(a.id)+" beats "+_icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
+				text += begintext + model.icon(a.id)+" beats "+model.icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
 			}
 		}
 		
@@ -1066,7 +1066,7 @@ Election.rankedPairs = function(model, options){ // Pairs of candidates are sort
 
 	text += "<br>";
 	if (topWinners.length >= 2) {
-		text += _tietext(topWinners);
+		text += _tietext(model,topWinners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else {
 		topWinner = topWinners[0]
@@ -1109,7 +1109,7 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 	// replace some of the html in the output of rbvote to make it match the style of betterballot
 	var rbvote_string = (resultRB.str).replace("style.css","../play/css/rbvote.css").replace()
 	var intext = Object.keys(model.candidatesById)
-	var outtext = Object.keys(model.candidatesById).map(x => _icon(x))
+	var outtext = Object.keys(model.candidatesById).map(x => model.icon(x))
 	for (var i in intext) {
 		rbvote_string = rbvote_string.replace(new RegExp(intext[i],"g"),outtext[i])
 	}
@@ -1213,14 +1213,14 @@ Election.rrv = function(model, options){
 			text += "<br><b>score as %:</b><br>";
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
-				//text += _icon(c)+"'s score: "+((tally[c]/_getTotalVoters(model)).toFixed(2))+" out of 5.00<br>";
-				text += _icon(c)+": "+_percentFormat(model, tally[c] / maxscore)
+				//text += model.icon(c)+"'s score: "+((tally[c]/_getTotalVoters(model)).toFixed(2))+" out of 5.00<br>";
+				text += model.icon(c)+": "+_percentFormat(model, tally[c] / maxscore)
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
 			}
 			var color = _colorsWinners([winner],model)[0]
 			text += "";
-			//text += _icon(winner)+" has the highest score, so...";
+			//text += model.icon(winner)+" has the highest score, so...";
 			text += "</span>";
 			text += "";
 			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>";
@@ -1234,7 +1234,7 @@ Election.rrv = function(model, options){
 			text += "<br>";
 			for(var j=0; j<winnerslist.length; j++){
 				var c = winnerslist[j]
-				text += _icon(c)+" ";
+				text += model.icon(c)+" ";
 			}
 			text += "<br>";
 			text += "<br>";
@@ -1356,14 +1356,14 @@ Election.rav = function(model, options){
 			text += "<br><b>score as %:</b><br>";
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
-				//text += _icon(c)+"'s score: "+((tally[c]/_getTotalVoters(model)).toFixed(2))+" out of 5.00<br>";
-				text += _icon(c)+": "+_percentFormat(model, tally[c])
+				//text += model.icon(c)+"'s score: "+((tally[c]/_getTotalVoters(model)).toFixed(2))+" out of 5.00<br>";
+				text += model.icon(c)+": "+_percentFormat(model, tally[c])
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
 			}
 			var color = _colorsWinners([winner],model)[0]
 			text += "";
-			//text += _icon(winner)+" has the highest score, so...";
+			//text += model.icon(winner)+" has the highest score, so...";
 			text += "</span>";
 			text += "";
 			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>";
@@ -1377,7 +1377,7 @@ Election.rav = function(model, options){
 			text += "<br>";
 			for(var j=0; j<winnerslist.length; j++){
 				var c = winnerslist[j]
-				text += _icon(c)+" ";
+				text += model.icon(c)+" ";
 			}
 			text += "<br>";
 			text += "<br>";
@@ -1430,16 +1430,16 @@ Election.borda = function(model, options){
 	text += "<b>higher score is better</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+"'s total score: "+tally[c]+" = "+_percentFormat(model, tally[c] / (numcan-1))+"%<br>";
+		text += model.icon(c)+"'s total score: "+tally[c]+" = "+_percentFormat(model, tally[c] / (numcan-1))+"%<br>";
 	}
 	if(winners.length>=2){
 		// NO WINNER?! OR TIE?!?!
-		text += _tietext(winners);
+		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	}else{
 		var winner = winners[0];
 		text += "<br>";
-		text += _icon(winner)+" has the <i>highest</i> score, so...<br>";
+		text += model.icon(winner)+" has the <i>highest</i> score, so...<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
@@ -1505,7 +1505,7 @@ Election.irv = function(model, options){
 		if (options.sidebar) {
 			for(var i=0; i<candidates.length; i++){
 				var c = candidates[i];
-				text += _icon(c)+":"+_percentFormat(model, tally[c])
+				text += model.icon(c)+":"+_percentFormat(model, tally[c])
 				if(i<candidates.length-1) text+=", ";
 			}
 			text += "<br>";
@@ -1521,7 +1521,7 @@ Election.irv = function(model, options){
 				break;
 			}
 			resolved = "done";
-			if (options.sidebar) text += _icon(winner)+" has more than 50%<br>";
+			if (options.sidebar) text += model.icon(winner)+" has more than 50%<br>";
 			break;
 		}
 
@@ -1539,7 +1539,7 @@ Election.irv = function(model, options){
 		//text += "nobody's more than 50%. ";
 		for (var li = 0; li < losers.length ; li++ ) {
 			loser = losers[li];
-			if (options.sidebar) text += "eliminate loser, "+_icon(loser)+".<br>";
+			if (options.sidebar) text += "eliminate loser, "+model.icon(loser)+".<br>";
 			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
 			var ballots = _getBallots(model);
 			for(var i=0; i<ballots.length; i++){
@@ -1579,7 +1579,7 @@ Election.irv = function(model, options){
 	if (!options.sidebar) return result
 
 	if (resolved == "tie") {
-		text += _tietext(winners);
+		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else {
 		// END!
@@ -1671,7 +1671,7 @@ Election.stv = function(model, options){
 			// Say 'em...
 			for(var i=0; i<candidates.length; i++){
 				var c = candidates[i];
-				text += _icon(c)+":"+Math.round(tally[c]);
+				text += model.icon(c)+":"+Math.round(tally[c]);
 				if(i<candidates.length-1) text+=", ";
 			}
 			text += "<br>";
@@ -1690,8 +1690,8 @@ Election.stv = function(model, options){
 			winnerslist.push(winner)
 			
 			if (options.sidebar) {
-				text += _icon(winner)+" has more than " + quotapercent + "%<br>";
-				text += "select winner, "+_icon(winner)+".<br><br>";
+				text += model.icon(winner)+" has more than " + quotapercent + "%<br>";
+				text += "select winner, "+model.icon(winner)+".<br><br>";
 			}
 
 			candidates.splice(candidates.indexOf(winner), 1); // remove from candidates...
@@ -1728,7 +1728,7 @@ Election.stv = function(model, options){
 				loser = losers[li];
 				
 				if (options.sidebar) {
-					text += "eliminate loser, "+_icon(loser)+".<br>";
+					text += "eliminate loser, "+model.icon(loser)+".<br>";
 				}
 				candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
 				var ballots = _getBallots(model);
@@ -1739,6 +1739,12 @@ Election.stv = function(model, options){
 			}
 			
 	
+		}
+		
+		if (candidates.length == 0) {
+			// we ran out of candidates, everybody won already
+			resolved = "done"
+			break
 		}
 
 		// And repeat!
@@ -1764,7 +1770,11 @@ Election.stv = function(model, options){
 			
 		roundHistory.tally = tally
 		roundHistory.ballots = _jcopy(ballots)
-		roundHistory.winners = [model.candidatesById[winner].i]
+		if (winner) {
+			roundHistory.winners = [model.candidatesById[winner].i]
+		} else {
+			roundHistory.winners = []
+		}
 		history.rounds.push(roundHistory)
 
 		text += "<br>"
@@ -1831,7 +1841,7 @@ Election.stv = function(model, options){
 	if (options.sidebar) {
 		text += '<div id="round' + (roundNum+1) + '" class="round">'
 		if (resolved == "tie") {
-			text += _tietext(tiedlosers);
+			text += _tietext(model,tiedlosers);
 			// text = "<b>TIE</b> <br> <br>" + text;
 		} 
 		text = "<br>" + text
@@ -1895,6 +1905,9 @@ Election.quotaApproval = function(model,options) {
 		q.push(1)
 	}
 	for (var n = 0; n < model.candidates.length; n++) {
+		if (winners.length >= seats) {
+			break
+		}
 		var tally = []
 		for (var k = 0; k < model.candidates.length; k++) {
 			tally[k] = 0
@@ -1917,7 +1930,7 @@ Election.quotaApproval = function(model,options) {
 			text += "<br>";
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
-				text += _icon(c)+" got "+_percentFormat(model, tally[i])+"<br>";
+				text += model.icon(c)+" got "+_percentFormat(model, tally[i])+"<br>";
 			}
 			text += "<br>";
 			text += '</div>'
@@ -1949,17 +1962,16 @@ Election.quotaApproval = function(model,options) {
 			}
 			history.rounds.push(roundHistory)
 		}
-		if (winners.length >= seats) break
 	}
 
 	
 	if(options.sidebar) {
-		text += '<div id="round' + (n+2) + '" class="round">'
+		text += '<div id="round' + (n+1) + '" class="round">'
 		text += "Final Winners:";
 		text += "<br>";
 		for(var i=0; i<winners.length; i++){
 			var c = winners[i]
-			text += _icon(c)+" ";
+			text += model.icon(c)+" ";
 		}
 		text += "<br>";
 		text += "<br>";
@@ -1975,7 +1987,7 @@ Election.quotaApproval = function(model,options) {
 		result.dontredocaption = true // we have an interactive caption
 		model.caption.innerHTML = text
 		// attach caption hover functions
-		for (var i=0; i < n+2; i++) {
+		for (var i=0; i < n+1; i++) {
 			var cbDraw = function(i) { // a function is returned, so that i has a new scope
 				return function() {
 					model.round = i+1
@@ -2033,25 +2045,25 @@ Election.toptwo = function(model, options){ // not to be confused with finding t
 	text += "<b>top two move to 2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+" got "+_percentFormat(model, tally1[c])+"<br>";
+		text += model.icon(c)+" got "+_percentFormat(model, tally1[c])+"<br>";
 	}
 	text += "<br><b>2nd round</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		if (toptwo.includes(c)) text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
+		if (toptwo.includes(c)) text += model.icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
 		if(options.sidebar){
 			text += "<br>";
-			text += _icon(winner)+" has most votes, so...<br>";
+			text += model.icon(winner)+" has most votes, so...<br>";
 		}
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
 		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
 	} else {
-		text += _tietext(winners);
+		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	}
 	result.text = text;
@@ -2110,7 +2122,7 @@ Election.pluralityWithPrimary = function(model, options){
 		var pwin = _countWinner(tally1)
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i].id;
-			text += _icon(c)+" got "+_percentFormat(model, tally1[c]);
+			text += model.icon(c)+" got "+_percentFormat(model, tally1[c]);
 			if (pwin.includes(c)) text += " &larr;"
 			text += "<br>"
 		}
@@ -2119,20 +2131,20 @@ Election.pluralityWithPrimary = function(model, options){
 	text += "<b>general election:</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		if (pwinners.includes(c)) text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
+		if (pwinners.includes(c)) text += model.icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
 		if(options.sidebar){
 			text += "<br>";
-			text += _icon(winner)+" has most votes, so...<br>";
+			text += model.icon(winner)+" has most votes, so...<br>";
 		}
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
 		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
 	} else {
-		text += _tietext(winners);
+		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	}
 	result.text = text;
@@ -2202,20 +2214,20 @@ Election.plurality = function(model, options){
 	text += "<b>most votes wins</b><br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
-		text += _icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
+		text += model.icon(c)+" got "+_percentFormat(model, tally[c])+"<br>";
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
 		if(options.sidebar){
 			text += "<br>";
-			text += _icon(winner)+" has most votes, so...<br>";
+			text += model.icon(winner)+" has most votes, so...<br>";
 		}
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
 		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
 	} else {
-		text += _tietext(winners);
+		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	}
 	result.text = text;
@@ -2361,9 +2373,9 @@ var doPollAndUpdateBallots = function(model,options,electiontype){
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i].id;
 				if (electiontype == "irv"){
-					polltext += _icon(c)+""+_padAfter(3,_percentFormat(model, tally.firstpicks[c]) + ". ") + " "
+					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(model, tally.firstpicks[c]) + ". ") + " "
 				} else {
-					polltext += _icon(c)+""+ _padAfter(3,_percentFormat(model, tally[c]/model.voters[0].type.maxscore) + ".") + " "
+					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(model, tally[c]/model.voters[0].type.maxscore) + ".") + " "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
 					//polltext += "<br>"
 				}
@@ -2593,13 +2605,13 @@ function _result(winners,model) {
 }
 
 
-function _tietext(winners) {
+function _tietext(model,winners) {
 	text = "";
 	for ( var i=0; i < winners.length; i++) {
 		if(i) {
 			text += " and ";
 		} 
-		text += _icon(winners[i]); 
+		text += model.icon(winners[i]); 
 	}
 	text += " tie<br>";
 	text += "</span>";

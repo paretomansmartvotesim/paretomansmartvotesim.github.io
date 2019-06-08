@@ -71,13 +71,14 @@ function main(preset){
 			
 		var ui = {}
 		
-		var model = new Model();
+		var model = new Model(modelName);
 		ui.model = model
         model.createDOM()
 
 		// CONFIGURE DEFAULTS
 		model.electionOptions = {sidebar:true}
 		model.HACK_BIG_RANGE = true;
+		model.theme = "Nicky"
 
 		// INIT
 		ui.model = model
@@ -96,10 +97,10 @@ function main(preset){
 			//     configure writes to model and reads from config.  Sanity rule: configure does not read from model.
 			_menuF("configure")   
 			// INIT
-			model.initMODEL()
 			for (var i=0; i<model.candidates.length; i++) {
 				model.candidates[i].init()
 			}
+			model.initMODEL()
 			for (var i=0; i<model.voters.length; i++) {
 				model.voters[i].init()
 			}
@@ -272,23 +273,23 @@ function main(preset){
 				// CONFIGURE
 				self.configure()
 				// INIT
-				model.initMODEL()
 				for(var i=0; i<model.candidates.length; i++) {
 					model.candidates[i].init()
 				}
+				model.initMODEL()
 				// UPDATE
 				model.update()
 			};
 			self.configure = function() {
 				model.numOfCandidates = config.candidates;
 				// Candidates, in a circle around the center.
-				var _candidateIDs = ["square","triangle","hexagon","pentagon","bob"];
+				var _candidateIcons = Object.keys(Candidate.graphicsByIcon["Default"])
 				var num = config.candidates;
 				if (config.candidatePositions) {
 					for(var i=0; i<num; i++){
-						var id = _candidateIDs[i];
+						var icon = _candidateIcons[i];
 						Object.assign(model.candidates[i],{
-							id:id,
+							icon:icon,
 							x:config.candidatePositions[i][0],
 							y:config.candidatePositions[i][1]
 						})
@@ -304,9 +305,9 @@ function main(preset){
 						var r = 100;
 						var x = 150 - r*Math.cos(angle);
 						var y = 150 - r*Math.sin(angle);
-						var id = _candidateIDs[i];
+						var icon = _candidateIcons[i];
 						Object.assign(model.candidates[i],{
-							id:id,
+							icon:icon,
 							x:x,
 							y:y
 						})

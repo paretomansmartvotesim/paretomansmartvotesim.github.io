@@ -2639,7 +2639,7 @@ function readballots(ballots,model)
    // convert candidate names to numbers
    
    numtocand = Object.keys( (model.candidatesById))
-   numtoiconcand = Object.keys( (model.candidatesById)) .map(x => _icon(x) )
+   numtoiconcand = Object.keys( (model.candidatesById)) .map(x => model.icon(x) )
    candtonum = new Object();
    for (i in numtocand) candtonum[numtocand[i]] = i;
 

@@ -24,13 +24,13 @@ function main_ballot(preset){
 	var BallotType = window[ballotType+"Ballot"];
 
 	// INIT
-	l.onload = function(){
+	l.onload = function(assets){
 
 		// CREATE
-		var model = new Model();
+		var model = new Model(preset.modelName);
         model.createDOM()
-
 		// CONFIGURE
+		model.assets = assets
 		model.size = 250
 		model.border = 2
 
@@ -57,9 +57,9 @@ function main_ballot(preset){
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
 			// CONFIGURE
-			Object.assign( model.candidates[0],{x: 41, y: 50, id:"square"} )
-			Object.assign( model.candidates[1],{x:153, y: 95, id:"triangle"} )
-			Object.assign( model.candidates[2],{x:216, y:216, id:"hexagon"} )
+			Object.assign( model.candidates[0],{x: 41, y: 50, icon:"square"} )
+			Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )
+			Object.assign( model.candidates[2],{x:216, y:216, icon:"hexagon"} )
 			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model),
 				firstStrategy: config.firstStrategy,
 				preFrontrunnerIds: config.preFrontrunnerIds} )
@@ -69,11 +69,11 @@ function main_ballot(preset){
 			model.dimensions = config.dimensions
 			if (model.dimensions == "1D+B") model.voters[0].y = model.yDimOne  // not tested yet
 			// INIT
-			model.initMODEL()
-			model.voters[0].init()
 			model.candidates[0].init()
 			model.candidates[1].init()
 			model.candidates[2].init()
+			model.initMODEL()
+			model.voters[0].init()
 			// UPDATE
 			model.update()
 		};
@@ -119,7 +119,7 @@ function main_ballot(preset){
 
 		if(config.showChoiceOfFrontrunners) {
 
-			var h1 = function(x) {return "<span class='buttonshape'>"+_icon(x)+"</span>";};
+			var h1 = function(x) {return "<span class='buttonshape'>"+model.icon(x)+"</span>";};
 			var frun = [
 				{name:h1("square"),realname:"square",margin:4},
 				{name:h1("triangle"),realname:"triangle",margin:4},
@@ -187,6 +187,13 @@ function main_ballot(preset){
 		"play/img/square.png",
 		"play/img/triangle.png",
 		"play/img/hexagon.png",
+
+		"play/img/square.svg",
+		"play/img/triangle.svg",
+		"play/img/hexagon.svg",
+
+		"play/img/pentagon.svg",
+		"play/img/bob.svg",
 
 		// Ballot instructions
 		"play/img/ballot_fptp.png",

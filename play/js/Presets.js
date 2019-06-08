@@ -1267,6 +1267,7 @@ function loadpreset(modelName) {
 			// dimensions:"2D",
 			system: "STV",
 			hidegearconfig: true,
+			configversion: 2.1
 		}
 
 	} else if (htmlname == "sandbox.html") {

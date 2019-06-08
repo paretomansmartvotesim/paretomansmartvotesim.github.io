@@ -9,13 +9,14 @@ function main_ballot(preset){
 	l.onload = function(){
 
 		// CREATE
-		var model = new Model();
+		var model = new Model(preset.modelName);
         model.createDOM()
 
 		// CONFIGURE
 		model.size = 250
 		model.border = 2
 		model.startAt1 = true
+		model.theme = "Nicky"
 
 		// INIT
 		model.initDOM()
@@ -31,16 +32,16 @@ function main_ballot(preset){
 			// CONFIGURE
 			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), 
 				firstStrategy: "zero strategy. judge on an absolute scale."} )
-			Object.assign( model.candidates[0],{x: 41, y: 50, id:"square"} )
-			Object.assign( model.candidates[1],{x:153, y: 95, id:"triangle"} )
-			Object.assign( model.candidates[2],{x:216, y:216, id:"hexagon"} )
+			Object.assign( model.candidates[0],{x: 41, y: 50, icon:"square"} )
+			Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )
+			Object.assign( model.candidates[2],{x:216, y:216, icon:"hexagon"} )
 			model.voters[0].firstStrategy = "zero strategy. judge on an absolute scale.";
 			// INIT
-			model.initMODEL()
-			model.voters[0].init()
 			model.candidates[0].init()
 			model.candidates[1].init()
 			model.candidates[2].init()
+			model.initMODEL()
+			model.voters[0].init()
 			// UPDATE
 			if(ballotType=="Score") {
 				model.voters[0].type.minscore = 1

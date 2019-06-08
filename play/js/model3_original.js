@@ -6,6 +6,7 @@ l.onload = function(assets){
 	var modelName = "model3"
 	var model = new Model(modelName);
 	model.assets = assets
+	model.theme = "Nicky"
 	model.createDOM()
 
 	// INIT

@@ -218,3 +218,8 @@ Election/Sandbox design:
     border: 3px solid #aaa;
 
 }
+
+svg {
+    width: 1em;
+    height: 1em;
+}

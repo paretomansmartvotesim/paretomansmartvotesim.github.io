@@ -1,4 +1,5 @@
 function Mouse(id, target){
+	// mouse events are only triggered when the mouse is used over a target.  The only target I've used is a canvas.
 
 	var self = this;
 
@@ -9,7 +10,6 @@ function Mouse(id, target){
 	self.y = 0;
 	self.pressed = false;
 	self.ctrlclick = false
-
 	// Events!
 	var _onmousedown = function(event){
 		_onmousemove(event);

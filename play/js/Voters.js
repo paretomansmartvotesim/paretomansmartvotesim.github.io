@@ -119,7 +119,7 @@ function ScoreVoter(model){
 			for(var i=0; i < cIDs.length; i++){
 				cID = cIDs[i]
 				var score = ballot[cID]
-				text += _icon(cID) + ":" + score
+				text += model.icon(cID) + ":" + score
 				text += "<br />"
 			}
 		}
@@ -128,7 +128,7 @@ function ScoreVoter(model){
 				cID = cIDs[i]
 				var score = ballot[cID]
 				for (var j=0; j < score; j++) {
-					text += _icon(cID) 
+					text += model.icon(cID) 
 				}
 				text += "<br />"
 			}
@@ -142,11 +142,11 @@ function ScoreVoter(model){
 				text += ""
 				for(var j=0; j<i; j++){
 					if (j>0) text += "  "
-					text += _icon(cIDs[j])
+					text += model.icon(cIDs[j])
 					if (ballot[cIDs[j]] > ballot[cIDs[i]]) {
 						text += ">"
 					} else text += "="
-					text += _icon(cIDs[i])
+					text += model.icon(cIDs[i])
 				} 
 				// 01  
 				// 02  12
@@ -413,7 +413,7 @@ function ThreeVoter(model){
 			for(var i in cIDs){
 				cID = cIDs[i]
 				var score = ballot[cID]
-				text += _icon(cID) + ":" + score
+				text += model.icon(cID) + ":" + score
 				text += "<br />"
 			}
 		}
@@ -425,17 +425,17 @@ function ThreeVoter(model){
 		text +=  "<pre><span class='small' style>   Good:</span>" 
 		var good = groups[2]
 		for (i in good) {
-			text += _icon(good[i])
+			text += model.icon(good[i])
 		}
 		text +=  "<br />"
 		text +=  "<br />"
 		text += "<span class='small' style>Not Bad:</span>" 
 		for (i in good) {
-			text += _icon(good[i])
+			text += model.icon(good[i])
 		}
 		var okay = groups[1]
 		for (i in okay) {
-			text += _icon(okay[i])
+			text += model.icon(okay[i])
 		}
 		text += "</pre>"
 		if(0) {
@@ -443,7 +443,7 @@ function ThreeVoter(model){
 			for(var i = 2; i > -1; i--){
 				if (i<2) text += ">"
 				for(j in groups[i]){
-					text += _icon(groups[i][j])
+					text += model.icon(groups[i][j])
 				}
 			}
 		}
@@ -455,11 +455,11 @@ function ThreeVoter(model){
 			text += ""
 			for(var j=0; j<i; j++){
 				if (j>0) text += "  "
-				text += _icon(cIDs[j])
+				text += model.icon(cIDs[j])
 				if (ballot[cIDs[j]] > ballot[cIDs[i]]) {
 					text += ">"
 				} else text += "="
-				text += _icon(cIDs[i])
+				text += model.icon(cIDs[i])
 			} 
 			// 01  
 			// 02  12
@@ -525,7 +525,7 @@ function ApprovalVoter(model){
 		for(var i=0; i<ballot.approved.length; i++){
 			// if (i>0) text += ">"
 			var candidate = ballot.approved[i];
-			text += _icon(candidate)
+			text += model.icon(candidate)
 		}
 		return text
 	}
@@ -704,7 +704,7 @@ function RankedVoter(model){
 			text += "<br />"
 			text += "<br />"
 			for(var i=0; i<ballot.rank.length; i++) {
-				text += _icon(ballot.rank[i])
+				text += model.icon(ballot.rank[i])
 				text += "  "
 				for(var j=0; j<ballot.rank.length; j++) {
 					if (j>0) text += " "
@@ -724,7 +724,7 @@ function RankedVoter(model){
 			for(var i=0; i<ballot.rank.length; i++){
 				if (i>0) text += ">"
 				var candidate = ballot.rank[i];
-				text += _icon(candidate)
+				text += model.icon(candidate)
 			}
 			text += "<br />"
 			text += "<br />"
@@ -746,8 +746,8 @@ function RankedVoter(model){
 					text += "<span style='float:left'>"
 					for(var j=0; j<ballot.rank.length-i; j++){
 						if (j>0) text += "&nbsp;&nbsp;&nbsp;&nbsp;"
-						text += _icon(ballot.rank[j]) + ">"
-						text += _icon(ballot.rank[j+i])
+						text += model.icon(ballot.rank[j]) + ">"
+						text += model.icon(ballot.rank[j+i])
 					} 
 					// 01  12
 					// 02  13
@@ -765,8 +765,8 @@ function RankedVoter(model){
 					}
 					for(var j=0; j<ballot.rank.length-i; j++){
 						if (j>0) text += " "
-						text += _icon(ballot.rank[j]) + ">"
-						text += _icon(ballot.rank[j+i])
+						text += model.icon(ballot.rank[j]) + ">"
+						text += model.icon(ballot.rank[j+i])
 					} 
 					// 01  12
 					// 02  13
@@ -784,8 +784,8 @@ function RankedVoter(model){
 					text += ""
 					for(var j=0; j<i; j++){
 						if (j>0) text += "  "
-						text += _icon(ballot.rank[j]) + ">"
-						text += _icon(ballot.rank[i])
+						text += model.icon(ballot.rank[j]) + ">"
+						text += model.icon(ballot.rank[i])
 					} 
 					// 01  
 					// 02  12
@@ -805,7 +805,7 @@ function RankedVoter(model){
 				var candidate = ballot.rank[i];
 				var score = numCandidates - i
 				for (var j=0; j < score; j++) {
-					text += _icon(candidate) 
+					text += model.icon(candidate) 
 				}
 				text += "<br />"
 			}
@@ -891,7 +891,7 @@ function PluralityVoter(model){
 		y = y*2;
 
 		// What fill?
-		var fill = Candidate.graphics[model.theme][ballot.vote].fill;
+		var fill = model.candidatesById[ballot.vote].fill;
 		ctx.fillStyle = fill;
 		ctx.strokeStyle = 'rgb(0,0,0)';
 		ctx.lineWidth = 1; // border
@@ -906,7 +906,7 @@ function PluralityVoter(model){
 
 	self.toText = function(ballot,system,rbsystem){
 		var text = "<span class='small' style> One vote for </span> " 
-		return text + _icon(ballot.vote)
+		return text + model.icon(ballot.vote)
 	}
 
 }
@@ -996,7 +996,7 @@ var  _erfinv  = function(x){ // from https://stackoverflow.com/a/12556710
 function GaussianVoters(model){ // this config comes from addVoters in main_sandbox
 
 	var self = this;
-	Draggable.call(self, model);
+	Draggable.call(self);
 	var config = {}
 	
 	// CONFIGURE DEFAULTS
@@ -1239,7 +1239,7 @@ function _fillVoterDefaults(self) {
 function SingleVoter(model){
 
 	var self = this;
-	Draggable.call(self, model);
+	Draggable.call(self);
 	
 	// CONFIGURE DEFAULTS
 	_fillVoterDefaults(self)
@@ -1298,7 +1298,7 @@ function SingleVoter(model){
 function VoterCenter(model){
 
 	var self = this;
-	Draggable.call(self, model);
+	Draggable.call(self);
 	
 	// LOAD
 	self.id = "voterCenter";
@@ -1313,7 +1313,7 @@ function VoterCenter(model){
 		var totalnumbervoters = 0
 		for(var i=0; i<model.voters.length; i++){
 			var voter = model.voters[i]
-			var numbervoters = voter.ballots.length
+			var numbervoters = voter.points.length
 			x += voter.x * numbervoters
 			y += voter.y * numbervoters
 			totalnumbervoters += numbervoters

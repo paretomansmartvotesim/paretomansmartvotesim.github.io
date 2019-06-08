@@ -41,8 +41,11 @@
 	<link rel="stylesheet" type="text/css" href="play/css/election_original.css">
 	<link rel="stylesheet" type="text/css" href="play/css/sandbox_original.css">
 	<link rel="stylesheet" type="text/css" href="play/css/ballotInSandbox.css">
-	<script src="play/js/helpers.js"></script>
+
 	<script src="play/js/minpubsub.js"></script>
+	<script src="play/js/hsluv-0.0.3.min.js"></script>
+
+	<script src="play/js/helpers.js"></script>
 	<script src="play/js/Loader.js"></script>
 	<script src="play/js/Mouse.js"></script>
 	<script src="play/js/Draggable.js"></script>
@@ -54,6 +57,7 @@
 	<script src="play/js/Model.js"></script>
 	<script src="play/js/Yee.js"></script>
 	<script src="play/js/Candidate.js"></script>
+	<script src="play/js/Color.js"></script>
 	<script src="play/js/Voters.js"></script>
 	<script src="play/js/Election.js"></script>
 	<script src="play/js/Buttons.js"></script>
@@ -107,7 +111,7 @@ THE SPOILER EFFECT
 				</p>
 				<div id="model1" class="div-model div-model-theme-Nicky">
 				</div>
-				<script src="play/js/model1.js">
+				<script src="play/js/model1_original.js">
 				</script>
 			</div>
 
@@ -126,7 +130,7 @@ THE SPOILER EFFECT
 				</p>
 				<div id="model2" class="div-model div-model-theme-Nicky">
 				</div>
-				<script src="play/js/model2.js">
+				<script src="play/js/model2_original.js">
 				</script>
 			</div>
 		</div>
@@ -147,7 +151,7 @@ THE SPOILER EFFECT
 				</p>
 				<div id="model3" class="div-model div-model-theme-Nicky" style="min-height:460px;">
 				</div>
-				<script src="play/js/model3.js">
+				<script src="play/js/model3_original.js">
 				</script>
 			</div>
 		</div>
@@ -205,7 +209,9 @@ THE ALTERNATIVE BALLOTS
 				<div id="ballot1" class="div-ballot div-model div-model-theme-Nicky" style="min-height:256px;" scrolling="no">
 				</div>
 				<script>
-					main_ballot(Object.assign(loadpreset("ballot1"),{theme:"Nicky"}))
+					var p = loadpreset("ballot1")
+					p.config.theme = "Nicky"
+					main_ballot(p)
 				</script>
 			</div>
 		</div>

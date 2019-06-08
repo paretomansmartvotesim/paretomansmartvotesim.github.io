@@ -1,10 +1,6 @@
 // YES, TAU.
 Math.TAU = Math.PI*2;
 
-// For the election sandbox code
-function _icon(name){
-	return "<img src='play/img/icon/"+name+".png'/>";
-}
 
 function _drawStroked(text, x, y, textsize, ctx) {
 	ctx.font = textsize + "px Sans-serif"
@@ -68,4 +64,27 @@ function _objF(obj,f) { // run function if it exists for each item of an object
 		if (obj[item][f]) obj[item][f]()
 	} 
 	// for example: run ui.menu.systems.configure(), ui.menu.nCandidates.configure(), et al.
+}
+
+
+function _convertImageToDataURLviaCanvas(img, outputFormat){
+	var canvas = document.createElement('CANVAS');
+	var ctx = canvas.getContext('2d');
+	canvas.height = img.height;
+	canvas.width = img.width;
+	ctx.drawImage(img, 0, 0);
+	var dataURL = canvas.toDataURL();
+	canvas = null; 
+	return dataURL
+}
+
+function _convertSVGToDataURLviaCanvas(img, outputFormat){
+	var canvas = document.createElement('CANVAS');
+	var ctx = canvas.getContext('2d');
+	canvas.height = img.height;
+	canvas.width = img.width;
+	ctx.drawImage(img, 0, 0);
+	var dataURL = canvas.toDataURL(outputFormat);
+	canvas = null; 
+	return dataURL
 }
