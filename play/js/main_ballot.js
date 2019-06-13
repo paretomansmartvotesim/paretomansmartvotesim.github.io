@@ -33,6 +33,7 @@ function main_ballot(preset){
 		model.assets = assets
 		model.size = 250
 		model.border = 2
+		model.voterType = VoterType
 
 		// INIT
 		model.initDOM()
@@ -64,6 +65,7 @@ function main_ballot(preset){
 				firstStrategy: config.firstStrategy,
 				preFrontrunnerIds: config.preFrontrunnerIds} )
 			model.preFrontrunnerIds = config.preFrontrunnerIds;
+			model.firstStrategy = config.firstStrategy
 			model.doStarStrategy = config.doStarStrategy;
 			model.theme = config.theme
 			model.dimensions = config.dimensions
@@ -83,6 +85,8 @@ function main_ballot(preset){
 		var ballot = new BallotType(model);
 		basediv.querySelector("#b-right").appendChild(ballot.dom)
 		model.onUpdate = function(){
+			if (model.voters.length == 0) return
+			if (model.voters[0].voterGroupType == "GaussianVoters") return
 			ballot.update(model.voters[0].ballot);
 		};
 
@@ -104,6 +108,7 @@ function main_ballot(preset){
 			// {name:"SNTF", realname:"starnormfrontrunners"}
 			var onChooseVoterStrategyOn = function(data){
 				config.firstStrategy = data.realname;
+				model.firstStrategy = config.firstStrategy
 				model.voters[0].firstStrategy = config.firstStrategy;
 				model.update();
 

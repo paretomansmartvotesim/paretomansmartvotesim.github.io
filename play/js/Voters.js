@@ -11,6 +11,7 @@ function ScoreVoter(model){
 	self.maxscore = 5;
 	self.minscore = 0;
 	self.defaultMax = model.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
+	self.filledCircles = true // display scores with filled transparent circles rather than unfilled circles.
 
 	self.getBallot = function(x, y, strategy){
 
@@ -48,6 +49,7 @@ function ScoreVoter(model){
 		y = y*2;
 		var scorange = self.maxscore - self.minscore
 		var step = (self.radiusLast - self.radiusFirst)/scorange;
+
 		// Draw big ol' circles.
 		var f = utility_function(model.utility_shape)
 		var finv = inverse_utility_function(model.utility_shape)
@@ -63,10 +65,25 @@ function ScoreVoter(model){
 			ctx.lineWidth = (i+5-scorange)*2 + 2;
 			ctx.beginPath();
 			ctx.arc(x, y, dist*2, 0, Math.TAU, false);
-			ctx.strokeStyle = "#888";
+			if (self.filledCircles) {
+				ctx.fillStyle = '#000'
+				ctx.strokeStyle = "#000";
+			} else {
+				ctx.strokeStyle = "#888"
+			}
 			ctx.setLineDash([]);
 			if (self.dottedCircle) ctx.setLineDash([5, 15]);
-			ctx.stroke();
+			if (self.filledCircles) {
+				var temp = ctx.globalAlpha
+				ctx.globalAlpha = .01
+				// ctx.stroke();
+				// ctx.globalAlpha = .1
+				ctx.globalAlpha = .2 / self.maxscore
+				ctx.fill()
+				ctx.globalAlpha = temp
+			} else {
+				ctx.stroke()
+			}
 			if (self.dottedCircle) ctx.setLineDash([]);
 		}
 	}
@@ -997,6 +1014,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 	var self = this;
 	Draggable.call(self);
+	self.voterGroupType = "GaussianVoters"
 	var config = {}
 	
 	// CONFIGURE DEFAULTS
@@ -1020,11 +1038,11 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 					spacings.splice(4)
 				}
 				//spacings.splice(2+self.vid)
-			} else if(self.num==1){
+			} else if(self.disk==1){
 				spacings.splice(4);
-			} else if(self.num==2){
+			} else if(self.disk==2){
 				spacings.splice(5);
-			} else if (self.num==3){
+			} else if (self.disk==3){
 				spacings = [0, 10, 11, 12, 15, 20, 30, 50, 100];
 			}
 			
@@ -1210,6 +1228,8 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = temp
 	};
+	self.draw1 = function() {}
+	self.draw2 = self.draw
 
 }
 
@@ -1218,7 +1238,7 @@ function _fillVoterDefaults(self) {
 
 	_fillInDefaults(self,{ 
 		// FIRST group in expVoterPositionsAndDistributions
-		num: 3,
+		disk: 3,
 		vid: 0,
 		snowman: false,
 		x_voters: false,
@@ -1240,6 +1260,7 @@ function SingleVoter(model){
 
 	var self = this;
 	Draggable.call(self);
+	self.voterGroupType = "SingleVoter"
 	
 	// CONFIGURE DEFAULTS
 	_fillVoterDefaults(self)
@@ -1271,15 +1292,27 @@ function SingleVoter(model){
 	self.drawBackAnnotation = function(x,y,ctx) {}
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
+		self.draw1(ctx)
+		self.draw2(ctx)
+	};
+	self.draw1 = function(ctx) {
 		var x = self.x*2;
 		var y = self.y*2;
-
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Background, for showing HOW the decision works...
 		self.drawBackAnnotation(x,y,ctx)
 		self.type.drawBG(ctx, self.x, self.y, self.ballot);
+		if(self.highlight) ctx.globalAlpha = temp
+	}
 
+	
+	self.draw2 = function(ctx){
+		var x = self.x*2;
+		var y = self.y*2;
+
+		if(self.highlight) var temp = ctx.globalAlpha
+		if(self.highlight) ctx.globalAlpha = 0.8
 		// Circle!
 		var size = 20;
 		self.type.drawCircle(ctx, self.x, self.y, size, self.ballot);
@@ -1290,8 +1323,7 @@ function SingleVoter(model){
 		
 		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = temp
-	};
-
+	}
 
 }
 

@@ -287,7 +287,13 @@ function Sandbox(modelName) {
             for(var i=0; i<config.numOfCandidates; i++) model.candidates.push(new Candidate(model))
         }
 
-        if (config.oneVoter) {
+        if (config.voterGroupTypes) {
+            for(var i=0; i<config.voterGroupTypes.length; i++) {
+                var vType = window[config.voterGroupTypes[i]]
+                var n = new vType(model)
+                model.voters.push(n)
+            }
+        } else if (config.oneVoter) {
             model.voters.push(new SingleVoter(model))
         } else {
             for(var i=0; i<config.numVoterGroups; i++) model.voters.push(new GaussianVoters(model))
@@ -341,8 +347,10 @@ function Sandbox(modelName) {
         basediv.querySelector("#right").appendChild(model.caption);
         
         if (config.oneVoter) {
-            ballot.update(model.voters[0].ballot);
-            model.caption.innerHTML = "<br />" + model.voters[0].type.toText(model.voters[0].ballot,model.system,model.rbsystem);
+            if (model.voters[0].voterGroupType == "SingleVoter") {
+                ballot.update(model.voters[0].ballot);
+                model.caption.innerHTML = "<br />" + model.voters[0].type.toText(model.voters[0].ballot,model.system,model.rbsystem);
+            }
         }
     };
 
@@ -350,10 +358,20 @@ function Sandbox(modelName) {
         // UPDATE MENU //
         for (i in ui.menu) if(config.featurelist.includes(i)) {ui.menu[i].choose.dom.hidden = false} else {ui.menu[i].choose.dom.hidden = true}
         // Make the MENU look correct.  The MENU is not part of the "model".
-        for (i in ui.menu.percentSecondStrategy.choose.sliders) ui.menu.percentSecondStrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
-        for (i in ui.menu.group_count.choose.sliders) ui.menu.group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
-        for (i in ui.menu.group_spread.choose.sliders) ui.menu.group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+        // for (i in ui.menu.percentSecondStrategy.choose.sliders) ui.menu.percentSecondStrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+        // for (i in ui.menu.group_count.choose.sliders) ui.menu.group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
+        // for (i in ui.menu.group_spread.choose.sliders) ui.menu.group_spread.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
 
+        for (i in ui.menu.percentSecondStrategy.choose.sliders) {
+            if (i < model.voters.length && model.voters[i].voterGroupType == "GaussianVoters") {
+                var style = "display:inline"
+            } else {
+                var style = "display:none"
+    }
+            ui.menu.percentSecondStrategy.choose.sliders[i].setAttribute("style",style)
+            ui.menu.group_count.choose.sliders[i].setAttribute("style",style)
+            ui.menu.group_spread.choose.sliders[i].setAttribute("style",style)
+        }
     }
 
     ///////////////////
@@ -656,6 +674,7 @@ function Sandbox(modelName) {
             config.x_voters = data.x_voters || false;
             config.oneVoter = data.oneVoter || false;
             config.voterPositions = null
+            config.voterGroupTypes = null
             // CREATE
             model.voters = []
             if (config.oneVoter) {
@@ -670,6 +689,7 @@ function Sandbox(modelName) {
             //_objF(ui.menu,"configure")  // TODO: do I need this?
             ui.menu.firstStrategy.configure()
             ui.menu.secondStrategy.configure()
+            ui.menu.spread_factor_voters.configure()
             // INIT
             model.initMODEL()
             for(var i=0; i<model.voters.length; i++) {
@@ -681,15 +701,31 @@ function Sandbox(modelName) {
         };
         self.configure = function() {	
             // MODEL //
-            model.numVoterGroups = config.numVoterGroups
-            model.nVoterGroupsRealName = config.nVoterGroupsRealName
-            var num = config.numVoterGroups;		
-            if (config.voterPositions) {
-                for(var i=0; i<num; i++){
+
+
+            // MODEL //
+            model.nVoterGroupsRealName = config.nVoterGroupsRealName	
+            if (config.voterGroupTypes) {
+                for(var i=0; i<config.voterPositions.length; i++){
                     var pos = config.voterPositions[i];
                     Object.assign(model.voters[i], {
                         vid: i,
-                        num:(4-num),
+                        disk:(4-num),
+                        x:pos[0],
+                        y:pos[1],
+                        snowman: config.voterGroupSnowman[i],
+                        x_voters: config.voterGroupX[i],
+                        disk: config.voterGroupDisk[i]
+                    })
+                    model.voters[i].setType( ui.menu.systems.listByName().voter );	
+                }
+            } else if (config.voterPositions) {
+                var num = model.voters.length
+                for(var i=0; i<config.voterPositions.length; i++){
+                    var pos = config.voterPositions[i];
+                    Object.assign(model.voters[i], {
+                        vid: i,
+                        disk:(4-num),
                         x:pos[0],
                         y:pos[1],
                         snowman: config.snowman,
@@ -698,6 +734,7 @@ function Sandbox(modelName) {
                     model.voters[i].setType( ui.menu.systems.listByName().voter );	
                 }
             } else {
+                var num = model.voters.length
                 var voterPositions;
                 if (config.snowman) {
                     voterPositions =  [[150,83],[150,150],[150,195]]
@@ -742,7 +779,7 @@ function Sandbox(modelName) {
                     var pos = voterPositions[i];
                     Object.assign(model.voters[i], {
                         vid: i,
-                        num:(4-num),
+                        disk:(4-num),
                         x:pos[0] * config.arena_size / 300, //+ (config.arena_size - 300) * .5
                         y:pos[1] * config.arena_size / 300, //+ (config.arena_size - 300) * .5
                         snowman: config.snowman,
@@ -754,7 +791,7 @@ function Sandbox(modelName) {
             }
                 
             if (model.dimensions == "1D+B") {
-                for(var i=0; i<num; i++){ 
+                for(var i=0; i<model.voters.length; i++){ 
                     model.voters[i].y = model.yDimOne
                 }
             }
@@ -776,12 +813,13 @@ function Sandbox(modelName) {
         self.name = "xVoterGroups"
         self.onChoose = function(slider,n) {
             // LOAD INPUT
-            config.xNumVoterGroups = slider.value;
-            config.numVoterGroups = slider.value;
+            var num = slider.value
+            config.xNumVoterGroups = num;
+            config.numVoterGroups = num;
 
             // CREATE
             model.voters = []
-            for(var i=0; i<config.numVoterGroups; i++) {
+            for(var i=0; i<num; i++) {
                 model.voters.push(new GaussianVoters(model))
             }
             // CONFIGURE
@@ -829,12 +867,14 @@ function Sandbox(modelName) {
             menu_update()
         }
         self.configure = function() {
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 self.configureN(i)
             }
         }
         self.configureN = function(n) {
+            if (model.voters[n].voterGroupType=="GaussianVoters") {
             model.voters[n].group_count =config.voter_group_count[n]
+        }
         }
         self.select = function() {
             for (i in self.choose.sliders) {
@@ -870,12 +910,14 @@ function Sandbox(modelName) {
             menu_update()
         }
         self.configure = function() {
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 self.configureN(i)
             }
         }
         self.configureN = function(n) {
+            if (model.voters[n].voterGroupType=="GaussianVoters") {
             model.voters[n].group_spread = config.voter_group_spread[n]
+        }
         }
         self.choose = new sliderSet({
             max: "500",
@@ -1044,7 +1086,7 @@ function Sandbox(modelName) {
         });
         self.configure = function() {
             model.firstStrategy = config.firstStrategy
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].firstStrategy = config.firstStrategy
             }
         }
@@ -1114,7 +1156,7 @@ function Sandbox(modelName) {
         };
         self.configure = function() {
             model.doTwoStrategies = config.doTwoStrategies
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].doTwoStrategies = config.doTwoStrategies
             }
         }
@@ -1159,7 +1201,7 @@ function Sandbox(modelName) {
         };
         self.configure = function() {
             model.secondStrategy = config.secondStrategy
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].secondStrategy = config.secondStrategies[i]
             }
         }
@@ -1192,12 +1234,14 @@ function Sandbox(modelName) {
             model.update();
         }
         self.configure = function() {
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 self.configureN(i)
             }
         }
         self.configureN = function(n) {
+            if (model.voters[n].voterGroupType=="GaussianVoters") {
             model.voters[n].percentSecondStrategy = config.percentSecondStrategy[n]
+        }
         }
         self.select = function() {
             for (i in self.choose.sliders) {
@@ -1325,7 +1369,7 @@ function Sandbox(modelName) {
         };
         self.configure = function() {
             model.preFrontrunnerIds = config.preFrontrunnerIds
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].preFrontrunnerIds = config.preFrontrunnerIds
             }
         }
@@ -1788,7 +1832,7 @@ function Sandbox(modelName) {
             // CONFIGURE
             self.configure()
             // INIT
-            for (var i=0; i<config.numVoterGroups; i++) {
+            for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
             // UPDATE
@@ -2187,12 +2231,21 @@ function Sandbox(modelName) {
 
         // Voter positions
         positions = [];
+        vTypes = []
+        x = []
+        snowman = []
+        disk = []
+        // voter types are varied in style
         for(var i=0; i<model.voters.length; i++){
             var voter = model.voters[i];
             positions.push([
                 Math.round(voter.x),
                 Math.round(voter.y)
             ]);
+            vTypes.push(voter.voterGroupType)
+            x.push(voter.x_voters)
+            snowman.push(voter.snowman)
+            disk.push(voter.disk)
         }
         if(log) console.log("voterPositions: "+JSON.stringify(positions));
         var voterPositions = positions;
@@ -2201,7 +2254,11 @@ function Sandbox(modelName) {
         return {
             candidatePositions: candidatePositions,
             voterPositions: voterPositions,
-            candidateSerials: serials
+            candidateSerials: serials,
+            voterGroupTypes: vTypes,
+            voterGroupX: x,
+            voterGroupSnowman: snowman,
+            voterGroupDisk: disk
         };
 
     };

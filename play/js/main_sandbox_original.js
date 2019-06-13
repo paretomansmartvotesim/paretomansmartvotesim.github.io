@@ -229,7 +229,7 @@ function main(preset){
 					for(var i=0; i<num; i++){
 						var pos = voterPositions[i];
 						Object.assign(model.voters[i], {
-							num:(4-num),
+							disk:(4-num),
 							x:pos[0], y:pos[1]
 						})
 						model.voters[i].setType( ui.menu.systems.listByName(config).voter ); // calls "new VoterType(model)"

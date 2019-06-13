@@ -126,6 +126,14 @@ function Candidate(model){
 			var stylechange = "<style>.cls-" + self.id + "{fill:" + self.fill + ";}</style>"
 			// add style to svg
 			self.svg  = self.svg.replace("</svg>", stylechange + "</svg>")
+			// auto | optimizeSpeed | crispEdges | geometricPrecision
+			// shapeRender = 'shape-rendering="auto"'
+			// self.svg  = self.svg.replace("<svg", '<svg ' + shapeRender)
+			// self.svg  = self.svg.replace("<rect", '<rect ' + shapeRender)
+			// self.svg  = self.svg.replace("<polygon", '<polygon ' + shapeRender)
+			// self.svg = self.svg.replace("<svg",'<svg width="800" height="800"')
+
+			
 			// deal with tooltext
 			var doToolText = false
 			if (doToolText) { // replace name in tooltext
@@ -134,9 +142,26 @@ function Candidate(model){
 				self.svg  = self.svg.replace(/<title>[^<]*<\/title>/, "")
 			}
 
-			// make the img using a Blob
-			var svgblob = new Blob([self.svg], {type: 'image/svg+xml'});
-			self.srcImg = URL.createObjectURL(svgblob); // TODO: fix firefox problems
+			// parse svg
+			var parser = new DOMParser();
+			self.svgDoc = parser.parseFromString(self.svg, "text/xml");
+
+			// edit svg Doc
+			var root = self.svgDoc.getElementsByTagName("svg")[0]
+			root.setAttribute("width", "800");
+			root.setAttribute("height", "800");
+
+			// serialize
+			var s = new XMLSerializer();
+ 			self.svg = s.serializeToString(self.svgDoc);
+
+			// make the image source
+			if (1) { // just trying different methods
+				self.srcImg = "data:image/svg+xml;base64," + btoa(self.svg);
+			} else {
+				var svgblob = new Blob([self.svg], {type: 'image/svg+xml'});
+				self.srcImg = URL.createObjectURL(svgblob); 
+			}
 			self.texticon = self.svg
 		}
 		

@@ -32,6 +32,8 @@ l.onload = function(assets){
     model.update()
   };
   model.onUpdate = function(){
+    if (model.voters.length == 0) return
+    if (model.voters[0].voterGroupType == "GaussianVoters") return
     var id = model.voters[0].ballot.vote;
     var color = model.candidatesById[id].fill;
     var text = "VOTES FOR <b style='color:"+color+"'>"+id.toUpperCase()+"</b>";

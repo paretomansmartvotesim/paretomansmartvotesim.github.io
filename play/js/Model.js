@@ -43,7 +43,6 @@ function Model(modelName){
 		system: "FPTP",
 		rbsystem: "Tideman",
 		numOfCandidates: 3,
-		numVoterGroups: 1,
 		spread_factor_voters: 1,
 		arena_size: 300,
 		median_mean: 1,
@@ -198,7 +197,9 @@ function Model(modelName){
 					self.orderOfVoters = m.map( a => a.i) // get original indices of sorted voters
 				} else { 
 					// 2D
-					if (! (self.arena.mouse.dragging || self.tarena.mouse.dragging) ) {
+					var draggingSomething = (self.arena.mouse.dragging || self.tarena.mouse.dragging)
+					var changedNumVoters = (self.orderOfVoters != undefined) && (self.orderOfVoters.length != v.length)
+					if (changedNumVoters || !draggingSomething ) {
 						var tsp = new TravelingSalesman(); 
 						tsp.runOnSet(v)
 						var order = tsp.getOrder()
@@ -397,7 +398,12 @@ function Arena(arenaName, model) {
 		self.mouse = new Mouse(model.id + "-" + self.id, self.canvas);	// MAH MOUSE
 		// if (arenaName == "arena") self.draggableManager = new DraggableManager(self,model); // only allow dragging for the main arena... for now.. TODO
 		self.draggableManager = new DraggableManager(self,model); 
-		self.plus = new Plus(model)
+		self.plusCandidate = new Plus(model)
+		self.plusOneVoter = new Plus(model)
+		self.plusVoterGroup = new Plus(model)
+		self.plusCandidate.isPlusCandidate = true
+		self.plusOneVoter.isPlusOneVoter = true
+		self.plusVoterGroup.isPlusVoterGroup = true
 		self.trash = new Trash(model)
 	}
 	self.initDOM = function() {
@@ -407,7 +413,9 @@ function Arena(arenaName, model) {
 		self.canvas.style.borderWidth = model.border+"px";
 		//self.canvas.style.margin = (2-self.border)+"px"; // use margin instead of border
 		
-		self.plus.init()
+		self.plusCandidate.init()
+		self.plusOneVoter.init()
+		self.plusVoterGroup.init()
 		self.trash.init()
 	}
 
@@ -418,23 +426,32 @@ function Arena(arenaName, model) {
 		Draggable.call(self);
 		self.isplus = true // when we try to drag the plus, we'll find out it's a plus and make a new candidate
 		
-		
 		// CONFIGURE DEFAULTS
 		self.size = 20;
+		self.isPlusCandidate = false
+		self.isPlusOneVoter = false
+		self.isPlusVoterGroup = false
 		
-		var srcPlus = "play/img/plus.png"
-		// if (Loader) {
-		// 	if (Loader.assets[srcPlus]) {
-		// 		self.img = Loader.assets[srcPlus]
-		// 	}
-		// }
-		self.img = new Image();
-		self.img.src = srcPlus
 		self.init = function() {
-			self.x = model.size - 45
-			self.y = model.size - 15
+			self.y = model.size - 20
+			if (self.isPlusCandidate) {
+				self.x = model.size - 45
+				var srcPlus = "play/img/plusCandidate.png"
+			} else if (self.isPlusOneVoter) {
+				self.x = model.size - 75
+				var srcPlus = "play/img/plusOneVoter.png"
+			} else if (self.isPlusVoterGroup) {
+				self.x = model.size - 105
+				var srcPlus = "play/img/plusVoterGroup.png"
+			}
+			// if (Loader) {
+			// 	if (Loader.assets[srcPlus]) {
+			// 		self.img = Loader.assets[srcPlus]
+			// 	}
+			// }
+			self.img = new Image();
+			self.img.src = srcPlus
 		}
-		self.init()
 		self.draw = function(ctx,arena){
 	
 			// RETINA
@@ -447,6 +464,7 @@ function Arena(arenaName, model) {
 				var temp = ctx.globalAlpha
 				ctx.globalAlpha = 0.8
 				size *= 2
+				// y -= size/4
 			}
 			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 			if(self.highlight) {
@@ -455,39 +473,66 @@ function Arena(arenaName, model) {
 		};
 
 		self.doPlus = function() {
-			// add candidate
-			var n = new Candidate(model)
-			n.x = self.x
-			n.y = self.y
-			// generate a new id
-			// look for the first one that isn't taken
-			for (var i=1; i < 10000000; i++) {  // million is more than enough candidates
-				var c = Candidate.graphicsByIcon[model.theme]
-				for (var icon in c) {
-					if (i == 1) {
-						var newId = icon
-					} else {
-						var newId = icon + i
+			if (self.isPlusCandidate) {
+				// add candidate
+				var n = new Candidate(model)
+				n.x = self.x
+				n.y = self.y
+				// generate a new id
+				// look for the first one that isn't taken
+				for (var i=1; i < 10000000; i++) {  // million is more than enough candidates
+					var c = Candidate.graphicsByIcon[model.theme]
+					for (var icon in c) {
+						if (i == 1) {
+							var newId = icon
+						} else {
+							var newId = icon + i
+						}
+						if (model.candidatesById[newId] != undefined) {
+							// already done
+						} else {
+							var doBreak = true
+							break
+						}
 					}
-					if (model.candidatesById[newId] != undefined) {
-						// already done
-					} else {
-						var doBreak = true
-						break
-					}
+					if (doBreak) break
 				}
-				if (doBreak) break
+				n.icon = icon
+				n.instance = i
+				model.candidates.push(n)
+					
+				// INIT
+				n.init()
+				model.initMODEL()
+				// update the GUI
+				model.onAddCandidate()
+				return n
+			} else if (self.isPlusOneVoter || self.isPlusVoterGroup) {
+				if (self.isPlusOneVoter) {
+					var n = new SingleVoter(model)
+				} else if (self.isPlusVoterGroup) {
+					var n = new GaussianVoters(model)
+				}
+				n.x = self.x
+				n.y = self.y
+				// n.x_voters = true
+				n.disk = 1
+				var max = 0
+				for (var i = 0; i < model.voters.length; i++) {
+					var a = model.voters[i].vid
+					if (a > max) max = a
+				}
+				n.vid = max + 1
+				n.setType(model.voterType)
+				n.firstStrategy = model.firstStrategy
+				n.secondStrategy = model.secondStrategy
+                n.spread_factor_voters = model.spread_factor_voters
+				model.voters.push(n)
+				// INIT
+				model.initMODEL()
+				n.init()
+				return n
 			}
-			n.icon = icon
-			n.instance = i
-			model.candidates.push(n)
-				
-			// INIT
-			n.init()
-			model.initMODEL()
-			// update the GUI
-			model.onAddCandidate()
-			return n
 		}
 	
 	}
@@ -504,8 +549,8 @@ function Arena(arenaName, model) {
 		self.img = new Image();
 		self.img.src = "play/img/trash.png"
 		self.init = function() {
-			self.x = model.size - 15
-			self.y = model.size - 15
+			self.x = model.size - 20
+			self.y = model.size - 20
 		}
 		self.init()
 		self.draw = function(ctx,arena){
@@ -535,6 +580,14 @@ function Arena(arenaName, model) {
 				if (model.candidates[i] == d) {
 					// delete candidate
 					model.candidates.splice(i,1)
+					break
+				}
+			}
+			// find the voter in the list
+			for (var i=0; i < model.voters.length; i++) {
+				if (model.voters[i] == d) {
+					// delete candidate
+					model.voters.splice(i,1)
 					break
 				}
 			}
@@ -571,8 +624,10 @@ function Arena(arenaName, model) {
 		// Draggable candidates and voters
 		self.draggables = [];
 		if (self.id == "arena" && model.theme != "Nicky") {
+			self.draggables.push(self.plusCandidate)
+			self.draggables.push(self.plusOneVoter)
+			self.draggables.push(self.plusVoterGroup)
 			self.draggables.push(self.trash)
-			self.draggables.push(self.plus)
 		}
 		for (var i=0; i<model.candidates.length; i++) {
 			var c = model.candidates[i]
@@ -749,11 +804,17 @@ function Arena(arenaName, model) {
 	
 			for(var i=0; i<model.voters.length; i++){
 				var voter = model.voters[i];
-				voter.draw(self.ctx);
+				voter.draw1(self.ctx);
+			}
+			for(var i=0; i<model.voters.length; i++){
+				var voter = model.voters[i];
+				voter.draw2(self.ctx);
 			}
 				
 			if (model.theme != "Nicky") {
-				self.plus.draw(self.ctx,self)
+				self.plusCandidate.draw(self.ctx,self)
+				self.plusOneVoter.draw(self.ctx,self)
+				self.plusVoterGroup.draw(self.ctx,self)
 				self.trash.draw(self.ctx,self)
 			}
 		}
