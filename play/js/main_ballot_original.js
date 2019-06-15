@@ -17,6 +17,7 @@ function main_ballot(preset){
 		model.border = 2
 		model.startAt1 = true
 		model.theme = "Nicky"
+		model.doOriginal = true
 
 		// INIT
 		model.initDOM()

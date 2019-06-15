@@ -49,8 +49,80 @@ BALLOT DESIGN
 	float:left;
 	width:254px;
 	text-align: center;	
+	margin-right: 20px;
+	margin-bottom: 20px;
 }
 .div-ballot #b-right {
 	display:inline-block;
-	width:500px;
+}
+
+
+.div-ballot #caption{
+	margin-top: 0px;
+	float:left;
+	clear: both;
+	text-align: left;
+    line-height: 1.0em;
+    font-size: 23px;
+}
+.div-ballot #caption .small{
+	font-size: 15px;
+	line-height: 1.0em;
+}
+
+.div-ballot #paper div{
+	display: inline-block;
+	vertical-align:top;
+}
+.div-ballot #paper table{
+	border-collapse: collapse;
+}
+.div-ballot #paper table.main{
+	min-width: 15em;
+}
+.div-ballot #paper table.main2{
+	min-width: 8em;
+}
+.div-ballot #paper table.num{
+	border: 3px solid #302702;
+}
+/* .div-ballot #paper table{
+	min-width: unset;
+	width: unset
+} */
+.div-ballot #paper td{
+	padding-top: 0px;
+}
+.div-ballot #paper td td{
+	padding: .2em;
+}
+.div-ballot #paper td.num{
+	width: 1em;
+	height: 1em;
+	text-align: center;
+}
+.div-ballot #paper th.main{
+	padding: .6em;
+	background-color: #ccc;
+}
+.div-ballot #paper td.main{
+	padding: .2em .6em;
+}
+.div-ballot #paper table.main{
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+.div-ballot #paper table.main2 th{
+	padding: .6em;
+	background-color: #F0EAD6;
+	color: #302702;
+}
+.div-ballot #paper table.main2 td{
+	padding: .6em;
+}
+
+.div-sandbox .div-ballot {
+	/* transform: scale(.5); */
+	font-size: 50%;
+	line-height: 1.2em;
 }

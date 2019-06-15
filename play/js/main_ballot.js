@@ -4,7 +4,14 @@ function main_ballot(preset){
 
 	var l = new Loader()
 
-	ballotType = config.system;
+	var nameBallot = config.system;
+	var translate = {
+		Plurality:"FPTP",
+		Ranked:"IRV",
+		Approval:"Approval",
+		Score:"Score"
+	}
+	var method = config.method || translate[nameBallot]
 	config.firstStrategy = config.firstStrategy || "zero strategy. judge on an absolute scale.";
 	config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"];
 	config.showChoiceOfStrategy = config.showChoiceOfStrategy || false
@@ -20,8 +27,8 @@ function main_ballot(preset){
 	var initialConfig = JSON.parse(JSON.stringify(config));
 
 	// CONFIGURE
-	var VoterType = window[ballotType+"Voter"];
-	var BallotType = window[ballotType+"Ballot"];
+	var VoterType = window[nameBallot+"Voter"];
+	var BallotType = window[nameBallot+"Ballot"];
 
 	// INIT
 	l.onload = function(assets){
@@ -34,6 +41,7 @@ function main_ballot(preset){
 		model.size = 250
 		model.border = 2
 		model.voterType = VoterType
+		model.system = method
 
 		// INIT
 		model.initDOM()
@@ -82,12 +90,31 @@ function main_ballot(preset){
 
 
 		// CREATE A BALLOT
-		var ballot = new BallotType(model);
-		basediv.querySelector("#b-right").appendChild(ballot.dom)
+		var way1 = true
+		if (config.newWay) {
+			if (way1) {
+				var caption = document.createElement("div");
+				caption.id = "caption";
+				basediv.querySelector("#b-right").appendChild(caption)
+			} else {
+				var bRight = basediv.querySelector("#b-right")
+			}
+		} else {
+			var ballot = new BallotType(model);
+			basediv.querySelector("#b-right").appendChild(ballot.dom)
+		}
 		model.onUpdate = function(){
 			if (model.voters.length == 0) return
 			if (model.voters[0].voterGroupType == "GaussianVoters") return
-			ballot.update(model.voters[0].ballot);
+			if (config.newWay) {
+				if (way1) {
+					caption.innerHTML = model.voters[0].type.toTextH(model.voters[0].ballot);
+				} else {
+					bRight.innerHTML = model.voters[0].type.toTextH(model.voters[0].ballot);
+				}
+			} else {
+				ballot.update(model.voters[0].ballot);
+			}
 		};
 
 		// UPDATE
@@ -199,6 +226,11 @@ function main_ballot(preset){
 
 		"play/img/pentagon.svg",
 		"play/img/bob.svg",
+
+        // plus
+        "play/img/plusCandidate.png",
+        "play/img/plusOneVoter.png",
+        "play/img/plusVoterGroup.png",
 
 		// Ballot instructions
 		"play/img/ballot_fptp.png",

@@ -8,10 +8,17 @@
 function ScoreVoter(model){
 
 	var self = this;
+	GeneralVoter.call(self,model)
+
 	self.maxscore = 5;
 	self.minscore = 0;
 	self.defaultMax = model.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
-	self.filledCircles = true // display scores with filled transparent circles rather than unfilled circles.
+	if (model.doOriginal) {
+		self.filledCircles = false
+	} else {
+		self.filledCircles = true // display scores with filled transparent circles rather than unfilled circles.
+	}
+	
 
 	self.getBallot = function(x, y, strategy){
 
@@ -124,12 +131,28 @@ function ScoreVoter(model){
 
 	};
 
-	self.toText = function(ballot,system,rbsystem){
-
-		// todo: star preferences
+	self.textBallot = function(ballot){
 
 		var text = ""
-		text += "<span class='small' style> Vote: </span> <br />" 
+		var scoreByCandidate = []
+		for(var i = 0; i < model.candidates.length; i++) {
+			scoreByCandidate[i] = ballot[model.candidates[i].id]
+		}
+
+		var rTitle = `
+		<em>Give EACH candidate a score<br>
+		<span class="small">from 0 (hate 'em) to 5 (love 'em)</span></em>
+		`
+		text += htmlBallot(model,rTitle,scoreByCandidate)
+		return text
+	}
+	self.textTally = function(ballot){
+		var system = model.system
+		
+		// todo: star preferences
+		var text = ""
+
+		if (self.say) text += "<span class='small' style> Vote: </span> <br />" 
 		cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
 
 		if (0){
@@ -145,7 +168,7 @@ function ScoreVoter(model){
 				cID = cIDs[i]
 				var score = ballot[cID]
 				for (var j=0; j < score; j++) {
-					text += model.icon(cID) 
+					text += model.icon(cID) + " "
 				}
 				text += "<br />"
 			}
@@ -421,12 +444,15 @@ function ThreeVoter(model){
 
 	self.maxscore = 2
 
-	
-	self.toText = function(ballot,system,rbsystem){
+	var tempTextBallot = self.textBallot
+	self.textBallot = function(ballot){
+		return tempTextBallot(ballot).replace("5 (love 'em)","2 (love 'em)")
+	}
+	self.textTally = function(ballot){
 		var text = ""
 		cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
 		if (0){
-			text += "<span class='small' style> Vote: </span> <br />" 
+			if (self.say) text += "<span class='small' style> Vote: </span> <br />" 
 			for(var i in cIDs){
 				cID = cIDs[i]
 				var score = ballot[cID]
@@ -494,7 +520,7 @@ function ThreeVoter(model){
 function ApprovalVoter(model){
 
 	var self = this;
-
+	GeneralVoter.call(self,model)
 	ScoreVoter.call(self,model)
 	self.maxscore = 1
 	self.defaultMax = 200 // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
@@ -535,23 +561,157 @@ function ApprovalVoter(model){
 		_drawSlices(model, ctx, x, y, size, slices, ballot.approved.length);
 
 	};
+	self.textBallot = function(ballot) {
+		var text = ""
 
-	self.toText = function(ballot,system,rbsystem){
-		var text = "<span class='small' style> Approved </span> <br />" 
+		var approvedByCandidate = []
+		for(var i = 0; i < model.candidates.length; i++) {
+			approvedByCandidate.push("&#x2800;")
+		}
+		for(var i=0; i<ballot.approved.length; i++){
+			var approved = ballot.approved[i];
+			var c = model.candidatesById[approved];
+			approvedByCandidate[c.i] = "&#x2714;"
+		}
+
+		var rTitle = `
+		<em>Who do you approve of?<br>
+		<span class="small">(pick as MANY as you like)</span></em>
+		`
+		text += htmlBallot(model,rTitle,approvedByCandidate)
+		return text
+	}
+	self.textTally = function(ballot){
+		var text = ""
+		if (self.say) text += "<span class='small' style> Approved </span> <br />" 
 		
 		for(var i=0; i<ballot.approved.length; i++){
 			// if (i>0) text += ">"
 			var candidate = ballot.approved[i];
 			text += model.icon(candidate)
+			text += "<br />"
 		}
 		return text
 	}
 }
 
+function GeneralVoter() {
+	var self = this
+	self.say = false
+	self.toTextV = function(ballot) {
+		if (0) {
+			return `<div id="paper">` + self.textBallot(ballot) + "</div>" + self.textTally(ballot) 
+		} else {
+			return self.toText(ballot,"V")
+		}
+
+	}
+	self.toTextH = function(ballot) {
+		return self.toText(ballot,"H")
+	}
+	self.toText = function(ballot,direction) {
+		var tablewrap = false
+		var text = ''
+		var part1 = self.textBallot(ballot)
+		var part2 = `
+		<table class="main2" border="1">
+		<tbody>
+		<tr>
+		<th>Tally<br>
+		<em><span class="small">how to add votes</span></em></th>
+		</tr>
+		<tr>
+		<td>#2</td>
+		</tr>
+		</tbody>
+		</table>`.replace("#2",self.textTally(ballot))
+
+		if (tablewrap) {
+			text += `<table id="paper">
+			<tbody>
+			<tr>
+			`
+			text += `<td valign="top">`
+			text += part1
+			text += `</td>`
+			if (direction=="V") {
+				text += '</tr><tr>'
+			}
+			text += `<td valign="top">`
+			text += part2
+			text += `</td>`
+			text += `
+			</tr>
+			</tbody>
+			</table>`
+		} else {
+			text += `
+			<div id="paper">
+			<div>
+			` + part1 + `
+			</div>
+			<div>
+			` + part2 + `
+			</div>
+			</div>`
+		}
+		return text
+	}
+}
+
+function htmlBallot(model,rTitle,textByCandidate) {
+	var text = ""
+	var tTitle = `
+	<table class="main" border="1">
+	<tbody>
+	<tr>
+	<th class="main">
+	#title
+	</th>
+	</tr>
+	<tr>
+	<td class="main">
+	<table border="0">
+	<tbody>
+	`
+	text += tTitle.replace("#title",rTitle)
+
+	tRow = `
+	<tr>
+	<td>
+	<table class="num">
+	<tbody>
+	<tr>
+	<td class="num">#num</td>
+	</tr>
+	</tbody>
+	</table>
+	</td>
+	<td>#name</td>
+	</tr>
+	`		
+	for(var i=0; i < model.candidates.length; i++) {
+		var c = model.candidates[i]
+		var num = textByCandidate[i]
+		var name = model.icon(c.id) + " <b style='color:"+c.fill+"'>" + c.id.toUpperCase() + "</b>"
+		text += tRow.replace("#num",num).replace("#name",name)	
+	}
+	text += `
+	</tbody>
+	</table>
+	</td>
+	</tr>
+	</tbody>
+	</table>
+	`
+	return text
+}
+
 function RankedVoter(model){
 
 	var self = this;
-
+	GeneralVoter.call(self,model)
+	
 	self.getBallot = function(x, y, strategy){
 
 		// Rank the peeps I'm closest to...
@@ -627,30 +787,176 @@ function RankedVoter(model){
 
 	self.drawBG = function(ctx, x, y, ballot){
 
-		// RETINA
-		x = x*2;
-		y = y*2;
+		if (model.doOriginal) {
+			// RETINA
+			x = x*2;
+			y = y*2;
+			// DRAW 'EM LINES
+			for(var i=0; i<ballot.rank.length; i++){
+	
+				// Line width
+				var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
+	
+				// To which candidate...
+				var rank = ballot.rank[i];
+				var c = model.candidatesById[rank];
+				var cx = c.x*2; // RETINA
+				var cy = c.y*2; // RETINA
+	
+				// Draw
+				ctx.beginPath();
+				ctx.moveTo(x,y);
+				ctx.lineTo(cx,cy);
+				ctx.lineWidth = lineWidth;
+				ctx.strokeStyle = "#888";
+				ctx.stroke();
+	
+			}
+	
+		} else if (model.system == "IRV") {
+			var old = {}
+			old.x = x
+			old.y = y
+			// DRAW 'EM LINES
+			for(var i=0; i<ballot.rank.length; i++){
+	
+				// Line width
+				var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
+	
+				// To which candidate...
+				var rank = ballot.rank[i];
+				var c = model.candidatesById[rank];
+				var next = {}
+				next.x = c.x;
+				next.y = c.y;
+	
+				// Draw
+				ctx.beginPath();
+				ctx.moveTo(old.x*2,old.y*2);
+				ctx.lineTo(next.x*2,next.y*2);
+				ctx.lineWidth = lineWidth;
+				ctx.strokeStyle = "#888";
+				ctx.stroke();
+				old = next
+				ctx.setLineDash([5, 15]);
+			}
+			ctx.setLineDash([]);
+	
+		} else {
+			// customization
+			var lineWidth = 1
+			var connectWidth = 1
+			var sizeCircle = 15
+			var connectCandidates = true
+			var minimap = true
+			var bimetalLine = true && !minimap
 
-		// DRAW 'EM LINES
-		for(var i=0; i<ballot.rank.length; i++){
+			var rankByCandidate = []
+			for(var i=0; i<ballot.rank.length; i++){
+				var rank = ballot.rank[i];
+				var c = model.candidatesById[rank];
+				rankByCandidate[c.i] = i
+			}
 
-			// Line width
-			var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
+			for(var i = 0; i < model.candidates.length; i++) {
+				for (var k = 0; k < i; k++) {
+					var c1 = model.candidates[i]
+					var c2 = model.candidates[k]
+					var win = rankByCandidate[k] > rankByCandidate[i]
+						
+					if (connectCandidates) {
+						ctx.setLineDash([5, 45]);
+						ctx.beginPath();
+						ctx.moveTo(c1.x*2,c1.y*2);
+						ctx.lineTo(c2.x*2,c2.y*2);
+						ctx.lineWidth = connectWidth;
+						ctx.strokeStyle = "#888";
+						ctx.stroke();
+						ctx.setLineDash([]);
+					}
+					// draw halfway line
+					var length = 10
+					mid = {}
+					mid.x = (c1.x + c2.x)*.5
+					mid.y = (c1.y + c2.y)*.5
+					var mag = Math.sqrt((c1.y-c2.y) **2 + (c1.x-c2.x)**2)
+					unit = {}
+					unit.x = (c1.x - c2.x) / mag
+					unit.y = (c1.y - c2.y) / mag
+					var start = {}
+					start.x = mid.x + unit.y * length
+					start.y = mid.y - unit.x * length
+					var stop = {}
+					stop.x = mid.x - unit.y * length
+					stop.y = mid.y + unit.x * length
+					if (bimetalLine) {
+						ctx.beginPath();
+						ctx.moveTo((start.x+lineWidth*unit.x)*2,(start.y+lineWidth*unit.y)*2);
+						ctx.lineTo((stop.x+lineWidth*unit.x)*2,(stop.y+lineWidth*unit.y)*2);
+						ctx.lineWidth = lineWidth*5;
+						ctx.strokeStyle = c1.fill;
+						ctx.stroke();
 
-			// To which candidate...
-			var rank = ballot.rank[i];
-			var c = model.candidatesById[rank];
-			var cx = c.x*2; // RETINA
-			var cy = c.y*2; // RETINA
+						ctx.beginPath();
+						ctx.moveTo((start.x-lineWidth*unit.x)*2,(start.y-lineWidth*unit.y)*2);
+						ctx.lineTo((stop.x-lineWidth*unit.x)*2,(stop.y-lineWidth*unit.y)*2);
+						ctx.lineWidth = lineWidth*5;
+						ctx.strokeStyle = c2.fill;
+						ctx.stroke();
+					} else {
+						ctx.beginPath();
+						ctx.moveTo(start.x*2,start.y*2);
+						ctx.lineTo(stop.x*2,stop.y*2);
+						ctx.lineWidth = lineWidth;
+						ctx.strokeStyle = "#888";
+						ctx.stroke();
+					}
 
-			// Draw
-			ctx.beginPath();
-			ctx.moveTo(x,y);
-			ctx.lineTo(cx,cy);
-			ctx.lineWidth = lineWidth;
-			ctx.strokeStyle = "#888";
-			ctx.stroke();
-
+					if (minimap) {
+						if (win) {
+							var fill = c1.fill
+						} else {
+							var fill = c2.fill
+						}
+						var factor = 7
+						var miniSize = 8
+						var circle = {}
+						circle.x = (mid.x * factor + x) / (factor + 1)
+						circle.y = (mid.y * factor + y) / (factor + 1)
+						
+						var temp = ctx.globalAlpha
+						ctx.globalAlpha = temp * .8
+						ctx.fillStyle = fill
+						ctx.beginPath();
+						ctx.moveTo(circle.x*2,circle.y*2);
+						ctx.arc(circle.x*2, circle.y*2, miniSize, 0, Math.TAU, false);
+						ctx.lineTo(circle.x*2,circle.y*2);
+						ctx.closePath();
+						ctx.fill();
+						ctx.globalAlpha = temp
+					} else {
+						if (win) {
+							var offset = 1
+						} else {
+							var offset = -1
+						}
+						var circle = {}
+						circle.x = mid.x + unit.x * offset * sizeCircle * .5
+						circle.y = mid.y + unit.y * offset * sizeCircle * .5
+						
+						var temp = ctx.globalAlpha
+						ctx.globalAlpha = temp * .3
+						ctx.fillStyle = "#000";
+						ctx.beginPath();
+						ctx.moveTo(circle.x*2,circle.y*2);
+						ctx.arc(circle.x*2, circle.y*2, sizeCircle, 0, Math.TAU, false);
+						ctx.lineTo(circle.x*2,circle.y*2);
+						ctx.closePath();
+						ctx.fill();
+						ctx.globalAlpha = temp
+					}
+				}
+			}
 		}
 
 	};
@@ -671,10 +977,29 @@ function RankedVoter(model){
 
 	};
 
-	self.toText = function(ballot,system,rbsystem){
-
+	self.textBallot = function(ballot) {
 		var text = ""
-		
+
+		var rankByCandidate = []
+		for(var i=0; i<ballot.rank.length; i++){
+			var rank = ballot.rank[i];
+			var c = model.candidatesById[rank];
+			rankByCandidate[c.i] = i + 1
+		}
+
+		var rTitle = `
+		<em>Rank in order of your choice:<br>
+		<span class="small">(1=1st choice, 2=2nd choice, etc...)</span></em>
+		`
+		text += htmlBallot(model,rTitle,rankByCandidate)
+		return text
+	}
+	self.textTally = function(ballot){
+		var system = model.system
+		var rbsystem = model.rbsystem
+		// todo: star preferences
+		var text = ""
+
 		// var onlyPoints = ["Borda"]
 		// var onlyPointsRB = ["Baldwin","Borda"]
 		// var noPreferenceChainRB = ["Black"]
@@ -717,7 +1042,11 @@ function RankedVoter(model){
 		if(system=="RBVote" && rbsystem=="Bucklin") {
 			// put a 1 in each ranking
 			text += "<pre>"
-			text += "    1 2 3 4 5"
+			// text += "    1 2 3 4 5"
+			text += "   "
+			for(var i=0; i<ballot.rank.length; i++) {
+				text += " " + (i+1)
+			}
 			text += "<br />"
 			text += "<br />"
 			for(var i=0; i<ballot.rank.length; i++) {
@@ -816,7 +1145,7 @@ function RankedVoter(model){
 		}
 
 		if (pick.doPoints) {
-			text += "<span class='small' style> Points: </span><br />" 
+			if (self.say) text += "<span class='small' style> Points: </span><br />" 
 			var numCandidates = ballot.rank.length
 			for(var i=0; i<ballot.rank.length; i++){
 				var candidate = ballot.rank[i];
@@ -835,6 +1164,8 @@ function RankedVoter(model){
 function PluralityVoter(model){
 
 	var self = this;
+	GeneralVoter.call(self,model)
+
 	self.maxscore = 1; // just for autopoll
 
 	self.getBallot = function(x, y, strategy){
@@ -921,8 +1252,25 @@ function PluralityVoter(model){
 
 	};
 
-	self.toText = function(ballot,system,rbsystem){
-		var text = "<span class='small' style> One vote for </span> " 
+	self.textBallot = function(ballot) {
+		var text = ""
+		var onePickByCandidate = []
+		for(var i = 0; i < model.candidates.length; i++) {
+			onePickByCandidate.push("&#x2800;")
+		}
+		var c = model.candidatesById[ballot.vote];
+		onePickByCandidate[c.i] = "&#x2714;"
+
+		var rTitle = `
+		<em>Who's your favorite candidate?<br>
+		<span class="small">(pick ONLY one)</span></em>
+		`
+		text += htmlBallot(model,rTitle,onePickByCandidate)
+		return text
+	}
+	self.textTally = function(ballot){
+		var text = ""
+		if (self.say) text += "<span class='small' style> One vote for </span> " 
 		return text + model.icon(ballot.vote)
 	}
 

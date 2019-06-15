@@ -334,22 +334,44 @@ function Sandbox(modelName) {
     model.onDraw = function(){
         
         // CREATE A BALLOT
+        
         var myNode = basediv.querySelector("#right");
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }  // remove old one, if there was one
-        // basediv.querySelector("#ballot").remove()	
+        // basediv.querySelector("#ballot").remove()
+
+        var doOldBallot = false
         if (config.oneVoter) {
-            var BallotType = model.ballotType
-            var ballot = new BallotType(model);
-            basediv.querySelector("#right").appendChild(ballot.dom);
+            if (doOldBallot) {
+                var BallotType = model.ballotType
+                var ballot = new BallotType(model);
+                basediv.querySelector("#right").appendChild(ballot.dom);
+            } else {
+                var divBallot = document.createElement("div")
+                basediv.querySelector("#right").appendChild(divBallot);
+            }
         }
         basediv.querySelector("#right").appendChild(model.caption);
         
         if (config.oneVoter) {
             if (model.voters[0].voterGroupType == "SingleVoter") {
-                ballot.update(model.voters[0].ballot);
-                model.caption.innerHTML = "<br />" + model.voters[0].type.toText(model.voters[0].ballot,model.system,model.rbsystem);
+                var text = ""
+                if (doOldBallot) ballot.update(model.voters[0].ballot);
+                if (doOldBallot) text += "<br />"
+                text += '<div class="div-ballot">'
+                text += model.voters[0].type.toTextV(model.voters[0].ballot);
+                text += '</div>'
+                if (0) {
+                    text += "<br /><br />"
+                    text += model.result.text
+                }
+                if (doOldBallot) {
+                    model.caption.innerHTML = text
+                } else {
+                    model.caption.innerHTML = ""
+                    divBallot.innerHTML = text
+                }
             }
         }
     };
@@ -2344,6 +2366,11 @@ function Sandbox(modelName) {
         "play/img/red_bee.png",
         "play/img/green_bee.png",
         "play/img/orange_bee.png",
+
+        // plus
+        "play/img/plusCandidate.png",
+        "play/img/plusOneVoter.png",
+        "play/img/plusVoterGroup.png",
 
         // Ballot instructions
         "play/img/ballot5_fptp.png",

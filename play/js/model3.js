@@ -61,5 +61,9 @@ l.load([
 	"play/img/triangle.svg",
 	"play/img/hexagon.svg",
 	"play/img/pentagon.svg",
-	"play/img/bob.svg"
+	"play/img/bob.svg",
+	// plus
+	"play/img/plusCandidate.png",
+	"play/img/plusOneVoter.png",
+	"play/img/plusVoterGroup.png"
 ]);

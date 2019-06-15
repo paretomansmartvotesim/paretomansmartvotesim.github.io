@@ -1304,7 +1304,8 @@ function loadpreset(modelName) {
 
 	} else if (htmlname == "ballot2.html") {
 		config = {
-			system: "Ranked"
+			system: "Ranked",
+			method: "IRV"
 		}
 
 	} else if (htmlname == "ballot3.html") {
@@ -1378,8 +1379,38 @@ function loadpreset(modelName) {
 		}
 		// } else if (htmlname == "election.html") {
 		// 	config = 
+	} else if (htmlname == "ballot13.html") {
+		config = {
+			system: "Plurality",
+			method: "FPTP",
+			newWay: true
+		}
 
+	} else if (htmlname == "ballot14.html") {
+		config = {
+			system: "Ranked",
+			method: "RankedPair",
+			newWay: true
+		}
 
+	} else if (htmlname == "ballot15.html") {
+		config = {
+			system: "Approval",
+			newWay: true
+		}
+
+	} else if (htmlname == "ballot16.html") {
+		config = {
+			system: "Score",
+			newWay: true
+		}
+
+	} else if (htmlname == "ballot17.html") {
+		config = {
+			system: "Ranked",
+			method: "IRV",
+			newWay: true
+		}
 	}
 	return {
 		config: config,

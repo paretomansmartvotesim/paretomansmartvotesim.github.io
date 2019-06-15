@@ -270,7 +270,6 @@ function Model(modelName){
 			self.tarena.draw()
 		}
 
-		self.onDraw();
 
 	}
 	self.drawSidebar = function () {
@@ -281,6 +280,7 @@ function Model(modelName){
 				}
 			}
 		}
+		self.onDraw();
 	}
 
 
@@ -434,14 +434,15 @@ function Arena(arenaName, model) {
 		
 		self.init = function() {
 			self.y = model.size - 20
+			var between = 40
 			if (self.isPlusCandidate) {
-				self.x = model.size - 45
+				self.x = model.size - between * 3.5
 				var srcPlus = "play/img/plusCandidate.png"
 			} else if (self.isPlusOneVoter) {
-				self.x = model.size - 75
+				self.x = model.size - between * 2.5
 				var srcPlus = "play/img/plusOneVoter.png"
 			} else if (self.isPlusVoterGroup) {
-				self.x = model.size - 105
+				self.x = model.size - between * 1.5
 				var srcPlus = "play/img/plusVoterGroup.png"
 			}
 			// if (Loader) {
