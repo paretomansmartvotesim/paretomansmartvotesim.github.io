@@ -2229,6 +2229,11 @@ function Sandbox(modelName) {
         self.dom = linkText
     }
 
+    var tinyLink = document.createElement("a")
+    centerDiv.appendChild(tinyLink)
+    tinyLink.setAttribute("target", "_blank")
+    tinyLink.setAttribute("class", "tinyURL")
+
     ///////////////////////////
     ////// SAVE POSITION //////
     ///////////////////////////
@@ -2317,6 +2322,13 @@ function Sandbox(modelName) {
         var restofurl = getUrl.pathname.split('/')
         for (var i=1; i < restofurl.length - 2; i++) {baseUrl += "/" + restofurl[i];}
         var link = baseUrl + "/sandbox/?m="+uri;
+        
+        var doTinyURL = true
+        if (doTinyURL) {
+            var goTiny='https://tinyurl.com/create.php?url='+encodeURIComponent(link)
+            tinyLink.setAttribute("href",goTiny)
+            tinyLink.innerHTML = `TinyURL<img src="play/img/external_link.svg">`
+        }
         
         var savelink = basediv.querySelector("#savelink");
         savelink.value = "saving...";

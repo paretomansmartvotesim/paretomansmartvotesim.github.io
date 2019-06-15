@@ -19,6 +19,13 @@ a:hover{ color: hsl(240,80%,80%); }
 	width: 670px;
 	margin: 0 auto;
 }
+.words .video{
+	border: 10px solid black;
+	border-top-width: 0px;
+	border-bottom-width: 4px;
+	border-left-width: 7px;
+	border-right-width: 12px;
+}
 #content p{
 	text-align: justify;
 	line-height: 1.7em;

@@ -138,9 +138,20 @@ Election/Sandbox design:
 }
 
 #savelink{
+    margin: 10px 9px 0 0;
     width:300px;
 }
 
+.tinyURL{
+    margin: 10px 9px 0 0;
+    font-size: .5em;
+    vertical-align: middle;
+    color: #0645AD
+}
+
+.tinyURL img {
+    height: .7em;
+}
 
 
 
