@@ -27,8 +27,7 @@ function Sandbox(modelName) {
     // Then wait for mouse events.
 
     // switch
-    var tryNewURL = false
-    var doFriendlyURI = false
+    var tryNewURL = true
 
     // LOAD DEFAULTS and INPUT
     var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
@@ -130,12 +129,20 @@ function Sandbox(modelName) {
             return decodeURIComponent(results[2].replace(/\+/g, " ")).replace("}/","}"); //not sure how that / got there.
         };
         if(modelData){
-            var data = JSON.parse(modelData);
-            config = data;
-        }
-        if (tryNewURL) {
-            if(modelVersion){
-                config.configversion = version
+            if (tryNewURL) {
+                if (version) { 
+                    // if we have a version number, then we know the data is in this format
+                    config = {
+                        zipped:modelData,
+                        configversion:version
+                    }
+                } else {
+                    var data = JSON.parse(modelData);
+                    config = data;
+                }
+            } else {
+                var data = JSON.parse(modelData);
+                config = data;
             }
         }
         cleanConfig(config)
@@ -498,6 +505,32 @@ function Sandbox(modelName) {
             {name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
             {name:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval}
         ];
+        self.codebook = [
+            {
+                field: "system",
+                decodeVersion: 2.2,
+                decode: [
+                    "FPTP",
+                    "+Primary",
+                    "Top Two",
+                    "RBVote",
+                    "IRV", 
+                    "Borda",
+                    "Minimax",
+                    "Schulze",
+                    "RankedPair",
+                    "Condorcet",
+                    "Approval",
+                    "Score",
+                    "STAR",
+                    "3-2-1",
+                    "RRV", 
+                    "RAV",
+                    "STV",
+                    "QuotaApproval"
+                ]
+            }
+        ]
         self.listByName = function() {
             var votingSystem = self.list.filter(function(system){
                 return(system.name==config.system);
@@ -589,6 +622,30 @@ function Sandbox(modelName) {
             {name:"Small",rbelection:rbvote.calcsmal},
             {name:"Tideman",rbelection:rbvote.calctide}
             ]	
+            
+        self.codebook = [
+            {
+                field: "rbsystem",
+                decodeVersion: 2.2,
+                decode: [
+                    "Baldwin",
+                    "Black",
+                    "Borda",
+                    "Bucklin",
+                    "Carey",
+                    "Coombs",
+                    "Copeland",
+                    "Dodgson",
+                    "Hare",
+                    "Nanson",
+                    "Raynaud",
+                    "Schulze",
+                    "Simpson",
+                    "Small",
+                    "Tideman"
+                ]
+            }
+        ]
         self.listByName = function() {
             var votingSystem = self.list.filter(function(system){
                 return(system.name==config.rbsystem);
@@ -690,21 +747,6 @@ function Sandbox(modelName) {
                 decode: [1,2,3,4],
                 decodeVersion: 2.2,
                 field: "numVoterGroups"
-            },
-            {
-                decode: ["false", "true"],
-                decodeVersion: 2.2,
-                field: "snowman"
-            },
-            {
-                decode: ["false", "true"],
-                decodeVersion: 2.2,
-                field: "x_voters"
-            },
-            {
-                decode: ["false", "true"],
-                decodeVersion: 2.2,
-                field: "oneVoter"
             },
             {
                 decode: ["GaussianVoters", "SingleVoter"],
@@ -1393,6 +1435,16 @@ function Sandbox(modelName) {
             {name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
             {name:"Manual",realname:"Press the poll button to find the frontrunners once."}
         ];
+        self.codebook = [
+            {
+                field: "autoPoll",
+                decodeVersion: 2.2,
+                decode: [
+                    "Auto",
+                    "Manual"
+                ]
+            }
+        ]
         self.onChoose = function(data){
             // LOAD INPUT
             config.autoPoll = data.name
@@ -1869,6 +1921,18 @@ function Sandbox(modelName) {
             {name:"generate all",margin:4},
             {name:"pick and generate"}
         ]
+        self.codebook = [
+            {
+                field: "colorChooser",
+                decodeVersion: 2.2,
+                decode: [
+                    "pick and repeat",
+                    "pick and repeat w/ offset",
+                    "generate all",
+                    "pick and generate"
+                ]
+            }
+        ]
         self.onChoose = function(data){
             // LOAD
             config.colorChooser = data.name
@@ -1907,6 +1971,15 @@ function Sandbox(modelName) {
             // {name:"hsluv light",margin:4},
             // {name:"cie sampling",margin:4},
             // {name:"hsl with dark"}
+        ]
+        self.codebook = [
+            {
+                field: "colorSpace",
+                decodeVersion: 2.2,
+                decode: [
+                    "hsluv with dark"
+                ]
+            }
         ]
         self.onChoose = function(data){
             // LOAD
@@ -1982,6 +2055,16 @@ function Sandbox(modelName) {
         self.list = [
             {name:"300",val:300,margin:4},
             {name:"600",val:600}
+        ]
+        self.codebook = [
+            {
+                field: "arena_size",
+                decodeVersion: 2.2,
+                decode: [
+                    300,
+                    600
+                ]
+            }
         ]
         self.onChoose = function(data){
             // LOAD
@@ -2076,6 +2159,17 @@ function Sandbox(modelName) {
             {name:"Bees",realname:"The Bee mode style for Unsplit."}
         ]
 
+        self.codebook = [
+            {
+                field: "theme",
+                decodeVersion: 2.2,
+                decode: [
+                    "Default",
+                    "Nicky",
+                    "Bees"
+                ]
+            }
+        ]
         self.onChoose = function(data){
             // LOAD
             config.theme = data.name
@@ -2127,6 +2221,17 @@ function Sandbox(modelName) {
             {name:"linear",margin:4},
             {name:"quadratic",margin:4},
             {name:"log"}
+        ]
+        self.codebook = [
+            {
+                field: "utility_shape",
+                decodeVersion: 2.2,
+                decode: [
+                    "linear",
+                    "quadratic",
+                    "log"
+                ]
+            }
         ]
         self.onChoose = function(data){
             // LOAD
@@ -2416,7 +2521,11 @@ function Sandbox(modelName) {
         } else {
             var eConfig = config
         }
-        var uri = encodeURIComponent(JSON.stringify(eConfig));
+        if (tryNewURL) {
+            var uri = encodeURIComponent(eConfig)
+        } else {
+            var uri = encodeURIComponent(JSON.stringify(eConfig));
+        }
         
         // Put it in the save link box!
         
@@ -2426,7 +2535,7 @@ function Sandbox(modelName) {
         var restofurl = getUrl.pathname.split('/')
         for (var i=1; i < restofurl.length - 2; i++) {baseUrl += "/" + restofurl[i];}
         if (tryNewURL) {
-            var link = baseUrl + "/sandbox/?v=" + "&m="+uri;    
+            var link = baseUrl + "/sandbox/?v=" + config.configversion + "&m="+uri;    
         } else {
             var link = baseUrl + "/sandbox/?m="+uri;
         }
@@ -2502,41 +2611,71 @@ function Sandbox(modelName) {
     }
     var encodeFields = encode
 
+    // additional codebooks
+    var extraCodeBook = [
+        {
+            decode:[
+                "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
+            ],
+            decodeVersion: 2.2,
+            field: "description"
+        }
+    ]
+
     // set up encoders
     for (var e in ui.menu) {
         var item = ui.menu[e]
         if (item.codebook) {
-            for (k = 0; k < item.codebook.length; k++) {
-                var decode = item.codebook[k].decode
-                var encode = {}
-                for (var i = 0; i < decode.length; i++) {
-                    var value = decode[i]
-                    encode[value] = i
-                }
-                item.codebook[k].encode = encode
-            }
+            _makeEncode(item.codebook)
         }
     }
-    
+    _makeEncode(extraCodeBook)
+    function _makeEncode(codebook) {
+        for (k = 0; k < codebook.length; k++) {
+            var decode = codebook[k].decode
+            var encode = {}
+            for (var i = 0; i < decode.length; i++) {
+                var value = JSON.stringify(decode[i])
+                encode[value] = i
+            }
+            codebook[k].encode = encode
+        }
+    }
+
+    var doFriendlyURI = true
+
 
     function encode_config(config) {
         var conf = _jcopy(config)
         for (var e in ui.menu) {
             var item = ui.menu[e]
-            if (item.codebook) {                
-                for (k = 0; k < item.codebook.length; k++) {
-                    var encode = item.codebook[k].encode
-                    var field = item.codebook[k].field
-                    var value = conf[field]
-                    if (Array.isArray(value)) {
-                        var temp = []
-                        for (var i =0; i < value.length; i++) {
-                            temp.push(encode[value[i]])
-                        }
-                        conf[field] = temp
+            if (item.codebook) {  
+                _encode(item.codebook)
+            }
+        }
+        _encode(extraCodeBook)
+        
+        function _encode(codebook) {
+            for (k = 0; k < codebook.length; k++) {
+                var encode = codebook[k].encode
+                var field = codebook[k].field
+                var value = conf[field]
+                var _lookup = function(v) {
+                    vs = JSON.stringify(v)
+                    if (vs in encode) {
+                        return encode[vs]
                     } else {
-                        conf[field] = encode[value]
+                        return "~" + vs // store as JSON String, and set a flag character
                     }
+                }
+                if (Array.isArray(value)) {
+                    var temp = []
+                    for (var i =0; i < value.length; i++) {
+                        temp.push(_lookup(value[i]))
+                    }
+                    conf[field] = temp
+                } else {
+                    conf[field] = _lookup(value) //  TODO: it is possible there could be a collision in encoded/decoded values
                 }
             }
         }
@@ -2552,15 +2691,15 @@ function Sandbox(modelName) {
         var dataZ = pako.gzip( JSON.stringify(conf) ,{ to: 'string' })
         var dataString = btoa(dataZ)
         if (doFriendlyURI) dataString = Base64EncodeUrl(dataString)
-        conf["zipped"] = dataString
-        for (var i in encodeFields) {
-            var n = encodeFields[i]
-            delete conf[n]
+        if (tryNewURL) {
+            return dataString
+        } else {
+            var co = {}
+            co["zipped"] = dataString
+            co["configversion"] = config["configversion"]
+            return co
         }
         // be careful to include all the zipped config items and add any new ones or they will appear as extras
-        conf["configversion"] = config["configversion"]
-        return conf
-
     }
     function decode_config(config) {
         if (config.configversion == undefined) return config
@@ -2587,22 +2726,33 @@ function Sandbox(modelName) {
 
         for (var e in ui.menu) {
             var item = ui.menu[e]
-            if (item.codebook) {                
-                for (k = 0; k < item.codebook.length; k++) {
-                    var version = item.codebook[k].decodeVersion
-                    if (conf.configversion < version) continue // the value wasn't encoded at this early version
-                    var decode = item.codebook[k].decode
-                    var field = item.codebook[k].field
-                    var value = config[field]
-                
-                    if (Array.isArray(value)) {
-                        var temp = []
-                        for (var i =0; i < value.length; i++) {
-                            temp.push(decode[value[i]])
-                        }
-                        config[field] = temp
-                    } else {
-                        config[field] = decode[value]
+            if (item.codebook) {  
+                _decode(item.codebook)
+            }
+        }
+        _decode(extraCodeBook)
+        function _decode(codebook) {              
+            for (k = 0; k < codebook.length; k++) {
+                var version = codebook[k].decodeVersion
+                if (conf.configversion < version) continue // the value wasn't encoded at this early version
+                var decode = codebook[k].decode
+                var field = codebook[k].field
+                var value = config[field]
+            
+                if (Array.isArray(value)) {
+                    var temp = []
+                    for (var i =0; i < value.length; i++) {
+                        temp.push(_lookup(value[i]))
+                    }
+                    config[field] = temp
+                } else {
+                    config[field] = _lookup(value)
+                }
+                function _lookup(v) {
+                    if (v in decode) {
+                        return decode[v]
+                    } else {    
+                        return JSON.parse(v.slice(1)) // remove the flag character and parse
                     }
                 }
             }
@@ -2611,17 +2761,21 @@ function Sandbox(modelName) {
     }
 
 
+    // URL Friendly Base 64
     //  * use this to make a Base64 encoded string URL friendly, 
     //  * i.e. '+' and '/' are replaced with '-' and '~' also any trailing '=' 
     //  * characters are removed
-    // maybe use _ instead of ~?
+    // https://tools.ietf.org/html/rfc4648
     function Base64EncodeUrl(str){
-        return str.replace(/\+/g, '-').replace(/\//g, '~').replace(/\=+$/, '');
+        return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
     }
 
     function Base64DecodeUrl(str){
-        str = (str + '===').slice(0, str.length + (str.length % 4));
-        return str.replace(/-/g, '+').replace(/~/g, '/');
+        str = str + '===' // pad
+        newlen = str.length - str.length % 4 // round
+        str = str.slice(0,newlen) // cut
+        // str = (str + '===').slice(0, str.length + (str.length % 4));
+        return str.replace(/-/g, '+').replace(/_/g, '/');
     }
 
     self.update = function(assets){
