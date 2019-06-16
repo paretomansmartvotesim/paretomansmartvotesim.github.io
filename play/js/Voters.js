@@ -618,7 +618,7 @@ function GeneralVoter() {
 		<tbody>
 		<tr>
 		<th>Tally<br>
-		<em><span class="small">how to add votes</span></em></th>
+		<em><span class="small">(how your vote counts)</span></em></th>
 		</tr>
 		<tr>
 		<td>#2</td>
