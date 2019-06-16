@@ -33,11 +33,10 @@ function Sandbox(modelName) {
     var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
     var yes_all_candidates = {}
     for (var i = 0; i < all_candidate_names.length; i++) {
-        var a = all_candidate_names[i]
-        yes_all_candidates[a] = true
+        yes_all_candidates[i] = true
     }
     var defaults = {
-        configversion:2.1,
+        configversion:2.3,
         sandboxsave: false,
         featurelist: ["systems"],
         hidegearconfig: false,
@@ -251,29 +250,56 @@ function Sandbox(modelName) {
                 }
                 config.featurelist = temp_featurelist
             }
-            config.configversion == 2 // updating to next version
+            config.configversion = 2 // updating to next version
         }
 
         if (config.configversion == 2) {
-            var oldyeefilter = config.yeefilter
-            var newyeefilter = {}
-            var oldcandidates = ["square","triangle","hexagon","pentagon","bob"]
-            for (var i = 0; i < oldcandidates.length; i++) {
-                var id = oldcandidates[i]
-                if (oldyeefilter.includes(id)) {
-                    newyeefilter[id] = true
-                } else {
-                    newyeefilter[id] = false
+            if (config.yeefilter) {
+                var oldyeefilter = config.yeefilter
+                var newyeefilter = {}
+                var oldcandidates = ["square","triangle","hexagon","pentagon","bob"]
+                for (var i = 0; i < oldcandidates.length; i++) {
+                    var id = oldcandidates[i]
+                    if (oldyeefilter.includes(id)) {
+                        newyeefilter[id] = true
+                    } else {
+                        newyeefilter[id] = false
+                    }
                 }
+                config.yeefilter = newyeefilter
             }
-            config.yeefilter = newyeefilter
 
             config.configversion = 2.1 // bump to next version
         }
         // we are now generating a new version of config.  We are done with grandfathering
 
         decode_config(config) // decodes the config, depending on version number
-        config.configversion = 2.2
+        // so in this case, we're decoding stuff from 2.2, but not 2.1 because 2.1 isn't encoded
+        if (config.configversion == 2.1) {
+            config.configversion = 2.2 // 2.1 is now treated the same as 2.2 because both are decoded
+        }
+        
+        if (config.configversion == 2.2) { 
+            if (config.yeefilter) {
+                var oldy = config.yeefilter
+                var newy = {}
+                var oldcandidates = ["square","triangle","hexagon","pentagon","bob"]
+                var serial = 0
+                for (var i = 0; i < oldcandidates.length; i++) {
+                    for (var k=1; k<=20; k++) {
+                        var id = oldcandidates[i]
+                        if (k > 1) id += k
+                        if (id in oldy) {
+                            newy[serial] = oldy[id]
+                        }
+                        serial++
+                    }
+                }
+                config.yeefilter = newy
+            }
+
+            config.configversion = 2.3
+        }
 
         // VOTER DEFAULTS
         // we want individual strategies to be loaded in, if they are there
@@ -1652,40 +1678,50 @@ function Sandbox(modelName) {
         self.list = [];
         self.makelist = function() {
             var a = []
-            var newList = {}
+            var newListSerial = {}
+            var newListId = {}
             for (var i=0; i < model.candidates.length; i++) {
                 var c = model.candidates[i]
                 a.push({
                     name:_iconButton(c.id),
                     realname:c.id,
                     keyyee:c.id,
+                    serial: c.serial,
                     margin:4
                 })
-                if (Object.keys(config.yeefilter).includes(c.id)) {
-                    newList[c.id] = config.yeefilter[c.id]
+                if (c.serial in config.yeefilter) {
+                    // if (Object.keys(config.yeefilter).includes(c.serial)) {
+                    newListSerial[c.serial] = config.yeefilter[c.serial]
+                    newListId[c.id] = config.yeefilter[c.serial]
                 } else {
-                    newList[c.id] = true
+                    newListSerial[c.serial] = true
+                    newListId[c.id] = true
                 }
             }
 
             // update yeefilter
-            config.yeefilter = newList
-            model.yeefilter = newList
+            config.yeefilter = newListSerial
+            model.yeefilter = newListId
             return a
         }
         self.onChoose = function(data){
             // LOAD CONFIG //
-            config.yeefilter[data.realname] = data.isOn
+            config.yeefilter[data.serial] = data.isOn
             // CONFIGURE
             self.configure()
             // UPDATE
             model.draw();
         };
         self.configure = function() {
-            model.yeefilter = config.yeefilter
+            for (var serial in config.yeefilter) {
+                var id = Candidate.idFromSerial(serial,config.theme)
+                model.yeefilter[id] = config.yeefilter[serial]
+            }
+            return
+            // model.yeefilter = config.yeefilter
         }
         self.select = function() {
-            self.choose.highlight("realname", config.yeefilter);
+            self.choose.highlight("serial", config.yeefilter);
         }
         self.choose = new ButtonGroup({
             label: "filter yee map?",

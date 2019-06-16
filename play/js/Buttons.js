@@ -89,7 +89,8 @@ function ButtonGroup(config){
 			for (ibu in self.buttons) {
 				var bu = self.buttons[ibu]
 				buttonName = bu.config[propName]
-				if (Object.keys(propValue).includes(buttonName)) { // the propValue is an array of values
+				// if (Object.keys(propValue).includes(buttonName)) { // the propValue is an array of values
+				if (buttonName in propValue) {
 					if (propValue[buttonName]) {
 						bu.turnOn();
 					}

@@ -339,4 +339,11 @@ for (var themename in Candidate.graphics) {
 	}
 }
 
-
+Candidate.idFromSerial = function (serial,theme) {
+	var chars = Candidate.graphics[theme]
+	var icon = serial % chars.length
+	var instance = (serial - icon) / chars.length +1
+	if (instance == 1) instance = ''
+	var id = chars[icon].icon + instance
+	return id
+}

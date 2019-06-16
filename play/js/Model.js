@@ -106,10 +106,12 @@ function Model(modelName){
 		self.tarena.initARENA()
 		
 		self.candidatesById = {};
+		self.candidatesBySerial = {};
 		for (var i=0; i<self.candidates.length; i++) {
 			var c = self.candidates[i]
-			self.candidatesById[c.id] = c;
 			c.i = i
+			self.candidatesById[c.id] = c;
+			self.candidatesBySerial[c.serial] = c;
 		}
 
 		var expYeeObject = function() {
