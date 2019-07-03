@@ -1129,7 +1129,7 @@ Election.rbvote = function(model, options){ // Use the RBVote from Rob Legrand
 
 Election.rrv = function(model, options){
 
-	var numreps = 3
+	var numreps = model.seats
 	var maxscore = 5
 
 	if (options.sidebar) {
@@ -1268,7 +1268,7 @@ Election.rrv = function(model, options){
 
 Election.rav = function(model, options){
 
-	var numreps = 3
+	var numreps = model.seats
 	var maxscore = 1
 
 	if (options.sidebar) {
@@ -1596,7 +1596,7 @@ Election.irv = function(model, options){
 
 Election.stv = function(model, options){
 
-	var numreps = 3
+	var numreps = model.seats
 
 
 	if (options.sidebar) {
@@ -1886,7 +1886,7 @@ Election.quotaApproval = function(model,options) {
 
 	var v = _getVoterArray(model)
 
-	var seats = 3
+	var seats = model.seats
 	var winners = []
 	var winnersIndexes = []
 	
@@ -2707,7 +2707,7 @@ function _drawBars(arena, model, round) {
 	
 	// calculate quota and build
 	var w = model.result.winners
-	var seats = 3//w.length // how many seats there are to fill.... just count the number of winners
+	var seats = model.seats//w.length // how many seats there are to fill.... just count the number of winners
 	var q = []
 	var build = []
 	for (var i=0; i < v.length; i++) {

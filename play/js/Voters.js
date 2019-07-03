@@ -1439,46 +1439,93 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			}
 			self.points = points
 		}
-		if (1 && model.dimensions == "1D+B") {  // cool method doesn't work
-
+		if (model.dimensions == "1D+B") {
 			self.y = model.yDimOne
-			for (var i = 0; i < self.points.length; i++) {
-				points[i][0] = self.points[i][0]
-				points[i][1] = 0
-				var diameter2 = 30
-				var yNewUp, yNewDown
-				var yMax = 0
-				var yMin = 10000
-				var noneighbors = true
-				for (var k = 0; k < i; k++) {
-					xDiff2 = (points[k][0] - points[i][0])**2
-					if (xDiff2 < diameter2) {
-						noneighbors = false
-						yDiff = Math.sqrt(diameter2-xDiff2)
-						yNewUp = yDiff + points[k][1]
-						yNewDown = - yDiff + points[k][1]
-						if (yNewUp > yMax) {
-							yMax = yNewUp
-						}
-						if (yNewDown < yMin) {
-							yMin = yNewDown
+
+			var build1 = false
+			var forward = true
+			if (build1) { // cool method doesn't work
+				for (var i = 0; i < self.points.length; i++) {
+				// for (var i = self.points.length - 1; i >= 0; i--) {
+					points[i][0] = self.points[i][0]
+					points[i][1] = 0
+					var diameter2 = 30
+					var yNewUp, yNewDown
+					var yMax = 0
+					var yMin = 10000
+					var noneighbors = true
+					// for (var k = self.points.length - 1; k > i; k--) {
+					for (var k = 0; k < i; k++) {
+						xDiff2 = (points[k][0] - points[i][0])**2
+						if (xDiff2 < diameter2) {
+							noneighbors = false
+							yDiff = Math.sqrt(diameter2-xDiff2)
+							yNewUp = yDiff + points[k][1]
+							yNewDown = - yDiff + points[k][1]
+							if (yNewUp > yMax) {
+								yMax = yNewUp
+							}
+							if (yNewDown < yMin) {
+								yMin = yNewDown
+							}
 						}
 					}
+					if (noneighbors) {
+						yChoose = 0
+					} else if (yMin > 0) {
+						var yChoose = yMin
+					} else {
+						var yChoose = yMax
+					}
+					points[i][1] = yChoose
 				}
-				if (noneighbors) {
-					yChoose = 0
-				} else if (yMin > 0) {
-					var yChoose = yMin
+				
+				for (var i = 0; i < points.length; i++) {
+					points[i][1] = -points[i][1]
+				}
+				self.points = points
+			} else {
+				var betweenDist = 5
+				var stackDist = 5
+				var added = []
+				var todo = []
+				if (forward) {
+					for (var i = 0 ; i < self.points.length; i++) {
+						todo.push(i)
+					}
 				} else {
-					var yChoose = yMax
+					for (var i = self.points.length - 1 ; i >= 0; i--) {
+						todo.push(i)
+					}
 				}
-				points[i][1] = yChoose
+				var level = 1
+				while (todo.length > 0) {
+					for (var c = 0; c < todo.length; c++) {
+						var i = todo[c]
+						// look for collisions
+						var collided = false
+						for (var d = 0; d < added.length; d++) {
+							var k = added[d]
+							xDiff = Math.abs(self.points[k][0] - self.points[i][0])
+							if (xDiff < betweenDist) {
+								collided = true
+								break
+							}
+						}
+						if (! collided) {
+							self.points[i][1] = (level-1) * -stackDist
+							added.push(i)
+							todo.splice(c,1)
+							c--
+						}
+					}
+					level++
+					var added = []
+				}
+
 			}
-			for (var i = 0; i < points.length; i++) {
-				points[i][1] = -points[i][1]
-			}
-			self.points = points
 		}
+
 		
 	}
 

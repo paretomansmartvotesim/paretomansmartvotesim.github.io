@@ -36,7 +36,7 @@ function Sandbox(modelName) {
         yes_all_candidates[i] = true
     }
     var defaults = {
-        configversion:2.3,
+        configversion:2.4,
         sandboxsave: false,
         featurelist: ["systems"],
         hidegearconfig: false,
@@ -47,6 +47,7 @@ function Sandbox(modelName) {
         oneVoter: false,
         system: "FPTP", // section
         rbsystem: "Tideman",
+        seats: 3,
         numOfCandidates: 3,
         numVoterGroups: 1,
         xNumVoterGroups: 4,
@@ -300,6 +301,7 @@ function Sandbox(modelName) {
 
             config.configversion = 2.3
         }
+        config.configversion = 2.4
 
         // VOTER DEFAULTS
         // we want individual strategies to be loaded in, if they are there
@@ -436,10 +438,17 @@ function Sandbox(modelName) {
                 var style = "display:inline"
             } else {
                 var style = "display:none"
-    }
+            }
             ui.menu.percentSecondStrategy.choose.sliders[i].setAttribute("style",style)
             ui.menu.group_count.choose.sliders[i].setAttribute("style",style)
             ui.menu.group_spread.choose.sliders[i].setAttribute("style",style)
+        }
+        
+        var multiWinnerSystem = ( config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" )
+        if (multiWinnerSystem) {
+            ui.menu.seats.choose.dom.hidden = false
+        } else {
+            ui.menu.seats.choose.dom.hidden = true
         }
     }
 
@@ -746,6 +755,44 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
+    ui.menu.seats = new function () {
+        var self = this
+        // self.name = dimensions
+        self.list = [
+            {name:"1",margin:4},
+            {name:"2",margin:4},
+            {name:"3",margin:4},
+            {name:"4",margin:4},
+            {name:"5",margin:4},
+            {name:"6",margin:4},
+            {name:"7",margin:4},
+            {name:"8",margin:4},
+            {name:"9",margin:4},
+            {name:"10"}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.seats = Number(data.name)
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.seats = config.seats
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.seats);
+        }
+        self.choose = new ButtonGroup({
+            label: "How many Seats:",
+            width: 18,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        basediv.querySelector("#left").appendChild(self.choose.dom);
+    }
+
     ui.menu.nVoterGroups = new function() { // How many voters?
         var self = this
         self.name = "nVoterGroups"
@@ -846,7 +893,8 @@ function Sandbox(modelName) {
 
             // MODEL //
             model.nVoterGroupsRealName = config.nVoterGroupsRealName	
-            if (config.voterGroupTypes) {
+            if (config.voterGroupTypes && config.voterPositions) {
+                // we are reading a config string of version 2.2 or greater
                 for(var i=0; i<config.voterPositions.length; i++){
                     var pos = config.voterPositions[i];
                     Object.assign(model.voters[i], {
@@ -963,6 +1011,7 @@ function Sandbox(modelName) {
             for(var i=0; i<num; i++) {
                 model.voters.push(new GaussianVoters(model))
             }
+            config.voterPositions = null
             // CONFIGURE
             ui.menu.nVoterGroups.configure() // same settings in this other button
             ui.menu.firstStrategy.configure()
@@ -1765,6 +1814,9 @@ function Sandbox(modelName) {
             decodeVersion: 2.2,
             field: "featurelist"
         }]
+        self.codebook[1] = _jcopy(self.codebook[0])
+        self.codebook[1].decode.push("seats")
+        self.codebook[1].decodeVersion = 2.4
         self.onChoose = function(data){
             // LOAD INPUT
             var featureset = new Set(config.featurelist)
@@ -2637,7 +2689,8 @@ function Sandbox(modelName) {
         "voterGroupTypes",
         "voterGroupX",
         "voterGroupSnowman",
-        "voterGroupDisk"
+        "voterGroupDisk",
+        "seats"
     ]
     var decode = decodeFields
     var encode = {}
@@ -2740,7 +2793,8 @@ function Sandbox(modelName) {
     function decode_config(config) {
         if (config.configversion == undefined) return config
         if (config.configversion <= 2.1) return config
-
+        if (! ("zipped" in config) ) return config
+        
         // unzip
         dataString = config["zipped"]
         if (doFriendlyURI) dataString = Base64DecodeUrl(dataString)
