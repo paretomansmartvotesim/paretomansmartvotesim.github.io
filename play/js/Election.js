@@ -686,7 +686,7 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	var text = "";
 	text += "<span class='small'>";
 	if (reverseExplanation) {
-		text += "<b>who lost the least, one-on-one?</b><br>";
+		text += "<b>who lost by the least, one-on-one?</b><br>";
 	} else {
 		text += "<b>who had the strongest wins, one-on-one?</b><br>";
 	}
@@ -696,8 +696,11 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	// Create the WIN tally
 	var tally = {};
 	var losses = {};
-	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
-	for(var candidateID in model.candidatesById) losses[candidateID] = 0;
+	for(var i=0; i<model.candidates.length; i++){ 
+		cID = model.candidates[i].id
+		tally[cID] = 0
+		losses[cID] = 0
+	}
 
 	// For each combination... who's the better ranking?
 	pairs = []
@@ -711,10 +714,15 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 			var bWins = 0;
 			for(var k=0; k<ballots.length; k++){
 				var rank = ballots[k].rank;
+				if (options.ballotweight) {
+					var inc = options.ballotweight[k][a.i][b.i]
+				} else {
+					var inc = 1
+				}
 				if(rank.indexOf(a.id)<rank.indexOf(b.id)){
-					aWins++; // a wins!
+					aWins+=inc; // a wins!
 				}else{
-					bWins++; // b wins!
+					bWins+=inc; // b wins!
 				}
 			}
 
@@ -795,6 +803,8 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 	}
 
 	// add text
+	var eventsToAssign = []
+		
 	for (var i in pairs) {
 		if (reverseExplanation) i = pairs.length - i - 1
 		var a = model.candidates[pairs[i].winI]
@@ -808,6 +818,57 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 			var endtext = "<br>"
 		}
 
+
+		var eventID = 'pair_' + a.id + '_' + b.id
+		if (options.round) eventID += '_round' + options.round
+		text += '<div id="' + eventID + '" class="pair">' // onmouseover="showOnlyPair(' + a.id + ',' + b.id + ')">'
+		
+		if (options.ballotweight) {
+			var weightcopy = _jcopy(options.ballotweight)
+			var pastwinnerscopy = _jcopy(options.pastwinners)
+		}
+		var pairDraw = function(ai,bi,tie) { // a function is returned, so that i has a new scope
+			return function() {
+				// make a backup
+				var backup = []
+				for (var i = 0; i < model.candidates.length; i++) {
+					backup.push(model.candidates[i])
+				}
+				// remove all candidates except the pair
+				// start at the end of the list
+				for (var i = model.candidates.length-1; i >= 0; i--) {
+					if (i == ai) continue // skip
+					if (i == bi) continue // skip
+					model.candidates.splice(i, 1); // remove from candidates...
+				}
+				var j = 0
+				for (var i=0; i < model.voters.length; i++) {
+					model.voters[i].update()
+					for (var k=0; k < model.voters[i].points.length; k++) {
+						model.voters[i].weights[k] = weightcopy[j][ai][bi]
+						j++
+					}
+				}
+				model.dontdrawwinners = true
+				model.draw()
+				model.dontdrawwinners = false
+				model.candidates = backup
+				for (var i=0; i < model.voters.length; i++) {
+					model.voters[i].update()
+				}
+
+				// also draw past winners
+				for (var i = 0; i < pastwinnerscopy.length; i++) {
+					var p = pastwinnerscopy[i]
+					model.candidatesById[p].draw(model.arena.ctx,model.arena)
+					model.candidatesById[p].drawText("WON",model.arena.ctx,model.arena)
+				}
+				// draw this pair's better half
+				if (! tie) model.candidates[ai].drawText("Better",model.arena.ctx,model.arena)
+			}
+		}
+
+		eventsToAssign.push({eventID,f:pairDraw(a.i,b.i,pairs[i].tie)})
 		if (pairs[i].tie) {
 			if(reverseExplanation) {
 				text += begintext + model.icon(a.id)+"&"+model.icon(b.id) + " tie" + endtext	
@@ -822,8 +883,10 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 				text += begintext + model.icon(a.id)+" beats "+model.icon(b.id)+" by " + _percentFormat(model, pairs[i].margin) + endtext	
 			}
 		}
+		text += '</div>'
 		
 	}
+	result.eventsToAssign = eventsToAssign
 
 	// sort losses
 	var sortedlosses = []
@@ -1871,6 +1934,347 @@ Election.stv = function(model, options){
 				}
 			}
 			model.caption.querySelector("#round" + (i+1)).addEventListener("mouseover", cbDraw(i))
+		}
+	}
+
+	// we messed around with the rankings, so lets put them back
+	for(var j=0; j<model.voters.length; j++){
+		model.voters[j].update();
+	}
+
+	return result;
+};
+
+Election.quotaMinimax = function(model, options){
+
+	var numreps = model.seats
+
+	var eventsToAssign = []
+
+	if (options.sidebar) {
+		var text = ""
+		var history = {}
+		history.rounds = []
+		var v =  _getVoterArray(model)
+		history.v = v
+		history.seats = numreps
+		history.maxscore = 5
+		model.round = -1
+	}
+
+	var quota = 1/numreps
+
+	if (options.sidebar) {
+		var quotapercent = Math.round(quota * 100)
+		var text = "";
+		text += "<span class='small'>";
+		text += "Find " + numreps + " winners.<br>"
+		text += "Set quota at 1/" + numreps + " = " + quotapercent + "%.<br><br>"
+	}
+
+	var candidates = [];
+	for(var i=0; i<model.candidates.length; i++){
+		candidates.push(model.candidates[i].id);
+	}
+	var winnerslist = []
+	var ballots = _getBallots(model);	
+	var oldballots = _jcopy(ballots)
+	var ballotweight = []
+	var numcan = model.candidates.length
+	for(var i=0; i<ballots.length; i++){
+		ballotweight[i] = []
+		for(var j=0; j < model.candidates.length; j++) {
+			ballotweight[i][j] = []
+			for(var k=0; k < model.candidates.length; k++) {
+				ballotweight[i][j][k] = 1
+			}
+		}
+	}
+	var all1 = _jcopy(ballotweight)
+	var ballotcounted = _jcopy(all1)
+
+	var oldCandidates = model.candidates
+	model.candidates = _jcopy(oldCandidates)
+	for ( var roundNum = 1; roundNum <= numreps; roundNum++) {
+
+		
+		if (options.sidebar) {
+			
+					
+			var stillin = []
+			for (var i=0; i<candidates.length; i++) {
+				stillin.push(model.candidatesById[candidates[i]].i)
+			}
+
+			var roundHistory = {
+				q:_jcopy(ballotweight),
+				ballots:_jcopy(ballots),
+				stillin: stillin
+			}
+
+			text += '<div id="round' + (roundNum) + '" class="round">'
+			text += "<b>round "+roundNum+":</b><br>";
+			if (roundNum>1) {
+				text += "Since we already counted the winner's supporters, only count the remaining votes.<br>";
+			} 
+		}
+
+		options.ballotweight = ballotweight
+		options.round = roundNum
+		options.pastwinners = winnerslist
+		var roundResult = Election.minimax(model,options)
+
+		eventsToAssign = eventsToAssign.concat(roundResult.eventsToAssign)
+		
+		var winners = roundResult.winners
+		var winner = winners[0];  // there needs to be a better tiebreaker here. TODO
+		winnerslist.push(winner)
+		
+		if (options.sidebar) {
+			text += '</div>'
+			text += roundResult.text
+		}
+
+
+		if (options.sidebar) {
+			
+			roundHistory.tally = tally
+			roundHistory.ballots = _jcopy(ballots)
+			if (winner) {
+				roundHistory.winners = [model.candidatesById[winner].i]
+			} else {
+				roundHistory.winners = []
+			}
+			history.rounds.push(roundHistory)
+			// text += '</div>'
+			text += "<br>"
+		}
+		
+		
+		var support = []
+		for(var j=0; j < numcan; j++) {
+			support[j] = []
+			for(var k=0; k < numcan; k++) {
+				support[j][k] = 0
+			}
+		}
+
+		var sequential = false
+		if (sequential) {
+			// add up support for the winner
+			for(var i=0; i<ballots.length; i++){
+				var rank = ballots[i].rank;
+				var winpos = rank.indexOf(winner)
+				for(j=0; j<ballotweight[i].length; j++) {
+					for(k=0; k<ballotweight[i][j].length; k++) {
+						if (j==k) continue // skip
+						var jr = rank.indexOf(oldCandidates[j].id)
+						var kr = rank.indexOf(oldCandidates[k].id)
+						if (jr >= winpos && kr >= winpos) {
+							support[j][k] += ballotweight[i][j][k]
+						}
+					}
+				}
+			}
+			// figure out how much to reweight
+			reweight = []
+			for(var j=0; j < numcan; j++) {
+				reweight[j] = []
+				for(var k=0; k < numcan; k++) {
+					var ratio = support[j][k] / (roundNum * quota * ballots.length)
+					// reweight[j][k] = Math.max(0,1-ratio)
+					if (ratio == 0) {
+						reweight[j][k] = 1
+					} else {
+						reweight[j][k] = Math.max(0,1-1/ratio)
+					}
+				}
+			}
+			// reweight and eliminate winner
+			for(var i=0; i<ballots.length; i++){
+				var rank = ballots[i].rank;
+				var winpos = rank.indexOf(winner)
+				for(j=0; j<ballotweight[i].length; j++) {
+					for(k=0; k<ballotweight[i][j].length; k++) {
+						if (j==k) continue // skip
+						var jr = rank.indexOf(oldCandidates[j].id)
+						var kr = rank.indexOf(oldCandidates[k].id)
+						if (jr >= winpos && kr >= winpos) {
+							ballotweight[i][j][k] *= reweight[j][k]
+						}
+					}
+				}
+				rank.splice(rank.indexOf(winner), 1); // REMOVE THE winner
+			}
+		} else {
+			// add up support for a the winning candidates so far
+			for(var i=0; i<oldballots.length; i++){
+				var rank = oldballots[i].rank;
+				for(j=0; j<ballotweight[i].length; j++) {
+					for(k=0; k<ballotweight[i][j].length; k++) {
+						if (j==k) continue // skip
+						var jr = rank.indexOf(oldCandidates[j].id)
+						var kr = rank.indexOf(oldCandidates[k].id)
+						var add = 0
+						for (var l=0; l<winnerslist.length;l++){
+							var w = winnerslist[l]
+							var winpos = rank.indexOf(w)
+							if (jr >= winpos && kr >= winpos) {
+								add = 1
+							}
+						}
+						ballotcounted[i][j][k] = add
+						support[j][k] += add
+					}
+				}
+			}
+			// figure out how much to reweight
+			// if there is a lot of support for the winning candidates, then the voters can still have positive weight.
+			// if there is zero support for the winners, then the voters are at full weight.
+			reweight = []
+			for(var j=0; j < numcan; j++) {
+				reweight[j] = []
+				for(var k=0; k < numcan; k++) {
+					var ratio = support[j][k] / (roundNum * quota * ballots.length)
+					if (ratio == 0) {
+						reweight[j][k] = 1
+					} else {
+						reweight[j][k] = Math.max(0,1-1/ratio) // don't let reweighting go negative
+					}
+				}
+			}
+			ballotweight = _jcopy(all1)
+			// reweight and eliminate winner
+			for(var i=0; i<ballots.length; i++){
+				var rank = ballots[i].rank;
+				var winpos = rank.indexOf(winner)
+				for(j=0; j<ballotweight[i].length; j++) {
+					for(k=0; k<ballotweight[i][j].length; k++) {
+						if (ballotcounted[i][j][k]) {
+							ballotweight[i][j][k] = reweight[j][k]
+						}
+					}
+				}
+				rank.splice(rank.indexOf(winner), 1); // REMOVE THE winner
+			}
+		}
+		var cids = [] // candidate id's
+		for (var i=0; i < model.candidates.length; i++) {
+			cids.push(model.candidates[i].id)
+		}
+		model.candidates.splice(cids.indexOf(winner), 1); // remove from candidates...
+
+	}
+	model.candidates = oldCandidates
+	
+	if (options.sidebar) {
+			
+		roundHistory.tally = tally
+		roundHistory.ballots = _jcopy(ballots)
+		if (winner) {
+			roundHistory.winners = [model.candidatesById[winner].i]
+		} else {
+			roundHistory.winners = []
+		}
+		history.rounds.push(roundHistory)
+
+		text += "<br>"
+		text += '</div>'
+
+		// push out a final reweight just to evaluate how well the method worked
+		if (0) {
+			var stillin = []
+			for (var i=0; i<candidates.length; i++) {
+				stillin.push(model.candidatesById[candidates[i]].i)
+			}
+
+			var roundHistory = {
+				q:_jcopy(ballotweight),
+				ballots:_jcopy(ballots),
+				stillin: stillin
+			}
+
+			var pre_tally = _tally_i(model, function(tally, ballot, i){
+				var first = ballot.rank[0]; // just count #1
+				tally[first] += ballotweight[i];
+			});
+	
+			// ONLY tally the remaining candidates...
+			var tally = {};
+			for(var i=0; i<candidates.length; i++){
+				var cID = candidates[i];
+				tally[cID] = pre_tally[cID];
+			}
+
+			
+			var winners = _countWinner(tally);
+			var winner = winners[0];  // there needs to be a better tiebreaker here. TODO
+
+			roundHistory.tally = tally
+			roundHistory.ballots = _jcopy(ballots)
+			if (winner) {
+				roundHistory.winners = [model.candidatesById[winner].i]
+			} else {
+				roundHistory.winners = []
+			}
+			history.rounds.push(roundHistory)
+			
+		}
+	}
+	
+	// TODO: fill in last votes
+
+	if (options.sidebar) {
+		text += '</div>'
+	}
+
+	winners = winnerslist.sort() 
+
+	if (model.dotop2) { /// TODO: see if this actually works
+		loserslist = loserslist.concat(_sortTallyRev(tally))
+		var ll = loserslist.length
+		model.top2 = loserslist.slice(ll-1,ll).concat(loserslist.slice(ll-2,ll-1))
+	}
+	
+	
+	var result = _result(winners,model)
+	var color = result.color
+
+
+	if (options.sidebar) {
+		text += '<div id="round' + (roundNum) + '" class="round">'
+		text = "<br>" + text
+		for (var i in winners) {
+			var winner = winners[i]
+			var color = _colorsWinners([winner],model)[0]
+			// END!
+			text += "</span>";
+			text += "<br>";
+			// text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;	
+		}
+		text += '</div>'
+	
+		result.history = history
+		result.dontredocaption = true // we have an interactive caption
+		result.text = text;
+		
+		model.caption.innerHTML = text
+		// attach caption hover functions
+		for (var i=0; i < roundNum; i++) {
+			var cbDraw = function(i) { // a function is returned, so that i has a new scope
+				return function() {
+					model.round = i+1
+					model.draw()
+					model.round = -1
+				}
+			}
+			model.caption.querySelector("#round" + (i+1)).addEventListener("mouseover", cbDraw(i))
+		}
+		// attach more
+		for (var i=0; i < eventsToAssign.length; i++) {
+			var e = eventsToAssign[i]
+			model.caption.querySelector("#" + e.eventID).addEventListener("mouseover", e.f)
 		}
 	}
 

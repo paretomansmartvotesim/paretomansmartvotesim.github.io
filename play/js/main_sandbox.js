@@ -444,7 +444,7 @@ function Sandbox(modelName) {
             ui.menu.group_spread.choose.sliders[i].setAttribute("style",style)
         }
         
-        var multiWinnerSystem = ( config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" )
+        var multiWinnerSystem = ( config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" || config.system == "QuotaMinimax")
         if (multiWinnerSystem) {
             ui.menu.seats.choose.dom.hidden = false
         } else {
@@ -538,7 +538,8 @@ function Sandbox(modelName) {
             {name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv, margin:4},
             {name:"RAV", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.rav},
             {name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
-            {name:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval}
+            {name:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval},
+            {name:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",voter:RankedVoter, ballot:"RankedBallot", election:Election.quotaMinimax}
         ];
         self.codebook = [
             {

@@ -961,19 +961,31 @@ function RankedVoter(model){
 
 	};
 
-	self.drawCircle = function(ctx, x, y, size, ballot){
+	self.drawCircle = function(ctx, x, y, size, ballot, weight){
 
 		var slices = [];
 		var n = ballot.rank.length;
-		var totalSlices = (n*(n+1))/2; // num of slices!
-
-		for(var i=0; i<ballot.rank.length; i++){
-			var rank = ballot.rank[i];
+		if (n==2) {
+			var totalSlices = 1
+			var rank = ballot.rank[0];
 			var candidate = model.candidatesById[rank];
-			slices.push({ num:(n-i), fill:candidate.fill });
-		}
+			slices.push({ num:1, fill:candidate.fill })
+		} else {
 
-		_drawSlices(model, ctx, x, y, size, slices, totalSlices);
+			var totalSlices = (n*(n+1))/2; // num of slices!
+	
+			for(var i=0; i<ballot.rank.length; i++){
+				var rank = ballot.rank[i];
+				var candidate = model.candidatesById[rank];
+				slices.push({ num:(n-i), fill:candidate.fill });
+			}
+	
+		}
+		if (0) {
+			_drawSlices(model, ctx, x, y, size * Math.sqrt(weight), slices, totalSlices);
+		} else {
+			_drawSlices(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
+		}
 
 	};
 
@@ -1538,8 +1550,10 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 	// UPDATE! Get all ballots.
 	self.ballots = [];
+	self.weights = []
 	self.update = function(){
 		self.ballots = [];
+		self.weights = [];
 		
 		//randomly assign voter strategy based on percentages, but using the same seed each time
 		// from http://davidbau.com/encode/seedrandom.js
@@ -1571,6 +1585,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 			var ballot = self.type.getBallot(x, y, strategy);
 			self.ballots.push(ballot);
+			self.weights.push(1);
 		}
 	};
 
@@ -1591,7 +1606,8 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				var x = self.x + p[0];
 				var y = self.y + p[1];
 				var ballot = self.ballots[i];
-				self.type.drawCircle(ctx, x, y, 10, ballot);
+				var weight = self.weights[i]
+				self.type.drawCircle(ctx, x, y, 10, ballot, weight);
 			}
 		}
 

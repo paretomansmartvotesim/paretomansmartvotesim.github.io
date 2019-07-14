@@ -222,12 +222,21 @@ Election/Sandbox design:
 /* end of slider stuff */
 
 .round {
-    border: 3px solid #fff;
-
+    border: 3px solid transparent;
 }
 .round:hover {
     background: #eee;
     border: 3px solid #aaa;
+
+}
+
+.pair {
+    border: 1px solid transparent;
+
+}
+.pair:hover {
+    background: #ddd;
+    border: 1px solid #aaa;
 
 }
 

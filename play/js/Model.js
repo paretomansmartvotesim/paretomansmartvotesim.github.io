@@ -848,17 +848,34 @@ function Arena(arenaName, model) {
 			}
 		}
 		
-		
-		// draw text next to the winners
-		if(model.result && model.result.winners) {
-			var objWinners = model.result.winners.map(x => model.candidatesById[x])
-			if (objWinners.length > 1) {
-				for (i in objWinners) {
-					objWinners[i].drawTie(self.ctx,self)
+		if (!model.dontdrawwinners) {
+			// draw text next to the winners
+			if(model.result && model.result.winners) {
+				for(var i=0; i<model.candidates.length; i++){
+					var c = model.candidates[i];
+					if (model.result.winners.includes(c.id)) {
+						if (model.result.winners.length > model.seats) {
+							c.drawTie(self.ctx,self)
+						} else {
+							c.drawWin(self.ctx,self)
+						}
+					}
 				}
-			} else {
-				objWinners[0].drawWin(self.ctx,self)
 			}
+
+			// if(model.result && model.result.winners) {
+			// 	var objWinners = model.result.winners.map(x => model.candidatesById[x])
+			// 	if (objWinners.length > model.seats) {
+			// 		for (i in objWinners) {
+			// 			objWinners[i].drawTie(self.ctx,self)
+			// 		}
+			// 	} else {
+			// 		for (i in objWinners) {
+			// 			objWinners[i].drawWin(self.ctx,self)
+			// 		}
+			// 	}
+			// }
+
 		}
 		
 		if (model.result) {

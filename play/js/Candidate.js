@@ -215,6 +215,11 @@ function Candidate(model){
 		var p = arena.modelToArena(self)
 		_drawStroked("WIN",p.x*2,p.y*2-35,40,ctx);
 	}	
+	self.drawText = function(text,ctx,arena) {
+		ctx.textAlign = "center";
+		var p = arena.modelToArena(self)
+		_drawStroked(text,p.x*2,p.y*2-35,40,ctx);
+	}	
 	self.draw = function(ctx,arena){
 
 		// RETINA

@@ -1263,9 +1263,9 @@ function loadpreset(modelName) {
 				[150, 150],
 			],
 			candidates: 5,
-			dimensions:"1D",
-			// dimensions:"2D",
-			system: "STV",
+			// dimensions:"1D",
+			dimensions:"2D",
+			system: "QuotaMinimax",
 			hidegearconfig: true,
 			configversion: 2.3
 		}
