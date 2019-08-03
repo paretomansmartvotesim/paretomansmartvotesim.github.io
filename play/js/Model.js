@@ -1121,6 +1121,10 @@ function Arena(arenaName, model) {
 					model.yeeobject.draw(self.ctx,self)
 				}
 			}
+			var d = self.mouse.dragging
+			if (d) { // draw the dragging object again (twice but that's okay)
+				d.draw(self.ctx,self)
+			}
 			if (model.theme != "Nicky") {
 				self.modify.draw(self.ctx,self)
 				

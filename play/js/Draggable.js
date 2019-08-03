@@ -20,6 +20,12 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		var r = self.size * self.radiusScale
 		return((dx*dx+dy*dy) < r*r);
 	};
+	self.hitDistance = function(x,y,arena){
+		var a = arena.modelToArena(self)
+		var dx = x-a.x;
+		var dy = y-a.y;
+		return dx*dx+dy*dy;
+	};
 
 	self.moveTo = function(x,y,arena,model){
 		var a = {}
@@ -64,18 +70,41 @@ function DraggableManager(arena,model){
 
 	// Helper: is Over anything?
 	self.isOver = function(){
+		// make a list
 		if (model.yeeon && model.yeeobject) { // Choose the yee object as a priority
 			if(model.yeeobject.hitTest(arena.mouse.x, arena.mouse.y,arena)){
 				return model.yeeobject;
 			}
 		}
+		var doTies = false
+		var tie = []
 		for(var i=arena.draggables.length-1; i>=0; i--){ // top DOWN.
 			var d = arena.draggables[i];
 			if (d.isModify && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the mod gear
 			if(d.hitTest(arena.mouse.x, arena.mouse.y,arena)){
 				if (d.isVoterCenter && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the voterCenter if we are the mod gear.
+				if (d.isCandidate || d.isVoter || d.isVoterCenter) {
+					doTies = true
+					tie.push(d)
+					continue
+				}
+				if (doTies) continue
 				return d;
 			}
+		}
+		if (doTies) {
+			if (tie.length == 1) return tie[0]
+			// which of the tied objects is closest?
+			var min = Infinity
+			var closest = null
+			for( var i = 0; i < tie.length; i++) {
+				var d = tie[i].hitDistance(arena.mouse.x, arena.mouse.y,arena)
+				if (d < min) {
+					min = d
+					closest = tie[i]
+				}
+			}
+			return closest
 		}
 		return null;
 	}
