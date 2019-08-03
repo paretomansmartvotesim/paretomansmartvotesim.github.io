@@ -1086,6 +1086,10 @@ function Arena(arenaName, model) {
 			}
 			for(var i=0; i<model.voters.length; i++){
 				var voter = model.voters[i];
+				if (voter.highlight) {
+					var flashydude = voter
+					continue
+				}
 				voter.draw2(self.ctx);
 			}
 				
@@ -1100,6 +1104,10 @@ function Arena(arenaName, model) {
 		
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i];
+			if (c.highlight) {
+				var flashydude = c
+				continue
+			}
 			c.draw(self.ctx,self);
 		}
 
@@ -1123,7 +1131,19 @@ function Arena(arenaName, model) {
 			}
 			var d = self.mouse.dragging
 			if (d) { // draw the dragging object again (twice but that's okay)
-				d.draw(self.ctx,self)
+				if (d.isVoter) {
+					d.draw2(self.ctx,self)
+				} else {
+					d.draw(self.ctx,self)
+				}
+			} else {
+				if (flashydude) {
+					if (flashydude.isVoter) {
+						flashydude.draw2(self.ctx,self)
+					} else {
+						flashydude.draw(self.ctx,self)
+					}
+				}
 			}
 			if (model.theme != "Nicky") {
 				self.modify.draw(self.ctx,self)

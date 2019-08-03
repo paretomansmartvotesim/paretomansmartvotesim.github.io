@@ -1606,7 +1606,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	// DRAW!
 	self.drawBackAnnotation = function(x,y,ctx) {}
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
-	self.draw = function(ctx){
+	self.draw1 = function(ctx){
 
 		if (model.showVoters != undefined && model.showVoters == false) {
 			var drawVoters = false
@@ -1624,6 +1624,8 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				self.type.drawCircle(ctx, x, y, 10, ballot, weight);
 			}
 		}
+	}
+	self.draw2 = function(ctx){
 
 		 // Don't draw a individual group under a votercenter, which looks weird.
 		if(model.voterCenter && model.voters.length == 1) return
@@ -1653,8 +1655,10 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = temp
 	};
-	self.draw1 = function() {}
-	self.draw2 = self.draw
+	self.draw = function(ctx){
+		self.draw1(ctx)
+		self.draw2(ctx)
+	};
 
 }
 
