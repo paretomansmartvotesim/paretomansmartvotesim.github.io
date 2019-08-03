@@ -120,6 +120,8 @@ li{
 .banner img{
 	margin: 0 auto;
 	display: block;
+	width: 850px;
+	/* height: 200px; */
 }
 #splash{
 	position: relative;
