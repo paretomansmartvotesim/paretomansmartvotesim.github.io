@@ -20,13 +20,19 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		return((dx*dx+dy*dy) < r*r);
 	};
 
-	self.moveTo = function(x,y,arena){
+	self.moveTo = function(x,y,arena,model){
 		var a = {}
 		a.x = x+self.offX
 		a.y = y+self.offY
 		var p = arena.arenaToModel(a,self);
-		self.x = p.x
-		self.y = p.y
+		if (model.dimensions == "1D+B") {
+			self.x = p.x
+			self.b = p.b
+			self.y = arena.yFromB(p.b)
+		} else {
+			self.x = p.x
+			self.y = p.y
+		}
 		// self.x = x+self.offX;
 		// self.y = y+self.offY;
 	};

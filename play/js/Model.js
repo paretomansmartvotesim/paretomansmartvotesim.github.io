@@ -338,7 +338,7 @@ function Model(modelName){
 					y: diff.y / lenDiff
 				}
 				var speed = 5
-				c.moveTo( c.x + unit.x * speed, c.y + unit.y * speed,self.arena);
+				c.moveTo( c.x + unit.x * speed, c.y + unit.y * speed,self.arena,self);
 			}
 	
 			// random movement
@@ -347,7 +347,7 @@ function Model(modelName){
 			var stepsize = 1
 			for(var i=0; i<self.candidates.length; i++){
 				var c = self.candidates[i];
-				c.moveTo( c.x + Math.round((Math.random()*2-1)*stepsize), c.y + Math.round((Math.random()*2-1)*stepsize), self.arena );
+				c.moveTo( c.x + Math.round((Math.random()*2-1)*stepsize), c.y + Math.round((Math.random()*2-1)*stepsize), self.arena , self );
 			}
 		} else if (motion == "bounce") {
 			// bouncing
@@ -370,7 +370,7 @@ function Model(modelName){
 			var speed = 10
 			for(var i=0; i<self.candidates.length; i++){
 				var c = self.candidates[i];
-				c.moveTo( c.x + bounce[i].x * speed, c.y + bounce[i].y * speed,self.arena)
+				c.moveTo( c.x + bounce[i].x * speed, c.y + bounce[i].y * speed,self.arena,self)
 				// r = Math.sqrt(c.x**2 + c.y**2)
 				// if (r > modelName.size * .5) {
 				// 	// reverse the radial component of the bounce
@@ -893,7 +893,11 @@ function Arena(arenaName, model) {
 			}
 		} else {
 			// just a regular arena
-			return d
+			if (model.dimensions == "1D+B") {
+				return {x:d.x, y:self.yFromB(d.b)}
+			} else {
+				return d
+			}
 		}
 	}
 
@@ -927,8 +931,13 @@ function Arena(arenaName, model) {
 			} else {
 				return {x:x,y:s.y}
 			}
+		} else {
+			if (model.dimensions == "1D+B") {
+				return {x:d.x, y:d.y, b:self.bFromY(d.y)}
+			} else {
+				return d
+			}
 		}
-		return d
 	}
 
 	self.update = function(){
@@ -936,7 +945,7 @@ function Arena(arenaName, model) {
 		if (arenaName == "arena") {
 			if(self.mouse.dragging){
 				var d = self.mouse.dragging
-				d.moveTo(self.mouse.x,self.mouse.y,self);
+				d.moveTo(self.mouse.x,self.mouse.y,self,model);
 				if (d.isUp) {
 					d.x = d.xC
 					d.y = Math.min(d.yC,d.y)
