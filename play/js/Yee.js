@@ -9,8 +9,11 @@ function Yee(model) {
 		var WIDTH = ctx.canvas.width;
 		var HEIGHT = ctx.canvas.height;
 		var doArrayWay = model.computeMethod != "ez"
+		var doB = (model.dimensions == "1D+B" && model.yeeobject.isCandidate)
 		var winners
 		if (doArrayWay) { // note that voterCenter is not yet implemented in the array way.  Only if "ez" is selected will the yee diagram work
+			// Also note that the broadness representation hasn't been added to this method yet.
+
 			// put candidate information into arrays
 			var canAid = [], xc = [], yc = [], fillc = [] //, canA = [], revCan = {} // candidates
 			var f=[] // , fA = [], fAid = [], xf = [], yf = [], fillf = [] // frontrunners
@@ -109,7 +112,11 @@ function Yee(model) {
 
 
 		saveo.x = model.yeeobject.x;
-		saveo.y = model.yeeobject.y;
+		if (doB) {
+			saveo.b = model.yeeobject.b;
+		} else {
+			saveo.y = model.yeeobject.y;
+		}
 		if (model.yeeobject == model.voterCenter) {
 			var voterso = []
 			for(var i=0; i<model.voters.length; i++){
@@ -124,6 +131,8 @@ function Yee(model) {
 
 		if (model.theme == "Bees") {
 			model.grid = "hexagon"
+		} else if (model.dimensions == "1D") {
+			model.grid = "linear"
 		} else {
 			model.grid = "square"
 		}
@@ -133,6 +142,12 @@ function Yee(model) {
 					model.gridx.push(x);
 					model.gridy.push(y);
 				}
+			}
+		} else if (model.grid == "linear") {
+			var y=.5*pixelsize
+			for(var x=.5*pixelsize ; x<=WIDTH; x+= pixelsize) {
+				model.gridx.push(x);
+				model.gridy.push(y);
 			}
 		} else { // hex grid
 			model.gridType = "horizontal hexagon"
@@ -240,7 +255,11 @@ function Yee(model) {
 				continue;
 			}
 			model.yeeobject.x = x * .5;
-			model.yeeobject.y = y * .5;
+			if (doB) {
+				model.yeeobject.b = model.arena.bFromY(y * .5)
+			} else {
+				model.yeeobject.y = y * .5;
+			}
 			// update positions of all the voters if the voterCenter is the yee object
 			if (model.yeeobject == model.voterCenter) {
 				var changecenter = {
@@ -264,7 +283,11 @@ function Yee(model) {
 			// model.caption.innerHTML = "Calculating " + Math.round(x/WIDTH*100) + "%"; // doesn't work yet 
 		}
 		model.yeeobject.x = saveo.x;
-		model.yeeobject.y = saveo.y;
+		if (doB) {
+			model.yeeobject.b = saveo.b;
+		} else {
+			model.yeeobject.y = saveo.y;
+		}
 		if (model.yeeobject == model.voterCenter) {
 			for(var i=0; i<model.voters.length; i++){
 				model.voters[i].x = voterso[i].x
@@ -367,7 +390,7 @@ function Yee(model) {
 					translate[colorcan] = can_filter_yee.includes(can) ? colorcan : 'white'
 				}
 			}
-
+			var HEIGHT = ctx.canvas.height
 			for(var k=0;k<model.gridx.length;k++) {
 				var ca = model.gridl[k]
 				
@@ -384,7 +407,9 @@ function Yee(model) {
 					var wb = pixelsize
 					var hb = pixelsize
 					var hh = pixelsize / 6; // height of stripe // used to be 5
-					for (var j=0; j< pixelsize/hh; j++) {
+					var numstripes = pixelsize/hh
+					if (model.grid == "linear") numstripes = HEIGHT / hh
+					for (var j=0; j< numstripes; j++) {
 						ctx.fillStyle = cb[j % cb.length]
 						ctx.fillRect(xb,yb+j*hh,wb,hh);
 					}
@@ -400,6 +425,8 @@ function Yee(model) {
 					}
 					if (model.grid == "square") {
 						ctx.fillRect(model.gridx[k]-pixelsize*.5, model.gridy[k]-pixelsize*.5, pixelsize, pixelsize);
+					} else if (model.grid == "linear") {
+						ctx.fillRect(model.gridx[k]-pixelsize*.5, 0, pixelsize, HEIGHT);
 					} else {
 						// var size = pixelsize / Math.sqrt(3)
 						var size = pixelsize / 2
