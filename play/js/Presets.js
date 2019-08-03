@@ -171,8 +171,9 @@ function loadpreset(modelName) {
 			*/
 
 			candidatePositions: [
-				[50, 150],
-				[250, 150]
+				[100, 150],
+				[200, 150],
+				[150,250]
 			],
 			voterPositions: [
 				[100, 150],
