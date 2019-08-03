@@ -248,6 +248,7 @@ function Model(modelName){
 
 	};
 
+	self.updateFromModel = function() {} // hook
 
 	self.onDraw = function(){}; // TO IMPLEMENT
 	self.draw = function() {
@@ -407,6 +408,7 @@ function Arena(arenaName, model) {
 		self.plusOneVoter.isPlusOneVoter = true
 		self.plusVoterGroup.isPlusVoterGroup = true
 		self.trash = new Trash(model)
+		self.modify = new Modify(model)
 	}
 	self.initDOM = function() {
 		// RETINA canvas, whatever.
@@ -419,6 +421,7 @@ function Arena(arenaName, model) {
 		self.plusOneVoter.init()
 		self.plusVoterGroup.init()
 		self.trash.init()
+		self.modify.init()
 	}
 
 
@@ -621,6 +624,225 @@ function Arena(arenaName, model) {
 	
 	}
 
+	function Modify(model) {
+		var self = this;
+		Draggable.call(self);
+		self.isModify = true // might help later
+		
+		// CONFIGURE DEFAULTS
+		self.size = 20;
+		
+		self.init = function() {
+			self.y = model.size - 20
+			var between = 40
+			self.x = model.size - between * 4.5
+			var srcMod = "play/img/gear.png"
+			// if (Loader) {
+			// 	if (Loader.assets[srcMod]) {
+			// 		self.img = Loader.assets[srcMod]
+			// 	}
+			// }
+			self.img = new Image();
+			self.img.src = srcMod
+		}
+		self.draw = function(ctx,arena){
+			// if it is near a candidate, then draw it on that candidate
+			// when the mouse is let go, the coordinates will snap to the candidate
+
+
+
+			// RETINA
+			var p = arena.modelToArena(self)
+			var x = p.x*2;
+			var y = p.y*2;
+			var size = self.size*2;
+	
+			if(self.highlight) {
+				var temp = ctx.globalAlpha
+				ctx.globalAlpha = 0.8
+				size *= 2
+				// y -= size/4
+			}
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+			if(self.highlight) {
+				ctx.globalAlpha = temp
+			}
+		};
+
+		self.doModify = function(flashydude) {
+			// snap to the nearest candidate, that we've been drawing on
+			if (flashydude && (flashydude.isCandidate || flashydude.isGaussianVoters) ) {
+				self.focus = flashydude
+				self.active = true
+				self.x = self.focus.x
+				self.y = self.focus.y
+				if (flashydude.isGaussianVoters) {
+					model.arena.up = new Up(model,flashydude) // create controls
+					model.arena.up.init()
+				}
+				model.arena.right = new Right(model,flashydude)
+				model.arena.right.init()
+				model.arena.initARENA() // add the controls to the arena
+			} else {
+				self.unInit()
+				self.init()
+			}
+		}
+
+		self.unInit = function() {
+			self.active = false
+			self.focus = null
+			model.arena.up = null
+			model.arena.right = null
+		}
+	}
+
+	function Up(model,o) {  // o is the object that is being modified
+		var self = this;
+		Draggable.call(self);
+		self.isUp = true // might help later
+		self.dontchangex = true
+		self.o = o
+		self.scale = 4
+		
+		// CONFIGURE DEFAULTS
+		self.size = 20;
+		
+		self.init = function() {
+			self.y = o.y - 60
+			if (o.group_count) {
+				var length = o.group_count / self.scale
+				self.y = o.y - length
+			}
+			self.x = o.x
+			self.xC = o.x
+			self.yC = o.y
+			var srcMod = "play/img/gear.png"
+			// if (Loader) {
+			// 	if (Loader.assets[srcMod]) {
+			// 		self.img = Loader.assets[srcMod]
+			// 	}
+			// }
+			self.img = new Image();
+			self.img.src = srcMod
+		}
+		self.draw = function(ctx,arena){
+			// RETINA
+			var p = arena.modelToArena(self)
+			var x = p.x*2;
+			var y = p.y*2;
+			var size = self.size*2;
+	
+			if(self.highlight) {
+				var temp = ctx.globalAlpha
+				ctx.globalAlpha = 0.8
+				size *= 2
+				// y -= size/4
+			}
+			
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+
+			var arrow_size = 20
+			var offset_y = 0
+			ctx.beginPath();
+			ctx.moveTo(x,y+offset_y)
+			ctx.lineTo(self.xC*2,self.yC*2)
+			ctx.moveTo(x,y+offset_y)
+			ctx.lineTo(x+arrow_size, y + offset_y + arrow_size)
+			ctx.moveTo(x,y+offset_y)
+			ctx.lineTo(x-arrow_size, y + offset_y + arrow_size)
+			ctx.lineWidth = 10
+			ctx.strokeStyle = "#333";
+			ctx.stroke();
+
+			if(self.highlight) {
+				ctx.globalAlpha = temp
+			}
+		};
+
+	}
+
+	function Right(model,o) {  // o is the object that is being modified
+		var self = this;
+		Draggable.call(self);
+		self.isRight = true // might help later
+		self.dontchangey = true
+		self.o = o
+		self.scale = 5
+		self.sizeScale = 2/3
+		
+		// CONFIGURE DEFAULTS
+		self.size = 20;
+		
+		self.init = function() {
+			self.y = o.y
+			self.yC = o.y
+			self.xC = o.x
+			self.x = o.x + 60
+			if (o.group_spread) {
+				var length = o.group_spread / self.scale
+				self.x = o.x + length
+			}
+			if (o.b) {
+				var length = o.size / self.sizeScale
+				self.x = o.x + length
+			}
+			var srcMod = "play/img/gear.png"
+			// if (Loader) {
+			// 	if (Loader.assets[srcMod]) {
+			// 		self.img = Loader.assets[srcMod]
+			// 	}
+			// }
+			self.img = new Image();
+			self.img.src = srcMod
+		}
+		self.draw = function(ctx,arena){
+			// RETINA
+			var p = arena.modelToArena(self)
+			var x = p.x*2;
+			var y = p.y*2;
+			var size = self.size*2;
+	
+			if(self.highlight) {
+				var temp = ctx.globalAlpha
+				ctx.globalAlpha = 0.8
+				size *= 2
+				// y -= size/4
+			}
+			
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+
+			var arrow_size = 20
+			var offset_x = 0
+
+			ctx.beginPath();
+			ctx.moveTo(x-offset_x,y)
+			ctx.lineTo(self.xC*2,self.yC*2)
+			ctx.moveTo(x-offset_x,y)
+			ctx.lineTo(x-offset_x-arrow_size, y + arrow_size)
+			ctx.moveTo(x-offset_x,y)
+			ctx.lineTo(x-offset_x-arrow_size, y - arrow_size)
+			ctx.lineWidth = 10
+			ctx.strokeStyle = "#333";
+			ctx.stroke();
+			
+			if(self.highlight) {
+				ctx.globalAlpha = temp
+			}
+		};
+
+	}
+	self.bFromY = function (y) {
+		return (model.size - y)/60
+	}
+	self.yFromB = function (b) {
+		return model.size - b * 60
+	}
+	
+	// function Right(model,o) {  // o is the object that is being modified
+	// 	Up.call(self,model,o)
+	// }
+
 
 	self.initARENA = function() {
 
@@ -641,6 +863,15 @@ function Arena(arenaName, model) {
 			self.draggables.push(v);
 		}
 		if(model.voterCenter) self.draggables.push(model.voterCenter)
+		if (self.id == "arena" && model.theme != "Nicky") {
+			self.draggables.push(self.modify)
+			if (self.modify.active) {
+				if (self.up) {
+					self.draggables.push(self.up)
+				}
+				self.draggables.push(self.right)
+			}
+		}
 	}
 
 		
@@ -704,25 +935,63 @@ function Arena(arenaName, model) {
 		// Move the one that's being dragged, if any
 		if (arenaName == "arena") {
 			if(self.mouse.dragging){
-				self.mouse.dragging.moveTo(self.mouse.x,self.mouse.y,self);
+				var d = self.mouse.dragging
+				d.moveTo(self.mouse.x,self.mouse.y,self);
+				if (d.isUp) {
+					d.x = d.xC
+					d.y = Math.min(d.yC,d.y)
+					if (d.o.voterGroupType && d.o.voterGroupType=="GaussianVoters") {
+						var length = -(d.y - d.yC)
+						d.o.group_count = length * d.scale
+						d.o.init()
+						model.updateFromModel()
+					}
+				} else if (d.isRight) {
+					d.y = d.yC
+					d.x = Math.max(d.xC,d.x)
+					var length = d.x - d.xC
+					if (d.o.voterGroupType && d.o.voterGroupType=="GaussianVoters") {
+						d.o.group_spread = length * d.scale
+						d.o.init()
+						model.updateFromModel()
+					} else if (d.o.isCandidate) {
+						d.o.size = length * d.sizeScale
+						d.o.b = d.o.bFromSize(d.o.size)
+						if (model.dimensions == "1D+B") {
+							d.o.y = self.yFromB(d.o.b)
+						}
+					}	
+				} else if (d.isModify) {
+					d.unInit() // dont show the axes when we're dragging the modify gear
+				}
 				if (model.dimensions == "1D+B") {
 					// apply limits to movement
-					var p = self.arenaToModel(self.mouse,self.mouse.dragging)
+					var p = self.arenaToModel(self.mouse,d)
 					var yMove = p.y	
-					var offY = self.mouse.dragging.offY
+					var offY = d.offY
 					var newY = yMove + offY
 					var limYc = model.yDimOne + model.yDimBuffer
 					var limYv = model.yDimOne
-					if (self.mouse.dragging.isCandidate) { // move candidate in the candidate region
+					if (d.isCandidate || d.isModify || d.isRight || d.isUp) { // move candidate in the candidate region
 						if (newY < limYc){
-							self.mouse.dragging.y = limYc
+							d.y = limYc
+						}
+						if (d.isCandidate) {
+							d.b = self.bFromY(d.y)
+							d.size = d.sizeFromB(d.b)
 						}
 					} else { // This is a voter
-						// self.mouse.dragging.y = Math.min(50,yMove)
+						// d.y = Math.min(50,yMove)
 						if (1 || newY > limYv){
-							self.mouse.dragging.y = limYv
+							d.y = limYv
 						}
 					}
+				}
+			}
+			if (self.modify && self.modify.active) { // update the modify value
+				if (self.modify.focus.group_spread) { // this value might have changed
+					self.right.init()  // so re-init the lengths of these controls
+					self.up.init()	
 				}
 			}
 		} else {
@@ -844,6 +1113,16 @@ function Arena(arenaName, model) {
 				// unless it covers the one voter
 				if (! covering ) {
 					model.yeeobject.draw(self.ctx,self)
+				}
+			}
+			if (model.theme != "Nicky") {
+				self.modify.draw(self.ctx,self)
+				
+				if (self.modify.active) {
+					if (self.up) {
+						self.up.draw(self.ctx,self)
+					}
+					self.right.draw(self.ctx,self)
 				}
 			}
 		}

@@ -3251,7 +3251,8 @@ function _drawBars(arena, model, round) {
 	// draw votes for each candidate in this round
 	var pos = 170
 	heightRectangle = 30	
-
+	
+	heightRectangle = Math.min(200 / model.candidates.length, 200/5)
 	
 	if (model.system == "STV") {
 		// use order

@@ -425,6 +425,10 @@ function Sandbox(modelName) {
         }
     };
 
+    model.updateFromModel = function() {
+        _objF(ui.menu,"updateFromModel")
+    }
+
     function menu_update() {
         // UPDATE MENU //
         for (i in ui.menu) if(config.featurelist.includes(i)) {ui.menu[i].choose.dom.hidden = false} else {ui.menu[i].choose.dom.hidden = true}
@@ -1071,6 +1075,15 @@ function Sandbox(modelName) {
             for (i in self.choose.sliders) {
                 self.choose.sliders[i].value = config.voter_group_count[i]
             }
+        }	
+        self.updateFromModel = function(n) {
+            for (i in model.voters) {
+                if (model.voters[i].voterGroupType=="GaussianVoters") {
+                    var s = model.voters[i].group_count
+                    config.voter_group_count[i] =  s
+                    self.choose.sliders[i].value =  s
+                }
+            }
         }
         self.choose = new sliderSet({
             max: "200",
@@ -1126,6 +1139,15 @@ function Sandbox(modelName) {
                 self.choose.sliders[i].value = config.voter_group_spread[i]
             }
         }			
+        self.updateFromModel = function(n) {
+            for (i in model.voters) {
+                if (model.voters[i].voterGroupType=="GaussianVoters") {
+                    var s = model.voters[i].group_spread
+                    config.voter_group_spread[i] =  s
+                    self.choose.sliders[i].value =  s
+                }
+            }
+        }
     }
 
     model.onInitModel = function() {
@@ -1152,6 +1174,7 @@ function Sandbox(modelName) {
             config.numOfCandidates = data.num;
             config.candidatePositions = null
             config.candidateSerials = null
+            config.candidateB = null
             // CREATE
             model.candidates = []
             for(var i=0; i<config.numOfCandidates; i++) {
@@ -1198,11 +1221,16 @@ function Sandbox(modelName) {
                     if (config.candidateSerials) {
                         serial = config.candidateSerials[i]
                     }
+                    var b = 1
+                    if (config.candidateB) {
+                        b = config.candidateB[i]
+                    }
                     var icon = _candidateIcons[serial % _candidateIcons.length];
                     var instance = Math.floor(serial / _candidateIcons.length) + 1
                     Object.assign(model.candidates[i],{
                         icon:icon,
                         instance:instance,
+                        b:b,
                         x:config.candidatePositions[i][0],
                         y:config.candidatePositions[i][1]
                     })
@@ -1218,11 +1246,16 @@ function Sandbox(modelName) {
                     var r = 100;
                     var x = 150 - r*Math.cos(angle) + (config.arena_size - 300) * .5; // probably replace "model" with "config", but maybe this will cause a bug
                     var y = 150 - r*Math.sin(angle) + (config.arena_size - 300) * .5; // TODO check for bug
+                    var b = 1
                     var icon = _candidateIcons[i];
+                    if (model.dimensions == "1D+B") {
+                        b = model.arena.bFromY(y)
+                    }
                     Object.assign(model.candidates[i],{
                         icon:icon,
                         x:x,
-                        y:y
+                        y:y,
+                        b:b
                     })
                     angle += Math.TAU/num;
                 }
@@ -2536,6 +2569,7 @@ function Sandbox(modelName) {
         // Candidate positions
         var positions = [];
         var serials = [];
+        var b = []
         for(var i=0; i<model.candidates.length; i++){
             var candidate = model.candidates[i];
             positions.push([
@@ -2543,6 +2577,7 @@ function Sandbox(modelName) {
                 Math.round(candidate.y)
             ]);
             serials.push(candidate.serial)
+            b.push(candidate.b)
         }
         if(log) console.log("candidatePositions: "+JSON.stringify(positions));
         var candidatePositions = positions;
@@ -2573,6 +2608,7 @@ function Sandbox(modelName) {
             candidatePositions: candidatePositions,
             voterPositions: voterPositions,
             candidateSerials: serials,
+            candidateB: b,
             voterGroupTypes: vTypes,
             voterGroupX: x,
             voterGroupSnowman: snowman,
@@ -2691,8 +2727,9 @@ function Sandbox(modelName) {
         "voterGroupX",
         "voterGroupSnowman",
         "voterGroupDisk",
-        "seats"
-    ]
+        "seats",
+        "candidateB"
+    ] // add more on to the end
     var decode = decodeFields
     var encode = {}
     for (var i = 0; i < decode.length; i++) {

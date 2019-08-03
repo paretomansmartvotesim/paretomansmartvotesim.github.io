@@ -8,7 +8,6 @@ function loadpreset(modelName) {
 	var update = function () {
 		return
 	}
-	var type
 
 	// helpers
 	update_original = function (s) {
@@ -38,12 +37,8 @@ function loadpreset(modelName) {
 			voterPositions: [
 				[155, 125]
 			]
-
-
 		}
 		update = update_original
-		type = "election"
-		type = "election"
 	} else if (htmlname == "election2.html") {
 		config = {
 
@@ -1209,6 +1204,29 @@ function loadpreset(modelName) {
 			// presethtmlname: "sandbox.html",
 		}
 
+	} else if (htmlname == "election31.html") {
+		config = {
+
+			features: 1,
+			system: "FPTP",
+
+			candidates: 3,
+			candidatePositions: [
+				[50, 125],
+				[250, 125],
+				[280, 280]
+			],
+
+			voters: 1,
+			voterPositions: [
+				[155, 125]
+			]
+
+
+		}
+		update = function (s) {
+			s.ui.menu.systems.choose.buttons.forEach(x => x.dom.hidden = (["FPTP", "Condorcet", "Approval", "Score"].includes(x.dom.innerHTML)) ? false : true)
+		}
 	} else if (htmlname == "elect_bees.html") {
 		config = {
 			candidatePositions: [
@@ -1296,7 +1314,6 @@ function loadpreset(modelName) {
 			voters: 1
 		}
 		update = update_original
-
 	} else if (htmlname == "ballot1.html") {
 		config = {
 			system: "Plurality"

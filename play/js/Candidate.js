@@ -10,11 +10,12 @@ function Candidate(model){
 	self.icon = 'square'
 	self.instance = 1
 	self.size = 40;
+	self.b = 1
 	self.selected = false
 
 	self.init = function () {
 		// GRAPHICS
-
+		self.size = self.sizeFromB(self.b)
 		// Defaults
 		if (model.theme == undefined) model.theme = "Default" // comment: this should already be handled in model.js
 		if (model.colorChooser == undefined) model.colorChooser = "pick and generate"
@@ -203,6 +204,13 @@ function Candidate(model){
 		var coloredSvgXml = svgXml.replace(/#3080d0/g,'#e05030');
 		img.src = "data:image/svg+xml;charset=utf-8,"+coloredSvgXml;
 	}
+	self.sizeFromB = function(b) {
+		return b * 40
+	}
+	self.bFromSize = function(b) {
+		return b / 40
+	}
+
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawTie = function(ctx,arena) {

@@ -233,7 +233,7 @@ function distF2(model,v,c) { // voter and candidate should be in order
 	if (model.dimensions == "1D+B") {
 		var dx = v.x - c.x
 		var dy = c.y - (model.yDimOne + model.yDimBuffer)
-		var a=9
+		var a=11
 		switch (a) {
 			case 1: return Math.abs(dx*dy)
 			case 2: return Math.abs(dx*dy*.1)
@@ -264,14 +264,27 @@ function distF2(model,v,c) { // voter and candidate should be in order
 			case 9:
 				var f = .2 * 2 ** (dy/30)
 				return (Math.abs(dx) * f)**2 
+			case 10:
+				var adx = Math.abs(dx)
+				var ady = Math.abs(dy)
+				var bInv = ady/30
+				return (adx * bInv)**2 
+			case 11:
+				var b = model.arena.bFromY(c.y)  // (model.size - c.y)/30
+				var f = 1/b * 2 * .5 ** b
+				return dx*dx * f*f
 		}
 	} else if (model.dimensions == "1D") {
 		var dx = v.x - c.x
-		return dx*dx
+		var f = 1/c.b * 2 * .5 ** c.b
+		return dx*dx * f*f
 	} else {
 		var dx = v.x - c.x
 		var dy = v.y - c.y
-		return dx*dx + dy*dy
+		var f = 1/c.b * 2 * .5 ** c.b 
+		// f = 1 when c.b = 1
+		// var f = .5 * 2 ** (1/c.b)
+		return (dx*dx + dy*dy) * f*f
 	}
 }
 
@@ -963,6 +976,7 @@ function RankedVoter(model){
 
 	self.drawCircle = function(ctx, x, y, size, ballot, weight){
 
+		if (typeof weight === 'undefined') weight = 1
 		var slices = [];
 		var n = ballot.rank.length;
 		if (n==2) {
@@ -1374,6 +1388,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 	var self = this;
 	Draggable.call(self);
+	self.isGaussianVoters = true
 	self.voterGroupType = "GaussianVoters"
 	var config = {}
 	
@@ -1745,6 +1760,7 @@ function VoterCenter(model){
 	
 	// LOAD
 	self.id = "voterCenter";
+	self.isVoterCenter = true;
 	self.size = 30;
 	self.points = [[0,0]];
 	self.img = new Image();  // use the face

@@ -64,7 +64,9 @@ function DraggableManager(arena,model){
 		}
 		for(var i=arena.draggables.length-1; i>=0; i--){ // top DOWN.
 			var d = arena.draggables[i];
+			if (d.isModify && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the mod gear
 			if(d.hitTest(arena.mouse.x, arena.mouse.y,arena)){
+				if (d.isVoterCenter && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the voterCenter if we are the mod gear.
 				return d;
 			}
 		}
@@ -73,7 +75,7 @@ function DraggableManager(arena,model){
 
 	// INTERFACING WITH THE *MOUSE*
 	subscribe(model.id + "-" + arena.id+"-mousemove", function(){
-		if(arena.mouse.pressed){
+		if(arena.mouse.pressed && ! (arena.mouse.dragging && arena.mouse.dragging.isModify)){
 			// open the trash can
 			if (arena.mouse.dragging) {
 				if (model.arena.mouse.dragging) {
@@ -84,7 +86,7 @@ function DraggableManager(arena,model){
 				}
 				model.update();
 			}
-		}else if(self.isOver()){
+		}else if(self.isOver() || (arena.mouse.dragging && arena.mouse.dragging.isModify)){
 			// If over anything, grab cursor!
 			arena.canvas.setAttribute("cursor", "grab");
 			// also, highlight one object
@@ -95,6 +97,7 @@ function DraggableManager(arena,model){
 			}
 			var flashydude = self.isOver()
 			if (flashydude) flashydude.highlight = true
+			if (arena.mouse.dragging && arena.mouse.dragging.isModify) model.update()
 			model.draw()
 			self.lastwas = "hovering"
 		}else{
@@ -142,6 +145,13 @@ function DraggableManager(arena,model){
 	subscribe(model.id + "-" + arena.id+"-mouseup", function(){
 		if (arena.mouse.dragging) { // we are dragging something, not just air
 			model.onDrop()
+			if (arena.mouse.dragging.isModify) {
+				var flashydude = self.isOver()
+				arena.mouse.dragging.doModify(flashydude)
+				arena.mouse.dragging = null;
+				model.draw()
+				return
+			}
 			model.update();
 		}
 		arena.mouse.dragging = null;
