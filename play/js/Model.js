@@ -674,8 +674,9 @@ function Arena(arenaName, model) {
 			if (flashydude && (flashydude.isCandidate || flashydude.isGaussianVoters) ) {
 				self.focus = flashydude
 				self.active = true
-				self.x = self.focus.x
-				self.y = self.focus.y
+				var f = model.arena.modelToArena(self.focus)
+				self.x = f.x
+				self.y = f.y
 				if (flashydude.isGaussianVoters) {
 					model.arena.up = new Up(model,flashydude) // create controls
 					model.arena.up.init()
@@ -709,14 +710,16 @@ function Arena(arenaName, model) {
 		self.size = 20;
 		
 		self.init = function() {
-			self.y = o.y - 60
+			var oa = model.arena.modelToArena(o)
+			var y = oa.y
+			self.y = y - 60
 			if (o.group_count) {
 				var length = o.group_count / self.scale
-				self.y = o.y - length
+				self.y = y - length
 			}
 			self.x = o.x
 			self.xC = o.x
-			self.yC = o.y
+			self.yC = y
 			var srcMod = "play/img/gear.png"
 			// if (Loader) {
 			// 	if (Loader.assets[srcMod]) {
@@ -775,8 +778,10 @@ function Arena(arenaName, model) {
 		self.size = 20;
 		
 		self.init = function() {
-			self.y = o.y
-			self.yC = o.y
+			var oa = model.arena.modelToArena(o)
+			var y = oa.y	
+			self.y = y
+			self.yC = y
 			self.xC = o.x
 			self.x = o.x + 60
 			if (o.group_spread) {
@@ -893,7 +898,7 @@ function Arena(arenaName, model) {
 			}
 		} else {
 			// just a regular arena
-			if (model.dimensions == "1D+B") {
+			if (d.isCandidate && model.dimensions == "1D+B") {
 				return {x:d.x, y:self.yFromB(d.b)}
 			} else {
 				return d
@@ -929,11 +934,11 @@ function Arena(arenaName, model) {
 				var y = _percentileToY(percentile, model)
 				return {x:x,y:y}
 			} else {
-				return {x:x,y:s.y}
+				return {x:x,y:s.y} // todo d.y ?
 			}
 		} else {
-			if (model.dimensions == "1D+B") {
-				return {x:d.x, y:d.y, b:self.bFromY(d.y)}
+			if (model.dimensions == "1D+B" && s.isCandidate) {
+				return {x:d.x, b:self.bFromY(d.y)}
 			} else {
 				return d
 			}
@@ -966,32 +971,24 @@ function Arena(arenaName, model) {
 					} else if (d.o.isCandidate) {
 						d.o.size = length * d.sizeScale
 						d.o.b = d.o.bFromSize(d.o.size)
-						if (model.dimensions == "1D+B") {
-							d.o.y = self.yFromB(d.o.b)
-						}
 					}	
 				} else if (d.isModify) {
 					d.unInit() // dont show the axes when we're dragging the modify gear
 				}
 				if (model.dimensions == "1D+B") {
-					// apply limits to movement
-					var p = self.arenaToModel(self.mouse,d)
-					var yMove = p.y	
-					var offY = d.offY
-					var newY = yMove + offY
-					var limYc = model.yDimOne + model.yDimBuffer
-					var limYv = model.yDimOne
-					if (d.isCandidate || d.isModify || d.isRight || d.isUp) { // move candidate in the candidate region
+					// apply limits to movement for candidates and voters
+					if (d.isCandidate) {
+						var limYc = model.yDimOne + model.yDimBuffer
+						var f = model.arena.modelToArena(d)
+						var newY =  f.y
 						if (newY < limYc){
-							d.y = limYc
-						}
-						if (d.isCandidate) {
-							d.b = self.bFromY(d.y)
+							newY = limYc
+							d.b = self.bFromY(newY)
 							d.size = d.sizeFromB(d.b)
 						}
-					} else { // This is a voter
-						// d.y = Math.min(50,yMove)
-						if (1 || newY > limYv){
+					} else if (d.isVoter || d.isVoterCenter) {
+						var limYv = model.yDimOne
+						if (1 || d.y > limYv){ 
 							d.y = limYv
 						}
 					}

@@ -25,10 +25,10 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		a.x = x+self.offX
 		a.y = y+self.offY
 		var p = arena.arenaToModel(a,self);
-		if (model.dimensions == "1D+B") {
+		if (model.dimensions == "1D+B" && self.isCandidate) {
 			self.x = p.x
 			self.b = p.b
-			self.y = arena.yFromB(p.b)
+			self.size = self.sizeFromB(p.b)
 		} else {
 			self.x = p.x
 			self.y = p.y

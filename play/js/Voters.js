@@ -270,8 +270,7 @@ function distF2(model,v,c) { // voter and candidate should be in order
 				var bInv = ady/30
 				return (adx * bInv)**2 
 			case 11:
-				var b = model.arena.bFromY(c.y)  // (model.size - c.y)/30
-				var f = 1/b * 2 * .5 ** b
+				var f = 1/c.b * 2 * .5 ** c.b
 				return dx*dx * f*f
 		}
 	} else if (model.dimensions == "1D") {
@@ -1678,7 +1677,8 @@ function _fillVoterDefaults(self) {
 		secondStrategy: "zero strategy. judge on an absolute scale.",
 		percentSecondStrategy: 0,
 		group_count: 50,
-		group_spread: 190
+		group_spread: 190,
+		isVoter: true
 	})
 }
 
