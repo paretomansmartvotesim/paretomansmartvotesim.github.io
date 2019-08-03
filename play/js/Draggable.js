@@ -5,7 +5,8 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 	// CONFIGURE DEFAULTS
 	self.x = 0
 	self.y = 0
-	self.radius = 25
+	self.size = 20
+	self.radiusScale = 25/40
 	
 	self.init = function () {
 		self.offX = 0;
@@ -16,7 +17,7 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		var a = arena.modelToArena(self)
 		var dx = x-a.x;
 		var dy = y-a.y;
-		var r = self.radius;
+		var r = self.size * self.radiusScale
 		return((dx*dx+dy*dy) < r*r);
 	};
 

@@ -611,7 +611,7 @@ function Arena(arenaName, model) {
 			var d = model.arena.mouse.dragging
 			var dx = d.x - self.x
 			var dy = d.y - self.y
-			var r = self.radius
+			var r = self.size * self.radiusScale
 			if (dx * dx + dy * dy < r * r) {
 				// we have trash
 				self.size = 40
