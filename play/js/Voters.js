@@ -1690,6 +1690,7 @@ function SingleVoter(model){
 
 	var self = this;
 	Draggable.call(self);
+	self.isSingleVoter = true
 	self.voterGroupType = "SingleVoter"
 	
 	// CONFIGURE DEFAULTS

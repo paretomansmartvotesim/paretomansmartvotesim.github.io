@@ -843,9 +843,11 @@ Election.minimax = function(model, options){ // Pairs of candidates are sorted b
 				}
 				var j = 0
 				for (var i=0; i < model.voters.length; i++) {
-					model.voters[i].update()
-					for (var k=0; k < model.voters[i].points.length; k++) {
-						model.voters[i].weights[k] = weightcopy[j][ai][bi]
+					v = model.voters[i]
+					v.update()
+					v.weights = []
+					for (var k=0; k < v.points.length; k++) {
+						v.weights[k] = weightcopy[j][ai][bi]
 						j++
 					}
 				}

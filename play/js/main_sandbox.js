@@ -2312,9 +2312,16 @@ function Sandbox(modelName) {
             if (config.theme == "Bees") {
                 model.showVoters = false
                 model.doBuzz = true
+                model.buzzInterval = setInterval(function(){
+                    if (model.doBuzz) {
+                        model.buzz()
+                        model.update()
+                    }
+                },60)
             } else {
                 model.showVoters = true
                 model.doBuzz = false
+                clearInterval(model.buzzInterval)
             }
         }
         self.init_sandbox = function() {
@@ -2915,13 +2922,6 @@ function Sandbox(modelName) {
         _objF(ui.arena,"update")
         _objF(ui.menu,"select");
         model.start(); 
-        
-        setInterval(function(){
-            if (model.doBuzz) {
-                model.buzz()
-                model.update()
-            }
-        },60)
     };
 
     self.assets = [
