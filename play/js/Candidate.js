@@ -149,8 +149,8 @@ function Candidate(model){
 
 			// edit svg Doc
 			var root = self.svgDoc.getElementsByTagName("svg")[0]
-			root.setAttribute("width", "800");
-			root.setAttribute("height", "800");
+			root.setAttribute("width", "40");
+			root.setAttribute("height", "40");
 
 			// serialize
 			var s = new XMLSerializer();
