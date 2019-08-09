@@ -168,6 +168,8 @@ function Model(modelName){
 	self.onAddCandidate = function() {} // callback
 	self.update = function(){
 
+		if (self.nLoading > 0) return // the loading function will call update()
+
 		// update positions of draggables
 		self.arena.update();
 		self.tarena.update();
@@ -252,8 +254,6 @@ function Model(modelName){
 
 	self.onDraw = function(){}; // TO IMPLEMENT
 	self.draw = function() {
-		
-		if (self.nLoading > 0) return // the loading function will call draw()
 
 		self.arena.clear()
 		self.tarena.clear()
@@ -275,7 +275,7 @@ function Model(modelName){
 
 
 	}
-	self.drawSidebar = function () {
+	self.drawSidebar = function () {		
 		if (self.result) {
 			if(self.result.text) {
 				if (self.result.dontredocaption != true) {
@@ -386,7 +386,7 @@ function Model(modelName){
 		}
 	}
 	self.icon = function(id) {
-		return self.candidatesById[id].texticon
+		return self.candidatesById[id].texticon_png
 	}
 };
 
@@ -509,9 +509,13 @@ function Arena(arenaName, model) {
 					
 				// INIT
 				n.init()
-				model.initMODEL()
-				// update the GUI
-				model.onAddCandidate()
+				if (model.nLoading > 0) {  // the loading function will call these after it's done.
+					return n
+				} else {
+					model.initMODEL()
+					// update the GUI
+					model.onAddCandidate()
+				}
 				return n
 			} else if (self.isPlusOneVoter || self.isPlusVoterGroup) {
 				if (self.isPlusOneVoter) {

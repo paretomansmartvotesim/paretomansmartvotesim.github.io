@@ -89,7 +89,6 @@ function Candidate(model){
 		if (asset) {
 			if (ext == "svg") {
 				processSVG(asset)
-				model.nLoading++
 				makeImg()
 			} else { 
 				// png asset
@@ -101,7 +100,6 @@ function Candidate(model){
 		} else { 
 			// no asset, so load the img from a file
 			if (ext == "svg") {
-				model.nLoading++
 				downloadSVGandMakeImg( function() { 
 					// callback
 					self.texticon = self.svg
@@ -109,7 +107,6 @@ function Candidate(model){
 				})
 			} else { 
 				self.srcImg = self.url
-				model.nLoading++
 				makeImg()
 
 				self.texticon = "<img src='"+self.url+"'/>"
@@ -149,8 +146,8 @@ function Candidate(model){
 
 			// edit svg Doc
 			var root = self.svgDoc.getElementsByTagName("svg")[0]
-			root.setAttribute("width", "40");
-			root.setAttribute("height", "40");
+			root.setAttribute("width", "80");
+			root.setAttribute("height", "80");
 
 			// serialize
 			var s = new XMLSerializer();
@@ -187,13 +184,27 @@ function Candidate(model){
 		}
 
 		function makeImg() {
-			self.img = new Image()
-			self.img.src = self.srcImg
-			self.img.onload = function () {
-				// self.datimg = _convertImageToDataURLviaCanvas(self.img, outputFormat)
-				model.nLoading--
-				if (model.nLoading == 0) {
-					model.draw()
+			// is this an svg?
+			// img_svg, img_png, img_blob
+			
+			model.nLoading++
+
+			self.img1 = new Image()
+			self.img1.src = self.srcImg // This is either a base64 string of the svg text of a base64 png.. but we'd like to make it a png so it loads faster
+			self.img1.onload = function () {
+				self.png_b64 = _convertImageToDataURLviaCanvas(self.img1, 'png')
+				self.img = new Image()
+				self.img.src = self.png_b64 // base64 png
+				self.texticon_png = "<img src='"+self.img.src+"'/>"
+				self.img.onload = function () {
+					model.nLoading--
+					if (model.nLoading == 0) {
+						model.initMODEL()
+						// update the GUI
+						model.onAddCandidate()
+						
+						model.update() // now we have extra text for the model's output
+					}
 				}
 			}
 		}
