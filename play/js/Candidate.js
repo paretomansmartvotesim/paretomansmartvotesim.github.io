@@ -194,7 +194,13 @@ function Candidate(model){
 			self.img1.onload = function () {
 				self.png_b64 = _convertImageToDataURLviaCanvas(self.img1, 'png')
 				self.img = new Image()
-				self.img.src = self.png_b64 // base64 png
+				if (1) {
+					self.img.src = self.png_b64 // base64 png
+				} else {
+					var bb = self.png_b64.split(',')
+					var svgblob = b64toBlob(bb[1], 'image/png');
+					self.img.src = URL.createObjectURL(svgblob); 
+				}
 				self.texticon_png = "<img src='"+self.img.src+"'/>"
 				self.img.onload = function () {
 					model.nLoading--
@@ -207,6 +213,31 @@ function Candidate(model){
 					}
 				}
 			}
+		}
+
+		function b64toBlob(b64Data, contentType='', sliceSize=512) {
+			// str = b64Data
+			// str = str + '===' // pad
+			// newlen = str.length - str.length % 4 // round
+			// str = str.slice(0,newlen) // cut
+			// b64Data = str
+			const byteCharacters = atob(b64Data);
+			const byteArrays = [];
+		  
+			for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+			  const slice = byteCharacters.slice(offset, offset + sliceSize);
+		  
+			  const byteNumbers = new Array(slice.length);
+			  for (let i = 0; i < slice.length; i++) {
+				byteNumbers[i] = slice.charCodeAt(i);
+			  }
+		  
+			  const byteArray = new Uint8Array(byteNumbers);
+			  byteArrays.push(byteArray);
+			}
+		  
+			const blob = new Blob(byteArrays, {type: contentType});
+			return blob;
 		}
 		
 	}
