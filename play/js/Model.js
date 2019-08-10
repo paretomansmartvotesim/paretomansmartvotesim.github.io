@@ -1134,7 +1134,8 @@ function Arena(arenaName, model) {
 				}
 			}
 			var d = self.mouse.dragging
-			if (d) { // draw the dragging object again (twice but that's okay)
+			var dontdo = true // I'm not sure why I did this part and it probably can be removed.
+			if (!dontdo && d) { // draw the dragging object again (twice but that's okay)
 				if (d.isVoter) {
 					d.draw2(self.ctx,self)
 				} else if (d.isVoterCenter){
