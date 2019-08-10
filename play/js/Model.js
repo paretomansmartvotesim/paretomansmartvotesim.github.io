@@ -1137,6 +1137,10 @@ function Arena(arenaName, model) {
 			if (d) { // draw the dragging object again (twice but that's okay)
 				if (d.isVoter) {
 					d.draw2(self.ctx,self)
+				} else if (d.isVoterCenter){
+					if(! oneVoter) {
+						d.draw(self.ctx,self)
+					}
 				} else {
 					d.draw(self.ctx,self)
 				}
