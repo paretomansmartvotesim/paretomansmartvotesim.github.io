@@ -139,7 +139,7 @@ function Candidate(model){
 			} else { // no tooltext
 				self.svg  = self.svg.replace(/<title>[^<]*<\/title>/, "")
 			}
-
+			
 			// parse svg
 			var parser = new DOMParser();
 			self.svgDoc = parser.parseFromString(self.svg, "text/xml");
@@ -151,11 +151,17 @@ function Candidate(model){
 
 			// serialize
 			var s = new XMLSerializer();
- 			self.svg = s.serializeToString(self.svgDoc);
+			 self.svg = s.serializeToString(self.svgDoc);
+
+			 root.setAttribute("width", "10");
+			 root.setAttribute("height", "10");
+
+			 self.svg_small = s.serializeToString(self.svgDoc);
 
 			// make the image source
 			if (1) { // just trying different methods
 				self.srcImg = "data:image/svg+xml;base64," + btoa(self.svg);
+				// self.srcImg = "data:image/svg+xml;base64," + btoa(self.svg_small);
 			} else {
 				var svgblob = new Blob([self.svg], {type: 'image/svg+xml'});
 				self.srcImg = URL.createObjectURL(svgblob); 
