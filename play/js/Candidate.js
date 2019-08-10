@@ -16,6 +16,7 @@ function Candidate(model){
 	self.init = function () {
 		// GRAPHICS
 		self.size = self.sizeFromB(self.b)
+		self.grabsize = self.size * .5
 		// Defaults
 		if (model.theme == undefined) model.theme = "Default" // comment: this should already be handled in model.js
 		if (model.colorChooser == undefined) model.colorChooser = "pick and generate"

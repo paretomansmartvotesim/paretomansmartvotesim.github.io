@@ -1335,6 +1335,17 @@ var _drawSlices = function(model, ctx, x, y, size, slices, totalSlices){
 	}
 	
 	if (model.yeeon) {
+		// Just draw a circle.	
+		_drawCircle(ctx,x/2,y/2,size)	
+	}
+
+};
+
+var _drawCircle = function (ctx, x, y, size) {
+
+		// RETINA
+		x = x*2;
+		y = y*2;
 		// Just draw a circle.		
 		ctx.strokeStyle = 'rgb(0,0,0)';
 		ctx.lineWidth = 1; // border
@@ -1342,9 +1353,8 @@ var _drawSlices = function(model, ctx, x, y, size, slices, totalSlices){
 		ctx.arc(x, y, size, 0, Math.TAU, true);
 		ctx.closePath();
 		ctx.stroke();
-	}
+}
 
-};
 var _drawBlank = function(model, ctx, x, y, size){
 	var slices = [{ num:1, fill:"#bbb" }];
 	_drawSlices(model, ctx, x, y, size, slices, 1);
@@ -1389,6 +1399,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	Draggable.call(self);
 	self.isGaussianVoters = true
 	self.voterGroupType = "GaussianVoters"
+	self.size = 30
 	var config = {}
 	
 	// CONFIGURE DEFAULTS
@@ -1593,7 +1604,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				var strategy = self.firstStrategy; // no e.g. 
 			}
 			
-			// choose the threshold of voters
+			// choose the threshold of voters for polls
 			var r_11 = Math.random() * 2 - 1 
 			self.type.poll_threshold_factor = _erfinv(r_11) * .2 + .5
 
@@ -1631,14 +1642,16 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		if(model.voterCenter && model.voters.length == 1) return
 
 		// Circle!
+		var size = self.size;
+		
 		var x = self.x*2;
 		var y = self.y*2;
-		var size = 20;
 		//self.type.drawCircle(ctx, self.x, self.y, size, ballot);
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
 		_drawBlank(model, ctx, self.x, self.y, size)
+		_drawCircle(ctx,self.x,self.y,self.size)
 		
 		// Face!
 		size = size*2;
@@ -1692,6 +1705,7 @@ function SingleVoter(model){
 	Draggable.call(self);
 	self.isSingleVoter = true
 	self.voterGroupType = "SingleVoter"
+	self.size = 20
 	
 	// CONFIGURE DEFAULTS
 	_fillVoterDefaults(self)
@@ -1713,8 +1727,10 @@ function SingleVoter(model){
 		// UPDATE!
 		self.ballot = null;
 		self.ballots = [];
+		
 	}
 	self.update = function(){
+		self.type.poll_threshold_factor = .6
 		self.ballot = self.type.getBallot(self.x, self.y, self.firstStrategy);
 		self.ballots = [self.ballot]
 	};
@@ -1745,8 +1761,9 @@ function SingleVoter(model){
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Circle!
-		var size = 20;
+		var size = self.size;
 		self.type.drawCircle(ctx, self.x, self.y, size, self.ballot);
+		_drawCircle(ctx,self.x,self.y,self.size)
 
 		// Face!
 		size = size*2;
@@ -1947,6 +1964,7 @@ function VoterCenter(model){
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
 		_drawBlank(model, ctx, self.x, self.y, size);
+		_drawCircle(ctx,self.x,self.y,self.size)
 		
 		// Face!
 		size = size*2;

@@ -6,6 +6,7 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 	self.x = 0
 	self.y = 0
 	self.size = 20
+	self.grabsize = 20
 	self.radiusScale = 25/40
 	
 	self.init = function () {
@@ -17,7 +18,7 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		var a = arena.modelToArena(self)
 		var dx = x-a.x;
 		var dy = y-a.y;
-		var r = self.size * self.radiusScale
+		var r = self.grabsize * self.radiusScale
 		return((dx*dx+dy*dy) < r*r);
 	};
 	self.hitDistance = function(x,y,arena){
