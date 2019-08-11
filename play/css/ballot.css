@@ -65,6 +65,12 @@ BALLOT DESIGN
     line-height: 1.0em;
     font-size: 23px;
 }
+
+.div-ballot #caption img{
+    height: 1em;
+	top:2px;
+	position: relative;
+}
 .div-ballot #caption .small{
 	font-size: 15px;
 	line-height: 1.0em;
