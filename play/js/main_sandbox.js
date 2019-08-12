@@ -963,11 +963,6 @@ function Sandbox(modelName) {
                     voterPositions = [[65,150],[150,150],[235,150]];
 
                 }
-                if (model.dimensions == "1D+B") {
-                    for(var i=0; i<num; i++){ 
-                        voterPositions[i][1] = model.yDimOne
-                    }
-                }
                 
                 for(var i=0; i<num; i++){
                     var pos = voterPositions[i];
@@ -981,12 +976,6 @@ function Sandbox(modelName) {
                     })
                     model.voters[i].setType( ui.menu.systems.listByName().voter );	
 
-                }
-            }
-                
-            if (model.dimensions == "1D+B") {
-                for(var i=0; i<model.voters.length; i++){ 
-                    model.voters[i].y = model.yDimOne
                 }
             }
         }
@@ -1258,13 +1247,6 @@ function Sandbox(modelName) {
                         b:b
                     })
                     angle += Math.TAU/num;
-                }
-            }
-            if (model.dimensions == "1D+B") {
-                var yStart = model.yDimOne + model.yDimBuffer
-                var yShrink = 1 - yStart/config.arena_size
-                for(var i=0; i<num; i++){
-                    model.candidates[i].y = yStart + model.candidates[i].y * yShrink
                 }
             }
         }

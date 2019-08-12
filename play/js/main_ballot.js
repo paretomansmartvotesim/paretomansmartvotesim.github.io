@@ -77,7 +77,6 @@ function main_ballot(preset){
 			model.doStarStrategy = config.doStarStrategy;
 			model.theme = config.theme
 			model.dimensions = config.dimensions
-			if (model.dimensions == "1D+B") model.voters[0].y = model.yDimOne  // not tested yet
 			// INIT
 			model.candidates[0].init()
 			model.candidates[1].init()

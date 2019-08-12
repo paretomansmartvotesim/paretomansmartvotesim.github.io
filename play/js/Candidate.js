@@ -12,11 +12,13 @@ function Candidate(model){
 	self.size = 40;
 	self.b = 1
 	self.selected = false
-
-	self.init = function () {
+	self.update = function() {
 		// GRAPHICS
 		self.size = self.sizeFromB(self.b)
-		self.grabsize = self.size * .5
+		self.grabsize = Math.max(self.size * .8,10)
+	}
+	self.init = function () {
+		self.update()
 		// Defaults
 		if (model.theme == undefined) model.theme = "Default" // comment: this should already be handled in model.js
 		if (model.colorChooser == undefined) model.colorChooser = "pick and generate"

@@ -232,46 +232,50 @@ function distF(model,v,c) {
 function distF2(model,v,c) { // voter and candidate should be in order
 	if (model.dimensions == "1D+B") {
 		var dx = v.x - c.x
-		var dy = c.y - (model.yDimOne + model.yDimBuffer)
-		var a=11
-		switch (a) {
-			case 1: return Math.abs(dx*dy)
-			case 2: return Math.abs(dx*dy*.1)
-			case 3: return Math.abs(dx*dy*dy*.001)
-			case 4:
-				var adx = Math.abs(dx)
-				var ady = Math.abs(dy)
-				if (adx < 10 || ady < 10) return 0
-				return (adx + ady)*2
-			case 5:
-				var adx = Math.abs(dx)
-				var ady = Math.abs(dy)
-				if (adx < 10 || ady < 10) {
-					var balance = min(adx,ady) / 10
-					return balance * (adx + ady)*2
-				} 
-				return (adx + ady)*2
-			case 6:
-				var adx = Math.abs(dx)
-				var ady = Math.abs(dy)
-				return (1/(1/adx+1/ady))**2 /// hmm forgot this square while making this function... so things are weird
-			case 7:
-				return (1/(1/(dx*dx)+100/(dy*dy))) ** 2
-			case 8:
-				var adx = Math.abs(dx)
-				var ady = Math.abs(dy)
-				return (11 / ( 1/adx + 10/ady )) ** 2
-			case 9:
-				var f = .2 * 2 ** (dy/30)
-				return (Math.abs(dx) * f)**2 
-			case 10:
-				var adx = Math.abs(dx)
-				var ady = Math.abs(dy)
-				var bInv = ady/30
-				return (adx * bInv)**2 
-			case 11:
-				var f = 1/c.b * 2 * .5 ** c.b
-				return dx*dx * f*f
+		if (1) {
+			if (c.b == 0) return 2^30
+			var f = 1/c.b * 2 * .5 ** c.b
+			return dx*dx * f*f
+		} else {
+			// these are old
+			var dy = c.y - (model.yDimOne + model.yDimBuffer)
+			var a=9
+			switch (a) {
+				case 1: return Math.abs(dx*dy)
+				case 2: return Math.abs(dx*dy*.1)
+				case 3: return Math.abs(dx*dy*dy*.001)
+				case 4:
+					var adx = Math.abs(dx)
+					var ady = Math.abs(dy)
+					if (adx < 10 || ady < 10) return 0
+					return (adx + ady)*2
+				case 5:
+					var adx = Math.abs(dx)
+					var ady = Math.abs(dy)
+					if (adx < 10 || ady < 10) {
+						var balance = min(adx,ady) / 10
+						return balance * (adx + ady)*2
+					} 
+					return (adx + ady)*2
+				case 6:
+					var adx = Math.abs(dx)
+					var ady = Math.abs(dy)
+					return (1/(1/adx+1/ady))**2 /// hmm forgot this square while making this function... so things are weird
+				case 7:
+					return (1/(1/(dx*dx)+100/(dy*dy))) ** 2
+				case 8:
+					var adx = Math.abs(dx)
+					var ady = Math.abs(dy)
+					return (11 / ( 1/adx + 10/ady )) ** 2
+				case 9:
+					var f = .2 * 2 ** (dy/30)
+					return (Math.abs(dx) * f)**2 
+				case 10:
+					var adx = Math.abs(dx)
+					var ady = Math.abs(dy)
+					var bInv = ady/30
+					return (adx * bInv)**2 
+			}
 		}
 	} else if (model.dimensions == "1D") {
 		var dx = v.x - c.x
@@ -812,8 +816,9 @@ function RankedVoter(model){
 				// To which candidate...
 				var rank = ballot.rank[i];
 				var c = model.candidatesById[rank];
-				var cx = c.x*2; // RETINA
-				var cy = c.y*2; // RETINA
+				var cc = model.arena.modelToArena(c)
+				var cx = cc.x*2; // RETINA
+				var cy = cc.y*2; // RETINA
 	
 				// Draw
 				ctx.beginPath();
@@ -838,9 +843,10 @@ function RankedVoter(model){
 				// To which candidate...
 				var rank = ballot.rank[i];
 				var c = model.candidatesById[rank];
+				var cc = model.arena.modelToArena(c)
 				var next = {}
-				next.x = c.x;
-				next.y = c.y;
+				next.x = cc.x;
+				next.y = cc.y;
 	
 				// Draw
 				ctx.beginPath();
@@ -859,9 +865,10 @@ function RankedVoter(model){
 			var lineWidth = 1
 			var connectWidth = 1
 			var sizeCircle = 15
-			var connectCandidates = true
+			var connectCandidates = false
 			var minimap = true
-			var bimetalLine = true && !minimap
+			var bimetalLine = (true && !minimap) || true
+			var regularLine = false
 
 			var rankByCandidate = []
 			for(var i=0; i<ballot.rank.length; i++){
@@ -872,8 +879,10 @@ function RankedVoter(model){
 
 			for(var i = 0; i < model.candidates.length; i++) {
 				for (var k = 0; k < i; k++) {
-					var c1 = model.candidates[i]
-					var c2 = model.candidates[k]
+					var c1 = model.arena.modelToArena(model.candidates[i])
+					c1.fill = model.candidates[i].fill
+					var c2 = model.arena.modelToArena(model.candidates[k])
+					c2.fill = model.candidates[k].fill
 					var win = rankByCandidate[k] > rankByCandidate[i]
 						
 					if (connectCandidates) {
@@ -915,7 +924,8 @@ function RankedVoter(model){
 						ctx.lineWidth = lineWidth*5;
 						ctx.strokeStyle = c2.fill;
 						ctx.stroke();
-					} else {
+					}
+					if (regularLine) {
 						ctx.beginPath();
 						ctx.moveTo(start.x*2,start.y*2);
 						ctx.lineTo(stop.x*2,stop.y*2);
@@ -939,12 +949,15 @@ function RankedVoter(model){
 						var temp = ctx.globalAlpha
 						ctx.globalAlpha = temp * .8
 						ctx.fillStyle = fill
-						ctx.beginPath();
 						ctx.moveTo(circle.x*2,circle.y*2);
+						ctx.beginPath();
 						ctx.arc(circle.x*2, circle.y*2, miniSize, 0, Math.TAU, false);
-						ctx.lineTo(circle.x*2,circle.y*2);
+						// ctx.lineTo(circle.x*2,circle.y*2);
 						ctx.closePath();
 						ctx.fill();
+						ctx.lineWidth = lineWidth;
+						ctx.strokeStyle = "#888";
+						ctx.stroke();
 						ctx.globalAlpha = temp
 					} else {
 						if (win) {
@@ -1244,8 +1257,9 @@ function PluralityVoter(model){
 		// RETINA
 		x = x*2;
 		y = y*2;
-		var tx = candidate.x*2;
-		var ty = candidate.y*2;
+		var cc = model.arena.modelToArena(candidate)
+		var tx = cc.x*2;
+		var ty = cc.y*2;
 
 		// DRAW - Line
 		ctx.beginPath();
@@ -1336,12 +1350,12 @@ var _drawSlices = function(model, ctx, x, y, size, slices, totalSlices){
 	
 	if (model.yeeon) {
 		// Just draw a circle.	
-		_drawCircle(ctx,x/2,y/2,size)	
+		_drawRing(ctx,x/2,y/2,size)	
 	}
 
 };
 
-var _drawCircle = function (ctx, x, y, size) {
+var _drawRing = function (ctx, x, y, size) {
 
 		// RETINA
 		x = x*2;
@@ -1476,8 +1490,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			}
 			self.points = points
 		}
-		if (model.dimensions == "1D+B") {
-			self.y = model.yDimOne
+		if (model.dimensions == "1D+B" || model.dimensions == "1D") {
 
 			var build1 = false
 			var forward = true
@@ -1628,8 +1641,9 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			// DRAW ALL THE points
 			for(var i=0; i<self.points.length; i++){
 				var p = self.points[i];
-				var x = self.x + p[0];
-				var y = self.y + p[1];
+				var s = model.arena.modelToArena(self)
+				var x = s.x + p[0];
+				var y = s.y + p[1];
 				var ballot = self.ballots[i];
 				var weight = self.weights[i]
 				self.type.drawCircle(ctx, x, y, 10, ballot, weight);
@@ -1644,14 +1658,15 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		// Circle!
 		var size = self.size;
 		
-		var x = self.x*2;
-		var y = self.y*2;
+		var s = model.arena.modelToArena(self)
+		var x = s.x*2;
+		var y = s.y*2;
 		//self.type.drawCircle(ctx, self.x, self.y, size, ballot);
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		_drawBlank(model, ctx, self.x, self.y, size)
-		_drawCircle(ctx,self.x,self.y,self.size)
+		_drawBlank(model, ctx, s.x, s.y, size)
+		_drawRing(ctx,s.x,s.y,self.size)
 		
 		// Face!
 		size = size*2;
@@ -1743,27 +1758,30 @@ function SingleVoter(model){
 		self.draw2(ctx)
 	};
 	self.draw1 = function(ctx) {
-		var x = self.x*2;
-		var y = self.y*2;
+		var s = model.arena.modelToArena(self)
+		var x = s.x*2;
+		var y = s.y*2;
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Background, for showing HOW the decision works...
 		self.drawBackAnnotation(x,y,ctx)
-		self.type.drawBG(ctx, self.x, self.y, self.ballot);
+		self.type.drawBG(ctx, s.x, s.y, self.ballot);
 		if(self.highlight) ctx.globalAlpha = temp
 	}
 
 	
 	self.draw2 = function(ctx){
-		var x = self.x*2;
-		var y = self.y*2;
+		
+		var s = model.arena.modelToArena(self)
+		var x = s.x*2;
+		var y = s.y*2;
 
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Circle!
 		var size = self.size;
-		self.type.drawCircle(ctx, self.x, self.y, size, self.ballot);
-		_drawCircle(ctx,self.x,self.y,self.size)
+		self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+		_drawRing(ctx,s.x,s.y,self.size)
 
 		// Face!
 		size = size*2;
@@ -1957,14 +1975,15 @@ function VoterCenter(model){
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.draw = function(ctx){
 		// UPDATE
-		var x = self.x*2;
-		var y = self.y*2;
+		var s = model.arena.modelToArena(self)
+		var x = s.x*2;
+		var y = s.y*2;
 		size = self.size
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		_drawBlank(model, ctx, self.x, self.y, size);
-		_drawCircle(ctx,self.x,self.y,self.size)
+		_drawBlank(model, ctx, s.x, s.y, size);
+		_drawRing(ctx,s.x,s.y,self.size)
 		
 		// Face!
 		size = size*2;

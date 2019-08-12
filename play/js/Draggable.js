@@ -28,22 +28,13 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		return dx*dx+dy*dy;
 	};
 
-	self.moveTo = function(x,y,arena,model){
+	self.newArenaPosition = function(x,y) {
+		// propose a new x and y, based only on the mouse
 		var a = {}
 		a.x = x+self.offX
 		a.y = y+self.offY
-		var p = arena.arenaToModel(a,self);
-		if (model.dimensions == "1D+B" && self.isCandidate) {
-			self.x = p.x
-			self.b = p.b
-			self.size = self.sizeFromB(p.b)
-		} else {
-			self.x = p.x
-			self.y = p.y
-		}
-		// self.x = x+self.offX;
-		// self.y = y+self.offY;
-	};
+		return a
+	}
 
 	self.offX = 0;
 	self.offY = 0;
@@ -51,8 +42,6 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		var a = arena.modelToArena(self)
 		self.offX = a.x-arena.mouse.x;
 		self.offY = a.y-arena.mouse.y;
-		// self.offX = self.x-arena.mouse.x;
-		// self.offY = self.y-arena.mouse.y;
 	};
 
 	self.update = function(){
@@ -118,7 +107,7 @@ function DraggableManager(arena,model){
 				if (model.arena.mouse.dragging) {
 					if (model.theme != "Nicky") {
 						// if we are in the main arena, then do the trash test
-						model.arena.trash.test();
+						model.arena.trashes.test();
 					}
 				}
 				model.update();

@@ -3238,13 +3238,13 @@ function _drawBars(arena, model, round) {
 			}
 			// draw line at bottom
 			var yLine = bottom
-			var c = arena.ctx
-			c.beginPath();
-			c.moveTo(0,yLine*2);
-			c.lineTo(c.canvas.width,yLine*2);
-			c.lineWidth = 2;
-			c.strokeStyle = "#888";
-			c.stroke();
+			var ctx = arena.ctx
+			ctx.beginPath();
+			ctx.moveTo(0,yLine*2);
+			ctx.lineTo(ctx.canvas.width,yLine*2);
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = "#888";
+			ctx.stroke();
 	
 			_drawStroked("Weight",70,400,40,arena.ctx)
 		}
