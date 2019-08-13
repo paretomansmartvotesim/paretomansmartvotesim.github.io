@@ -1102,6 +1102,9 @@ function Arena(arenaName, model) {
 					d.b = n.b
 					d.update()
 				}
+				if (d.isVoter) {
+					self.pileVoters()
+				}
 			} else {
 				var p = d.newArenaPosition(self.mouse.x,self.mouse.y);
 				d.x = p.x
@@ -1141,6 +1144,64 @@ function Arena(arenaName, model) {
 		}
 	}
 
+	self.pileVoters = function() {
+		if (model.dimensions != "2D") {
+			// list all the voters
+			// drop the voters
+			// store the new positions
+			var forward = true
+	
+			var betweenDist = 5
+			var stackDist = 5
+			var added = []
+			var todo = []
+	
+			if (forward) {
+				for (var m = 0; m < model.voters.length; m++) {
+					var points = model.voters[m].points
+					for (var i = 0; i < points.length; i++) {
+						todo.push([m,i])
+					}
+				}
+				// for (var i = 0 ; i < self.points.length; i++) {
+				// 	todo.push(i)
+				// }
+			} else {
+				// for (var i = self.points.length - 1 ; i >= 0; i--) {
+				// 	todo.push(i)
+				// }
+			}
+			var level = 1
+			while (todo.length > 0) {
+				for (var c = 0; c < todo.length; c++) {
+					var m = todo[c][0]
+					var i = todo[c][1]
+					// look for collisions
+					var collided = false
+					for (var d = 0; d < added.length; d++) {
+						var o = added[d][0]
+						var k = added[d][1]
+						x1 = model.voters[o].points[k][0] + model.voters[o].x
+						x2 = model.voters[m].points[i][0] + model.voters[m].x
+						xDiff = Math.abs(x1 - x2)
+						if (xDiff < betweenDist) {
+							collided = true
+							break
+						}
+					}
+					if (! collided) {
+						model.voters[m].points[i][1] = (level-1) * -stackDist
+						added.push([m,i])
+						todo.splice(c,1)
+						c--
+					}
+				}
+				level++
+				var added = []
+			}
+		}
+
+	}
 
 	self.clear = function(){
 		// Clear it all!
@@ -1156,7 +1217,10 @@ function Arena(arenaName, model) {
 		ctx.lineTo(ctx.canvas.width,yLine*2);
 		ctx.lineWidth = 5;
 		ctx.strokeStyle = "#888";
+		
+		ctx.setLineDash([5, 15]);
 		ctx.stroke();
+			ctx.setLineDash([]);
 	}
 
 	self.draw = function(){

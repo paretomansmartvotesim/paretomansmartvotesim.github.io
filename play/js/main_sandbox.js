@@ -370,6 +370,7 @@ function Sandbox(modelName) {
         for (var i=0; i<model.voters.length; i++) {
             model.voters[i].init()
         }
+        model.arena.pileVoters()
 		// INIT (menu)
 		ui.menu.presetconfig.init_sandbox()
 		ui.menu.gearicon.init_sandbox()
@@ -737,6 +738,7 @@ function Sandbox(modelName) {
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
+            model.arena.pileVoters()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
@@ -888,6 +890,7 @@ function Sandbox(modelName) {
             for(var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
+            model.arena.pileVoters()
             // UPDATE
             model.update()
             menu_update()
@@ -1015,6 +1018,7 @@ function Sandbox(modelName) {
             for(var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
+            model.arena.pileVoters()
             // UPDATE
             model.update()
             menu_update()
@@ -1237,9 +1241,6 @@ function Sandbox(modelName) {
                     var y = 150 - r*Math.sin(angle) + (config.arena_size - 300) * .5; // TODO check for bug
                     var b = 1
                     var icon = _candidateIcons[i];
-                    if (model.dimensions == "1D+B") {
-                        b = model.arena.bFromY(y)
-                    }
                     Object.assign(model.candidates[i],{
                         icon:icon,
                         x:x,
@@ -2131,6 +2132,7 @@ function Sandbox(modelName) {
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
+            model.arena.pileVoters()
             // UPDATE
             model.update()
         };
@@ -2192,6 +2194,7 @@ function Sandbox(modelName) {
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
+            model.arena.pileVoters()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
