@@ -568,8 +568,8 @@ function Arena(arenaName, model) {
 			if (model.dimensions == "1D+B") {
 				self.t[1].y = model.arena.yDimOne
 			} else if (model.dimensions == "1D") {
-				self.t[0].y = model.arena.yDimOne * 2
-				self.t[1].y = model.arena.yDimOne * 1
+				self.t[0].y = model.size - model.arena.yDimOne
+				self.t[1].y = model.arena.yDimOne
 			}
 		}
 		self.tossInTrash = function() {
@@ -1007,7 +1007,7 @@ function Arena(arenaName, model) {
 				}
 			} else if (model.dimensions == "1D" ) {
 				if (d.isCandidate) {
-					y = 2*self.yDimOne
+					y = model.size - self.yDimOne
 				} else if (d.isVoter || d.isVoterCenter) {
 					y = self.yDimOne
 				} else {
@@ -1086,7 +1086,7 @@ function Arena(arenaName, model) {
 	self.update = function(){
 		// Move the one that's being dragged, if any
 		
-		self.yDimOne = 100
+		self.yDimOne = model.size * .6 / 1.6
 		self.yDimBuffer = 20
 		// self.yDimBuffer = (model.size - self.yDimOne) * .3
 		
@@ -1117,6 +1117,7 @@ function Arena(arenaName, model) {
 					var length = -(d.y - d.yC)
 					d.o.group_count = length * d.scale
 					d.o.init()
+					self.pileVoters()
 					model.updateFromModel()
 				}
 			} else if (d.isRight) {
@@ -1126,6 +1127,7 @@ function Arena(arenaName, model) {
 				if (d.o.voterGroupType && d.o.voterGroupType=="GaussianVoters") {
 					d.o.group_spread = length * d.scale
 					d.o.init()
+					self.pileVoters()
 					model.updateFromModel()
 				} else if (d.o.isCandidate) {
 					d.o.size = length * d.sizeScale

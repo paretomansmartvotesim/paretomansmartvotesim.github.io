@@ -1482,8 +1482,13 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
 			for (var count = 0; count < self.group_count; count++) {
 				angle = theta * count
-				_radius_norm = Math.sqrt(1-(count+.5)/self.group_count)
-				_radius = _erfinv(_radius_norm) * _spread_factor
+				if (1) {
+					_radius_norm = Math.sqrt(1-(count+.5)/self.group_count)
+					_radius = _erfinv(_radius_norm) * _spread_factor
+				} else {
+					_radius_norm = (count+.5)/self.group_count
+					_radius = Math.sqrt(-Math.log(_radius_norm)) * _spread_factor * 2
+				}
 				var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
 				var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
 				points.push([x,y]);
