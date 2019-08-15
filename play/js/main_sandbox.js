@@ -1013,6 +1013,7 @@ function Sandbox(modelName) {
             ui.menu.nVoterGroups.configure() // same settings in this other button
             ui.menu.firstStrategy.configure()
             ui.menu.secondStrategy.configure()
+            ui.menu.spread_factor_voters.configure()
             // INIT
             model.initMODEL()
             for(var i=0; i<model.voters.length; i++) {

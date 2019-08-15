@@ -1401,6 +1401,29 @@ var  _erfinv  = function(x){ // from https://stackoverflow.com/a/12556710
 	return z;
 }
 
+function _erf(x) {
+	var z;
+	const ERF_A = 0.147; 
+	var the_sign_of_x;
+	if(0==x) {
+		the_sign_of_x = 0;
+		return 0;
+	} else if(x>0){
+		the_sign_of_x = 1;
+	} else {
+		the_sign_of_x = -1;
+	}
+
+	var one_plus_axsqrd = 1 + ERF_A * x * x;
+	var four_ovr_pi_etc = 4/Math.PI + ERF_A * x * x;
+	var ratio = four_ovr_pi_etc / one_plus_axsqrd;
+	ratio *= x * -x;
+	var expofun = Math.exp(ratio);
+	var radical = Math.sqrt(1-expofun);
+	z = radical * the_sign_of_x;
+	return z;
+}
+
 /////////////////////////////////////////
 ///////// SINGLE OR GAUSSIAN ////////////
 /////////////////////////////////////////
@@ -1479,15 +1502,17 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var _radius = 0;
 			var _radius_norm = 0;
 			var _spread_factor = 2 * Math.exp(.01*self.group_spread) * Math.sqrt(self.group_count/20) // so the slider is exponential
+			self.stdev = _spread_factor * 1.38
 			var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
 			for (var count = 0; count < self.group_count; count++) {
 				angle = theta * count
-				if (1) {
+				if (0) {
 					_radius_norm = Math.sqrt(1-(count+.5)/self.group_count)
 					_radius = _erfinv(_radius_norm) * _spread_factor
+					self.stdev = _spread_factor
 				} else {
-					_radius_norm = (count+.5)/self.group_count
-					_radius = Math.sqrt(-Math.log(_radius_norm)) * _spread_factor * 2
+					_radius_norm = 1-(count+.5)/self.group_count
+					_radius = Math.sqrt(-2*Math.log(1-_radius_norm)) * self.stdev * .482
 				}
 				var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
 				var y = Math.sin(angle)*_radius  * self.spread_factor_voters;
@@ -1568,7 +1593,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 							}
 						}
 						if (! collided) {
-							self.points[i][1] = (level-1) * -stackDist
+							self.points[i][2] = (level-1) * -stackDist
 							added.push(i)
 							todo.splice(c,1)
 							c--
@@ -1644,14 +1669,20 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		}
 		if (drawVoters) {
 			// DRAW ALL THE points
+			var circlesize = 10
 			for(var i=0; i<self.points.length; i++){
 				var p = self.points[i];
 				var s = model.arena.modelToArena(self)
 				var x = s.x + p[0];
-				var y = s.y + p[1];
+				if (model.dimensions == "2D") {
+					var y = s.y + p[1];
+				} else {
+					var y = s.y + p[2];
+					circlesize = 6
+				}
 				var ballot = self.ballots[i];
 				var weight = self.weights[i]
-				self.type.drawCircle(ctx, x, y, 10, ballot, weight);
+				self.type.drawCircle(ctx, x, y, circlesize, ballot, weight);
 			}
 		}
 	}
