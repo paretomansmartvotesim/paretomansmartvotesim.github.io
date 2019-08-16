@@ -414,9 +414,11 @@ function Arena(arenaName, model) {
 		self.plusCandidate = new Plus(model)
 		self.plusOneVoter = new Plus(model)
 		self.plusVoterGroup = new Plus(model)
+		self.plusXVoterGroup = new Plus(model)
 		self.plusCandidate.isPlusCandidate = true
 		self.plusOneVoter.isPlusOneVoter = true
 		self.plusVoterGroup.isPlusVoterGroup = true
+		self.plusXVoterGroup.isPlusXVoterGroup = true
 		self.trashes = new Trashes(model)
 		self.modify = new Modify(model)
 	}
@@ -430,6 +432,7 @@ function Arena(arenaName, model) {
 		self.plusCandidate.init()
 		self.plusOneVoter.init()
 		self.plusVoterGroup.init()
+		self.plusXVoterGroup.init()
 		self.trashes.init()
 		self.modify.init()
 	}
@@ -446,19 +449,23 @@ function Arena(arenaName, model) {
 		self.isPlusCandidate = false
 		self.isPlusOneVoter = false
 		self.isPlusVoterGroup = false
+		self.isPlusXVoterGroup = false
 		
 		self.init = function() {
 			self.y = model.size - 20
 			var between = 40
 			if (self.isPlusCandidate) {
-				self.x = model.size - between * 3.5
+				self.x = model.size - between * 4.5
 				var srcPlus = "play/img/plusCandidate.png"
 			} else if (self.isPlusOneVoter) {
-				self.x = model.size - between * 2.5
+				self.x = model.size - between * 3.5
 				var srcPlus = "play/img/plusOneVoter.png"
 			} else if (self.isPlusVoterGroup) {
-				self.x = model.size - between * 1.5
+				self.x = model.size - between * 2.5
 				var srcPlus = "play/img/plusVoterGroup.png"
+			} else if (self.isPlusXVoterGroup) {
+				self.x = model.size - between * 1.5
+				var srcPlus = "play/img/plus_sunflower.png"
 			}
 			// if (Loader) {
 			// 	if (Loader.assets[srcPlus]) {
@@ -529,16 +536,19 @@ function Arena(arenaName, model) {
 					model.onAddCandidate()
 				}
 				return n
-			} else if (self.isPlusOneVoter || self.isPlusVoterGroup) {
+			} else if (self.isPlusOneVoter || self.isPlusVoterGroup || self.isPlusXVoterGroup) {
 				if (self.isPlusOneVoter) {
 					var n = new SingleVoter(model)
-				} else if (self.isPlusVoterGroup) {
+				} else if (self.isPlusVoterGroup || self.isPlusXVoterGroup) {
 					var n = new GaussianVoters(model)
 				}
 				n.x = self.x
 				n.y = self.y
-				// n.x_voters = true
-				n.disk = 1
+				if (self.isPlusXVoterGroup) {
+					n.x_voters = true
+				} else {
+					n.disk = 1
+				}
 				var max = 0
 				for (var i = 0; i < model.voters.length; i++) {
 					var a = model.voters[i].vid
@@ -709,7 +719,7 @@ function Arena(arenaName, model) {
 			} else {
 				self.y = model.size - 20
 				var between = 40
-				self.x = model.size - between * 4.5
+				self.x = model.size - between * 5.5
 			}
 		}
 		self.draw = function(ctx,arena){
@@ -953,6 +963,7 @@ function Arena(arenaName, model) {
 			self.draggables.push(self.plusCandidate)
 			self.draggables.push(self.plusOneVoter)
 			self.draggables.push(self.plusVoterGroup)
+			self.draggables.push(self.plusXVoterGroup)
 			for (var i=0; i<self.trashes.t.length; i++) {
 				self.draggables.push(self.trashes.t[i])
 			}
@@ -1448,6 +1459,7 @@ function Arena(arenaName, model) {
 				self.plusCandidate.draw(self.ctx,self)
 				self.plusOneVoter.draw(self.ctx,self)
 				self.plusVoterGroup.draw(self.ctx,self)
+				self.plusXVoterGroup.draw(self.ctx,self)
 				self.trashes.t[0].draw(self.ctx,self)
 			}
 		}
