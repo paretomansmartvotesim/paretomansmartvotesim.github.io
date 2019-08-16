@@ -2649,9 +2649,13 @@ function Sandbox(modelName) {
         
         // make link string
         var getUrl = window.location;
-        var baseUrl = getUrl.protocol + "//" + getUrl.host; //http://ncase.me/ballot
+        var baseUrl = getUrl.protocol + "//" + getUrl.host; // http://ncase.me/
         var restofurl = getUrl.pathname.split('/')
-        for (var i=1; i < restofurl.length - 2; i++) {baseUrl += "/" + restofurl[i];}
+        for (var i=1; i < restofurl.length - 1; i++) { //  /ballot/
+            if (restofurl[i] != "sandbox") {
+                baseUrl += "/" + restofurl[i];
+            }
+        }
         if (tryNewURL) {
             var link = baseUrl + "/sandbox/?v=" + config.configversion + "&m="+uri;    
         } else {
