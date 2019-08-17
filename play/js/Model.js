@@ -1360,16 +1360,19 @@ function Arena(arenaName, model) {
 		if (self.id == "arena") {
 			setAnnotations()
 			// drawSortLines()
-			drawToolbar()
-			var flashydude = getFlashydude()
 			if (model.dimensions == "2D" || noClip) {
+				drawVoters1()
+				drawToolbar()
+				var flashydude = getFlashydude()
 				drawExtraTrash()
-				drawVoters()
+				drawVoters2()
 				drawCandidates()
 				drawVoterCenterAndAnotherYeeObject()
 				drawFlashydude()
 				drawWinners()
 			} else {
+				drawToolbar()
+				var flashydude = getFlashydude()
 				var flashyFirst = (flashydude && flashydude.isCandidate)
 				// startClip()
 				drawCandidates()
@@ -1377,8 +1380,9 @@ function Arena(arenaName, model) {
 				drawWinners()
 				// resetClip()
 				clipCandidates()
+				drawVoters1()
 				drawExtraTrash()
-				drawVoters()
+				drawVoters2()
 				if (!flashyFirst) drawFlashydude()
 				drawVoterCenterAndAnotherYeeObject()
 			}
@@ -1526,17 +1530,15 @@ function Arena(arenaName, model) {
 			}
 		}
 
-		function drawVoters() {
+		function drawVoters1() {
 			for(var i=0; i<model.voters.length; i++){
 				var voter = model.voters[i];
 				voter.draw1(self.ctx,self);
 			}
+		}
+		function drawVoters2() {
 			for(var i=0; i<model.voters.length; i++){
 				var voter = model.voters[i];
-				if (voter.highlight) {
-					var flashydude = voter
-					continue
-				}
 				voter.draw2(self.ctx,self);
 			}
 		}

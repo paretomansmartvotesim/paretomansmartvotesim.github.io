@@ -1520,7 +1520,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			}
 			self.points = points
 		}
-		if (model.dimensions == "1D+B" || model.dimensions == "1D") {
+		if (0 && (model.dimensions == "1D+B" || model.dimensions == "1D")) {
 
 			var build1 = false
 			var forward = true
