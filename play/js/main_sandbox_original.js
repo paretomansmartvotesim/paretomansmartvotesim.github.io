@@ -104,6 +104,7 @@ function main(preset){
 			for (var i=0; i<model.voters.length; i++) {
 				model.voters[i].init()
 			}
+			model.arena.redistrict()
 			model.update()
 		};
 
@@ -199,6 +200,7 @@ function main(preset){
 					model.voters[i].init()
 				}
 				// UPDATE
+        		model.arena.redistrict()
 				model.update()
 			};
 			self.configure = function() {
@@ -278,6 +280,7 @@ function main(preset){
 				}
 				model.initMODEL()
 				// UPDATE
+        		model.arena.redistrict()
 				model.update()
 			};
 			self.configure = function() {

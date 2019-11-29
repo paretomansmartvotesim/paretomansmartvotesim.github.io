@@ -1284,7 +1284,8 @@ function loadpreset(modelName) {
 			candidates: 5,
 			// dimensions:"1D",
 			dimensions:"2D",
-			system: "QuotaMinimax",
+			nDistricts:5,
+			system: "FPTP",
 			hidegearconfig: true,
 			configversion: 2.3
 		}

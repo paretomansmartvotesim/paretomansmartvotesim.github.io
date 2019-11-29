@@ -33,11 +33,12 @@ l.onload = function(assets){
 		model.voters[0].init()
 		model.election = Election.plurality;
 		model.optionsForElection =  {sidebar:true, original:true}
+		model.arena.redistrict()
 		// UPDATE
 		model.update()
 	};
 	model.onUpdate = function(){
-		Election.plurality(model);
+		Election.plurality(model.district[0],model);
 	};
 
 	var resetDOM = document.createElement("div");

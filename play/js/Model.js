@@ -43,6 +43,7 @@ function Model(modelName){
 		median_mean: 1,
 		utility_shape: "linear",
 		dimensions: "2D",
+		nDistricts: 1,
         colorChooser: "pick and generate",
         colorSpace: "hsluv with dark",
 		arena_border: 2,
@@ -232,8 +233,58 @@ function Model(modelName){
 		}
 		if (selected.winners.length > 0) {
 			self.result = selected
+			if (self.doTop2) self.result.theTop2 = selected
 		} else {
-			self.result = self.election(self,self.optionsForElection);
+
+			if (self.nDistricts > 1) {
+				for (var i = 0; i < self.nDistricts; i++) {
+					if (self.district[i].candidates.length == 0) continue
+					self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
+				}
+
+				// put all the results together
+				self.result = {
+					winners: [],
+					colors: [],
+					color: [],
+					history: [],
+					eventsToAssign: [],
+					text: ''
+				}
+				if (self.doTop2) self.result.theTop2 = []
+				for (var i = 0; i < self.nDistricts; i++) {
+					self.result.text += "<br>"
+					self.result.text += "<br>"
+					self.result.text += "District " + (i+1)
+					self.result.text += "<br>"
+					if (self.district[i].candidates.length == 0) continue
+					self.result.text += self.district[i].result.text
+					self.result.winners = [].concat(self.result.winners , self.district[i].result.winners)
+					self.result.colors = [].concat(self.result.colors , self.district[i].result.colors)
+					self.result.color = [].concat(self.result.color , self.district[i].result.color)
+					if (self.district[i].result.eventsToAssign) self.result.eventsToAssign = [].concat(self.result.eventsToAssign , self.district[i].result.eventsToAssign)
+					if (self.doTop2) self.result.theTop2 = [].concat(self.result.theTop2 , self.district[i].result.theTop2)
+				}
+				// for now, just give the history for the first district with candidates
+				for (var i = 0; i < self.nDistricts; i++) {
+					if (self.district[i].candidates.length > 0) {
+						self.result.history = self.district[i].result.history
+						break
+					}
+				}
+				
+				// for (var i = 0; i < self.nDistricts; i++) {
+				// 	self.result.history =[].concat(self.result.history , self.district[i].result.history)
+				// 	self.result.history.push =[].concat(self.result.history , self.district[i].result.history)
+				// }
+
+				// TODO: visualize many districts results in tarena
+				
+
+			} else {
+				self.result = self.election(self.district[0], self,self.optionsForElection);
+				self.district[0].result = self.result
+			}
 		}
 		
 		self.draw()
@@ -244,6 +295,7 @@ function Model(modelName){
 		publish(self.id+"-update");
 
 	};
+
 
 	self.updateFromModel = function() {} // hook
 
@@ -259,12 +311,28 @@ function Model(modelName){
 		//self.ctx.drawImage(background,0,0);
 		self.yee.drawBackground()
 		
-		_drawBars(self.tarena,self,self.round)
+		if ( ! self.tarena.canvas.hidden) {
+			if (self.nDistricts > 1) {
+				// TODO later
+				// for (var i = 0; i < self.nDistricts; i++) {
+				// 	if (self.district[i].candidates.length == 0) continue
+				// 	_drawBars(i,self.tarena,self,self.round)
+				// }
+			} else {
+				_drawBars(0,self.tarena,self,self.round)
+			}
+		}
 
 		if (self.dimensions == "1D+B") self.arena.drawHorizontal(self.arena.yDimOne + self.arena.yDimBuffer)
 		if (self.dimensions == "1D" && 0) {
 			self.arena.drawHorizontal(self.arena.yDimOne)
 			self.arena.drawHorizontal(self.size - self.arena.yDimOne)
+		}
+
+		if (self.dimensions == "2D") {
+			for (var i=0; i < self.district.length - 1; i++) {
+				self.arena.drawHorizontal(self.district[i].upperBound)
+			}
 		}
 		
 		self.arena.draw()
@@ -277,8 +345,12 @@ function Model(modelName){
 	self.drawSidebar = function () {		
 		if (self.result) {
 			if(self.result.text) {
-				if (self.result.dontredocaption != true) {
-					self.caption.innerHTML = self.result.text;
+				self.caption.innerHTML = self.result.text;
+				if (self.result.eventsToAssign) {
+					for (var i=0; i < self.result.eventsToAssign.length; i++) {
+						var e = self.result.eventsToAssign[i]
+						self.caption.querySelector("#" + e.eventID).addEventListener("mouseover", e.f)
+					}
 				}
 			}
 		}
@@ -397,6 +469,11 @@ function Model(modelName){
 	}
 	self.icon = function(id) {
 		return self.candidatesById[id].texticon_png
+	}
+	self.checkGotoTarena = function() { 
+		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
+		// right now, we don't have a good visual of these for multiple districts, just one
+		return (self.nDistricts < 2) && (self.system == "QuotaApproval" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV")
 	}
 };
 
@@ -1116,9 +1193,16 @@ function Arena(arenaName, model) {
 				if (d.isCandidate) {
 					d.b = n.b
 					d.update()
+					self.candidatePicksDistrict(d)
+					self.districtsListCandidates()
 				}
 				if (d.isVoter) {
 					self.pileVoters()
+					self.redistrict()
+				}
+				if (d.isVoterCenter) {
+					d.drag()
+					self.redistrict()
 				}
 			} else {
 				var p = d.newArenaPosition(self.mouse.x,self.mouse.y);
@@ -1133,6 +1217,7 @@ function Arena(arenaName, model) {
 					d.o.group_count = length * d.scale
 					d.o.init()
 					self.pileVoters()
+					self.redistrict()
 					model.updateFromModel()
 				}
 			} else if (d.isRight) {
@@ -1143,6 +1228,7 @@ function Arena(arenaName, model) {
 					d.o.group_spread = length * d.scale
 					d.o.init()
 					self.pileVoters()
+					self.redistrict()
 					model.updateFromModel()
 				} else if (d.o.isCandidate) {
 					d.o.size = length * d.sizeScale
@@ -1327,6 +1413,141 @@ function Arena(arenaName, model) {
 				}
 				
 			}
+		}
+	}
+
+	self.redistrict = function() {
+		// calculate district lines
+
+		// create data structure
+		model.district = []
+		for (var i = 0; i < model.nDistricts; i++) {
+			model.district[i] = {
+				voters: [],
+				candidates: [],
+				i: i
+			}
+		}
+
+		// list voters
+		// The district contains information about where to find the voters in the groups AKA model.voters[]
+		var vs = []
+		var j = 0
+		for (var i = 0; i < model.voters.length; i++) {
+			var voterGroup = model.voters[i]
+			var points = voterGroup.points
+			var yGroup = voterGroup.y
+			for (var k = 0; k < points.length; k++) {
+				var v = {
+					iGroup: i,
+					iAll: j,
+					iPoint: k,
+					y: points[k][1] + yGroup
+				}
+				j++
+				vs.push(v)
+			}
+		}
+
+		// sort voters
+		vs.sort(function(a,b){return a.y - b.y})
+
+		// make equal assignments
+		var totalVoters = vs.length
+		var factor = model.nDistricts / totalVoters
+		var oldDistrict = 0
+		var oldy = 0
+		var firsty = [0]
+		var lasty = []
+		model.indexOfSortedVoterInDistrict = []
+		for (var i = 0; i < vs.length; i++) {
+			var v = vs[i]
+
+			// assign
+			var d =  Math.floor(i * factor)
+			v.district = d
+			
+			// fill district[] with info on voters.
+			model.district[d].voters.push(v)
+			model.indexOfSortedVoterInDistrict[i] = model.district[d].voters.length 
+
+			// fill district borders for use with candidates
+			if (oldDistrict != d) {
+				oldDistrict =  d
+				firsty.push(v.y)
+				lasty.push(v.y)
+			}
+			oldy = v.y
+		}
+		lasty.push(oldy)
+
+		var borders = []
+		for (var i = 0; i < model.nDistricts - 1; i++) {
+			var middle = ( firsty[i+1] + lasty[i] ) * .5
+			borders.push(middle)
+		}
+		for (var i = 0; i < model.nDistricts; i++) {
+			if (i == 0) {
+				model.district[i].lowerBound = -Infinity
+			} else {
+				model.district[i].lowerBound = borders[i-1]
+			}
+			if (i == model.nDistricts - 1) {
+				model.district[i].upperBound = Infinity
+			} else {
+				model.district[i].upperBound = borders[i]
+			}
+		}
+		// put voters into new districts
+		for (var i = 0; i < model.voters.length; i++) {
+			model.voters[i].district = []
+		}
+		for (var i = 0; i < vs.length; i++) {
+			var v = vs[i]
+			model.voters[v.iGroup].district[v.iPoint] = v.district
+		}
+
+		// fill candidates with info on district.
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i]
+			self.candidatePicksDistrict(c)
+		}
+
+		// fill district[] with info on candidates.
+		self.districtsListCandidates()
+		
+	}
+
+	self.candidatePicksDistrict = function(c) {
+		// put candidate into correct district
+		for (var i = 0; i < model.nDistricts; i++) {
+			var uB = model.district[i].upperBound
+			if (c.y < uB) {
+				c.district = i
+				break
+			}
+		}
+	}
+	self.districtsListCandidates = function() {
+		// fill district[] with info on candidates.
+		// reset
+		for (var i = 0; i < model.nDistricts; i++) {
+			model.district[i].candidates = []
+			model.district[i].candidatesById = {}
+			model.district[i].preFrontrunnerIds = []
+		}
+		// assign candidates to districts' lists
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i]
+			model.district[c.district].candidates.push(c)
+			model.district[c.district].candidatesById[c.id] = c
+		}
+
+		// assign frontrunners to districts' lists
+		for(var i=0; i<model.preFrontrunnerIds.length; i++){
+			var cid = model.preFrontrunnerIds[i]
+			var c = model.candidatesById[cid]
+			model.district[c.district].preFrontrunnerIds.push(cid)
 		}
 	}
 
@@ -1639,5 +1860,4 @@ function Arena(arenaName, model) {
 			}
 		}
 	}
-
 }

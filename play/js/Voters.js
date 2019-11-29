@@ -20,7 +20,7 @@ function ScoreVoter(model){
 	}
 	
 
-	self.getBallot = function(x, y, strategy){
+	self.getBallot = function(x, y, strategy, iDistrict){
 
 		doStar =  (model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
 		if (model.autoPoll == "Auto" && model.pollResults) {
@@ -37,9 +37,10 @@ function ScoreVoter(model){
 				if (tally[can] > threshold) viable.push(can)
 			}
 		} else {
-			viable = model.preFrontrunnerIds
+			viable = model.district[iDistrict].preFrontrunnerIds
 		}
-		var scoresfirstlast = dostrategy(model,x,y,self.minscore,self.maxscore,strategy,viable,model.candidates,self.defaultMax,doStar,model.utility_shape)
+		var cans = model.district[iDistrict].candidates
+		var scoresfirstlast = dostrategy(model,x,y,self.minscore,self.maxscore,strategy,viable,cans,self.defaultMax,doStar,model.utility_shape)
 		
 		self.radiusFirst = scoresfirstlast.radiusFirst
 		self.radiusLast = scoresfirstlast.radiusLast
@@ -106,6 +107,7 @@ function ScoreVoter(model){
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i];
 			var cID = c.id;
+			if (ballot[cID] == undefined) continue
 			var score = ballot[cID] - self.minscore;
 			leftover -= score;
 			slices.push({
@@ -542,14 +544,15 @@ function ApprovalVoter(model){
 	self.defaultMax = 200 // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.subGetBallot = self.getBallot
-	self.getBallot = function(x, y, strategy){
+	self.getBallot = function(x, y, strategy, iDistrict){
 		
-		var scores = self.subGetBallot(x,y,strategy)
+		var scores = self.subGetBallot(x,y,strategy, iDistrict)
 
 		// Anyone close enough. If anyone.
 		var approved = [];
-		for(var i=0; i<model.candidates.length; i++){
-			var c = model.candidates[i];
+		var cans = model.district[iDistrict].candidates
+		for(var j=0;j<cans.length;j++){
+			var c = cans[j];
 			if(scores[c.id] == 1){
 				approved.push(c.id);
 			}
@@ -728,12 +731,14 @@ function RankedVoter(model){
 	var self = this;
 	GeneralVoter.call(self,model)
 	
-	self.getBallot = function(x, y, strategy){
+	self.getBallot = function(x, y, strategy, iDistrict){
 
 		// Rank the peeps I'm closest to...
 		var rank = [];
-		for(var i=0;i<model.candidates.length;i++){
-			rank.push(model.candidates[i].id);
+		var cans = model.district[iDistrict].candidates
+		for(var j=0;j<cans.length;j++){
+			var c = cans[j];
+			rank.push(c.id);
 		}
 		rank = rank.sort(function(a,b){
 
@@ -871,19 +876,20 @@ function RankedVoter(model){
 			var regularLine = false
 
 			var rankByCandidate = []
+			var cans = []
 			for(var i=0; i<ballot.rank.length; i++){
 				var rank = ballot.rank[i];
 				var c = model.candidatesById[rank];
+				cans.push(c)
 				rankByCandidate[c.i] = i
 			}
-
-			for(var i = 0; i < model.candidates.length; i++) {
+			for(var i = 0; i < cans.length; i++) {
 				for (var k = 0; k < i; k++) {
-					var c1 = model.arena.modelToArena(model.candidates[i])
-					c1.fill = model.candidates[i].fill
-					var c2 = model.arena.modelToArena(model.candidates[k])
-					c2.fill = model.candidates[k].fill
-					var win = rankByCandidate[k] > rankByCandidate[i]
+					var c1 = model.arena.modelToArena(cans[i])
+					c1.fill = cans[i].fill
+					var c2 = model.arena.modelToArena(cans[k])
+					c2.fill = cans[k].fill
+					var win = rankByCandidate[cans[k].i] > rankByCandidate[cans[i].i]
 						
 					if (connectCandidates) {
 						ctx.setLineDash([5, 45]);
@@ -991,7 +997,10 @@ function RankedVoter(model){
 		if (typeof weight === 'undefined') weight = 1
 		var slices = [];
 		var n = ballot.rank.length;
-		if (n==2) {
+		if (n==0) {
+			var totalSlices = 1
+			slices.push({ num:1, fill:"#bbb" })
+		} else if(n==2) {
 			var totalSlices = 1
 			var rank = ballot.rank[0];
 			var candidate = model.candidatesById[rank];
@@ -1206,7 +1215,7 @@ function PluralityVoter(model){
 
 	self.maxscore = 1; // just for autopoll
 
-	self.getBallot = function(x, y, strategy){
+	self.getBallot = function(x, y, strategy, iDistrict){
 
 		if (model.autoPoll == "Auto" && model.pollResults) {
 			// if (model.autoPoll == "Auto" && (typeof model.pollResults !== 'undefined')) {
@@ -1223,7 +1232,7 @@ function PluralityVoter(model){
 				if (tally[can] > threshold) viable.push(can)
 			}
 		} else {
-			var viable = model.preFrontrunnerIds
+			viable = model.district[iDistrict].preFrontrunnerIds
 		}
 
 		// Who am I closest to? Use their fill
@@ -1231,10 +1240,11 @@ function PluralityVoter(model){
 		
 		if (model.election == Election.pluralityWithPrimary) checkOnlyFrontrunners = false // workaround
 		
-		var closest = null;
+		var closest = {id:null};
 		var closestDistance = Infinity;
-		for(var j=0;j<model.candidates.length;j++){
-			var c = model.candidates[j];
+		var cans = model.district[iDistrict].candidates
+		for(var j=0;j<cans.length;j++){
+			var c = cans[j];
 			if(checkOnlyFrontrunners && ! viable.includes(c.id)  ) {
 				continue // skip this candidate because he isn't one of the 2 or more frontrunners, so we can't vote for him
 			}
@@ -1244,7 +1254,6 @@ function PluralityVoter(model){
 				closest = c;
 			}
 		}
-
 		// Vote for the CLOSEST
 		return { vote:closest.id };
 
@@ -1278,7 +1287,12 @@ function PluralityVoter(model){
 		y = y*2;
 
 		// What fill?
-		var fill = model.candidatesById[ballot.vote].fill;
+		if (ballot.vote == null) {
+			var fill = '#bbb'
+			// return
+		} else {
+			var fill = model.candidatesById[ballot.vote].fill;
+		}
 		ctx.fillStyle = fill;
 		ctx.strokeStyle = 'rgb(0,0,0)';
 		ctx.lineWidth = 1; // border
@@ -1650,8 +1664,8 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			// choose the threshold of voters for polls
 			var r_11 = Math.random() * 2 - 1 
 			self.type.poll_threshold_factor = _erfinv(r_11) * .2 + .5
-
-			var ballot = self.type.getBallot(x, y, strategy);
+			var iDistrict = self.district[i]
+			var ballot = self.type.getBallot(x, y, strategy, iDistrict);
 			self.ballots.push(ballot);
 			self.weights.push(1);
 		}
@@ -1782,7 +1796,7 @@ function SingleVoter(model){
 	}
 	self.update = function(){
 		self.type.poll_threshold_factor = .6
-		self.ballot = self.type.getBallot(self.x, self.y, self.firstStrategy);
+		self.ballot = self.type.getBallot(self.x, self.y, self.firstStrategy, self.district);
 		self.ballots = [self.ballot]
 	};
 
@@ -1992,17 +2006,16 @@ function VoterCenter(model){
 	}
 	self.update = function() {// do the center voter thing
 		// UPDATE
-		if(model.arena.mouse.dragging == self || model.tarena.mouse.dragging == self) {
-			var oldcenter = self.findVoterCenter()
-			var changecenter = {x:self.x - oldcenter.x, y:self.y - oldcenter.y}
-			for(var i=0; i<model.voters.length; i++){
-				model.voters[i].x += changecenter.x
-				model.voters[i].y += changecenter.y
-			}
-		} else {
-			var recenter = self.findVoterCenter()
-			self.x = recenter.x
-			self.y = recenter.y
+		var recenter = self.findVoterCenter()
+		self.x = recenter.x
+		self.y = recenter.y
+	}
+	self.drag = function() {
+		var oldcenter = self.findVoterCenter()
+		var changecenter = {x:self.x - oldcenter.x, y:self.y - oldcenter.y}
+		for(var i=0; i<model.voters.length; i++){
+			model.voters[i].x += changecenter.x
+			model.voters[i].y += changecenter.y
 		}
 	}
 

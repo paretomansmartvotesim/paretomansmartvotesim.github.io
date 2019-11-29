@@ -58,6 +58,7 @@ function Sandbox(modelName) {
         theme: "Default",
         utility_shape: "linear",
         dimensions: "2D",
+        nDistricts: 1,
         colorChooser: "pick and generate",
         colorSpace: "hsluv with dark",
         arena_border: 2,
@@ -71,7 +72,7 @@ function Sandbox(modelName) {
         computeMethod: "ez",
         pixelsize: 60,
         optionsForElection: {sidebar:true}, // sandboxes have this default
-        featurelist: ["systems","dimensions","nVoterGroups","firstStrategy","doTwoStrategies","yee","gearicon"]
+        featurelist: ["systems","dimensions","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","gearicon"]
     }
     self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
@@ -203,7 +204,7 @@ function Sandbox(modelName) {
                             config.sandboxsave = true
                             return ["systems","voters","candidates"] 	}	}	}
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
-            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions"])
+            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts"])
             // clear the grandfathered config settings
             delete config.doPercentFirst
             delete config.features
@@ -215,6 +216,7 @@ function Sandbox(modelName) {
                 var menuNameTranslator = {
                     "systems":"systems",
                     "dimensions":"dimensions",
+                    "nDistricts":"nDistricts",
                     "voters":"nVoterGroups",
                     "nVoterGroups":"nVoterGroups",
                     "candidates":"nCandidates",
@@ -371,6 +373,7 @@ function Sandbox(modelName) {
             model.voters[i].init()
         }
         model.arena.pileVoters()
+        model.arena.redistrict()
 		// INIT (menu)
 		ui.menu.presetconfig.init_sandbox()
 		ui.menu.gearicon.init_sandbox()
@@ -616,16 +619,16 @@ function Sandbox(modelName) {
             var s = self.listByName()
             model.election = s.election
             model.system = config.system;
-            var multiWinnerSystem = ( config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" )
+            var doTarena = model.checkGotoTarena()
             if (autoSwitchDim) {
-                if (multiWinnerSystem) {
+                if (doTarena) {
                     model.dimensions = "1D+B"
                 } else {
                     model.dimensions = "2D"
                 }
             }
             
-            if (multiWinnerSystem) {
+            if (doTarena) {
                 model.tarena.canvas.hidden = false
             } else {
                 model.tarena.canvas.hidden = true
@@ -739,6 +742,7 @@ function Sandbox(modelName) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
+            model.arena.redistrict()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
@@ -756,6 +760,51 @@ function Sandbox(modelName) {
         self.choose = new ButtonGroup({
             label: "Arena Dimensions:",
             width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        basediv.querySelector("#left").appendChild(self.choose.dom);
+    }
+
+    ui.menu.nDistricts = new function () {
+        var self = this
+        // self.name = nDistricts
+        self.list = [
+            {name:"1",margin:4},
+            {name:"2",margin:4},
+            {name:"3",margin:4},
+            {name:"4",margin:4},
+            {name:"5",margin:4},
+            {name:"6",margin:4},
+            {name:"7",margin:4},
+            {name:"8",margin:4},
+            {name:"9",margin:4},
+            {name:"10"}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.nDistricts = Number(data.name)
+            // CONFIGURE
+            self.configure()
+            // INIT
+            model.arena.redistrict()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.nDistricts = config.nDistricts
+            if (model.checkGotoTarena()) { // TODO: make a visualization for more than 1 district
+                model.tarena.canvas.hidden = false
+            } else {
+                model.tarena.canvas.hidden = true
+            }
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.nDistricts);
+        }
+        self.choose = new ButtonGroup({
+            label: "Number of Districts:",
+            width: 18,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -891,6 +940,7 @@ function Sandbox(modelName) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
+            model.arena.redistrict()
             // UPDATE
             model.update()
             menu_update()
@@ -1020,6 +1070,7 @@ function Sandbox(modelName) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
+            model.arena.redistrict()
             // UPDATE
             model.update()
             menu_update()
@@ -1607,6 +1658,7 @@ function Sandbox(modelName) {
             // CONFIGURE
             self.configure()
             // UPDATE
+            model.arena.districtsListCandidates()
             model.update();
         };
         self.configure = function() {
@@ -1641,18 +1693,18 @@ function Sandbox(modelName) {
             if (data.name == "Poll") { // get last poll
                 var won = model.result.winners
             } else { // do new poll
-                model.dotop2 = true // not yet implemented
+                model.doTop2 = true
                 model.update()
-                model.dotop2 = false
-                var won = model.top2
-                model.top2 = []
+                model.doTop2 = false
+                var won = model.result.theTop2
             }
-            // SHOW CALCULATIONS //
-            ui.menu.frontrunners.choose.highlight("realname", won);
             // UPDATE CONFIG //
             config.preFrontrunnerIds = won
+            // UPDATE MENU //
+            ui.menu.frontrunners.select()
             // CONFIGURE AND UPDATE MODEL //
-            model.preFrontrunnerIds = config.preFrontrunnerIds // no need to run this at model init
+            ui.menu.frontrunners.configure()
+            model.arena.districtsListCandidates()
             model.update();
         };
         self.choose = new ButtonGroup({
@@ -1834,6 +1886,7 @@ function Sandbox(modelName) {
         }]
         self.codebook[1] = _jcopy(self.codebook[0])
         self.codebook[1].decode.push("seats")
+        self.codebook[1].decode.push("nDistricts")
         self.codebook[1].decodeVersion = 2.4
         self.onChoose = function(data){
             // LOAD INPUT
@@ -2134,6 +2187,7 @@ function Sandbox(modelName) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
+            model.arena.redistrict()
             // UPDATE
             model.update()
         };
@@ -2196,6 +2250,7 @@ function Sandbox(modelName) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
+            model.arena.redistrict()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
@@ -2725,7 +2780,8 @@ function Sandbox(modelName) {
         "voterGroupSnowman",
         "voterGroupDisk",
         "seats",
-        "candidateB"
+        "candidateB",
+        "nDistricts"
     ] // add more on to the end
     var decode = decodeFields
     var encode = {}

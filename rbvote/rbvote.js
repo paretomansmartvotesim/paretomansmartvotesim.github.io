@@ -2626,7 +2626,7 @@ function readvotes()
 }
 
 
-function readballots(ballots,model)
+function readballots(ballots,district,model)
 {
    var absent, beat = new Array(), i, ignoreinput, j, k, l, nextcand, rating = new Array(), regexp = new RegExp(), rvotecomment, rvoteinput,
        rvoteline = new Array(), tiebreakinput;
@@ -2638,8 +2638,8 @@ function readballots(ballots,model)
    
    // convert candidate names to numbers
    
-   numtocand = Object.keys( (model.candidatesById))
-   numtoiconcand = Object.keys( (model.candidatesById)) .map(x => model.icon(x) )
+   numtocand = Object.keys( (district.candidatesById))
+   numtoiconcand = Object.keys( (district.candidatesById)) .map(x => model.icon(x) )
    candtonum = new Object();
    for (i in numtocand) candtonum[numtocand[i]] = i;
 

@@ -275,7 +275,28 @@ function Yee(model) {
 			for(var j=0; j<model.voters.length; j++){
 				model.voters[j].update();
 			}
-			var result = model.election(model, {sidebar:false});
+			if (model.nDistricts > 1) {
+
+
+				// put all the results together
+				result = {
+					colors: []
+				}
+				for (var k = 0; k < model.nDistricts; k++) {
+					if (model.district[k].candidates.length > 0) {
+						result_k = model.election( model.district[k], model, model.optionsForElection );
+						result.colors = [].concat(result.colors , result_k.colors)
+					}
+
+				}
+				if (result.colors.length > 1) {
+					result.color = "#ccc"
+				} else {
+					result.color = result.colors[0]
+				}
+			} else {
+				var result = model.election(model.district[0], model, {sidebar:false});
+			}
 
 
 			model.gridl.push(result.color);

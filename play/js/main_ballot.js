@@ -83,6 +83,7 @@ function main_ballot(preset){
 			model.candidates[2].init()
 			model.initMODEL()
 			model.voters[0].init()
+			model.arena.redistrict()
 			// UPDATE
 			model.update()
 		};

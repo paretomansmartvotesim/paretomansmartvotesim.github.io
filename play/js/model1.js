@@ -28,6 +28,7 @@ l.onload = function(assets){
     model.candidates[1].init()
     model.initMODEL()
     model.voters[0].init()
+    model.arena.redistrict()
     // UPDATE
     model.update()
   };
