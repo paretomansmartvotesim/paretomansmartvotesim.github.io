@@ -3,11 +3,14 @@ Math.TAU = Math.PI*2;
 
 
 function _drawStroked(text, x, y, textsize, ctx) {
+	_drawStrokedColor(text, x, y, textsize, 'white', ctx)
+}
+function _drawStrokedColor(text, x, y, textsize,color, ctx) {
 	ctx.font = textsize + "px Sans-serif"
 	ctx.strokeStyle = 'black';
 	ctx.lineWidth = 4;
 	ctx.strokeText(text, x, y);
-	ctx.fillStyle = 'white';
+	ctx.fillStyle = color;
 	ctx.fillText(text, x, y);
 }
 
@@ -78,6 +81,22 @@ function _convertImageToDataURLviaCanvas(img, outputFormat){
 	return dataURL
 }
 
+function _convertLetterToDataURLviaCanvas(letter,color, outputFormat){
+	var canvas = document.createElement('CANVAS');
+	var ctx = canvas.getContext('2d');
+	canvas.height = 40;
+	canvas.width = 40;
+	ctx.textAlign = "center"
+	_drawStrokedColor(letter,20,35,40,color,ctx);
+	// _drawStrokedColor(letter,0,0,40,color,ctx);
+	// _drawStroked(letter,20,20,40,ctx);
+	var dataURL = canvas.toDataURL(outputFormat);
+	canvas = null; 
+	return dataURL
+}
+
+
+
 function _convertSVGToDataURLviaCanvas(img, outputFormat){
 	var canvas = document.createElement('CANVAS');
 	var ctx = canvas.getContext('2d');
@@ -88,3 +107,4 @@ function _convertSVGToDataURLviaCanvas(img, outputFormat){
 	canvas = null; 
 	return dataURL
 }
+console.log('ding')

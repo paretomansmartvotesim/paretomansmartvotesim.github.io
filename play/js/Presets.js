@@ -1287,6 +1287,7 @@ function loadpreset(modelName) {
 			nDistricts:5,
 			system: "FPTP",
 			hidegearconfig: true,
+			theme:"Letters",
 			configversion: 2.3
 		}
 

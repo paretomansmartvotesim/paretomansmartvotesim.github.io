@@ -468,8 +468,22 @@ function Model(modelName){
 		}
 	}
 	self.icon = function(id) {
+		if (self.theme === 'Letters') {
+			var c = self.candidatesById[id]
+			return "<span class='letter' style='color:"+c.fill+";'>"+c.name.toUpperCase()+"</span>"
+		}
 		return self.candidatesById[id].texticon_png
 	}
+	
+	self.nameUpper = function(id) {
+		if (self.theme === 'Letters') {
+			var c = self.candidatesById[id]
+			// return "<span class='letterBig' style='color:"+c.fill+";'>"+c.name.toUpperCase()+"</span>"
+			return "<span class='letterBig';'>"+c.name.toUpperCase()+"</span>"
+		}
+		return self.candidatesById[id].name.toUpperCase()
+	}
+	
 	self.checkGotoTarena = function() { 
 		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
 		// right now, we don't have a good visual of these for multiple districts, just one

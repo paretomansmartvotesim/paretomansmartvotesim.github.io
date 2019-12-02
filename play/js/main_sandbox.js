@@ -2319,7 +2319,8 @@ function Sandbox(modelName) {
         self.list = [
             {name:"Default",realname:"Default",margin:4},
             {name:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
-            {name:"Bees",realname:"The Bee mode style for Unsplit."}
+            {name:"Bees",realname:"The Bee mode style for Unsplit."},
+            {name:"Letters",realname:"Use Letters for Candidates",margin:4}
         ]
 
         self.codebook = [
@@ -2329,7 +2330,8 @@ function Sandbox(modelName) {
                 decode: [
                     "Default",
                     "Nicky",
-                    "Bees"
+                    "Bees",
+                    "Letters"
                 ]
             }
         ]

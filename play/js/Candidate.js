@@ -37,6 +37,12 @@ function Candidate(model){
 		var charIndex = char.i
 		var serial = charIndex + (self.instance - 1) * chars.length
 		self.serial = serial
+		if (model.theme == "Letters") {
+			self.name = String.fromCharCode((serial % 26) + "A".charCodeAt(0));
+		} else {
+			self.name = self.icon
+		}
+
 		self.url = char.url
 		// var _graphics = Candidate.graphics[model.theme][self.icon];
 		// self.url = _graphics.img
@@ -47,7 +53,9 @@ function Candidate(model){
 			if (model.assets[self.url]) {
 				var asset = model.assets[self.url]
 			} else {
-				if (Loader) {
+				if (model.theme == "Letters") {
+					// skip
+				} else if (Loader) {
 					if (Loader.assets[self.url]) {
 						var asset = Loader.assets[self.url]
 					}
@@ -56,9 +64,13 @@ function Candidate(model){
 		}
 
 		// png or svg?
-		var ext = char.url.split('.').pop();
+		if (model.theme == "Letters") {
+			var ext = "NA"
+		} else {
+			var ext = char.url.split('.').pop();
+		}
 		self.ext = ext
-		if (ext != "svg") {
+		if (ext != "svg" &&  (model.theme != "Letters") ) {
 			// if we are using png's then we have to repeat the fill // TODO: fix
 			self.fill = char.fill
 		} else if (model.colorChooser == "pick and generate") {
@@ -108,6 +120,8 @@ function Candidate(model){
 					self.texticon = self.svg
 					model.update() // draw the UI.. maybe we don't need a whole bunch
 				})
+			} else if (model.theme == "Letters") {
+				makeLetterImage()
 			} else { 
 				self.srcImg = self.url
 				makeImg()
@@ -249,6 +263,24 @@ function Candidate(model){
 			return blob;
 		}
 		
+		function makeLetterImage() {
+			model.nLoading++
+			self.png_b64 = _convertLetterToDataURLviaCanvas(self.name,self.fill, '.png')
+			self.img = new Image()
+			self.img.src = self.png_b64 // base64 png
+			self.texticon_png = "<img src='"+self.img.src+"'/>"
+			self.img.onload = function () {
+				model.nLoading--
+				if (model.nLoading == 0) {
+					model.initMODEL()
+					// update the GUI
+					model.onAddCandidate()
+					
+					model.update() // now we have extra text for the model's output
+				}
+			}	
+		}
+	
 	}
 	
 	self.convertColor = function() {
@@ -386,6 +418,28 @@ Candidate.graphics = {
 		{
 			icon: "bob",
 			url: "play/img/orange_bee.png",
+			fill: "hsl(30,80%,70%)"
+		}
+	],
+	Letters: [
+		{
+			icon: "square",
+			fill: "hsl(240,80%,70%)"
+		},
+		{
+			icon: "triangle",
+			fill: "hsl(45,80%,70%)"
+		},
+		{
+			icon: "hexagon",
+			fill: "hsl(0,80%,70%)"
+		},
+		{
+			icon: "pentagon",
+			fill: "hsl(90,80%,70%)"
+		},
+		{
+			icon: "bob",
 			fill: "hsl(30,80%,70%)"
 		}
 	]

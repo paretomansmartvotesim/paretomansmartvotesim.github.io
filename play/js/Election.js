@@ -47,8 +47,8 @@ Election.score = function(district, model, options){
 			text += model.icon(winner)+" has the highest score, so...<br>";
 			text += "</span>";
 			text += "<br>";
-			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;
 		}
 
 		result.text = text;
@@ -131,8 +131,8 @@ Election.star = function(district, model, options){
 			text += "</span>";
 		}
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winners[0])+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winners[0])+"</b> WINS <br> <br>" + text;
 		result.text = text;
 
 	}
@@ -216,8 +216,8 @@ Election.three21 = function(district, model, options){
 		text += model.icon(finalists[0])+": "+_percentFormat(district, aWins)+"; "+model.icon(finalists[1]) +": "+_percentFormat(district, bWins)+", so...<br>";
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winners[0].toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winners[0])+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winners[0])+"</b> WINS <br> <br>" + text;
 		result.text = text;
 
 	}
@@ -267,8 +267,8 @@ Election.approval = function(district, model, options){
 		text += model.icon(winner)+" is most approved, so...<br>";
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;
 	}
 	result.text = text;
 	return result;
@@ -350,8 +350,8 @@ Election.condorcet = function(district, model, options){
 		text += model.icon(topWinner)+" beats all other candidates in one-on-one races.<br>";
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS <br> <br>" + text;
 	}else if (topWinners.length >= 2) {
 		for(var i=0; i<district.candidates.length; i++){
 			var c = district.candidates[i].id;
@@ -675,8 +675,8 @@ Election.schulze = function(district, model, options){ // Pairs of candidates ar
 		}
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+		text += "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS <br> <br>" + text;	
 	}
 	
 	// what's the loop?
@@ -950,8 +950,8 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 		}
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+		text += "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS <br> <br>" + text;	
 	} else {
 		text += "No Candidates <br>"
 	}
@@ -1173,8 +1173,8 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 		topWinner = topWinners[0]
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+		text += "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS <br> <br>" + text;	
 	} else {
 		text += "<br> No Candidates <br>"
 	}
@@ -1226,8 +1226,8 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	topWinner = topWinners[0]
 	text += "</span>";
 	text += "<br>";
-	text += "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS";
-	// text = "<b style='color:"+color+"'>"+topWinner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+	text += "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS";
+	// text = "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS <br> <br>" + text;	
 
 	result.text = text;
 
@@ -1330,8 +1330,8 @@ Election.rrv = function(district, model, options){
 			//text += model.icon(winner)+" has the highest score, so...";
 			text += "</span>";
 			text += "";
-			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>";
-			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;
+			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>";
+			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;
 			text += '</div>'
 		}
 	
@@ -1477,8 +1477,8 @@ Election.rav = function(district, model, options){
 			//text += model.icon(winner)+" has the highest score, so...";
 			text += "</span>";
 			text += "";
-			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>";
-			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;
+			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>";
+			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;
 			text += '</div>'
 		}
 	
@@ -1558,8 +1558,8 @@ Election.borda = function(district, model, options){
 		text += model.icon(winner)+" has the <i>highest</i> score, so...<br>";
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;
 	}
 	result.text = text;
 	return result;
@@ -1702,8 +1702,8 @@ Election.irv = function(district, model, options){
 		// END!
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;	
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;	
 	}
 
 	result.text = text;
@@ -1968,8 +1968,8 @@ Election.stv = function(district, model, options){
 			// END!
 			text += "</span>";
 			text += "<br>";
-			text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;	
+			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;	
 		}
 		text += '</div>'
 	
@@ -2308,8 +2308,8 @@ Election.quotaMinimax = function(district, model, options){
 			// END!
 			text += "</span>";
 			text += "<br>";
-			// text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-			// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br>" + text;	
+			// text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;	
 		}
 		text += '</div>'
 	
@@ -2529,8 +2529,8 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 		}
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;
 	} else {
 		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
@@ -2611,8 +2611,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 		}
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;
 	} else {
 		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
@@ -2660,7 +2660,7 @@ Election.plurality = function(district, model, options){
 		}
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
 		
 		result.text = text;
 		return result
@@ -2673,7 +2673,7 @@ Election.plurality = function(district, model, options){
 		}
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
 		
 		result.text = text;
 		return result
@@ -2695,8 +2695,8 @@ Election.plurality = function(district, model, options){
 		}
 		text += "</span>";
 		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		// text = "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS <br> <br>" + text;
+		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+		// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;
 	} else {
 		text += _tietext(model,winners);
 		// text = "<b>TIE</b> <br> <br>" + text;
