@@ -118,7 +118,8 @@ function Candidate(model){
 				downloadSVGandMakeImg( function() { 
 					// callback
 					self.texticon = self.svg
-					model.update() // draw the UI.. maybe we don't need a whole bunch
+					
+					if (! self.dummy) model.update() // draw the UI.. maybe we don't need a whole bunch
 				})
 			} else if (model.theme == "Letters") {
 				makeLetterImage()
@@ -231,8 +232,9 @@ function Candidate(model){
 						model.initMODEL()
 						// update the GUI
 						model.onAddCandidate()
-						
-						model.update() // now we have extra text for the model's output
+						model.arena.redistrict()
+
+						if (! self.dummy) model.update() // now we have extra text for the model's output
 					}
 				}
 			}
@@ -275,8 +277,9 @@ function Candidate(model){
 					model.initMODEL()
 					// update the GUI
 					model.onAddCandidate()
-					
-					model.update() // now we have extra text for the model's output
+					model.arena.redistrict()
+
+					if (! self.dummy) model.update() // now we have extra text for the model's output
 				}
 			}	
 		}

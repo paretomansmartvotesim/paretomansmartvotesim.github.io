@@ -1854,7 +1854,12 @@ function VoterCenter(model){
 	self.size = 30;
 	self.points = [[0,0]];
 	self.img = new Image();  // use the face
-	self.img.src = "play/img/voter_face.png";
+	var oldway
+	if (oldway) {
+		self.img.src = "play/img/voter_face.png";
+	} else {
+		self.img.src = "play/img/center.png";
+	}
 	self.findVoterCenter = function(){ // calculate the center of the voter groups
 		// UPDATE
 		var x = 0
@@ -2031,12 +2036,19 @@ function VoterCenter(model){
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		_drawBlank(model, ctx, s.x, s.y, size);
-		_drawRing(ctx,s.x,s.y,self.size)
-		
-		// Face!
-		size = size*2;
-		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		if (oldway) {
+			_drawBlank(model, ctx, s.x, s.y, size);
+			_drawRing(ctx,s.x,s.y,self.size)
+			
+			// Face!
+			size = size*2;
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+
+		} else {
+			size = size*2;
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+
+		}
 		self.drawAnnotation(x,y,ctx)
 
 		if(self.highlight) ctx.globalAlpha = temp

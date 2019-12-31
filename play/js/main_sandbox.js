@@ -1749,6 +1749,20 @@ function Sandbox(modelName) {
                     margin:4
                 })
             }
+            a.push({
+                name:"+",
+                realname:"Additional Candidate",
+                keyyee: "newcan",
+                kindayee:"newcan",
+                margin:4
+            })
+            a.push({
+                name:"B",
+                realname:"Beat Map.  Shows where a new candidate would get beat in a head-to-head match against another candidate.",
+                keyyee: "beatCircles",
+                kindayee:"beatCircles",
+                margin:4
+            })
             return a
         }
         self.onChoose = function(data){
@@ -1759,7 +1773,7 @@ function Sandbox(modelName) {
             var featureset = new Set(config.featurelist)
             for (var i in xlist){
                 var xi = xlist[i]
-                if (config.kindayee != undefined && config.kindayee != "off") {
+                if ((config.kindayee != undefined && config.kindayee != "off") || config.kindayee == "newcan" || config.kindayee == "beatCircles") {
                     featureset.add(xi)
                 } else {
                     featureset.delete(xi)

@@ -2,6 +2,10 @@
 function Yee(model) {
 	var self = this
 
+	// var colorNewCan = 'hsl(0,100%,100%)'
+	var colorNewCan = 'hsl(0,0%,0%)'
+	var colorNewCan = '#ccc'
+
 	self.calculate = function(){
 		var ctx = model.arena.ctx
 		// model.pixelsize= 30.0;
@@ -9,8 +13,137 @@ function Yee(model) {
 		var WIDTH = ctx.canvas.width;
 		var HEIGHT = ctx.canvas.height;
 		var doArrayWay = model.computeMethod != "ez"
-		var doB = (model.dimensions == "1D+B" && model.yeeobject.isCandidate)
+		var doB = (model.dimensions == "1D+B" && (model.kindayee == "newcan" || model.kindayee == "beatCircles" || (model.yeeobject && model.yeeobject.isCandidate)))
 		var winners
+
+		// if we are considering a potential candidate, then add it
+		var doNewCan = (model.kindayee == "newcan")
+		if (doNewCan) {
+			var newway = true
+			if (newway) {
+
+				model.yeeon = false
+				var doDummy = true
+				model.arena.plusCandidate.doPlus(doDummy)
+				model.yeeon = true
+				
+				model.initMODEL()
+				model.yeeobject = model.candidates[model.candidates.length - 1]
+				model.yeeobject.fill = colorNewCan
+
+				model.arena.redistrict()
+			} else {
+				var nc = new Candidate(model)
+				model.candidates.push(nc)
+				// CONFIGURE
+				// Object.assign( nc,{x:153, y: 95} )
+				// , icon:"newdude"
+				// INIT
+				nc.init()
+				nc.icon = "newdude"
+				model.initMODEL()
+				model.arena.redistrict()
+				// UPDATE
+				nc.fill = 'hsl(0,100%,100%)'
+				model.yeeobject = nc
+
+			}
+		} else if (model.kindayee == "beatCircles") {
+			// calculate medians
+
+			var median = function(values) {
+
+				values.sort( function(a,b) {return a - b;} );
+			
+				var half = Math.floor(values.length/2);
+			
+				if(values.length % 2)
+					return values[half];
+				else
+					return (values[half-1] + values[half]) / 2.0;
+			}
+			xvals = []
+			yvals = []
+			for(i=0; i<model.voters.length; i++){
+				voter = model.voters[i]
+				for(m=0; m<voter.points.length; m++) {
+					point = voter.points[m]
+					xvals.push(point[0]+voter.x)
+					yvals.push(point[1]+voter.y)
+				}
+			}
+			var xCenter = model.voterCenter.x
+			var yCenter = model.voterCenter.y
+			var medians = []
+			var angles = []
+			var xMedians = []
+			var yMedians = []
+			var xCenteredMedians = []
+			var yCenteredMedians = []
+
+			beatCircle = {}
+			beatCircle.x = {}
+			beatCircle.y = {}
+			for( var j = 0; j < model.candidates.length; j++) {
+				var can = model.candidates[j]
+				beatCircle.x[can.id] = []
+				beatCircle.y[can.id] = []
+			}
+
+			for (var angle = 0; angle <= 180; angle+= .5) {
+				angles.push(angle)
+				var angleR = angle * Math.PI / 180
+				var s = Math.sin(angleR)
+				var c = Math.cos(angleR)
+				var dot = []
+				for( var j = 0; j < xvals.length; j++) {
+					x = xvals[j]
+					y = yvals[j]
+					dot.push( c * x + s * y)
+				}
+				var m = median(dot)
+				medians.push(m)
+
+			// for (var i = 0; i < angles.length; i++) {
+				// calculate medians diagram
+				// median point 
+				var xMedian = m * c
+				var yMedian = m * s				
+				// perpendicular is (s, -c)
+				// project center along perpendicular (perp dot center)
+				var proj = s * xCenter - c * yCenter
+				// calculate change vector
+				var xChange = proj * s
+				var yChange = proj * -c
+				// add projected length to the median point
+				var xCenteredMedian = xMedian + xChange
+				var yCenteredMedian = yMedian + yChange
+				xMedians.push(xMedian)
+				yMedians.push(yMedian)
+				xCenteredMedians.push(xCenteredMedian)
+				yCenteredMedians.push(yCenteredMedian)
+
+				// calculate beat circles
+				for( var j = 0; j < model.candidates.length; j++) {
+					var can = model.candidates[j]
+					if (0) {
+						var xMove = (m * c - can.x) * 2 
+						var yMove = (m * c - can.y) * 2 
+					} else {
+						var canProj = c * can.x + s * can.y
+						var xMove = (m - canProj) * c * 2
+						var yMove = (m - canProj) * s * 2
+					}
+					beatCircle.x[can.id].push(can.x + xMove)
+					beatCircle.y[can.id].push(can.y + yMove)
+				}
+			}
+			model.beatCircle = beatCircle
+			return
+		}
+
+
+
 		if (doArrayWay) { // note that voterCenter is not yet implemented in the array way.  Only if "ez" is selected will the yee diagram work
 			// Also note that the broadness representation hasn't been added to this method yet.
 
@@ -315,6 +448,27 @@ function Yee(model) {
 				model.voters[i].y = voterso[i].y
 			}
 		}
+
+		
+		if (doNewCan) {
+			model.candidates.pop()
+			if (newway) {
+
+				model.initMODEL()
+			
+				// update the GUI
+				model.onAddCandidate()
+				model.arena.redistrict()
+				model.yeeobject = undefined
+			
+			} else {
+
+				model.arena.redistrict()
+				// UPDATE
+				// model.update()
+	
+			}
+		}
 	}
 	
 	self.winSeek = function(can) {
@@ -404,56 +558,91 @@ function Yee(model) {
 			var method_1 = (Election.stv == model.election) || (Election.rrv == model.election)  // two methods for filtering colors in the yee diagram
 			if (method_1) {
 				color_filter_yee = can_filter_yee.map(x => model.candidatesById[x].fill)
+				if (model.kindayee=='newcan') color_filter_yee.push(colorNewCan)
 			} else {
 				translate = {}
 				for(can in model.candidatesById) {
 					var colorcan = model.candidatesById[can].fill
 					translate[colorcan] = can_filter_yee.includes(can) ? colorcan : 'white'
 				}
+				if (model.kindayee=='newcan') translate[colorNewCan] = colorNewCan
 			}
 			var HEIGHT = ctx.canvas.height
-			for(var k=0;k<model.gridx.length;k++) {
-				var ca = model.gridl[k]
+			if (model.kindayee == "beatCircles") {
+				// draw the beatcircles
+				for (var i = 0; i < can_filter_yee.length; i++) {
+					var cid = can_filter_yee[i]
+					x = model.beatCircle.x[cid]
+					y = model.beatCircle.y[cid]
+					var bc = new Path2D()
+					
+					bc.moveTo(x[0]*2,y[0]*2)
+					for (var j=1; j < x.length; j++) {
+						bc.lineTo(x[j]*2,y[j]*2)
+					}
+					var fillCircle = true
+					if (fillCircle) {
+						bc.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+						ctx.globalAlpha = .3
+						ctx.fillStyle = model.candidatesById[cid].fill;
+						ctx.closePath()
+						ctx.fill(bc,"evenodd")
+						if (1) {
+							ctx.strokeStyle = model.candidatesById[cid].fill;
+							ctx.stroke(bc)
+						}
+					} else {
+						// ctx.lineWidth = 8;
+						ctx.strokeStyle = model.candidatesById[cid].fill;
+						ctx.stroke(bc)
+
+					}
+				}
+			} else {
 				
-				if (ca=="#ccc") { // make stripes instead of gray
-					var cb = model.gridb[k]
-					if (method_1) {
-						cb = cb.filter(function(x) {return color_filter_yee.includes(x)} )// filter the colors so that only the selected colors are displayed
-						if (cb.length == 0) cb = ['white']
-					} else {
-						cb = cb.map(x => translate[x])
-					}
-					var xb = model.gridx[k]-pixelsize*.5
-					var yb = model.gridy[k]-pixelsize*.5
-					var wb = pixelsize
-					var hb = pixelsize
-					var hh = pixelsize / 6; // height of stripe // used to be 5
-					var numstripes = pixelsize/hh
-					if (model.grid == "linear") numstripes = HEIGHT / hh
-					for (var j=0; j< numstripes; j++) {
-						ctx.fillStyle = cb[j % cb.length]
-						ctx.fillRect(xb,yb+j*hh,wb,hh);
-					}
-				} else {
-					if (method_1) {
-						if (color_filter_yee.includes(ca)) {
-							ctx.fillStyle = ca;
+				for(var k=0;k<model.gridx.length;k++) {
+					var ca = model.gridl[k]
+					
+					if (ca=="#ccc") { // make stripes instead of gray
+						var cb = model.gridb[k]
+						if (method_1) {
+							cb = cb.filter(function(x) {return color_filter_yee.includes(x)} )// filter the colors so that only the selected colors are displayed
+							if (cb.length == 0) cb = ['white']
 						} else {
-							ctx.fillStyle = 'white';
-						}	
+							cb = cb.map(x => translate[x])
+						}
+						var xb = model.gridx[k]-pixelsize*.5
+						var yb = model.gridy[k]-pixelsize*.5
+						var wb = pixelsize
+						var hb = pixelsize
+						var hh = pixelsize / 6; // height of stripe // used to be 5
+						var numstripes = pixelsize/hh
+						if (model.grid == "linear") numstripes = HEIGHT / hh
+						for (var j=0; j< numstripes; j++) {
+							ctx.fillStyle = cb[j % cb.length]
+							ctx.fillRect(xb,yb+j*hh,wb,hh);
+						}
 					} else {
-						ctx.fillStyle = translate[ca]
-					}
-					if (model.grid == "square") {
-						ctx.fillRect(model.gridx[k]-pixelsize*.5, model.gridy[k]-pixelsize*.5, pixelsize, pixelsize);
-					} else if (model.grid == "linear") {
-						ctx.fillRect(model.gridx[k]-pixelsize*.5, 0, pixelsize, HEIGHT);
-					} else {
-						// var size = pixelsize / Math.sqrt(3)
-						var size = pixelsize / 2
-						var x = model.gridx[k]
-						var y = model.gridy[k]
-						self.drawHexagon(x,y,size,ctx)
+						if (method_1) {
+							if (color_filter_yee.includes(ca)) {
+								ctx.fillStyle = ca;
+							} else {
+								ctx.fillStyle = 'white';
+							}	
+						} else {
+							ctx.fillStyle = translate[ca]
+						}
+						if (model.grid == "square") {
+							ctx.fillRect(model.gridx[k]-pixelsize*.5, model.gridy[k]-pixelsize*.5, pixelsize, pixelsize);
+						} else if (model.grid == "linear") {
+							ctx.fillRect(model.gridx[k]-pixelsize*.5, 0, pixelsize, HEIGHT);
+						} else {
+							// var size = pixelsize / Math.sqrt(3)
+							var size = pixelsize / 2
+							var x = model.gridx[k]
+							var y = model.gridy[k]
+							self.drawHexagon(x,y,size,ctx)
+						}
 					}
 				}
 			}
@@ -509,5 +698,17 @@ function Yee(model) {
 			ctx.fillRect(x-dot,y-dot,dot*2,dot*2);
 			ctx.globalAlpha = temp
 		}
+	}
+
+	self.calculateCondorcet = function(model) {
+		// condorcet guide
+
+		// calculate medians in all directions
+		// detail: even number
+		// detail: counterclockwise
+		
+		// calculate winner circle against each candidate
+		
+		// The data is a list of points that connect to form a circle.  This is calcualted per candidate.
 	}
 }

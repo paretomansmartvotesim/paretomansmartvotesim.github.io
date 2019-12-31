@@ -120,12 +120,18 @@ function Model(modelName){
 				return undefined
 			} else if (self.kindayee=="center") { 
 				return self.voterCenter
+			} else if (self.kindayee=="newcan") { 
+				return undefined
+			} else if (self.kindayee=="beatCircles") { 
+				return undefined
 			} else { // if yeeobject is not defined
 				return undefined
 			}
 		}
 		self.yeeobject = expYeeObject()
 		self.yeeon = (self.yeeobject != undefined) ? true : false
+		if (self.kindayee=="newcan") self.yeeon = true
+		if (self.kindayee=="beatCircles") self.yeeon = true
 		self.onInitModel()
 	}
 	self.onInitModel = function() {} // a hook for a caller
@@ -176,7 +182,7 @@ function Model(modelName){
 		}
 
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		if (self.yeeon && self.arena.mouse.dragging != self.yeeobject && self.tarena.mouse.dragging != self.yeeobject) {
+		if (self.yeeon && ((self.arena.mouse.dragging != self.yeeobject && self.tarena.mouse.dragging != self.yeeobject) || self.kindayee == 'newcan' || self.kindayee == 'beatCircles')) {
 			self.yee.calculate()
 		}
 		
@@ -588,7 +594,7 @@ function Arena(arenaName, model) {
 			}
 		};
 
-		self.doPlus = function() {
+		self.doPlus = function(doDummy) {
 			if (self.isPlusCandidate) {
 				// add candidate
 				var n = new Candidate(model)
@@ -615,6 +621,7 @@ function Arena(arenaName, model) {
 				}
 				n.icon = icon
 				n.instance = i
+				n.dummy = doDummy
 				model.candidates.push(n)
 					
 				// INIT
@@ -625,6 +632,7 @@ function Arena(arenaName, model) {
 					model.initMODEL()
 					// update the GUI
 					model.onAddCandidate()
+					model.arena.redistrict()
 				}
 				return n
 			} else if (self.isPlusOneVoter || self.isPlusVoterGroup || self.isPlusXVoterGroup) {
@@ -741,9 +749,19 @@ function Arena(arenaName, model) {
 				if (model.candidates[i] == d) {
 					// delete candidate
 					model.candidates.splice(i,1)
+					
 					break
 				}
 			}
+			for (var i=0; i < model.preFrontrunnerIds.length; i++) {
+				if (model.preFrontrunnerIds[i] == d.id) {
+					// delete candidate
+					model.preFrontrunnerIds.splice(i,1)
+					break
+				}
+			}
+			model.preFrontrunnerIds[i]
+
 			// find the voter in the list
 			for (var i=0; i < model.voters.length; i++) {
 				if (model.voters[i] == d) {
@@ -757,6 +775,7 @@ function Arena(arenaName, model) {
 			model.initMODEL()
 			// update the GUI
 			model.onAddCandidate()
+			model.arena.redistrict()
 
 			self.size = 20
 			return 
@@ -1020,6 +1039,7 @@ function Arena(arenaName, model) {
 			model.initMODEL()
 			// update the GUI
 			model.onAddCandidate()
+			model.arena.redistrict()
 			
 			model.update() // now we have extra text for the model's output
 		}

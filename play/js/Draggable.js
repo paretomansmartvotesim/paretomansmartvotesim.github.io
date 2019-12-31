@@ -150,7 +150,7 @@ function DraggableManager(arena,model){
 			// special case.. adding a candidate
 			if (d.istrash) return
 			if (d.isplus) {
-				n = d.doPlus() // plus stuff
+				n = d.doPlus(false) // plus stuff
 				d = n // switcheroo ... so the candidate pops out of the plus sign
 			}
 

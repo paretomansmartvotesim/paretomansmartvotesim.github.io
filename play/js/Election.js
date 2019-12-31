@@ -286,6 +286,10 @@ Election.condorcet = function(district, model, options){
 	var tally = {};
 	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
 
+	var beatsMe = {}
+	for(var candidateID in model.candidatesById) beatsMe[candidateID] = []
+
+
 	// For each combination... who's the better ranking?
 	for(var i=0; i<district.candidates.length-1; i++){
 		var a = district.candidates[i];
@@ -306,9 +310,10 @@ Election.condorcet = function(district, model, options){
 
 			// WINNER?
 			var winner = (aWins>bWins) ? a : b;
+			var loser = (aWins<=bWins) ? a : b;
 			if (aWins != bWins) {
 				tally[winner.id]++;
-
+				beatsMe[loser.id].push(winner.id)
 				// Text.
 				var by,to;
 				if(winner==a){
@@ -320,6 +325,8 @@ Election.condorcet = function(district, model, options){
 				}
 				text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+model.icon(winner.id)+" wins, "+_percentFormat(district, by)+" to "+_percentFormat(district, to)+"<br>";
 			} else { //tie
+				beatsMe[a.id].push(b.id)
+				beatsMe[b.id].push(a.id)
 				tally[a.id]++;
 				tally[b.id]++;
 				text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
@@ -335,8 +342,28 @@ Election.condorcet = function(district, model, options){
 			topWinners.push(id);
 		}
 	}
+
+	if (topWinners.length != 1) {
+		// ties
+
+		// sort list
+		var idSorted = Object.keys(tally).sort(function(x,y) {return -tally[x]+tally[y]}) // reverse?
+		var indexOfId = {}
+		for (var i = 0; i < idSorted.length; i++) indexOfId[idSorted[i]] = i
+		var divider = 1
+		for (var i = 0; i < divider; i++) {
+			var b = beatsMe[idSorted[i]]
+			for (var j = 0; j < b.length; j++) {
+				divider = Math.max(divider, indexOfId[b[j]] + 1)
+			}
+		}
+		topWinners = idSorted.slice(0,divider)
+	}
 	// probably it would be better to find the smith set but this is okay for now
-	topWinners = _countWinner(tally);
+	// topWinners = _countWinner(tally);
+	
+	
+
 	var result = _result(topWinners,model)
     var color = result.color
 	if (model.doTop2) var theTop2 = _sortTally(tally).slice(0,2)
@@ -2783,7 +2810,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			});
 
 			var options2 = {dontpoll:true, sidebar:true}
-			Election.irv(model,options2) // do an IRV election to find out who wins
+			Election.irv(district,model,options2) // do an IRV election to find out who wins
 			
 			/// Get really good polling results.
 			temp1 = model.pollResults // doing a poll without strategy.  not sure if this would work
