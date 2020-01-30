@@ -2622,6 +2622,19 @@ function Sandbox(modelName) {
     tinyLink.setAttribute("target", "_blank")
     tinyLink.setAttribute("class", "tinyURL")
 
+    var embed = false
+    var embedLink = document.createElement("span")
+    centerDiv.appendChild(embedLink)
+    embedLink.setAttribute("class", "tinyURL")
+    embedLink.setAttribute("style", "text-decoration: underline;")
+    embedLink.onclick = function(){
+        embed = ! embed
+        ui.arena.save.dom.onclick()
+    }
+
+
+
+
     ///////////////////////////
     ////// SAVE POSITION //////
     ///////////////////////////
@@ -2732,19 +2745,24 @@ function Sandbox(modelName) {
         } else {
             var link = baseUrl + "/sandbox/?m="+uri;
         }
-        
+        if (embed) {            
+		    linkText = '<iframe src="' + link + '" scrolling="yes" width="1000" height="600"></iframe>'
+        } else {
+            linkText = link
+        }
         
         var doTinyURL = true
         if (doTinyURL) {
             var goTiny='https://tinyurl.com/create.php?url='+encodeURIComponent(link)
             tinyLink.setAttribute("href",goTiny)
             tinyLink.innerHTML = `TinyURL<img src="play/img/external_link.svg">`
+            embedLink.innerHTML = "&lt;embed&gt;";
         }
         
         var savelink = basediv.querySelector("#savelink");
         savelink.value = "saving...";
         setTimeout(function(){
-            savelink.value = link;
+            savelink.value = linkText;
         },750);
 
     };
