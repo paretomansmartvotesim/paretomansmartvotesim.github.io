@@ -2740,10 +2740,15 @@ function Sandbox(modelName) {
                 baseUrl += "/" + restofurl[i];
             }
         }
-        if (tryNewURL) {
-            var link = baseUrl + "/sandbox/?v=" + config.configversion + "&m="+uri;    
+        if (embed) {            
+		    relativePath = "/sandbox/embedbox.html?v="
         } else {
-            var link = baseUrl + "/sandbox/?m="+uri;
+            relativePath = "/sandbox/?v="
+        }
+        if (tryNewURL) {
+            var link = baseUrl + relativePath + config.configversion + "&m="+uri;    
+        } else {
+            var link = baseUrl + relativePath + uri;
         }
         if (embed) {            
 		    linkText = '<iframe src="' + link + '" scrolling="yes" width="1000" height="600"></iframe>'
