@@ -865,6 +865,61 @@ function RankedVoter(model){
 			}
 			ctx.setLineDash([]);
 	
+		} else if (model.system == "Borda") {
+			
+			me = {x:x, y:y}
+			var meArena = model.arena.modelToArena(me)
+
+			var temp = ctx.globalAlpha
+			for(var i=0; i<ballot.rank.length; i++){
+	
+				// Line width
+				var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
+	
+				// To which candidate...
+				var rank = ballot.rank[i];
+				var c = model.candidatesById[rank];
+				var cc = model.arena.modelToArena(c)
+
+				dist = Math.sqrt((meArena.x - cc.x) ** 2 + (meArena.y - cc.y) ** 2 )
+				
+
+				ctx.beginPath();
+				ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
+				var invert = false
+				if (invert) {
+					ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+					ctx.closePath()
+				}
+
+				var doColors = false
+				if (doColors) {
+					ctx.fillStyle = c.fill
+				} else {
+					ctx.fillStyle = '#000'
+				}
+				ctx.strokeStyle = "#000";
+				
+				// ctx.setLineDash([]);
+
+				var doLines = true
+				if (doLines) {
+					ctx.globalAlpha = .01
+					ctx.stroke()
+				}
+				var doColors = true
+				if (doColors) {
+					ctx.globalAlpha = 1 / ballot.rank.length / model.voters.length
+				} else {
+					ctx.globalAlpha = .4 / ballot.rank.length / model.voters.length
+				}
+				if (invert) {
+					ctx.fill("evenodd")
+				} else {
+					ctx.fill()
+				}
+			}
+			ctx.globalAlpha = temp
 		} else {
 			// customization
 			var lineWidth = 1

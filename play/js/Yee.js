@@ -544,6 +544,8 @@ function Yee(model) {
 			var temp = ctx.globalAlpha
 			ctx.globalAlpha = 1
 			ctx.fillStyle = "#fff"
+			// ctx.fillStyle = "#ccc"
+			// ctx.fillStyle = "#333"
 			ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height)  // draw a white background
 			ctx.fill()
 			ctx.globalAlpha = .9
@@ -570,6 +572,16 @@ function Yee(model) {
 			var HEIGHT = ctx.canvas.height
 			if (model.kindayee == "beatCircles") {
 				// draw the beatcircles
+				var tempComposite = ctx.globalCompositeOperation
+				ctx.globalCompositeOperation = "multiply"
+				// ctx.globalCompositeOperation = "screen"
+				// ctx.globalCompositeOperation = "overlay"
+				// ctx.globalCompositeOperation = "hue"
+				// ctx.globalCompositeOperation = "lighter"
+				// ctx.globalCompositeOperation = "darker" // compatibility issues
+				// ctx.globalCompositeOperation = "lighten"
+				// ctx.globalCompositeOperation = "darken"
+				
 				for (var i = 0; i < can_filter_yee.length; i++) {
 					var cid = can_filter_yee[i]
 					x = model.beatCircle.x[cid]
@@ -598,6 +610,7 @@ function Yee(model) {
 
 					}
 				}
+				ctx.globalCompositeOperation = tempComposite
 			} else {
 				
 				for(var k=0;k<model.gridx.length;k++) {
