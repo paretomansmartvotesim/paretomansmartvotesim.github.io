@@ -3,12 +3,12 @@ Math.TAU = Math.PI*2;
 
 
 function _drawStroked(text, x, y, textsize, ctx) {
-	_drawStrokedColor(text, x, y, textsize, 'white', ctx)
+	_drawStrokedColor(text, x, y, textsize, 4, 'white', ctx)
 }
-function _drawStrokedColor(text, x, y, textsize,color, ctx) {
+function _drawStrokedColor(text, x, y, textsize,lw, color, ctx) {
 	ctx.font = textsize + "px Sans-serif"
 	ctx.strokeStyle = 'black';
-	ctx.lineWidth = 4;
+	ctx.lineWidth = lw;
 	ctx.strokeText(text, x, y);
 	ctx.fillStyle = color;
 	ctx.fillText(text, x, y);
@@ -84,12 +84,17 @@ function _convertImageToDataURLviaCanvas(img, outputFormat){
 function _convertLetterToDataURLviaCanvas(letter,color, outputFormat){
 	var canvas = document.createElement('CANVAS');
 	var ctx = canvas.getContext('2d');
+	n = letter.length
 	canvas.height = 40;
-	canvas.width = 40;
+	canvas.width = 40 * n;
+	x = canvas.width / 2
 	ctx.textAlign = "center"
-	_drawStrokedColor(letter,20,35,40,color,ctx);
-	// _drawStrokedColor(letter,0,0,40,color,ctx);
-	// _drawStroked(letter,20,20,40,ctx);
+	if (n > 2) {
+		reduce = 1.5
+		_drawStrokedColor(letter,x,20 + 15 / reduce,40 / reduce,3,color,ctx);
+	} else {
+		_drawStrokedColor(letter,x,35,40,4,color,ctx);
+	}
 	var dataURL = canvas.toDataURL(outputFormat);
 	canvas = null; 
 	return dataURL

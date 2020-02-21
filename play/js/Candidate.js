@@ -37,12 +37,15 @@ function Candidate(model){
 		var charIndex = char.i
 		var serial = charIndex + (self.instance - 1) * chars.length
 		self.serial = serial
-		if (model.theme == "Letters") {
-			self.name = String.fromCharCode((serial % 26) + "A".charCodeAt(0));
+		if (model.customNames == "Yes" & serial < model.namelist.length & model.namelist[serial] != "") {
+			self.name = model.namelist[serial]
 		} else {
-			self.name = self.icon
+			if (model.theme == "Letters") {
+				self.name = String.fromCharCode((serial % 26) + "A".charCodeAt(0));
+			} else {
+				self.name = self.icon
+			}
 		}
-
 		self.url = char.url
 		// var _graphics = Candidate.graphics[model.theme][self.icon];
 		// self.url = _graphics.img
@@ -327,7 +330,12 @@ function Candidate(model){
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		if (model.customNames == "Yes") {
+			hsize = self.img.width / self.img.height * size
+			ctx.drawImage(self.img, x-hsize/2, y-size/2, hsize, size);
+		} else {
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		}
 		self.drawAnnotation(x,y,ctx)
 		if (self.selected) {
 			_drawStroked("SELECTED",x,y-5,40,ctx);			

@@ -886,13 +886,13 @@ function RankedVoter(model){
 
 				ctx.beginPath();
 				ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
-				var invert = false
+				var invert = false // CAN CHANGE
 				if (invert) {
 					ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
 					ctx.closePath()
 				}
 
-				var doColors = false
+				var doColors = false // CAN CHANGE
 				if (doColors) {
 					ctx.fillStyle = c.fill
 				} else {

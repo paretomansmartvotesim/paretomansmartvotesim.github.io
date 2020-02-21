@@ -19,6 +19,8 @@ function main_ballot(preset){
 	config.doStarStrategy = config.doStarStrategy || false
 	config.theme = config.theme || "Default"
 	config.dimensions = config.dimensions || "2D"
+	config.namelist = ""
+	config.customNames = "No"
 
 	// grandfather name for firstStrategy used only for main_ballot
 	if (config.strategy != undefined) config.firstStrategy = config.strategy
@@ -77,6 +79,8 @@ function main_ballot(preset){
 			model.doStarStrategy = config.doStarStrategy;
 			model.theme = config.theme
 			model.dimensions = config.dimensions
+			model.customNames = config.customNames
+			model.namelist = config.namelist.split("\n")
 			// INIT
 			model.candidates[0].init()
 			model.candidates[1].init()

@@ -49,6 +49,8 @@ function Sandbox(modelName) {
         rbsystem: "Tideman",
         seats: 3,
         numOfCandidates: 3,
+        customNames: "No",
+        namelist: "",
         numVoterGroups: 1,
         xNumVoterGroups: 4,
         nVoterGroupsRealName: "One Group",
@@ -57,6 +59,7 @@ function Sandbox(modelName) {
         median_mean: 1,
         theme: "Default",
         utility_shape: "linear",
+        votersAsCandidates: "no",
         dimensions: "2D",
         nDistricts: 1,
         colorChooser: "pick and generate",
@@ -72,7 +75,7 @@ function Sandbox(modelName) {
         computeMethod: "ez",
         pixelsize: 60,
         optionsForElection: {sidebar:true}, // sandboxes have this default
-        featurelist: ["systems","dimensions","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","gearicon"]
+        featurelist: ["systems","dimensions","customNames","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","gearicon"]
     }
     self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
@@ -204,7 +207,7 @@ function Sandbox(modelName) {
                             config.sandboxsave = true
                             return ["systems","voters","candidates"] 	}	}	}
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
-            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts"])
+            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","customNames"])
             // clear the grandfathered config settings
             delete config.doPercentFirst
             delete config.features
@@ -242,7 +245,8 @@ function Sandbox(modelName) {
                     "poll":"poll",
                     "autoPoll":"autoPoll",
                     "frontrunners":"frontrunners",
-                    "gearicon":"gearicon"
+                    "gearicon":"gearicon",
+                    "customNames":"customNames"
                     // "primaries":"primaries"
                 }
                 var temp_featurelist = []
@@ -1316,6 +1320,75 @@ function Sandbox(modelName) {
         ui.menu.nCandidates.select()
     }
 
+    
+    ui.menu.customNames = new function () {
+        var self = this
+        self.name = "customNames"
+        self.list = [
+            {name:"Yes",margin:4},
+            {name:"No"}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.customNames = data.name
+            // CONFIGURE
+            self.configure()
+            // INIT
+            for(var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            model.initMODEL()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.customNames = config.customNames
+            ui.menu.namelist.choose.dom.hidden = (model.customNames == "Yes") ? false : true
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.customNames);
+        }
+        self.choose = new ButtonGroup({
+            label: "Customize Candidates' Names?",
+            width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        basediv.querySelector("#left").appendChild(self.choose.dom);
+    }
+
+    
+    ui.menu.namelist = new function () {
+        var self = this
+        self.name = "namelist"
+        self.onChoose = function(){
+            // LOAD
+            config.namelist = self.choose.dom.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            for(var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            model.initMODEL()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.namelist = config.namelist.split("\n")
+        }
+        self.select = function() {
+            self.choose.dom.value = config.namelist
+        }
+        self.choose = {
+            dom: document.createElement("textarea")
+        }
+        self.choose.dom.addEventListener("input",self.onChoose)
+        basediv.querySelector("#left").appendChild(self.choose.dom);
+    }
+
+    
+
     ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
         var self = this
         self.name = "firstStrategy"
@@ -1879,7 +1952,8 @@ function Sandbox(modelName) {
         self.codebook = [{
             decode: ["systems",
                 "rbSystems",
-                "dimensions",
+                "customNames",
+                "namelist",
                 "nVoterGroups",
                 "xVoterGroups",
                 "group_count",
@@ -2443,6 +2517,47 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
+    ui.menu.votersAsCandidates = new function () {
+        var self = this
+        // self.name = utility_shape
+        self.list = [
+            {name:"yes",margin:4},
+            {name:"no"}
+        ]
+        // self.codebook = [
+        //     {
+        //         field: "votersAsCandidates",
+        //         decodeVersion: 2.4,
+        //         decode: [
+        //             "yes",
+        //             "no"
+        //         ]
+        //     }
+        // ]
+        self.onChoose = function(data){
+            // LOAD
+            config.votersAsCandidates = data.name
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.votersAsCandidates = config.votersAsCandidates
+        }
+        self.select = function() {
+            self.choose.highlight("name", config.votersAsCandidates);
+        }
+        self.choose = new ButtonGroup({
+            label: "Voters as Candidates:",
+            width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.choose.dom.hidden = true
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+    }
+
     ui.menu.gearicon = new function () {
         // gear button (combines with above)
         var self = this
@@ -2466,6 +2581,7 @@ function Sandbox(modelName) {
                 ui.menu.colorChooser,
                 ui.menu.colorSpace,
                 ui.menu.utility_shape,
+                ui.menu.votersAsCandidates,
                 ui.menu.gearoff
             ]
             if (turnOn) {
@@ -2820,7 +2936,10 @@ function Sandbox(modelName) {
         "voterGroupDisk",
         "seats",
         "candidateB",
-        "nDistricts"
+        "nDistricts",
+        "votersAsCandidates",
+        "customNames",
+        "namelist"
     ] // add more on to the end
     var decode = decodeFields
     var encode = {}
