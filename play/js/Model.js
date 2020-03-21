@@ -331,9 +331,9 @@ function Model(modelName){
 				// }
 			} else {
 				if (self.optionsForElection.sidebar) {
-				_drawBars(0,self.tarena,self,self.round)
+					_drawBars(0,self.tarena,self,self.round)
+				}
 			}
-		}
 		}
 
 		if (self.dimensions == "1D+B") self.arena.drawHorizontal(self.arena.yDimOne + self.arena.yDimBuffer)
@@ -1692,6 +1692,7 @@ function Arena(arenaName, model) {
 				drawToolbar()
 				var flashydude = getFlashydude()
 				drawExtraTrash()
+				drawVotes()
 				drawVoters2()
 				drawCandidates()
 				drawVoterCenterAndAnotherYeeObject()
@@ -1709,6 +1710,7 @@ function Arena(arenaName, model) {
 				clipCandidates()
 				drawVoters1()
 				drawExtraTrash()
+				drawVotes()
 				drawVoters2()
 				if (!flashyFirst) drawFlashydude()
 				drawVoterCenterAndAnotherYeeObject()
@@ -1863,6 +1865,94 @@ function Arena(arenaName, model) {
 				voter.draw1(self.ctx,self);
 			}
 		}
+		function drawVotes() {
+			if (model.system == "IRV" && model.dimensions == "2D" && model.result) {
+				ctx = self.ctx
+				for (var k = 0; k < model.district.length; k++) {
+					result = model.district[k].result
+					drawIRV(result)
+				}
+			}
+		}
+		function drawIRV(result) {
+			var transfers = result.transfers
+			var topChoice = result.topChoice
+			var nBallots = result.nBallots
+
+			if (transfers.length == 0) return // edge case: everybody tied
+
+			for (var i = 0; i < transfers.length; i++) {
+				var from = model.candidatesById[transfers[i].from]
+				var flows = transfers[i].flows
+				for (var toID in flows) {
+					var f = flows[toID]
+					var to = model.candidatesById[toID]
+					drawTransfer(f,from,to,nBallots)
+				}
+			}
+
+			// make a list of voters first choices for the voters in the winning coalition
+			winner = result.winners[0]
+			coalition = {}
+			for (var i = 0; i < model.candidates.length; i++) {
+				coalition[model.candidates[i].id] = 0
+			}
+			for (var i = 0; i < topChoice[0].length; i++) {
+				penultimate = topChoice[topChoice.length-1][i]
+				first = topChoice[0][i]
+				if( penultimate == winner) {
+					coalition[first] ++
+				}
+			}
+			to = model.candidatesById[winner]
+			frac = .5
+			halfway = {}
+			halfway.x = from.x * frac + to.x * (1-frac)
+			halfway.y = from.y * frac + to.y * (1-frac)
+			drawTransfer(coalition,halfway,to,nBallots)
+
+		}
+		
+		function drawTransfer(flow,from,to,nBallots) {
+			var norm = 2.5 * nBallots / 135
+			var total = 0
+			for (var firstID in flow) {
+				var size = flow[firstID] / norm
+				total = total + size
+			}
+			sumsize = 0
+			for (var firstID in flow) {
+				var size = flow[firstID] / norm
+				var first = model.candidatesById[firstID]
+				if (size > 0) {
+					var x1 = from.x
+					var y1 = from.y
+					var x2 = to.x
+					var y2 = to.y
+					var dx = x2 - x1
+					var dy = y2 - y1
+					var length = Math.sqrt(dx**2 + dy**2)
+					var ux = dx / length
+					var uy = dy / length
+					
+					// amount to move by
+					move = total/2 - sumsize - size/2
+					x1 = x1 + uy * move
+					x2 = x2 + uy * move
+					y1 = y1 - ux * move
+					y2 = y2 - ux * move
+					
+					ctx.beginPath();
+					ctx.moveTo(x1*2,y1*2);
+					ctx.lineTo(x2*2,y2*2);
+					ctx.lineWidth = size*2;
+					ctx.strokeStyle = first.fill;
+					ctx.stroke();
+				}
+				sumsize = sumsize + size
+			}
+		}
+
 		function drawVoters2() {
 			for(var i=0; i<model.voters.length; i++){
 				var voter = model.voters[i];

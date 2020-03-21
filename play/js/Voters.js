@@ -836,35 +836,55 @@ function RankedVoter(model){
 			}
 	
 		} else if (model.system == "IRV") {
-			var old = {}
-			old.x = x
-			old.y = y
-			// DRAW 'EM LINES
-			for(var i=0; i<ballot.rank.length; i++){
-	
-				// Line width
-				var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
-	
-				// To which candidate...
-				var rank = ballot.rank[i];
-				var c = model.candidatesById[rank];
-				var cc = model.arena.modelToArena(c)
-				var next = {}
-				next.x = cc.x;
-				next.y = cc.y;
-	
-				// Draw
+			if (1) {
+				var candidate = model.candidatesById[ballot.rank[0]];
+		
+				// RETINA
+				x = x*2;
+				y = y*2;
+				var cc = model.arena.modelToArena(candidate)
+				var tx = cc.x*2;
+				var ty = cc.y*2;
+		
+				// DRAW - Line
 				ctx.beginPath();
-				ctx.moveTo(old.x*2,old.y*2);
-				ctx.lineTo(next.x*2,next.y*2);
-				ctx.lineWidth = lineWidth;
+				ctx.moveTo(x,y);
+				ctx.lineTo(tx,ty);
+				ctx.lineWidth = 8;
 				ctx.strokeStyle = "#888";
 				ctx.stroke();
-				old = next
-				ctx.setLineDash([5, 15]);
-			}
-			ctx.setLineDash([]);
-	
+		
+
+			} else {
+				var old = {}
+				old.x = x
+				old.y = y
+				// DRAW 'EM LINES
+				for(var i=0; i<ballot.rank.length; i++){
+		
+					// Line width
+					var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
+		
+					// To which candidate...
+					var rank = ballot.rank[i];
+					var c = model.candidatesById[rank];
+					var cc = model.arena.modelToArena(c)
+					var next = {}
+					next.x = cc.x;
+					next.y = cc.y;
+		
+					// Draw
+					ctx.beginPath();
+					ctx.moveTo(old.x*2,old.y*2);
+					ctx.lineTo(next.x*2,next.y*2);
+					ctx.lineWidth = lineWidth;
+					ctx.strokeStyle = "#888";
+					ctx.stroke();
+					old = next
+					ctx.setLineDash([5, 15]);
+				}
+				ctx.setLineDash([]);				
+			}	
 		} else if (model.system == "Borda") {
 			
 			me = {x:x, y:y}

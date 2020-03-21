@@ -1598,6 +1598,11 @@ Election.irv = function(district, model, options){
 	if (options.dontpoll) dopoll = false
 	if (dopoll) polltext = doPollAndUpdateBallots(district,model,options,"irv")
 
+	if (options.sidebar) var drawFlows = true
+	if (drawFlows) {
+		var transfers = []
+		var topChoice = []
+	}
 
 	var text = "";
 	if (options.sidebar) text += "<span class='small'>";
@@ -1607,8 +1612,11 @@ Election.irv = function(district, model, options){
 	var roundNum = 1;
 
 	var candidates = [];
+	var startingCandidates = []
 	for(var i=0; i<district.candidates.length; i++){
-		candidates.push(district.candidates[i].id);
+		var cid = district.candidates[i].id
+		candidates.push(cid);
+		startingCandidates.push(cid)
 	}
 	var loserslist = []
 
@@ -1658,7 +1666,15 @@ Election.irv = function(district, model, options){
 		var winners = _countWinner(tally);
 		var winner = winners[0];
 		var ratio = tally[winner] / district.voters.length;
-		if(ratio>0.5){
+		var option100 = true
+		if (option100) {
+			if (candidates.length == 1) {
+				resolved = "done";
+				if (options.sidebar) text += model.icon(winner)+" is the last candidate standing<br>";
+				break;
+			}
+			
+		} else if(ratio>0.5){
 			if (winners.length >= 2) {	// won't happen bc ratio > .5	
 				resolved = "tie"; 
 				break;
@@ -1671,6 +1687,10 @@ Election.irv = function(district, model, options){
 		// Otherwise... runoff...
 		var losers = _countLoser(tally);
 		var loser = losers[0];
+		if (model.breakTies && losers.length > 1) {
+			loser = losers[Math.floor(losers.length * Math.random())]
+			losers = [loser]
+		}
 		if (losers.length >= candidates.length) {
 			resolved = "tie"; 
 			break;
@@ -1685,16 +1705,54 @@ Election.irv = function(district, model, options){
 			if (options.sidebar) text += "eliminate loser, "+model.icon(loser)+".<br>";
 			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
 			var ballots = _getBallots(district, model);
-			for(var i=0; i<ballots.length; i++){
-				var rank = ballots[i].rank;
-				rank.splice(rank.indexOf(loser), 1); // REMOVE THE LOSER
+
+			if (drawFlows) {
+				topChoice[roundNum-1] = []
+				var check = []
 			}
-			// And repeat!
+
+			for(var i=0; i<ballots.length; i++){
+				var ranking = ballots[i].rank;
+				var loserIndex = ranking.indexOf(loser)
+
+				if (drawFlows) {
+					topChoice[roundNum-1][i] = ranking[0]
+					if (loserIndex == 0) {
+						// check the ballots that changed when calculating the transfer
+						check.push({i:i,roundNum:roundNum})
+					}
+				}
+				ranking.splice(loserIndex, 1); // REMOVE THE LOSER		
+			}
+			if (drawFlows) {
+
+				// make empty data structure for losing candidate
+				transfers[roundNum-1] = {from:loser, flows:{}}
+				for (var k = 0; k < candidates.length; k++) {
+					var cid = candidates[k]
+					transfers[roundNum-1].flows[cid] = {}
+					for (var m = 0; m < startingCandidates.length; m++) {
+						var cid2 = startingCandidates[m]
+						transfers[roundNum-1].flows[cid][cid2] = 0
+					}
+				}
+
+				// record where transfers came from
+				for (var k = 0; k < check.length; k++) {
+					var c = check[k]
+					var to = ballots[c.i].rank[0]
+					first = topChoice[0][c.i]
+					transfers[c.roundNum-1].flows[to][first] ++
+					var a = 0
+				}
+			}
 			roundNum++;
 		}
 		if (options.sidebar) text += "<br>"
 	
 	}
+
+
 	if(options.sidebar) {
 		
 		for(var i=0; i<model.voters.length; i++){
@@ -1719,6 +1777,13 @@ Election.irv = function(district, model, options){
 	var color = result.color
 
 	if (model.doTop2) result.theTop2 = theTop2
+
+	if (drawFlows) {
+		result.transfers = transfers
+		result.topChoice = topChoice
+		if (ballots === undefined )	var ballots = _getBallots(district, model);
+		result.nBallots = ballots.length
+	}
 
 	if (!options.sidebar) return result
 
