@@ -1857,6 +1857,10 @@ Election.stv = function(district, model, options){
 			// Otherwise... runoff...
 			var losers = _countLoser(tally);
 			var loser = losers[0];
+			if (model.breakTies && losers.length > 1) {
+				loser = losers[Math.floor(losers.length * Math.random())]
+				losers = [loser]
+			}
 			if (losers.length >= candidates.length) {
 				resolved = "tie"; 
 				winnerslist = winnerslist.concat(losers)
@@ -2429,6 +2433,10 @@ Election.quotaApproval = function(district, model, options){
 		}
 		// who won this round?
 		var roundWinners = _countWinner(tally) // need to exclude twice-winners
+		if (model.breakTies) {
+			roundWinners = roundWinners[Math.floor(Math.random() * roundWinners.length)]
+			roundWinners = [roundWinners]
+		}
 		roundWinners = roundWinners.map(x => Number(x))
 		roundWinners.forEach(x => winnersIndexes.push(Number(x)))
 		roundWinnersId = roundWinners.map( x => district.candidates[x].id)
@@ -3534,7 +3542,31 @@ function _getVoterArray(model) {
 				}
 				vs.push(v)
 				
+			} else {
+				vs.push(v)
 			}
+		}
+	}
+	return vs
+}
+
+
+
+function _getVoterArrayXY(model) {
+	// returns an array of all the voters and their distinguishing info
+
+	var vs = []
+	for (var i = 0; i < model.voters.length; i++) {
+		var voterGroup = model.voters[i]
+		var points = voterGroup.points
+		var xGroup = voterGroup.x
+		var yGroup = voterGroup.y
+		for (var k = 0; k < points.length; k++) {
+			var v = {
+				x:  points[k][0] + xGroup,
+				y:  points[k][1] + yGroup
+			}
+			vs.push(v)
 		}
 	}
 	return vs

@@ -59,7 +59,7 @@ function Sandbox(modelName) {
         median_mean: 1,
         theme: "Default",
         utility_shape: "linear",
-        votersAsCandidates: "no",
+        votersAsCandidates: false,
         dimensions: "2D",
         nDistricts: 1,
         colorChooser: "pick and generate",
@@ -365,7 +365,7 @@ function Sandbox(modelName) {
         _objF(ui.menu,"configure")
         // CONFIGURE DEFAULTS (model)
         model.border = config.arena_border
-        model.electionOptions = {sidebar:true}
+        model.optionsForElection = {sidebar:true}
         model.HACK_BIG_RANGE = true;
         // INIT
         model.initDOM()
@@ -2521,8 +2521,8 @@ function Sandbox(modelName) {
         var self = this
         // self.name = utility_shape
         self.list = [
-            {name:"yes",margin:4},
-            {name:"no"}
+            {name:"yes",value:true,margin:4},
+            {name:"no",value:false}
         ]
         // self.codebook = [
         //     {
@@ -2536,7 +2536,7 @@ function Sandbox(modelName) {
         // ]
         self.onChoose = function(data){
             // LOAD
-            config.votersAsCandidates = data.name
+            config.votersAsCandidates = data.value
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -2546,7 +2546,7 @@ function Sandbox(modelName) {
             model.votersAsCandidates = config.votersAsCandidates
         }
         self.select = function() {
-            self.choose.highlight("name", config.votersAsCandidates);
+            self.choose.highlight("value", config.votersAsCandidates);
         }
         self.choose = new ButtonGroup({
             label: "Voters as Candidates:",

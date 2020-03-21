@@ -76,7 +76,7 @@ function main(preset){
         model.createDOM()
 
 		// CONFIGURE DEFAULTS
-		model.electionOptions = {sidebar:true}
+		model.optionsForElection = {sidebar:true}
 		model.HACK_BIG_RANGE = true;
 		model.theme = "Nicky"
 

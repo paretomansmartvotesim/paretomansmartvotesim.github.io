@@ -37,7 +37,7 @@ function Candidate(model){
 		var charIndex = char.i
 		var serial = charIndex + (self.instance - 1) * chars.length
 		self.serial = serial
-		if (model.customNames == "Yes" & serial < model.namelist.length & model.namelist[serial] != "") {
+		if (model.customNames == "Yes" && serial < model.namelist.length && model.namelist[serial] != "") {
 			self.name = model.namelist[serial]
 		} else {
 			if (model.theme == "Letters") {
@@ -333,6 +333,9 @@ function Candidate(model){
 		if (model.customNames == "Yes") {
 			hsize = self.img.width / self.img.height * size
 			ctx.drawImage(self.img, x-hsize/2, y-size/2, hsize, size);
+		} else if (model.votersAsCandidates) {
+			
+			ctx.rect(x-size/2, y-size/2, size, size);
 		} else {
 			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		}

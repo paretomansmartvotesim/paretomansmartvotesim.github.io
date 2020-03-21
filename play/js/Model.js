@@ -181,6 +181,11 @@ function Model(modelName){
 			self.voterCenter.update()
 		}
 
+		// do an analysis kind of election
+		if (self.votersAsCandidates) {
+			self.updateVC()
+		}
+
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
 		if (self.yeeon && ((self.arena.mouse.dragging != self.yeeobject && self.tarena.mouse.dragging != self.yeeobject) || self.kindayee == 'newcan' || self.kindayee == 'beatCircles')) {
 			self.yee.calculate()
@@ -192,7 +197,7 @@ function Model(modelName){
 			voter.update();
 		}
 		
-		if (self.tarena.canvas.hidden == false) // find order of voters
+		if (self.tarena.canvas.hidden == false & self.optionsForElection.sidebar) // find order of voters
 		{
 			var v = _getVoterArray(self)
 			if (v.length > 0) {
@@ -325,8 +330,10 @@ function Model(modelName){
 				// 	_drawBars(i,self.tarena,self,self.round)
 				// }
 			} else {
+				if (self.optionsForElection.sidebar) {
 				_drawBars(0,self.tarena,self,self.round)
 			}
+		}
 		}
 
 		if (self.dimensions == "1D+B") self.arena.drawHorizontal(self.arena.yDimOne + self.arena.yDimBuffer)
@@ -342,7 +349,7 @@ function Model(modelName){
 		}
 		
 		self.arena.draw()
-		if (self.tarena.canvas.hidden  == false) {
+		if (self.tarena.canvas.hidden  == false && self.optionsForElection.sidebar) {
 			self.tarena.draw()
 		}
 
@@ -494,6 +501,71 @@ function Model(modelName){
 		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
 		// right now, we don't have a good visual of these for multiple districts, just one
 		return (self.nDistricts < 2) && (self.system == "QuotaApproval" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV")
+	}
+
+	self.updateVC = function() {
+		
+		// make candidates in the positions of the voters
+		var vs = _getVoterArrayXY(self)
+		self.candidates = []
+		for (var k = 0; k < vs.length; k ++) {
+			var v = vs[k]
+			
+			var n = new Candidate(self)
+			n.x = v.x
+			n.y = v.y
+			// generate a new id
+			// look for the first one that isn't taken
+			var doBreak = false
+			for (var i=1; i < 10000000; i++) {  // million is more than enough candidates
+				var c = Candidate.graphicsByIcon[self.theme]
+				for (var icon in c) {
+					if (i == 1) {
+						var newId = icon
+					} else {
+						var newId = icon + i
+					}
+					if (self.candidatesById[newId] != undefined) {
+						// already done
+					} else {
+						doBreak = true
+						break
+					}
+				}
+				if (doBreak) break
+			}
+			n.icon = icon
+			n.instance = i
+			n.dummy = true
+			self.candidates.push(n)
+				
+			// INIT
+			n.init()
+			var temp = self.onInitModel
+			self.onInitModel = function () {}
+			self.initMODEL()
+			self.onInitModel = temp
+		}
+		// update the GUI
+		self.arena.redistrict()
+		
+		// run the election
+		
+		// // get the ballots for this electionc
+		// for(var i=0; i<self.voters.length; i++){
+		// 	var voter = self.voters[i];
+		// 	voter.update();
+		// }
+		
+		// for (var i = 0; i < self.nDistricts; i++) {
+		// 	if (self.district[i].candidates.length == 0) continue
+		// 	self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
+		// }
+
+		self.optionsForElection = {sidebar:false}
+		self.tarena.canvas.hidden  = true
+		self.breakTies = true
+
 	}
 };
 
