@@ -64,7 +64,14 @@ function Model(modelName){
 		voterType: PluralityVoter,
 		election: Election.plurality,
 		ballotType: PluralityBallot,
-		rbelection: rbvote.calctide
+		rbelection: rbvote.calctide,
+		opt: {
+			IRV100: true, // show the final transfer to the winner (to reach 100%)
+			IRVShowdown: false,  // show a reverse-direction transfer to represent the winner
+			showIRVTransfers: true,  // show lines representing transfers between rounds
+			breakWinTiesMultiSeat: false, // break ties for winning candidates in multi-winner methods
+			breakEliminationTiesIRV: true // break ties for eliminations of candidates in IRV
+		}
 	})
 	
 	self.yee = new Yee(self);
@@ -249,8 +256,11 @@ function Model(modelName){
 
 			if (self.nDistricts > 1) {
 				for (var i = 0; i < self.nDistricts; i++) {
-					if (self.district[i].candidates.length == 0) continue
-					self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
+					if (self.district[i].candidates.length == 0) {
+						self.district[i].result = undefined
+					} else {
+						self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
+					}
 				}
 
 				// put all the results together
@@ -564,7 +574,7 @@ function Model(modelName){
 
 		self.optionsForElection = {sidebar:false}
 		self.tarena.canvas.hidden  = true
-		self.breakTies = true
+		self.opt.breakWinTiesMultiSeat = true
 
 	}
 };
@@ -1464,9 +1474,9 @@ function Arena(arenaName, model) {
 						if (max < x) max = x
 					}
 					sd = Math.sqrt(sum2/points.length)
-					console.log(sd)
-					console.log(stdev[m])
-					console.log(max)
+					// console.log(sd)
+					// console.log(stdev[m])
+					// console.log(max)
 					for (var i = 0; i < points.length; i++) {
 						var x = v.points[i][0]
 						var y = v.points[i][1]
@@ -1832,14 +1842,131 @@ function Arena(arenaName, model) {
 		}
 		
 		function drawCandidates() {
+			// There's two ways to draw the candidate.  One shows the candidate icon.
+			// Two shows the vote totals and optionally, the candidate icon.
+			var go = (model.system == "IRV" || model.system == "STV")  && model.dimensions == "2D" && model.result && self.id == "arena"
+			if (go) {
+				for (var k = 0; k < model.district.length; k++) {
+					result = model.district[k].result
+					drawIRVCandidates(result)
+				}
+			}
+			var ctx = self.ctx
 			for(var i=0; i<model.candidates.length; i++){
 				var c = model.candidates[i];
 				if (c.highlight) {
 					continue
 				}
-				c.draw(self.ctx,self);
+				if (go) { // use transparency to draw candidate
+					temp = ctx.globalAlpha
+					ctx.globalAlpha = .3
+					c.draw(ctx,self);
+					ctx.globalAlpha = temp
+				} else {
+					c.draw(ctx,self);
+				}
 			}
 		}
+
+		function drawIRVCandidates(result) {
+
+			if (result === undefined) return
+
+			var coalitions = result.coalitions
+
+			if (coalitions.length == 0) return // edge case: everybody tied
+
+			for (var i = 0; i < coalitions.length; i++) {
+				var coalition = coalitions[i]
+				drawCoalition(coalition,result)
+			}
+
+		}
+
+		function drawCoalition(coalition,result) {
+
+			
+			var from = model.candidatesById[coalition.id]
+			var list = coalition.list
+			
+			var canIdByDecision = result.canIdByDecision
+			var nBallots = result.nBallots
+			var ctx = self.ctx
+			var norm = 2.5 * nBallots / (135 * model.seats)
+			var total = 0
+			
+			for (var firstID in list) {
+				var size = list[firstID]
+				total = total + size
+			}
+
+			ctx.lineWidth = 0;
+
+			if (1) {
+				norm = norm * 0.02
+
+				sumsize = 0
+				var slices = []
+				for (var i = 0; i < canIdByDecision.length; i++) {
+					var firstID = canIdByDecision[i]
+					if ( list.hasOwnProperty(firstID)) {
+						var first = model.candidatesById[firstID]
+						var size = list[firstID]
+						if (size > 0) {
+							// add to list
+							slices.push({num:size, fill:first.fill})
+						}
+					}
+				}
+				if (slices.length === 0) return
+				var x = from.x
+				var y = from.y
+				var lastme = slices.pop()
+				mesize = lastme.num
+				var totalSlices = total - mesize
+				var size2 = Math.sqrt(total/norm)
+				if (slices.length > 0) {
+					_drawSlices(model, ctx, x, y, size2, slices, totalSlices)
+				}
+				
+				// draw me
+				r = Math.sqrt(mesize/ norm)
+				ctx.beginPath();
+				ctx.arc(x*2, y*2, r, 0, Math.TAU, false);
+				ctx.strokeStyle = lastme.fill;
+				ctx.fillStyle = lastme.fill;
+				ctx.fill();
+				return
+			}
+
+
+			sumsize = 0
+			for (var i = 0; i < canIdByDecision.length; i++) {
+				var firstID = canIdByDecision[i]
+				if ( list.hasOwnProperty(firstID)) {
+					var first = model.candidatesById[firstID]
+					var size = list[firstID] / norm
+					if (size > 0) {
+						var x = from.x
+						var y = from.y
+	
+
+						r = Math.sqrt((total - sumsize) / norm) * 5
+						r = (total - sumsize) / norm * .2
+	
+						ctx.beginPath();
+						ctx.arc(x*2, y*2, r*2, 0, Math.TAU, false);
+						ctx.strokeStyle = first.fill;
+						ctx.fillStyle = first.fill;
+						ctx.fill();
+						ctx.stroke();
+					}
+					sumsize = sumsize + size
+
+				}
+			}
+		}
+
 
 		function clipCandidates() {
 			// draw a white rectangle
@@ -1866,15 +1993,16 @@ function Arena(arenaName, model) {
 			}
 		}
 		function drawVotes() {
-			if (model.system == "IRV" && model.dimensions == "2D" && model.result) {
+			var go = model.system == "IRV" || model.system == "STV"
+			if (go && model.dimensions == "2D" && model.result && model.opt.showIRVTransfers) {
 				ctx = self.ctx
 				for (var k = 0; k < model.district.length; k++) {
 					result = model.district[k].result
-					drawIRV(result)
+					if (result)	drawIRVTransfers(result)
 				}
 			}
 		}
-		function drawIRV(result) {
+		function drawIRVTransfers(result) {
 			var transfers = result.transfers
 			var topChoice = result.topChoice
 			var nBallots = result.nBallots
@@ -1882,39 +2010,80 @@ function Arena(arenaName, model) {
 			if (transfers.length == 0) return // edge case: everybody tied
 
 			for (var i = 0; i < transfers.length; i++) {
-				var from = model.candidatesById[transfers[i].from]
-				var flows = transfers[i].flows
-				for (var toID in flows) {
-					var f = flows[toID]
-					var to = model.candidatesById[toID]
-					drawTransfer(f,from,to,nBallots)
+				for (var k = 0; k < transfers[i].length; k++) {
+					var transfer = transfers[i][k]
+					var from = model.candidatesById[transfer.from]
+					var flows = transfer.flows
+					for (var toID in flows) {
+						var f = flows[toID]
+						var to = model.candidatesById[toID]
+						drawTransfer(f,from,to,nBallots)
+					}
 				}
 			}
 
-			// make a list of voters first choices for the voters in the winning coalition
-			winner = result.winners[0]
-			coalition = {}
-			for (var i = 0; i < model.candidates.length; i++) {
-				coalition[model.candidates[i].id] = 0
-			}
-			for (var i = 0; i < topChoice[0].length; i++) {
-				penultimate = topChoice[topChoice.length-1][i]
-				first = topChoice[0][i]
-				if( penultimate == winner) {
-					coalition[first] ++
+			if (model.opt.IRVShowdown) {
+				if (0) {
+					// make a list of voters first choices for the voters in the winning coalition
+					for (var k = 0; k < result.winners.length; k++) {
+						winner = result.winners[k]
+						coalition = {}
+						for (var i = 0; i < model.candidates.length; i++) {
+							coalition[model.candidates[i].id] = 0
+						}
+						for (var i = 0; i < topChoice[0].length; i++) {
+							penultimate = topChoice[topChoice.length-1][i]
+							first = topChoice[0][i]
+							if( penultimate == winner) {
+								coalition[first] ++
+							}
+						}
+						to = model.candidatesById[winner]
+						frac = .5
+						halfway = {}
+						halfway.x = from.x * frac + to.x * (1-frac)
+						halfway.y = from.y * frac + to.y * (1-frac)
+						drawTransfer(coalition,halfway,to,nBallots)
+					}
+				} else {
+					// make a list of voters first choices for the voters in the winning coalition
+					for (var m = 0; m < result.lastlosers.length; m++) {
+						var loser = result.lastlosers[m]
+						var from = model.candidatesById[loser]
+		
+						for (var k = 0; k < result.winners.length; k++) {
+							winner = result.winners[k]
+							coalition = {}
+							for (var i = 0; i < model.candidates.length; i++) {
+								coalition[model.candidates[i].id] = 0
+							}
+							for (var i = 0; i < topChoice[0].length; i++) {
+								penultimate = topChoice[topChoice.length-1][i]
+								first = topChoice[0][i]
+								if( penultimate == winner) {
+									coalition[first] ++
+								}
+							}
+							to = model.candidatesById[winner]
+							frac = .5
+							halfway = {}
+							halfway.x = from.x * frac + to.x * (1-frac)
+							halfway.y = from.y * frac + to.y * (1-frac)
+							drawTransfer(coalition,halfway,to,nBallots)
+				
+						}
+					}
 				}
 			}
-			to = model.candidatesById[winner]
-			frac = .5
-			halfway = {}
-			halfway.x = from.x * frac + to.x * (1-frac)
-			halfway.y = from.y * frac + to.y * (1-frac)
-			drawTransfer(coalition,halfway,to,nBallots)
+
+			
 
 		}
 		
 		function drawTransfer(flow,from,to,nBallots) {
-			var norm = 2.5 * nBallots / 135
+			var ctx = self.ctx
+			var norm = 2.5 * nBallots / (135 * model.seats)
+			norm = norm * 1.5
 			var total = 0
 			for (var firstID in flow) {
 				var size = flow[firstID] / norm
@@ -1925,22 +2094,14 @@ function Arena(arenaName, model) {
 				var size = flow[firstID] / norm
 				var first = model.candidatesById[firstID]
 				if (size > 0) {
-					var x1 = from.x
-					var y1 = from.y
-					var x2 = to.x
-					var y2 = to.y
-					var dx = x2 - x1
-					var dy = y2 - y1
-					var length = Math.sqrt(dx**2 + dy**2)
-					var ux = dx / length
-					var uy = dy / length
 					
+					var u = _unitVector(to,from) 
 					// amount to move by
 					move = total/2 - sumsize - size/2
-					x1 = x1 + uy * move
-					x2 = x2 + uy * move
-					y1 = y1 - ux * move
-					y2 = y2 - ux * move
+					x1 = from.x + u.y * move
+					x2 = to.x + u.y * move
+					y1 = from.y - u.x * move
+					y2 = to.y - u.x * move
 					
 					ctx.beginPath();
 					ctx.moveTo(x1*2,y1*2);
@@ -1951,6 +2112,29 @@ function Arena(arenaName, model) {
 				}
 				sumsize = sumsize + size
 			}
+
+
+			if (total > 0) {
+				frac = .5
+				halfway = {}
+				halfway.x = from.x * frac + to.x * (1-frac)
+				halfway.y = from.y * frac + to.y * (1-frac)
+				
+				var u = _unitVector(to,from) 
+				var alen = 5
+				a = {
+					from: {
+						x: halfway.x - alen * u.x,
+						y: halfway.y - alen * u.y
+					},
+					to: {
+						x: halfway.x + alen * u.x,
+						y: halfway.y + alen * u.y
+					},
+				}
+				_drawArrow(ctx, a.from.x * 2, a.from.y * 2, a.to.x * 2, a.to.y * 2)
+			}
+
 		}
 
 		function drawVoters2() {
@@ -2020,14 +2204,20 @@ function Arena(arenaName, model) {
 		function drawWinners() {
 			if (!model.dontdrawwinners) {
 				// draw text next to the winners
-				if(model.result && model.result.winners) {
-					for(var i=0; i<model.candidates.length; i++){
-						var c = model.candidates[i];
-						if (model.result.winners.includes(c.id)) {
-							if (model.result.winners.length > model.seats) {
-								c.drawTie(self.ctx,self)
-							} else {
-								c.drawWin(self.ctx,self)
+
+				for (var k = 0; k < model.district.length; k++) {
+					var district = model.district[k]
+					var result = district.result
+					
+					if(result && result.winners) {
+						for(var i=0; i<district.candidates.length; i++){
+							var c = district.candidates[i];
+							if (result.winners.includes(c.id)) {
+								if (result.winners.length > model.seats) {
+									c.drawTie(self.ctx,self)
+								} else {
+									c.drawWin(self.ctx,self)
+								}
 							}
 						}
 					}
