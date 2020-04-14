@@ -60,6 +60,8 @@ function Sandbox(modelName) {
         theme: "Default",
         utility_shape: "linear",
         votersAsCandidates: false,
+        visSingleBallotsOnly: false,
+        ballotVis: true,
         dimensions: "2D",
         nDistricts: 1,
         colorChooser: "pick and generate",
@@ -75,7 +77,7 @@ function Sandbox(modelName) {
         computeMethod: "ez",
         pixelsize: 60,
         optionsForElection: {sidebar:true}, // sandboxes have this default
-        featurelist: ["systems","dimensions","customNames","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","gearicon"]
+        featurelist: ["systems","dimensions","customNames","theme","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","gearicon"]
     }
     self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
@@ -207,7 +209,7 @@ function Sandbox(modelName) {
                             config.sandboxsave = true
                             return ["systems","voters","candidates"] 	}	}	}
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
-            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","customNames"])
+            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","theme","customNames"])
             // clear the grandfathered config settings
             delete config.doPercentFirst
             delete config.features
@@ -246,7 +248,8 @@ function Sandbox(modelName) {
                     "autoPoll":"autoPoll",
                     "frontrunners":"frontrunners",
                     "gearicon":"gearicon",
-                    "customNames":"customNames"
+                    "customNames":"customNames",
+                    "theme":"theme"
                     // "primaries":"primaries"
                 }
                 var temp_featurelist = []
@@ -1320,6 +1323,7 @@ function Sandbox(modelName) {
         ui.menu.nCandidates.select()
     }
 
+    
     
     ui.menu.customNames = new function () {
         var self = this
@@ -2470,8 +2474,8 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+        // self.choose.dom.hidden = false
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.customNames.choose.dom);
     }
 
     ui.menu.utility_shape = new function () {
@@ -2558,6 +2562,88 @@ function Sandbox(modelName) {
         basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
+    ui.menu.ballotVis = new function () {
+        var self = this
+        // self.name = utility_shape
+        self.list = [
+            {name:"yes",value:true,margin:4},
+            {name:"no",value:false}
+        ]
+        // self.codebook = [
+        //     {
+        //         field: "ballotVis",
+        //         decodeVersion: 2.4,
+        //         decode: [
+        //             "yes",
+        //             "no"
+        //         ]
+        //     }
+        // ]
+        self.onChoose = function(data){
+            // LOAD
+            config.ballotVis = data.value
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.ballotVis = config.ballotVis
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.ballotVis);
+        }
+        self.choose = new ButtonGroup({
+            label: "Show Ballot Visuals:",
+            width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.choose.dom.hidden = true
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+    }
+
+    ui.menu.visSingleBallotsOnly = new function () {
+        var self = this
+        // self.name = utility_shape
+        self.list = [
+            {name:"yes",value:true,margin:4},
+            {name:"no",value:false}
+        ]
+        // self.codebook = [
+        //     {
+        //         field: "visSingleBallotsOnly",
+        //         decodeVersion: 2.4,
+        //         decode: [
+        //             "yes",
+        //             "no"
+        //         ]
+        //     }
+        // ]
+        self.onChoose = function(data){
+            // LOAD
+            config.visSingleBallotsOnly = data.value
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.visSingleBallotsOnly = config.visSingleBallotsOnly
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.visSingleBallotsOnly);
+        }
+        self.choose = new ButtonGroup({
+            label: "Only Visualize Single Voters:",
+            width: 68,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.choose.dom.hidden = true
+        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
+    }
+
     ui.menu.gearicon = new function () {
         // gear button (combines with above)
         var self = this
@@ -2577,11 +2663,12 @@ function Sandbox(modelName) {
                 ui.menu.spread_factor_voters,
                 ui.menu.arena_size,
                 ui.menu.median_mean,
-                ui.menu.theme,
                 ui.menu.colorChooser,
                 ui.menu.colorSpace,
                 ui.menu.utility_shape,
                 ui.menu.votersAsCandidates,
+                ui.menu.visSingleBallotsOnly,
+                ui.menu.ballotVis,
                 ui.menu.gearoff
             ]
             if (turnOn) {
@@ -2938,6 +3025,8 @@ function Sandbox(modelName) {
         "candidateB",
         "nDistricts",
         "votersAsCandidates",
+        "visSingleBallotsOnly",
+        "ballotVis",
         "customNames",
         "namelist"
     ] // add more on to the end

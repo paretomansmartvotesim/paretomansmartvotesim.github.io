@@ -71,6 +71,8 @@ Election/Sandbox design:
     margin-bottom: 3px;
     padding: 1px 0;
     
+    overflow:hidden;
+    
     position: relative;
     top:0;
 

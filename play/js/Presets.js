@@ -1306,7 +1306,8 @@ function loadpreset(modelName) {
 			spread_factor_voters: 2,
 			firstStrategy: "normalize",
 			secondStrategy: "normalize frontrunners only",
-			autoPoll: "Auto"
+			autoPoll: "Auto",
+			visSingleBallotsOnly: false
 		}
 	} else if (htmlname == "sandbox_original.html") {
 		config = {

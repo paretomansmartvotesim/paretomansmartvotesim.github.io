@@ -12,6 +12,8 @@ function ScoreVoter(model){
 
 	self.maxscore = 5;
 	self.minscore = 0;
+	self.radiusLast = []
+	self.radiusFirst = []
 	self.defaultMax = model.HACK_BIG_RANGE ? 61 * 4 : 25 * 4; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 	if (model.doOriginal) {
 		self.filledCircles = false
@@ -20,7 +22,7 @@ function ScoreVoter(model){
 	}
 	
 
-	self.getBallot = function(x, y, strategy, iDistrict){
+	self.getBallot = function(x, y, strategy, iDistrict, i){
 
 		doStar =  (model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
 		if (model.autoPoll == "Auto" && model.pollResults) {
@@ -42,40 +44,69 @@ function ScoreVoter(model){
 		var cans = model.district[iDistrict].candidates
 		var scoresfirstlast = dostrategy(model,x,y,self.minscore,self.maxscore,strategy,viable,cans,self.defaultMax,doStar,model.utility_shape)
 		
-		self.radiusFirst = scoresfirstlast.radiusFirst
-		self.radiusLast = scoresfirstlast.radiusLast
+		self.radiusFirst[i] = scoresfirstlast.radiusFirst
+		self.radiusLast[i] = scoresfirstlast.radiusLast
 		self.dottedCircle = scoresfirstlast.dottedCircle
 		var scores = scoresfirstlast.scores
 		return scores
 		
 	};
 
-	self.drawBG = function(ctx, x, y, ballot){
+	self.drawBG = function(ctx, x, y, ballot, iDistrict, k){
 
-		// RETINA
-		x = x*2;
-		y = y*2;
 		var scorange = self.maxscore - self.minscore
 		var step = (self.radiusLast - self.radiusFirst)/scorange;
 
+		var nVoters = model.district[iDistrict].voters.length
+
 		// Draw big ol' circles.
+		var lastDist = Infinity
 		var f = utility_function(model.utility_shape)
 		var finv = inverse_utility_function(model.utility_shape)
+
+		
+		var tempComposite = ctx.globalCompositeOperation
+		// ctx.globalCompositeOperation = "source-over"
+		// ctx.globalCompositeOperation = "multiply" // kinda cloudy
+		// ctx.globalCompositeOperation = "screen"
+		// ctx.globalCompositeOperation = "overlay"
+		// ctx.globalCompositeOperation = "hue"
+		ctx.globalCompositeOperation = "lighter"  // seems good
+		// ctx.globalCompositeOperation = "darker" // compatibility issues
+		// ctx.globalCompositeOperation = "lighten"
+		// ctx.globalCompositeOperation = "darken" // not uniform 1,2,3
+
 		for(var i=0;i<scorange;i++){
 			//var dist = step*(i+.5) + self.radiusFirst
 
 			var frac = (1-(i+.5)/scorange)
 			var worst = f(1)
-			var best = f(self.radiusFirst/self.radiusLast)
+			var best = f(self.radiusFirst[k]/self.radiusLast[k])
 			var x1 = finv(frac*(worst-best)+best)
-			var dist = x1 * self.radiusLast
+			var dist = x1 * self.radiusLast[k]
 			
 			ctx.lineWidth = (i+5-scorange)*2 + 2;
 			ctx.beginPath();
-			ctx.arc(x, y, dist*2, 0, Math.TAU, false);
+			ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
 			if (self.filledCircles) {
 				ctx.fillStyle = '#000'
 				ctx.strokeStyle = "#000";
+				var invert = true // CAN CHANGE
+				if (invert) {
+					// draw district rectangle
+					var donuts = true
+					if (donuts) {
+						if (lastDist == Infinity) {
+							ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+						} else {
+							ctx.arc(x*2, y*2, lastDist*2, 0, Math.TAU, false);
+						}
+						lastDist = dist // copy
+					} else {
+						ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+					}
+					ctx.closePath()
+				}
 			} else {
 				ctx.strokeStyle = "#888"
 			}
@@ -83,17 +114,24 @@ function ScoreVoter(model){
 			if (self.dottedCircle) ctx.setLineDash([5, 15]);
 			if (self.filledCircles) {
 				var temp = ctx.globalAlpha
-				ctx.globalAlpha = .01
+				// ctx.globalAlpha = .01
 				// ctx.stroke();
 				// ctx.globalAlpha = .1
-				ctx.globalAlpha = .2 / self.maxscore
-				ctx.fill()
+				ctx.globalAlpha = 1 / scorange / nVoters 
+				if (invert) {
+					if (donuts) ctx.globalAlpha = Math.max(.002, 1 / nVoters * (scorange - i) / scorange) // donuts get lighter towards the center
+					// .002 seems to be a limit
+					ctx.fill("evenodd")
+				} else {
+					ctx.fill()
+				}
 				ctx.globalAlpha = temp
 			} else {
 				ctx.stroke()
 			}
 			if (self.dottedCircle) ctx.setLineDash([]);
 		}
+		ctx.globalCompositeOperation = tempComposite
 	}
 
 	self.drawCircle = function(ctx, x, y, size, ballot){
@@ -449,7 +487,9 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 			var c = canAid[i]
 			if (scores[c]==maxscore && i!=n1i) {
 				scores[c]=maxscore-1;
-	}}}
+			}
+		}
+	}
 
 	return {scores:scores, radiusFirst:n , radiusLast:m, dottedCircle:dottedCircle}
 }
@@ -544,9 +584,9 @@ function ApprovalVoter(model){
 	self.defaultMax = 200 // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
 	self.subGetBallot = self.getBallot
-	self.getBallot = function(x, y, strategy, iDistrict){
+	self.getBallot = function(x, y, strategy, iDistrict, i){
 		
-		var scores = self.subGetBallot(x,y,strategy, iDistrict)
+		var scores = self.subGetBallot(x,y,strategy, iDistrict, i)
 
 		// Anyone close enough. If anyone.
 		var approved = [];
@@ -731,7 +771,7 @@ function RankedVoter(model){
 	var self = this;
 	GeneralVoter.call(self,model)
 	
-	self.getBallot = function(x, y, strategy, iDistrict){
+	self.getBallot = function(x, y, strategy, iDistrict, i){
 
 		// Rank the peeps I'm closest to...
 		var rank = [];
@@ -806,7 +846,7 @@ function RankedVoter(model){
 
 	};
 
-	self.drawBG = function(ctx, x, y, ballot){
+	self.drawBG = function(ctx, x, y, ballot, iDistrict, i){
 
 		if (model.doOriginal) {
 			// RETINA
@@ -1290,7 +1330,7 @@ function PluralityVoter(model){
 
 	self.maxscore = 1; // just for autopoll
 
-	self.getBallot = function(x, y, strategy, iDistrict){
+	self.getBallot = function(x, y, strategy, iDistrict, i){
 
 		if (model.autoPoll == "Auto" && model.pollResults) {
 			// if (model.autoPoll == "Auto" && (typeof model.pollResults !== 'undefined')) {
@@ -1334,9 +1374,11 @@ function PluralityVoter(model){
 
 	};
 
-	self.drawBG = function(ctx, x, y, ballot){
+	self.drawBG = function(ctx, x, y, ballot, iDistrict, i){
 
 		var candidate = model.candidatesById[ballot.vote];
+		
+		if (candidate === undefined) return // just in case
 
 		// RETINA
 		x = x*2;
@@ -1740,7 +1782,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var r_11 = Math.random() * 2 - 1 
 			self.type.poll_threshold_factor = _erfinv(r_11) * .2 + .5
 			var iDistrict = self.district[i]
-			var ballot = self.type.getBallot(x, y, strategy, iDistrict);
+			var ballot = self.type.getBallot(x, y, strategy, iDistrict, i);
 			self.ballots.push(ballot);
 			self.weights.push(1);
 		}
@@ -1749,7 +1791,14 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	// DRAW!
 	self.drawBackAnnotation = function(x,y,ctx) {}
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
+
+	self.draw0 = function(ctx){
+		self.drawPart(0,ctx)
+	}
 	self.draw1 = function(ctx){
+		self.drawPart(1,ctx)
+	}
+	self.drawPart = function(part,ctx){
 
 		if (model.showVoters != undefined && model.showVoters == false) {
 			var drawVoters = false
@@ -1759,6 +1808,8 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		if (drawVoters) {
 			// DRAW ALL THE points
 			var circlesize = 10
+			var xs = []
+			var ys = []
 			for(var i=0; i<self.points.length; i++){
 				var p = self.points[i];
 				var s = model.arena.modelToArena(self)
@@ -1769,10 +1820,25 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 					var y = s.y + p[2];
 					circlesize = 6
 				}
-				var ballot = self.ballots[i];
-				var weight = self.weights[i]
-				self.type.drawCircle(ctx, x, y, circlesize, ballot, weight);
+				xs.push(x)
+				ys.push(y)
 			}
+			if (part === 0) {
+				if (model.ballotVis && ! model.visSingleBallotsOnly) {
+					temp = ctx.globalAlpha
+					ctx.globalAlpha = .2
+					for(var i=0; i<self.points.length; i++){
+						self.type.drawBG(ctx, xs[i], ys[i], self.ballots[i], self.district[i], i)
+					}
+					ctx.globalAlpha = temp
+				}
+			} else {
+				for(var i=0; i<self.points.length; i++){
+					self.type.drawCircle(ctx, xs[i], ys[i], circlesize, self.ballots[i], self.weights[i]);
+				}
+			}
+
+
 		}
 	}
 	self.draw2 = function(ctx){
@@ -1871,7 +1937,7 @@ function SingleVoter(model){
 	}
 	self.update = function(){
 		self.type.poll_threshold_factor = .6
-		self.ballot = self.type.getBallot(self.x, self.y, self.firstStrategy, self.district);
+		self.ballot = self.type.getBallot(self.x, self.y, self.firstStrategy, self.district, 0);
 		self.ballots = [self.ballot]
 	};
 
@@ -1882,6 +1948,10 @@ function SingleVoter(model){
 		self.draw1(ctx)
 		self.draw2(ctx)
 	};
+	self.draw0 = function(ctx) {
+		var s = model.arena.modelToArena(self)
+		if (model.ballotVis) self.type.drawBG(ctx, s.x, s.y, self.ballot, self.district[0], 0);
+	}
 	self.draw1 = function(ctx) {
 		var s = model.arena.modelToArena(self)
 		var x = s.x*2;
@@ -1890,7 +1960,6 @@ function SingleVoter(model){
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Background, for showing HOW the decision works...
 		self.drawBackAnnotation(x,y,ctx)
-		self.type.drawBG(ctx, s.x, s.y, self.ballot);
 		if(self.highlight) ctx.globalAlpha = temp
 	}
 

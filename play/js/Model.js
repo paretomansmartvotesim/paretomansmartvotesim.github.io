@@ -71,7 +71,9 @@ function Model(modelName){
 			showIRVTransfers: true,  // show lines representing transfers between rounds
 			breakWinTiesMultiSeat: false, // break ties for winning candidates in multi-winner methods
 			breakEliminationTiesIRV: true // break ties for eliminations of candidates in IRV
-		}
+		},
+		ballotVis: true, // turn on or off the visuals that show where the ballots go
+		visSingleBallotsOnly: true // only show the single ballots as part of the ballotVis
 	})
 	
 	self.yee = new Yee(self);
@@ -1698,6 +1700,7 @@ function Arena(arenaName, model) {
 			setAnnotations()
 			// drawSortLines()
 			if (model.dimensions == "2D" || noClip) {
+				drawVoters0()
 				drawVoters1()
 				drawToolbar()
 				var flashydude = getFlashydude()
@@ -1718,6 +1721,7 @@ function Arena(arenaName, model) {
 				drawWinners()
 				// resetClip()
 				clipCandidates()
+				drawVoters0()
 				drawVoters1()
 				drawExtraTrash()
 				drawVotes()
@@ -1986,6 +1990,12 @@ function Arena(arenaName, model) {
 			}
 		}
 
+		function drawVoters0() {
+			for(var i=0; i<model.voters.length; i++){
+				var voter = model.voters[i];
+				voter.draw0(self.ctx,self);
+			}
+		}
 		function drawVoters1() {
 			for(var i=0; i<model.voters.length; i++){
 				var voter = model.voters[i];
