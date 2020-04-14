@@ -1307,7 +1307,8 @@ function loadpreset(modelName) {
 			firstStrategy: "normalize",
 			secondStrategy: "normalize frontrunners only",
 			autoPoll: "Auto",
-			visSingleBallotsOnly: false
+			visSingleBallotsOnly: false,
+			theme: "Letters"
 		}
 	} else if (htmlname == "sandbox_original.html") {
 		config = {

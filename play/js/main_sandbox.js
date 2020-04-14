@@ -466,6 +466,25 @@ function Sandbox(modelName) {
             ui.menu.seats.choose.dom.hidden = true
         }
     }
+    
+    // helpers
+
+    model.onInitModel = function() {
+        // update sandbox buttons
+        var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
+        m.forEach(function(m) {
+            m.choose.buttonConfigs = m.makelist()
+            m.choose.init()
+            m.select()
+        })
+    }
+    
+    model.onAddCandidate = function() {
+        var n = model.candidates.length
+        model.numOfCandidates = n
+        config.numOfCandidates = n
+        ui.menu.nCandidates.select()
+    }
 
     ///////////////////
     // SLIDERS CLASS //
@@ -650,7 +669,6 @@ function Sandbox(modelName) {
         self.select = function() {
             self.choose.highlight("name", config.system)
         }
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.rbSystems = new function() { // Which RB voting system?
@@ -725,8 +743,6 @@ function Sandbox(modelName) {
         self.select = function() {
             self.choose.highlight("name", config.rbsystem)
         }
-        basediv.querySelector("#left").appendChild(self.choose.dom);
-        self.choose.dom.hidden = true
     }
 
     ui.menu.dimensions = new function () {
@@ -770,7 +786,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.nDistricts = new function () {
@@ -815,7 +830,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.seats = new function () {
@@ -853,7 +867,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.nVoterGroups = new function() { // How many voters?
@@ -1048,7 +1061,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.xVoterGroups = new function() { // if the last option X is selected, we need a selection for number of voters
@@ -1091,8 +1103,6 @@ function Sandbox(modelName) {
             chid:"choose number of voter groups",
             chfn:self.onChoose
         })
-        // x_voter_sliders[0] = 
-        basediv.querySelector("#left").appendChild(self.choose.dom)
         self.select = function() {
             self.choose.sliders[0].value = config.xNumVoterGroups // TODO: load x_voters config somehow
         }
@@ -1147,7 +1157,6 @@ function Sandbox(modelName) {
             num:maxVoters,
             labelText: "what # voters in each group?"
         })
-        basediv.querySelector("#left").appendChild(self.choose.dom)
     }
 
     ui.menu.group_spread = new function() {  // group count
@@ -1185,7 +1194,6 @@ function Sandbox(modelName) {
             num:maxVoters,
             labelText: "how spread out is the group?"
         })
-        basediv.querySelector("#left").appendChild(self.choose.dom)
         self.select = function() {
             for (i in self.choose.sliders) {
                 self.choose.sliders[i].value = config.voter_group_spread[i]
@@ -1200,16 +1208,6 @@ function Sandbox(modelName) {
                 }
             }
         }
-    }
-
-    model.onInitModel = function() {
-        // update sandbox buttons
-        var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
-        m.forEach(function(m) {
-            m.choose.buttonConfigs = m.makelist()
-            m.choose.init()
-            m.select()
-        })
     }
 
     ui.menu.nCandidates = new function() { // how many candidates?
@@ -1313,18 +1311,8 @@ function Sandbox(modelName) {
         self.select = function() {
             self.choose.highlight("num", config.numOfCandidates);
         }
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
-
-    model.onAddCandidate = function() {
-        var n = model.candidates.length
-        model.numOfCandidates = n
-        config.numOfCandidates = n
-        ui.menu.nCandidates.select()
-    }
-
-    
-    
+  
     ui.menu.customNames = new function () {
         var self = this
         self.name = "customNames"
@@ -1335,6 +1323,18 @@ function Sandbox(modelName) {
         self.onChoose = function(data){
             // LOAD
             config.customNames = data.name
+            // LOAD more
+            var xlist = ["namelist"]
+            var featureset = new Set(config.featurelist)
+            for (var i in xlist){
+                var xi = xlist[i]
+                if (data.name == "Yes") {
+                    featureset.add(xi)
+                } else {
+                    featureset.delete(xi)
+                }
+            }
+            config.featurelist = Array.from(featureset)
             // CONFIGURE
             self.configure()
             // INIT
@@ -1358,7 +1358,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     
@@ -1388,7 +1387,6 @@ function Sandbox(modelName) {
             dom: document.createElement("textarea")
         }
         self.choose.dom.addEventListener("input",self.onChoose)
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     
@@ -1429,7 +1427,6 @@ function Sandbox(modelName) {
         self.select = function() {
             self.choose.highlight("realname", config.firstStrategy);
         }
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     function _loadConfigForStrategyButtons(config) {			
@@ -1507,8 +1504,7 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose,
             isCheckbox: true
-        });
-        basediv.querySelector("#left").appendChild(self.choose.dom);			
+        });			
     }
 
     ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
@@ -1577,7 +1573,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.percentSecondStrategy = new function() {  // group count
@@ -1618,7 +1613,6 @@ function Sandbox(modelName) {
             num:maxVoters,
             labelText: "what % use this 2nd strategy?"
         })
-        basediv.querySelector("#left").appendChild(self.choose.dom)
     }	
 
     if (0) { // are there primaries?
@@ -1645,7 +1639,6 @@ function Sandbox(modelName) {
                 data: self.list,
                 onChoose: self.onChoose
             });
-            basediv.querySelector("#left").appendChild(choosePrimaries.dom);
         }
     }
 
@@ -1698,7 +1691,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
 
@@ -1753,8 +1745,7 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose,
             isCheckbox: true
-        });
-        basediv.querySelector("#left").appendChild(self.choose.dom);			
+        });			
     }
 
     ui.menu.poll = new function() { // do a poll to find frontrunner
@@ -1791,7 +1782,6 @@ function Sandbox(modelName) {
             onChoose: self.onChoose,
             justButton: true
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.yee = new function() { // yee
@@ -1878,8 +1868,7 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.setAttribute("id",self.name)
-        basediv.querySelector("#left").appendChild(self.choose.dom);
+        self.choose.dom.setAttribute("id",self.name) // interesting
     }
 
     ui.menu.yeefilter = new function() { 	// yee filter
@@ -1941,7 +1930,6 @@ function Sandbox(modelName) {
             isCheckboxBool: true
         });
         self.choose.dom.setAttribute("id",self.name)
-        basediv.querySelector("#left").appendChild(self.choose.dom);
     }
 
     ui.menu.gearconfig = new function() { 	// gear config - decide which menu items to do
@@ -2002,8 +1990,6 @@ function Sandbox(modelName) {
             onChoose: self.onChoose,
             isCheckbox: true
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.presetconfig = new function() { // pick a preset
@@ -2091,8 +2077,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-		basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
 		self.init_sandbox = function() {
 			self.choose.highlight("modelName", modelName); // only do this once.  Otherwise it would be in updateUI
 		}
@@ -2127,8 +2111,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        basediv.querySelector("#left").appendChild(self.choose.dom);
-        self.choose.dom.hidden = true
     }
 
     ui.menu.computeMethod = new function () {
@@ -2159,8 +2141,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.colorChooser = new function () {
@@ -2209,8 +2189,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.colorSpace = new function () {
@@ -2257,8 +2235,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.spread_factor_voters = new function () {
@@ -2298,13 +2274,11 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.arena_size = new function () {
         var self = this
-        // self.name = arena_size
+        // self.name = "arena_size"
         self.list = [
             {name:"300",val:300,margin:4},
             {name:"600",val:600}
@@ -2369,13 +2343,11 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.median_mean = new function () {
         var self = this
-        // self.name = median_mean
+        // self.name = "median_mean"
         self.list = [
             {name:"median",val:2,margin:4},
             {name:"mean",val:1}
@@ -2401,13 +2373,11 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.theme = new function () {
         var self = this
-        // self.name = median_mean
+        // self.name = "theme"
         self.list = [
             {name:"Default",realname:"Default",margin:4},
             {name:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
@@ -2474,13 +2444,11 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        // self.choose.dom.hidden = false
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.customNames.choose.dom);
     }
 
     ui.menu.utility_shape = new function () {
         var self = this
-        // self.name = utility_shape
+        // self.name = "utility_shape"
         self.list = [
             {name:"linear",margin:4},
             {name:"quadratic",margin:4},
@@ -2517,13 +2485,11 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.votersAsCandidates = new function () {
         var self = this
-        // self.name = utility_shape
+        // self.name = "votersAsCandidates"
         self.list = [
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
@@ -2558,13 +2524,11 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.ballotVis = new function () {
         var self = this
-        // self.name = utility_shape
+        // self.name = "ballotVis"
         self.list = [
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
@@ -2599,13 +2563,11 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.visSingleBallotsOnly = new function () {
         var self = this
-        // self.name = utility_shape
+        // self.name = "visSingleBallotsOnly"
         self.list = [
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
@@ -2640,8 +2602,6 @@ function Sandbox(modelName) {
             data: self.list,
             onChoose: self.onChoose
         });
-        self.choose.dom.hidden = true
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
     }
 
     ui.menu.gearicon = new function () {
@@ -2685,7 +2645,6 @@ function Sandbox(modelName) {
             onChoose: self.onChoose,
             isCheckbox: true
         });
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.gearconfig.choose.dom);
         self.init_sandbox = function() {
             if(config.hidegearconfig) self.choose.dom.hidden = true
         }
@@ -2719,9 +2678,80 @@ function Sandbox(modelName) {
             onChoose: self.onChoose,
             isCheckbox: true
         });
-        basediv.querySelector("#left").insertBefore(self.choose.dom,ui.menu.systems.choose.dom);
-        self.choose.dom.hidden = true
     }
+
+    // Put all in order
+
+    menuList = [
+        "gearicon",
+        "gearconfig",
+        "presetconfig",
+        "computeMethod",
+        "colorChooser",
+        "colorSpace",
+        "spread_factor_voters",
+        "arena_size",
+        "median_mean",
+        "theme",
+        "utility_shape",
+        "votersAsCandidates",
+        "ballotVis",
+        "visSingleBallotsOnly",
+        "gearoff",
+        "systems", // start of normal list
+        "rbSystems",
+        "dimensions",
+        "nDistricts",
+        "seats",
+        "nVoterGroups",
+        "xVoterGroups",
+        "group_count",
+        "group_spread",
+        "nCandidates",
+        "theme",
+        "customNames",
+        "namelist",
+        "firstStrategy",
+        "doTwoStrategies",
+        "secondStrategy",
+        "percentSecondStrategy",
+        // "primaries", // not doing this one, comment out
+        "autoPoll",
+        "frontrunners",
+        "poll",
+        "yee",
+        "yeefilter" ,
+        "choose_pixel_size"
+    ]
+    hiddenList = [
+        "gearconfig",
+        "presetconfig",
+        "computeMethod",
+        "colorChooser",
+        "colorSpace",
+        "spread_factor_voters",
+        "arena_size",
+        "median_mean",
+        "theme",
+        "utility_shape",
+        "votersAsCandidates",
+        "ballotVis",
+        "visSingleBallotsOnly",
+        "gearoff",
+        "rbSystems",
+        "yeefilter",
+        "choose_pixel_size"
+    ]
+    for (var i = 0; i < menuList.length; i++) {
+        var menuID = menuList[i]
+        basediv.querySelector("#left").appendChild(ui.menu[menuID].choose.dom)
+    }
+    for (var i = 0; i < hiddenList.length; i++) {
+        var hiddenID = hiddenList[i]
+        ui.menu[hiddenID].choose.dom.hidden = true
+    }
+
+
     //////////////////////////
     //////// RESET... ////////
     //////////////////////////
