@@ -3,12 +3,18 @@ Math.TAU = Math.PI*2;
 
 
 function _drawStroked(text, x, y, textsize, ctx) {
-	_drawStrokedColor(text, x, y, textsize, 4, 'white', ctx)
+	_drawStrokedColor(text, x, y, textsize, 4, 'white', ctx, false)
 }
-function _drawStrokedColor(text, x, y, textsize,lw, color, ctx) {
+function _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
 	ctx.font = textsize + "px Sans-serif"
-	ctx.strokeStyle = 'black';
 	ctx.lineWidth = lw;
+	if (blend) { // blend color into border
+		ctx.strokeStyle = color;
+		ctx.strokeText(text, x, y);
+		ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+	} else { // black border
+		ctx.strokeStyle = 'black';
+	}
 	ctx.strokeText(text, x, y);
 	ctx.fillStyle = color;
 	ctx.fillText(text, x, y);
@@ -142,9 +148,9 @@ function _convertLetterToDataURLviaCanvas(letter,color, outputFormat){
 	ctx.textAlign = "center"
 	if (n > 2) {
 		reduce = 1.5
-		_drawStrokedColor(letter,x,20 + 15 / reduce,40 / reduce,3,color,ctx);
+		_drawStrokedColor(letter,x,20 + 15 / reduce,40 / reduce,3,color,ctx, true);
 	} else {
-		_drawStrokedColor(letter,x,35,40,4,color,ctx);
+		_drawStrokedColor(letter,x,35,40,4,color,ctx, true);
 	}
 	var dataURL = canvas.toDataURL(outputFormat);
 	canvas = null; 
