@@ -38,6 +38,9 @@
 .div-sandbox div#double_description_container {
     margin: 0 12px;
 }
+.div-sandbox div#topMenuSpacer {
+    height: 0.5em;
+}
 
 .div-sandbox #savelink{
     margin-top: 10px;

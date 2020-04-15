@@ -1221,8 +1221,8 @@ function loadpreset(modelName) {
 			voters: 1,
 			voterPositions: [
 				[155, 125]
-			]
-
+			],
+			hidegearconfig: true
 
 		}
 		update = function (s) {
@@ -1308,7 +1308,8 @@ function loadpreset(modelName) {
 			secondStrategy: "normalize frontrunners only",
 			autoPoll: "Auto",
 			visSingleBallotsOnly: false,
-			theme: "Letters"
+			theme: "Letters",
+			menuVersion: "2"
 		}
 	} else if (htmlname == "sandbox_original.html") {
 		config = {

@@ -102,7 +102,7 @@ function Model(modelName){
 		self.tarena.initDOM()
 		
 		self.dom.style.width = (self.size+2*self.border)+"px"; // size+2*borders!
-		self.caption.style.width = self.dom.style.width;
+		// self.caption.style.width = self.dom.style.width;
 	}
 
 	self.initMODEL = function() {
