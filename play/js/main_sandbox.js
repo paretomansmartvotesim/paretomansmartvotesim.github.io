@@ -211,9 +211,31 @@ function Sandbox(modelName) {
                         case 3: return ["systems","voters","candidates"]
                         case 4: 
                             config.sandboxsave = true
-                            return ["systems","voters","candidates"] 	}	}	}
+                            return ["systems","voters","candidates"] 	
+                        }
+                    }
+                }
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
-            if (config.doFullStrategyConfig) config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","theme","customNames","stepMenu","menuLevel","menuVersion"]) // ,"viz"
+            if (config.doFullStrategyConfig) {
+                // basically everything that should be displayed at the start
+                config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","theme","customNames","stepMenu","menuLevel","menuVersion"]) // ,"viz"                
+                config.featurelist = config.featurelist.concat([
+                    "gearconfig",
+                    "presetconfig",
+                    "computeMethod",
+                    "spread_factor_voters",
+                    "arena_size",
+                    "median_mean",
+                    "colorChooser",
+                    "colorSpace",
+                    "utility_shape",
+                    "votersAsCandidates",
+                    "visSingleBallotsOnly",
+                    "ballotVis",
+                    "menuVersion",
+                    "gearoff"
+                ])
+            }
             // clear the grandfathered config settings
             delete config.doPercentFirst
             delete config.features
@@ -257,8 +279,22 @@ function Sandbox(modelName) {
                     "stepMenu":"stepMenu",
                     "customNames":"customNames",
                     // "viz":"viz",
-                    "theme":"theme"
-                    // "primaries":"primaries"
+                    "theme":"theme",
+                    // "primaries":"primaries",
+                    "gearconfig":"gearconfig",
+                    "presetconfig":"presetconfig",
+                    "computeMethod":"computeMethod",
+                    "spread_factor_voters":"spread_factor_voters",
+                    "arena_size":"arena_size",
+                    "median_mean":"median_mean",
+                    "colorChooser":"colorChooser",
+                    "colorSpace":"colorSpace",
+                    "utility_shape":"utility_shape",
+                    "votersAsCandidates":"votersAsCandidates",
+                    "visSingleBallotsOnly":"visSingleBallotsOnly",
+                    "ballotVis":"ballotVis",
+                    "menuVersion":"menuVersion",
+                    "gearoff":"gearoff",
                 }
                 var temp_featurelist = []
                 for (var i=0; i<config.featurelist.length; i++) {
@@ -2689,29 +2725,12 @@ function Sandbox(modelName) {
             // gear means 
         };
         self.configure = function() {
-            var gearItems = [
-                "gearconfig",
-                "presetconfig",
-                "computeMethod",
-                "spread_factor_voters",
-                "arena_size",
-                "median_mean",
-                "colorChooser",
-                "colorSpace",
-                "utility_shape",
-                "votersAsCandidates",
-                "visSingleBallotsOnly",
-                "ballotVis",
-                "menuVersion",
-                "gearoff"
-            ]
-            if (self.isOn || config.menuVersion != "1") {
-                gearItems.forEach( x => ui.menu[x].choose.dom.hidden = false)
+            if (self.isOn) {
+                menuList1Dom["gearList"].hidden = false
             } else {
-                gearItems.forEach( x => ui.menu[x].choose.dom.hidden = true)
+                
+                menuList1Dom["gearList"].hidden = true
             }
-            
-            configFeaturelist(self.isOn, gearItems)
         }
         // no select because we don't want to save with the config menu open
         self.choose = new ButtonGroup({
@@ -2805,13 +2824,13 @@ function Sandbox(modelName) {
                 // configFeaturelist(true, hiddenInMenu2) // on
                 // configFeaturelist(false, hiddenInMenu1) // off
                 ui.menu.gearicon.onChoose({isOn:false}) // off
-                topMenu.hidden = true // off
+                topMenu2.hidden = true // off
             } else {
                 buildSubMenus() // place menu items into dom structure
                 ui.menu.gearicon.onChoose({isOn:true}) // turn on everything
                 // configFeaturelist(true, hiddenInMenu1) // turn on everything
                 // configFeaturelist(false, hiddenInMenu2) // turn off some things
-                topMenu.hidden = false // turn on menu and spacer
+                topMenu2.hidden = false // turn on menu and spacer
             }
             menu_update() // actually hide/show things
         }
@@ -2957,108 +2976,86 @@ function Sandbox(modelName) {
 
 
 
-
-    menuList = [
-        "gearicon",
-        "menuLevel",
-        "stepMenu",
-        "gearconfig", // start of hidden list
-        "presetconfig",
-        "menuVersion",
-        "computeMethod",
-        "colorChooser",
-        "colorSpace",
-        "spread_factor_voters",
-        "arena_size",
-        "median_mean",
-        "theme",
-        "utility_shape",
-        "votersAsCandidates",
-        "ballotVis",
-        "visSingleBallotsOnly",
-        "gearoff",
-        "systems", // start of normal list
-        "rbSystems",
-        "dimensions",
-        "nDistricts",
-        "seats",
-        "nVoterGroups",
-        "xVoterGroups",
-        "group_count",
-        "group_spread",
-        "nCandidates",
-        "theme",
-        "customNames",
-        "namelist",
-        "firstStrategy",
-        "doTwoStrategies",
-        "secondStrategy",
-        "percentSecondStrategy",
-        // "primaries", // not doing this one, comment out
-        "autoPoll",
-        "frontrunners",
-        "poll",
-        // "viz",
-        "yee",
-        "yeefilter" ,
-        "choose_pixel_size"
-    ]
-    gearList = [
-        "gearconfig",
-        "presetconfig",
-        "computeMethod",
-        "colorChooser",
-        "colorSpace",
-        "spread_factor_voters",
-        "arena_size",
-        "median_mean",
-        "theme",
-        "utility_shape",
-        "votersAsCandidates",
-        "ballotVis",
-        "visSingleBallotsOnly",
-        "gearoff",
-        "rbSystems",
-        "yeefilter",
-        "choose_pixel_size",
-        "menuVersion",
-    ]
-    hiddenInMenu1 = [
-        "menuLevel",
-        "stepMenu"
-    ]
+    menuList1Keys = ["gearicon","gearList","main","hidden"]
+    menuList1 = {
+        gearicon: [
+            "gearicon",
+        ],
+        gearList: [
+            "gearconfig", // start of hidden list
+            "presetconfig",
+            "menuVersion",
+            "computeMethod",
+            "colorChooser",
+            "colorSpace",
+            "spread_factor_voters",
+            "arena_size",
+            "median_mean",
+            "theme",
+            "utility_shape",
+            "votersAsCandidates",
+            "ballotVis",
+            "visSingleBallotsOnly",
+            "gearoff",
+        ],
+        main: [
+            "systems", // start of normal list
+            "rbSystems",
+            "dimensions",
+            "nDistricts",
+            "seats",
+            "nVoterGroups",
+            "xVoterGroups",
+            "group_count",
+            "group_spread",
+            "nCandidates",
+            "theme",
+            "customNames",
+            "namelist",
+            "firstStrategy",
+            "doTwoStrategies",
+            "secondStrategy",
+            "percentSecondStrategy",
+            // "primaries", // not doing this one, comment out
+            "autoPoll",
+            "frontrunners",
+            "poll",
+            // "viz",
+            "yee",
+            "yeefilter" ,
+            "choose_pixel_size",
+        ],
+        hidden: [
+            "menuLevel",
+            "stepMenu",
+        ]
+    }
+    hiddenInMenu1 = menuList1.hidden
 
     // hidden menu - for things that don't fit into the other spots
     
-    var hiddenMenu = document.createElement("div")
-    hiddenMenu.hidden = true
+    var menuList1Dom = {}
     var baseleft = basediv.querySelector("#left")
-    baseleft.appendChild(hiddenMenu)
+    function assignMenu1() {
+        // create divs
+        for (var key of menuList1Keys) {
+            var dom = document.createElement("div")
+            baseleft.appendChild(dom)
+            menuList1Dom[key] = dom
+        }
+        menuList1Dom["gearList"].hidden = true
+        menuList1Dom["hidden"].hidden = true
+    }
+    assignMenu1()
 
     // append all the menu dom elements to the menu
     function buildMenu1() {
-        baseleft = basediv.querySelector("#left")
 
-        for (var i = 0; i < menuList.length; i++) {
-            var menuID = menuList[i]
-            // var parent = document.createElement("div")
-            // baseleft.appendChild(parent)
-            // parent.appendChild(ui.menu[menuID].choose.dom)
-            baseleft.appendChild(ui.menu[menuID].choose.dom)
+        for (var key of menuList1Keys) {
+            for (var menuID of menuList1[key]) {
+                menuList1Dom[key].appendChild(ui.menu[menuID].choose.dom)
+            }
         }
-    
-        // some menu items are hidden by default
-        for (var i = 0; i < gearList.length; i++) {
-            var hiddenID = gearList[i]
-            ui.menu[hiddenID].choose.dom.hidden = true
-        }
-
-        for (var i = 0; i < hiddenInMenu1.length; i++) {
-            var hiddenID = hiddenInMenu1[i]
-            // ui.menu[hiddenID].choose.dom.hidden = true
-            hiddenMenu.appendChild(ui.menu[hiddenID].choose.dom)
-        }
-        return
     }
 
     buildMenu1()
@@ -3190,11 +3187,14 @@ function Sandbox(modelName) {
         "advanced":[] // list of advanced doms to turn on/off
     }
     var submenuAndLevelDom = {}
-    var topMenu
+    var topMenu2
+    var hiddenMenu2
     function assignSubMenus() { // don't actually append to dom yet
         var baseleft = basediv.querySelector("#left")
-        topMenu = document.createElement("div")
-        baseleft.appendChild(topMenu)
+
+        topMenu2 = document.createElement("div")
+        baseleft.appendChild(topMenu2)
+
         for (var a in submenus) {
             var parent1 = document.createElement("div")
             baseleft.appendChild(parent1)
@@ -3210,18 +3210,23 @@ function Sandbox(modelName) {
                 // }
             }
         }
+
+        hiddenMenu2 = document.createElement("div")
+        hiddenMenu2.hidden = true
     }
 
     assignSubMenus()
 
     // now repeat the above but append the submenu items to the dom
     function buildSubMenus() {
+
         for (var c of ["menuLevel","stepMenu"]) { // the topmost menu
-            topMenu.appendChild(ui.menu[c].choose.dom)
+            topMenu2.appendChild(ui.menu[c].choose.dom)
         }
         var spacer = document.createElement("div")
-        spacer.id = "topMenuSpacer"
-        topMenu.appendChild(spacer)
+        spacer.id = "topMenu2Spacer"
+        topMenu2.appendChild(spacer)
+
         for (var a in submenus) { // the submenus
             for (var b of ["normal","advanced"]) {
                 parent2 = submenuAndLevelDom[a][b]
@@ -3231,10 +3236,8 @@ function Sandbox(modelName) {
             }
         }
         
-        for (var i = 0; i < hiddenInMenu2.length; i++) {
-            var hiddenID = hiddenInMenu2[i]
-            // ui.menu[hiddenID].choose.dom.hidden = true
-            hiddenMenu.appendChild(ui.menu[hiddenID].choose.dom)
+        for (var hiddenID of hiddenInMenu2) {
+            hiddenMenu2.appendChild(ui.menu[hiddenID].choose.dom)
         }
     }
 
