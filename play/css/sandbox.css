@@ -38,7 +38,7 @@
 .div-sandbox div#double_description_container {
     margin: 0 12px;
 }
-.div-sandbox div#topMenuSpacer {
+.div-sandbox div.topMenuSpacer {
     height: 0.5em;
 }
 

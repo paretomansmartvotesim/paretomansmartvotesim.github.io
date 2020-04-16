@@ -1309,7 +1309,9 @@ function loadpreset(modelName) {
 			autoPoll: "Auto",
 			visSingleBallotsOnly: false,
 			theme: "Letters",
-			menuVersion: "2"
+			menuVersion: "2",
+			featurelistVer: "2",
+			doFeatureFilter: false,
 		}
 	} else if (htmlname == "sandbox_original.html") {
 		config = {

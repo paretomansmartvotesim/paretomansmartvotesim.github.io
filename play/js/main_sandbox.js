@@ -81,7 +81,9 @@ function Sandbox(modelName) {
         computeMethod: "ez",
         pixelsize: 60,
         optionsForElection: {sidebar:true}, // sandboxes have this default
-        featurelist: ["systems","dimensions","customNames","theme","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","menuLevel","stepMenu","menuVersion"] // ,"viz"
+        featurelist: ["systems","dimensions","customNames","theme","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","menuLevel","stepMenu","menuVersion"], // ,"viz"
+        featurelistVer: "1",
+        doFeatureFilter: true,
     }
     self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
@@ -166,6 +168,31 @@ function Sandbox(modelName) {
         // FILENAME
         // config.presethtmlname = self.url.substring(self.url.lastIndexOf('/')+1);
 
+        var configFeatures = [
+            "gearconfig",
+            "presetconfig",
+            "computeMethod",
+            "spread_factor_voters",
+            "arena_size",
+            "median_mean",
+            "colorChooser",
+            "colorSpace",
+            "utility_shape",
+            "votersAsCandidates",
+            "visSingleBallotsOnly",
+            "ballotVis",
+            "menuVersion",
+            "doFeatureFilter",
+            "gearoff"
+        ]
+        // There is a problem in going from an old featureset to a new one.
+        // The new features are not included in the set.
+        // So we add an opton to choose whether to filter features.
+        // By default the filter is on.
+        // The default in the sandbox preset is off.
+        // In this way, it is easy to switch the filter off and update the features.
+        // The filter switch is inside the config menu.
+
         if(config.configversion == undefined || config.configversion == 1) {
             // GRANDFATHER URL variable names
             // change old variable names to new names to preserve backward compatibility with urls and presets
@@ -218,23 +245,8 @@ function Sandbox(modelName) {
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
             if (config.doFullStrategyConfig) {
                 // basically everything that should be displayed at the start
-                config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","theme","customNames","stepMenu","menuLevel","menuVersion"]) // ,"viz"                
-                config.featurelist = config.featurelist.concat([
-                    "gearconfig",
-                    "presetconfig",
-                    "computeMethod",
-                    "spread_factor_voters",
-                    "arena_size",
-                    "median_mean",
-                    "colorChooser",
-                    "colorSpace",
-                    "utility_shape",
-                    "votersAsCandidates",
-                    "visSingleBallotsOnly",
-                    "ballotVis",
-                    "menuVersion",
-                    "gearoff"
-                ])
+                config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","theme","customNames","stepMenu","menuLevel","menuVersion","spacer"]) // ,"viz"                
+                config.featurelist = config.featurelist.concat(configFeatures)
             }
             // clear the grandfathered config settings
             delete config.doPercentFirst
@@ -295,6 +307,9 @@ function Sandbox(modelName) {
                     "ballotVis":"ballotVis",
                     "menuVersion":"menuVersion",
                     "gearoff":"gearoff",
+                    "featurelistVer":"featurelistVer",
+                    "doFeatureFilter":"doFeatureFilter",
+                    "spacer":"spacer",
                 }
                 var temp_featurelist = []
                 for (var i=0; i<config.featurelist.length; i++) {
@@ -377,6 +392,10 @@ function Sandbox(modelName) {
         }
 
         _fillInDefaults(config, defaults)
+
+        
+        // add in features that were not included with the old version
+        if (config.featurelistVer == "1") configFeaturelist(true, configFeatures)
     }
 
     model.start = function(){
@@ -486,8 +505,9 @@ function Sandbox(modelName) {
 
     function menu_update() {
         // UPDATE MENU //
+        // to delete
         for (i in ui.menu) {
-            if(config.featurelist.includes(i)) {
+            if( !config.doFeatureFilter || config.featurelist.includes(i) ) {
                 ui.menu[i].choose.dom.hidden = false
             } else {
                 ui.menu[i].choose.dom.hidden = true
@@ -2082,8 +2102,17 @@ function Sandbox(modelName) {
             }
             config.featurelist = Array.from(featureset)
             // UPDATE
-            menu_update()
+            self.configure()
         };
+        self.configure = function() {
+            for (i in ui.menu) {
+                if(!config.doFeatureFilter || config.featurelist.includes(i)) {
+                    ui.menu[i].choose.dom.hidden = false
+                } else {
+                    ui.menu[i].choose.dom.hidden = true
+                }
+            }
+        }
         self.select = function() {
             self.choose.highlight("realname", config.featurelist);
         }
@@ -2726,10 +2755,10 @@ function Sandbox(modelName) {
         };
         self.configure = function() {
             if (self.isOn) {
-                menuList1Dom["gearList"].hidden = false
+                m1.menuNameDivs["gearList"][0].hidden = false
             } else {
                 
-                menuList1Dom["gearList"].hidden = true
+                m1.menuNameDivs["gearList"][0].hidden = true
             }
         }
         // no select because we don't want to save with the config menu open
@@ -2820,17 +2849,9 @@ function Sandbox(modelName) {
             
             // reattach nodes
             if (config.menuVersion === "1") {
-                buildMenu1()
-                // configFeaturelist(true, hiddenInMenu2) // on
-                // configFeaturelist(false, hiddenInMenu1) // off
-                ui.menu.gearicon.onChoose({isOn:false}) // off
-                topMenu2.hidden = true // off
+                m1.buildSubMenus()
             } else {
-                buildSubMenus() // place menu items into dom structure
-                ui.menu.gearicon.onChoose({isOn:true}) // turn on everything
-                // configFeaturelist(true, hiddenInMenu1) // turn on everything
-                // configFeaturelist(false, hiddenInMenu2) // turn off some things
-                topMenu2.hidden = false // turn on menu and spacer
+                m2.buildSubMenus() // place menu items into dom structure
             }
             menu_update() // actually hide/show things
         }
@@ -2863,13 +2884,13 @@ function Sandbox(modelName) {
             opts = ui.menu.stepMenu.choose.dom.children // stepMenu options
 
             if (config.menuLevel === "normal") { // hide advanced features
-                for( var dom of levelDoms["advanced"]) {
+                for( var dom of m2.menuNameDivs["advanced"]) {
                     dom.hidden = true
                 }
                 opts[5].hidden = true // these options only have advanced features
                 opts[6].hidden = true
             } else if (config.menuLevel === "advanced") {
-                for( var dom of levelDoms["advanced"]) {
+                for( var dom of m2.menuNameDivs["advanced"]) {
                     dom.hidden = false
                 }
                 opts[5].hidden = false
@@ -2906,10 +2927,10 @@ function Sandbox(modelName) {
         };
         self.configure = function() {
             for (var e of self.list) {
-                submenuDom[e.value].hidden = true
+                m2.menuNameDivs[e.value][0].hidden = true
             }
             // one on
-            submenuDom[config.stepMenu].hidden = false
+            m2.menuNameDivs[config.stepMenu][0].hidden = false
         }
         self.choose = new ButtonGroup({
             label: "Steps:", // Sub Menu
@@ -2922,30 +2943,45 @@ function Sandbox(modelName) {
         }
     }
 
+    
+    ui.menu.doFeatureFilter = new function () {
+        var self = this
+        // self.name = doFeatureFilter
+        self.list = [
+            {name:"yes",value:true,margin:4},
+            {name:"no",value:false},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.doFeatureFilter = data.value
+            // CONFIGURE
+            self.configure()
+        };
+        self.configure = function() {
+            ui.menu.gearconfig.configure()
+        }
+        self.choose = new ButtonGroup({
+            label: "Enable filtering of menu items?:", // Sub Menu
+            width: 100,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.doFeatureFilter);
+        }
+    }
+
+    ui.menu.spacer = new function () {
+        var self = this
+        self.choose = {}
+        self.choose.dom = document.createElement("div")
+        self.choose.dom.className = "topMenuSpacer"
+    }
+    
+
     // rebuild menu
 
     // function to make menu items visible/hidden
-    // function showSubMenus() {
-    //     // depends on menuLevels and 
-
-    //     // clear
-    //     // turn all submenus off
-    //     var xlist = []
-    //     for (var a in submenus) {
-    //         for (var b in submenus[a]) {
-    //             xlist = xlist.concat(submenus[a][b])
-    //         }
-    //     }
-    //     configFeaturelist(false, xlist)
-
-    //     // only turn the selected submenu on
-    //     xlist = submenus[config.submenu]["normal"]
-    //     if (config.menuLevel === "advanced") {
-    //         xlist2 = submenus[config.submenu]["normal"]
-    //         xlist = xlist.concat(xlist2)
-    //     }
-    //     configFeaturelist(true, xlist)
-    // }
 
     // but there are some submenus that are dependent on selections from other menus,
     // so we need to run the choose operations for those menu items
@@ -2975,13 +3011,12 @@ function Sandbox(modelName) {
     /////////////////
 
 
-
-    menuList1Keys = ["gearicon","gearList","main","hidden"]
-    menuList1 = {
-        gearicon: [
+    menu1 = [
+        ["gearicon", [
             "gearicon",
-        ],
-        gearList: [
+        ]],
+        [ "gearList", [
+            "doFeatureFilter",
             "gearconfig", // start of hidden list
             "presetconfig",
             "menuVersion",
@@ -2997,8 +3032,8 @@ function Sandbox(modelName) {
             "ballotVis",
             "visSingleBallotsOnly",
             "gearoff",
-        ],
-        main: [
+        ]],
+        [ "main", [
             "systems", // start of normal list
             "rbSystems",
             "dimensions",
@@ -3024,222 +3059,184 @@ function Sandbox(modelName) {
             "yee",
             "yeefilter" ,
             "choose_pixel_size",
-        ],
-        hidden: [
+        ]],
+        [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "menuLevel",
             "stepMenu",
-        ]
-    }
-    hiddenInMenu1 = menuList1.hidden
+            "spacer",
+        ]],
+    ]
 
-    // hidden menu - for things that don't fit into the other spots
-    
-    var menuList1Dom = {}
-    var baseleft = basediv.querySelector("#left")
-    function assignMenu1() {
-        // create divs
-        for (var key of menuList1Keys) {
-            var dom = document.createElement("div")
-            baseleft.appendChild(dom)
-            menuList1Dom[key] = dom
-        }
-        menuList1Dom["gearList"].hidden = true
-        menuList1Dom["hidden"].hidden = true
-    }
-    assignMenu1()
-
-    // append all the menu dom elements to the menu
-    function buildMenu1() {
-
-        for (var key of menuList1Keys) {
-            for (var menuID of menuList1[key]) {
-                menuList1Dom[key].appendChild(ui.menu[menuID].choose.dom)
-            }
-        }
-    }
-
-    buildMenu1()
-
-    
 
     // organize into submenus
 
-    basic = [
-        "systems",
-        "nCandidates",
-        "nVoterGroups",
-    ]
-    // submenus = [
-    //     [
-    //         "geometry",
-    //         [
-    //             "normal",
-    //             [
-    //                 "dimensions",
-    //                 "nDistricts",
-    //                 "nVoterGroups",
-    //                 "xVoterGroups",
-    //                 "group_count",
-    //                 "group_spread",
-    //                 "nCandidates",
-    //             ]
+    menu2 = [
+        ["topmenu", [
+            "menuLevel",
+            "stepMenu",
+            "spacer",
+        ]],
+        [ "submenu", [
+            [ "geometry", [
+                [ "normal", [
+                    "dimensions",
+                    "nDistricts",
+                    "nVoterGroups",
+                    "xVoterGroups",
+                    "group_count",
+                    "group_spread",
+                    "nCandidates",
+                ]],
+                [ "advanced", [
+                    "spread_factor_voters",
+                    "arena_size",
+                    "median_mean",
+                    "utility_shape",
+                    "votersAsCandidates",
+                ]],
+            ]],
+            ["style", [
+                ["normal", [
+                    "theme",
+                    "customNames",
+                    "namelist",
+                ]],
+                ["advanced", [
+                    "colorChooser",
+                    "colorSpace",
+                ]],
+            ]],
+            ["method", [
+                ["normal", [
+                    "systems",
+                    "rbSystems",
+                    "seats",
+                    "firstStrategy",
+                    "doTwoStrategies",
+                    "secondStrategy",
+                    "percentSecondStrategy",
+                    "autoPoll",
+                    "frontrunners",
+                    "poll",
+                    // "primaries", // not doing this one, comment out               
+                ]],
+                ["advanced", [
+                    
+                ]],
+            ]],
+            ["viz", [
+                ["normal", [
+                    // "viz",
+                    "yee",
+                    "yeefilter" ,
+                    "choose_pixel_size"
+                ]],
+                ["advanced", [
+                    "ballotVis",
+                    "visSingleBallotsOnly",
+                ]],
+            ]],
+            ["ui", [
+                ["normal", [
+                ]],
+                ["advanced", [
+                    "menuVersion",
+                    "doFeatureFilter",
+                    "gearconfig", 
+                    "presetconfig",
+                ]],
+            ]],
+            ["compute", [
+                ["normal", [
 
-    //     ]]
+                ]],
+                ["advanced", [
+                    "computeMethod",
+                ]],
+            ]],
+        ]],
+        ["hidden", [
+            "gearoff",
+            "gearicon",
+        ]],
+    ]
+
+    // TODO
+    // basic = [
+    //     "systems",
+    //     "nCandidates",
+    //     "nVoterGroups",
     // ]
 
-    orderedSubMenu = [
-        "geometry",
-        "style",
-        "method",
-        "viz",
-        "ui",
-        "compute"
-    ]
 
-    submenus = {
-        geometry: {
-            normal: [
-                "dimensions",
-                "nDistricts",
-                "nVoterGroups",
-                "xVoterGroups",
-                "group_count",
-                "group_spread",
-                "nCandidates",
-            ],
-            advanced: [
-                "spread_factor_voters",
-                "arena_size",
-                "median_mean",
-                "utility_shape",
-                "votersAsCandidates",
-            ]
-        },
-        style: {
-            normal: [
-                "theme",
-                "customNames",
-                "namelist",
-            ],
-            advanced: [
-                "colorChooser",
-                "colorSpace",
-            ]
-        },
-        method: {
-            normal: [
-                "systems",
-                "rbSystems",
-                "seats",
-                "firstStrategy",
-                "doTwoStrategies",
-                "secondStrategy",
-                "percentSecondStrategy",
-                "autoPoll",
-                "frontrunners",
-                "poll",
-                // "primaries", // not doing this one, comment out               
-            ],
-            advanced: [
-                
-            ],
-        },
-        viz: {
-            normal: [
-                // "viz",
-                "yee",
-                "yeefilter" ,
-                "choose_pixel_size"
-            ],
-            advanced: [
-                "ballotVis",
-                "visSingleBallotsOnly",
-            ]
-        },
-        ui: {
-            normal: [
-            ],
-            advanced: [
-                "menuVersion",
-                "gearconfig", 
-                "presetconfig",
-            ]
-        },
-        compute: {
-            normal: [
+    var m1 = new menuTree()
+    m1.assignMenu( menu1 , basediv.querySelector("#left"), "basediv" )
+    // detail: seems harmless, but the basediv gets reattached.
+    
+    m1.menuNameDivs["gearList"][0].hidden = true
+    m1.menuNameDivs["hidden"][0].hidden = true
 
-            ],
-            advanced: [
-                "computeMethod",
-            ]
-        }
-    }
-    hiddenInMenu2 = [
-        "gearoff",
-        "gearicon"
-    ]
+    m1.buildSubMenus()
+    
 
-    // append all the menu dom elements to the menu
+    var m2 = new menuTree()
+    m2.assignMenu( menu2 , basediv.querySelector("#left"), "basediv" )
 
-    var submenuDom = {} // list of submenu doms to turn on/off
-    var levelDoms = {
-        "normal":[],
-        "advanced":[] // list of advanced doms to turn on/off
-    }
-    var submenuAndLevelDom = {}
-    var topMenu2
-    var hiddenMenu2
-    function assignSubMenus() { // don't actually append to dom yet
-        var baseleft = basediv.querySelector("#left")
+    m2.menuNameDivs["hidden"][0].hidden = true
 
-        topMenu2 = document.createElement("div")
-        baseleft.appendChild(topMenu2)
+    
+    function menuTree() {
+        var self = this
 
-        for (var a in submenus) {
-            var parent1 = document.createElement("div")
-            baseleft.appendChild(parent1)
-            submenuDom[a] = parent1
-            submenuAndLevelDom[a] = {}
-            for (var b of ["normal","advanced"]) {
-                var parent2 = document.createElement("div")
-                parent1.appendChild(parent2)
-                levelDoms[b].push(parent2)
-                submenuAndLevelDom[a][b] = parent2
-                // for (var c of submenus[a][b]) {
-                //     parent2.appendChild(ui.menu[c].choose.dom)
-                // }
+        // Loop through and collect nodes with the same name into a list
+        // Later, during build, use that list to turn divs on and off
+
+        // append all the menu dom elements to the menu
+
+
+        self.menuNameDivs = {}
+        // Here are all the divs that correspond to names to toggle on and off
+        // list of submenu doms to turn on/off
+
+        var ap = []
+        // Here are all the attachments points for the nodes
+        // Now I just need a list of the child doms for each one
+        // so that later I can loop through all the attachment points and attach the children.
+        // ap[i].parent: parent div
+        // ap[i].children:  [array of divs to attach]
+        
+        self.assignMenu = function(m,parent,name) {
+            var children = []
+            for (var a of m) {
+                if (typeof a === "string") { // child
+                    var div = ui.menu[a].choose.dom
+                } else { // parent
+                    var div = document.createElement("div")
+                    parent.appendChild(div)
+                    var aName = a[0]
+                    if (self.menuNameDivs[aName] == undefined) {
+                        self.menuNameDivs[aName] = []
+                    }
+                    self.menuNameDivs[aName].push(div)
+                    self.assignMenu(a[1],div,aName) // recursion
+                }
+                children.push(div)
             }
+            ap.push({parentName:name,parent:parent,children:children})
         }
-
-        hiddenMenu2 = document.createElement("div")
-        hiddenMenu2.hidden = true
-    }
-
-    assignSubMenus()
-
-    // now repeat the above but append the submenu items to the dom
-    function buildSubMenus() {
-
-        for (var c of ["menuLevel","stepMenu"]) { // the topmost menu
-            topMenu2.appendChild(ui.menu[c].choose.dom)
-        }
-        var spacer = document.createElement("div")
-        spacer.id = "topMenu2Spacer"
-        topMenu2.appendChild(spacer)
-
-        for (var a in submenus) { // the submenus
-            for (var b of ["normal","advanced"]) {
-                parent2 = submenuAndLevelDom[a][b]
-                for (var c of submenus[a][b]) {
-                    parent2.appendChild(ui.menu[c].choose.dom)
+    
+        // To build the menu, it's really easy, just attach the divs for the menu items to the submenu div structure
+        self.buildSubMenus = function() {
+            for (var a of ap) {
+                for(var child of a.children) {
+                    a.parent.appendChild(child)
                 }
             }
         }
-        
-        for (var hiddenID of hiddenInMenu2) {
-            hiddenMenu2.appendChild(ui.menu[hiddenID].choose.dom)
-        }
+
     }
+
+
 
     //////////////////////////
     //////// RESET... ////////
