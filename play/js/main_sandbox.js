@@ -83,7 +83,7 @@ function Sandbox(modelName) {
         optionsForElection: {sidebar:true}, // sandboxes have this default
         featurelist: ["systems","dimensions","customNames","theme","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","menuLevel","stepMenu","menuVersion"], // ,"viz"
         featurelistVer: "1",
-        doFeatureFilter: true,
+        doFeatureFilter: true, 
     }
     self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
@@ -695,19 +695,6 @@ function Sandbox(modelName) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.system = data.name;
-            var turnOnRBVote = (data.name == "RBVote")
-            var xlist = ["rbSystems"]
-            var featureset = new Set(config.featurelist)
-            for (var i in xlist){
-                var xi = xlist[i]
-                if ( turnOnRBVote) {
-                    featureset.add(xi)
-                } else {
-                    featureset.delete(xi)
-                }
-            }
-            config.system = data.name;
-            config.featurelist = Array.from(featureset)
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -727,6 +714,9 @@ function Sandbox(modelName) {
             onChoose: self.onChoose
         });
         self.configure= function() {
+            
+            showMenuItemsIf("divRBVote", config.system === "RBVote")
+
             var s = self.listByName()
             model.election = s.election
             model.system = config.system;
@@ -1002,17 +992,8 @@ function Sandbox(modelName) {
         self.onChoose = function(data){
             // LOAD INPUT
             // add the configuration for the voter groups when "X" is chosen
-            var xlist = ["group_count","group_spread","xVoterGroups"]
-            var featureset = new Set(config.featurelist)
-            for (var i in xlist){
-                var xi = xlist[i]
-                if (data.x_voters) {
-                    featureset.add(xi)
-                } else {
-                    featureset.delete(xi)
-                }
-            }
-            config.featurelist = Array.from(featureset)
+            
+            
             if(data.x_voters) {
                 config.numVoterGroups = config.xNumVoterGroups
             } else {
@@ -1053,6 +1034,7 @@ function Sandbox(modelName) {
         self.configure = function() {	
             // MODEL //
 
+            showMenuItemsIf("divXVoterGroups", config.x_voters)
 
             // MODEL //
             model.nVoterGroupsRealName = config.nVoterGroupsRealName	
@@ -1204,6 +1186,8 @@ function Sandbox(modelName) {
             self.configure()
             // INIT
             model.voters[n].init()
+            model.arena.pileVoters()
+            model.arena.redistrict()
             // UPDATE
             model.update()
             menu_update()
@@ -1408,18 +1392,6 @@ function Sandbox(modelName) {
         self.onChoose = function(data){
             // LOAD
             config.customNames = data.name
-            // LOAD more
-            var xlist = ["namelist"]
-            var featureset = new Set(config.featurelist)
-            for (var i in xlist){
-                var xi = xlist[i]
-                if (data.name == "Yes") {
-                    featureset.add(xi)
-                } else {
-                    featureset.delete(xi)
-                }
-            }
-            config.featurelist = Array.from(featureset)
             // CONFIGURE
             self.configure()
             // INIT
@@ -1431,6 +1403,7 @@ function Sandbox(modelName) {
             model.update()
         };
         self.configure = function() {
+            showMenuItemsIf("divCustomNames", config.customNames === "Yes")
             model.customNames = config.customNames
             ui.menu.namelist.choose.dom.hidden = (model.customNames == "Yes") ? false : true
         }
@@ -1530,8 +1503,6 @@ function Sandbox(modelName) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.firstStrategy = data.realname;
-            // CONFIGURE FEATURELIST
-            _loadConfigForStrategyButtons(config)
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1545,6 +1516,7 @@ function Sandbox(modelName) {
             onChoose: self.onChoose
         });
         self.configure = function() {
+            _showOrHideMenuForStrategy(config)
             model.firstStrategy = config.firstStrategy
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].firstStrategy = config.firstStrategy
@@ -1555,7 +1527,7 @@ function Sandbox(modelName) {
         }
     }
 
-    function _loadConfigForStrategyButtons(config) {			
+    function _showOrHideMenuForStrategy(config) {			
         var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
         var turnOffFrontrunnerControls =  not_f.includes(config.firstStrategy)
         if (config.doTwoStrategies) {
@@ -1565,24 +1537,8 @@ function Sandbox(modelName) {
                 }
             }
         }
-        var xlist = ["frontrunners","autoPoll","poll"]
-        var featureset = new Set(config.featurelist)
-        for (var i in xlist){
-            var xi = xlist[i]
-            if ( ! turnOffFrontrunnerControls) {
-                featureset.add(xi)
-            } else {
-                featureset.delete(xi)
-            }
-        }
-        if (config.autoPoll == "Auto") {
-            var xlist = ["frontrunners","poll"]
-            for (var i in xlist){
-                var xi = xlist[i]
-                featureset.delete(xi)
-            }
-        }
-        config.featurelist = Array.from(featureset)
+        showMenuItemsIf("divPoll", ! turnOffFrontrunnerControls)
+        showMenuItemsIf("divManualPoll", ! config.autoPoll == "Auto")
     }
 
     ui.menu.doTwoStrategies = new function() { // Is there a 2nd strategy?
@@ -1593,20 +1549,7 @@ function Sandbox(modelName) {
         ];
         self.onChoose = function(data){
             // LOAD INPUT
-            var xlist = ["secondStrategy","percentSecondStrategy"]
-            var featureset = new Set(config.featurelist)
-            for (var i in xlist){
-                var xi = xlist[i]
-                if (data.isOn) {
-                    featureset.add(xi)
-                } else {
-                    featureset.delete(xi)
-                }
-            }
-            config.featurelist = Array.from(featureset)
             config.doTwoStrategies = data.isOn
-            // CONFIGURE FEATURELIST
-            _loadConfigForStrategyButtons(config)
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1614,6 +1557,8 @@ function Sandbox(modelName) {
             menu_update()
         };
         self.configure = function() {
+            showMenuItemsIf("divSecondStrategy", config.doTwoStrategies)
+            _showOrHideMenuForStrategy(config)
             model.doTwoStrategies = config.doTwoStrategies
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].doTwoStrategies = config.doTwoStrategies
@@ -1673,8 +1618,6 @@ function Sandbox(modelName) {
             for (var i = 0; i < maxVoters; i++) {
                 config.secondStrategies[i] = data.realname
             }
-            // CONFIGURE FEATURELIST
-            _loadConfigForStrategyButtons(config)
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1682,6 +1625,7 @@ function Sandbox(modelName) {
             menu_update()
         };
         self.configure = function() {
+            _showOrHideMenuForStrategy(config)
             model.secondStrategy = config.secondStrategy
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].secondStrategy = config.secondStrategies[i]
@@ -1708,7 +1652,6 @@ function Sandbox(modelName) {
         self.onChoose = function(slider,n) {
             // LOAD INPUT
             config.percentSecondStrategy[n] = slider.value;
-            // _loadConfigForStrategyButtons(config) // not necessary
             // CONFIGURE
             self.configureN(n)
             // UPDATE
@@ -1720,6 +1663,7 @@ function Sandbox(modelName) {
             }
         }
         self.configureN = function(n) {
+            // _showOrHideMenuForStrategy(config) // not necessary
             if (model.voters[n].voterGroupType=="GaussianVoters") {
             model.voters[n].percentSecondStrategy = config.percentSecondStrategy[n]
         }
@@ -1788,17 +1732,6 @@ function Sandbox(modelName) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.autoPoll = data.name
-            var xlist = ["poll","frontrunners"]
-            var featureset = new Set(config.featurelist)
-            for (var i in xlist){
-                var xi = xlist[i]
-                if (data.name == "Manual") {
-                    featureset.add(xi)
-                } else {
-                    featureset.delete(xi)
-                }
-            }
-            config.featurelist = Array.from(featureset)
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1806,6 +1739,7 @@ function Sandbox(modelName) {
             menu_update()
         };
         self.configure = function() {
+            showMenuItemsIf("divManualPoll", config.autoPoll == "Manual")
             model.autoPoll = config.autoPoll
         }
         self.select = function() {
@@ -1962,17 +1896,6 @@ function Sandbox(modelName) {
             // LOAD INPUT
             config.kindayee = data.kindayee
             config.keyyee = data.keyyee
-            var xlist = ["choose_pixel_size","yeefilter"]
-            var featureset = new Set(config.featurelist)
-            for (var i in xlist){
-                var xi = xlist[i]
-                if ((config.kindayee != undefined && config.kindayee != "off") || config.kindayee == "newcan" || config.kindayee == "beatCircles") {
-                    featureset.add(xi)
-                } else {
-                    featureset.delete(xi)
-                }
-            }
-            config.featurelist = Array.from(featureset)
             // CONFIGURE
             self.configure()
             // INIT
@@ -1982,6 +1905,7 @@ function Sandbox(modelName) {
             menu_update()
         };
         self.configure = function() {
+            showMenuItemsIf("divYee", (config.kindayee != undefined && config.kindayee != "off") || config.kindayee == "newcan" || config.kindayee == "beatCircles")
             model.kindayee = config.kindayee
             model.keyyee = config.keyyee
         }
@@ -2061,11 +1985,21 @@ function Sandbox(modelName) {
     ui.menu.gearconfig = new function() { 	// gear config - decide which menu items to do
         var self = this
         // self.name = "gearconfig"
-        self.list = []
-        var n=1
-        for (var name in ui.menu) {
-            self.list.push({name:n,realname:name,margin:1})
-            n++
+        self.initSpecial = function() {
+            // list all the menu items
+            self.list = []
+            var n=1
+            for (var name in ui.menu) {
+                self.list.push({name:n,realname:name,margin:1})
+                n++
+            }
+            self.choose = new ButtonGroup({
+                label: "which menu options are displayed?",
+                width: 18,
+                data: self.list,
+                onChoose: self.onChoose,
+                isCheckbox: true
+            });
         }
         self.codebook = [{
             decode: ["systems",
@@ -2094,13 +2028,7 @@ function Sandbox(modelName) {
         self.codebook[1].decodeVersion = 2.4
         self.onChoose = function(data){
             // LOAD INPUT
-            var featureset = new Set(config.featurelist)
-            if (data.isOn) {
-                featureset.add(data.realname)
-            } else {
-                featureset.delete(data.realname)
-            }
-            config.featurelist = Array.from(featureset)
+            configFeaturelist(data.isOn, [data.realname])
             // UPDATE
             self.configure()
         };
@@ -2116,13 +2044,6 @@ function Sandbox(modelName) {
         self.select = function() {
             self.choose.highlight("realname", config.featurelist);
         }
-        self.choose = new ButtonGroup({
-            label: "which menu options are displayed?",
-            width: 18,
-            data: self.list,
-            onChoose: self.onChoose,
-            isCheckbox: true
-        });
     }
 
     ui.menu.presetconfig = new function() { // pick a preset
@@ -2757,7 +2678,6 @@ function Sandbox(modelName) {
             if (self.isOn) {
                 m1.menuNameDivs["gearList"][0].hidden = false
             } else {
-                
                 m1.menuNameDivs["gearList"][0].hidden = true
             }
         }
@@ -2791,6 +2711,7 @@ function Sandbox(modelName) {
                 configFeaturelist(false, ["gearicon"])
                 ui.menu.gearicon.choose.dom.hidden = true
                 ui.menu.gearicon.onChoose({isOn:false})
+
             }
         }
         // no select because it's either hidden or off
@@ -2978,6 +2899,11 @@ function Sandbox(modelName) {
         self.choose.dom.className = "topMenuSpacer"
     }
     
+    // run this after loading the whole menu
+    ui.menu.gearconfig.initSpecial()
+
+
+
 
     // rebuild menu
 
@@ -3035,30 +2961,44 @@ function Sandbox(modelName) {
         ]],
         [ "main", [
             "systems", // start of normal list
-            "rbSystems",
+            [ "divRBVote", [
+                "rbSystems",
+            ]],
             "dimensions",
             "nDistricts",
             "seats",
             "nVoterGroups",
-            "xVoterGroups",
-            "group_count",
-            "group_spread",
+            [ "divXVoterGroups", [
+                "xVoterGroups",
+                "group_count",
+                "group_spread",
+            ]],
             "nCandidates",
             "theme",
             "customNames",
-            "namelist",
+            ["divCustomNames", [
+                "namelist",
+            ]],
             "firstStrategy",
             "doTwoStrategies",
-            "secondStrategy",
-            "percentSecondStrategy",
+            [ "divSecondStrategy", [
+                "secondStrategy",
+                "percentSecondStrategy",
+            ]],
             // "primaries", // not doing this one, comment out
-            "autoPoll",
-            "frontrunners",
-            "poll",
+            [ "divPoll", [
+                "autoPoll",
+                [ "divManualPoll", [
+                    "frontrunners",
+                    "poll",
+                ]],
+            ]],
             // "viz",
             "yee",
-            "yeefilter" ,
-            "choose_pixel_size",
+            ["divYee", [
+                "yeefilter" ,
+                "choose_pixel_size",
+            ]],
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "menuLevel",
@@ -3082,9 +3022,11 @@ function Sandbox(modelName) {
                     "dimensions",
                     "nDistricts",
                     "nVoterGroups",
-                    "xVoterGroups",
-                    "group_count",
-                    "group_spread",
+                    [ "divXVoterGroups", [
+                        "xVoterGroups",
+                        "group_count",
+                        "group_spread",
+                    ]],
                     "nCandidates",
                 ]],
                 [ "advanced", [
@@ -3099,7 +3041,9 @@ function Sandbox(modelName) {
                 ["normal", [
                     "theme",
                     "customNames",
-                    "namelist",
+                    ["divCustomNames", [
+                        "namelist",
+                    ]],
                 ]],
                 ["advanced", [
                     "colorChooser",
@@ -3109,15 +3053,23 @@ function Sandbox(modelName) {
             ["method", [
                 ["normal", [
                     "systems",
-                    "rbSystems",
+                    [ "divRBVote", [
+                        "rbSystems",
+                    ]],
                     "seats",
                     "firstStrategy",
                     "doTwoStrategies",
-                    "secondStrategy",
-                    "percentSecondStrategy",
-                    "autoPoll",
-                    "frontrunners",
-                    "poll",
+                    [ "divSecondStrategy", [
+                        "secondStrategy",
+                        "percentSecondStrategy",
+                    ]],
+                    [ "divPoll", [
+                        "autoPoll",
+                        [ "divManualPoll", [
+                            "frontrunners",
+                            "poll",
+                        ]],
+                    ]],
                     // "primaries", // not doing this one, comment out               
                 ]],
                 ["advanced", [
@@ -3128,8 +3080,10 @@ function Sandbox(modelName) {
                 ["normal", [
                     // "viz",
                     "yee",
-                    "yeefilter" ,
-                    "choose_pixel_size"
+                    ["divYee", [
+                        "yeefilter" ,
+                        "choose_pixel_size"
+                    ]],
                 ]],
                 ["advanced", [
                     "ballotVis",
@@ -3236,6 +3190,16 @@ function Sandbox(modelName) {
 
     }
 
+    // helper
+    function showMenuItemsIf(name,condition) {
+        if (condition) {
+            m1.menuNameDivs[name][0].hidden = false
+            m2.menuNameDivs[name][0].hidden = false
+        } else {
+            m1.menuNameDivs[name][0].hidden = true
+            m2.menuNameDivs[name][0].hidden = true
+        }
+    }
 
 
     //////////////////////////
