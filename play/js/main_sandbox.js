@@ -827,7 +827,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Arena Dimensions:",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1392,7 +1392,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Customize Candidates' Names?",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1432,7 +1432,7 @@ function Sandbox(modelName) {
     //     }
     //     self.choose = new ButtonGroup({
     //         label: "Which Visualizations?",
-    //         width: 68,
+    //         width: 71,
     //         data: self.list,
     //         onChoose: self.onChoose,
     //         isCheckbox: true
@@ -1491,7 +1491,7 @@ function Sandbox(modelName) {
         };
         self.choose = new ButtonGroup({
             label: "what's voters' strategy?",
-            width: 40,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1551,7 +1551,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "",
-            width: 40,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose,
             isCheckbox: true
@@ -1619,7 +1619,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "what's voters' 2nd strategy?",
-            width: 40,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1685,7 +1685,7 @@ function Sandbox(modelName) {
             }
             self.choose = new ButtonGroup({
                 label: "Primaries?",
-                width: 72,
+                width: 71,
                 data: self.list,
                 onChoose: self.onChoose
             });
@@ -1727,7 +1727,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "AutoPoll to find new frontrunner:",
-            width: 72,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1781,7 +1781,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "who are the frontrunners?",
-            width: 40,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose,
             isCheckbox: true
@@ -1894,7 +1894,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "which object for yee map?",
-            width: 20,
+            width: 21,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1954,7 +1954,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "filter yee map?",
-            width: 20,
+            width: 21,
             data: self.list,
             onChoose: self.onChoose,
             isCheckboxBool: true
@@ -2143,7 +2143,7 @@ function Sandbox(modelName) {
         };
         self.choose = new ButtonGroup({
             label: "pick a preset:",
-            width: 38,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2177,7 +2177,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "size of pixels in yee diagram:",
-            width: 38,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2207,7 +2207,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "method of computing yee diagram:",
-            width: 38,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2340,7 +2340,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Voter Spread:",
-            width: 38,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2409,7 +2409,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Arena size:",
-            width: 38,
+            width: 41,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2439,7 +2439,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Median or Mean:",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2510,7 +2510,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Theme:",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2551,7 +2551,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Utility Shape:",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2590,7 +2590,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Voters as Candidates:",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2629,7 +2629,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Show Ballot Visuals:",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2668,7 +2668,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Only Visualize Single Voters:",
-            width: 68,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2700,7 +2700,7 @@ function Sandbox(modelName) {
         // no select because we don't want to save with the config menu open
         self.choose = new ButtonGroup({
             label: "",
-            width: 60,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose,
             isCheckbox: true
@@ -2798,7 +2798,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Menu Version:",
-            width: 60,
+            width: 71,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2848,7 +2848,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Effort:", // Level of Expertise
-            width: 70,
+            width: 108,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2895,7 +2895,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Steps:", // Sub Menu
-            width: 100,
+            width: 108,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2923,7 +2923,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Enable filtering of menu items?:", // Sub Menu
-            width: 100,
+            width: 108,
             data: self.list,
             onChoose: self.onChoose
         });
