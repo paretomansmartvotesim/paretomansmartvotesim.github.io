@@ -174,14 +174,6 @@ function Sandbox(modelName) {
         // config.presethtmlname = self.url.substring(self.url.lastIndexOf('/')+1);
 
 
-        // There is a problem in going from an old featureset to a new one.
-        // The new features are not included in the set.
-        // So we add an opton to choose whether to filter features.
-        // By default the filter is on.
-        // The default in the sandbox preset is off.
-        // In this way, it is easy to switch the filter off and update the features.
-        // The filter switch is inside the config menu.
-
         if(config.configversion == undefined || config.configversion == 1) {
             // GRANDFATHER URL variable names
             // change old variable names to new names to preserve backward compatibility with urls and presets
@@ -329,6 +321,15 @@ function Sandbox(modelName) {
         // add in features that were not included with the old version
         if (config.configversion == 2.4) { 
             config.configversion = 2.5
+                
+            // There is a problem in going from an old featureset to a new one.
+            // The new features are not included in the set.
+            // So we add an opton to choose whether to filter features.
+            // By default the filter is on.
+            // The default in the sandbox preset is off.
+            // In this way, it is easy to switch the filter off and update the features.
+            // The filter switch is inside the config menu.
+
             // if this is a save from before version 2.5
             // then the featurelist is on and it didn't include the menu items that are hidden in menuVersion 1
             // so, allow the user to remove the filter
@@ -633,26 +634,26 @@ function Sandbox(modelName) {
             {
                 field: "system",
                 decodeVersion: 2.2,
-                decode: [
-                    "FPTP",
-                    "+Primary",
-                    "Top Two",
-                    "RBVote",
-                    "IRV", 
-                    "Borda",
-                    "Minimax",
-                    "Schulze",
-                    "RankedPair",
-                    "Condorcet",
-                    "Approval",
-                    "Score",
-                    "STAR",
-                    "3-2-1",
-                    "RRV", 
-                    "RAV",
-                    "STV",
-                    "QuotaApproval"
-                ]
+                decode: {
+                    0:"FPTP",
+                    1:"+Primary",
+                    2:"Top Two",
+                    3:"RBVote",
+                    4:"IRV", 
+                    5:"Borda",
+                    6:"Minimax",
+                    7:"Schulze",
+                    8:"RankedPair",
+                    9:"Condorcet",
+                    10:"Approval",
+                    11:"Score",
+                    12:"STAR",
+                    13:"3-2-1",
+                    14:"RRV", 
+                    15:"RAV",
+                    16:"STV",
+                    17:"QuotaApproval"
+                }
             }
         ]
         self.listByName = function() {
@@ -740,23 +741,23 @@ function Sandbox(modelName) {
             {
                 field: "rbsystem",
                 decodeVersion: 2.2,
-                decode: [
-                    "Baldwin",
-                    "Black",
-                    "Borda",
-                    "Bucklin",
-                    "Carey",
-                    "Coombs",
-                    "Copeland",
-                    "Dodgson",
-                    "Hare",
-                    "Nanson",
-                    "Raynaud",
-                    "Schulze",
-                    "Simpson",
-                    "Small",
-                    "Tideman"
-                ]
+                decode: {
+                    0:"Baldwin",
+                    1:"Black",
+                    2:"Borda",
+                    3:"Bucklin",
+                    4:"Carey",
+                    5:"Coombs",
+                    6:"Copeland",
+                    7:"Dodgson",
+                    8:"Hare",
+                    9:"Nanson",
+                    10:"Raynaud",
+                    11:"Schulze",
+                    12:"Simpson",
+                    13:"Small",
+                    14:"Tideman"
+                }
             }
         ]
         self.listByName = function() {
@@ -927,22 +928,32 @@ function Sandbox(modelName) {
         ];
         self.codebook = [
             {
-                decode: ["Single Voter",
-                    "One Group", 
-                    "Two Groups", 
-                    "Three Groups",
-                    "Different Sized Groups (like a snowman)",
-                    "Custom Number of Voters and Sizes and Spreads"],
+                decode: {
+                    0:"Single Voter",
+                    1:"One Group", 
+                    2:"Two Groups", 
+                    3:"Three Groups",
+                    4:"Different Sized Groups (like a snowman)",
+                    5:"Custom Number of Voters and Sizes and Spreads"
+                },
                 decodeVersion: 2.2,
                 field: "nVoterGroupsRealName"
             },
             {
-                decode: [1,2,3,4],
+                decode: {
+                    0:1,
+                    1:2,
+                    2:3,
+                    3:4,
+                },
                 decodeVersion: 2.2,
                 field: "numVoterGroups"
             },
             {
-                decode: ["GaussianVoters", "SingleVoter"],
+                decode: {
+                    0:"GaussianVoters",
+                    1:"SingleVoter"
+                },
                 decodeVersion: 2.2,
                 field: "voterGroupTypes"
             }
@@ -1557,13 +1568,13 @@ function Sandbox(modelName) {
             {name:"F+", realname:"best frontrunner", margin:5},
             {name:"F-", realname:"not the worst frontrunner"}
         ];
-        var decodeList = [
-            "zero strategy. judge on an absolute scale.",
-            "normalize",
-            "normalize frontrunners only",
-            "best frontrunner",
-            "not the worst frontrunner"
-        ] 
+        var decodeList = {
+            0:"zero strategy. judge on an absolute scale.",
+            1:"normalize",
+            2:"normalize frontrunners only",
+            3:"best frontrunner",
+            4:"not the worst frontrunner"
+        }
         self.codebook = [
             {
                 decode: decodeList,
@@ -1692,10 +1703,10 @@ function Sandbox(modelName) {
             {
                 field: "autoPoll",
                 decodeVersion: 2.2,
-                decode: [
-                    "Auto",
-                    "Manual"
-                ]
+                decode: {
+                    0:"Auto",
+                    1:"Manual"
+                }
             }
         ]
         self.onChoose = function(data){
@@ -1970,31 +1981,67 @@ function Sandbox(modelName) {
                 isCheckbox: true
             });
         }
-        self.codebook = [{
-            decode: ["systems",
-                "rbSystems",
-                "nVoterGroups",
-                "xVoterGroups",
-                "group_count",
-                "group_spread",
-                "nCandidates",
-                "firstStrategy",
-                "doTwoStrategies",
-                "secondStrategy",
-                "percentSecondStrategy",
-                "autoPoll",
-                "frontrunners",
-                "poll",
-                "yee",
-                "yeefilter",
-                "gearicon"],
-            decodeVersion: 2.2,
-            field: "featurelist"
-        }]
+        self.codebook = [
+            {
+                decode: {
+                    0:"systems",
+                    1:"rbSystems",
+                    2:"nVoterGroups",
+                    3:"xVoterGroups",
+                    4:"group_count",
+                    5:"group_spread",
+                    6:"nCandidates",
+                    7:"firstStrategy",
+                    8:"doTwoStrategies",
+                    9:"secondStrategy",
+                    10:"percentSecondStrategy",
+                    11:"autoPoll",
+                    12:"frontrunners",
+                    13:"poll",
+                    14:"yee",
+                    15:"yeefilter",
+                    16:"gearicon",
+                },
+                decodeVersion: 2.2,
+                field: "featurelist"
+            }
+        ]
+
         self.codebook[1] = _jcopy(self.codebook[0])
-        self.codebook[1].decode.push("seats")
-        self.codebook[1].decode.push("nDistricts")
+        _fillInDefaults(self.codebook[1].decode, {
+            17:"seats",
+            18:"nDistricts",
+        })
         self.codebook[1].decodeVersion = 2.4
+        
+        self.codebook[2] = _jcopy(self.codebook[1])
+        _fillInDefaults(self.codebook[2].decode, {
+            19: "dimensions",
+            20: "customNames",
+            21: "namelist",
+            22: "gearconfig",
+            23: "presetconfig",
+            24: "choose_pixel_size",
+            25: "computeMethod",
+            26: "colorChooser",
+            27: "colorSpace",
+            28: "spread_factor_voters",
+            29: "arena_size",
+            30: "median_mean",
+            31: "theme",
+            32: "utility_shape",
+            33: "votersAsCandidates",
+            34: "ballotVis",
+            35: "visSingleBallotsOnly",
+            36: "gearoff",
+            37: "menuVersion",
+            38: "menuLevel",
+            39: "stepMenu",
+            40: "doFeatureFilter",
+            41: "spacer",
+        })
+        self.codebook[2].decodeVersion = 2.5
+
         self.onChoose = function(data){
             // LOAD INPUT
             modifyConfigFeaturelist(data.isOn, [data.realname])
@@ -2179,12 +2226,12 @@ function Sandbox(modelName) {
             {
                 field: "colorChooser",
                 decodeVersion: 2.2,
-                decode: [
-                    "pick and repeat",
-                    "pick and repeat w/ offset",
-                    "generate all",
-                    "pick and generate"
-                ]
+                decode: {
+                    0:"pick and repeat",
+                    1:"pick and repeat w/ offset",
+                    2:"generate all",
+                    3:"pick and generate"
+                }
             }
         ]
         self.onChoose = function(data){
@@ -2228,9 +2275,9 @@ function Sandbox(modelName) {
             {
                 field: "colorSpace",
                 decodeVersion: 2.2,
-                decode: [
-                    "hsluv with dark"
-                ]
+                decode: {
+                    0:"hsluv with dark"
+                }
             }
         ]
         self.onChoose = function(data){
@@ -2310,10 +2357,10 @@ function Sandbox(modelName) {
             {
                 field: "arena_size",
                 decodeVersion: 2.2,
-                decode: [
-                    300,
-                    600
-                ]
+                decode: {
+                    0:300,
+                    1:600
+                }
             }
         ]
         self.onChoose = function(data){
@@ -2412,12 +2459,12 @@ function Sandbox(modelName) {
             {
                 field: "theme",
                 decodeVersion: 2.2,
-                decode: [
-                    "Default",
-                    "Nicky",
-                    "Bees",
-                    "Letters"
-                ]
+                decode: {
+                    0:"Default",
+                    1:"Nicky",
+                    2:"Bees",
+                    3:"Letters"
+                }
             }
         ]
         self.onChoose = function(data){
@@ -2481,11 +2528,11 @@ function Sandbox(modelName) {
             {
                 field: "utility_shape",
                 decodeVersion: 2.2,
-                decode: [
-                    "linear",
-                    "quadratic",
-                    "log"
-                ]
+                decode: {
+                    0:"linear",
+                    1:"quadratic",
+                    2:"log"
+                }
             }
         ]
         self.onChoose = function(data){
@@ -2517,16 +2564,16 @@ function Sandbox(modelName) {
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
         ]
-        // self.codebook = [
-        //     {
-        //         field: "votersAsCandidates",
-        //         decodeVersion: 2.4,
-        //         decode: [
-        //             "yes",
-        //             "no"
-        //         ]
-        //     }
-        // ]
+        self.codebook = [
+            {
+                field: "votersAsCandidates",
+                decodeVersion: 2.5,
+                decode: {
+                    0:"yes",
+                    1:"no"
+                }
+            }
+        ]
         self.onChoose = function(data){
             // LOAD
             config.votersAsCandidates = data.value
@@ -2556,16 +2603,16 @@ function Sandbox(modelName) {
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
         ]
-        // self.codebook = [
-        //     {
-        //         field: "ballotVis",
-        //         decodeVersion: 2.4,
-        //         decode: [
-        //             "yes",
-        //             "no"
-        //         ]
-        //     }
-        // ]
+        self.codebook = [
+            {
+                field: "ballotVis",
+                decodeVersion: 2.5,
+                decode: {
+                    0:"yes",
+                    1:"no"
+                }
+            }
+        ]
         self.onChoose = function(data){
             // LOAD
             config.ballotVis = data.value
@@ -2595,16 +2642,16 @@ function Sandbox(modelName) {
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
         ]
-        // self.codebook = [
-        //     {
-        //         field: "visSingleBallotsOnly",
-        //         decodeVersion: 2.4,
-        //         decode: [
-        //             "yes",
-        //             "no"
-        //         ]
-        //     }
-        // ]
+        self.codebook = [
+            {
+                field: "visSingleBallotsOnly",
+                decodeVersion: 2.5,
+                decode: {
+                    0:"yes",
+                    1:"no"
+                }
+            }
+        ]
         self.onChoose = function(data){
             // LOAD
             config.visSingleBallotsOnly = data.value
@@ -2768,6 +2815,14 @@ function Sandbox(modelName) {
             {name:"normal",value:"normal",margin:4},
             {name:"advanced",value:"advanced"}
         ]
+        self.codebook = [ {
+            field: "menuLevel",
+            decodeVersion: 2.5,
+            decode: {
+                0:"normal",
+                1:"advanced"
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.menuLevel = data.value
@@ -2813,6 +2868,18 @@ function Sandbox(modelName) {
             {name:"ui",value:"ui",margin:4},
             {name:"compute",value:"compute"}
         ]
+        self.codebook = [ {
+            field: "stepMenu",
+            decodeVersion: 2.5,
+            decode: {
+                0:"geometry",
+                1:"style",
+                2:"method",
+                3:"viz",
+                4:"ui",
+                5:"compute"
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.stepMenu = data.value
@@ -3430,69 +3497,71 @@ function Sandbox(modelName) {
 
     };
     
-    decodeFields = [
-        "candidatePositions",
-        "voterPositions",
-        "candidates",
-        "dimensions",
-        "system",
-        "hidegearconfig",
+
+    // HOWTO: Add to the end of the list.  Don't add to the middle of this list.
+    // safer: use a dictionary
+    // These are the fields that show up in the URL, so we shorten them.
+    decodeFields = {
+        0:"candidatePositions",
+        1:"voterPositions",
+        2:"candidates",
+        3:"dimensions",
+        4:"system",
+        5:"hidegearconfig",
         // "configversion",
-        "secondStrategies",
-        "percentSecondStrategy",
-        "voter_group_count",
-        "voter_group_spread",
-        "sandboxsave",
-        "featurelist",
-        "description",
-        "keyyee",
-        "snowman",
-        "x_voters",
-        "oneVoter",
-        "rbsystem",
-        "numOfCandidates",
-        "numVoterGroups",
-        "xNumVoterGroups",
-        "nVoterGroupsRealName",
-        "spread_factor_voters",
-        "arena_size",
-        "median_mean",
-        "theme",
-        "utility_shape",
-        "colorChooser",
-        "colorSpace",
-        "arena_border",
-        "preFrontrunnerIds",
-        "autoPoll",
-        "firstStrategy",
-        "secondStrategy",
-        "doTwoStrategies",
-        "yeefilter",
-        "computeMethod",
-        "pixelsize",
-        "optionsForElection",
-        "candidateSerials",
-        "voterGroupTypes",
-        "voterGroupX",
-        "voterGroupSnowman",
-        "voterGroupDisk",
-        "seats",
-        "candidateB",
-        "nDistricts",
-        "votersAsCandidates",
-        "visSingleBallotsOnly",
-        "ballotVis",
-        "customNames",
-        "namelist",
+        6:"secondStrategies",
+        7:"percentSecondStrategy",
+        8:"voter_group_count",
+        9:"voter_group_spread",
+        10:"sandboxsave",
+        11:"featurelist",
+        12:"description",
+        13:"keyyee",
+        14:"snowman",
+        15:"x_voters",
+        16:"oneVoter",
+        17:"rbsystem",
+        18:"numOfCandidates",
+        19:"numVoterGroups",
+        20:"xNumVoterGroups",
+        21:"nVoterGroupsRealName",
+        22:"spread_factor_voters",
+        23:"arena_size",
+        24:"median_mean",
+        25:"theme",
+        26:"utility_shape",
+        27:"colorChooser",
+        28:"colorSpace",
+        29:"arena_border",
+        30:"preFrontrunnerIds",
+        31:"autoPoll",
+        32:"firstStrategy",
+        33:"secondStrategy",
+        34:"doTwoStrategies",
+        35:"yeefilter",
+        36:"computeMethod",
+        37:"pixelsize",
+        38:"optionsForElection",
+        39:"candidateSerials",
+        40:"voterGroupTypes",
+        41:"voterGroupX",
+        42:"voterGroupSnowman",
+        43:"voterGroupDisk",
+        44:"seats",
+        45:"candidateB",
+        46:"nDistricts",
+        47:"votersAsCandidates",
+        48:"visSingleBallotsOnly",
+        49:"ballotVis",
+        50:"customNames",
+        51:"namelist",
         // "viz",
-    ] // add more on to the end
-    var decode = decodeFields
-    var encode = {}
-    for (var i = 0; i < decode.length; i++) {
-        var value = decode[i]
-        encode[value] = i
+    } // add more on to the end ONLY
+        
+    var encodeFields = {}
+    for ([i,v] of Object.entries(decodeFields)) {
+        encodeFields[v] = i
     }
-    var encodeFields = encode
 
     // additional codebooks
     var extraCodeBook = [
@@ -3517,8 +3586,8 @@ function Sandbox(modelName) {
         for (k = 0; k < codebook.length; k++) {
             var decode = codebook[k].decode
             var encode = {}
-            for (var i = 0; i < decode.length; i++) {
-                var value = JSON.stringify(decode[i])
+            for (var [i,v] of Object.entries(decode)) {
+                var value = JSON.stringify(v)
                 encode[value] = i
             }
             codebook[k].encode = encode
@@ -3602,8 +3671,7 @@ function Sandbox(modelName) {
         // note that we have to decode it in place
         var conf = _jcopy(config)
         // decode field names
-        for (var i =0; i < decodeFields.length; i++) {
-            var n = decodeFields[i]
+        for (var [i,n] of Object.entries(decodeFields)) {
             config[n] = conf[i]
             delete config[i]
         }
@@ -3619,6 +3687,10 @@ function Sandbox(modelName) {
             for (k = 0; k < codebook.length; k++) {
                 var version = codebook[k].decodeVersion
                 if (conf.configversion < version) continue // the value wasn't encoded at this early version
+                // so maybe if the value was an unencoded number that happens to now equal a coded number,
+                // then we shouldn't change that number
+                // HOWTO: If we are looking at an old sandbox, then don't use codebooks with new words in them
+                // So, when you add new words to a codebook, put a version number on that page of words
                 var decode = codebook[k].decode
                 var field = codebook[k].field
                 var value = config[field]
