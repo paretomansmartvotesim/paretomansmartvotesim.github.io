@@ -1310,8 +1310,8 @@ function loadpreset(modelName) {
 			visSingleBallotsOnly: false,
 			theme: "Letters",
 			menuVersion: "2",
-			featurelistVer: "2",
 			doFeatureFilter: false,
+			// configversion: 2.5, // should stay at latest version
 		}
 	} else if (htmlname == "sandbox_original.html") {
 		config = {

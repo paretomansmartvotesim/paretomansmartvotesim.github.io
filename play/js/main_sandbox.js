@@ -1,3 +1,6 @@
+
+// Search for HOWTO to see notes on making changes. (right now, just for renaming menus)
+
 function main(preset) {
 
 
@@ -36,9 +39,8 @@ function Sandbox(modelName) {
         yes_all_candidates[i] = true
     }
     var defaults = {
-        configversion:2.4,
+        configversion:2.5,
         sandboxsave: false,
-        featurelist: ["systems"],
         hidegearconfig: false,
         description: "",
         keyyee: "off",
@@ -81,10 +83,13 @@ function Sandbox(modelName) {
         computeMethod: "ez",
         pixelsize: 60,
         optionsForElection: {sidebar:true}, // sandboxes have this default
-        featurelist: ["systems","dimensions","customNames","theme","nDistricts","nVoterGroups","firstStrategy","doTwoStrategies","yee","menuLevel","stepMenu","menuVersion"], // ,"viz"
-        featurelistVer: "1",
+        // featurelist: is not listed here because the default for featurelist is all menu items
         doFeatureFilter: true, 
     }
+    function defaultFeaturelist() {
+        return {featurelist:Object.keys(ui.menu)}
+    }
+
     self.url = undefined
     var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
 
@@ -168,23 +173,7 @@ function Sandbox(modelName) {
         // FILENAME
         // config.presethtmlname = self.url.substring(self.url.lastIndexOf('/')+1);
 
-        var configFeatures = [
-            "gearconfig",
-            "presetconfig",
-            "computeMethod",
-            "spread_factor_voters",
-            "arena_size",
-            "median_mean",
-            "colorChooser",
-            "colorSpace",
-            "utility_shape",
-            "votersAsCandidates",
-            "visSingleBallotsOnly",
-            "ballotVis",
-            "menuVersion",
-            "doFeatureFilter",
-            "gearoff"
-        ]
+
         // There is a problem in going from an old featureset to a new one.
         // The new features are not included in the set.
         // So we add an opton to choose whether to filter features.
@@ -245,8 +234,10 @@ function Sandbox(modelName) {
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
             if (config.doFullStrategyConfig) {
                 // basically everything that should be displayed at the start
-                config.featurelist = config.featurelist.concat(["firstStrategy","second strategy","yee","gearicon","dimensions","nDistricts","theme","customNames","stepMenu","menuLevel","menuVersion","spacer"]) // ,"viz"                
-                config.featurelist = config.featurelist.concat(configFeatures)
+                // This config.doFullStrategyConfig is a shorthand that gets replaced by the featurelist
+                // This featurelist should be updated with all the menu items
+                config.featurelist = Object.keys(ui.menu)
+                config.doFeatureFilter = false
             }
             // clear the grandfathered config settings
             delete config.doPercentFirst
@@ -254,62 +245,25 @@ function Sandbox(modelName) {
             delete config.doFullStrategyConfig
 
             // GRANDFATHER featurelist step 2
+            // HOWTO: When replacing the name of a menu item, the old configurations with that name still need to work
+            // So, add the new menu item to the list below.
             // replace old names with new names
             if (config.featurelist) {
                 var menuNameTranslator = {
-                    "systems":"systems",
-                    "dimensions":"dimensions",
-                    "nDistricts":"nDistricts",
                     "voters":"nVoterGroups",
-                    "nVoterGroups":"nVoterGroups",
                     "candidates":"nCandidates",
-                    "nCandidates":"nCandidates",
                     "unstrategic":"firstStrategy",
-                    "firstStrategy":"firstStrategy",
                     "second strategy":"doTwoStrategies",
-                    "doTwoStrategies":"doTwoStrategies",
                     "yee":"yee",
                     "rbvote":"rbSystems",
-                    "rbSystems":"rbSystems",
                     "custom_number_voters":"xVoterGroups",
                     "xHowManyVoterGroups":"xVoterGroups",
-                    "xVoterGroups":"xVoterGroups",
-                    "group_count":"group_count",
-                    "group_spread":"group_spread",
                     "strategy":"secondStrategy",
-                    "secondStrategy":"secondStrategy",
                     "percentstrategy":"percentSecondStrategy",
-                    "percentSecondStrategy":"percentSecondStrategy",
-                    "choose_pixel_size":"choose_pixel_size",
-                    "yeefilter":"yeefilter",
-                    "poll":"poll",
-                    "autoPoll":"autoPoll",
-                    "frontrunners":"frontrunners",
-                    "gearicon":"gearicon",
-                    "menuVersion":"menuVersion",
-                    "menuLevel":"menuLevel",
-                    "stepMenu":"stepMenu",
-                    "customNames":"customNames",
-                    // "viz":"viz",
-                    "theme":"theme",
-                    // "primaries":"primaries",
-                    "gearconfig":"gearconfig",
-                    "presetconfig":"presetconfig",
-                    "computeMethod":"computeMethod",
-                    "spread_factor_voters":"spread_factor_voters",
-                    "arena_size":"arena_size",
-                    "median_mean":"median_mean",
-                    "colorChooser":"colorChooser",
-                    "colorSpace":"colorSpace",
-                    "utility_shape":"utility_shape",
-                    "votersAsCandidates":"votersAsCandidates",
-                    "visSingleBallotsOnly":"visSingleBallotsOnly",
-                    "ballotVis":"ballotVis",
-                    "menuVersion":"menuVersion",
-                    "gearoff":"gearoff",
-                    "featurelistVer":"featurelistVer",
-                    "doFeatureFilter":"doFeatureFilter",
-                    "spacer":"spacer",
+                }
+                // all the current names get translated as themselves
+                for (var id of Object.keys(ui.menu)) {
+                    menuNameTranslator[id] = id
                 }
                 var temp_featurelist = []
                 for (var i=0; i<config.featurelist.length; i++) {
@@ -369,7 +323,28 @@ function Sandbox(modelName) {
 
             config.configversion = 2.3
         }
-        config.configversion = 2.4
+        if (config.configversion == 2.3) { 
+            config.configversion = 2.4
+        }
+        // add in features that were not included with the old version
+        if (config.configversion == 2.4) { 
+            config.configversion = 2.5
+            // if this is a save from before version 2.5
+            // then the featurelist is on and it didn't include the menu items that are hidden in menuVersion 1
+            // so, allow the user to remove the filter
+            if (config.featurelist != undefined) modifyConfigFeaturelist(true, ["doFeatureFilter"]) 
+        }
+
+        // Hmm. on the one hand, I want to load an example where I have purposely set the filter
+        // and that example is indistinguishable from an example where I want to see the new features
+        // because I can't tell the difference (in the old version) between manual and automatic hiding
+        // So maybe I should have an upgrade button, to allow the user to decide what to do.
+        // or maybe the user could manually change the 2.4 to 2.5 in the URL.
+        // 2.4 would not have the upgrade button
+        // 2.5 
+        // Oh
+        // The difference between the locked down version and the updating version is the "config" menu
+        // So I put the "Disable filters" button in the config menu,
 
         // VOTER DEFAULTS
         // we want individual strategies to be loaded in, if they are there
@@ -392,10 +367,9 @@ function Sandbox(modelName) {
         }
 
         _fillInDefaults(config, defaults)
+        _fillInDefaults(config, defaultFeaturelist() )
 
         
-        // add in features that were not included with the old version
-        if (config.featurelistVer == "1") configFeaturelist(true, configFeatures)
     }
 
     model.start = function(){
@@ -505,14 +479,7 @@ function Sandbox(modelName) {
 
     function menu_update() {
         // UPDATE MENU //
-        // to delete
-        for (i in ui.menu) {
-            if( !config.doFeatureFilter || config.featurelist.includes(i) ) {
-                ui.menu[i].choose.dom.hidden = false
-            } else {
-                ui.menu[i].choose.dom.hidden = true
-            }
-        }
+
         // Make the MENU look correct.  The MENU is not part of the "model".
         // for (i in ui.menu.percentSecondStrategy.choose.sliders) ui.menu.percentSecondStrategy.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
         // for (i in ui.menu.group_count.choose.sliders) ui.menu.group_count.choose.sliders[i].setAttribute("style",(i<config.numVoterGroups) ?  "display:inline": "display:none")
@@ -529,6 +496,8 @@ function Sandbox(modelName) {
             ui.menu.group_spread.choose.sliders[i].setAttribute("style",style)
         }
         
+
+        // todo: move to config for menu item
         var multiWinnerSystem = ( config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" || config.system == "QuotaMinimax")
         if (multiWinnerSystem) {
             ui.menu.seats.choose.dom.hidden = false
@@ -540,7 +509,7 @@ function Sandbox(modelName) {
     
     // helpers
     
-    function configFeaturelist(condition, xlist) {
+    function modifyConfigFeaturelist(condition, xlist) {
         // e.g. var xlist = ["choose_pixel_size","yeefilter"]
         var featureset = new Set(config.featurelist)
         for (var i in xlist){
@@ -1432,7 +1401,7 @@ function Sandbox(modelName) {
     //         // LOAD
     //         config.viz = data.val
     //         // LOAD more
-    //         configFeaturelist(config.viz == "Yee", ["yee"])
+    //         modifyConfigFeaturelist(config.viz == "Yee", ["yee"])
     //         // CONFIGURE
     //         self.configure()
     //         // INIT
@@ -2028,7 +1997,7 @@ function Sandbox(modelName) {
         self.codebook[1].decodeVersion = 2.4
         self.onChoose = function(data){
             // LOAD INPUT
-            configFeaturelist(data.isOn, [data.realname])
+            modifyConfigFeaturelist(data.isOn, [data.realname])
             // UPDATE
             self.configure()
         };
@@ -2708,7 +2677,7 @@ function Sandbox(modelName) {
         }
         self.configure = function() {
             if (config.hidegearconfig) {
-                configFeaturelist(false, ["gearicon"])
+                modifyConfigFeaturelist(false, ["gearicon"])
                 ui.menu.gearicon.choose.dom.hidden = true
                 ui.menu.gearicon.onChoose({isOn:false})
 
@@ -2772,6 +2741,10 @@ function Sandbox(modelName) {
             if (config.menuVersion === "1") {
                 m1.buildSubMenus()
             } else {
+                // 
+                ui.menu.doFeatureFilter.onChoose({value:false})
+                ui.menu.doFeatureFilter.select()
+
                 m2.buildSubMenus() // place menu items into dom structure
             }
             menu_update() // actually hide/show things
@@ -2952,7 +2925,6 @@ function Sandbox(modelName) {
             "spread_factor_voters",
             "arena_size",
             "median_mean",
-            "theme",
             "utility_shape",
             "votersAsCandidates",
             "ballotVis",
@@ -3159,11 +3131,13 @@ function Sandbox(modelName) {
         // ap[i].parent: parent div
         // ap[i].children:  [array of divs to attach]
         
-        self.assignMenu = function(m,parent,name) {
+        self.assignMenu = function(m,parent,parentName) {
             var children = []
+            var childrenNames = []
             for (var a of m) {
                 if (typeof a === "string") { // child
                     var div = ui.menu[a].choose.dom
+                    var aName = a
                 } else { // parent
                     var div = document.createElement("div")
                     parent.appendChild(div)
@@ -3175,8 +3149,9 @@ function Sandbox(modelName) {
                     self.assignMenu(a[1],div,aName) // recursion
                 }
                 children.push(div)
+                childrenNames.push(aName)
             }
-            ap.push({parentName:name,parent:parent,children:children})
+            ap.push({parentName:parentName,childrenNames:childrenNames,parent:parent,children:children})
         }
     
         // To build the menu, it's really easy, just attach the divs for the menu items to the submenu div structure
