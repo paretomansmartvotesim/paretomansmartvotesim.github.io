@@ -3500,6 +3500,8 @@ function Sandbox(modelName) {
         setTimeout(function(){
             savelink.value = linkText;
         },750);
+        console.log("(Link length is ",linkText.length,")")
+        console.log("")
 
     };
     
@@ -3566,6 +3568,7 @@ function Sandbox(modelName) {
         
     var encodeFields = {}
     for ([i,v] of Object.entries(decodeFields)) {
+        i = Number(i)
         encodeFields[v] = i
     }
 
@@ -3594,6 +3597,7 @@ function Sandbox(modelName) {
             var encode = {}
             for (var [i,v] of Object.entries(decode)) {
                 var value = JSON.stringify(v)
+                i = Number(i)
                 encode[value] = i
             }
             codebook[k].encode = encode
@@ -3678,6 +3682,7 @@ function Sandbox(modelName) {
         var conf = _jcopy(config)
         // decode field names
         for (var [i,n] of Object.entries(decodeFields)) {
+            i = Number(i)
             config[n] = conf[i]
             delete config[i]
         }
