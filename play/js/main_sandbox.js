@@ -83,11 +83,8 @@ function Sandbox(modelName) {
         computeMethod: "ez",
         pixelsize: 60,
         optionsForElection: {sidebar:true}, // sandboxes have this default
-        // featurelist: is not listed here because the default for featurelist is all menu items
+        featurelist: ['gearconfig',"doFeatureFilter"],
         doFeatureFilter: true, 
-    }
-    function defaultFeaturelist() {
-        return {featurelist:Object.keys(ui.menu)}
     }
 
     self.url = undefined
@@ -219,17 +216,17 @@ function Sandbox(modelName) {
                         case 3: return ["systems","voters","candidates"]
                         case 4: 
                             config.sandboxsave = true
-                            return ["systems","voters","candidates"] 	
-                        }
+                            return ["systems","voters","candidates"]
                     }
                 }
+            }
             if (config.doPercentFirst) config.featurelist = config.featurelist.concat(["percentStrategy"]);
             if (config.doFullStrategyConfig) {
+                config.doFeatureFilter = false
+                // The feature filter is off, so all items are displayed.
                 // basically everything that should be displayed at the start
                 // This config.doFullStrategyConfig is a shorthand that gets replaced by the featurelist
-                // This featurelist should be updated with all the menu items
-                config.featurelist = Object.keys(ui.menu)
-                config.doFeatureFilter = false
+                // The featurelist has it's own control as an item
             }
             // clear the grandfathered config settings
             delete config.doPercentFirst
@@ -333,19 +330,29 @@ function Sandbox(modelName) {
             // if this is a save from before version 2.5
             // then the featurelist is on and it didn't include the menu items that are hidden in menuVersion 1
             // so, allow the user to remove the filter
-            if (config.featurelist != undefined) modifyConfigFeaturelist(true, ["doFeatureFilter"]) 
+
+            // so, if the featurelist is set then we want to turn on the filter
+            // if the featurelist is not set, then we don't do the filter
+            if ( config.featurelist == undefined) {
+                config.doFeatureFilter = false
+            } else {
+                modifyConfigFeaturelist(true, ["doFeatureFilter"]) 
+            }
+
+            // Hmm. on the one hand, I want to load an example where I have purposely set the filter
+            // and that example is indistinguishable from an example where I want to see the new features
+            // because I can't tell the difference (in the old version) between manual and automatic hiding
+            // So maybe I should have an upgrade button, to allow the user to decide what to do.
+            // or maybe the user could manually change the 2.4 to 2.5 in the URL.
+            // 2.4 would not have the upgrade button
+            // 2.5 
+            // Oh
+            // The difference between the locked down version and the updating version is the "config" menu
+            // So I put the "Disable filters" button in the config menu,
+
         }
 
-        // Hmm. on the one hand, I want to load an example where I have purposely set the filter
-        // and that example is indistinguishable from an example where I want to see the new features
-        // because I can't tell the difference (in the old version) between manual and automatic hiding
-        // So maybe I should have an upgrade button, to allow the user to decide what to do.
-        // or maybe the user could manually change the 2.4 to 2.5 in the URL.
-        // 2.4 would not have the upgrade button
-        // 2.5 
-        // Oh
-        // The difference between the locked down version and the updating version is the "config" menu
-        // So I put the "Disable filters" button in the config menu,
+        // Finally done with old versions!
 
         // VOTER DEFAULTS
         // we want individual strategies to be loaded in, if they are there
@@ -368,7 +375,6 @@ function Sandbox(modelName) {
         }
 
         _fillInDefaults(config, defaults)
-        _fillInDefaults(config, defaultFeaturelist() )
 
         
     }
@@ -2938,7 +2944,7 @@ function Sandbox(modelName) {
         self.choose.dom = document.createElement("div")
         self.choose.dom.className = "topMenuSpacer"
     }
-    
+
     // run this after loading the whole menu
     ui.menu.gearconfig.initSpecial()
 
