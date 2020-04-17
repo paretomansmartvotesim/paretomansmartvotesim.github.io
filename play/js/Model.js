@@ -1625,6 +1625,10 @@ function Arena(arenaName, model) {
 			model.voters[v.iGroup].district[v.iPoint] = v.district
 		}
 
+		self.redistrictCandidates()
+	}
+
+	self.redistrictCandidates = function() {
 		// fill candidates with info on district.
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i]
@@ -1633,7 +1637,6 @@ function Arena(arenaName, model) {
 
 		// fill district[] with info on candidates.
 		self.districtsListCandidates()
-		
 	}
 
 	self.candidatePicksDistrict = function(c) {
