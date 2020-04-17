@@ -925,13 +925,49 @@ function RankedVoter(model){
 				}
 				ctx.setLineDash([]);				
 			}	
-		} else if (model.system == "Borda") {
+		} else if (1) {
 			
-			me = {x:x, y:y}
-			var meArena = model.arena.modelToArena(me)
+			if (model.system == "Borda") {
+				var doColors = false
+			} else {
+				var doColors = true
+			}
 
+			me = {x:x, y:y}
+			// var meArena = model.arena.modelToArena(me)
+			var nVoters = model.district[iDistrict].voters.length
+			
+			var tempComposite = ctx.globalCompositeOperation
+
+			if (doColors) {
+				var cmul = 1
+				// ctx.globalCompositeOperation = "source-over"; cmul = 1 // maybe
+				ctx.globalCompositeOperation = "multiply"; cmul = 1 // good , but colors are off
+				// ctx.globalCompositeOperation = "screen"; cmul = 2 // interesting, bad
+				// ctx.globalCompositeOperation = "overlay"; cmul = 2 // okay
+				// ctx.globalCompositeOperation = "hue"; cmul = 1 // great for small numbers (best on color matching) but fails for large numbers
+				// ctx.globalCompositeOperation = "lighter"; cmul = .4 // 1  // good for small number // bad for large number
+				// ctx.globalCompositeOperation = "darker"; cmul = .5 // compatibility issues & order matters
+				// ctx.globalCompositeOperation = "lighten"; cmul = 4 // kinda good for small numbers // bad because background too bright
+				// ctx.globalCompositeOperation = "darken"; cmul = .3 // not uniform 1,2,3 // not dark enough
+			} else {
+				// ctx.globalCompositeOperation = "source-over"
+				// ctx.globalCompositeOperation = "multiply" // kinda cloudy
+				// ctx.globalCompositeOperation = "screen"
+				// ctx.globalCompositeOperation = "overlay"
+				// ctx.globalCompositeOperation = "hue"
+				ctx.globalCompositeOperation = "lighter"  // seems good
+				// ctx.globalCompositeOperation = "darker" // compatibility issues
+				// ctx.globalCompositeOperation = "lighten"
+				// ctx.globalCompositeOperation = "darken" // not uniform 1,2,3
+			}
 			var temp = ctx.globalAlpha
-			for(var i=0; i<ballot.rank.length; i++){
+			var lastDist = Infinity
+			var scorange = ballot.rank.length
+			for(var i=ballot.rank.length-1; i>=0; i--){
+
+				// reverse order
+
 	
 				// Line width
 				var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
@@ -939,20 +975,34 @@ function RankedVoter(model){
 				// To which candidate...
 				var rank = ballot.rank[i];
 				var c = model.candidatesById[rank];
-				var cc = model.arena.modelToArena(c)
+				// var cc = model.arena.modelToArena(c)
 
-				dist = Math.sqrt((meArena.x - cc.x) ** 2 + (meArena.y - cc.y) ** 2 )
+				// dist = Math.sqrt((meArena.x - cc.x) ** 2 + (meArena.y - cc.y) ** 2 )
+				dist = distF(model,me,c)
 				
 
 				ctx.beginPath();
 				ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
-				var invert = false // CAN CHANGE
+				
+				var invert = true // CAN CHANGE
+				var donuts = true
+				if (doColors) {
+					donuts = false
+				}
 				if (invert) {
-					ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+					if (donuts) {
+						if (lastDist == Infinity) {
+							ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+						} else {
+							ctx.arc(x*2, y*2, lastDist*2, 0, Math.TAU, false);
+						}
+						lastDist = dist // copy
+					} else {
+						ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+					}
 					ctx.closePath()
 				}
 
-				var doColors = false // CAN CHANGE
 				if (doColors) {
 					ctx.fillStyle = c.fill
 				} else {
@@ -962,23 +1012,29 @@ function RankedVoter(model){
 				
 				// ctx.setLineDash([]);
 
-				var doLines = true
+				var doLines = false
 				if (doLines) {
 					ctx.globalAlpha = .01
 					ctx.stroke()
 				}
-				var doColors = true
 				if (doColors) {
-					ctx.globalAlpha = 1 / ballot.rank.length / model.voters.length
+					var mult = 2 * cmul
 				} else {
-					ctx.globalAlpha = .4 / ballot.rank.length / model.voters.length
+					var mult = 1
+				}				
+				if (donuts) {
+					ctx.globalAlpha = Math.max(.002, 1 * mult / nVoters * (i+1) / scorange) // donuts get lighter towards the center
+				} else {
+					ctx.globalAlpha = Math.max(.002, 1 * mult / nVoters / scorange) // donuts get lighter towards the center
 				}
 				if (invert) {
+					// .002 seems to be a limit
 					ctx.fill("evenodd")
 				} else {
 					ctx.fill()
 				}
 			}
+			ctx.globalCompositeOperation = tempComposite
 			ctx.globalAlpha = temp
 		} else {
 			// customization
