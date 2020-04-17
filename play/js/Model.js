@@ -495,7 +495,7 @@ function Model(modelName){
 	self.icon = function(id) {
 		if (self.theme === 'Letters') {
 			var c = self.candidatesById[id]
-			return "<span class='letter' style='color:"+c.fill+";'>"+c.name.toUpperCase()+"</span>"
+			return "<span class='letter' style='color:"+c.fill+";'><b>"+c.name.toUpperCase()+"</b></span>"
 		}
 		return self.candidatesById[id].texticon_png
 	}
