@@ -1850,7 +1850,7 @@ function Sandbox(modelName) {
             }
             a[a.length-1].margin = 28 // make the last button have some space after it
             a = a.concat([
-                {name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5,width:68}])
+                {name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5,width:71}])
             a[a.length-1].margin = 200 - 28 - 1 * 22 // make the last button have some space after it
             for (var i=0; i < model.candidates.length; i++) {
                 var c = model.candidates[i]
@@ -2872,7 +2872,7 @@ function Sandbox(modelName) {
             {name:"method",value:"method",margin:4},
             {name:"viz",value:"viz",margin:0},
             {name:"ui",value:"ui",margin:4},
-            {name:"compute",value:"compute"}
+            {name:"dev",value:"dev"}
         ]
         self.codebook = [ {
             field: "stepMenu",
@@ -2883,7 +2883,7 @@ function Sandbox(modelName) {
                 2:"method",
                 3:"viz",
                 4:"ui",
-                5:"compute"
+                5:"dev"
             }
         } ]
         self.onChoose = function(data){
@@ -3145,7 +3145,7 @@ function Sandbox(modelName) {
                     "presetconfig",
                 ]],
             ]],
-            ["compute", [
+            ["dev", [
                 ["normal", [
 
                 ]],
