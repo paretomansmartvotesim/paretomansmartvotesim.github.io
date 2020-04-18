@@ -76,6 +76,10 @@ function Model(modelName){
 		ballotVis: true, // turn on or off the visuals that show where the ballots go
 		visSingleBallotsOnly: true, // only show the single ballots as part of the ballotVis
 		beatMap: "auto",
+        keyyee: "newcan",
+        kindayee: "newcan",
+        ballotConcept: "auto",
+        powerChart: "auto",
 	})
 	
 	self.viz = new Viz(self);

@@ -81,7 +81,6 @@ function Sandbox(modelName) {
         yeefilter: yes_all_candidates,
         computeMethod: "ez",
         pixelsize: 60,
-        optionsForElection: {sidebar:true}, // sandboxes have this default
         featurelist: ['gearconfig',"doFeatureFilter"],
         doFeatureFilter: true, 
         yeeon: false,
@@ -89,6 +88,7 @@ function Sandbox(modelName) {
         kindayee: "newcan",
         ballotConcept: "auto",
         powerChart: "auto",
+        sidebarOn: "on",
     }
 
     self.url = undefined
@@ -2047,6 +2047,7 @@ function Sandbox(modelName) {
             43: "beatMap",
             44: "ballotConcept",
             45: "powerChart",
+            46: "sidebarOn",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -3089,9 +3090,47 @@ function Sandbox(modelName) {
         }
     }
 
+    ui.menu.sidebarOn = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = sidebarOn
+        self.list = [
+            // {name:"auto",value:"auto",margin:4},
+            {name:"on",value:"on",margin:4},
+            {name:"off",value:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.sidebarOn = data.value
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            if (config.sidebarOn == "on") {
+                model.update()
+            }
+        };
+        self.configure = function() {
+            model.optionsForElection.sidebar = (config.sidebarOn == "on")
+            if (config.sidebarOn == "on") {
+                model.caption.hidden = false
+            } else {
+                model.caption.hidden = true
+            }
+        }
+        self.choose = new ButtonGroup({
+            label: "Written Results:", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.sidebarOn);
+        }
+    }
 
 
-    
+
+
 
 
 
@@ -3201,6 +3240,7 @@ function Sandbox(modelName) {
             "beatMap",
             "ballotConcept",
             "powerChart",
+            "sidebarOn",
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "stepMenu",
@@ -3291,6 +3331,7 @@ function Sandbox(modelName) {
                     "beatMap",
                     "ballotConcept",
                     "powerChart",
+                    "sidebarOn",
                 ]],
                 ["advanced", [
                     "ballotVis",
@@ -3711,7 +3752,7 @@ function Sandbox(modelName) {
         35:"yeefilter",
         36:"computeMethod",
         37:"pixelsize",
-        38:"optionsForElection",
+        38:"optionsForElection", // no longer used, but okay to have
         39:"candidateSerials",
         40:"voterGroupTypes",
         41:"voterGroupX",
@@ -3734,6 +3775,7 @@ function Sandbox(modelName) {
         58:"kindayee",
         59:"ballotConcept",
         60:"powerChart",
+        61:"sidebarOn",
     } // add more on to the end ONLY
         
     var encodeFields = {}
