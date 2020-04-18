@@ -459,6 +459,9 @@ function Sandbox(modelName) {
     };
 
     model.onDraw = function(){
+
+        
+        drawButtons() // make sure the icons show up
         
         // CREATE A BALLOT
         
@@ -569,12 +572,16 @@ function Sandbox(modelName) {
         config.numOfCandidates = n
         ui.menu.nCandidates.select()
 
+        drawButtons()
+    }
+
+    function drawButtons() {
         var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
         m.forEach(function(m) {
             m.choose.buttonConfigs = m.makelist()
             m.choose.init()
             m.select()
-        })
+        })    
 
     }
 

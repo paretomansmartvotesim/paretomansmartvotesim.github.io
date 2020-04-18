@@ -377,6 +377,17 @@ function Model(modelName){
 	self.drawSidebar = function () {		
 		if (self.result) {
 			if(self.result.text) {
+				if (self.placeHolding) {
+					if (self.nLoading > 0) {
+						// will do on next draw
+						return
+					} else {
+						// ready to replace
+						self.result.text = self.result.text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
+							return self.icon($1)
+						  });  // https://stackoverflow.com/a/49262416
+					}
+				}
 				self.caption.innerHTML = self.result.text;
 				if (self.result.eventsToAssign) {
 					for (var i=0; i < self.result.eventsToAssign.length; i++) {
@@ -502,8 +513,16 @@ function Model(modelName){
 		if (self.theme === 'Letters') {
 			var c = self.candidatesById[id]
 			return "<span class='letter' style='color:"+c.fill+";'><b>"+c.name.toUpperCase()+"</b></span>"
+		} else {
+			// if the images haven't loaded yet, then put a placeholder here and flag a task to replace the text during the redraw 
+			// (The redraw happens after images are loaded)
+			if (self.nLoading > 0) {
+				self.placeHolding = true
+				return "^Placeholder{" + id + "}"
+			} else {
+				return self.candidatesById[id].texticon_png
+			}
 		}
-		return self.candidatesById[id].texticon_png
 	}
 	
 	self.nameUpper = function(id) {
