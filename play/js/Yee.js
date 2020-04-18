@@ -8,8 +8,6 @@ function Viz(model) {
 
 	self.calculate = function() {
 		
-
-
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
 		 // ranked voter and not (original or IRV or Borda)
 		 var autoBeatMap = model.beatMap == "auto" && model.voterType.name == "RankedVoter" && ! (model.doOriginal  || model.system == "IRV" || model.system == "STV" || model.system == "Borda")
@@ -34,6 +32,21 @@ function Viz(model) {
 
 		if (doBeatMap) {
 			self.calculateBeatMap()
+		}
+	}
+
+	self.drawBackground = function() {
+
+		if (model.yeeon) {
+			self.drawBackgroundYee()
+		}
+
+		// ranked voter and not (original or IRV or Borda)
+		var autoBeatMap = model.beatMap == "auto" && model.voterType.name == "RankedVoter" && ! (model.doOriginal  || model.system == "IRV" || model.system == "STV" || model.system == "Borda")
+		var doBeatMap = model.beatMap == "on" || autoBeatMap
+
+		if (doBeatMap) {
+			self.drawBackgroundBeatMap()
 		}
 	}
 
@@ -475,21 +488,6 @@ function Viz(model) {
 		return goal
 	}
 
-	self.drawBackground = function() {
-
-		if (model.yeeon) {
-			self.drawBackgroundYee()
-		}
-
-		// ranked voter and not (original or IRV or Borda)
-		var autoBeatMap = model.beatMap == "auto" && model.voterType.name == "RankedVoter" && ! (model.doOriginal  || model.system == "IRV" || model.system == "STV" || model.system == "Borda")
-		var doBeatMap = model.beatMap == "on" || autoBeatMap
-
-		if (doBeatMap) {
-			self.drawBackgroundBeatMap()
-		}
-	}
-
 	self.drawBackgroundYee = function() {	
 		var arena = model.arena
 		var ctx = arena.ctx
@@ -677,6 +675,8 @@ function Viz(model) {
 		var arena = model.arena
 		var ctx = arena.ctx
 		var temp = ctx.globalAlpha
+		var tempComposite = ctx.globalCompositeOperation
+		var tempLinewidth = ctx.lineWidth
 
 		// ctx.globalAlpha = 1
 		// ctx.fillStyle = "#fff"
@@ -696,7 +696,6 @@ function Viz(model) {
 		
 
 		// draw the beatcircles
-		var tempComposite = ctx.globalCompositeOperation
 		ctx.globalCompositeOperation = "multiply"
 		// ctx.globalCompositeOperation = "screen"
 		// ctx.globalCompositeOperation = "overlay"
@@ -706,6 +705,8 @@ function Viz(model) {
 		// ctx.globalCompositeOperation = "lighten"
 		// ctx.globalCompositeOperation = "darken"
 		
+		ctx.lineWidth = 1
+
 		for (var i = 0; i < can_filter_yee.length; i++) {
 			var cid = can_filter_yee[i]
 			x = model.beatCircle.x[cid]
