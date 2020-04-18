@@ -112,11 +112,7 @@ function main_ballot(preset){
 			if (model.voters.length == 0) return
 			if (model.voters[0].voterGroupType == "GaussianVoters") return
 			if (config.newWay) {
-				if (way1) {
-					caption.innerHTML = model.voters[0].type.toTextH(model.voters[0].ballot);
-				} else {
-					bRight.innerHTML = model.voters[0].type.toTextH(model.voters[0].ballot);
-				}
+				// onDraw
 			} else {
 				ballot.update(model.voters[0].ballot);
 			}
@@ -156,14 +152,24 @@ function main_ballot(preset){
 
 		if(config.showChoiceOfFrontrunners) {
 
-			var h1 = function(x) {return "<span class='buttonshape'>"+model.icon(x)+"</span>";};
-			var frun = [
-				{name:h1("square"),realname:"square",margin:4},
-				{name:h1("triangle"),realname:"triangle",margin:4},
-				{name:h1("hexagon"),realname:"hexagon",margin:4},
-				//{name:h1("pentagon"),realname:"pentagon",margin:4},
-				//{name:h1("bob"),realname:"bob"}
-			];
+			function _iconButton(id) {
+				return "<span class='buttonshape'>"+model.icon(id)+"</span>"
+			}
+			frun = [];
+			function frunMakelist() {
+				var a = []
+				for (var i=0; i < model.candidates.length; i++) {
+					var c = model.candidates[i]
+					a.push({
+						name:_iconButton(c.id),
+						realname:c.id,
+						margin:5
+					})
+				}
+				a[a.length-1].margin = 0
+				return a
+			}
+			
 			var onChooseFrun = function(data){
 
 				// update config...
@@ -188,6 +194,36 @@ function main_ballot(preset){
 				isCheckbox: true
 			});
 			basediv.querySelector("#b-left").appendChild(chooseFrun.dom);
+		}
+
+
+		model.onDraw = function(){	
+			if(config.showChoiceOfFrontrunners) {
+				chooseFrun.buttonConfigs = frunMakelist()
+				chooseFrun.init()
+			}
+
+			if (model.voters.length == 0) return
+			if (model.voters[0].voterGroupType == "GaussianVoters") return
+			if (config.newWay) {
+				var text = model.voters[0].type.toTextH(model.voters[0].ballot);
+				if (model.placeHolding) {
+					if (model.nLoading > 0) {
+						// will do on next draw
+						return
+					} else {
+						// ready to replace
+						text = text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
+							return model.icon($1)
+						});  // https://stackoverflow.com/a/49262416
+					}
+				}
+				if (way1) {
+					caption.innerHTML = text
+				} else {
+					bRight.innerHTML = text
+				}
+			}
 		}
 
 		var selectMENU = function(){
