@@ -191,25 +191,8 @@ function Model(modelName){
 			self.updateVC()
 		}
 
-		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		 // ranked voter and not (original or IRV or Borda)
-		var autoBeatMap = self.beatMap == "auto" && self.voterType.name == "RankedVoter" && ! (self.doOriginal  || self.system == "IRV" || self.system == "STV" || self.system == "Borda")
-		var doBeatMap = self.beatMap == "on" || autoBeatMap
-		if (self.yeeon || doBeatMap) {
-			if (self.yeeobject != undefined && (self.arena.mouse.dragging === self.yeeobject || self.tarena.mouse.dragging === self.yeeobject)) {
-				// dragging the yee object, so no need to recalculate, we can save time...
-				// unless we wanted to calculate one of these:
-				if (self.kindayee == 'newcan') {
-					self.viz.calculate()
-				} else if (doBeatMap) {
-					// do only the beat Map because it takes less time and we don't need to do the yee calculation
-					self.viz.calculateBeatMap()
-				}
-			} else {
-				// something caused an update and we aren't dragging the yee object
-				self.viz.calculate()
-			}
-		}
+		
+		self.viz.calculate()
 
 		// get the ballots for this election
 		for(var i=0; i<self.voters.length; i++){

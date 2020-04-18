@@ -8,15 +8,32 @@ function Viz(model) {
 
 	self.calculate = function() {
 		
+
+
+		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
+		 // ranked voter and not (original or IRV or Borda)
+		 var autoBeatMap = model.beatMap == "auto" && model.voterType.name == "RankedVoter" && ! (model.doOriginal  || model.system == "IRV" || model.system == "STV" || model.system == "Borda")
+		 var doBeatMap = model.beatMap == "on" || autoBeatMap
+
+		 if (model.yeeon) {
+			 if (model.yeeobject != undefined && (model.arena.mouse.dragging === model.yeeobject || model.tarena.mouse.dragging === model.yeeobject)) {
+				 // dragging the yee object, so no need to recalculate, we can save time...
+				 // unless we wanted to calculate one of these:
+				 if (model.kindayee == 'newcan') {
+					 self.calculateYee()
+				 } 
+			 } else {
+				 // something caused an update and we aren't dragging the yee object
+				 self.calculateYee()
+			 }
+		 }
+
 		// ranked voter and not (original or IRV or Borda)
 		var autoBeatMap = model.beatMap == "auto" && model.voterType.name == "RankedVoter" && ! (model.doOriginal  || model.system == "IRV" || model.system == "STV" || model.system == "Borda")
 		var doBeatMap = model.beatMap == "on" || autoBeatMap
 
 		if (doBeatMap) {
 			self.calculateBeatMap()
-		}
-		if (model.yeeon) {
-			self.calculateYee()
 		}
 	}
 
