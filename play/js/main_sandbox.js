@@ -3531,6 +3531,7 @@ function Sandbox(modelName) {
         basediv.insertBefore(descDOM, refNode);
         var descText = document.createElement("textarea");
         descText.id = "description_text";
+        descText.placeholder = "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
 
         containText = document.createElement("div");
         containText.id = "double_description_container";

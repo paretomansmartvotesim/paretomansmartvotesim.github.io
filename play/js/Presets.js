@@ -1293,7 +1293,7 @@ function loadpreset(modelName) {
 
 	} else if (htmlname == "sandbox.html") {
 		config = {
-			description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
+			description: "",
 			features: 4,
 			system: "FPTP",
 			candidates: 5,
