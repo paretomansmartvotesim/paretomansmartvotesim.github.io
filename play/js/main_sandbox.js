@@ -86,7 +86,8 @@ function Sandbox(modelName) {
         doFeatureFilter: true, 
         yeeon: false,
         beatMap: "auto",
-        kindayee: "newcan"
+        kindayee: "newcan",
+        ballotConcept: "auto",
     }
 
     self.url = undefined
@@ -2043,6 +2044,7 @@ function Sandbox(modelName) {
             41: "spacer",
             42: "yeeon",
             43: "beatMap",
+            44: "ballotConcept",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -3004,12 +3006,47 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Beat Map", // Sub Menu
-            width: 108,
+            width: 52,
             data: self.list,
             onChoose: self.onChoose
         });
         self.select = function() {
             self.choose.highlight("value", config.beatMap);
+        }
+    }
+
+
+    ui.menu.ballotConcept = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = ballotConcept
+        self.list = [
+            {name:"auto",value:"auto",margin:4},
+            {name:"on",value:"on",margin:4},
+            {name:"off",value:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.ballotConcept = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            model.initMODEL()
+            // UPDATE
+            model.update();
+            menu_update()
+        };
+        self.configure = function() {
+            model.ballotConcept = config.ballotConcept
+        }
+        self.choose = new ButtonGroup({
+            label: "Ballot conceptualization:", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.ballotConcept);
         }
     }
 
@@ -3123,6 +3160,7 @@ function Sandbox(modelName) {
                 ]],
             ]],
             "beatMap",
+            "ballotConcept",
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "stepMenu",
@@ -3211,6 +3249,7 @@ function Sandbox(modelName) {
                         ]],
                     ]],
                     "beatMap",
+                    "ballotConcept",
                 ]],
                 ["advanced", [
                     "ballotVis",

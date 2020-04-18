@@ -1876,6 +1876,8 @@ function Arena(arenaName, model) {
 			// There's two ways to draw the candidate.  One shows the candidate icon.
 			// Two shows the vote totals and optionally, the candidate icon.
 			var go = (model.system == "IRV" || model.system == "STV")  && model.dimensions == "2D" && model.result && self.id == "arena"
+			var go = go && ! (model.ballotConcept == "off")
+	
 			if (go) {
 				for (var k = 0; k < model.district.length; k++) {
 					result = model.district[k].result
@@ -2030,6 +2032,9 @@ function Arena(arenaName, model) {
 			}
 		}
 		function drawVotes() {
+			
+			if (model.ballotConcept == "off") return
+
 			var go = model.system == "IRV" || model.system == "STV"
 			if (go && model.dimensions == "2D" && model.result && model.opt.showIRVTransfers) {
 				ctx = self.ctx

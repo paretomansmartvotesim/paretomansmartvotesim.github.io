@@ -54,6 +54,8 @@ function ScoreVoter(model){
 
 	self.drawBG = function(ctx, x, y, ballot, iDistrict, k){
 
+		if (model.ballotConcept == "off") return
+
 		var scorange = self.maxscore - self.minscore
 		var step = (self.radiusLast - self.radiusFirst)/scorange;
 
@@ -848,6 +850,8 @@ function RankedVoter(model){
 
 	self.drawBG = function(ctx, x, y, ballot, iDistrict, i){
 
+		if (model.ballotConcept == "off") return
+
 		if (model.doOriginal) {
 			// RETINA
 			x = x*2;
@@ -1431,6 +1435,8 @@ function PluralityVoter(model){
 	};
 
 	self.drawBG = function(ctx, x, y, ballot, iDistrict, i){
+		
+		if (model.ballotConcept == "off") return
 
 		var candidate = model.candidatesById[ballot.vote];
 		
