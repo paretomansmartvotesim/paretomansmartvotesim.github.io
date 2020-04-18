@@ -73,7 +73,8 @@ function Model(modelName){
 			breakEliminationTiesIRV: true // break ties for eliminations of candidates in IRV
 		},
 		ballotVis: true, // turn on or off the visuals that show where the ballots go
-		visSingleBallotsOnly: true // only show the single ballots as part of the ballotVis
+		visSingleBallotsOnly: true, // only show the single ballots as part of the ballotVis
+		winMap: false,
 	})
 	
 	self.yee = new Yee(self);
@@ -121,7 +122,9 @@ function Model(modelName){
 
 		var expYeeObject = function() {
 			// Yee diagram
-			if (self.kindayee == "can") {
+			if ( ! self.winMap) {
+				return undefined
+			} else if (self.kindayee == "can") {
 				return self.candidatesById[self.keyyee]
 			} else if (self.kindayee=="voter") {
 				return self.voters[self.keyyee]
@@ -141,6 +144,7 @@ function Model(modelName){
 		self.yeeon = (self.yeeobject != undefined) ? true : false
 		if (self.kindayee=="newcan") self.yeeon = true
 		if (self.kindayee=="beatCircles") self.yeeon = true
+		if ( ! self.winMap) self.yeeon = false
 		self.onInitModel()
 	}
 	self.onInitModel = function() {} // a hook for a caller
@@ -196,8 +200,10 @@ function Model(modelName){
 		}
 
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		if (self.yeeon && ((self.arena.mouse.dragging != self.yeeobject && self.tarena.mouse.dragging != self.yeeobject) || self.kindayee == 'newcan' || self.kindayee == 'beatCircles')) {
-			self.yee.calculate()
+		if (self.yeeon) {
+			if ((self.arena.mouse.dragging != self.yeeobject && self.tarena.mouse.dragging != self.yeeobject) || self.kindayee == 'newcan' || self.kindayee == 'beatCircles') {
+				self.yee.calculate()
+			}
 		}
 		
 		// get the ballots for this election

@@ -85,6 +85,7 @@ function Sandbox(modelName) {
         optionsForElection: {sidebar:true}, // sandboxes have this default
         featurelist: ['gearconfig',"doFeatureFilter"],
         doFeatureFilter: true, 
+        winMap: true,
     }
 
     self.url = undefined
@@ -2045,6 +2046,7 @@ function Sandbox(modelName) {
             39: "stepMenu",
             40: "doFeatureFilter",
             41: "spacer",
+            42: "winMap",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -2945,6 +2947,49 @@ function Sandbox(modelName) {
         self.choose.dom.className = "topMenuSpacer"
     }
 
+
+    ui.menu.winMap = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = winMap
+        self.list = [
+            {name:"on",value:true,margin:4},
+            {name:"off",value:false},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.winMap = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            model.initMODEL()
+            // UPDATE
+            model.update();
+            menu_update()
+        };
+        self.configure = function() {
+            showMenuItemsIf("divWinMap", config.winMap)
+            model.winMap = config.winMap
+        }
+        self.choose = new ButtonGroup({
+            label: "Win Map", // Sub Menu
+            width: 108,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.winMap);
+        }
+    }
+
+
+
+
+
+
+
+
+
     // run this after loading the whole menu
     ui.menu.gearconfig.initSpecial()
 
@@ -3039,10 +3084,13 @@ function Sandbox(modelName) {
                 ]],
             ]],
             // "viz",
-            "yee",
-            ["divYee", [
-                "yeefilter" ,
-                "choose_pixel_size",
+            "winMap",
+            ["divWinMap", [
+                "yee",
+                ["divYee", [
+                    "yeefilter" ,
+                    "choose_pixel_size"
+                ]],
             ]],
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
@@ -3124,10 +3172,13 @@ function Sandbox(modelName) {
             ["viz", [
                 ["normal", [
                     // "viz",
-                    "yee",
-                    ["divYee", [
-                        "yeefilter" ,
-                        "choose_pixel_size"
+                    "winMap",
+                    ["divWinMap", [
+                        "yee",
+                        ["divYee", [
+                            "yeefilter" ,
+                            "choose_pixel_size"
+                        ]],
                     ]],
                 ]],
                 ["advanced", [
