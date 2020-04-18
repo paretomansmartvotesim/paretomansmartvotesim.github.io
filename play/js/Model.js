@@ -199,8 +199,11 @@ function Model(modelName){
 			if (self.yeeobject != undefined && (self.arena.mouse.dragging === self.yeeobject || self.tarena.mouse.dragging === self.yeeobject)) {
 				// dragging the yee object, so no need to recalculate, we can save time...
 				// unless we wanted to calculate one of these:
-				if (self.kindayee == 'newcan' || doBeatMap) {
+				if (self.kindayee == 'newcan') {
 					self.viz.calculate()
+				} else if (doBeatMap) {
+					// do only the beat Map because it takes less time and we don't need to do the yee calculation
+					self.viz.calculateBeatMap()
 				}
 			} else {
 				// something caused an update and we aren't dragging the yee object
