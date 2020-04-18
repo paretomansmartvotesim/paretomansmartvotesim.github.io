@@ -89,6 +89,7 @@ function Sandbox(modelName) {
         ballotConcept: "auto",
         powerChart: "auto",
         sidebarOn: "on",
+        lastTransfer: "on",
     }
 
     self.url = undefined
@@ -732,7 +733,8 @@ function Sandbox(modelName) {
         self.configure= function() {
             
             showMenuItemsIf("divRBVote", config.system === "RBVote")
-
+            showMenuItemsIf("divLastTransfer", config.system === "IRV" || config.system === "STV")
+            
             var s = self.listByName()
             model.election = s.election
             model.system = config.system;
@@ -2048,6 +2050,7 @@ function Sandbox(modelName) {
             44: "ballotConcept",
             45: "powerChart",
             46: "sidebarOn",
+            47: "lastTransfer",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -2962,11 +2965,12 @@ function Sandbox(modelName) {
             config.yeeon = data.value
             // CONFIGURE
             self.configure()
-            // INIT
-            model.initMODEL()
             // UPDATE
-            model.update();
-            menu_update()
+            if (config.yeeon) {
+                model.update() // need to calculate
+            } else {
+                model.draw()
+            }
         };
         self.configure = function() {
             showMenuItemsIf("divWinMap", config.yeeon)
@@ -2998,11 +3002,12 @@ function Sandbox(modelName) {
             config.beatMap = data.value
             // CONFIGURE
             self.configure()
-            // INIT
-            model.initMODEL()
             // UPDATE
-            model.update();
-            menu_update()
+            if (config.beatMap == "off") {
+                model.draw()
+            } else {
+                model.update() // might need to calculate
+            }
         };
         self.configure = function() {
             model.beatMap = config.beatMap
@@ -3033,11 +3038,12 @@ function Sandbox(modelName) {
             config.ballotConcept = data.value
             // CONFIGURE
             self.configure()
-            // INIT
-            model.initMODEL()
             // UPDATE
-            model.update();
-            menu_update()
+            if (config.ballotConcept == "off") {
+                model.draw()
+            } else {
+                model.update() // might need to calculate
+            }
         };
         self.configure = function() {
             model.ballotConcept = config.ballotConcept
@@ -3069,7 +3075,9 @@ function Sandbox(modelName) {
             // CONFIGURE
             self.configure()
             // INIT
-            model.update()
+            if (config.sidebarOn == "auto") {
+                model.update()
+            }
         };
         self.configure = function() {
             model.powerChart = config.powerChart
@@ -3128,7 +3136,37 @@ function Sandbox(modelName) {
         }
     }
 
-
+    
+    ui.menu.lastTransfer = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = lastTransfer
+        self.list = [
+            // {name:"auto",value:"auto",margin:4},
+            {name:"on",value:"on",margin:4},
+            {name:"off",value:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.lastTransfer = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            model.update() // must re-run election
+        };
+        self.configure = function() {
+            model.opt.IRV100 = (config.lastTransfer == "on")
+        }
+        self.choose = new ButtonGroup({
+            label: "Show Last Transfer for Transferable Methods?", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.lastTransfer);
+        }
+    }
 
 
 
@@ -3241,6 +3279,9 @@ function Sandbox(modelName) {
             "ballotConcept",
             "powerChart",
             "sidebarOn",
+            ["divLastTransfer", [
+                "lastTransfer",
+            ]]
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "stepMenu",
@@ -3332,6 +3373,9 @@ function Sandbox(modelName) {
                     "ballotConcept",
                     "powerChart",
                     "sidebarOn",
+                    ["divLastTransfer", [
+                        "lastTransfer",
+                    ]]
                 ]],
                 ["advanced", [
                     "ballotVis",
@@ -3776,6 +3820,7 @@ function Sandbox(modelName) {
         59:"ballotConcept",
         60:"powerChart",
         61:"sidebarOn",
+        62:"lastTransfer",
     } // add more on to the end ONLY
         
     var encodeFields = {}
