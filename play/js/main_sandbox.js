@@ -2797,15 +2797,15 @@ function Sandbox(modelName) {
         // self.name = menuLevel
         self.list = [
             // {name:"basic",value:"basic",margin:4},
-            {name:"normal",value:"normal",margin:4},
-            {name:"advanced",value:"advanced"}
+            {name:"stock",value:"normal",margin:4},
+            {name:"more",value:"advanced"}
         ]
         self.codebook = [ {
             field: "menuLevel",
             decodeVersion: 2.5,
             decode: {
-                0:"normal",
-                1:"advanced"
+                0:"normal",  // stock?
+                1:"advanced" // epic?
             }
         } ]
         self.onChoose = function(data){
@@ -2832,8 +2832,8 @@ function Sandbox(modelName) {
             }
         }
         self.choose = new ButtonGroup({
-            label: "Effort:", // Level of Expertise
-            width: 108,
+            label: "Options:", // Level of Expertise
+            width: 52,
             data: self.list,
             onChoose: self.onChoose
         });

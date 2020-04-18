@@ -59,7 +59,7 @@ function Model(modelName){
 		//
 		nVoterGroupsRealName: "Single Voter",
 		yeeobject: undefined,
-		yeeon: false,
+		yeeon: false,		
 		//
 		voterType: PluralityVoter,
 		election: Election.plurality,
