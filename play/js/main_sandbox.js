@@ -367,8 +367,8 @@ function Sandbox(modelName) {
                 config.yeeon = true
             }
 
-            // if the yee menu was in the featurelist, then make sure the new yee on/off switch is added to the featurelist
-            if (config.featurelist != undefined && config.featurelist.includes("yee")) modifyConfigFeaturelist(true,["yeeon"])
+            // if the yee menu was in the featurelist, then make sure the new yee on/off switch is added to the featurelist // and beatMap
+            if (config.featurelist != undefined && config.featurelist.includes("yee")) modifyConfigFeaturelist(true,["yeeon","beatMap"])
 
             // so basically, we are getting rid of the "none" button in the yee chooser and making it into a separate control.
 
