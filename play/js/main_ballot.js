@@ -67,6 +67,7 @@ function main_ballot(preset){
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
+			model.voterCenter = new VoterCenter(model)
 			// CONFIGURE
 			Object.assign( model.candidates[0],{x: 41, y: 50, icon:"square"} )
 			Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )

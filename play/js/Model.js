@@ -120,6 +120,12 @@ function Model(modelName){
 			self.candidatesBySerial[c.serial] = c;
 		}
 
+		self.yeefilter = {}
+		for (var c of self.candidates) {
+			self.yeefilter[c.id] = true
+		}
+
+
 		var expYeeObject = function() {
 			// Yee diagram
 			if ( ! self.yeeon) {
