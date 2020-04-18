@@ -3091,7 +3091,7 @@ function Sandbox(modelName) {
 
 
 
-
+    
 
 
 
@@ -3725,6 +3725,15 @@ function Sandbox(modelName) {
         49:"ballotVis",
         50:"customNames",
         51:"namelist",
+        52:"menuVersion",
+        53:"stepMenu",
+        54:"menuLevel",
+        55:"doFeatureFilter",
+        56:"yeeon",
+        57:"beatMap",
+        58:"kindayee",
+        59:"ballotConcept",
+        60:"powerChart",
     } // add more on to the end ONLY
         
     var encodeFields = {}
@@ -3842,10 +3851,13 @@ function Sandbox(modelName) {
         // note that we have to decode it in place
         var conf = _jcopy(config)
         // decode field names
-        for (var [i,n] of Object.entries(decodeFields)) {
-            i = Number(i)
-            config[n] = conf[i]
-            delete config[i]
+        for (var [e,v] of Object.entries(conf)) {
+            if (decodeFields.hasOwnProperty(e)) {                
+                // if we can decode it, then decode it
+                delete config[e]
+                var d = decodeFields[e]
+                config[d] = v
+            }
         }
 
         for (var e in ui.menu) {
