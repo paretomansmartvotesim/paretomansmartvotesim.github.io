@@ -336,7 +336,11 @@ function Model(modelName){
 	self.drawArenas = function() {
 
 		self.arena.clear()
-		self.tarena.clear()
+
+		var doTarena = self.checkGotoTarena()
+		if (doTarena) {
+			self.tarena.clear()
+		}
 
 		// Draw axes
 		//var background = new Image();
@@ -344,7 +348,7 @@ function Model(modelName){
 		//self.ctx.drawImage(background,0,0);
 		self.viz.drawBackground()
 		
-		if ( ! self.tarena.canvas.hidden) {
+		if (doTarena) {
 			if (self.nDistricts > 1) {
 				// TODO later
 				// for (var i = 0; i < self.nDistricts; i++) {
@@ -371,7 +375,7 @@ function Model(modelName){
 		}
 		
 		self.arena.draw()
-		if (self.tarena.canvas.hidden  == false && self.optionsForElection.sidebar) {
+		if (doTarena) {
 			self.tarena.draw()
 		}
 
@@ -540,7 +544,7 @@ function Model(modelName){
 	self.checkGotoTarena = function() { 
 		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
 		// right now, we don't have a good visual of these for multiple districts, just one
-		return (self.nDistricts < 2) && (self.system == "QuotaApproval" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV")
+		return (self.nDistricts < 2) && (self.system == "QuotaApproval" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.powerChart == "off")
 	}
 
 	self.updateVC = function() {
@@ -1761,7 +1765,9 @@ function Arena(arenaName, model) {
 		} else {	
 			var flashydude = getFlashydude()
 			drawCandidates()
-			drawFlashydude()
+			var flashyFirst = (flashydude && flashydude.isCandidate)
+			if (flashyFirst) drawFlashydude() // only if flashydude is a candidate 
+			// flashydude means we are hovering over the object and the object changes color to show we're hovering
 			drawWinners()
 			setBorderColor()
 		}

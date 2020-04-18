@@ -88,6 +88,7 @@ function Sandbox(modelName) {
         beatMap: "auto",
         kindayee: "newcan",
         ballotConcept: "auto",
+        powerChart: "auto",
     }
 
     self.url = undefined
@@ -2045,6 +2046,7 @@ function Sandbox(modelName) {
             42: "yeeon",
             43: "beatMap",
             44: "ballotConcept",
+            45: "powerChart",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -3051,6 +3053,43 @@ function Sandbox(modelName) {
     }
 
 
+    ui.menu.powerChart = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = powerChart
+        self.list = [
+            {name:"auto",value:"auto",margin:4},
+            // {name:"on",value:"on",margin:4},
+            {name:"off",value:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.powerChart = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            model.update()
+        };
+        self.configure = function() {
+            model.powerChart = config.powerChart
+            if (model.checkGotoTarena()) { // TODO: make a visualization for more than 1 district
+                model.tarena.canvas.hidden = false
+            } else {
+                model.tarena.canvas.hidden = true
+            }
+        }
+        self.choose = new ButtonGroup({
+            label: "Power Chart:", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.powerChart);
+        }
+    }
+
+
 
 
 
@@ -3161,6 +3200,7 @@ function Sandbox(modelName) {
             ]],
             "beatMap",
             "ballotConcept",
+            "powerChart",
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "stepMenu",
@@ -3250,6 +3290,7 @@ function Sandbox(modelName) {
                     ]],
                     "beatMap",
                     "ballotConcept",
+                    "powerChart",
                 ]],
                 ["advanced", [
                     "ballotVis",
