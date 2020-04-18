@@ -1242,8 +1242,14 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	
 	// replace some of the html in the output of rbvote to make it match the style of betterballot
 	var rbvote_string = (resultRB.str).replace("style.css","../play/css/rbvote.css").replace()
-	var intext = Object.keys(model.candidatesById)
-	var outtext = Object.keys(model.candidatesById).map(x => model.icon(x))
+	var intext = []
+	var outtext = []
+	for(var i = model.candidates.length - 1; i >= 0; i--) {
+		var c = model.candidates[i]
+		intext.push(c.id)
+		outtext.push(model.icon(c.id))
+	}
+	// var outtext = Object.keys(model.candidatesById).map(x => model.icon(x))
 	for (var i in intext) {
 		rbvote_string = rbvote_string.replace(new RegExp(intext[i],"g"),outtext[i])
 	}

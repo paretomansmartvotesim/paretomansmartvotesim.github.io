@@ -50,7 +50,10 @@ THE MAIN MODEL ITSELF
 	cursor: default;
 	margin-top:10px;
 	text-align: center;
+	word-wrap: break-word;
+	text-align: left;
 }
+
 .div-model #caption .small{
 	font-size: 0.75em;
 }

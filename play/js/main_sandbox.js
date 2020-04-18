@@ -438,7 +438,6 @@ function Sandbox(modelName) {
         _objF(ui.menu,"configure")
         // CONFIGURE DEFAULTS (model)
         model.border = config.arena_border
-        model.optionsForElection = {sidebar:true}
         model.HACK_BIG_RANGE = true;
         // INIT
         model.initDOM()
