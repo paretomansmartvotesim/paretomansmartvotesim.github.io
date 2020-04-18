@@ -17,6 +17,7 @@ function Model(modelName){
 	self.arena = new Arena("arena",self)
 	self.tarena = new Arena("tarena",self)
 	self.nLoading = 0 // counter for drawing after everything is loaded
+	// the only thing to be done after loading the images is drawing the images
 	
 	// CONFIGURE DEFAULTS
 	// helper
@@ -181,7 +182,7 @@ function Model(modelName){
 	self.onAddCandidate = function() {} // callback
 	self.update = function(){
 
-		if (self.nLoading > 0) return // the loading function will call update()
+		// if (self.nLoading > 0) return // the loading function will call update()
 
 		// update positions of draggables
 		self.arena.update();
@@ -309,9 +310,8 @@ function Model(modelName){
 				self.district[0].result = self.result
 			}
 		}
-		
+		 
 		self.draw()
-		self.drawSidebar()
 
 		// Update!
 		self.onUpdate();
@@ -324,6 +324,13 @@ function Model(modelName){
 
 	self.onDraw = function(){}; // TO IMPLEMENT
 	self.draw = function() {
+		
+		// three things need to be drawn.  The arenas, the sidebar, and maybe more, like the main_sandbox or the main_ballot or whatever else calls new Model
+		self.drawArenas()
+		self.drawSidebar()
+		self.onDraw()
+	}
+	self.drawArenas = function() {
 
 		self.arena.clear()
 		self.tarena.clear()
@@ -379,7 +386,6 @@ function Model(modelName){
 				}
 			}
 		}
-		self.onDraw();
 	}
 
 
@@ -707,18 +713,19 @@ function Arena(arenaName, model) {
 				n.instance = i
 				n.dummy = doDummy
 				model.candidates.push(n)
-					
+
+				// once model.candidates is updated, we call the usual functions
+
+			
 				// INIT
 				n.init()
-				if (model.nLoading > 0) {  // the loading function will call these after it's done.
-					return n
-				} else {
-					model.initMODEL()
-					// update the GUI
-					model.onAddCandidate()
-					model.arena.redistrict()
-				}
-				return n
+				model.initMODEL()
+				// UPDATE
+				model.arena.redistrictCandidates()
+				model.onAddCandidate()
+				// model.update will happen later
+
+				return n			
 			} else if (self.isPlusOneVoter || self.isPlusVoterGroup || self.isPlusXVoterGroup) {
 				if (self.isPlusOneVoter) {
 					var n = new SingleVoter(model)
@@ -1120,12 +1127,7 @@ function Arena(arenaName, model) {
 	function onLoadTool() {
 		model.nLoading--
 		if (model.nLoading == 0) {
-			model.initMODEL()
-			// update the GUI
-			model.onAddCandidate()
-			model.arena.redistrict()
-			
-			model.update() // now we have extra text for the model's output
+			model.draw()
 		}
 	}
 	

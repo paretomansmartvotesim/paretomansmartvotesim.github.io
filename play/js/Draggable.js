@@ -124,7 +124,7 @@ function DraggableManager(arena,model){
 			var flashydude = self.isOver()
 			if (flashydude) flashydude.highlight = true
 			if (arena.mouse.dragging && arena.mouse.dragging.isModify) model.update()
-			model.draw()
+			model.drawArenas()
 			self.lastwas = "hovering"
 		}else{
 			// Otherwise no cursor
@@ -134,7 +134,7 @@ function DraggableManager(arena,model){
 					var d = arena.draggables[i];
 					d.highlight = false
 				}
-				model.draw()	
+				model.drawArenas()	
 			}
 			self.lastwas = "nothovering"
 		}
@@ -175,7 +175,7 @@ function DraggableManager(arena,model){
 				var flashydude = self.isOver()
 				arena.mouse.dragging.doModify(flashydude)
 				arena.mouse.dragging = null;
-				model.draw()
+				model.drawArenas()
 				return
 			}
 			model.update();

@@ -568,6 +568,14 @@ function Sandbox(modelName) {
         model.numOfCandidates = n
         config.numOfCandidates = n
         ui.menu.nCandidates.select()
+
+        var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
+        m.forEach(function(m) {
+            m.choose.buttonConfigs = m.makelist()
+            m.choose.init()
+            m.select()
+        })
+
     }
 
     ///////////////////
@@ -1318,7 +1326,11 @@ function Sandbox(modelName) {
             model.initMODEL()
             // UPDATE
             
+            model.arena.redistrictCandidates()
             // update sandbox buttons
+
+            // Note: model.onAddCandidate() is similar
+
             var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
             m.forEach(function(m) {
                 m.choose.buttonConfigs = m.makelist()
@@ -1922,7 +1934,7 @@ function Sandbox(modelName) {
             // CONFIGURE
             self.configure()
             // UPDATE
-            model.draw();
+            model.drawArenas();
         };
         self.configure = function() {
             for (var serial in config.yeefilter) {

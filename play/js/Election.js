@@ -911,7 +911,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 
 
 				model.dontdrawwinners = true
-				model.draw()
+				model.drawArenas()
 				model.dontdrawwinners = false
 				district.candidates = dBackup
 				model.candidates = mBackup
@@ -1383,7 +1383,7 @@ Election.rrv = function(district, model, options){
 				var cbDraw = function(i) { // a function is returned, so that i has a new scope
 					return function() {
 						model.round = i+1
-						model.draw()
+						model.drawArenas()
 						model.round = -1
 					}
 				}
@@ -1530,7 +1530,7 @@ Election.rav = function(district, model, options){
 			var cbDraw = function(i) { // a function is returned, so that i has a new scope
 				return function() {
 					model.round = i+1
-					model.draw()
+					model.drawArenas()
 					model.round = -1
 				}
 			}
@@ -2361,7 +2361,7 @@ Election.stv = function(district, model, options){
 			var cbDraw = function(i) { // a function is returned, so that i has a new scope
 				return function() {
 					model.round = i+1
-					model.draw()
+					model.drawArenas()
 					model.round = -1
 				}
 			}
@@ -2703,7 +2703,7 @@ Election.quotaMinimax = function(district, model, options){
 			var cbDraw = function(i) { // a function is returned, so that i has a new scope
 				return function() {
 					model.round = i+1
-					model.draw()
+					model.drawArenas()
 					model.round = -1
 				}
 			}
@@ -2840,7 +2840,7 @@ Election.quotaApproval = function(district, model, options){
 			var cbDraw = function(i) { // a function is returned, so that i has a new scope
 				return function() {
 					model.round = i+1
-					model.draw()
+					model.drawArenas()
 					model.round = -1
 				}
 			}
@@ -3330,7 +3330,7 @@ var _tally_primary = function(district, model, tallyFunc){
 	}
 	district.candidates = oldcandidates // reset
 	// Return it.
-	model.draw()
+	model.drawArenas()
 	return primaries_tallies;
 
 }

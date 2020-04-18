@@ -232,12 +232,8 @@ function Candidate(model){
 				self.img.onload = function () {
 					model.nLoading--
 					if (model.nLoading == 0) {
-						model.initMODEL()
-						// update the GUI
-						model.onAddCandidate()
-						model.arena.redistrict()
-
-						if (! self.dummy) model.update() // now we have extra text for the model's output
+						if (self.dummy) return
+						model.draw()
 					}
 				}
 			}
@@ -277,12 +273,8 @@ function Candidate(model){
 			self.img.onload = function () {
 				model.nLoading--
 				if (model.nLoading == 0) {
-					model.initMODEL()
-					// update the GUI
-					model.onAddCandidate()
-					model.arena.redistrict()
-
-					if (! self.dummy) model.update() // now we have extra text for the model's output
+					if (self.dummy) return
+					model.draw()
 				}
 			}	
 		}
@@ -318,6 +310,7 @@ function Candidate(model){
 		_drawStroked(text,p.x*2,p.y*2-35,40,ctx);
 	}	
 	self.draw = function(ctx,arena){
+		if (model.nLoading > 0) return // still loading, will call lat
 
 		// RETINA
 		var p = arena.modelToArena(self)
