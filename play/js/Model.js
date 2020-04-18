@@ -325,6 +325,9 @@ function Model(modelName){
 	self.onDraw = function(){}; // TO IMPLEMENT
 	self.draw = function() {
 		
+		if (self.nLoading > 0) return // still loading, will call later and save some computing cycles
+		// The drawing system and the loading assets system are connected here.
+
 		// three things need to be drawn.  The arenas, the sidebar, and maybe more, like the main_sandbox or the main_ballot or whatever else calls new Model
 		self.drawArenas()
 		self.drawSidebar()

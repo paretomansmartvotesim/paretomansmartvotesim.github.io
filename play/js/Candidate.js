@@ -99,7 +99,7 @@ function Candidate(model){
 			self.fill = char.fill
 		}
 		
-
+		if (self.dummy) return // don't make
 
 		// make an img for canvas
 		// make an embeddable text string for html
