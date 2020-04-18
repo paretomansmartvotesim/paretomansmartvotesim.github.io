@@ -192,11 +192,14 @@ function Model(modelName){
 		}
 
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		if (self.yeeon || self.beatMap == "on") {
+		 // ranked voter and not (original or IRV or Borda)
+		var autoBeatMap = self.beatMap == "auto" && self.voterType.name == "RankedVoter" && ! (self.doOriginal  || self.system == "IRV" || self.system == "STV" || self.system == "Borda")
+		var doBeatMap = self.beatMap == "on" || autoBeatMap
+		if (self.yeeon || doBeatMap) {
 			if (self.yeeobject != undefined && (self.arena.mouse.dragging === self.yeeobject || self.tarena.mouse.dragging === self.yeeobject)) {
 				// dragging the yee object, so no need to recalculate, we can save time...
 				// unless we wanted to calculate one of these:
-				if (self.kindayee == 'newcan' || self.beatMap == 'on') {
+				if (self.kindayee == 'newcan' || doBeatMap) {
 					self.viz.calculate()
 				}
 			} else {

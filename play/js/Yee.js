@@ -8,7 +8,11 @@ function Viz(model) {
 
 	self.calculate = function() {
 		
-		if (model.beatMap == "on") {
+		// ranked voter and not (original or IRV or Borda)
+		var autoBeatMap = model.beatMap == "auto" && model.voterType.name == "RankedVoter" && ! (model.doOriginal  || model.system == "IRV" || model.system == "STV" || model.system == "Borda")
+		var doBeatMap = model.beatMap == "on" || autoBeatMap
+
+		if (doBeatMap) {
 			self.calculateBeatMap()
 		}
 		if (model.yeeon) {
@@ -459,7 +463,12 @@ function Viz(model) {
 		if (model.yeeon) {
 			self.drawBackgroundYee()
 		}
-		if (model.beatMap == "on") {
+
+		// ranked voter and not (original or IRV or Borda)
+		var autoBeatMap = model.beatMap == "auto" && model.voterType.name == "RankedVoter" && ! (model.doOriginal  || model.system == "IRV" || model.system == "STV" || model.system == "Borda")
+		var doBeatMap = model.beatMap == "on" || autoBeatMap
+
+		if (doBeatMap) {
 			self.drawBackgroundBeatMap()
 		}
 	}

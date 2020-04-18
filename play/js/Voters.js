@@ -875,7 +875,7 @@ function RankedVoter(model){
 	
 			}
 	
-		} else if (model.system == "IRV") {
+		} else if (model.system == "IRV" || model.system == "STV") {
 			if (1) {
 				var candidate = model.candidatesById[ballot.rank[0]];
 		
