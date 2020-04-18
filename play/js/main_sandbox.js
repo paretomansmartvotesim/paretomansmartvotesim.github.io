@@ -1969,21 +1969,22 @@ function Sandbox(modelName) {
                 decode: {
                     0:"systems",
                     1:"rbSystems",
-                    2:"nVoterGroups",
-                    3:"xVoterGroups",
-                    4:"group_count",
-                    5:"group_spread",
-                    6:"nCandidates",
-                    7:"firstStrategy",
-                    8:"doTwoStrategies",
-                    9:"secondStrategy",
-                    10:"percentSecondStrategy",
-                    11:"autoPoll",
-                    12:"frontrunners",
-                    13:"poll",
-                    14:"yee",
-                    15:"yeefilter",
-                    16:"gearicon",
+                    2:"dimensions", // still need to keep this even though it isn't here anymore
+                    3:"nVoterGroups",
+                    4:"xVoterGroups",
+                    5:"group_count",
+                    6:"group_spread",
+                    7:"nCandidates",
+                    8:"firstStrategy",
+                    9:"doTwoStrategies",
+                    10:"secondStrategy",
+                    11:"percentSecondStrategy",
+                    12:"autoPoll",
+                    13:"frontrunners",
+                    14:"poll",
+                    15:"yee",
+                    16:"yeefilter",
+                    17:"gearicon",
                 },
                 decodeVersion: 2.2,
                 field: "featurelist"
@@ -1992,14 +1993,13 @@ function Sandbox(modelName) {
 
         self.codebook[1] = _jcopy(self.codebook[0])
         _fillInDefaults(self.codebook[1].decode, {
-            17:"seats",
-            18:"nDistricts",
+            18:"seats",
+            19:"nDistricts",
         })
         self.codebook[1].decodeVersion = 2.4
         
         self.codebook[2] = _jcopy(self.codebook[1])
         _fillInDefaults(self.codebook[2].decode, {
-            19: "dimensions",
             20: "customNames",
             21: "namelist",
             22: "gearconfig",
