@@ -43,7 +43,7 @@ function Sandbox(modelName) {
         sandboxsave: false,
         hidegearconfig: false,
         description: "",
-        keyyee: "off",
+        keyyee: "newcan",
         snowman: false, // section
         x_voters: false,
         oneVoter: false,
@@ -52,7 +52,6 @@ function Sandbox(modelName) {
         seats: 3,
         numOfCandidates: 3,
         customNames: "No",
-        // viz: "Ballot",
         namelist: "",
         numVoterGroups: 1,
         xNumVoterGroups: 4,
@@ -65,7 +64,7 @@ function Sandbox(modelName) {
         votersAsCandidates: false,
         visSingleBallotsOnly: false,
         ballotVis: true,
-        stepMenu: "geometry",
+        stepMenu: "geom",
         menuVersion: "1",
         menuLevel: "normal",
         dimensions: "2D",
@@ -85,7 +84,9 @@ function Sandbox(modelName) {
         optionsForElection: {sidebar:true}, // sandboxes have this default
         featurelist: ['gearconfig',"doFeatureFilter"],
         doFeatureFilter: true, 
-        winMap: true,
+        yeeon: false,
+        beatMap: "auto",
+        kindayee: "newcan"
     }
 
     self.url = undefined
@@ -350,6 +351,27 @@ function Sandbox(modelName) {
             // Oh
             // The difference between the locked down version and the updating version is the "config" menu
             // So I put the "Disable filters" button in the config menu,
+
+
+
+
+            // one more thing
+            // switch the name for this setting:
+            if (config.kindayee == "beatCircles") {
+                config.beatMap = "on"
+                config.keyyee = "off"
+                config.kindayee = "off"
+            }
+            var isSomething = x => (x != undefined && x != "off"      )
+            if (isSomething(config.kindayee) || isSomething(config.keyyee)) {
+                config.yeeon = true
+            }
+
+            // if the yee menu was in the featurelist, then make sure the new yee on/off switch is added to the featurelist
+            if (config.featurelist != undefined && config.featurelist.includes("yee")) modifyConfigFeaturelist(true,["yeeon"])
+
+            // so basically, we are getting rid of the "none" button in the yee chooser and making it into a separate control.
+
 
         }
 
@@ -1405,47 +1427,6 @@ function Sandbox(modelName) {
         });
     }
 
-    // Just a draft for now
-    // ui.menu.viz = new function () {
-    //     var self = this
-    //     // self.name = "viz"
-    //     self.list = [
-    //         // {name:"Voter",val:"Voter",margin:4},
-    //         {name:"Ballot",val:"Ballot",margin:4},
-    //         // {name:"Decision",val:"Decision",margin:4},
-    //         {name:"Yee",val:"Yee"}
-    //     ]
-    //     self.onChoose = function(data){ // not finished
-    //         // LOAD
-    //         config.viz = data.val
-    //         // LOAD more
-    //         modifyConfigFeaturelist(config.viz == "Yee", ["yee"])
-    //         // CONFIGURE
-    //         self.configure()
-    //         // INIT
-    //         for(var i=0; i<model.candidates.length; i++) {
-    //             model.candidates[i].init()
-    //         }
-    //         model.initMODEL()
-    //         // UPDATE
-    //         model.update()
-    //     };
-    //     self.configure = function() {
-    //         model.viz = config.viz
-    //         ui.menu.namelist.choose.dom.hidden = (model.viz == "Yes") ? false : true
-    //     }
-    //     self.select = function() {
-    //         self.choose.highlight("name", config.viz);
-    //     }
-    //     self.choose = new ButtonGroup({
-    //         label: "Which Visualizations?",
-    //         width: 71,
-    //         data: self.list,
-    //         onChoose: self.onChoose,
-    //         isCheckbox: true
-    //     });
-    // }
-
     
     ui.menu.namelist = new function () {
         var self = this
@@ -1837,8 +1818,6 @@ function Sandbox(modelName) {
         self.list = [];
         self.makelist = function() {
             var a = []
-            a = a.concat([
-                {name:"A",realname:"all voters",keyyee:"mean",kindayee:"center",margin:28}])
             for (var i=0; i < model.voters.length; i++) {
                 var v = model.voters[i]
                 a.push({
@@ -1849,10 +1828,14 @@ function Sandbox(modelName) {
                     margin:4
                 })
             }
-            a[a.length-1].margin = 28 // make the last button have some space after it
-            a = a.concat([
-                {name:"none",realname:"turn off",keyyee:"off",kindayee:"off",margin:5,width:71}])
-            a[a.length-1].margin = 200 - 28 - 1 * 22 // make the last button have some space after it
+            a.push({
+                name:"Voter Center",
+                realname:"all voters",
+                keyyee:"mean",
+                kindayee:"center",
+                width: 146, 
+                margin:220-146
+            })
             for (var i=0; i < model.candidates.length; i++) {
                 var c = model.candidates[i]
                 a.push({
@@ -1870,13 +1853,6 @@ function Sandbox(modelName) {
                 kindayee:"newcan",
                 margin:4
             })
-            a.push({
-                name:"B",
-                realname:"Beat Map.  Shows where a new candidate would get beat in a head-to-head match against another candidate.",
-                keyyee: "beatCircles",
-                kindayee:"beatCircles",
-                margin:4
-            })
             return a
         }
         self.onChoose = function(data){
@@ -1892,7 +1868,7 @@ function Sandbox(modelName) {
             menu_update()
         };
         self.configure = function() {
-            showMenuItemsIf("divYee", (config.kindayee != undefined && config.kindayee != "off") || config.kindayee == "newcan" || config.kindayee == "beatCircles")
+            showMenuItemsIf("divYee",  true) // kind of a holdover from a previous version
             model.kindayee = config.kindayee
             model.keyyee = config.keyyee
         }
@@ -1903,7 +1879,7 @@ function Sandbox(modelName) {
             label: "which object for yee map?",
             width: 21,
             data: self.list,
-            onChoose: self.onChoose
+            onChoose: self.onChoose,
         });
         self.choose.dom.setAttribute("id",self.name) // interesting
     }
@@ -2046,7 +2022,8 @@ function Sandbox(modelName) {
             39: "stepMenu",
             40: "doFeatureFilter",
             41: "spacer",
-            42: "winMap",
+            42: "yeeon",
+            43: "beatMap",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -2869,9 +2846,9 @@ function Sandbox(modelName) {
         var self = this
         // self.name = stepMenu
         self.list = [
-            {name:"geometry",value:"geometry",margin:4},
-            {name:"style",value:"style",margin:0},
-            {name:"method",value:"method",margin:4},
+            {name:"geom",value:"geom",margin:4},
+            {name:"style",value:"style",margin:4},
+            {name:"vote",value:"vote",margin:4},
             {name:"viz",value:"viz",margin:0},
             {name:"ui",value:"ui",margin:4},
             {name:"dev",value:"dev"}
@@ -2880,9 +2857,9 @@ function Sandbox(modelName) {
             field: "stepMenu",
             decodeVersion: 2.5,
             decode: {
-                0:"geometry",
+                0:"geom",
                 1:"style",
-                2:"method",
+                2:"vote",
                 3:"viz",
                 4:"ui",
                 5:"dev"
@@ -2903,7 +2880,7 @@ function Sandbox(modelName) {
         }
         self.choose = new ButtonGroup({
             label: "Steps:", // Sub Menu
-            width: 108,
+            width: 52,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2948,17 +2925,17 @@ function Sandbox(modelName) {
     }
 
 
-    ui.menu.winMap = new function () {
+    ui.menu.yeeon = new function () {
         // win map (+on off)
         var self = this
-        // self.name = winMap
+        // self.name = yeeon
         self.list = [
             {name:"on",value:true,margin:4},
             {name:"off",value:false},
         ]
         self.onChoose = function(data){
             // LOAD
-            config.winMap = data.value
+            config.yeeon = data.value
             // CONFIGURE
             self.configure()
             // INIT
@@ -2968,17 +2945,52 @@ function Sandbox(modelName) {
             menu_update()
         };
         self.configure = function() {
-            showMenuItemsIf("divWinMap", config.winMap)
-            model.winMap = config.winMap
+            showMenuItemsIf("divWinMap", config.yeeon)
+            model.yeeon = config.yeeon
         }
         self.choose = new ButtonGroup({
-            label: "Win Map", // Sub Menu
+            label: "Draw Win Map (Yee's Diagram)?", // Sub Menu
             width: 108,
             data: self.list,
             onChoose: self.onChoose
         });
         self.select = function() {
-            self.choose.highlight("value", config.winMap);
+            self.choose.highlight("value", config.yeeon);
+        }
+    }
+
+
+    ui.menu.beatMap = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = beatMap
+        self.list = [
+            {name:"auto",value:"auto",margin:4},
+            {name:"on",value:"on",margin:4},
+            {name:"off",value:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.beatMap = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            model.initMODEL()
+            // UPDATE
+            model.update();
+            menu_update()
+        };
+        self.configure = function() {
+            model.beatMap = config.beatMap
+        }
+        self.choose = new ButtonGroup({
+            label: "Beat Map", // Sub Menu
+            width: 108,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.beatMap);
         }
     }
 
@@ -3083,8 +3095,7 @@ function Sandbox(modelName) {
                     "poll",
                 ]],
             ]],
-            // "viz",
-            "winMap",
+            "yeeon",
             ["divWinMap", [
                 "yee",
                 ["divYee", [
@@ -3092,10 +3103,11 @@ function Sandbox(modelName) {
                     "choose_pixel_size"
                 ]],
             ]],
+            "beatMap",
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
-            "menuLevel",
             "stepMenu",
+            "menuLevel",
             "spacer",
         ]],
     ]
@@ -3105,12 +3117,12 @@ function Sandbox(modelName) {
 
     menu2 = [
         ["topmenu", [
-            "menuLevel",
             "stepMenu",
+            "menuLevel",
             "spacer",
         ]],
         [ "submenu", [
-            [ "geometry", [
+            [ "geom", [
                 [ "normal", [
                     "dimensions",
                     "nDistricts",
@@ -3143,7 +3155,7 @@ function Sandbox(modelName) {
                     "colorSpace",
                 ]],
             ]],
-            ["method", [
+            ["vote", [
                 ["normal", [
                     "systems",
                     [ "divRBVote", [
@@ -3171,8 +3183,7 @@ function Sandbox(modelName) {
             ]],
             ["viz", [
                 ["normal", [
-                    // "viz",
-                    "winMap",
+                    "yeeon",
                     ["divWinMap", [
                         "yee",
                         ["divYee", [
@@ -3180,6 +3191,7 @@ function Sandbox(modelName) {
                             "choose_pixel_size"
                         ]],
                     ]],
+                    "beatMap",
                 ]],
                 ["advanced", [
                     "ballotVis",
@@ -3614,7 +3626,6 @@ function Sandbox(modelName) {
         49:"ballotVis",
         50:"customNames",
         51:"namelist",
-        // "viz",
     } // add more on to the end ONLY
         
     var encodeFields = {}

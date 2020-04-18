@@ -74,10 +74,10 @@ function Model(modelName){
 		},
 		ballotVis: true, // turn on or off the visuals that show where the ballots go
 		visSingleBallotsOnly: true, // only show the single ballots as part of the ballotVis
-		winMap: false,
+		beatMap: "auto",
 	})
 	
-	self.yee = new Yee(self);
+	self.viz = new Viz(self);
 	
 	self.createDOM = function() {
 		self.arena.createDOM()
@@ -122,29 +122,21 @@ function Model(modelName){
 
 		var expYeeObject = function() {
 			// Yee diagram
-			if ( ! self.winMap) {
+			if ( ! self.yeeon) {
 				return undefined
 			} else if (self.kindayee == "can") {
 				return self.candidatesById[self.keyyee]
 			} else if (self.kindayee=="voter") {
 				return self.voters[self.keyyee]
-			} else if (self.kindayee=="off") {
-				return undefined
 			} else if (self.kindayee=="center") { 
 				return self.voterCenter
 			} else if (self.kindayee=="newcan") { 
-				return undefined
-			} else if (self.kindayee=="beatCircles") { 
 				return undefined
 			} else { // if yeeobject is not defined
 				return undefined
 			}
 		}
 		self.yeeobject = expYeeObject()
-		self.yeeon = (self.yeeobject != undefined) ? true : false
-		if (self.kindayee=="newcan") self.yeeon = true
-		if (self.kindayee=="beatCircles") self.yeeon = true
-		if ( ! self.winMap) self.yeeon = false
 		self.onInitModel()
 	}
 	self.onInitModel = function() {} // a hook for a caller
@@ -200,12 +192,19 @@ function Model(modelName){
 		}
 
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
-		if (self.yeeon) {
-			if ((self.arena.mouse.dragging != self.yeeobject && self.tarena.mouse.dragging != self.yeeobject) || self.kindayee == 'newcan' || self.kindayee == 'beatCircles') {
-				self.yee.calculate()
+		if (self.yeeon || self.beatMap == "on") {
+			if (self.yeeobject != undefined && (self.arena.mouse.dragging === self.yeeobject || self.tarena.mouse.dragging === self.yeeobject)) {
+				// dragging the yee object, so no need to recalculate, we can save time...
+				// unless we wanted to calculate one of these:
+				if (self.kindayee == 'newcan' || self.beatMap == 'on') {
+					self.viz.calculate()
+				}
+			} else {
+				// something caused an update and we aren't dragging the yee object
+				self.viz.calculate()
 			}
 		}
-		
+
 		// get the ballots for this election
 		for(var i=0; i<self.voters.length; i++){
 			var voter = self.voters[i];
@@ -338,7 +337,7 @@ function Model(modelName){
 		//var background = new Image();
 		//background.src = "../play/img/axis.png";
 		//self.ctx.drawImage(background,0,0);
-		self.yee.drawBackground()
+		self.viz.drawBackground()
 		
 		if ( ! self.tarena.canvas.hidden) {
 			if (self.nDistricts > 1) {
@@ -403,7 +402,7 @@ function Model(modelName){
 				finding = true
 				for(var i=0; i<self.candidates.length; i++){
 					var can = self.candidates[i]
-					goal[i] = self.yee.winSeek(can)
+					goal[i] = self.viz.winSeek(can)
 				}
 				finding = false
 			}
@@ -1786,8 +1785,8 @@ function Arena(arenaName, model) {
 			}
 		}
 		function setAnnotations() {
-			if(model.yeeobject) model.yeeobject.drawBackAnnotation = model.yee.drawYeeGuyBackground
-			if(model.yeeobject) model.yeeobject.drawAnnotation = model.yee.drawYeeAnnotation
+			if(model.yeeobject) model.yeeobject.drawBackAnnotation = model.viz.drawYeeGuyBackground
+			if(model.yeeobject) model.yeeobject.drawAnnotation = model.viz.drawYeeAnnotation
 		}
 
 		function drawSortLines() {
@@ -2168,6 +2167,7 @@ function Arena(arenaName, model) {
 			var isCenter = (typeof model.voterCenter !== 'undefined')
 			if (isCenter && ! oneVoter) {
 				model.voterCenter.draw(self.ctx)
+				return
 			}
 
 			// draw the Yee object last so it is easy to see.
@@ -2177,7 +2177,8 @@ function Arena(arenaName, model) {
 				var covering = (oneVoter && (yeeOne || yeeCenter) )
 				// unless it covers the one voter
 				if (! covering ) {
-					model.yeeobject.draw(self.ctx,self)
+
+					model.yeeobject.draw2(self.ctx,self)
 				}
 			}
 		}

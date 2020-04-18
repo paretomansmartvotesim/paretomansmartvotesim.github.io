@@ -1900,7 +1900,8 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	self.draw2 = function(ctx){
 
 		 // Don't draw a individual group under a votercenter, which looks weird.
-		if(model.voterCenter && model.voters.length == 1) return
+		// if(model.voterCenter && model.voters.length == 1) return
+		// I guess this fixed something.. at some point.. but not anymore
 
 		// Circle!
 		var size = self.size;
