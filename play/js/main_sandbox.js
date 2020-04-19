@@ -4,41 +4,106 @@
 function main(preset) {
 
 
-    var s = new Sandbox(preset.modelName)
-    var l = new Loader()
+    // CREATE
+    var c = new Config() 
     
-    // CONFIGURE
-    s.url = window.location.href;
-    l.onload = s.update // this might look like an update but we're configuring Loader
+    // CREATE
+    var s = new Sandbox(preset.modelName, c)   // the sandbox is the binder between the model and the config
+    
+    // LOAD
+    c.url = window.location.href;
 
-    // INIT
-	s.setConfig(preset.config)
-	if (preset.update) preset.update(s)
+    // c.ui = s.ui
     
-    // UPDATE
+    // INIT
+    c.setConfig(preset.config)
+    // s.setConfig() // connects to the config
+    // INIT
+    if (preset.update) preset.update(s) 
+    
+
+    // use loader to save on bandwidth
+    // alternatively just do
+    // s.update()
+
+    // CREATE
+    var l = new Loader()
+    // CONFIGURE
+    l.onload = s.update // this might look like an update but we're configuring Loader    
+    // INIT
     l.load(s.assets);
+
+
+    // var c = new Config()
+    
+    // // there are two parts, the model and the config.
+    // // load initial config
+    // // bind model and config using menu items (config step for )
+    // // start/ initialize
+
+    // // config
+    // // The sandbox is the binder
+
+    // // CREATE
+    // var s = new Sandbox()
+    
+    // // LOAD
+    // s.modelName = preset.modelName
+    // s.config = preset.config
+    // s.url = window.location.href;
+	// if (preset.update) s.onInit = () => preset.update(s)
+    
+    // // CONFIGURE
+    // s.init() // was s.setConfig(preset.config)
+
+    // // USE - maybe this should be in s.start()
+    // var l = new Loader()
+    // l.onload = s.start // used to be s.update
+    // l.load(s.assets);
+
+
+
+
+
 }
 
-function Sandbox(modelName) {
-	var self = this
+function Config() {
+    var self = this
 
-    // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
-    // Basic description of main_sandbox.js
-    // First we load the config,
-    // Then we update the model and menu.
-    // Then wait for mouse events.
+    ///////////////////////
+    // Connecting Things //
+    ///////////////////////
+
+    var config = {}
+    var initialConfig = {}
+
+    // access these internal variables
+    self.getConfig = () => config
+    self.getInitialConfig = () => initialConfig
+
+    // some variables that Sandbox still needs
+    self.maxVoters = 10
+    self.embed = false
+
+    // some variables that will be set later by calling function to get config ready
+    self.url = undefined
+    self.uiMenuKeys = undefined // to fill in later from calling function
+
+
+    /////////////////////////////
+    // LOAD DEFAULTS and INPUT //
+    /////////////////////////////
 
     // switch
-    var tryNewURL = true
+    self.tryNewURL = true
 
-    // LOAD DEFAULTS and INPUT
     var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
     var yes_all_candidates = {}
     for (var i = 0; i < all_candidate_names.length; i++) {
         yes_all_candidates[i] = true
     }
-    var defaults = {
+    self.defaults = {
         configversion:2.5,
         sandboxsave: false,
         hidegearconfig: false,
@@ -94,52 +159,15 @@ function Sandbox(modelName) {
         candidateIcons: "image",
     }
 
-    self.url = undefined
-    var maxVoters = 10  // workaround  // there is a bug where the real max is one less than this
-
-    // CREATE
-    var model = new Model(modelName);
-    var ui = {}
-    self.ui = ui
-    ui.model = model
-    var config
-    var initialConfig
-    var basediv = document.querySelector("#" + modelName)
-
-    // CREATE div stuff for sandbox
-    function newDivOnBase(name) {
-        var a = document.createElement("div");
-        a.setAttribute("id", name);
-        basediv.appendChild(a);
-    }
-    newDivOnBase("left")
-    newDivOnBase("center")
-    newDivOnBase("right")
-    model.createDOM()
-    var centerDiv = basediv.querySelector("#center")
-    if (centerDiv.hasChildNodes()){
-        var firstNode = centerDiv.childNodes[0]
-        centerDiv.insertBefore(model.dom,firstNode);
-    } else {
-        centerDiv.appendChild(model.dom)
-    }
-    model.dom.removeChild(model.caption);
-    basediv.querySelector("#right").appendChild(model.caption);
-    model.caption.style.width = "";
-
-    // FUNCTIONS and CLASSES for INIT and UPDATE
-
-    model.inSandbox = true
 
     self.setConfig = function(c) {
-        config = c
         // INIT - initialize all data structures
         // the data structure for a sandbox is the configuration of the model.  Init completes this data structures.
         // backwards compatibility
         // the data structure for a model is model.<property>
         if (self.url != undefined) {
             var modelData = _getParameterByName("m",self.url);
-            if (tryNewURL) var version = _getParameterByName("v",self.url);
+            if (self.tryNewURL) var version = _getParameterByName("v",self.url);
         }
         function _getParameterByName(name,url){
             name = name.replace(/[\[\]]/g, "\\$&");
@@ -150,28 +178,29 @@ function Sandbox(modelName) {
             return decodeURIComponent(results[2].replace(/\+/g, " ")).replace("}/","}"); //not sure how that / got there.
         };
         if(modelData){
-            if (tryNewURL) {
+            if (self.tryNewURL) {
                 if (version) { 
                     // if we have a version number, then we know the data is in this format
-                    config = {
+                    c = {
                         zipped:modelData,
                         configversion:version
                     }
                 } else {
                     var data = JSON.parse(modelData);
-                    config = data;
+                    c = data;
                 }
             } else {
                 var data = JSON.parse(modelData);
-                config = data;
+                c = data;
             }
         }
-        cleanConfig(config)
-        initialConfig = _jcopy(config);
+        self.cleanConfig(c)
+        _copyAttributes(config,c)
+        _copyAttributes(initialConfig,c)
     
     }
 
-   function cleanConfig(config) {
+    self.cleanConfig = function(config) {
         // Load the defaults.  This runs at the start and after loading a preset.
 
         // FILENAME
@@ -258,7 +287,7 @@ function Sandbox(modelName) {
                     "percentstrategy":"percentSecondStrategy",
                 }
                 // all the current names get translated as themselves
-                for (var id of Object.keys(ui.menu)) {
+                for (var id of self.uiMenuKeys) {
                     menuNameTranslator[id] = id
                 }
                 var temp_featurelist = []
@@ -343,7 +372,7 @@ function Sandbox(modelName) {
             if ( config.featurelist == undefined) {
                 config.doFeatureFilter = false
             } else {
-                modifyConfigFeaturelist(true, ["doFeatureFilter"]) 
+                modifyConfigFeaturelist(config,true, ["doFeatureFilter"]) 
             }
 
             // Hmm. on the one hand, I want to load an example where I have purposely set the filter
@@ -375,7 +404,7 @@ function Sandbox(modelName) {
             }
 
             // if the yee menu was in the featurelist, then make sure the new yee on/off switch is added to the featurelist // and beatMap
-            if (config.featurelist != undefined && config.featurelist.includes("yee")) modifyConfigFeaturelist(true,["yeeon","beatMap"])
+            if (config.featurelist != undefined && config.featurelist.includes("yee")) modifyConfigFeaturelist(config,true,["yeeon","beatMap"])
 
             // so basically, we are getting rid of the "none" button in the yee chooser and making it into a separate control.
 
@@ -393,7 +422,7 @@ function Sandbox(modelName) {
         // if we have a blank slate, then we want to fill in with the variable "secondStrategy"
         if (config.secondStrategy && config.secondStrategies === undefined) {
             config.secondStrategies = []
-            for (var i = 0; i < maxVoters; i++) {
+            for (var i = 0; i < self.maxVoters; i++) {
                 config.secondStrategies[i] = config.secondStrategy
             }	
         }
@@ -401,17 +430,392 @@ function Sandbox(modelName) {
         config.percentSecondStrategy = config.percentSecondStrategy || []
         config.voter_group_count = config.voter_group_count || []
         config.voter_group_spread = config.voter_group_spread || []
-        for (var i = 0; i < maxVoters; i++) {
+        for (var i = 0; i < self.maxVoters; i++) {
             config.secondStrategies[i] = config.secondStrategies[i] || "zero strategy. judge on an absolute scale."
             if(config.percentSecondStrategy[i] == undefined) config.percentSecondStrategy[i] = 0
             config.voter_group_count[i] = config.voter_group_count[i] || 50
             config.voter_group_spread[i] = config.voter_group_spread[i] || 190
         }
 
-        _fillInDefaults(config, defaults)
+        _fillInDefaults(config, self.defaults)
 
         
     }
+    self.reset = function() {
+        _copyAttributes(config,initialConfig)
+    }
+
+    self.save = function() {
+        _copyAttributes(initialConfig,config)
+        // UPDATE SAVE URL //
+        var newURLs = _makeURL();
+        // CONSOLE OUTPUT //
+        console_out(1)  // gives a log of settings to copy and paste
+        return newURLs
+    }
+
+    var _makeURL = function(){
+
+        // URI ENCODE!
+        var doEncode = true
+        if (doEncode) {
+            var eConfig = encode_config(config)
+        } else {
+            var eConfig = config
+        }
+        if (self.tryNewURL) {
+            var uri = encodeURIComponent(eConfig)
+        } else {
+            var uri = encodeURIComponent(JSON.stringify(eConfig));
+        }
+        
+        // Put it in the save link box!
+        
+        // make link string
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host; // http://ncase.me/
+        var restofurl = getUrl.pathname.split('/')
+        for (var i=1; i < restofurl.length - 1; i++) { //  /ballot/
+            if (restofurl[i] != "sandbox") {
+                baseUrl += "/" + restofurl[i];
+            }
+        }
+        if (self.embed) {            
+		    var relativePath = "/sandbox/embedbox.html?v="
+        } else {
+            var relativePath = "/sandbox/?v="
+        }
+        if (self.tryNewURL) {
+            var link = baseUrl + relativePath + config.configversion + "&m="+uri;    
+        } else {
+            var link = baseUrl + relativePath + uri;
+        }
+        if (self.embed) {            
+		    var linkText = '<iframe src="' + link + '" scrolling="yes" width="1000" height="600"></iframe>'
+        } else {
+            var linkText = link
+        }
+        
+        console.log("(Link length is ",linkText.length,")")
+        console.log("")
+        return {link:link, linkText:linkText}
+    };
+
+    var doFriendlyURI = true
+
+    function encode_config(config) {
+        var conf = _jcopy(config)
+        for (var e in ui.menu) {
+            var item = ui.menu[e]
+            if (item.codebook) {  
+                _encode(item.codebook)
+            }
+        }
+        _encode(extraCodeBook)
+        
+        function _encode(codebook) {
+            for (k = 0; k < codebook.length; k++) {
+                var encode = codebook[k].encode
+                var field = codebook[k].field
+                var value = conf[field]
+                var _lookup = function(v) {
+                    var vs = JSON.stringify(v)
+                    if (vs in encode) {
+                        return encode[vs]
+                    } else {
+                        return "~" + vs // store as JSON String, and set a flag character
+                    }
+                }
+                if (Array.isArray(value)) {
+                    var temp = []
+                    for (var i =0; i < value.length; i++) {
+                        temp.push(_lookup(value[i]))
+                    }
+                    conf[field] = temp
+                } else {
+                    conf[field] = _lookup(value) //  TODO: it is possible there could be a collision in encoded/decoded values
+                }
+            }
+        }
+        //
+        // encode field names
+        for (var i in encodeFields) {
+            var n = encodeFields[i]
+            conf[n] = conf[i]
+            delete conf[i]
+        }
+        // zip
+        delete conf["configversion"]
+        var dataZ = pako.gzip( JSON.stringify(conf) ,{ to: 'string' })
+        var dataString = btoa(dataZ)
+        if (doFriendlyURI) dataString = Base64EncodeUrl(dataString)
+        if (self.tryNewURL) {
+            return dataString
+        } else {
+            var co = {}
+            co["zipped"] = dataString
+            co["configversion"] = config["configversion"]
+            return co
+        }
+        // be careful to include all the zipped config items and add any new ones or they will appear as extras
+    }
+
+    
+    // HOWTO: Add to the end of the list.  Don't add to the middle of this list.
+    // safer: use a dictionary
+    // These are the fields that show up in the URL, so we shorten them.
+    decodeFields = {
+        0:"candidatePositions",
+        1:"voterPositions",
+        2:"candidates",
+        3:"dimensions",
+        4:"system",
+        5:"hidegearconfig",
+        // "configversion",
+        6:"secondStrategies",
+        7:"percentSecondStrategy",
+        8:"voter_group_count",
+        9:"voter_group_spread",
+        10:"sandboxsave",
+        11:"featurelist",
+        12:"description",
+        13:"keyyee",
+        14:"snowman",
+        15:"x_voters",
+        16:"oneVoter",
+        17:"rbsystem",
+        18:"numOfCandidates",
+        19:"numVoterGroups",
+        20:"xNumVoterGroups",
+        21:"nVoterGroupsRealName",
+        22:"spread_factor_voters",
+        23:"arena_size",
+        24:"median_mean",
+        25:"theme",
+        26:"utility_shape",
+        27:"colorChooser",
+        28:"colorSpace",
+        29:"arena_border",
+        30:"preFrontrunnerIds",
+        31:"autoPoll",
+        32:"firstStrategy",
+        33:"secondStrategy",
+        34:"doTwoStrategies",
+        35:"yeefilter",
+        36:"computeMethod",
+        37:"pixelsize",
+        38:"optionsForElection", // no longer used, but okay to have
+        39:"candidateSerials",
+        40:"voterGroupTypes",
+        41:"voterGroupX",
+        42:"voterGroupSnowman",
+        43:"voterGroupDisk",
+        44:"seats",
+        45:"candidateB",
+        46:"nDistricts",
+        47:"votersAsCandidates",
+        48:"visSingleBallotsOnly",
+        49:"ballotVis",
+        50:"customNames",
+        51:"namelist",
+        52:"menuVersion",
+        53:"stepMenu",
+        54:"menuLevel",
+        55:"doFeatureFilter",
+        56:"yeeon",
+        57:"beatMap",
+        58:"kindayee",
+        59:"ballotConcept",
+        60:"powerChart",
+        61:"sidebarOn",
+        62:"lastTransfer",
+        63:"voterIcons",
+        64:"candidateIcons",
+    } // add more on to the end ONLY
+        
+    var ui
+    var encodeFields = {}
+    self.setUpEncode = function(params) {
+        ui = params.ui
+        extraCodeBook = params.extraCodeBook
+
+        for ([i,v] of Object.entries(decodeFields)) {
+            i = Number(i)
+            encodeFields[v] = i
+        }
+        // set up encoders
+        for (var e in ui.menu) {
+            var item = ui.menu[e]
+            if (item.codebook) {
+                _makeEncode(item.codebook)
+            }
+        }
+
+        _makeEncode(extraCodeBook)
+    
+    }
+    
+    function _makeEncode(codebook) {
+        for (k = 0; k < codebook.length; k++) {
+            var decode = codebook[k].decode
+            var encode = {}
+            for (var [i,v] of Object.entries(decode)) {
+                var value = JSON.stringify(v)
+                i = Number(i)
+                encode[value] = i
+            }
+            codebook[k].encode = encode
+        }
+    }
+    function decode_config(config) {
+        if (config.configversion == undefined) return config
+        if (config.configversion <= 2.1) return config
+        if (! ("zipped" in config) ) return config
+        
+        // unzip
+        var dataString = config["zipped"]
+        if (doFriendlyURI) dataString = Base64DecodeUrl(dataString)
+        var data = pako.inflate( atob( dataString))
+        var strData = String.fromCharCode.apply(null, new Uint16Array(data));
+        var conUnzipped = JSON.parse( strData )
+
+        Object.assign(config,conUnzipped)
+        delete config["zipped"]
+
+        // note that we have to decode it in place
+        var conf = _jcopy(config)
+        // decode field names
+        for (var [e,v] of Object.entries(conf)) {
+            if (decodeFields.hasOwnProperty(e)) {                
+                // if we can decode it, then decode it
+                delete config[e]
+                var d = decodeFields[e]
+                config[d] = v
+            }
+        }
+
+        for (var e in ui.menu) {
+            var item = ui.menu[e]
+            if (item.codebook) {  
+                _decode(item.codebook)
+            }
+        }
+        _decode(extraCodeBook)
+        function _decode(codebook) {              
+            for (k = 0; k < codebook.length; k++) {
+                var version = codebook[k].decodeVersion
+                if (conf.configversion < version) continue // the value wasn't encoded at this early version
+                // so maybe if the value was an unencoded number that happens to now equal a coded number,
+                // then we shouldn't change that number
+                // HOWTO: If we are looking at an old sandbox, then don't use codebooks with new words in them
+                // So, when you add new words to a codebook, put a version number on that page of words
+                var decode = codebook[k].decode
+                var field = codebook[k].field
+                var value = config[field]
+            
+                if (Array.isArray(value)) {
+                    var temp = []
+                    for (var i =0; i < value.length; i++) {
+                        temp.push(_lookup(value[i]))
+                    }
+                    config[field] = temp
+                } else {
+                    config[field] = _lookup(value)
+                }
+                function _lookup(v) {
+                    if (v in decode) {
+                        return decode[v]
+                    } else {    
+                        return JSON.parse(v.slice(1)) // remove the flag character and parse
+                    }
+                }
+            }
+        }
+        return
+    }
+
+
+    // URL Friendly Base 64
+    //  * use this to make a Base64 encoded string URL friendly, 
+    //  * i.e. '+' and '/' are replaced with '-' and '~' also any trailing '=' 
+    //  * characters are removed
+    // https://tools.ietf.org/html/rfc4648
+    function Base64EncodeUrl(str){
+        return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+    }
+
+    function Base64DecodeUrl(str){
+        str = str + '===' // pad
+        var newlen = str.length - str.length % 4 // round
+        str = str.slice(0,newlen) // cut
+        // str = (str + '===').slice(0, str.length + (str.length % 4));
+        return str.replace(/-/g, '+').replace(/_/g, '/');
+    }
+
+    var console_out = function (log){
+        // helper function to output the config to the console.
+        var logtext = ''
+        for (i in config) {
+            logtext += i + ": " +JSON.stringify(config[i]) + ',\n'
+            // logtext += '"' + i + '",\n' // for codebook
+        }
+        var aloc = window.location.pathname.split('/')
+        //logtext += "\n\npaste this JSON into" + aloc[aloc.length-2] + "/" + aloc[aloc.length-1]
+        logtext += "\n\npaste this JSON into /play/js/Presets.js under option " + aloc[aloc.length-1]
+        console.log(logtext)
+        if (log==2) console.log(JSON.stringify(config))
+    }
+
+
+
+}
+
+function Sandbox(modelName, cConfig) {
+    var self = this
+    
+    // access cConfig's variables // they used to be in the same closure, so that's why we have to use these methods
+    var config = cConfig.getConfig() // never do config = something.  Only do config.something = somethingelse
+    var initialConfig = cConfig.getInitialConfig()
+
+
+    // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
+
+    // Basic description of main_sandbox.js
+    // First we load the config,
+    // Then we update the model and menu.
+    // Then wait for mouse events.
+
+    // CREATE
+    var model = new Model(modelName);
+    var ui = {}
+    self.ui = ui
+    ui.model = model
+    var basediv = document.querySelector("#" + modelName)
+
+    // CREATE div stuff for sandbox
+    function newDivOnBase(name) {
+        var a = document.createElement("div");
+        a.setAttribute("id", name);
+        basediv.appendChild(a);
+    }
+    newDivOnBase("left")
+    newDivOnBase("center")
+    newDivOnBase("right")
+    model.createDOM()
+    var centerDiv = basediv.querySelector("#center")
+    if (centerDiv.hasChildNodes()){
+        var firstNode = centerDiv.childNodes[0]
+        centerDiv.insertBefore(model.dom,firstNode);
+    } else {
+        centerDiv.appendChild(model.dom)
+    }
+    model.dom.removeChild(model.caption);
+    basediv.querySelector("#right").appendChild(model.caption);
+    model.caption.style.width = "";
+
+    // FUNCTIONS and CLASSES for INIT and UPDATE
+
+    model.inSandbox = true
 
     model.start = function(){
 
@@ -552,19 +956,6 @@ function Sandbox(modelName) {
     
     // helpers
     
-    function modifyConfigFeaturelist(condition, xlist) {
-        // e.g. var xlist = ["choose_pixel_size","yeefilter"]
-        var featureset = new Set(config.featurelist)
-        for (var i in xlist){
-            var xi = xlist[i]
-            if (condition) {
-                featureset.add(xi)
-            } else {
-                featureset.delete(xi)
-            }
-        }
-        config.featurelist = Array.from(featureset)
-    }    
 
     model.onInitModel = function() {
         drawButtons()
@@ -1192,7 +1583,7 @@ function Sandbox(modelName) {
 
         }		
         self.choose = new sliderSet({
-            max: maxVoters-1,
+            max: cConfig.maxVoters-1,
             min:"1",
             value:"4",
             chtext:"",
@@ -1252,7 +1643,7 @@ function Sandbox(modelName) {
             chtext:"",
             chid:"choose number",
             chfn:self.onChoose,
-            num:maxVoters,
+            num:cConfig.maxVoters,
             labelText: "what # voters in each group?"
         })
     }
@@ -1289,7 +1680,7 @@ function Sandbox(modelName) {
             chtext:"",
             chid:"choose width in pixels",
             chfn:self.onChoose,
-            num:maxVoters,
+            num:cConfig.maxVoters,
             labelText: "how spread out is the group?"
         })
         self.select = function() {
@@ -1595,7 +1986,7 @@ function Sandbox(modelName) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.secondStrategy = data.realname
-            for (var i = 0; i < maxVoters; i++) {
+            for (var i = 0; i < cConfig.maxVoters; i++) {
                 config.secondStrategies[i] = data.realname
             }
             // CONFIGURE
@@ -1660,7 +2051,7 @@ function Sandbox(modelName) {
             chtext:"",
             chid:"choosepercent",
             chfn:self.onChoose,
-            num:maxVoters,
+            num:cConfig.maxVoters,
             labelText: "what % use this 2nd strategy?"
         })
     }	
@@ -2047,7 +2438,7 @@ function Sandbox(modelName) {
 
         self.onChoose = function(data){
             // LOAD INPUT
-            modifyConfigFeaturelist(data.isOn, [data.realname])
+            modifyConfigFeaturelist(config,data.isOn, [data.realname])
             // UPDATE
             self.configure()
         };
@@ -2095,7 +2486,7 @@ function Sandbox(modelName) {
                 if (firstletter == 'e' || firstletter == 's') {
                     
                     // LOAD Preset
-                    config = loadpreset(data.modelName).config
+                    _copyAttributes(config, loadpreset(data.modelName).config)
                     
                 } else if (firstletter == 'b') {
                     //document.location.replace(data.htmlname);
@@ -2114,7 +2505,8 @@ function Sandbox(modelName) {
                     Object.assign(ballotconfig, loadpreset(data.modelName).config )
                     // get config from ballotconfig
                     var systemTranslator = {Plurality:"FPTP",Ranked:"Condorcet",Approval:"Approval",Score:"Score",Three:"3-2-1"}
-                    config = {
+                    
+                    _copyAttributes(config, {
                         system: systemTranslator[ballotconfig.system],
                         voterPositions: ballotconfig.voterPositions,
                         candidatePositions: ballotconfig.candidatePositions,
@@ -2123,16 +2515,16 @@ function Sandbox(modelName) {
                         // these are not based on the ballot config
                         oneVoter: true,
                         arena_size: 300
-                    }
+                    })
                     config.featurelist = []
                     if (ballotconfig.showChoiceOfFrontrunners) {config.featurelist.push("frontrunners")}
                     if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("firstStrategy")}
                 }
                 // CONFIGURE MAIN
-                cleanConfig(config)
+                cConfig.cleanConfig(config)
                 config.sandboxsave = true // we're in a sandbox
                 config.featurelist = Array.from((new Set(config.featurelist)).add("gearicon").add("presetconfig"))
-                initialConfig = _jcopy(config);
+                _copyAttributes(initialConfig,config)
                 // CONFIGURE (LOADER)
                 model.size = config.arena_size
                 // INIT (LOADER)
@@ -2743,7 +3135,7 @@ function Sandbox(modelName) {
         }
         self.configure = function() {
             if (config.hidegearconfig) {
-                modifyConfigFeaturelist(false, ["gearicon"])
+                modifyConfigFeaturelist(config,false, ["gearicon"])
                 ui.menu.gearicon.choose.dom.hidden = true
                 ui.menu.gearicon.onChoose({isOn:false})
 
@@ -3253,7 +3645,7 @@ function Sandbox(modelName) {
     ui.menu.gearconfig.initSpecial()
 
 
-
+    cConfig.uiMenuKeys = Object.keys(ui.menu)
 
     // rebuild menu
 
@@ -3588,7 +3980,7 @@ function Sandbox(modelName) {
         resetDOM.innerHTML = "reset";
         resetDOM.onclick = function(){
             // LOAD INITIAL CONFIG
-            config = _jcopy(initialConfig); // RESTORE IT!
+            cConfig.reset()
             // RESET = CREATE, CONFIGURE, INIT, & UPDATE
             model.reset()
             // UPDATE MENU //
@@ -3650,11 +4042,21 @@ function Sandbox(modelName) {
             var description = basediv.querySelector("#description_text") || {value:""};
             config.description = description.value;
             // UPDATE MAIN //
-            initialConfig = _jcopy(config); // now the reset button will restore these saved settings
-            // UPDATE SAVE URL //
-            _writeURL(config);
-            // CONSOLE OUTPUT //
-            console_out(1,config)  // gives a log of settings to copy and paste
+            newURLs = cConfig.save()
+            
+            var doTinyURL = true
+            if (doTinyURL) {
+                var goTiny='https://tinyurl.com/create.php?url='+encodeURIComponent(newURLs.link)
+                tinyLink.setAttribute("href",goTiny)
+                tinyLink.innerHTML = `TinyURL<img src="play/img/external_link.svg">`
+                embedLink.innerHTML = "&lt;embed&gt;";
+            }
+            
+            var savelink = basediv.querySelector("#savelink");
+            savelink.value = "saving...";
+            setTimeout(function(){
+                savelink.value = newURLs.linkText;
+            },750);
             
 
         };
@@ -3680,13 +4082,12 @@ function Sandbox(modelName) {
     tinyLink.setAttribute("target", "_blank")
     tinyLink.setAttribute("class", "tinyURL")
 
-    var embed = false
     var embedLink = document.createElement("span")
     centerDiv.appendChild(embedLink)
     embedLink.setAttribute("class", "tinyURL")
     embedLink.setAttribute("style", "text-decoration: underline;")
     embedLink.onclick = function(){
-        embed = ! embed
+        cConfig.embed = ! cConfig.embed
         ui.arena.save.dom.onclick()
     }
 
@@ -3752,165 +4153,6 @@ function Sandbox(modelName) {
 
     };
 
-    var console_out = function (log,config){
-        // helper function to output the config to the console.
-        var logtext = ''
-        for (i in config) {
-            logtext += i + ": " +JSON.stringify(config[i]) + ',\n'
-            // logtext += '"' + i + '",\n' // for codebook
-        }
-        var aloc = window.location.pathname.split('/')
-        //logtext += "\n\npaste this JSON into" + aloc[aloc.length-2] + "/" + aloc[aloc.length-1]
-        logtext += "\n\npaste this JSON into /play/js/Presets.js under option " + aloc[aloc.length-1]
-        console.log(logtext)
-        if (log==2) console.log(JSON.stringify(config))
-    }
-    window.jsave = function(){
-        // I used to use jsave() to output to console for debugging.
-        var pos = savePositions()  // saves the candidate and voter positions in the config.
-        for (i in pos) config[i] = pos[i] 
-        console_out(1,config)
-    }
-
-    var _writeURL = function(config){
-
-        // URI ENCODE!
-        var doEncode = true
-        if (doEncode) {
-            var eConfig = encode_config(config)
-        } else {
-            var eConfig = config
-        }
-        if (tryNewURL) {
-            var uri = encodeURIComponent(eConfig)
-        } else {
-            var uri = encodeURIComponent(JSON.stringify(eConfig));
-        }
-        
-        // Put it in the save link box!
-        
-        // make link string
-        var getUrl = window.location;
-        var baseUrl = getUrl.protocol + "//" + getUrl.host; // http://ncase.me/
-        var restofurl = getUrl.pathname.split('/')
-        for (var i=1; i < restofurl.length - 1; i++) { //  /ballot/
-            if (restofurl[i] != "sandbox") {
-                baseUrl += "/" + restofurl[i];
-            }
-        }
-        if (embed) {            
-		    relativePath = "/sandbox/embedbox.html?v="
-        } else {
-            relativePath = "/sandbox/?v="
-        }
-        if (tryNewURL) {
-            var link = baseUrl + relativePath + config.configversion + "&m="+uri;    
-        } else {
-            var link = baseUrl + relativePath + uri;
-        }
-        if (embed) {            
-		    linkText = '<iframe src="' + link + '" scrolling="yes" width="1000" height="600"></iframe>'
-        } else {
-            linkText = link
-        }
-        
-        var doTinyURL = true
-        if (doTinyURL) {
-            var goTiny='https://tinyurl.com/create.php?url='+encodeURIComponent(link)
-            tinyLink.setAttribute("href",goTiny)
-            tinyLink.innerHTML = `TinyURL<img src="play/img/external_link.svg">`
-            embedLink.innerHTML = "&lt;embed&gt;";
-        }
-        
-        var savelink = basediv.querySelector("#savelink");
-        savelink.value = "saving...";
-        setTimeout(function(){
-            savelink.value = linkText;
-        },750);
-        console.log("(Link length is ",linkText.length,")")
-        console.log("")
-
-    };
-    
-
-    // HOWTO: Add to the end of the list.  Don't add to the middle of this list.
-    // safer: use a dictionary
-    // These are the fields that show up in the URL, so we shorten them.
-    decodeFields = {
-        0:"candidatePositions",
-        1:"voterPositions",
-        2:"candidates",
-        3:"dimensions",
-        4:"system",
-        5:"hidegearconfig",
-        // "configversion",
-        6:"secondStrategies",
-        7:"percentSecondStrategy",
-        8:"voter_group_count",
-        9:"voter_group_spread",
-        10:"sandboxsave",
-        11:"featurelist",
-        12:"description",
-        13:"keyyee",
-        14:"snowman",
-        15:"x_voters",
-        16:"oneVoter",
-        17:"rbsystem",
-        18:"numOfCandidates",
-        19:"numVoterGroups",
-        20:"xNumVoterGroups",
-        21:"nVoterGroupsRealName",
-        22:"spread_factor_voters",
-        23:"arena_size",
-        24:"median_mean",
-        25:"theme",
-        26:"utility_shape",
-        27:"colorChooser",
-        28:"colorSpace",
-        29:"arena_border",
-        30:"preFrontrunnerIds",
-        31:"autoPoll",
-        32:"firstStrategy",
-        33:"secondStrategy",
-        34:"doTwoStrategies",
-        35:"yeefilter",
-        36:"computeMethod",
-        37:"pixelsize",
-        38:"optionsForElection", // no longer used, but okay to have
-        39:"candidateSerials",
-        40:"voterGroupTypes",
-        41:"voterGroupX",
-        42:"voterGroupSnowman",
-        43:"voterGroupDisk",
-        44:"seats",
-        45:"candidateB",
-        46:"nDistricts",
-        47:"votersAsCandidates",
-        48:"visSingleBallotsOnly",
-        49:"ballotVis",
-        50:"customNames",
-        51:"namelist",
-        52:"menuVersion",
-        53:"stepMenu",
-        54:"menuLevel",
-        55:"doFeatureFilter",
-        56:"yeeon",
-        57:"beatMap",
-        58:"kindayee",
-        59:"ballotConcept",
-        60:"powerChart",
-        61:"sidebarOn",
-        62:"lastTransfer",
-        63:"voterIcons",
-        64:"candidateIcons",
-    } // add more on to the end ONLY
-        
-    var encodeFields = {}
-    for ([i,v] of Object.entries(decodeFields)) {
-        i = Number(i)
-        encodeFields[v] = i
-    }
-
     // additional codebooks
     var extraCodeBook = [
         {
@@ -3922,170 +4164,12 @@ function Sandbox(modelName) {
         }
     ]
 
-    // set up encoders
-    for (var e in ui.menu) {
-        var item = ui.menu[e]
-        if (item.codebook) {
-            _makeEncode(item.codebook)
+    cConfig.setUpEncode(
+        {
+            ui:ui,
+            extraCodeBook:extraCodeBook
         }
-    }
-    _makeEncode(extraCodeBook)
-    function _makeEncode(codebook) {
-        for (k = 0; k < codebook.length; k++) {
-            var decode = codebook[k].decode
-            var encode = {}
-            for (var [i,v] of Object.entries(decode)) {
-                var value = JSON.stringify(v)
-                i = Number(i)
-                encode[value] = i
-            }
-            codebook[k].encode = encode
-        }
-    }
-
-    var doFriendlyURI = true
-
-
-    function encode_config(config) {
-        var conf = _jcopy(config)
-        for (var e in ui.menu) {
-            var item = ui.menu[e]
-            if (item.codebook) {  
-                _encode(item.codebook)
-            }
-        }
-        _encode(extraCodeBook)
-        
-        function _encode(codebook) {
-            for (k = 0; k < codebook.length; k++) {
-                var encode = codebook[k].encode
-                var field = codebook[k].field
-                var value = conf[field]
-                var _lookup = function(v) {
-                    vs = JSON.stringify(v)
-                    if (vs in encode) {
-                        return encode[vs]
-                    } else {
-                        return "~" + vs // store as JSON String, and set a flag character
-                    }
-                }
-                if (Array.isArray(value)) {
-                    var temp = []
-                    for (var i =0; i < value.length; i++) {
-                        temp.push(_lookup(value[i]))
-                    }
-                    conf[field] = temp
-                } else {
-                    conf[field] = _lookup(value) //  TODO: it is possible there could be a collision in encoded/decoded values
-                }
-            }
-        }
-        //
-        // encode field names
-        for (var i in encodeFields) {
-            var n = encodeFields[i]
-            conf[n] = conf[i]
-            delete conf[i]
-        }
-        // zip
-        delete conf["configversion"]
-        var dataZ = pako.gzip( JSON.stringify(conf) ,{ to: 'string' })
-        var dataString = btoa(dataZ)
-        if (doFriendlyURI) dataString = Base64EncodeUrl(dataString)
-        if (tryNewURL) {
-            return dataString
-        } else {
-            var co = {}
-            co["zipped"] = dataString
-            co["configversion"] = config["configversion"]
-            return co
-        }
-        // be careful to include all the zipped config items and add any new ones or they will appear as extras
-    }
-    function decode_config(config) {
-        if (config.configversion == undefined) return config
-        if (config.configversion <= 2.1) return config
-        if (! ("zipped" in config) ) return config
-        
-        // unzip
-        dataString = config["zipped"]
-        if (doFriendlyURI) dataString = Base64DecodeUrl(dataString)
-        var data = pako.inflate( atob( dataString))
-        var strData = String.fromCharCode.apply(null, new Uint16Array(data));
-        var conUnzipped = JSON.parse( strData )
-
-        Object.assign(config,conUnzipped)
-        delete config["zipped"]
-
-        // note that we have to decode it in place
-        var conf = _jcopy(config)
-        // decode field names
-        for (var [e,v] of Object.entries(conf)) {
-            if (decodeFields.hasOwnProperty(e)) {                
-                // if we can decode it, then decode it
-                delete config[e]
-                var d = decodeFields[e]
-                config[d] = v
-            }
-        }
-
-        for (var e in ui.menu) {
-            var item = ui.menu[e]
-            if (item.codebook) {  
-                _decode(item.codebook)
-            }
-        }
-        _decode(extraCodeBook)
-        function _decode(codebook) {              
-            for (k = 0; k < codebook.length; k++) {
-                var version = codebook[k].decodeVersion
-                if (conf.configversion < version) continue // the value wasn't encoded at this early version
-                // so maybe if the value was an unencoded number that happens to now equal a coded number,
-                // then we shouldn't change that number
-                // HOWTO: If we are looking at an old sandbox, then don't use codebooks with new words in them
-                // So, when you add new words to a codebook, put a version number on that page of words
-                var decode = codebook[k].decode
-                var field = codebook[k].field
-                var value = config[field]
-            
-                if (Array.isArray(value)) {
-                    var temp = []
-                    for (var i =0; i < value.length; i++) {
-                        temp.push(_lookup(value[i]))
-                    }
-                    config[field] = temp
-                } else {
-                    config[field] = _lookup(value)
-                }
-                function _lookup(v) {
-                    if (v in decode) {
-                        return decode[v]
-                    } else {    
-                        return JSON.parse(v.slice(1)) // remove the flag character and parse
-                    }
-                }
-            }
-        }
-        return
-    }
-
-
-    // URL Friendly Base 64
-    //  * use this to make a Base64 encoded string URL friendly, 
-    //  * i.e. '+' and '/' are replaced with '-' and '~' also any trailing '=' 
-    //  * characters are removed
-    // https://tools.ietf.org/html/rfc4648
-    function Base64EncodeUrl(str){
-        return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
-    }
-
-    function Base64DecodeUrl(str){
-        str = str + '===' // pad
-        newlen = str.length - str.length % 4 // round
-        str = str.slice(0,newlen) // cut
-        // str = (str + '===').slice(0, str.length + (str.length % 4));
-        return str.replace(/-/g, '+').replace(/_/g, '/');
-    }
+    )
 
     self.update = function(assets){
         // UPDATE SANDBOX
@@ -4144,3 +4228,18 @@ function Sandbox(modelName) {
     // SAVE & PARSE
     // ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
 }
+
+
+function modifyConfigFeaturelist(config,config, condition, xlist) {
+    // e.g. var xlist = ["choose_pixel_size","yeefilter"]
+    var featureset = new Set(config.featurelist)
+    for (var i in xlist){
+        var xi = xlist[i]
+        if (condition) {
+            featureset.add(xi)
+        } else {
+            featureset.delete(xi)
+        }
+    }
+    config.featurelist = Array.from(featureset)
+}    

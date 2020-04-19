@@ -71,6 +71,18 @@ function _unitVector(to,from) {
 	return {x:ux, y:uy}
 }
 
+function _copyAttributes(to,from) {
+	// create copy of 'from'
+	from = from || {}
+	to = to || {} // maybe don't need this line?
+	for (var name in to) {
+		delete to[name]
+	}
+	for (var name in from) {
+		to[name] = from[name];
+	}
+}
+
 function _fillInDefaults(to,from) {
 	// create copy of 'from'
 	from = from || {}
