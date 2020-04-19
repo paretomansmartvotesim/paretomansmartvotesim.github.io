@@ -567,13 +567,7 @@ function Sandbox(modelName) {
     }    
 
     model.onInitModel = function() {
-        // update sandbox buttons
-        var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
-        m.forEach(function(m) {
-            m.choose.buttonConfigs = m.makelist()
-            m.choose.init()
-            m.select()
-        })
+        drawButtons()
     }
     
     model.onAddCandidate = function() {
@@ -581,11 +575,11 @@ function Sandbox(modelName) {
         model.numOfCandidates = n
         config.numOfCandidates = n
         ui.menu.nCandidates.select()
-
-        drawButtons()
     }
 
     function drawButtons() {
+
+        // draw sandbox buttons that depend on candidate images
         var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
         m.forEach(function(m) {
             m.choose.buttonConfigs = m.makelist()
@@ -1345,16 +1339,6 @@ function Sandbox(modelName) {
             // UPDATE
             
             model.arena.redistrictCandidates()
-            // update sandbox buttons
-
-            // Note: model.onAddCandidate() is similar
-
-            var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
-            m.forEach(function(m) {
-                m.choose.buttonConfigs = m.makelist()
-                m.choose.init()
-                m.select()
-            })
 
             // update model
             model.update()
