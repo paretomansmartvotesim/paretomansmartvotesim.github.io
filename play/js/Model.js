@@ -410,9 +410,7 @@ function Model(modelName){
 						return
 					} else {
 						// ready to replace
-						self.result.textSubs = self.result.text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
-							return self.icon($1)
-						});  // https://stackoverflow.com/a/49262416
+						self.result.textSubs = self.replacePlaceholder(self.result.text)
 					}
 				} else {
 					self.result.textSubs = self.result.text
@@ -541,29 +539,52 @@ function Model(modelName){
 	self.icon = function(id) {
 		if (self.placeHoldDuringElection) {
 			return "^Placeholder{" + id + "}"
-		}
-		if (self.theme === 'Letters') {
+
+		} else if (self.nLoading > 0) {
+			// if the images haven't loaded yet, then put a placeholder here and flag a task to replace the text during the redraw 
+			// (The redraw happens after images are loaded)
+			self.placeHolding = true
+			return "^Placeholder{" + id + "}"
+
+		} else if (self.candidateIcons == "name" && self.theme != "Nicky") {
 			var c = self.candidatesById[id]
 			return "<span class='letter' style='color:"+c.fill+";'><b>"+c.name.toUpperCase()+"</b></span>"
 		} else {
-			// if the images haven't loaded yet, then put a placeholder here and flag a task to replace the text during the redraw 
-			// (The redraw happens after images are loaded)
-			if (self.nLoading > 0) {
-				self.placeHolding = true
-				return "^Placeholder{" + id + "}"
-			} else {
-				return self.candidatesById[id].texticon_png
-			}
+			return self.candidatesById[id].texticon
+			// return self.candidatesById[id].texticon_png
 		}
+	}
+
+	self.replacePlaceholder = function(text) {
+		var filled = text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
+			return self.icon($1)
+		});  
+		// https://stackoverflow.com/a/49262416
+		var filled2 = filled.replace(/\^PlaceholderNameUpper{(.*?)}/g, (match, $1) => {
+			return self.nameUpper($1)
+		}); 
+		return filled2
 	}
 	
 	self.nameUpper = function(id) {
-		if (self.theme === 'Letters') {
+		if (self.placeHoldDuringElection) {
+			return "^PlaceholderNameUpper{" + id + "}"
+
+		} else if (self.nLoading > 0) {
+			// if the images haven't loaded yet, then put a placeholder here and flag a task to replace the text during the redraw 
+			// (The redraw happens after images are loaded)
+			self.placeHolding = true
+			return "^PlaceholderNameUpper{" + id + "}"
+			
+		} else if (self.candidateIcons == "name" && self.theme != "Nicky") {
 			var c = self.candidatesById[id]
 			// return "<span class='letterBig' style='color:"+c.fill+";'>"+c.name.toUpperCase()+"</span>"
 			return "<span class='letterBig';'>"+c.name.toUpperCase()+"</span>"
+		} else {
+			return self.candidatesById[id].name.toUpperCase()
 		}
-		return self.candidatesById[id].name.toUpperCase()
+
+		
 	}
 	
 	self.checkGotoTarena = function() { 

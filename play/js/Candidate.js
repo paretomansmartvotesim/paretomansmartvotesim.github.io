@@ -30,33 +30,46 @@ function Candidate(model){
 		} else {
 			self.id = self.icon
 		}
-
+		
 		// what order are we at
 		var chars = Candidate.graphics[model.theme]
 		var char = Candidate.graphicsByIcon[model.theme][self.icon]
 		var charIndex = char.i
 		var serial = charIndex + (self.instance - 1) * chars.length
 		self.serial = serial
+
+		// The candidate's name is not his id.  id is unique.
 		if (model.customNames == "Yes" && serial < model.namelist.length && model.namelist[serial] != "") {
 			self.name = model.namelist[serial]
 		} else {
-			if (model.theme == "Letters") {
-				self.name = String.fromCharCode((serial % 26) + "A".charCodeAt(0));
+			// use specified name.  If none specified, use alphabet.
+			if (Candidate.graphicsByIcon[model.theme][self.icon].hasOwnProperty("name")) {
+				self.name = Candidate.graphicsByIcon[model.theme][self.icon]["name"]
 			} else {
-				self.name = self.icon
+				self.name = String.fromCharCode((serial % 26) + "A".charCodeAt(0));
 			}
 		}
+
+		// Make an image for the name
+		self.nameSelf = {}
+		self.nameSelf.ext = "NA"
+		pickFillFromColorChooser()
+		self.nameSelf.fill = self.fill
+		if (self.dummy) return // don't make
+		makeLetterImage()
+
+		// Load the regular image
 		self.url = char.url
 		// var _graphics = Candidate.graphics[model.theme][self.icon];
 		// self.url = _graphics.img
-		
+
 		// are we using an svg or an img?
 		// if the model doesn't have assets, then load the files the old way
 		if (model.assets) {
 			if (model.assets[self.url]) {
 				var asset = model.assets[self.url]
 			} else {
-				if (model.theme == "Letters") {
+				if (0) { // was for Letters
 					// skip
 				} else if (Loader) {
 					if (Loader.assets[self.url]) {
@@ -67,36 +80,42 @@ function Candidate(model){
 		}
 
 		// png or svg?
-		if (model.theme == "Letters") {
+		if (0) { // was for Letters
 			var ext = "NA"
 		} else {
 			var ext = char.url.split('.').pop();
 		}
 		self.ext = ext
-		if (ext != "svg" &&  (model.theme != "Letters") ) {
+		if (ext != "svg" &&  (1) ) { // 1 used to be !"Letters" theme
 			// if we are using png's then we have to repeat the fill // TODO: fix
 			self.fill = char.fill
-		} else if (model.colorChooser == "pick and generate") {
-			if (self.instance > 1) {
-				// change fill for further rounds
+		} else {
+			pickFillFromColorChooser()
+		}
+		
+		function pickFillFromColorChooser() {
+			if (model.colorChooser == "pick and generate") {
+				if (self.instance > 1) {
+					// change fill for further rounds
+					self.fill = Color.generate(serial)
+				} else {
+					self.fill = char.fill
+					// self.fill = _graphics.fill;
+				}
+			} else if (model.colorChooser == "pick and repeat w/ offset") {
+				if (self.instance > 1) {
+					// change fill for further rounds
+					var fillIndex = (charIndex + self.instance - 1) % chars.length
+					self.fill = chars[fillIndex].fill
+				} else {
+					self.fill = char.fill
+					// self.fill = _graphics.fill;
+				}
+			} else if (model.colorChooser == "generate all") {
 				self.fill = Color.generate(serial)
-			} else {
+			} else { // "pick and repeat"
 				self.fill = char.fill
-				// self.fill = _graphics.fill;
 			}
-		} else if (model.colorChooser == "pick and repeat w/ offset") {
-			if (self.instance > 1) {
-				// change fill for further rounds
-				var fillIndex = (charIndex + self.instance - 1) % chars.length
-				self.fill = chars[fillIndex].fill
-			} else {
-				self.fill = char.fill
-				// self.fill = _graphics.fill;
-			}
-		} else if (model.colorChooser == "generate all") {
-			self.fill = Color.generate(serial)
-		} else { // "pick and repeat"
-			self.fill = char.fill
 		}
 		
 		if (self.dummy) return // don't make
@@ -124,7 +143,7 @@ function Candidate(model){
 					
 					if (! self.dummy) model.update() // draw the UI.. maybe we don't need a whole bunch
 				})
-			} else if (model.theme == "Letters") {
+			} else if (0) {  // 0 used to be "Letters" theme
 				makeLetterImage()
 			} else { 
 				self.srcImg = self.url
@@ -266,11 +285,11 @@ function Candidate(model){
 		
 		function makeLetterImage() {
 			model.nLoading++
-			self.png_b64 = _convertLetterToDataURLviaCanvas(self.name,self.fill, '.png')
-			self.img = new Image()
-			self.img.src = self.png_b64 // base64 png
-			self.texticon_png = "<img src='"+self.img.src+"'/>"
-			self.img.onload = function () {
+			self.nameSelf.png_b64 = _convertLetterToDataURLviaCanvas(self.name,self.fill, '.png')
+			self.nameSelf.img = new Image()
+			self.nameSelf.img.src = self.nameSelf.png_b64 // base64 png
+			self.nameSelf.texticon_png = "<img src='"+self.nameSelf.img.src+"'/>"
+			self.nameSelf.img.onload = function () {
 				model.nLoading--
 				if (model.nLoading == 0) {
 					if (self.dummy) return
@@ -328,14 +347,18 @@ function Candidate(model){
 			
 			if (model.customNames == "Yes") {
 				hsize = self.img.width / self.img.height * size
-				ctx.drawImage(self.img, x-hsize/2, y-size/2, hsize, size);
+			}
+			if (model.candidateIcons == "image" || model.candidateIcons == "both") {
+				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+			}
+			if (model.candidateIcons == "name" || model.candidateIcons == "both") {
+				hsize = self.nameSelf.img.width / self.nameSelf.img.height * size
+				ctx.drawImage(self.nameSelf.img, x-hsize/2, y-size/2, hsize, size);
+			}
 			// } else if (model.votersAsCandidates) {
 			// 	ctx.rect(x-size/2, y-size/2, size, size);
 			// 	ctx.fillStyle = self.fill
 			// 	ctx.fill()
-			} else {
-				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
-			}
 		}
 		self.drawAnnotation(x,y,ctx)
 		if (self.selected) {
@@ -383,27 +406,32 @@ Candidate.graphics = {
 		{
 			icon: "square",
 			url: "play/img/square.png",
-			fill: "hsl(240,80%,70%)"
+			fill: "hsl(240,80%,70%)",
+			name: "square",
 		},
 		{
 			icon: "triangle",
 			url: "play/img/triangle.png",
-			fill: "hsl(45,80%,70%)"
+			fill: "hsl(45,80%,70%)",
+			name: "triangle",
 		},
 		{
 			icon: "hexagon",
 			url: "play/img/hexagon.png",
-			fill: "hsl(0,80%,70%)"
+			fill: "hsl(0,80%,70%)",
+			name: "hexagon",
 		},
 		{
 			icon: "pentagon",
 			url: "play/img/pentagon.png",
-			fill: "hsl(90,80%,70%)"
+			fill: "hsl(90,80%,70%)",
+			name: "pentagon",
 		},
 		{
 			icon: "bob",
 			url: "play/img/bob.png",
-			fill: "hsl(30,80%,70%)"
+			fill: "hsl(30,80%,70%)",
+			name: "bob",
 		}
 	],
 	Bees: [
@@ -430,28 +458,6 @@ Candidate.graphics = {
 		{
 			icon: "bob",
 			url: "play/img/orange_bee.png",
-			fill: "hsl(30,80%,70%)"
-		}
-	],
-	Letters: [
-		{
-			icon: "square",
-			fill: "hsl(240,80%,70%)"
-		},
-		{
-			icon: "triangle",
-			fill: "hsl(45,80%,70%)"
-		},
-		{
-			icon: "hexagon",
-			fill: "hsl(0,80%,70%)"
-		},
-		{
-			icon: "pentagon",
-			fill: "hsl(90,80%,70%)"
-		},
-		{
-			icon: "bob",
 			fill: "hsl(30,80%,70%)"
 		}
 	]

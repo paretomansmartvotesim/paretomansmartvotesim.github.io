@@ -379,6 +379,10 @@ function Sandbox(modelName) {
 
             // so basically, we are getting rid of the "none" button in the yee chooser and making it into a separate control.
 
+            if (config.theme == "Letters") {
+                config.theme = "Default" // Merged two ideas
+                config.candidateIcons = "name"
+            }
 
         }
 
@@ -2465,7 +2469,6 @@ function Sandbox(modelName) {
             {name:"Default",realname:"Default",margin:4},
             {name:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
             {name:"Bees",realname:"The Bee mode style for Unsplit."},
-            {name:"Letters",realname:"Use Letters for Candidates",margin:4}
         ]
 
         self.codebook = [
@@ -2476,7 +2479,7 @@ function Sandbox(modelName) {
                     0:"Default",
                     1:"Nicky",
                     2:"Bees",
-                    3:"Letters"
+                    3:"Letters", // no longer used but can't reuse this code
                 }
             }
         ]
@@ -2490,10 +2493,11 @@ function Sandbox(modelName) {
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
+            model.initMODEL()
             // INIT SANDBOX
-            self.init_sandbox()
+            self.init_sandbox() // sets the class of the div
             // UPDATE
-            model.update()
+            model.draw()
         };
         self.configure = function() {
             model.theme = config.theme
@@ -3227,6 +3231,8 @@ function Sandbox(modelName) {
         // self.name = candidateIcons
         self.list = [
             {name:"image",value:"image",realname:"image",margin:4},
+            {name:"both",value:"both",realname:"both image and name",margin:4},
+            {name:"name",value:"name",realname:"name",margin:4},
             {name:"off",value:"off",realname:"off"},
         ]
         self.onChoose = function(data){
@@ -3234,6 +3240,11 @@ function Sandbox(modelName) {
             config.candidateIcons = data.value
             // CONFIGURE
             self.configure()
+                
+            for (var i=0; i<model.candidates.length; i++) {
+                model.candidates[i].init()
+            }
+            model.initMODEL()
             model.draw()
         };
         self.configure = function() {
