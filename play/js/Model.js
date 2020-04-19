@@ -200,6 +200,7 @@ function Model(modelName){
 		// do an analysis kind of election
 		if (self.votersAsCandidates) {
 			self.updateVC()
+			self.votersAsCandidates = false
 		}
 
 		
@@ -211,7 +212,7 @@ function Model(modelName){
 			voter.update();
 		}
 		
-		if (self.tarena.canvas.hidden == false & self.optionsForElection.sidebar) // find order of voters
+		if (self.powerChart != "off") // find order of voters
 		{
 			var v = _getVoterArray(self)
 			if (v.length > 0) {
@@ -260,6 +261,10 @@ function Model(modelName){
 			self.result = selected
 			if (self.doTop2) self.result.theTop2 = selected
 		} else {
+
+			// for the moment, this works, but ideally there would be separate components of the STV, RRV etc elections for the powerCharts
+			// we make sure that we generate the data now so we have it later.
+			self.optionsForElection.sidebar = self.optionsForElection.sidebar || self.checkGotoTarena()
 
 			if (self.nDistricts > 1) {
 				for (var i = 0; i < self.nDistricts; i++) {
@@ -556,64 +561,32 @@ function Model(modelName){
 		// make candidates in the positions of the voters
 		var vs = _getVoterArrayXY(self)
 		self.candidates = []
+		self.preFrontrunnerIds = []
 		for (var k = 0; k < vs.length; k ++) {
 			var v = vs[k]
 			
 			var n = new Candidate(self)
 			n.x = v.x
 			n.y = v.y
-			// generate a new id
-			// look for the first one that isn't taken
-			var doBreak = false
-			for (var i=1; i < 10000000; i++) {  // million is more than enough candidates
-				var c = Candidate.graphicsByIcon[self.theme]
-				for (var icon in c) {
-					if (i == 1) {
-						var newId = icon
-					} else {
-						var newId = icon + i
-					}
-					if (self.candidatesById[newId] != undefined) {
-						// already done
-					} else {
-						doBreak = true
-						break
-					}
-				}
-				if (doBreak) break
-			}
+
+			// generate a new id]
+			var c = Object.keys(Candidate.graphicsByIcon[self.theme])
+			var x = c.length
+			var i = Math.floor(k/x) + 1
+			var b = k % x
+			var icon = c[b]
 			n.icon = icon
 			n.instance = i
-			n.dummy = true
 			self.candidates.push(n)
 				
 			// INIT
 			n.init()
-			var temp = self.onInitModel
-			self.onInitModel = function () {}
-			self.initMODEL()
-			self.onInitModel = temp
 		}
+		self.initMODEL()
+		self.arena.redistrictCandidates()
 		// update the GUI
-		self.arena.redistrict()
+		self.onAddCandidate()
 		
-		// run the election
-		
-		// // get the ballots for this electionc
-		// for(var i=0; i<self.voters.length; i++){
-		// 	var voter = self.voters[i];
-		// 	voter.update();
-		// }
-		
-		// for (var i = 0; i < self.nDistricts; i++) {
-		// 	if (self.district[i].candidates.length == 0) continue
-		// 	self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
-		// }
-
-		self.optionsForElection = {sidebar:false}
-		self.tarena.canvas.hidden  = true
-		self.opt.breakWinTiesMultiSeat = true
-
 	}
 };
 

@@ -361,9 +361,11 @@ function Sandbox(modelName) {
             // one more thing
             // switch the name for this setting:
             if (config.kindayee == "beatCircles") {
-                config.beatMap = "on"
-                config.keyyee = "off"
-                config.kindayee = "off"
+                config.beatMap = "on" // new setting
+
+                config.yeeon = false // old settings
+                config.keyyee = "newcan"
+                config.kindayee = "newcan"
             }
             var isSomething = x => (x != undefined && x != "off"      )
             if (isSomething(config.kindayee) || isSomething(config.keyyee)) {
@@ -2590,11 +2592,29 @@ function Sandbox(modelName) {
             config.votersAsCandidates = data.value
             // CONFIGURE
             self.configure()
+            
+            config.votersAsCandidates = false // turn it off // just one press
+            setTimeout(self.select,800)
             // UPDATE
+
+            // virtually press some buttons
+            // pretend we did onChoose and select for the following options to make things run more smoothly
+            config.powerChart = "off"
+            ui.menu.powerChart.configure()
+            ui.menu.powerChart.select()
+            config.sidebarOn = "off"
+            ui.menu.sidebarOn.configure()
+            ui.menu.sidebarOn.select()
+
             model.update()
         };
         self.configure = function() {
             model.votersAsCandidates = config.votersAsCandidates
+            if (config.votersAsCandidates) {
+                model.opt.breakWinTiesMultiSeat = true
+            } else {
+                model.opt.breakWinTiesMultiSeat = false
+            }
         }
         self.select = function() {
             self.choose.highlight("value", config.votersAsCandidates);
@@ -2964,6 +2984,7 @@ function Sandbox(modelName) {
             config.yeeon = data.value
             // CONFIGURE
             self.configure()
+            model.initMODEL()
             // UPDATE
             if (config.yeeon) {
                 model.update() // need to calculate

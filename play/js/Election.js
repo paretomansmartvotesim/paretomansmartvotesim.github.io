@@ -1411,7 +1411,7 @@ Election.rrv = function(district, model, options){
 };
 
 Election.rav = function(district, model, options){
-
+	
 	var numreps = model.seats
 	var maxscore = 1
 
@@ -1604,7 +1604,7 @@ Election.irv = function(district, model, options){
 	if (options.dontpoll) dopoll = false
 	if (dopoll) polltext = doPollAndUpdateBallots(district,model,options,"irv")
 
-	if (options.sidebar) var drawFlows = true
+	var drawFlows = (model.ballotConcept != "off")
 	if (drawFlows) {
 		var transfers = []
 		var coalitions = []
@@ -1927,9 +1927,8 @@ Election.irv = function(district, model, options){
 Election.stv = function(district, model, options){
 
 	var numreps = model.seats
-
 	
-	if (options.sidebar) var drawFlows = true
+	var drawFlows = (model.ballotConcept != "off")
 	if (drawFlows) {
 		var transfers = []
 		var coalitions = []
@@ -2735,7 +2734,7 @@ Election.quotaMinimax = function(district, model, options){
 };
 
 Election.quotaApproval = function(district, model, options){
-
+	
 	var v = _getVoterArray(model)
 
 	var seats = model.seats
