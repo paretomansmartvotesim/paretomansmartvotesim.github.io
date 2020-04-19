@@ -776,10 +776,6 @@ function Cypher() {
 function Sandbox(modelName, cConfig) {
     var self = this
     
-    // access cConfig's variables // they used to be in the same closure, so that's why we have to use these methods
-    var config = cConfig.getConfig() // never do config = something.  Only do config.something = somethingelse
-    var initialConfig = cConfig.getInitialConfig()
-
 
     // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
@@ -788,12 +784,18 @@ function Sandbox(modelName, cConfig) {
     // Then we update the model and menu.
     // Then wait for mouse events.
 
+    // 
+
     // CREATE
     var model = new Model(modelName);
     var ui = {}
     self.ui = ui
     ui.model = model
     var basediv = document.querySelector("#" + modelName)
+
+    // access cConfig's variables // they used to be in the same closure, so that's why we have to use these methods
+    var config = cConfig.getConfig() // never do config = something.  Only do config.something = somethingelse
+    var initialConfig = cConfig.getInitialConfig()
 
     // CREATE div stuff for sandbox
     function newDivOnBase(name) {
@@ -1050,7 +1052,6 @@ function Sandbox(modelName, cConfig) {
         
         var autoSwitchDim = false
         
-        self.name = "systems"
         self.list = [
             {name:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
             {name:"+Primary", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.pluralityWithPrimary},
@@ -1161,7 +1162,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.rbSystems = new function() { // Which RB voting system?
         var self = this
-        self.name = "rbSystems"
         self.list = [
             {name:"Baldwin",rbelection:rbvote.calcbald, margin:4},
             {name:"Black",rbelection:rbvote.calcblac},
@@ -1235,7 +1235,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.dimensions = new function () {
         var self = this
-        // self.name = dimensions
         self.list = [
             {name:"2D",realname:"Two Position Dimensions",margin:4},
             {name:"1D+B",realname:"One Position Dimension Horizontally, Plus Broadness in the Vertical Dimension", margin:4},
@@ -1278,7 +1277,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.nDistricts = new function () {
         var self = this
-        // self.name = nDistricts
         self.list = [
             {name:"1",margin:4},
             {name:"2",margin:4},
@@ -1322,7 +1320,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.seats = new function () {
         var self = this
-        // self.name = dimensions
         self.list = [
             {name:"1",margin:4},
             {name:"2",margin:4},
@@ -1359,8 +1356,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.nVoterGroups = new function() { // How many voters?
         var self = this
-        self.name = "nVoterGroups"
-
         self.list = [
             {realname: "Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
             {realname: "One Group", name:"1", num:1, margin:5},
@@ -1555,7 +1550,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.xVoterGroups = new function() { // if the last option X is selected, we need a selection for number of voters
         var self = this
-        self.name = "xVoterGroups"
         self.onChoose = function(slider,n) {
             // LOAD INPUT
             var num = slider.value
@@ -1600,8 +1594,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.group_count = new function() {  // group count
         var self = this
-        self.name = "group_count"
-
         self.onChoose = function(slider,n) {
             // LOAD INPUT
             config.voter_group_count[n] = slider.value;
@@ -1653,8 +1645,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.group_spread = new function() {  // group count
         var self = this
-        self.name = "group_spread"
-
         self.onChoose = function(slider,n) {
             // LOAD INPUT
             config.voter_group_spread[n] = slider.value;
@@ -1704,7 +1694,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.nCandidates = new function() { // how many candidates?
         var self = this
-        self.name = "nCandidates"
         self.list = [
             {name:"two", num:2, margin:4},
             {name:"three", num:3, margin:4},
@@ -1801,7 +1790,6 @@ function Sandbox(modelName, cConfig) {
   
     ui.menu.customNames = new function () {
         var self = this
-        self.name = "customNames"
         self.list = [
             {name:"Yes",margin:4},
             {name:"No"}
@@ -1837,7 +1825,6 @@ function Sandbox(modelName, cConfig) {
     
     ui.menu.namelist = new function () {
         var self = this
-        self.name = "namelist"
         self.onChoose = function(){
             // LOAD
             config.namelist = self.choose.dom.value
@@ -1866,7 +1853,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
         var self = this
-        self.name = "firstStrategy"
         self.list = [
             {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
             {name:"N", realname:"normalize", margin:5},
@@ -1917,7 +1903,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.doTwoStrategies = new function() { // Is there a 2nd strategy?
         var self = this
-        self.name = "doTwoStrategies"
         self.list = [
             {realname: "opton for 2nd strategy", name:"2"}
         ];
@@ -1954,7 +1939,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
         var self = this
-        self.name = "secondStrategy"
         self.list = [
             {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
             {name:"N", realname:"normalize", margin:5},
@@ -2021,8 +2005,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.percentSecondStrategy = new function() {  // group count
         var self = this
-        self.name = "percentSecondStrategy"
-
         self.onChoose = function(slider,n) {
             // LOAD INPUT
             config.percentSecondStrategy[n] = slider.value;
@@ -2088,7 +2070,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.autoPoll = new function() { // do a poll to find frontrunner
         var self = this
-        self.name = "autoPoll"
         self.list = [
             {name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
             {name:"Manual",realname:"Press the poll button to find the frontrunners once."}
@@ -2134,7 +2115,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.frontrunners = new function() { // frontrunners
         var self = this
-        self.name = "frontrunners"
         self.list = [];
         self.makelist = function() {
             var a = []
@@ -2184,7 +2164,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.poll = new function() { // do a poll to find frontrunner
         var self = this
-        self.name = "poll"
         self.list = [
             {name:"Poll",margin:5},
             {name:"Poll 2",realname:"Find the top 2 frontrunners."}
@@ -2220,7 +2199,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.yee = new function() { // yee
         var self = this
-        self.name = "yee"
         self.list = [];
         self.makelist = function() {
             var a = []
@@ -2292,7 +2270,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.yeefilter = new function() { 	// yee filter
         var self = this
-        self.name = "yeefilter"
         self.list = [];
         self.makelist = function() {
             var a = []
@@ -2353,7 +2330,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.gearconfig = new function() { 	// gear config - decide which menu items to do
         var self = this
-        // self.name = "gearconfig"
         self.initSpecial = function() {
             // list all the menu items
             self.list = []
@@ -2461,7 +2437,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.presetconfig = new function() { // pick a preset
         var self = this
-        self.name = "presetconfig"  // no name needed
         self.list = _buildPresetConfig({nElection:14,nBallot:12})
         function _buildPresetConfig(c) {
             // var presetnames = ["O","SA"]
@@ -2552,7 +2527,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.choose_pixel_size = new function() {
         var self = this
-        self.name = "choose_pixel_size"
         self.list = [
             {name:"60",val:60,margin:4},
             {name:"30",val:30,margin:4},
@@ -2583,7 +2557,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.computeMethod = new function () {
         var self = this
-        // self.name = computeMethod
         self.list = [
             {name:"gpu",margin:4},
             {name:"js",margin:4},
@@ -2613,7 +2586,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.colorChooser = new function () {
         var self = this
-        // self.name = computeMethod
         self.list = [
             {name:"pick and repeat",margin:4},
             {name:"pick and repeat w/ offset",margin:4},
@@ -2660,7 +2632,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.colorSpace = new function () {
         var self = this
-        // self.name = computeMethod
         self.list = [
             {name:"hsluv with dark"}
             // ,margin:4},
@@ -2705,7 +2676,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.spread_factor_voters = new function () {
         var self = this
-        // self.name = spread_factor_voters
         self.list = [
             {name:"1",val:1,margin:4},
             {name:"2",val:2,margin:4},
@@ -2744,7 +2714,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.arena_size = new function () {
         var self = this
-        // self.name = "arena_size"
         self.list = [
             {name:"300",val:300,margin:4},
             {name:"600",val:600}
@@ -2813,7 +2782,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.median_mean = new function () {
         var self = this
-        // self.name = "median_mean"
         self.list = [
             {name:"median",val:2,margin:4},
             {name:"mean",val:1}
@@ -2843,7 +2811,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.theme = new function () {
         var self = this
-        // self.name = "theme"
         self.list = [
             {name:"Default",realname:"Default",margin:4},
             {name:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
@@ -2914,7 +2881,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.utility_shape = new function () {
         var self = this
-        // self.name = "utility_shape"
         self.list = [
             {name:"linear",margin:4},
             {name:"quadratic",margin:4},
@@ -2955,7 +2921,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.votersAsCandidates = new function () {
         var self = this
-        // self.name = "votersAsCandidates"
         self.list = [
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
@@ -3012,7 +2977,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.ballotVis = new function () {
         var self = this
-        // self.name = "ballotVis"
         self.list = [
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
@@ -3051,7 +3015,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.visSingleBallotsOnly = new function () {
         var self = this
-        // self.name = "visSingleBallotsOnly"
         self.list = [
             {name:"yes",value:true,margin:4},
             {name:"no",value:false}
@@ -3091,7 +3054,6 @@ function Sandbox(modelName, cConfig) {
     ui.menu.gearicon = new function () {
         // gear button (combines with above)
         var self = this
-        // self.name = gearicon
         self.list = [
             {name:"config"}
         ]
@@ -3123,7 +3085,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.gearoff = new function () {
         var self = this
-        // self.name = gearoff
         self.list = [
             {name:"are you sure?",realname:"You won't be able to get the config back, so I'd recommend saving first and then disabling the config and then saving again.  That way you still have a copy that you can edit later if you made a mistake."}
         ]
@@ -3182,7 +3143,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.menuVersion = new function () {
         var self = this
-        // self.name = menuVersion
         self.list = [
             {name:"1",value:"1",margin:4},
             {name:"2",value:"2"}
@@ -3223,7 +3183,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.menuLevel = new function () {
         var self = this
-        // self.name = menuLevel
         self.list = [
             // {name:"basic",value:"basic",margin:4},
             {name:"stock",value:"normal",margin:4},
@@ -3273,7 +3232,6 @@ function Sandbox(modelName, cConfig) {
 
     ui.menu.stepMenu = new function () {
         var self = this
-        // self.name = stepMenu
         self.list = [
             {name:"geom",value:"geom",margin:4},
             {name:"style",value:"style",margin:4},
@@ -3321,7 +3279,6 @@ function Sandbox(modelName, cConfig) {
     
     ui.menu.doFeatureFilter = new function () {
         var self = this
-        // self.name = doFeatureFilter
         self.list = [
             {name:"yes",value:true,margin:4},
             {name:"no",value:false},
@@ -3355,9 +3312,7 @@ function Sandbox(modelName, cConfig) {
 
 
     ui.menu.yeeon = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = yeeon
         self.list = [
             {name:"on",value:true,margin:4},
             {name:"off",value:false},
@@ -3392,9 +3347,7 @@ function Sandbox(modelName, cConfig) {
 
 
     ui.menu.beatMap = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = beatMap
         self.list = [
             {name:"auto",value:"auto",margin:4},
             {name:"on",value:"on",margin:4},
@@ -3428,9 +3381,7 @@ function Sandbox(modelName, cConfig) {
 
 
     ui.menu.ballotConcept = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = ballotConcept
         self.list = [
             {name:"auto",value:"auto",margin:4},
             {name:"on",value:"on",margin:4},
@@ -3464,9 +3415,7 @@ function Sandbox(modelName, cConfig) {
 
 
     ui.menu.powerChart = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = powerChart
         self.list = [
             {name:"auto",value:"auto",margin:4},
             // {name:"on",value:"on",margin:4},
@@ -3502,9 +3451,7 @@ function Sandbox(modelName, cConfig) {
     }
 
     ui.menu.sidebarOn = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = sidebarOn
         self.list = [
             // {name:"auto",value:"auto",margin:4},
             {name:"on",value:"on",margin:4},
@@ -3541,9 +3488,7 @@ function Sandbox(modelName, cConfig) {
 
     
     ui.menu.lastTransfer = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = lastTransfer
         self.list = [
             // {name:"auto",value:"auto",margin:4},
             {name:"on",value:"on",margin:4},
@@ -3573,9 +3518,7 @@ function Sandbox(modelName, cConfig) {
 
     
     ui.menu.voterIcons = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = voterIcons
         self.list = [
             {name:"circle",value:"circle",realname:"circle",margin:4},
             // {name:"first",value:"first",realname:"circles with the first vote only",margin:4},
@@ -3605,9 +3548,7 @@ function Sandbox(modelName, cConfig) {
 
 
     ui.menu.candidateIcons = new function () {
-        // win map (+on off)
         var self = this
-        // self.name = candidateIcons
         self.list = [
             {name:"image",value:"image",realname:"image",margin:4},
             {name:"both",value:"both",realname:"both image and name",margin:4},
