@@ -216,7 +216,7 @@ function Model(modelName){
 			voter.update();
 		}
 		
-		if (self.powerChart != "off") // find order of voters
+		if (self.checkGotoTarena()) // find order of voters
 		{
 			var v = _getVoterArray(self)
 			if (v.length > 0) {
