@@ -3554,6 +3554,7 @@ function Sandbox(modelName, cConfig) {
             {name:"both",value:"both",realname:"both image and name",margin:4},
             {name:"name",value:"name",realname:"name",margin:4},
             {name:"off",value:"off",realname:"off"},
+            {name:"dots",value:"dots",realname:"dots",margin:4},
         ]
         self.onChoose = function(data){
             // LOAD

@@ -109,6 +109,18 @@ function Candidate(model){
 				hsize = self.nameSelf.img.width / self.nameSelf.img.height * size
 				ctx.drawImage(self.nameSelf.img, x-hsize/2, y-size/2, hsize, size);
 			}
+			if (model.candidateIcons == "dots") {
+				ctx.fillStyle = self.fill
+				ctx.strokeStyle = 'black'
+				ctx.lineWidth = 1
+		
+				// Just draw a circle.
+				ctx.beginPath()
+				var side = 10
+				ctx.rect(x-side/2, y-side/2, side, side)
+				ctx.fill()
+				ctx.stroke()
+			}
 			// } else if (model.votersAsCandidates) {
 			// 	ctx.rect(x-size/2, y-size/2, size, size);
 			// 	ctx.fillStyle = self.fill
