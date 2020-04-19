@@ -13,18 +13,16 @@ function main(preset) {
     // LOAD
     c.url = window.location.href;
 
-    // c.ui = s.ui
-    
     // INIT
     c.setConfig(preset.config)
-    // s.setConfig() // connects to the config
     // INIT
     if (preset.update) preset.update(s) 
     
 
     // use loader to save on bandwidth
-    // alternatively just do
+    // alternatively if we call the loader from all the places where we need the images, then we could just do
     // s.update()
+    // for possibly greater speed, since we don't have to wait on the downloads.
 
     // CREATE
     var l = new Loader()
@@ -70,7 +68,7 @@ function main(preset) {
 function Config() {
     var self = this
 
-
+    self.cypher = new Cypher()
     ///////////////////////
     // Connecting Things //
     ///////////////////////
@@ -97,6 +95,7 @@ function Config() {
 
     // switch
     self.tryNewURL = true
+    self.cypher.tryNewURL = self.tryNewURL
 
     var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
     var yes_all_candidates = {}
@@ -321,7 +320,7 @@ function Config() {
         }
         // we are now generating a new version of config.  We are done with grandfathering
 
-        decode_config(config) // decodes the config, depending on version number
+        self.cypher.decode_config(config) // decodes the config, depending on version number
         // so in this case, we're decoding stuff from 2.2, but not 2.1 because 2.1 isn't encoded
         if (config.configversion == 2.1) {
             config.configversion = 2.2 // 2.1 is now treated the same as 2.2 because both are decoded
@@ -459,7 +458,7 @@ function Config() {
         // URI ENCODE!
         var doEncode = true
         if (doEncode) {
-            var eConfig = encode_config(config)
+            var eConfig = self.cypher.encode_config(config)
         } else {
             var eConfig = config
         }
@@ -501,9 +500,29 @@ function Config() {
         return {link:link, linkText:linkText}
     };
 
+    var console_out = function (log){
+        // helper function to output the config to the console.
+        var logtext = ''
+        for (i in config) {
+            logtext += i + ": " +JSON.stringify(config[i]) + ',\n'
+            // logtext += '"' + i + '",\n' // for codebook
+        }
+        var aloc = window.location.pathname.split('/')
+        //logtext += "\n\npaste this JSON into" + aloc[aloc.length-2] + "/" + aloc[aloc.length-1]
+        logtext += "\n\npaste this JSON into /play/js/Presets.js under option " + aloc[aloc.length-1]
+        console.log(logtext)
+        if (log==2) console.log(JSON.stringify(config))
+    }
+
+
+
+}
+
+function Cypher() {
+    var self = this
     var doFriendlyURI = true
 
-    function encode_config(config) {
+    self.encode_config = function(config) {
         var conf = _jcopy(config)
         for (var e in ui.menu) {
             var item = ui.menu[e]
@@ -667,7 +686,7 @@ function Config() {
             codebook[k].encode = encode
         }
     }
-    function decode_config(config) {
+    self.decode_config = function(config) {
         if (config.configversion == undefined) return config
         if (config.configversion <= 2.1) return config
         if (! ("zipped" in config) ) return config
@@ -751,22 +770,6 @@ function Config() {
         // str = (str + '===').slice(0, str.length + (str.length % 4));
         return str.replace(/-/g, '+').replace(/_/g, '/');
     }
-
-    var console_out = function (log){
-        // helper function to output the config to the console.
-        var logtext = ''
-        for (i in config) {
-            logtext += i + ": " +JSON.stringify(config[i]) + ',\n'
-            // logtext += '"' + i + '",\n' // for codebook
-        }
-        var aloc = window.location.pathname.split('/')
-        //logtext += "\n\npaste this JSON into" + aloc[aloc.length-2] + "/" + aloc[aloc.length-1]
-        logtext += "\n\npaste this JSON into /play/js/Presets.js under option " + aloc[aloc.length-1]
-        console.log(logtext)
-        if (log==2) console.log(JSON.stringify(config))
-    }
-
-
 
 }
 
@@ -4164,7 +4167,7 @@ function Sandbox(modelName, cConfig) {
         }
     ]
 
-    cConfig.setUpEncode(
+    cConfig.cypher.setUpEncode(
         {
             ui:ui,
             extraCodeBook:extraCodeBook
