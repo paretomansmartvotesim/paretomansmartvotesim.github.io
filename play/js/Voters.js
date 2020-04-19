@@ -1858,6 +1858,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.drawPart(0,ctx)
 	}
 	self.draw1 = function(ctx){
+		if (model.voterIcons == "off") return
 		self.drawPart(1,ctx)
 	}
 	self.drawPart = function(part,ctx){
@@ -1919,21 +1920,25 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		_drawBlank(model, ctx, s.x, s.y, size)
-		_drawRing(ctx,s.x,s.y,self.size)
 		
-		// Face!
-		size = size*2;
-		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		if (model.voterIcons != "off") {
 
-		// Number ID
-		var textsize = 20
-		ctx.textAlign = "center";
-		
-		if(model.voters.length != 1) {
-			_drawStroked(self.vid+1,x+0*textsize,y+0*textsize,textsize,ctx);
+			_drawBlank(model, ctx, s.x, s.y, size)
+			_drawRing(ctx,s.x,s.y,self.size)
+			
+			// Face!
+			size = size*2;
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+	
+			// Number ID
+			var textsize = 20
+			ctx.textAlign = "center";
+			
+			if(model.voters.length != 1) {
+				_drawStroked(self.vid+1,x+0*textsize,y+0*textsize,textsize,ctx);
+			}
+	
 		}
-
 		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = temp
 	};
@@ -2037,13 +2042,17 @@ function SingleVoter(model){
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Circle!
 		var size = self.size;
-		self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
-		_drawRing(ctx,s.x,s.y,self.size)
+		if (model.voterIcons != "off") {
+			
+			self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+			_drawRing(ctx,s.x,s.y,self.size)
 
-		// Face!
-		size = size*2;
-		ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+			// Face!
+			size = size*2;
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		}	
 		
+			
 		self.drawAnnotation(x,y,ctx)
 		if(self.highlight) ctx.globalAlpha = temp
 	}

@@ -90,6 +90,7 @@ function Sandbox(modelName) {
         powerChart: "auto",
         sidebarOn: "on",
         lastTransfer: "on",
+        voterIcons: "circle",
     }
 
     self.url = undefined
@@ -2052,6 +2053,7 @@ function Sandbox(modelName) {
             45: "powerChart",
             46: "sidebarOn",
             47: "lastTransfer",
+            48: "voterIcons",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -3188,6 +3190,38 @@ function Sandbox(modelName) {
         }
     }
 
+    
+    ui.menu.voterIcons = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = voterIcons
+        self.list = [
+            {name:"circle",value:"circle",realname:"circle",margin:4},
+            // {name:"first",value:"first",realname:"circles with the first vote only",margin:4},
+            // {name:"dots",value:"dots",realname:"dots",margin:4},
+            {name:"off",value:"off",realname:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.voterIcons = data.value
+            // CONFIGURE
+            self.configure()
+            model.draw()
+        };
+        self.configure = function() {
+            model.voterIcons = config.voterIcons
+        }
+        self.choose = new ButtonGroup({
+            label: "Voter Icons:", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.voterIcons);
+        }
+    }
+
 
 
 
@@ -3251,6 +3285,11 @@ function Sandbox(modelName) {
             "votersAsCandidates",
             "ballotVis",
             "visSingleBallotsOnly",
+            "sidebarOn",
+            ["divLastTransfer", [
+                "lastTransfer",
+            ]],
+            "voterIcons",
             "gearoff",
         ]],
         [ "main", [
@@ -3298,10 +3337,6 @@ function Sandbox(modelName) {
             "beatMap",
             "ballotConcept",
             "powerChart",
-            "sidebarOn",
-            ["divLastTransfer", [
-                "lastTransfer",
-            ]]
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "stepMenu",
@@ -3338,6 +3373,7 @@ function Sandbox(modelName) {
                     "median_mean",
                     "utility_shape",
                     "votersAsCandidates",
+                    "voterIcons",
                 ]],
             ]],
             ["style", [
@@ -3842,6 +3878,7 @@ function Sandbox(modelName) {
         60:"powerChart",
         61:"sidebarOn",
         62:"lastTransfer",
+        63:"voterIcons",
     } // add more on to the end ONLY
         
     var encodeFields = {}
