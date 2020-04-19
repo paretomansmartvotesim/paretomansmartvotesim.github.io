@@ -323,15 +323,19 @@ function Candidate(model){
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
-		if (model.customNames == "Yes") {
-			hsize = self.img.width / self.img.height * size
-			ctx.drawImage(self.img, x-hsize/2, y-size/2, hsize, size);
-		// } else if (model.votersAsCandidates) {
-		// 	ctx.rect(x-size/2, y-size/2, size, size);
-		// 	ctx.fillStyle = self.fill
-		// 	ctx.fill()
-		} else {
-			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		
+		if (model.candidateIcons != "off") {
+			
+			if (model.customNames == "Yes") {
+				hsize = self.img.width / self.img.height * size
+				ctx.drawImage(self.img, x-hsize/2, y-size/2, hsize, size);
+			// } else if (model.votersAsCandidates) {
+			// 	ctx.rect(x-size/2, y-size/2, size, size);
+			// 	ctx.fillStyle = self.fill
+			// 	ctx.fill()
+			} else {
+				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+			}
 		}
 		self.drawAnnotation(x,y,ctx)
 		if (self.selected) {

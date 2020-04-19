@@ -91,6 +91,7 @@ function Sandbox(modelName) {
         sidebarOn: "on",
         lastTransfer: "on",
         voterIcons: "circle",
+        candidateIcons: "image",
     }
 
     self.url = undefined
@@ -2054,6 +2055,7 @@ function Sandbox(modelName) {
             46: "sidebarOn",
             47: "lastTransfer",
             48: "voterIcons",
+            49: "candidateIcons",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -3223,6 +3225,34 @@ function Sandbox(modelName) {
     }
 
 
+    ui.menu.candidateIcons = new function () {
+        // win map (+on off)
+        var self = this
+        // self.name = candidateIcons
+        self.list = [
+            {name:"image",value:"image",realname:"image",margin:4},
+            {name:"off",value:"off",realname:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.candidateIcons = data.value
+            // CONFIGURE
+            self.configure()
+            model.draw()
+        };
+        self.configure = function() {
+            model.candidateIcons = config.candidateIcons
+        }
+        self.choose = new ButtonGroup({
+            label: "Candidate Icons:", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.candidateIcons);
+        }
+    }
 
 
 
@@ -3290,6 +3320,7 @@ function Sandbox(modelName) {
                 "lastTransfer",
             ]],
             "voterIcons",
+            "candidateIcons",
             "gearoff",
         ]],
         [ "main", [
@@ -3373,7 +3404,6 @@ function Sandbox(modelName) {
                     "median_mean",
                     "utility_shape",
                     "votersAsCandidates",
-                    "voterIcons",
                 ]],
             ]],
             ["style", [
@@ -3383,6 +3413,8 @@ function Sandbox(modelName) {
                     ["divCustomNames", [
                         "namelist",
                     ]],
+                    "voterIcons",
+                    "candidateIcons",
                 ]],
                 ["advanced", [
                     "colorChooser",
@@ -3879,6 +3911,7 @@ function Sandbox(modelName) {
         61:"sidebarOn",
         62:"lastTransfer",
         63:"voterIcons",
+        64:"candidateIcons",
     } // add more on to the end ONLY
         
     var encodeFields = {}

@@ -80,7 +80,8 @@ function Model(modelName){
         kindayee: "newcan",
         ballotConcept: "auto",
         powerChart: "auto",
-        voterIcons: "circles",
+		voterIcons: "circles",
+		candidateIcons: "image",
 	})
 	
 	self.viz = new Viz(self);
