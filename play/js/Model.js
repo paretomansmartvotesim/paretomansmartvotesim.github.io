@@ -82,6 +82,8 @@ function Model(modelName){
         powerChart: "auto",
 		voterIcons: "circles",
 		candidateIcons: "image",
+		placeHoldDuringElection: false,
+		doPlaceHoldDuringElection: true,
 	})
 	
 	self.viz = new Viz(self);
@@ -273,7 +275,9 @@ function Model(modelName){
 					if (self.district[i].candidates.length == 0) {
 						self.district[i].result = undefined
 					} else {
+						self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 						self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
+						self.placeHoldDuringElection = false
 					}
 				}
 
@@ -317,7 +321,9 @@ function Model(modelName){
 				
 
 			} else {
+				self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 				self.result = self.election(self.district[0], self,self.optionsForElection);
+				self.placeHoldDuringElection = false
 				self.district[0].result = self.result
 			}
 		}
@@ -395,18 +401,23 @@ function Model(modelName){
 	self.drawSidebar = function () {		
 		if (self.result) {
 			if(self.result.text) {
-				if (self.placeHolding) {
+				// the doPlaceHoldDuringElection option helps make it easier to draw
+				// because we can use a placeholder for the drawing during the calculation phase of the election
+				// and then substitute the image on the draw step.
+				if (self.placeHolding || self.doPlaceHoldDuringElection) {
 					if (self.nLoading > 0) {
 						// will do on next draw
 						return
 					} else {
 						// ready to replace
-						self.result.text = self.result.text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
+						self.result.textSubs = self.result.text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
 							return self.icon($1)
-						  });  // https://stackoverflow.com/a/49262416
+						});  // https://stackoverflow.com/a/49262416
 					}
+				} else {
+					self.result.textSubs = self.result.text
 				}
-				self.caption.innerHTML = self.result.text;
+				self.caption.innerHTML = self.result.textSubs;
 				if (self.result.eventsToAssign) {
 					for (var i=0; i < self.result.eventsToAssign.length; i++) {
 						var e = self.result.eventsToAssign[i]
@@ -528,6 +539,9 @@ function Model(modelName){
 		}
 	}
 	self.icon = function(id) {
+		if (self.placeHoldDuringElection) {
+			return "^Placeholder{" + id + "}"
+		}
 		if (self.theme === 'Letters') {
 			var c = self.candidatesById[id]
 			return "<span class='letter' style='color:"+c.fill+";'><b>"+c.name.toUpperCase()+"</b></span>"

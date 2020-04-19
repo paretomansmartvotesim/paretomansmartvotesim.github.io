@@ -1433,9 +1433,8 @@ function Sandbox(modelName) {
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
-            model.initMODEL()
             // UPDATE
-            model.update()
+            model.draw()
         };
         self.configure = function() {
             showMenuItemsIf("divCustomNames", config.customNames === "Yes")
@@ -1466,9 +1465,8 @@ function Sandbox(modelName) {
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
-            model.initMODEL()
             // UPDATE
-            model.update()
+            model.draw()
         };
         self.configure = function() {
             model.namelist = config.namelist.split("\n")
@@ -2260,9 +2258,8 @@ function Sandbox(modelName) {
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
-            model.initMODEL()
             // UPDATE
-            model.update()
+            model.draw()
         };
         self.configure = function() {
             model.colorChooser = config.colorChooser
@@ -2306,9 +2303,8 @@ function Sandbox(modelName) {
             for(var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
-            // model.initMODEL()
             // UPDATE
-            model.update()
+            model.draw()
         };
         self.configure = function() {
             model.colorSpace = config.colorSpace
@@ -2317,7 +2313,7 @@ function Sandbox(modelName) {
             self.choose.highlight("name", config.colorSpace);
         }
         self.choose = new ButtonGroup({
-            label: "Method of Choosing Colors:",
+            label: "Color Space:",
             width: 220,
             data: self.list,
             onChoose: self.onChoose
