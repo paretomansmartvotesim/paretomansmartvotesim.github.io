@@ -550,8 +550,8 @@ function Model(modelName){
 			var c = self.candidatesById[id]
 			return "<span class='letter' style='color:"+c.fill+";'><b>"+c.name.toUpperCase()+"</b></span>"
 		} else {
-			return self.candidatesById[id].texticon
-			// return self.candidatesById[id].texticon_png
+			return self.candidatesById[id].imageSelf.texticon
+			// return self.candidatesById[id].imageSelf.texticon_png
 		}
 	}
 
