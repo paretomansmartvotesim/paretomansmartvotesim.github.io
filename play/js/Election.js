@@ -1604,16 +1604,16 @@ Election.irv = function(district, model, options){
 	if (options.dontpoll) dopoll = false
 	if (dopoll) polltext = doPollAndUpdateBallots(district,model,options,"irv")
 
-	var drawFlows = (model.ballotConcept != "off")
+	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
 	if (drawFlows) {
 		var transfers = []
 		var coalitions = []
 		var topChoice = []
 		var coalitionInRound = []
-		var ballots = _getBallots(district, model);
 		var lastlosers = []
 		var losers = []
 	}
+	var ballots = _getBallots(district, model);
 
 	var text = "";
 	if (options.sidebar) text += "<span class='small'>";
@@ -1928,7 +1928,7 @@ Election.stv = function(district, model, options){
 
 	var numreps = model.seats
 	
-	var drawFlows = (model.ballotConcept != "off")
+	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
 	if (drawFlows) {
 		var transfers = []
 		var coalitions = []

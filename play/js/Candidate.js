@@ -112,7 +112,6 @@ function Candidate(model){
 			ctx.strokeStyle = 'black'
 			ctx.lineWidth = 1
 	
-			// Just draw a circle.
 			ctx.beginPath()
 			var side = 10
 			ctx.rect(x-side/2, y-side/2, side, side)
@@ -123,7 +122,7 @@ function Candidate(model){
 		// 	ctx.rect(x-size/2, y-size/2, size, size);
 		// 	ctx.fillStyle = self.fill
 		// 	ctx.fill()
-		
+
 		self.drawAnnotation(x,y,ctx)
 		if (self.selected) {
 			_drawStroked("SELECTED",x,y-5,40,ctx);			

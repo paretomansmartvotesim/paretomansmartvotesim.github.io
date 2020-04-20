@@ -380,7 +380,7 @@ function Viz(model) {
 					result.color = result.colors[0]
 				}
 			} else {
-				var result = model.election(model.district[0], model, {sidebar:false});
+				var result = model.election(model.district[0], model, {sidebar:false, yeefast:true});
 			}
 
 

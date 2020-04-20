@@ -1903,7 +1903,11 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				}
 			} else {
 				for(var i=0; i<self.points.length; i++){
-					self.type.drawCircle(ctx, xs[i], ys[i], circlesize, self.ballots[i], self.weights[i]);
+					if (model.voterIcons == "dots") {
+						_drawDot(xs[i], ys[i], ctx)
+					} else {
+						self.type.drawCircle(ctx, xs[i], ys[i], circlesize, self.ballots[i], self.weights[i]);
+					}
 				}
 			}
 
@@ -1953,6 +1957,19 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.draw2(ctx)
 	};
 
+}
+
+function _drawDot(x,y,ctx) {
+	ctx.fillStyle = '#333'
+	// ctx.strokeStyle = '#333'
+	ctx.lineWidth = 1
+
+	// Just draw a circle.
+	ctx.beginPath()
+	var radius = 2
+	ctx.arc(x*2,y*2, radius, 0, Math.TAU, false)
+	ctx.fill()
+	// ctx.stroke()
 }
 
 function _fillVoterDefaults(self) {
@@ -2048,7 +2065,7 @@ function SingleVoter(model){
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Circle!
 		var size = self.size;
-		if (model.voterIcons != "off") {
+		if (model.voterIcons == "circle") {
 			
 			self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
 			_drawRing(ctx,s.x,s.y,self.size)
@@ -2056,7 +2073,9 @@ function SingleVoter(model){
 			// Face!
 			size = size*2;
 			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
-		}	
+		} else if (model.voterIcons == "dots") {
+			_drawDot(s.x, s.y, ctx)
+		} 
 		
 			
 		self.drawAnnotation(x,y,ctx)

@@ -3547,7 +3547,7 @@ function Sandbox(modelName, cConfig) {
         self.list = [
             {name:"circle",value:"circle",realname:"circle",margin:4},
             // {name:"first",value:"first",realname:"circles with the first vote only",margin:4},
-            // {name:"dots",value:"dots",realname:"dots",margin:4},
+            {name:"dots",value:"dots",realname:"dots",margin:4},
             {name:"off",value:"off",realname:"off"},
         ]
         self.onChoose = function(data){
@@ -3926,8 +3926,6 @@ function Sandbox(modelName, cConfig) {
                     ]],
                     "beatMap",
                     "ballotConcept",
-                    "powerChart",
-                    "sidebarOn",
                     ["divLastTransfer", [
                         "lastTransfer",
                     ]],
@@ -3936,6 +3934,8 @@ function Sandbox(modelName, cConfig) {
                     ]],
                 ]],
                 ["advanced", [
+                    "powerChart",
+                    "sidebarOn",
                     "ballotVis",
                     "visSingleBallotsOnly",
                 ]],
