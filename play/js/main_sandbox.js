@@ -156,6 +156,7 @@ function Config() {
         lastTransfer: "on",
         voterIcons: "circle",
         candidateIconsSet: ["name"],
+        pairwiseMinimaps: "off",
     }
 
 
@@ -651,6 +652,7 @@ function Cypher() {
         63:"voterIcons",
         64:"candidateIcons",
         65:"candidateIconsSet",
+        66:"pairwiseMinimaps",
     } // add more on to the end ONLY
         
     var ui
@@ -1143,6 +1145,7 @@ function Sandbox(modelName, cConfig) {
             
             showMenuItemsIf("divRBVote", config.system === "RBVote")
             showMenuItemsIf("divLastTransfer", config.system === "IRV" || config.system === "STV")
+
             
             var s = self.listByName()
             model.election = s.election
@@ -1167,6 +1170,14 @@ function Sandbox(modelName, cConfig) {
                 v.setType( s.voter ); // calls "new VoterType(model)"
             }) 
             model.pollResults = undefined
+
+            
+            if (model.voterType.name == "RankedVoter") {
+                var goPairwise = model.voters[0].type.pickDescription().doPairs
+            } else {
+                var goPairwise = false
+            }
+            showMenuItemsIf("divPairwiseMinimaps",  goPairwise)
         }
         self.select = function() {
             self.choose.highlight("name", config.system)
@@ -2425,6 +2436,7 @@ function Sandbox(modelName, cConfig) {
             47: "lastTransfer",
             48: "voterIcons",
             49: "candidateIcons",
+            50: "pairwiseMinimaps",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -3679,6 +3691,37 @@ function Sandbox(modelName, cConfig) {
     }
 
 
+    
+    ui.menu.pairwiseMinimaps = new function () {
+        var self = this
+        self.list = [
+            // {name:"auto",value:"auto",margin:4},
+            {name:"auto",value:"auto",margin:4},
+            {name:"off",value:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.pairwiseMinimaps = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            model.update() // must re-run election
+        };
+        self.configure = function() {
+            model.pairwiseMinimaps = config.pairwiseMinimaps
+        }
+        self.choose = new ButtonGroup({
+            label: "Show Pairwise Minimaps?", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.pairwiseMinimaps);
+        }
+    }
+
+
     // run this after loading the whole menu
     ui.menu.gearconfig.initSpecial()
 
@@ -3739,6 +3782,9 @@ function Sandbox(modelName, cConfig) {
             "sidebarOn",
             ["divLastTransfer", [
                 "lastTransfer",
+            ]],
+            ["divPairwiseMinimaps", [
+                "pairwiseMinimaps",
             ]],
             "voterIcons",
             "candidateIcons",
@@ -3884,7 +3930,10 @@ function Sandbox(modelName, cConfig) {
                     "sidebarOn",
                     ["divLastTransfer", [
                         "lastTransfer",
-                    ]]
+                    ]],
+                    ["divPairwiseMinimaps", [
+                        "pairwiseMinimaps",
+                    ]],
                 ]],
                 ["advanced", [
                     "ballotVis",

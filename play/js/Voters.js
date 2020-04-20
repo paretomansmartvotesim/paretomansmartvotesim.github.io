@@ -1040,7 +1040,8 @@ function RankedVoter(model){
 			}
 			ctx.globalCompositeOperation = tempComposite
 			ctx.globalAlpha = temp
-		} else {
+		} 
+		if (model.pairwiseMinimaps == "auto" && self.pickDescription().doPairs) {
 			// customization
 			var lineWidth = 1
 			var connectWidth = 1
@@ -1216,12 +1217,8 @@ function RankedVoter(model){
 		text += htmlBallot(model,rTitle,rankByCandidate)
 		return text
 	}
-	self.textTally = function(ballot){
-		var system = model.system
-		var rbsystem = model.rbsystem
-		// todo: star preferences
-		var text = ""
-
+	self.pickDescription = function() {
+		
 		// var onlyPoints = ["Borda"]
 		// var onlyPointsRB = ["Baldwin","Borda"]
 		// var noPreferenceChainRB = ["Black"]
@@ -1255,11 +1252,20 @@ function RankedVoter(model){
 			"Small":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
 			"Tideman":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."}
 		}
-		if (system=="RBVote") {
-			var pick = rb[rbsystem]
+		if (model.system=="RBVote") {
+			var pick = rb[model.rbsystem]
 		} else {
-			var pick = regular[system]
+			var pick = regular[model.system]
 		}
+		return pick
+	}
+	self.textTally = function(ballot){
+		var system = model.system
+		var rbsystem = model.rbsystem
+		// todo: star preferences
+		var text = ""
+
+		var pick = self.pickDescription()
 
 		if(system=="RBVote" && rbsystem=="Bucklin") {
 			// put a 1 in each ranking

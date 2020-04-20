@@ -84,6 +84,7 @@ function Model(modelName){
 		candidateIconsSet: ["name"],
 		placeHoldDuringElection: false,
 		doPlaceHoldDuringElection: true,
+		pairwiseMinimaps: "off"
 	})
 	
 	self.viz = new Viz(self);
