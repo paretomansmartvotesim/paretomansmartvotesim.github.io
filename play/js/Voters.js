@@ -1905,6 +1905,9 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				for(var i=0; i<self.points.length; i++){
 					if (model.voterIcons == "dots") {
 						_drawDot(xs[i], ys[i], ctx)
+					} else if (model.voterIcons == "top") {
+						var c = _findClosestCan(xs[i],ys[i],self.district[i],model)
+						_drawCircleFill(xs[i],ys[i],circlesize,c.fill,ctx,model)
 					} else {
 						self.type.drawCircle(ctx, xs[i], ys[i], circlesize, self.ballots[i], self.weights[i]);
 					}
@@ -2073,6 +2076,9 @@ function SingleVoter(model){
 			// Face!
 			size = size*2;
 			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		} else if (model.voterIcons == "top") {
+			var c = _findClosestCan(s.x,s.y,self.district[0],model)
+			_drawCircleFill(s.x,s.y,self.size,c.fill,ctx,model)
 		} else if (model.voterIcons == "dots") {
 			_drawDot(s.x, s.y, ctx)
 		} 
@@ -2295,4 +2301,32 @@ function VoterCenter(model){
 		if(self.highlight) ctx.globalAlpha = temp
 	};
 
+}
+
+function _findClosestCan(x,y,iDistrict,model) {
+	
+	var closest = {id:null};
+	var closestDistance = Infinity;
+	var cans = model.district[iDistrict].candidates
+	for(var c of cans){
+		var dist = distF2(model,{x:x,y:y},c)
+		if(dist<closestDistance){
+			closestDistance = dist;
+			closest = c;
+		}
+	}
+	return closest
+}
+
+function _drawCircleFill(x,y,size,fill,ctx,model) {
+	x = x*2;
+	y = y*2;
+	ctx.fillStyle = fill;
+	ctx.strokeStyle = 'rgb(0,0,0)';
+	ctx.lineWidth = 1
+
+	ctx.beginPath()
+	ctx.arc(x, y, size, 0, Math.TAU, true)
+	ctx.fill()
+	if (model.yeeon) ctx.stroke()
 }

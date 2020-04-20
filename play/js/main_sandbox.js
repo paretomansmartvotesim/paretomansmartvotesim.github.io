@@ -3546,7 +3546,7 @@ function Sandbox(modelName, cConfig) {
         var self = this
         self.list = [
             {name:"circle",value:"circle",realname:"circle",margin:4},
-            // {name:"first",value:"first",realname:"circles with the first vote only",margin:4},
+            {name:"top",value:"top",realname:"circles with the top preference only",margin:4},
             {name:"dots",value:"dots",realname:"dots",margin:4},
             {name:"off",value:"off",realname:"off"},
         ]
