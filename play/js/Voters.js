@@ -1257,6 +1257,14 @@ function RankedVoter(model){
 		} else {
 			var pick = regular[model.system]
 		}
+		if (pick == undefined) {
+			pick = {
+				doChain: false,
+				doPairs: false,
+				doPoints: false,
+				message: "Not yet implemented."
+			}
+		}
 		return pick
 	}
 	self.textTally = function(ballot){

@@ -4,26 +4,24 @@
 function main(preset) {
 
 
-    // CREATE
-    var c = new Config() 
     
     // CREATE
-    var s = new Sandbox(preset.modelName, c)   // the sandbox is the binder between the model and the config
+    var ui = {}
+    ui.modelName = preset.modelName
+
+    // Set up all the menu items and buttons and divs
+    var s = new Sandbox(ui)   // the sandbox is the binder between the model and the config
     
-    // LOAD
-    c.url = window.location.href;
+    // Read the current URL
+    ui.url = window.location.href;
 
     // INIT
-    c.setConfig(preset.config)
-    // INIT
+    // Read in the config file.
+    s.setConfig(preset.config)
+    
+    // Filter which buttons will appear in the menu items. // Kind of clumsy but works.
     if (preset.update) preset.update(s) 
     
-
-    // use loader to save on bandwidth
-    // alternatively if we call the loader from all the places where we need the images, then we could just do
-    // s.update()
-    // for possibly greater speed, since we don't have to wait on the downloads.
-
     // CREATE
     var l = new Loader()
     // CONFIGURE
@@ -31,71 +29,19 @@ function main(preset) {
     // INIT
     l.load(s.assets);
 
-
-    // var c = new Config()
-    
-    // // there are two parts, the model and the config.
-    // // load initial config
-    // // bind model and config using menu items (config step for )
-    // // start/ initialize
-
-    // // config
-    // // The sandbox is the binder
-
-    // // CREATE
-    // var s = new Sandbox()
-    
-    // // LOAD
-    // s.modelName = preset.modelName
-    // s.config = preset.config
-    // s.url = window.location.href;
-	// if (preset.update) s.onInit = () => preset.update(s)
-    
-    // // CONFIGURE
-    // s.init() // was s.setConfig(preset.config)
-
-    // // USE - maybe this should be in s.start()
-    // var l = new Loader()
-    // l.onload = s.start // used to be s.update
-    // l.load(s.assets);
-
-
-
-
+    // use loader to save on bandwidth
+    // alternatively if we call the loader from all the places where we need the images, then we could just do
+    // s.update()
+    // for possibly greater speed, since we don't have to wait on the downloads.
 
 }
 
-function Config() {
+function Config(ui, config, initialConfig) {
     var self = this
-
-    self.cypher = new Cypher()
-    ///////////////////////
-    // Connecting Things //
-    ///////////////////////
-
-    var config = {}
-    var initialConfig = {}
-
-    // access these internal variables
-    self.getConfig = () => config
-    self.getInitialConfig = () => initialConfig
-
-    // some variables that Sandbox still needs
-    self.maxVoters = 10
-    self.embed = false
-
-    // some variables that will be set later by calling function to get config ready
-    self.url = undefined
-    self.uiMenuKeys = undefined // to fill in later from calling function
-
 
     /////////////////////////////
     // LOAD DEFAULTS and INPUT //
     /////////////////////////////
-
-    // switch
-    self.tryNewURL = true
-    self.cypher.tryNewURL = self.tryNewURL
 
     var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
     var yes_all_candidates = {}
@@ -167,9 +113,9 @@ function Config() {
         // the data structure for a sandbox is the configuration of the model.  Init completes this data structures.
         // backwards compatibility
         // the data structure for a model is model.<property>
-        if (self.url != undefined) {
-            var modelData = _getParameterByName("m",self.url);
-            if (self.tryNewURL) var version = _getParameterByName("v",self.url);
+        if (ui.url != undefined) {
+            var modelData = _getParameterByName("m",ui.url);
+            if (ui.tryNewURL) var version = _getParameterByName("v",ui.url);
         }
         function _getParameterByName(name,url){
             name = name.replace(/[\[\]]/g, "\\$&");
@@ -180,7 +126,7 @@ function Config() {
             return decodeURIComponent(results[2].replace(/\+/g, " ")).replace("}/","}"); //not sure how that / got there.
         };
         if(modelData){
-            if (self.tryNewURL) {
+            if (ui.tryNewURL) {
                 if (version) { 
                     // if we have a version number, then we know the data is in this format
                     c = {
@@ -206,7 +152,7 @@ function Config() {
         // Load the defaults.  This runs at the start and after loading a preset.
 
         // FILENAME
-        // config.presethtmlname = self.url.substring(self.url.lastIndexOf('/')+1);
+        // config.presethtmlname = ui.url.substring(ui.url.lastIndexOf('/')+1);
 
 
         if(config.configversion == undefined || config.configversion == 1) {
@@ -289,7 +235,7 @@ function Config() {
                     "percentstrategy":"percentSecondStrategy",
                 }
                 // all the current names get translated as themselves
-                for (var id of self.uiMenuKeys) {
+                for (var id of Object.keys(ui.menu)) {
                     menuNameTranslator[id] = id
                 }
                 var temp_featurelist = []
@@ -323,7 +269,7 @@ function Config() {
         }
         // we are now generating a new version of config.  We are done with grandfathering
 
-        self.cypher.decode_config(config) // decodes the config, depending on version number
+        ui.cypher.decode_config(config) // decodes the config, depending on version number
         // so in this case, we're decoding stuff from 2.2, but not 2.1 because 2.1 isn't encoded
         if (config.configversion == 2.1) {
             config.configversion = 2.2 // 2.1 is now treated the same as 2.2 because both are decoded
@@ -388,14 +334,11 @@ function Config() {
             // The difference between the locked down version and the updating version is the "config" menu
             // So I put the "Disable filters" button in the config menu,
 
-
-
-
             // one more thing
             // switch the name for this setting:
             if (config.kindayee == "beatCircles") {
                 config.beatMap = "on" // new setting
-
+    
                 config.yeeon = false // old settings
                 config.keyyee = "newcan"
                 config.kindayee = "newcan"
@@ -405,26 +348,33 @@ function Config() {
                 config.yeeon = true
             }
 
+        }
+
+        // now these corrections might have to be done to version 2.5, and they won't hurt the next version
+        if (config.configversion == 2.5) {
+    
             // if the yee menu was in the featurelist, then make sure the new yee on/off switch is added to the featurelist // and beatMap
             if (config.featurelist != undefined && config.featurelist.includes("yee")) modifyConfigFeaturelist(config,true,["yeeon","beatMap"])
-
+    
             // so basically, we are getting rid of the "none" button in the yee chooser and making it into a separate control.
-
+    
             if (config.theme == "Letters") {
                 config.theme = "Default" // Merged two ideas
                 config.candidateIconsSet = ["name"]
             }
-
+    
         }
 
+
         // Finally done with old versions!
+
 
         // VOTER DEFAULTS
         // we want individual strategies to be loaded in, if they are there
         // if we have a blank slate, then we want to fill in with the variable "secondStrategy"
         if (config.secondStrategy && config.secondStrategies === undefined) {
             config.secondStrategies = []
-            for (var i = 0; i < self.maxVoters; i++) {
+            for (var i = 0; i < ui.maxVoters; i++) {
                 config.secondStrategies[i] = config.secondStrategy
             }	
         }
@@ -432,7 +382,7 @@ function Config() {
         config.percentSecondStrategy = config.percentSecondStrategy || []
         config.voter_group_count = config.voter_group_count || []
         config.voter_group_spread = config.voter_group_spread || []
-        for (var i = 0; i < self.maxVoters; i++) {
+        for (var i = 0; i < ui.maxVoters; i++) {
             config.secondStrategies[i] = config.secondStrategies[i] || "zero strategy. judge on an absolute scale."
             if(config.percentSecondStrategy[i] == undefined) config.percentSecondStrategy[i] = 0
             config.voter_group_count[i] = config.voter_group_count[i] || 50
@@ -454,6 +404,10 @@ function Config() {
         // CONSOLE OUTPUT //
         console_out(1)  // gives a log of settings to copy and paste
         return newURLs
+
+        // the old way, here for historical reasons.
+        // SAVE & PARSE
+        // ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
     }
 
     var _makeURL = function(){
@@ -461,11 +415,11 @@ function Config() {
         // URI ENCODE!
         var doEncode = true
         if (doEncode) {
-            var eConfig = self.cypher.encode_config(config)
+            var eConfig = ui.cypher.encode_config(config)
         } else {
             var eConfig = config
         }
-        if (self.tryNewURL) {
+        if (ui.tryNewURL) {
             var uri = encodeURIComponent(eConfig)
         } else {
             var uri = encodeURIComponent(JSON.stringify(eConfig));
@@ -482,17 +436,17 @@ function Config() {
                 baseUrl += "/" + restofurl[i];
             }
         }
-        if (self.embed) {            
+        if (ui.embed) {            
 		    var relativePath = "/sandbox/embedbox.html?v="
         } else {
             var relativePath = "/sandbox/?v="
         }
-        if (self.tryNewURL) {
+        if (ui.tryNewURL) {
             var link = baseUrl + relativePath + config.configversion + "&m="+uri;    
         } else {
             var link = baseUrl + relativePath + uri;
         }
-        if (self.embed) {            
+        if (ui.embed) {            
 		    var linkText = '<iframe src="' + link + '" scrolling="yes" width="1000" height="600"></iframe>'
         } else {
             var linkText = link
@@ -521,7 +475,7 @@ function Config() {
 
 }
 
-function Cypher() {
+function Cypher(ui) {
     var self = this
     var doFriendlyURI = true
 
@@ -533,7 +487,7 @@ function Cypher() {
                 _encode(item.codebook)
             }
         }
-        _encode(extraCodeBook)
+        _encode(ui.extraCodeBook)
         
         function _encode(codebook) {
             for (k = 0; k < codebook.length; k++) {
@@ -571,7 +525,7 @@ function Cypher() {
         var dataZ = pako.gzip( JSON.stringify(conf) ,{ to: 'string' })
         var dataString = btoa(dataZ)
         if (doFriendlyURI) dataString = Base64EncodeUrl(dataString)
-        if (self.tryNewURL) {
+        if (ui.tryNewURL) {
             return dataString
         } else {
             var co = {}
@@ -659,11 +613,8 @@ function Cypher() {
         68:"textBallotInput",
     } // add more on to the end ONLY
         
-    var ui
     var encodeFields = {}
-    self.setUpEncode = function(params) {
-        ui = params.ui
-        extraCodeBook = params.extraCodeBook
+    self.setUpEncode = function() {
 
         for ([i,v] of Object.entries(decodeFields)) {
             i = Number(i)
@@ -677,7 +628,7 @@ function Cypher() {
             }
         }
 
-        _makeEncode(extraCodeBook)
+        _makeEncode(ui.extraCodeBook)
     
     }
     
@@ -726,7 +677,7 @@ function Cypher() {
                 _decode(item.codebook)
             }
         }
-        _decode(extraCodeBook)
+        _decode(ui.extraCodeBook)
         function _decode(codebook) {              
             for (k = 0; k < codebook.length; k++) {
                 var version = codebook[k].decodeVersion
@@ -781,7 +732,7 @@ function Cypher() {
 }
 
 
-function Sandbox(modelName, cConfig) {
+function Sandbox(ui) {
     var self = this
     
 
@@ -792,39 +743,53 @@ function Sandbox(modelName, cConfig) {
     // Then we update the model and menu.
     // Then wait for mouse events.
 
-    // 
+    // // there are two parts, the model and the config.
+    // // load initial config
+    // // bind model and config using menu items (config step for )
+    // // start/ initialize
+    // // The sandbox is the binder
+
 
     // CREATE
-    var model = new Model(modelName);
-    var ui = {}
-    ui.model = model
-    var basediv = document.querySelector("#" + model.id)
 
+    var model = new Model(ui.modelName)
 
+    // some switches
+    ui.embed = false
+    ui.maxVoters = 10
+    ui.tryNewURL = true
 
-    // access cConfig's variables // they used to be in the same closure, so that's why we have to use these methods
-    var config = cConfig.getConfig() // never do config = something.  Only do config.something = somethingelse
-    var initialConfig = cConfig.getInitialConfig()
+    var config = {}
+    var initialConfig = {}
+    var cConfig = new Config(ui,config,initialConfig) 
+    self.setConfig = cConfig.setConfig
 
+    ui.cypher = new Cypher(ui)
+    
     // CREATE div stuff for sandbox
-    function newDivOnBase(name) {
-        var a = document.createElement("div");
-        a.setAttribute("id", name);
-        basediv.appendChild(a);
-    }
+    var basediv = document.querySelector("#" + model.id)
     newDivOnBase("left")
     newDivOnBase("center")
     newDivOnBase("right")
-    model.createDOM()
-
-    ui.menu = {}
-    Menu(basediv,ui,model,config,initialConfig, cConfig)
+    
+    Menu(ui,model,config,initialConfig, cConfig, basediv)
     // ui.menu = new Menu(ui,model,config,initialConfig, cConfig)
-    ui.arena = {}
-    UiArena(basediv,ui,model,config,initialConfig, cConfig)
+    UiArena(ui,model,config,initialConfig, cConfig, basediv)
     // ui.arena = new UiArena(ui,model,config,initialConfig, cConfig)
+    
+    // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
+    ui.cypher.setUpEncode()
+    
 
-    // ui.menu = {}
+
+
+
+    // Now we focus on the model
+
+
+    // Details
+
+    model.createDOM()
 
     var centerDiv = basediv.querySelector("#center")
     if (centerDiv.hasChildNodes()){
@@ -841,6 +806,10 @@ function Sandbox(modelName, cConfig) {
 
     model.inSandbox = true
 
+
+
+
+    
     self.start = function(assets){
         // UPDATE SANDBOX
 
@@ -1017,14 +986,20 @@ function Sandbox(modelName, cConfig) {
 
     ];
 
-    //if(config.sandboxsave) resetDOM.onclick();
-
-    // SAVE & PARSE
-    // ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
+    
+    // helper
+    
+    function newDivOnBase(name) {
+        var a = document.createElement("div");
+        a.setAttribute("id", name);
+        basediv.appendChild(a);
+    }
 }
 
 
-function Menu(basediv,ui,model,config,initialConfig, cConfig) {
+function Menu(ui,model,config,initialConfig, cConfig, basediv) {
+
+    ui.menu = {}
 
     ui.menu_update = function() {
         // UPDATE MENU //
@@ -1672,7 +1647,7 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
 
         }		
         self.choose = new sliderSet({
-            max: cConfig.maxVoters-1,
+            max: ui.maxVoters-1,
             min:"1",
             value:"4",
             chtext:"",
@@ -1730,7 +1705,7 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
             chtext:"",
             chid:"choose number",
             chfn:self.onChoose,
-            num:cConfig.maxVoters,
+            num:ui.maxVoters,
             labelText: "what # voters in each group?"
         })
     }
@@ -1765,7 +1740,7 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
             chtext:"",
             chid:"choose width in pixels",
             chfn:self.onChoose,
-            num:cConfig.maxVoters,
+            num:ui.maxVoters,
             labelText: "how spread out is the group?"
         })
         self.select = function() {
@@ -2065,7 +2040,7 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.secondStrategy = data.realname
-            for (var i = 0; i < cConfig.maxVoters; i++) {
+            for (var i = 0; i < ui.maxVoters; i++) {
                 config.secondStrategies[i] = data.realname
             }
             // CONFIGURE
@@ -2128,7 +2103,7 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
             chtext:"",
             chid:"choosepercent",
             chfn:self.onChoose,
-            num:cConfig.maxVoters,
+            num:ui.maxVoters,
             labelText: "what % use this 2nd strategy?"
         })
     }	
@@ -2531,7 +2506,7 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
 
     ui.menu.presetconfig = new function() { // pick a preset
         var self = this
-        self.list = _buildPresetConfig({nElection:14,nBallot:12})
+        self.list = _buildPresetConfig({nElection:31,nBallot:17})
         function _buildPresetConfig(c) {
             // var presetnames = ["O","SA"]
             // var presetModelNames = [config.filename,"sandbox.html"]
@@ -3878,9 +3853,6 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
     // run this after loading the whole menu
     ui.menu.gearconfig.initSpecial()
 
-
-    cConfig.uiMenuKeys = Object.keys(ui.menu)
-
     // rebuild menu
 
     // function to make menu items visible/hidden
@@ -4164,6 +4136,7 @@ function Menu(basediv,ui,model,config,initialConfig, cConfig) {
         }
     }
 
+
 }
 
 
@@ -4221,8 +4194,10 @@ function menuTree(ui) {
 
 }
 
-function UiArena(basediv,ui,model,config,initialConfig, cConfig) {
-    var self = this
+function UiArena(ui,model,config,initialConfig, cConfig, basediv) {
+    
+    ui.arena = {}
+
     //////////////////////////
     //////// RESET... ////////
     //////////////////////////
@@ -4342,12 +4317,20 @@ function UiArena(basediv,ui,model,config,initialConfig, cConfig) {
     embedLink.setAttribute("class", "tinyURL")
     embedLink.setAttribute("style", "text-decoration: underline;")
     embedLink.onclick = function(){
-        cConfig.embed = ! cConfig.embed
+        ui.embed = ! ui.embed
         ui.arena.save.dom.onclick()
     }
 
-
-
+    // additional codebooks
+    ui.extraCodeBook = [
+        {
+            decode:[
+                "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
+            ],
+            decodeVersion: 2.2,
+            field: "description"
+        }
+    ]
 
     ///////////////////////////
     ////// SAVE POSITION //////
@@ -4407,7 +4390,11 @@ function UiArena(basediv,ui,model,config,initialConfig, cConfig) {
         };
 
     };
+
+    
 }
+
+// helpers
 
 function modifyConfigFeaturelist(config, condition, xlist) {
     // e.g. var xlist = ["choose_pixel_size","yeefilter"]
