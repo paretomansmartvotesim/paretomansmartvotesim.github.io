@@ -155,7 +155,7 @@ function Config() {
         sidebarOn: "on",
         lastTransfer: "on",
         voterIcons: "circle",
-        candidateIcons: "2",
+        candidateIconsSet: ["name"],
     }
 
 
@@ -409,7 +409,7 @@ function Config() {
 
             if (config.theme == "Letters") {
                 config.theme = "Default" // Merged two ideas
-                config.candidateIcons = "2"
+                config.candidateIconsSet = ["name"]
             }
 
         }
@@ -650,6 +650,7 @@ function Cypher() {
         62:"lastTransfer",
         63:"voterIcons",
         64:"candidateIcons",
+        65:"candidateIconsSet",
     } // add more on to the end ONLY
         
     var ui
@@ -3572,7 +3573,8 @@ function Sandbox(modelName, cConfig) {
         var encoder = _simpleMakeEncode(decoder)
         self.onChoose = function(data){
             // LOAD
-            config.candidateIcons = loadDec(encoder,data,config.candidateIcons)
+            // config.candidateIcons = loadDec(encoder,data,config.candidateIcons)
+            config.candidateIconsSet = loadSet(config.candidateIconsSet, data)
 
             // config.candidateIcons = data.value
             // CONFIGURE
@@ -3585,7 +3587,8 @@ function Sandbox(modelName, cConfig) {
             model.draw()
         };
         self.configure = function() {
-            model.candidateIconsSet = decodeDec(decoder,config.candidateIcons)
+            // model.candidateIconsSet = decodeDec(decoder,config.candidateIcons)
+            model.candidateIconsSet = config.candidateIconsSet
         }
         self.choose = new ButtonGroup({
             label: "Candidate Icons:", // Sub Menu
@@ -3595,11 +3598,27 @@ function Sandbox(modelName, cConfig) {
             isCheckbox: true
         });
         self.select = function() {
-            var d = decodeDec(decoder,config.candidateIcons)
+            // var d = decodeDec(decoder,config.candidateIcons)
+            var d = config.candidateIconsSet
             self.choose.highlight("value", d);
         }
     }
 
+    function loadSet(featurelist, data) {
+        // e.g. var xlist = ["choose_pixel_size","yeefilter"]
+        var featureset = new Set(featurelist)
+        if (data.isOn) {
+            featureset.add(data.value)
+        } else {
+            featureset.delete(data.value)
+        }
+        return Array.from(featureset)
+    }  
+
+    // Went back to more normal config setting for candidate set, 
+    // but kept the old code there just in case.  
+    // I had been encoding the combination of settings as a decimal number, 
+    // but it was too likely to break in the future.
     var loadDec = function(encoder, data, a) {
         var b = _decStringToBinaryString(a)
         // pad with 0's
@@ -4238,7 +4257,7 @@ function Sandbox(modelName, cConfig) {
 }
 
 
-function modifyConfigFeaturelist(config,config, condition, xlist) {
+function modifyConfigFeaturelist(config, condition, xlist) {
     // e.g. var xlist = ["choose_pixel_size","yeefilter"]
     var featureset = new Set(config.featurelist)
     for (var i in xlist){
@@ -4261,3 +4280,4 @@ function _simpleMakeEncode(decode) {
     }
     return encode
 }
+
