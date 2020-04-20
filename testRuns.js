@@ -1,5 +1,16 @@
 
 var e = [
+ 
+    ["main", [ 
+        ["index","index.html"],
+        ["sandbox","http://127.0.0.1:8000/sandbox"],
+        ["original","original.html"],
+        ["approval_superman","approval_superman.html"],
+        ["original","original.html"],
+        ["newer","newer.html"],
+        ["log","log.html"],
+        ["quotaApproval","quotaApproval.html"],
+    ]],
     ["borda viz", [ 
         [1,"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41WwXKbMBD9F511QEjGOLc2mZya9JCZXOKMRzGyrRlALhKZJpnk2_sWG7uN6lg2sMvTW2l3WbS8sYxdPDwIlXGh1CN_ECLnohy1UkKZFFwU6vGRM0HcXIIhaWAKRRU0INkFy68YZwrKBHLCLla69oazAjYsB3T-xERTsDMe_TFSYmSS8dMHODNwxAyhnD8pGoQeuh4-CgqMfcxxzOcso8ucwaURERFCF_qxyjam9da1fkROc9sr60NnlyGB643-gpZHiIwQFSGTCClOO7DsfXDNrW5MSmSg1QjuJHMaIWWEzOK8_-dRxM9CxNkQcTpEnA8RJ-QQ0drobunalV2fj37bGW9CKnu5cc6bxdb-NvXC21eTYOKabR_MjQkbV6XQa9ddDst0iey7rV4mOOIRqq4WK70Mrls8u2C6hOrQnWl1YqiNqaxuF43R7Xly2JgmYc4-2NqGl4Xf6G0CfRfWN3-p28pWOqS8AE-6rl24twnUZ-vvbLuuzffBxv9s65eTVuKLN5RK1K1WKTlt-3uEhF0qjfzDPJv6PNUHs70B_TyzctfYz_rOXNs6pBSlp3r8zKM9O0eDyWAhqOUgelLVodmIY98RxVFFVyEWNHQRBTHbz5Jnw30uiED3mD6HkOM4phYQmBY9DkoxDkxHpByR2WAqqZ8y_6tH0QPFdq_pWZPvUuypMt8vJ4e-ScoxBIm13tixNY2KHBW1U94BkTfmlezhTpFBlmTsbWWedHfkzYauKrjkaOxMDS7S-oLcUtT8dosPV4LyGJLUW7kgFR5IiMkO4Xu0GFKlKDEfgxV9DpT_3FHaP8gp-kKAF-zWkUZ5gfyrTPdp-VQ2hxyNhbenHUp2yO_7H3QVO2bUCAAA"],
         [2,"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41WTU_jMBD9Lz7nEMdJmnLbBXFa2AMSlxZVpnFbS0ncjZ1qAcFv3zemaQFvqZsPj8dvPB-Z5PWFpexiNuN5mvA8f0hmnGcJr0apEhCKMuFl_vCQMO6xBbBFSnPBLlh2xRKWQygwFuxiJRurElYCyjKozl_YaAJ0mgQHViqswOHpE5gpMHyKqM5flAQydv2AGDnlw97mOOdzltJtzhDSqOGBhm70Y7VuVWe16eyoOY3trrR1vV66CKxV8htYFmhEoMkDTRFoytMBLAfrTHsrWxWTGWANkjuJnASaKtBMw7r_51GEz4KH1eBhOXhYDx4W5JDRWsl-abqVXp_Pftsrq1wserkxxqrFVv9VzcLqZxVhYtrt4NSNchtTx8Ab0196N30k-m4rlxGBWKQq68VKLp3pFzvjVB_RHbJXnYxMtVW1lt2iVbI7D3Yb1UbsOTjdaPe0sBu5jYC_p_XDXsqu1rV0MS_Ao2wa4-51BHSn7Z3u1o366W3s7655OmnFv3lDqUXNahVT0264R0r4SsWBf6mdas5DrVPbG8DPI2tzje_Z0Ktr3biYprTUj19x9M3OQDApLDhRDrInMT-QDT_yDi-PIliFUJDAIjmG6X6XLPXzjBOA5tg-wyDGdWzNMWBbcByEclyYjJpq1Ey9qSAaZfbPgKaHFp97Sc-aYhd8DxXZ3p3wvEnCMQUBXy_sSE2jIEYhfxdeoaJo1DPZI5wyxViRsdW1epT9ETf1rMoTkYDPWe5DTCmknIjPO6ZJ9nECfzNBAvwJDAVxa-IP0pa-MDmV4c3bEPlXn2ZU5DcKgf4PwCe7NSRRFTB-aMp9Eb40yaEiY5vtq3doUD9__Qd6XTAvuQgAAA"],
@@ -27,6 +38,9 @@ var e = [
         ["cool","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41STW_CMAz9Lz77EMdJ2nCeOO4PAIdqKxMSAq0UTRqC377nZFAmtGmUNs8fcZ79ciJHs8Uie055xQuvntumgMxSkITMPjqgGOFyqxWT2B5RYVHbJa2ydwkoIVdtFzySs-Uqzcg_EVOgmWOKNFt320PPlFDE88ODLQ0ijh8eRFpEouPf_8jJyJHs-B-vtYL-x-EIPmJd0WVJF7ck8DWkN9Tc0HJZP_aj1_2878bj0M8327Efru7yEll9j_4vxYJhw9j1Hy_dzqxwm4VMY5E0QQxCAla0HbHkMkEPxnB60BUsqO-xaI2F6kQ5xZKqs6lWW61cNqjpTof3Yzf04DIOm273tu2NskpJVF9qqdb8iayi-ommuV2BvwK9glDBGS5Qof4TJynYJCufi8oCzZUDjg3uW3ZcKzNNjnriw9fC_u8wOCzUStVioYwgRLsbLJM_lR5DYyKVvXZR2x9WNsvagBHBkZ73hkDPJI2mrzdQFYhVgTgJGidBo53THcdSoL2_CzFPkeTusB2zt4zkb8hu0X69pvMXJ38V474DAAA"],
         ["nice minimalism","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VS207DMAz9Fz_7IY6TNNkz4pEf2PZQQYeQpk10nZBA7Ns5TraVi4C2aY4vsY_tvJGjxXJZPKey5qWEjiUIkA_K4jrTdZF9VKCcWLJbr5nEDkl0jGXOzrMXc86Zfch2qqqqs9KC_A0xBVo4pkiLTb89DEwJUeD1_cWRDhbHP15YMizI-_sHnwIfKSD3_7Ja0IFpPIKPWFl0WtHJrQh8DekVdVe0WrWfPfSwvx366TgOt0_baRgv6rqILL5H_acqQbBm7IaX-35nUrj2Qua2SJohGiEBO8qO2ErtoAdjKD3oCjbE99i02UJTIpxiS03ZNSk3qdQDapOnw_OxHwdwmcanfve4HYyySnVUX2OpNv-ZrCL6G819uwB_AXoBoYF3qECFhldkUrBJFr7UKQtmrhyQNrjz2IXFRBtHy_jjb2b_txkclmqhWrBQWxCi3Q2WWZ9qjaGzIdWzdlHzF6mYZGVAiOBId3tDoGcjjTZfb0BrqHi-5vNA4zzQaHn641QD5M93IZbZktwnbGn25pH8Fdkt2m82BsMZvn8Ax3faIssDAAA"],
         ["Icons not showing correctly in explanation","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VSy27CMBD8lz37ED9jc6449geAQ0RdFImCGhJVKoJv74xDCBWqinE8u17vjnd8lkoWq1V0KoaNWhkdldEJSGun6khXSsr4migGZSu32SjRPKR9pTBpW1mIeRElThaVEi-L92Z_ykoCAo16GjhSY6dSTwM7ETtI_fcfMQkxOqH-_5N0ccm-G8BHk7lc13Kt1gK-RPaO6jtar8cPf_J2XOamH7q8bPd97iZ3mSLMb3D_a7FgsBmH_LVtDrTcvRd6bosOM0Qj0GvRuLbHkkoHDRjDaUBXY0F-g8WOe250-nEJoxNpLJY4WqkcsBRXTp9D02Vw6bu2Oez2mZStLoHWlCTWjvEzWYvsZ5n7NgEzATsBN4ILXKAi-RuVLNgEpk9FZQ3NrXIo68iIkjgKUWrRMI8GMq8sgStXcp5aq9ugPxTOrmbTyyk-vPjLSrRIC4ZHTXk9EqEoJfLUyxDYksrfnu0skJ8F8qzTDH1JEB-19WneCdUDZpkjI4K5I76Kbdtt96QUUFDaj2aX5fID08NdIIMDAAA"],
+        ["Text Ballots","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VSy27CMBD8lz374HdizlWP_YGEQ0RDhURBDYkqFcG3d8ZuCBWqinE8-_Du7K7PomXVNMmqmNaqsUarShP4oExtgYxPygbqAlV6vVZieMcErbApO1mJfRIlXlZOSZDVttufeiURjlY9LFypYNHqYcFSw4LQf__hk-BjEvL_v0kXNY7DBD6GzOXaylW3Ar5E7oaqG2rb8uFPXo_PfTdOQ_-824_9MKvzFmF8i_qvWYLAZhz6z013oORvvTBLW0xcIBphPE6UHXCgMq3EgjGUFnQNDsS3OFyx-aIMRYrlqHLnbV2klC84zlZOH1M39OAyDrvu8LbvSdmZ7OhsjuVc8V_IOkQ_y9K3GdgZuBn4Ai5QgYr0X8jkwCYyfMpTNpi5Ux5pPRlxJJ6DyLko2HsBkRtHUB6TD5y1-lnUx8zZV2x6vsWHV_-SEiXSghCQU16OREjKEQXOyxKUukPpaFgGFJYBBebppjEHqO9nG9JiifoOM82RHtHeEF_FZjds9qQUWZMcuvc8i8i-HbdbGqq5rZGp5PINUZDL8aADAAA"],
+        ["2 Text Ballots","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VSy27bMBD8lz3zwLdEH3ooihx76s3ygXHkwoBiobKMFgnib88MGVkugqKmKc4-uDu7y1fRstluk1Ux7dTWGq0aTeCDMq0FMj4pG6gLVOndTonhHRO0wqbsZCP2myjxsnFKgmwOeTj3SiIcrfq0cKWBRatPC5YWFoT-9x8-CT4mIf__N-mixnm6gI8hc7l2ctWdgC-Ru6HmhrqufviTp_Ghz_Nl6h-Ow9xPi7psEca3qP9aJAhsxqn_vc8nSv7WC7O2xcQVohHG40TZAQcq00osGENpQdfgQHyLw1Wbr8pQpViPpnTetlVK5YLjbOX865KnHlzm6ZhPP4eelJ0pjs6WWM5V_5WsQ_RXWfu2ALsAtwBfwRtUoCL9CzI5sIkMn8qUDWbulEdaT0YciecgSi4K9l5A5K0jqI_JB85afSzqY-HsGza93OLDa_-SEiXSghCQU76PREjKEQXOyxLUukPtaFgHFNYBBebJl7kEaO9nG9JqifoOM81Ij2hviK9if5z2AylF1iSn_FxmEdm38XCgoVnaGpkqf3nsePtp_NH_mb_mYRjn80e_3wFQ-nZ1ugMAAA"],
+        ["Test Voters as candidates warning","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VSy27bMBD8lz3zwLdEH3ooihx76s3ygXHkwoBiobKMFgnib88MGVkugqKmKc7ukrvDWb6Kls12m6yKaae21mjVaAIflGktkPFJ2UBfoEvvdkoMz5igFSZtJxux30SJl41TEmRzyMO5VxKx0apPA0caRLT6NBBpEUHqf_-xJ2GPSaj__0m6uOM8XcDHkLlcO7nqTsCXyN1Qc0NdVz_8ydP40Of5MvUPx2Hup8VdpgjzW9z_WiwYFOPU_97nEy1_08Ksspi4QghhPFZcO2DBzbQSC8ZwWtA1WJDfYnE15qszVCvWpSnK27ZaqRxw7K2cf13y1IPLPB3z6efQk7IzZaOzJZdzdf9K1iH7q6y6LcAuwC3AV_AGF6hI_4JKDmwi06fSZYOeO-VR1pMRW-LZiFKLhr03kHnrCOpj8oG9Vh-D_lg4-4ail1N8eO1fVqJFWjACasr3kQhF2aLAflmCqmioioa1QWFtUGCdfJlLgva-tyGtkajvMMuM3BHtDfFV7I_TfiClyDvJKT-XXkTqNh4ODDSLrJGl8pfHjqefxh_9n_lrHoZxPn_o_Q4b5c5FugMAAA"],
         // ["",""],
         // ["",""],
         // ["",""],
@@ -39,15 +53,22 @@ var e = [
 ]
     // [,""],
         // [,""],
-var c = ""
+var c = "<p><ul>"
 for (var [d,a] of e) {
+    c += "<li>"
     c += d
+    c += "<ul>"
     for (var [i,b] of a) {
+        c += "<li>"
         // embed = '<iframe src="' + b + '" scrolling="yes" width="1000" height="600"></iframe>'
-        c += '<a href="' + b + '"> ' + i + '</a>, '
+        var f = b.replace("http://127.0.0.1:8000/","")
+        c += '<a href="' + f + '"> ' + i + '</a>, '
+        c += "</li>"
     }
-    c +=  + "<br><br>"
+    c += "</ul></li>"
 }
+c +=  + "</ul></p>"
 
 
 document.querySelector("body").innerHTML = c
+console.log("done")

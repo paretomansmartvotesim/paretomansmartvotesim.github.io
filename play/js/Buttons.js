@@ -59,10 +59,14 @@ function ButtonGroup(config){
 			} else {
 				button.turnOn();
 			}
-		} else if (! self.justButton) { // justButton means it doesn't get selected
+		} else { // justButton means it doesn't get selected
 			// Turn all off
 			for(var i=0;i<self.buttons.length;i++) self.buttons[i].turnOff();
 			button.turnOn(); // except one
+			if (self.justButton) {
+				// turn on for a little while, then off
+				setTimeout( () => button.turnOff() , 800);
+			}
 		}
 		// And send the data up
 		self.onChoose(buttonData);

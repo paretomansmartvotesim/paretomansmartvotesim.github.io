@@ -10,7 +10,7 @@ Election/Sandbox design:
 .div-election #center, 
 .div-election #right{
 	float:left;
-    min-height: 320px;
+    /* min-height: 320px; */
     text-align: left;
 }
 .div-election #left{

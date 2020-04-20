@@ -157,6 +157,8 @@ function Config() {
         voterIcons: "circle",
         candidateIconsSet: ["name"],
         pairwiseMinimaps: "off",
+        submitTextBallots: false,
+        textBallotInput: "",
     }
 
 
@@ -653,6 +655,8 @@ function Cypher() {
         64:"candidateIcons",
         65:"candidateIconsSet",
         66:"pairwiseMinimaps",
+        67:"submitTextBallots",
+        68:"textBallotInput",
     } // add more on to the end ONLY
         
     var ui
@@ -839,6 +843,9 @@ function Sandbox(modelName, cConfig) {
 
     model.start = function(){
 
+        // This "model.start()" launches the model
+        // So it is also useful as a template for everything that you might need to do after a button press.
+
         // CREATE
         
         if (config.candidatePositions) {
@@ -890,6 +897,7 @@ function Sandbox(modelName, cConfig) {
         // UPDATE
         model.update()
         menu_update()
+        
     };
 
     model.onDraw = function(){
@@ -2437,6 +2445,7 @@ function Sandbox(modelName, cConfig) {
             48: "voterIcons",
             49: "candidateIcons",
             50: "pairwiseMinimaps",
+            51: "textBallotInput",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -2970,6 +2979,18 @@ function Sandbox(modelName, cConfig) {
             setTimeout(self.select,800)
             // UPDATE
 
+            // show warning
+            var string = 'Turned off Sidebar and Power Chart to save computer time.'
+            var textNode = document.createElement('div')
+            textNode.className = "button-group"
+            self.choose.dom.after(textNode)
+            var subNode = document.createElement('div')
+            subNode.className = "button-group-label"
+            textNode.appendChild(subNode)
+            subNode.innerHTML = string
+            setTimeout(() => textNode.remove(),4000)
+
+            if ( model.doTextBallots) return // text ballots are not relevant here
             // virtually press some buttons
             // pretend we did onChoose and select for the following options to make things run more smoothly
             config.powerChart = "off"
@@ -3721,6 +3742,78 @@ function Sandbox(modelName, cConfig) {
         }
     }
 
+    
+    ui.menu.doTextBallots = new function () {
+        var self = this
+        self.list = [
+            {name:"Yes",value:true,margin:4},
+            {name:"No",value:false}
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.doTextBallots = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT AND UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            showMenuItemsIf("divDoTextBallots", config.doTextBallots)
+            model.doTextBallots = config.doTextBallots
+            ui.menu.textBallotInput.choose.dom.hidden = ( ! model.doTextBallots )
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.doTextBallots);
+        }
+        self.choose = new ButtonGroup({
+            label: "Text Ballot Input?",
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+    }
+
+    
+    ui.menu.textBallotInput = new function () {
+        var self = this
+        self.onChoose = function(){
+            // LOAD
+            config.textBallotInput = self.choose.dom.value
+            // CONFIGURE
+            self.configure()
+        };
+        self.configure = function() {
+            model.textBallotInput = config.textBallotInput
+        }
+        self.select = function() {
+            self.choose.dom.value = config.textBallotInput
+        }
+        self.choose = {
+            dom: document.createElement("textarea")
+        }
+        self.choose.dom.addEventListener("input",self.onChoose)
+    }
+
+    ui.menu.submitTextBallots = new function () {
+        var self = this
+        self.list = [
+            {name:"Submit"}
+        ]
+        self.onChoose = function(){
+            // INIT AND UPDATE
+            model.update()
+        };
+        self.choose = new ButtonGroup({
+            label: "",
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose,
+            justButton: true
+        });
+    }
+    
+
+
 
     // run this after loading the whole menu
     ui.menu.gearconfig.initSpecial()
@@ -3835,6 +3928,11 @@ function Sandbox(modelName, cConfig) {
             "beatMap",
             "ballotConcept",
             "powerChart",
+            "doTextBallots",
+            ["divDoTextBallots", [
+                "textBallotInput",
+                "submitTextBallots",
+            ]],
         ]],
         [ "hidden", [ // hidden menu - for things that don't fit into the other spots
             "stepMenu",
@@ -3911,6 +4009,11 @@ function Sandbox(modelName, cConfig) {
                     // "primaries", // not doing this one, comment out               
                 ]],
                 ["advanced", [
+                    "doTextBallots",
+                    ["divDoTextBallots", [
+                        "textBallotInput",
+                        "submitTextBallots",
+                    ]],
                     
                 ]],
             ]],

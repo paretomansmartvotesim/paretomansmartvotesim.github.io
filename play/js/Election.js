@@ -1215,6 +1215,41 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 
 Election.rbvote = function(district, model, options){ // Use the RBVote from Rob Legrand
 
+	if (model.checkRunTextBallots()) {
+		// var filler = {candidates:[]}
+		// result = _check01(filler,model)
+		// if (! result.good) return result
+		var text = "<span class='small'>";
+		rbvote.setreturnstring() // tell rbvote that we might want return strings (unless we're not doing the sidebar)
+		document.rbform = {
+			rvote:{
+				value:model.textBallotInput
+			},
+			tiebreak:{
+				value:""
+			},
+			ignore:{
+				value: ""
+			},
+			reverse:{
+				checked: false
+			}
+		}
+		if (! rbvote.readvotes()) return
+		resultRB = model.rbelection(options.sidebar) // e.g. result = rbvote.calctide() // having a sidebar display means we want to construct explanation strings
+
+		if (resultRB.str) { // e.g. when the sidebar is on
+			// replace some of the html in the output of rbvote to make it match the style of betterballot
+			var rbvote_string = (resultRB.str).replace("style.css","../play/css/rbvote.css").replace()
+			rbvote_string = rbvote_string.replace('<th rowspan="5">for</th>',)
+			text += rbvote_string
+		}
+		text += "</span>";
+		result = {text:text};
+	
+		return result;
+	}
+
 	var reverseExplanation = false
 
 	

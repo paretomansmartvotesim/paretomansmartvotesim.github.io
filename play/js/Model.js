@@ -84,7 +84,8 @@ function Model(modelName){
 		candidateIconsSet: ["name"],
 		placeHoldDuringElection: false,
 		doPlaceHoldDuringElection: true,
-		pairwiseMinimaps: "off"
+		pairwiseMinimaps: "off",
+		doTextBallots: false,
 	})
 	
 	self.viz = new Viz(self);
@@ -190,6 +191,22 @@ function Model(modelName){
 
 	self.onAddCandidate = function() {} // callback
 	self.update = function(){
+
+		
+        if (self.checkRunTextBallots()){ // TODO: make text ballots work for every method, so we don't have to do this step and we can 
+
+			if (self.textBallotInput == "") return // no need to annoy the user
+			// run an election with RBVote
+			if (self.system === "RBVote") {
+				self.result = self.election("",self,self.optionsForElection)
+				self.district[0].result = self.result
+				self.drawSidebar()
+			}
+			// self.onDraw()
+			// self.onUpdate()
+			publish(self.id+"-update");
+			return
+		}
 
 		// if (self.nLoading > 0) return // the loading function will call update()
 
@@ -345,6 +362,14 @@ function Model(modelName){
 		
 		if (self.nLoading > 0) return // still loading, will call later and save some computing cycles
 		// The drawing system and the loading assets system are connected here.
+
+		if (self.checkRunTextBallots()) {
+			self.arena.canvas.hidden = true
+			self.drawSidebar() 
+			return
+		} else {
+			self.arena.canvas.hidden = false
+		}
 
 		// three things need to be drawn.  The arenas, the sidebar, and maybe more, like the main_sandbox or the main_ballot or whatever else calls new Model
 		self.drawArenas()
@@ -593,6 +618,18 @@ function Model(modelName){
 		// right now, we don't have a good visual of these for multiple districts, just one
 		return (self.nDistricts < 2) && (self.system == "QuotaApproval" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.powerChart == "off")
 	}
+
+	self.checkDoBeatMap = function() {
+		// ranked voter and not (original or IRV or Borda)
+		var autoBeatMap = self.beatMap == "auto" && self.voterType.name == "RankedVoter" && ! (self.doOriginal  || self.system == "IRV" || self.system == "STV" || self.system == "Borda")
+		var on = self.beatMap == "on" || autoBeatMap
+		var doBeatMap = on && ! self.doTextBallots
+		return doBeatMap
+	}
+	self.checkRunTextBallots = function() {
+		return self.system == "RBVote" && self.doTextBallots
+	}
+		
 
 	self.updateVC = function() {
 		

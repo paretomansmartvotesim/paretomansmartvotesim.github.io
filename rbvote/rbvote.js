@@ -2772,6 +2772,7 @@ return{
     calctide:calctide,
     readballots:readballots,
     returnstring:returnstring,
-    setreturnstring:setreturnstring
+    setreturnstring:setreturnstring,
+    readvotes:readvotes
   }
 }();
