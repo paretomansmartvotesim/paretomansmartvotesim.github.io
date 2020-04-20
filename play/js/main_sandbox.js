@@ -797,9 +797,10 @@ function Sandbox(modelName, cConfig) {
     // CREATE
     var model = new Model(modelName);
     var ui = {}
-    self.ui = ui
     ui.model = model
-    var basediv = document.querySelector("#" + modelName)
+    var basediv = document.querySelector("#" + model.id)
+
+
 
     // access cConfig's variables // they used to be in the same closure, so that's why we have to use these methods
     var config = cConfig.getConfig() // never do config = something.  Only do config.something = somethingelse
@@ -815,6 +816,16 @@ function Sandbox(modelName, cConfig) {
     newDivOnBase("center")
     newDivOnBase("right")
     model.createDOM()
+
+    ui.menu = {}
+    Menu(basediv,ui,model,config,initialConfig, cConfig)
+    // ui.menu = new Menu(ui,model,config,initialConfig, cConfig)
+    ui.arena = {}
+    UiArena(basediv,ui,model,config,initialConfig, cConfig)
+    // ui.arena = new UiArena(ui,model,config,initialConfig, cConfig)
+
+    // ui.menu = {}
+
     var centerDiv = basediv.querySelector("#center")
     if (centerDiv.hasChildNodes()){
         var firstNode = centerDiv.childNodes[0]
@@ -896,14 +907,14 @@ function Sandbox(modelName, cConfig) {
         ui.menu.theme.init_sandbox();
         // UPDATE
         model.update()
-        menu_update()
+        ui.menu_update()
         
     };
 
     model.onDraw = function(){
 
         
-        drawButtons() // make sure the icons show up
+        ui.drawButtons() // make sure the icons show up
         
         // CREATE A BALLOT
         
@@ -952,7 +963,70 @@ function Sandbox(modelName, cConfig) {
         _objF(ui.menu,"updateFromModel")
     }
 
-    function menu_update() {
+    // helpers
+    
+
+    model.onInitModel = function() {
+        ui.drawButtons()
+    }
+    
+    model.onAddCandidate = function() {
+        var n = model.candidates.length
+        model.numOfCandidates = n
+        config.numOfCandidates = n
+        ui.menu.nCandidates.select()
+    }
+    self.assets = [
+        
+        // the peeps
+        "play/img/voter_face.png",
+
+        "play/img/square.png",
+        "play/img/triangle.png",
+        "play/img/hexagon.png",
+        "play/img/pentagon.png",
+        "play/img/bob.png",
+
+        "play/img/square.svg",
+        "play/img/triangle.svg",
+        "play/img/hexagon.svg",
+        "play/img/pentagon.svg",
+        "play/img/bob.svg",
+
+        "play/img/blue_bee.png",
+        "play/img/yellow_bee.png",
+        "play/img/red_bee.png",
+        "play/img/green_bee.png",
+        "play/img/orange_bee.png",
+
+        // plus
+        "play/img/plusCandidate.png",
+        "play/img/plusOneVoter.png",
+        "play/img/plusVoterGroup.png",
+
+        // Ballot instructions
+        "play/img/ballot5_fptp.png",
+        "play/img/ballot5_ranked.png",
+        "play/img/ballot5_approval.png",
+        "play/img/ballot5_range.png",
+
+        // The boxes
+        "play/img/ballot5_box.png",
+        "play/img/ballot_rate.png",
+        "play/img/ballot_three.png"
+
+    ];
+
+    //if(config.sandboxsave) resetDOM.onclick();
+
+    // SAVE & PARSE
+    // ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
+}
+
+
+function Menu(basediv,ui,model,config,initialConfig, cConfig) {
+
+    ui.menu_update = function() {
         // UPDATE MENU //
 
         // Make the MENU look correct.  The MENU is not part of the "model".
@@ -982,21 +1056,7 @@ function Sandbox(modelName, cConfig) {
     }
 
     
-    // helpers
-    
-
-    model.onInitModel = function() {
-        drawButtons()
-    }
-    
-    model.onAddCandidate = function() {
-        var n = model.candidates.length
-        model.numOfCandidates = n
-        config.numOfCandidates = n
-        ui.menu.nCandidates.select()
-    }
-
-    function drawButtons() {
+    ui.drawButtons = function() {
 
         // draw sandbox buttons that depend on candidate images
         var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
@@ -1064,7 +1124,7 @@ function Sandbox(modelName, cConfig) {
     // BUTTONS - WHAT VOTING SYSTEM //
     //////////////////////////////////
 
-    ui.menu = {}
+
     ui.menu.systems = new function() { // Which voting system?
         // "new function () {code}" means make an object "this", and run "code" in a new scope
         // I made a singleton class so we can use "self" instead of saying "systems" (or another button group name).  
@@ -1141,7 +1201,7 @@ function Sandbox(modelName, cConfig) {
                 ui.menu.dimensions.select()
             }
             model.update();
-            menu_update()
+            ui.menu_update()
         };
         self.choose = new ButtonGroup({
             label: "what voting system?",
@@ -1479,7 +1539,7 @@ function Sandbox(modelName, cConfig) {
             model.arena.redistrict()
             // UPDATE
             model.update()
-            menu_update()
+            ui.menu_update()
         };
         self.configure = function() {	
             // MODEL //
@@ -1608,7 +1668,7 @@ function Sandbox(modelName, cConfig) {
             model.arena.redistrict()
             // UPDATE
             model.update()
-            menu_update()
+            ui.menu_update()
 
         }		
         self.choose = new sliderSet({
@@ -1637,7 +1697,7 @@ function Sandbox(modelName, cConfig) {
             model.arena.redistrict()
             // UPDATE
             model.update()
-            menu_update()
+            ui.menu_update()
         }
         self.configure = function() {
             for (var i=0; i<model.voters.length; i++) {
@@ -1686,7 +1746,7 @@ function Sandbox(modelName, cConfig) {
             model.voters[n].init()
             // UPDATE
             model.update()
-            menu_update()
+            ui.menu_update()
         }
         self.configure = function() {
             for (var i=0; i<model.voters.length; i++) {
@@ -1899,7 +1959,7 @@ function Sandbox(modelName, cConfig) {
             self.configure()
             // UPDATE
             model.update();
-            menu_update()
+            ui.menu_update()
         };
         self.choose = new ButtonGroup({
             label: "what's voters' strategy?",
@@ -1945,7 +2005,7 @@ function Sandbox(modelName, cConfig) {
             self.configure()
             // UPDATE
             model.update();
-            menu_update()
+            ui.menu_update()
         };
         self.configure = function() {
             showMenuItemsIf("divSecondStrategy", config.doTwoStrategies)
@@ -2012,7 +2072,7 @@ function Sandbox(modelName, cConfig) {
             self.configure()
             // UPDATE
             model.update();
-            menu_update()
+            ui.menu_update()
         };
         self.configure = function() {
             _showOrHideMenuForStrategy(config)
@@ -2123,7 +2183,7 @@ function Sandbox(modelName, cConfig) {
             self.configure()
             // UPDATE
             model.update();
-            menu_update()
+            ui.menu_update()
         };
         self.configure = function() {
             showMenuItemsIf("divManualPoll", config.autoPoll == "Manual")
@@ -2281,7 +2341,7 @@ function Sandbox(modelName, cConfig) {
             model.initMODEL()
             // UPDATE
             model.update();
-            menu_update()
+            ui.menu_update()
         };
         self.configure = function() {
             showMenuItemsIf("divYee",  true) // kind of a holdover from a previous version
@@ -2482,7 +2542,7 @@ function Sandbox(modelName, cConfig) {
 
             // and fill in the rest
             for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presetModelNames.push("election"+i) ; presetdescription.push("election"+i)}
-            presetnames.push("O") ; presetModelNames.push(modelName) ; presetdescription.push("original intended preset")
+            presetnames.push("O") ; presetModelNames.push(model.id) ; presetdescription.push("original intended preset")
             // TODO
             for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presetModelNames.push("ballot"+i) ; presetdescription.push("ballot"+i)}
             
@@ -2555,7 +2615,7 @@ function Sandbox(modelName, cConfig) {
             onChoose: self.onChoose
         });
 		self.init_sandbox = function() {
-			self.choose.highlight("modelName", modelName); // only do this once.  Otherwise it would be in updateUI
+			self.choose.highlight("modelName", model.id); // only do this once.  Otherwise it would be in updateUI
 		}
     }
 
@@ -3214,7 +3274,7 @@ function Sandbox(modelName, cConfig) {
 
                 m2.buildSubMenus() // place menu items into dom structure
             }
-            menu_update() // actually hide/show things
+            ui.menu_update() // actually hide/show things
         }
         self.choose = new ButtonGroup({
             label: "Menu Version:",
@@ -4076,7 +4136,7 @@ function Sandbox(modelName, cConfig) {
     // ]
 
 
-    var m1 = new menuTree()
+    var m1 = new menuTree(ui)
     m1.assignMenu( menu1 , basediv.querySelector("#left"), "basediv" )
     // detail: seems harmless, but the basediv gets reattached.
     
@@ -4086,65 +4146,12 @@ function Sandbox(modelName, cConfig) {
     m1.buildSubMenus()
     
 
-    var m2 = new menuTree()
+    var m2 = new menuTree(ui)
     m2.assignMenu( menu2 , basediv.querySelector("#left"), "basediv" )
 
     m2.menuNameDivs["hidden"][0].hidden = true
 
     
-    function menuTree() {
-        var self = this
-
-        // Loop through and collect nodes with the same name into a list
-        // Later, during build, use that list to turn divs on and off
-
-        // append all the menu dom elements to the menu
-
-
-        self.menuNameDivs = {}
-        // Here are all the divs that correspond to names to toggle on and off
-        // list of submenu doms to turn on/off
-
-        var ap = []
-        // Here are all the attachments points for the nodes
-        // Now I just need a list of the child doms for each one
-        // so that later I can loop through all the attachment points and attach the children.
-        // ap[i].parent: parent div
-        // ap[i].children:  [array of divs to attach]
-        
-        self.assignMenu = function(m,parent,parentName) {
-            var children = []
-            var childrenNames = []
-            for (var a of m) {
-                if (typeof a === "string") { // child
-                    var div = ui.menu[a].choose.dom
-                    var aName = a
-                } else { // parent
-                    var div = document.createElement("div")
-                    parent.appendChild(div)
-                    var aName = a[0]
-                    if (self.menuNameDivs[aName] == undefined) {
-                        self.menuNameDivs[aName] = []
-                    }
-                    self.menuNameDivs[aName].push(div)
-                    self.assignMenu(a[1],div,aName) // recursion
-                }
-                children.push(div)
-                childrenNames.push(aName)
-            }
-            ap.push({parentName:parentName,childrenNames:childrenNames,parent:parent,children:children})
-        }
-    
-        // To build the menu, it's really easy, just attach the divs for the menu items to the submenu div structure
-        self.buildSubMenus = function() {
-            for (var a of ap) {
-                for(var child of a.children) {
-                    a.parent.appendChild(child)
-                }
-            }
-        }
-
-    }
 
     // helper
     function showMenuItemsIf(name,condition) {
@@ -4157,12 +4164,69 @@ function Sandbox(modelName, cConfig) {
         }
     }
 
+}
 
+
+function menuTree(ui) {
+    var self = this
+
+    // Loop through and collect nodes with the same name into a list
+    // Later, during build, use that list to turn divs on and off
+
+    // append all the menu dom elements to the menu
+
+
+    self.menuNameDivs = {}
+    // Here are all the divs that correspond to names to toggle on and off
+    // list of submenu doms to turn on/off
+
+    var ap = []
+    // Here are all the attachments points for the nodes
+    // Now I just need a list of the child doms for each one
+    // so that later I can loop through all the attachment points and attach the children.
+    // ap[i].parent: parent div
+    // ap[i].children:  [array of divs to attach]
+    
+    self.assignMenu = function(m,parent,parentName) {
+        var children = []
+        var childrenNames = []
+        for (var a of m) {
+            if (typeof a === "string") { // child
+                var div = ui.menu[a].choose.dom
+                var aName = a
+            } else { // parent
+                var div = document.createElement("div")
+                parent.appendChild(div)
+                var aName = a[0]
+                if (self.menuNameDivs[aName] == undefined) {
+                    self.menuNameDivs[aName] = []
+                }
+                self.menuNameDivs[aName].push(div)
+                self.assignMenu(a[1],div,aName) // recursion
+            }
+            children.push(div)
+            childrenNames.push(aName)
+        }
+        ap.push({parentName:parentName,childrenNames:childrenNames,parent:parent,children:children})
+    }
+
+    // To build the menu, it's really easy, just attach the divs for the menu items to the submenu div structure
+    self.buildSubMenus = function() {
+        for (var a of ap) {
+            for(var child of a.children) {
+                a.parent.appendChild(child)
+            }
+        }
+    }
+
+}
+
+function UiArena(basediv,ui,model,config,initialConfig, cConfig) {
+    var self = this
     //////////////////////////
     //////// RESET... ////////
     //////////////////////////
 
-    ui.arena = {}
     ui.arena.reset = new function() {
         var self = this
         var resetDOM = document.createElement("div");
@@ -4268,6 +4332,7 @@ function Sandbox(modelName, cConfig) {
     }
 
     var tinyLink = document.createElement("a")
+    var centerDiv = basediv.querySelector("#center")
     centerDiv.appendChild(tinyLink)
     tinyLink.setAttribute("target", "_blank")
     tinyLink.setAttribute("class", "tinyURL")
@@ -4342,72 +4407,7 @@ function Sandbox(modelName, cConfig) {
         };
 
     };
-
-    // additional codebooks
-    var extraCodeBook = [
-        {
-            decode:[
-                "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
-            ],
-            decodeVersion: 2.2,
-            field: "description"
-        }
-    ]
-
-    cConfig.cypher.setUpEncode(
-        {
-            ui:ui,
-            extraCodeBook:extraCodeBook
-        }
-    )
-
-    self.assets = [
-        
-        // the peeps
-        "play/img/voter_face.png",
-
-        "play/img/square.png",
-        "play/img/triangle.png",
-        "play/img/hexagon.png",
-        "play/img/pentagon.png",
-        "play/img/bob.png",
-
-        "play/img/square.svg",
-        "play/img/triangle.svg",
-        "play/img/hexagon.svg",
-        "play/img/pentagon.svg",
-        "play/img/bob.svg",
-
-        "play/img/blue_bee.png",
-        "play/img/yellow_bee.png",
-        "play/img/red_bee.png",
-        "play/img/green_bee.png",
-        "play/img/orange_bee.png",
-
-        // plus
-        "play/img/plusCandidate.png",
-        "play/img/plusOneVoter.png",
-        "play/img/plusVoterGroup.png",
-
-        // Ballot instructions
-        "play/img/ballot5_fptp.png",
-        "play/img/ballot5_ranked.png",
-        "play/img/ballot5_approval.png",
-        "play/img/ballot5_range.png",
-
-        // The boxes
-        "play/img/ballot5_box.png",
-        "play/img/ballot_rate.png",
-        "play/img/ballot_three.png"
-
-    ];
-
-    //if(config.sandboxsave) resetDOM.onclick();
-
-    // SAVE & PARSE
-    // ?m={s:[system], v:[voterPositions], c:[candidatePositions], d:[description]}
 }
-
 
 function modifyConfigFeaturelist(config, condition, xlist) {
     // e.g. var xlist = ["choose_pixel_size","yeefilter"]
