@@ -258,7 +258,7 @@ function Graphicon(candidate,option,char,model) {
 		if (candidate.dummy) return // don't make
 		makeLetterImage()
 	} else {
-
+		
 		// Load the regular image
 		self.url = char.url
 		// var _graphics = Candidate.graphics[model.theme][self.icon];
@@ -330,7 +330,10 @@ function Graphicon(candidate,option,char,model) {
 			}
 		}
 
-	
+		
+		if (model.theme == "Nicky") {
+			self.texticon = "<img src='play/img/icon/"+candidate.name+".png'/>";
+		}
 	}
 	
 	function pickFillFromColorChooser() {

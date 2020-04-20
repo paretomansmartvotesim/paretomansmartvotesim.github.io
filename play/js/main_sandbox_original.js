@@ -79,6 +79,7 @@ function main(preset){
 		model.optionsForElection = {sidebar:true}
 		model.HACK_BIG_RANGE = true;
 		model.theme = "Nicky"
+		model.doOriginal = true
 
 		// INIT
 		ui.model = model

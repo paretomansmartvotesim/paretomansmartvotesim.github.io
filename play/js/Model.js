@@ -80,8 +80,8 @@ function Model(modelName){
         kindayee: "newcan",
         ballotConcept: "auto",
         powerChart: "auto",
-		voterIcons: "circles",
-		candidateIconsSet: ["name"],
+		voterIcons: "circle",
+		candidateIconsSet: ["image"],
 		placeHoldDuringElection: false,
 		doPlaceHoldDuringElection: true,
 		pairwiseMinimaps: "off",
@@ -626,6 +626,20 @@ function Model(modelName){
 		var doBeatMap = on && ! self.doTextBallots
 		return doBeatMap
 	}
+	self.checkDoBallotConcept = function() {
+		// ranked voter and not (original or IRV or Borda)
+		var p1 = ! self.doOriginal
+		var p2 =   self.ballotConcept != "off"
+		var p3 = ! self.doTextBallots
+		return p1 && p2 && p3
+
+	}
+	self.checkDoIRVConcept = function() {
+		var go = (self.system == "IRV" || self.system == "STV")  && self.dimensions == "2D" && self.result
+		go = go && self.checkDoBallotConcept()
+		return go
+	}
+
 	self.checkRunTextBallots = function() {
 		return self.system == "RBVote" && self.doTextBallots
 	}
@@ -1933,9 +1947,7 @@ function Arena(arenaName, model) {
 		function drawCandidates() {
 			// There's two ways to draw the candidate.  One shows the candidate icon.
 			// Two shows the vote totals and optionally, the candidate icon.
-			var go = (model.system == "IRV" || model.system == "STV")  && model.dimensions == "2D" && model.result && self.id == "arena"
-			var go = go && ! (model.ballotConcept == "off")
-	
+			var go = model.checkDoIRVConcept() && self.id == "arena"
 			if (go) {
 				for (var k = 0; k < model.district.length; k++) {
 					result = model.district[k].result
@@ -2091,7 +2103,7 @@ function Arena(arenaName, model) {
 		}
 		function drawVotes() {
 			
-			if (model.ballotConcept == "off") return
+			if ( ! model.checkDoBallotConcept() ) return
 
 			var go = model.system == "IRV" || model.system == "STV"
 			if (go && model.dimensions == "2D" && model.result && model.opt.showIRVTransfers) {
