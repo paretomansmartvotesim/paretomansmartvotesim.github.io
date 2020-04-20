@@ -27,7 +27,7 @@ function main(preset) {
     // CREATE
     var l = new Loader()
     // CONFIGURE
-    l.onload = s.update // this might look like an update but we're configuring Loader    
+    l.onload = s.start // this might look like an update but we're configuring Loader    
     // INIT
     l.load(s.assets);
 
@@ -155,7 +155,7 @@ function Config() {
         sidebarOn: "on",
         lastTransfer: "on",
         voterIcons: "circle",
-        candidateIcons: "image",
+        candidateIcons: "2",
     }
 
 
@@ -409,7 +409,7 @@ function Config() {
 
             if (config.theme == "Letters") {
                 config.theme = "Default" // Merged two ideas
-                config.candidateIcons = "name"
+                config.candidateIcons = "2"
             }
 
         }
@@ -773,6 +773,7 @@ function Cypher() {
 
 }
 
+
 function Sandbox(modelName, cConfig) {
     var self = this
     
@@ -821,6 +822,17 @@ function Sandbox(modelName, cConfig) {
     // FUNCTIONS and CLASSES for INIT and UPDATE
 
     model.inSandbox = true
+
+    self.start = function(assets){
+        // UPDATE SANDBOX
+
+        model.assets = assets
+        
+        basediv.classList.add("div-model-theme-" + config.theme)
+        _objF(ui.arena,"update")
+        _objF(ui.menu,"select");
+        model.start(); 
+    };
 
     model.start = function(){
 
@@ -3551,14 +3563,18 @@ function Sandbox(modelName, cConfig) {
         var self = this
         self.list = [
             {name:"image",value:"image",realname:"image",margin:4},
-            {name:"both",value:"both",realname:"both image and name",margin:4},
+            // {name:"both",value:"both",realname:"both image and name",margin:4},
             {name:"name",value:"name",realname:"name",margin:4},
-            {name:"off",value:"off",realname:"off"},
+            // {name:"off",value:"off",realname:"off"},
             {name:"dots",value:"dots",realname:"dots",margin:4},
         ]
+        var decoder = ["image","name","dots"] // be careful to only add to the end of this list
+        var encoder = _simpleMakeEncode(decoder)
         self.onChoose = function(data){
             // LOAD
-            config.candidateIcons = data.value
+            config.candidateIcons = loadDec(encoder,data,config.candidateIcons)
+
+            // config.candidateIcons = data.value
             // CONFIGURE
             self.configure()
                 
@@ -3569,21 +3585,79 @@ function Sandbox(modelName, cConfig) {
             model.draw()
         };
         self.configure = function() {
-            model.candidateIcons = config.candidateIcons
+            model.candidateIconsSet = decodeDec(decoder,config.candidateIcons)
         }
         self.choose = new ButtonGroup({
             label: "Candidate Icons:", // Sub Menu
             width: 52,
             data: self.list,
-            onChoose: self.onChoose
+            onChoose: self.onChoose,
+            isCheckbox: true
         });
         self.select = function() {
-            self.choose.highlight("value", config.candidateIcons);
+            var d = decodeDec(decoder,config.candidateIcons)
+            self.choose.highlight("value", d);
         }
     }
 
+    var loadDec = function(encoder, data, a) {
+        var b = _decStringToBinaryString(a)
+        // pad with 0's
+        var b = b.padStart(Object.keys(encoder).length, '0')
+        var c = loadBinary(encoder, data, b)
+        var d = _binStringToDecString(c)        
+        return d
+    }
+    var decodeDec = function(decoder, a) {
+        var b = _decStringToBinaryString(a)
+        // pad with 0's
+        var b = b.padStart(decoder.length, '0')
+        var c = decodeBinary(decoder, b)          
+        return c 
+    }
+                
 
-
+    var loadBinary = function(encoder, data, a) {
+                
+        //  example config.candidateIcons is 110
+        var b = _stringToArray(a)
+        // b is [1,1,0]
+        // which index to set?
+        var c = data.name
+        var d = encoder[c]
+        // d is the index to set
+        // what to set to?
+        e = (data.isOn) ? 1 : 0
+        b[d] = e
+        // great!
+        // now save the config
+        var f = _arrayToString(b)
+        return f
+    }
+    var decodeBinary = function(decoder, a) {
+        var b = _stringToArray(a)
+        // lets decode each element to a new array
+        var c = []
+        for (var [d,e] of Object.entries(b)) {
+            if (e == 1) {
+                // add the decoded value to the list
+                c.push(decoder[d])
+            }
+        }
+        return c
+    }
+    function _stringToArray(string) {
+        return string.split("")
+    }
+    function _arrayToString(array) {
+        return array.join("")
+    }
+    function _decStringToBinaryString(dec) {
+        return parseInt(dec).toString(2)
+    }
+    function _binStringToDecString(bin) {
+        return parseInt( bin, 2 )
+    }
 
 
     // run this after loading the whole menu
@@ -4116,17 +4190,6 @@ function Sandbox(modelName, cConfig) {
         }
     )
 
-    self.update = function(assets){
-        // UPDATE SANDBOX
-
-        model.assets = assets
-        
-        basediv.classList.add("div-model-theme-" + config.theme)
-        _objF(ui.arena,"update")
-        _objF(ui.menu,"select");
-        model.start(); 
-    };
-
     self.assets = [
         
         // the peeps
@@ -4188,3 +4251,13 @@ function modifyConfigFeaturelist(config,config, condition, xlist) {
     }
     config.featurelist = Array.from(featureset)
 }    
+
+function _simpleMakeEncode(decode) {
+    var encode = {}
+    for (var [i,v] of Object.entries(decode)) {
+        // var value = JSON.stringify(v)
+        i = Number(i)
+        encode[v] = i
+    }
+    return encode
+}

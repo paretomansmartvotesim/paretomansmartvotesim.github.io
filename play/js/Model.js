@@ -81,7 +81,7 @@ function Model(modelName){
         ballotConcept: "auto",
         powerChart: "auto",
 		voterIcons: "circles",
-		candidateIcons: "image",
+		candidateIconsSet: ["name"],
 		placeHoldDuringElection: false,
 		doPlaceHoldDuringElection: true,
 	})
@@ -546,7 +546,7 @@ function Model(modelName){
 			self.placeHolding = true
 			return "^Placeholder{" + id + "}"
 
-		} else if (self.candidateIcons == "name" && self.theme != "Nicky") {
+		} else if (self.candidateIconsSet.includes("name") && self.theme != "Nicky") {
 			var c = self.candidatesById[id]
 			return "<span class='letter' style='color:"+c.fill+";'><b>"+c.name.toUpperCase()+"</b></span>"
 		} else {
@@ -576,7 +576,7 @@ function Model(modelName){
 			self.placeHolding = true
 			return "^PlaceholderNameUpper{" + id + "}"
 			
-		} else if (self.candidateIcons == "name" && self.theme != "Nicky") {
+		} else if (self.candidateIconsSet.includes("name") && self.theme != "Nicky") {
 			var c = self.candidatesById[id]
 			// return "<span class='letterBig' style='color:"+c.fill+";'>"+c.name.toUpperCase()+"</span>"
 			return "<span class='letterBig';'>"+c.name.toUpperCase()+"</span>"

@@ -1309,7 +1309,7 @@ function loadpreset(modelName) {
 			autoPoll: "Auto",
 			visSingleBallotsOnly: false,
 			theme: "Default",
-			candidateIcons: "name",
+			candidateIcons: "2",
 			menuVersion: "2",
 			doFeatureFilter: false,
 			yeeon: false,
