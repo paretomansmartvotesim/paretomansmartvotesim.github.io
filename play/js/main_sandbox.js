@@ -108,10 +108,17 @@ function Config(ui, config, initialConfig) {
 
     var self = this
 
+    
+
     /////////////////////////////
     // LOAD DEFAULTS and INPUT //
     /////////////////////////////
 
+    // some switches
+    ui.embed = false
+    ui.maxVoters = 10 
+    ui.tryNewURL = true
+    
     var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
     var yes_all_candidates = {}
     for (var i = 0; i < all_candidate_names.length; i++) {
@@ -839,71 +846,124 @@ function Sandbox(ui) {
     // CREATE the data structure
 
     var model = new Model(ui.idModel)
-    model.inSandbox = true
-
-    // some switches
-    ui.embed = false
-    ui.maxVoters = 10
-    ui.tryNewURL = true
 
     var config = {}
     var initialConfig = {}
+    bindModel(ui,model,config)
+
     var cConfig = new Config(ui,config,initialConfig)
 
     ui.cypher = new Cypher(ui)
     
     // CREATE the divs!
-    createDOM()
+    createDOM(ui,model)
     Menu(ui,model,config,initialConfig, cConfig)
     UiArena(ui,model,config,initialConfig, cConfig)
     
     // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
     ui.cypher.setUpEncode()
 
+    
     // INIT
     // Read in the config file.
     cConfig.setConfig()
 
-
-    function createDOM() {
-        
-        // Here are two boolean variables to consider
-        // ui.missingModelId : needs a new parent div
-        // ui.danglingScript : can't be appended to a parent div, so will leave dangling
-
-        // Here are the actual strings that these bools refer to
-        // ui.idModel : for the divs
-        // ui.idScript: for the divs
-
-        ui.dom = {}
-        if (ui.missingModelId) {
-            _makeParentDivs()
-        } else {
-            ui.dom.basediv = document.querySelector("#" + model.id)
-        }
-        ui.dom.left = newDivOnBase("left")
-        ui.dom.center = newDivOnBase("center")
-        ui.dom.right = newDivOnBase("right")
-        function newDivOnBase(name) {
-            var a = document.createElement("div");
-            a.setAttribute("id", name);
-            ui.dom.basediv.appendChild(a);
-            return a
-        }
-        // Details
-        model.createDOM()
     
-        var centerDiv = ui.dom.center
-        if (centerDiv.hasChildNodes()){
-            var firstNode = centerDiv.childNodes[0]
-            centerDiv.insertBefore(model.dom,firstNode);
-        } else {
-            centerDiv.appendChild(model.dom)
-        }
-        model.dom.removeChild(model.caption);
-        ui.dom.right.appendChild(model.caption);
-        model.caption.style.width = "";
+    self.start = function(assets){
+        // UPDATE SANDBOX
+
+        model.assets = assets
+        
+        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
+        _objF(ui.arena,"update")
+        _objF(ui.menu,"select");
+        model.start(); 
+    }; 
+
+    self.assets = [
+        
+        // the peeps
+        "play/img/voter_face.png",
+
+        "play/img/square.png",
+        "play/img/triangle.png",
+        "play/img/hexagon.png",
+        "play/img/pentagon.png",
+        "play/img/bob.png",
+
+        "play/img/square.svg",
+        "play/img/triangle.svg",
+        "play/img/hexagon.svg",
+        "play/img/pentagon.svg",
+        "play/img/bob.svg",
+
+        "play/img/blue_bee.png",
+        "play/img/yellow_bee.png",
+        "play/img/red_bee.png",
+        "play/img/green_bee.png",
+        "play/img/orange_bee.png",
+
+        // plus
+        "play/img/plusCandidate.png",
+        "play/img/plusOneVoter.png",
+        "play/img/plusVoterGroup.png",
+
+        // Ballot instructions
+        "play/img/ballot5_fptp.png",
+        "play/img/ballot5_ranked.png",
+        "play/img/ballot5_approval.png",
+        "play/img/ballot5_range.png",
+
+        // The boxes
+        "play/img/ballot5_box.png",
+        "play/img/ballot_rate.png",
+        "play/img/ballot_three.png"
+
+    ];
+
+    
+
+}
+
+
+function createDOM(ui,model) {
+        
+    // Here are two boolean variables to consider
+    // ui.missingModelId : needs a new parent div
+    // ui.danglingScript : can't be appended to a parent div, so will leave dangling
+
+    // Here are the actual strings that these bools refer to
+    // ui.idModel : for the divs
+    // ui.idScript: for the divs
+
+    ui.dom = {}
+    if (ui.missingModelId) {
+        _makeParentDivs()
+    } else {
+        ui.dom.basediv = document.querySelector("#" + model.id)
     }
+    ui.dom.left = newDivOnBase("left")
+    ui.dom.center = newDivOnBase("center")
+    ui.dom.right = newDivOnBase("right")
+    function newDivOnBase(name) {
+        var a = document.createElement("div");
+        a.setAttribute("id", name);
+        ui.dom.basediv.appendChild(a);
+        return a
+    }
+    // Details
+    model.createDOM()
+
+    var centerDiv = ui.dom.center
+    if (centerDiv.hasChildNodes()){
+        var firstNode = centerDiv.childNodes[0]
+        centerDiv.insertBefore(model.dom,firstNode);
+    } else {
+        centerDiv.appendChild(model.dom)
+    }
+    model.dom.removeChild(model.caption);
+    ui.dom.right.appendChild(model.caption);
+    model.caption.style.width = "";
     
     ui.makeParentDivs = _makeParentDivs
     function _makeParentDivs() {
@@ -956,20 +1016,12 @@ function Sandbox(ui) {
         
     }
 
+}
 
+function bindModel(ui,model,config) {
 
+    model.inSandbox = true
     
-    self.start = function(assets){
-        // UPDATE SANDBOX
-
-        model.assets = assets
-        
-        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
-        _objF(ui.arena,"update")
-        _objF(ui.menu,"select");
-        model.start(); 
-    }; 
-
     model.start = function(){
 
         // This "model.start()" launches the model
@@ -1094,51 +1146,7 @@ function Sandbox(ui) {
         config.numOfCandidates = n
         ui.menu.nCandidates.select()
     }
-    self.assets = [
-        
-        // the peeps
-        "play/img/voter_face.png",
-
-        "play/img/square.png",
-        "play/img/triangle.png",
-        "play/img/hexagon.png",
-        "play/img/pentagon.png",
-        "play/img/bob.png",
-
-        "play/img/square.svg",
-        "play/img/triangle.svg",
-        "play/img/hexagon.svg",
-        "play/img/pentagon.svg",
-        "play/img/bob.svg",
-
-        "play/img/blue_bee.png",
-        "play/img/yellow_bee.png",
-        "play/img/red_bee.png",
-        "play/img/green_bee.png",
-        "play/img/orange_bee.png",
-
-        // plus
-        "play/img/plusCandidate.png",
-        "play/img/plusOneVoter.png",
-        "play/img/plusVoterGroup.png",
-
-        // Ballot instructions
-        "play/img/ballot5_fptp.png",
-        "play/img/ballot5_ranked.png",
-        "play/img/ballot5_approval.png",
-        "play/img/ballot5_range.png",
-
-        // The boxes
-        "play/img/ballot5_box.png",
-        "play/img/ballot_rate.png",
-        "play/img/ballot_three.png"
-
-    ];
-
-    
-
 }
-
 
 function Menu(ui,model,config,initialConfig, cConfig) {
 
