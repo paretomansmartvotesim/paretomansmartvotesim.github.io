@@ -621,9 +621,9 @@ function Model(idModel){
 
 	self.checkDoBeatMap = function() {
 		// ranked voter and not (original or IRV or Borda)
-		var autoBeatMap = self.beatMap == "auto" && self.voterType.name == "RankedVoter" && ! (self.doOriginal  || self.system == "IRV" || self.system == "STV" || self.system == "Borda")
-		var on = self.beatMap == "on" || autoBeatMap
-		var doBeatMap = on && ! self.doTextBallots
+		var autoBeatMap = (self.beatMap == "auto") && (self.voterType.name == "RankedVoter") && ! (self.doOriginal  || self.system == "IRV" || self.system == "STV" || self.system == "Borda")
+		var on = (self.beatMap == "on") || autoBeatMap
+		var doBeatMap = on && ( ! self.doTextBallots)
 		return doBeatMap
 	}
 	self.checkDoBallotConcept = function() {
@@ -1876,8 +1876,8 @@ function Arena(arenaName, model) {
 			}
 		}
 		function setAnnotations() {
-			if(model.yeeobject) model.yeeobject.drawBackAnnotation = model.viz.drawYeeGuyBackground
-			if(model.yeeobject) model.yeeobject.drawAnnotation = model.viz.drawYeeAnnotation
+			if(model.yeeobject) model.yeeobject.drawBackAnnotation = model.viz.yee.drawYeeGuyBackground
+			if(model.yeeobject) model.yeeobject.drawAnnotation = model.viz.yee.drawYeeAnnotation
 		}
 
 		function drawSortLines() {

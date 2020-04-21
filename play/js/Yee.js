@@ -9,8 +9,8 @@ function Viz(model) {
 
 	var self = this
 
-	yee = new Yee(model)
-	beatMap = new BeatMap(model)
+	var yee = new Yee(model)
+	var beatMap = new BeatMap(model)
 	self.yee = yee
 	self.beatMap = beatMap
 

@@ -63,10 +63,12 @@ function main(ui) {
     if (ui.idModel == undefined) {
         ui.idModel = "model-" + _rand5()
         ui.missingModelId = true
-    }
-    if (ui.idScript == undefined) {
-        ui.idScript = "script-" + _rand5()
-        ui.danglingScript = true
+    
+        if (ui.idScript == undefined) {
+            ui.idScript = "script-" + _rand5()
+            ui.danglingScript = true
+        }
+    
     }
     ui.url = ui.url || window.location.href
 
@@ -859,31 +861,6 @@ function Sandbox(ui) {
     cConfig.setConfig()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function createDOM() {
         
         // Here are two boolean variables to consider
@@ -894,23 +871,25 @@ function Sandbox(ui) {
         // ui.idModel : for the divs
         // ui.idScript: for the divs
 
+        ui.dom = {}
         if (ui.missingModelId) {
-            ui.basediv = _makeParentDivs()
+            _makeParentDivs()
         } else {
-            ui.basediv = document.querySelector("#" + model.id)
+            ui.dom.basediv = document.querySelector("#" + model.id)
         }
-        newDivOnBase("left")
-        newDivOnBase("center")
-        newDivOnBase("right")
+        ui.dom.left = newDivOnBase("left")
+        ui.dom.center = newDivOnBase("center")
+        ui.dom.right = newDivOnBase("right")
         function newDivOnBase(name) {
             var a = document.createElement("div");
             a.setAttribute("id", name);
-            ui.basediv.appendChild(a);
+            ui.dom.basediv.appendChild(a);
+            return a
         }
         // Details
         model.createDOM()
     
-        var centerDiv = ui.basediv.querySelector("#center")
+        var centerDiv = ui.dom.center
         if (centerDiv.hasChildNodes()){
             var firstNode = centerDiv.childNodes[0]
             centerDiv.insertBefore(model.dom,firstNode);
@@ -918,12 +897,11 @@ function Sandbox(ui) {
             centerDiv.appendChild(model.dom)
         }
         model.dom.removeChild(model.caption);
-        ui.basediv.querySelector("#right").appendChild(model.caption);
+        ui.dom.right.appendChild(model.caption);
         model.caption.style.width = "";
     }
     
-    // helper
-    ui.makerParentDivs = _makeParentDivs
+    ui.makeParentDivs = _makeParentDivs
     function _makeParentDivs() {
         
         // the model
@@ -948,27 +926,11 @@ function Sandbox(ui) {
         pa.appendChild(cm); 
         cm.appendChild(md)
 
-        return md
+        ui.dom.basediv = md
+        ui.dom.container = cm
+        ui.dom.parent = pa
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        // go from this
+        // goes from this
         //  <div>
         // 	    <script id="idScript">
         // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
@@ -980,21 +942,16 @@ function Sandbox(ui) {
         // 	    <div id="idModel" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
         // 	    </div>
         //      <script id="idScript">
-        // 	        main()
+        // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
         //      </script>
         // </div>
         // https://stackoverflow.com/a/758683
         // via https://stackoverflow.com/a/1219857
 
-
-
-    // if id is not provided, then generate an id and leave the node dangling
-    // ui.containerDiv will be generated with this id
-
-        // the sandbox
+        // if id is not provided, then uses the generated id and leave the node dangling
         
-
     }
+
 
 
     
@@ -1003,7 +960,7 @@ function Sandbox(ui) {
 
         model.assets = assets
         
-        ui.basediv.classList.add("div-model-theme-" + config.theme)
+        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
         _objF(ui.arena,"update")
         _objF(ui.menu,"select");
         model.start(); 
@@ -1075,24 +1032,24 @@ function Sandbox(ui) {
         
         // CREATE A BALLOT
         
-        var myNode = ui.basediv.querySelector("#right");
+        var myNode = ui.dom.right;
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }  // remove old one, if there was one
-        // ui.basediv.querySelector("#ballot").remove()
+        // ui.dom.basediv.querySelector("#ballot").remove()
 
         var doOldBallot = false
         if (config.oneVoter) {
             if (doOldBallot) {
                 var BallotType = model.ballotType
                 var ballot = new BallotType(model);
-                basediv.querySelector("#right").appendChild(ballot.dom);
+                ui.dom.right.appendChild(ballot.dom);
             } else {
                 var divBallot = document.createElement("div")
-                ui.basediv.querySelector("#right").appendChild(divBallot);
+                ui.dom.right.appendChild(divBallot);
             }
         }
-        ui.basediv.querySelector("#right").appendChild(model.caption);
+        ui.dom.right.appendChild(model.caption);
         
         if (config.oneVoter) {
             if (model.voters[0].voterGroupType == "SingleVoter") {
@@ -1185,7 +1142,6 @@ function Menu(ui,model,config,initialConfig, cConfig) {
 
 
     ui.menu = {}
-    var basediv = ui.basediv
 
     ui.menu_update = function() {
         // UPDATE MENU //
@@ -3123,9 +3079,9 @@ function Menu(ui,model,config,initialConfig, cConfig) {
         }
         self.init_sandbox = function() {
             for (var i = 0; i < self.list.length; i++) {
-               basediv.classList.remove("div-model-theme-" + self.list[i].name)
+               ui.dom.basediv.classList.remove("div-model-theme-" + self.list[i].name)
             }
-            basediv.classList.add("div-model-theme-" + model.theme)
+            ui.dom.basediv.classList.add("div-model-theme-" + model.theme)
         }
         self.select = function() {
             self.choose.highlight("name", config.theme);
@@ -4299,7 +4255,7 @@ function Menu(ui,model,config,initialConfig, cConfig) {
 
 
     var m1 = new menuTree(ui)
-    m1.assignMenu( menu1 , basediv.querySelector("#left"), "basediv" )
+    m1.assignMenu( menu1 , ui.dom.left, "basediv" )
     // detail: seems harmless, but the basediv gets reattached.
     
     m1.menuNameDivs["gearList"][0].hidden = true
@@ -4309,7 +4265,7 @@ function Menu(ui,model,config,initialConfig, cConfig) {
     
 
     var m2 = new menuTree(ui)
-    m2.assignMenu( menu2 , basediv.querySelector("#left"), "basediv" )
+    m2.assignMenu( menu2 , ui.dom.left, "basediv" )
 
     m2.menuNameDivs["hidden"][0].hidden = true
 
@@ -4387,7 +4343,6 @@ function menuTree(ui) {
 function UiArena(ui,model,config,initialConfig, cConfig) {
     
     ui.arena = {}
-    var basediv = ui.basediv
 
     //////////////////////////
     //////// RESET... ////////
@@ -4406,7 +4361,7 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
             // UPDATE MENU //
             _objF(ui.menu,"select");
         };
-        basediv.querySelector("#center").appendChild(resetDOM);
+        ui.dom.center.appendChild(resetDOM);
         self.dom = resetDOM
     }
 
@@ -4418,8 +4373,8 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
         var self = this
         var descDOM = document.createElement("div");
         descDOM.id = "description_container";
-        var refNode = basediv.querySelector("#left");
-        basediv.insertBefore(descDOM, refNode);
+        var refNode = ui.dom.left;
+        ui.dom.basediv.insertBefore(descDOM, refNode);
         var descText = document.createElement("textarea");
         descText.id = "description_text";
         descText.placeholder = "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
@@ -4435,7 +4390,7 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
         self.update = function () {
             
             if (config.sandboxsave) {
-                basediv.querySelector("#center").style.width = config.arena_size + model.border*2 + "px"
+                ui.dom.center.style.width = config.arena_size + model.border*2 + "px"
                 descDOM.hidden = false
                 descText.hidden = false
             } else {
@@ -4459,7 +4414,7 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
             var pos = savePositions()  // saves the candidate and voter positions in the config.
             for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
             // Description
-            var description = basediv.querySelector("#description_text") || {value:""};
+            var description = ui.dom.basediv.querySelector("#description_text") || {value:""};
             config.description = description.value;
             // UPDATE MAIN //
             newURLs = cConfig.save()
@@ -4472,7 +4427,7 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
                 embedLink.innerHTML = "&lt;embed&gt;";
             }
             
-            var savelink = basediv.querySelector("#savelink");
+            var savelink = ui.dom.basediv.querySelector("#savelink");
             savelink.value = "saving...";
             setTimeout(function(){
                 savelink.value = newURLs.linkText;
@@ -4480,7 +4435,7 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
             
 
         };
-        basediv.querySelector("#center").appendChild(saveDOM);
+        ui.dom.center.appendChild(saveDOM);
         self.dom = saveDOM
     }
 
@@ -4493,18 +4448,17 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
         linkText.onclick = function(){
             linkText.select();
         };
-        basediv.querySelector("#center").appendChild(linkText);
+        ui.dom.center.appendChild(linkText);
         self.dom = linkText
     }
 
     var tinyLink = document.createElement("a")
-    var centerDiv = basediv.querySelector("#center")
-    centerDiv.appendChild(tinyLink)
+    ui.dom.center.appendChild(tinyLink)
     tinyLink.setAttribute("target", "_blank")
     tinyLink.setAttribute("class", "tinyURL")
 
     var embedLink = document.createElement("span")
-    centerDiv.appendChild(embedLink)
+    ui.dom.center.appendChild(embedLink)
     embedLink.setAttribute("class", "tinyURL")
     embedLink.setAttribute("style", "text-decoration: underline;")
     embedLink.onclick = function(){
