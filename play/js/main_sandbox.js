@@ -1,27 +1,88 @@
 
 // Search for HOWTO to see notes on making changes. (right now, just for renaming menus)
 
-function main(preset) {
+function main(ui) {
+
+    // main runs the whole userland experience.
+    // ui is a mother object for everything related to the User Interface
+    // in much the same way that model is the mother for everything simulation related.
+
+    // Example usage:
+    // main({id:"asdf",presetName:"sandbox"})
+    // main({id:"uiop"})
+    // ui = main()
+    // Just put it inside <div><script id="id">
+    
+    // Like so:
+	// <div>
+	// 	    <script id="asdf">
+	// 		    main({id:"asdf",presetName:"sandbox"})
+	// 	    </script>
+    // <div>
+    // The input variables are:
+    // ui.idScript : what you call the divs
+    // ui.presetName : the name of the preset
+
+
+    // ui.presetName: for the presets
+    // ui.idModel : for the divs
+    // ui.idScript: for the divs
+
+    
+    
+    // We can even do a url pasted directly from the address bar 
+    // (only the part after the ? question mark is read into the Config)
+	// main({id:"uio",url:"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Ty27CMBD8lz374HdizhXH_gBwiGiokNJEDYkqFcG3d8aBhApVKsbs7MO7411zFi2rzSZZFdNObazRqtAEPihTWiATjDJFBApRmaR3OyWGZ0zQCpu6k5XYF1HiZaWVBFkdquZUK4kItOpp4UgBj1ZPC54SHqT--4uYhBhwUf_YpIs7Dv0IPobM5bqVq94K-BK5GRUz2m6nH37krVvX1TD29frYDHV_N-ctwvwW979mDQqb0dZf-6ql5udemKUtJi4QjTAeEtcOECl30IIxjBZ0DQTyWwg3-fxkDJOIkxFpHEQ5aSkfcJytnD7Hqq_BZeiPVfve1KTsTA50NidxbopfyDpkP8vStzuwd-DuwE_gAhOoSP2NSg5sItOnPGWDmTvlUdaTEUfiOYhci4p9VJB54wh8vpIPnLW6Ldpj5uwLNj2f4sMrf2mJGmlBCagprx0RinJEgfOyBC6nCrdnuwwoLAMKrFONQ05QPs42pMUT9QNmmY4R0c6Ir2J_7PcNKUXeSdrqI88ism_d4UBHsfx1WEsuP5a3SEChAwAA"})
+
+    // Another example:
+    // main runs after loadpreset
+    // and they can be chained together
+    // e.g. main(loadpreset({id:"asdf",presetName:"sandbox"}))
+
+
+    // Finally, if id is not provided, then generate an id and leave the node dangling
+    // ui.containerDiv will be generated with this id
+    // Example:
+	// <div>
+	// 	    <script id="later">
+    //         ui = {presetName:"sandbox"}
+    //         loadpreset(ui)
+    //         main(ui)
+    //         ui.idScript = "later"
+    //         ui.makeParentDivs()
+	// 	    </script>
+    // <div>
+    
+
+    
+    // Defaults
+    // a little help filling in the ui (should have been done in html as above)
+    if (ui == undefined || ui.config == undefined || ui.presetName == undefined) {
+        ui = loadpreset(ui)
+    }
+    if (ui.idModel == undefined) {
+        ui.idModel = "model-" + _rand5()
+        ui.missingModelId = true
+    }
+    if (ui.idScript == undefined) {
+        ui.idScript = "script-" + _rand5()
+        ui.danglingScript = true
+    }
+    ui.url = ui.url || window.location.href
 
 
     
-    // CREATE
-    var ui = {}
-    ui.modelName = preset.modelName
+
 
     // Set up all the menu items and buttons and divs
     var s = new Sandbox(ui)   // the sandbox is the binder between the model and the config
-    
-    // Read the current URL
-    ui.url = window.location.href;
 
-    // INIT
-    // Read in the config file.
-    s.setConfig(preset.config)
-    
     // Filter which buttons will appear in the menu items. // Kind of clumsy but works.
-    if (preset.update) preset.update(s) 
+    if (ui.preset.update) ui.preset.update() 
     
+
+
+
     // CREATE
     var l = new Loader()
     // CONFIGURE
@@ -34,9 +95,15 @@ function main(preset) {
     // s.update()
     // for possibly greater speed, since we don't have to wait on the downloads.
 
+
+
+
+    return ui
 }
 
 function Config(ui, config, initialConfig) {
+    //  Getting the configuration from a URL or previous version, requiring clean up.
+
     var self = this
 
     /////////////////////////////
@@ -108,7 +175,8 @@ function Config(ui, config, initialConfig) {
     }
 
 
-    self.setConfig = function(c) {
+    self.setConfig = function() {
+        var c = ui.preset.config
         // INIT - initialize all data structures
         // the data structure for a sandbox is the configuration of the model.  Init completes this data structures.
         // backwards compatibility
@@ -476,6 +544,8 @@ function Config(ui, config, initialConfig) {
 }
 
 function Cypher(ui) {
+    // Decyphers the URL
+
     var self = this
     var doFriendlyURI = true
 
@@ -729,12 +799,18 @@ function Cypher(ui) {
         return str.replace(/-/g, '+').replace(/_/g, '/');
     }
 
+
+
 }
 
-
 function Sandbox(ui) {
-    var self = this
-    
+    // This sets up the Sandbox, with some help from the functions called below during the CREATE phase.  
+    // The main tasks are 
+    //  Cypher: decyphering the URL,
+    //  Config: getting the configuration from it.
+    // Sandbox: binding functions into the Model simulation routine.  And creating the primary divs
+    //    Menu: Creating all the divs and assigning click events inside the left menu
+    // UiArena: " " outside the left menu
 
     // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
@@ -750,9 +826,14 @@ function Sandbox(ui) {
     // // The sandbox is the binder
 
 
-    // CREATE
 
-    var model = new Model(ui.modelName)
+
+    var self = this
+
+    // CREATE the data structure
+
+    var model = new Model(ui.idModel)
+    model.inSandbox = true
 
     // some switches
     ui.embed = false
@@ -761,52 +842,159 @@ function Sandbox(ui) {
 
     var config = {}
     var initialConfig = {}
-    var cConfig = new Config(ui,config,initialConfig) 
-    self.setConfig = cConfig.setConfig
+    var cConfig = new Config(ui,config,initialConfig)
 
     ui.cypher = new Cypher(ui)
     
-    // CREATE div stuff for sandbox
-    var basediv = document.querySelector("#" + model.id)
-    newDivOnBase("left")
-    newDivOnBase("center")
-    newDivOnBase("right")
-    
-    Menu(ui,model,config,initialConfig, cConfig, basediv)
-    // ui.menu = new Menu(ui,model,config,initialConfig, cConfig)
-    UiArena(ui,model,config,initialConfig, cConfig, basediv)
-    // ui.arena = new UiArena(ui,model,config,initialConfig, cConfig)
+    // CREATE the divs!
+    createDOM()
+    Menu(ui,model,config,initialConfig, cConfig)
+    UiArena(ui,model,config,initialConfig, cConfig)
     
     // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
     ui.cypher.setUpEncode()
+
+    // INIT
+    // Read in the config file.
+    cConfig.setConfig()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function createDOM() {
+        
+        // Here are two boolean variables to consider
+        // ui.missingModelId : needs a new parent div
+        // ui.danglingScript : can't be appended to a parent div, so will leave dangling
+
+        // Here are the actual strings that these bools refer to
+        // ui.idModel : for the divs
+        // ui.idScript: for the divs
+
+        if (ui.missingModelId) {
+            ui.basediv = _makeParentDivs()
+        } else {
+            ui.basediv = document.querySelector("#" + model.id)
+        }
+        newDivOnBase("left")
+        newDivOnBase("center")
+        newDivOnBase("right")
+        function newDivOnBase(name) {
+            var a = document.createElement("div");
+            a.setAttribute("id", name);
+            ui.basediv.appendChild(a);
+        }
+        // Details
+        model.createDOM()
     
-
-
-
-
-    // Now we focus on the model
-
-
-    // Details
-
-    model.createDOM()
-
-    var centerDiv = basediv.querySelector("#center")
-    if (centerDiv.hasChildNodes()){
-        var firstNode = centerDiv.childNodes[0]
-        centerDiv.insertBefore(model.dom,firstNode);
-    } else {
-        centerDiv.appendChild(model.dom)
+        var centerDiv = ui.basediv.querySelector("#center")
+        if (centerDiv.hasChildNodes()){
+            var firstNode = centerDiv.childNodes[0]
+            centerDiv.insertBefore(model.dom,firstNode);
+        } else {
+            centerDiv.appendChild(model.dom)
+        }
+        model.dom.removeChild(model.caption);
+        ui.basediv.querySelector("#right").appendChild(model.caption);
+        model.caption.style.width = "";
     }
-    model.dom.removeChild(model.caption);
-    basediv.querySelector("#right").appendChild(model.caption);
-    model.caption.style.width = "";
+    
+    // helper
+    ui.makerParentDivs = _makeParentDivs
+    function _makeParentDivs() {
+        
+        // the model
+        var md = document.createElement('div'); 
+        md.id = ui.idModel
+        md.classList = "div-sandbox div-election div-ballot-in-sandbox div-model"
 
-    // FUNCTIONS and CLASSES for INIT and UPDATE
+        // the contain-model 
+        var cm = document.createElement('div'); 
+        cm.classList = "contain-model"
+        cm.setAttribute("scrolling","no")
 
-    model.inSandbox = true
+        // the script
+        if (ui.danglingScript) {
+            var pa = document.createElement('div'); 
+        } else {
+            var sc = document.getElementById(ui.idScript); 
+            var pa = sc.parentNode
+        }
+
+        // connecting
+        pa.appendChild(cm); 
+        cm.appendChild(md)
+
+        return md
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        // go from this
+        //  <div>
+        // 	    <script id="idScript">
+        // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
+        // 	    </script>
+        //  <div>
+        
+        // to this
+        // <div class="contain-model">
+        // 	    <div id="idModel" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
+        // 	    </div>
+        //      <script id="idScript">
+        // 	        main()
+        //      </script>
+        // </div>
+        // https://stackoverflow.com/a/758683
+        // via https://stackoverflow.com/a/1219857
+
+
+
+    // if id is not provided, then generate an id and leave the node dangling
+    // ui.containerDiv will be generated with this id
+
+        // the sandbox
+        
+
+    }
 
 
     
@@ -815,11 +1003,11 @@ function Sandbox(ui) {
 
         model.assets = assets
         
-        basediv.classList.add("div-model-theme-" + config.theme)
+        ui.basediv.classList.add("div-model-theme-" + config.theme)
         _objF(ui.arena,"update")
         _objF(ui.menu,"select");
         model.start(); 
-    };
+    }; 
 
     model.start = function(){
 
@@ -887,11 +1075,11 @@ function Sandbox(ui) {
         
         // CREATE A BALLOT
         
-        var myNode = basediv.querySelector("#right");
+        var myNode = ui.basediv.querySelector("#right");
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }  // remove old one, if there was one
-        // basediv.querySelector("#ballot").remove()
+        // ui.basediv.querySelector("#ballot").remove()
 
         var doOldBallot = false
         if (config.oneVoter) {
@@ -901,10 +1089,10 @@ function Sandbox(ui) {
                 basediv.querySelector("#right").appendChild(ballot.dom);
             } else {
                 var divBallot = document.createElement("div")
-                basediv.querySelector("#right").appendChild(divBallot);
+                ui.basediv.querySelector("#right").appendChild(divBallot);
             }
         }
-        basediv.querySelector("#right").appendChild(model.caption);
+        ui.basediv.querySelector("#right").appendChild(model.caption);
         
         if (config.oneVoter) {
             if (model.voters[0].voterGroupType == "SingleVoter") {
@@ -987,19 +1175,17 @@ function Sandbox(ui) {
     ];
 
     
-    // helper
-    
-    function newDivOnBase(name) {
-        var a = document.createElement("div");
-        a.setAttribute("id", name);
-        basediv.appendChild(a);
-    }
+
 }
 
 
-function Menu(ui,model,config,initialConfig, cConfig, basediv) {
+function Menu(ui,model,config,initialConfig, cConfig) {
+
+    // Each menu item is kind of similar to a mini instance of Sandbox.start.  That's because most of the stuff in Sandbox.start has already been done.  These small onChoose functions just launch when a button is pressed, which is after the whole Sandbox has loaded.
+
 
     ui.menu = {}
+    var basediv = ui.basediv
 
     ui.menu_update = function() {
         // UPDATE MENU //
@@ -2522,20 +2708,24 @@ function Menu(ui,model,config,initialConfig, cConfig, basediv) {
             for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presetModelNames.push("ballot"+i) ; presetdescription.push("ballot"+i)}
             
             var presetconfig = []
-            for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],modelName:presetModelNames[i],margin:4})
+            for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],presetName:presetModelNames[i],margin:4})
             return presetconfig
         }
         self.onChoose = function(data){
             if (data.isOn) {
                 // LOAD MAIN
-                var preset = loadpreset(data.modelName)
-                var firstletter = data.modelName[0]
+                var ui2 = loadpreset(data.presetName)
+                var firstletter = data.presetName[0]
+
+                // here's where I should make use of ui2.uiType
+                // if (ui2.uiType == "election" || ui2.uiType == "sandbox" || ui2.uiType == "sandbox-original")
                 if (firstletter == 'e' || firstletter == 's') {
                     
                     // LOAD Preset
-                    _copyAttributes(config, loadpreset(data.modelName).config)
+                    _copyAttributes(config, ui2.preset.config)
                     
-                } else if (firstletter == 'b') {
+                // } else if (ui2.uiType == "ballot")
+                } else if (firstletter == 'b') { 
                     //document.location.replace(data.htmlname);
                     // LOAD Defaults
                     var ballotconfig = {
@@ -2549,7 +2739,7 @@ function Menu(ui,model,config,initialConfig, cConfig, basediv) {
                         doStarStrategy: false
                     }
                     // LOAD Preset
-                    Object.assign(ballotconfig, loadpreset(data.modelName).config )
+                    Object.assign(ballotconfig, ui2.preset.config )
                     // get config from ballotconfig
                     var systemTranslator = {Plurality:"FPTP",Ranked:"Condorcet",Approval:"Approval",Score:"Score",Three:"3-2-1"}
                     
@@ -2590,7 +2780,7 @@ function Menu(ui,model,config,initialConfig, cConfig, basediv) {
             onChoose: self.onChoose
         });
 		self.init_sandbox = function() {
-			self.choose.highlight("modelName", model.id); // only do this once.  Otherwise it would be in updateUI
+			self.choose.highlight("presetName", model.id); // only do this once.  Otherwise it would be in updateUI
 		}
     }
 
@@ -4194,9 +4384,10 @@ function menuTree(ui) {
 
 }
 
-function UiArena(ui,model,config,initialConfig, cConfig, basediv) {
+function UiArena(ui,model,config,initialConfig, cConfig) {
     
     ui.arena = {}
+    var basediv = ui.basediv
 
     //////////////////////////
     //////// RESET... ////////

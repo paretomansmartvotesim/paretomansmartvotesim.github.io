@@ -1,5 +1,7 @@
 
-function main_ballot(preset){
+function main_ballot(ui){
+	var presetName = ui.presetName
+	var preset = ui.preset
 	var config = preset.config
 
 	var l = new Loader()
@@ -36,7 +38,7 @@ function main_ballot(preset){
 	l.onload = function(assets){
 
 		// CREATE
-		var model = new Model(preset.modelName);
+		var model = new Model(presetName);
         model.createDOM()
 		// CONFIGURE
 		model.assets = assets
@@ -48,7 +50,7 @@ function main_ballot(preset){
 		// INIT
 		model.initDOM()
 
-		var basediv = document.querySelector("#" + preset.modelName)
+		var basediv = document.querySelector("#" + presetName)
 
 			
 		// CREATE div stuff

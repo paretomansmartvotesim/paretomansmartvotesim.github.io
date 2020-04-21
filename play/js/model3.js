@@ -3,14 +3,14 @@ l.onload = function(assets){
 
 	// CREATE
 
-	var modelName = "model3"
-	var model = new Model(modelName);
+	var presetName = "model3"
+	var model = new Model(presetName);
 	model.assets = assets
 	model.createDOM()
 
 	// INIT
 	model.initDOM()
-  var basediv = document.querySelector("#" + modelName)
+  var basediv = document.querySelector("#" + presetName)
   basediv.appendChild(model.dom);
 
 	model.start = function(){

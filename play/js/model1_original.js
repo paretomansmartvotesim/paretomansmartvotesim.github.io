@@ -2,8 +2,8 @@ var l = new Loader()
 l.onload = function(assets){
 
   // CREATE
-  var modelName = "model1"
-  var model = new Model(modelName);
+  var presetName = "model1"
+  var model = new Model(presetName);
   model.assets = assets
 	model.theme = "Nicky"
   model.createDOM()
@@ -12,7 +12,7 @@ l.onload = function(assets){
   // INIT
   model.initDOM()
 
-  var basediv = document.querySelector("#" + modelName)
+  var basediv = document.querySelector("#" + presetName)
   basediv.appendChild(model.dom);
 
   model.start = function(){

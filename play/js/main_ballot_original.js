@@ -1,6 +1,8 @@
 
-function main_ballot(preset){
+function main_ballot(ui){
+	var preset = ui.preset
 	var ballotType = preset.config.system
+	var presetName = ui.presetName
 
 	var VoterType = window[ballotType+"Voter"];
 	var BallotType = window[ballotType+"Ballot"];
@@ -9,7 +11,7 @@ function main_ballot(preset){
 	l.onload = function(){
 
 		// CREATE
-		var model = new Model(preset.modelName);
+		var model = new Model(presetName);
         model.createDOM()
 
 		// CONFIGURE
@@ -22,7 +24,7 @@ function main_ballot(preset){
 		// INIT
 		model.initDOM()
 
-		var basediv = document.querySelector("#" + preset.modelName)
+		var basediv = document.querySelector("#" + presetName)
 		basediv.appendChild(model.dom);
 		model.start = function(){
 			// CREATE

@@ -1,26 +1,61 @@
-function loadpreset(modelName) {
-	
-	// input
-	var htmlname = modelName + '.html'
+function loadpreset(ui) {
 
-	// defaults
-	var config = []
-	var update = function () {
-		return
+	// clumsy grandfather
+	if (typeof(ui) == "string") {
+		ui = {
+			presetName:ui,
+			idModel:ui,
+		}
 	}
 
-	// helpers
-	update_original = function (s) {
-		s.ui.menu.systems.choose.buttons.forEach(x => x.dom.hidden = (["FPTP", "IRV", "Borda", "Condorcet", "Approval", "Score"].includes(x.dom.innerHTML)) ? false : true)
-		s.ui.menu.systems.choose.buttons.forEach(x => x.dom.style.marginRight = "4px")
-		s.ui.menu.systems.choose.buttons.forEach(x => x.dom.style.width = "106px")
 
-		s.ui.menu.nVoterGroups.choose.buttons.forEach(x => x.dom.hidden = (["1", "2", "3"].includes(x.dom.innerHTML)) ? false : true)
-		s.ui.menu.nCandidates.choose.buttons.forEach(x => x.dom.hidden = (["two", "three", "four", "five"].includes(x.dom.innerHTML)) ? false : true)
+
+	// e.g. loadpreset( {id:"sandbox"} )
+
+	// input:
+	// ui.presetName
+
+	// load the preset corresponding to the ui.presetName
+	// if we don't already have a ui.presetName, generate one
+	
+	// output: additional attributes
+	// ui.preset.config
+	// ui.preset.update
+	// ui.presetName (is generated if not provided)
+	
+
+    // ui.presetName: for the presets
+    // ui.idModel : for the divs
+    // ui.idScript: for the divs
+
+
+	// defaults
+	var config = {}
+	var update = () => null
+	var uiType = "election"
+	
+	// default presetName
+	if (! (ui && ui.presetName) ) {
+		if (ui == undefined) var ui = {}
+		ui.presetName = "sandbox"
+		// then we will end up skipping down to the bottom
+	}
+
+
+	// helpers
+	var update_original = function () {
+		ui.menu.systems.choose.buttons.forEach(x => x.dom.hidden = (["FPTP", "IRV", "Borda", "Condorcet", "Approval", "Score"].includes(x.dom.innerHTML)) ? false : true)
+		ui.menu.systems.choose.buttons.forEach(x => x.dom.style.marginRight = "4px")
+		ui.menu.systems.choose.buttons.forEach(x => x.dom.style.width = "106px")
+
+		ui.menu.nVoterGroups.choose.buttons.forEach(x => x.dom.hidden = (["1", "2", "3"].includes(x.dom.innerHTML)) ? false : true)
+		ui.menu.nCandidates.choose.buttons.forEach(x => x.dom.hidden = (["two", "three", "four", "five"].includes(x.dom.innerHTML)) ? false : true)
 	}
 	
 	// configurations
-	if (htmlname == "election1.html") {
+	if (ui.presetName == "election1") {
+		uiType = "election"
+		update = update_original
 		config = {
 
 			features: 1,
@@ -38,8 +73,9 @@ function loadpreset(modelName) {
 				[155, 125]
 			]
 		}
+	} else if (ui.presetName == "election2") {
+		uiType = "election"
 		update = update_original
-	} else if (htmlname == "election2.html") {
 		config = {
 
 			features: 1,
@@ -59,8 +95,9 @@ function loadpreset(modelName) {
 
 
 		}
+	} else if (ui.presetName == "election3") {
+		uiType = "election"
 		update = update_original
-	} else if (htmlname == "election3.html") {
 		config = {
 
 			features: 1,
@@ -83,16 +120,18 @@ function loadpreset(modelName) {
 			// voterPositions: [[226,230]]
 
 		}
+	} else if (ui.presetName == "election4") {
+		uiType = "election"
 		update = update_original
-	} else if (htmlname == "election4.html") {
 		config = {
 			features: 2,
 			system: "Condorcet",
 			candidates: 3,
 			voters: 3
 		}
+	} else if (ui.presetName == "election5") {
+		uiType = "election"
 		update = update_original
-	} else if (htmlname == "election5.html") {
 		config = {
 
 			features: 2,
@@ -112,8 +151,8 @@ function loadpreset(modelName) {
 			]
 
 		}
-		update = update_original
-	} else if (htmlname == "election6.html") {
+	} else if (ui.presetName == "election6") {
+		uiType = "election"
 		config = {
 
 			system: "Score",
@@ -132,7 +171,8 @@ function loadpreset(modelName) {
 			]
 
 		}
-	} else if (htmlname == "election7.html") {
+	} else if (ui.presetName == "election7") {
+		uiType = "election"
 		config = {
 			featurelist: ["percentSecondStrategy"],
 			percentSecondStrategy: [90, 0, 0],
@@ -154,7 +194,8 @@ function loadpreset(modelName) {
 			firstStrategy: "zero strategy. judge on an absolute scale."
 
 		}
-	} else if (htmlname == "election8.html") {
+	} else if (ui.presetName == "election8") {
+		uiType = "election"
 		config = {
 
 			/*
@@ -197,7 +238,8 @@ function loadpreset(modelName) {
 			doFullStrategyConfig: undefined,
 
 		}
-	} else if (htmlname == "election9.html") {
+	} else if (ui.presetName == "election9") {
+		uiType = "election"
 		config = {
 
 			features: 3,
@@ -216,7 +258,8 @@ function loadpreset(modelName) {
 			doFullStrategyConfig: true
 
 		}
-	} else if (htmlname == "election10.html") {
+	} else if (ui.presetName == "election10") {
+		uiType = "election"
 		config = {
 			/*
 				features:3,
@@ -266,7 +309,8 @@ function loadpreset(modelName) {
 			doPercentFirst: undefined,
 			doFullStrategyConfig: undefined
 		}
-	} else if (htmlname == "election11.html") {
+	} else if (ui.presetName == "election11") {
+		uiType = "election"
 		config = {
 			/*
 				features:1,
@@ -317,7 +361,8 @@ function loadpreset(modelName) {
 			doPercentFirst: undefined,
 			doFullStrategyConfig: undefined
 		}
-	} else if (htmlname == "election12.html") {
+	} else if (ui.presetName == "election12") {
+		uiType = "election"
 		config = {
 			/*
 				features:3,
@@ -364,7 +409,8 @@ function loadpreset(modelName) {
 			doPercentFirst: undefined,
 			doFullStrategyConfig: undefined,
 		}
-	} else if (htmlname == "election13.html") {
+	} else if (ui.presetName == "election13") {
+		uiType = "election"
 		config = {
 			/*
 				features:3,
@@ -413,7 +459,8 @@ function loadpreset(modelName) {
 			doPercentFirst: undefined,
 			doFullStrategyConfig: undefined
 		}
-	} else if (htmlname == "election14.html") {
+	} else if (ui.presetName == "election14") {
+		uiType = "election"
 		config = {
 			/*
 				features:3,
@@ -462,7 +509,8 @@ function loadpreset(modelName) {
 			doPercentFirst: undefined,
 			doFullStrategyConfig: undefined
 		}
-	} else if (htmlname == "election15.html") {
+	} else if (ui.presetName == "election15") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -494,7 +542,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election16.html") {
+	} else if (ui.presetName == "election16") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -538,7 +587,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election17.html") {
+	} else if (ui.presetName == "election17") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -586,7 +636,8 @@ function loadpreset(modelName) {
 
 
 
-	} else if (htmlname == "election18.html") {
+	} else if (ui.presetName == "election18") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -633,7 +684,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election19.html") {
+	} else if (ui.presetName == "election19") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -677,7 +729,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election20.html") {
+	} else if (ui.presetName == "election20") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -721,7 +774,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election21.html") {
+	} else if (ui.presetName == "election21") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -768,7 +822,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election22.html") {
+	} else if (ui.presetName == "election22") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -815,7 +870,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election23.html") {
+	} else if (ui.presetName == "election23") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[76, 147],
@@ -862,7 +918,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election24.html") {
+	} else if (ui.presetName == "election24") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[78, 187],
@@ -909,7 +966,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election25.html") {
+	} else if (ui.presetName == "election25") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[75, 184],
@@ -956,7 +1014,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election26.html") {
+	} else if (ui.presetName == "election26") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[40, 132],
@@ -1006,7 +1065,8 @@ function loadpreset(modelName) {
 		}
 
 
-	} else if (htmlname == "election27.html") {
+	} else if (ui.presetName == "election27") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1056,7 +1116,8 @@ function loadpreset(modelName) {
 			// presethtmlname: "sandbox.html",
 		}
 
-	} else if (htmlname == "election28.html") {
+	} else if (ui.presetName == "election28") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1105,7 +1166,8 @@ function loadpreset(modelName) {
 			// filename: "sandbox.html",
 			// presethtmlname: "sandbox.html",
 		}
-	} else if (htmlname == "election29.html") {
+	} else if (ui.presetName == "election29") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1154,7 +1216,8 @@ function loadpreset(modelName) {
 			// filename: "sandbox.html",
 			// presethtmlname: "sandbox.html",
 		}
-	} else if (htmlname == "election30.html") {
+	} else if (ui.presetName == "election30") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1205,7 +1268,8 @@ function loadpreset(modelName) {
 			// presethtmlname: "sandbox.html",
 		}
 
-	} else if (htmlname == "election31.html") {
+	} else if (ui.presetName == "election31") {
+		uiType = "election"
 		config = {
 
 			features: 1,
@@ -1225,10 +1289,11 @@ function loadpreset(modelName) {
 			hidegearconfig: true
 
 		}
-		update = function (s) {
-			s.ui.menu.systems.choose.buttons.forEach(x => x.dom.hidden = (["FPTP", "Condorcet", "Approval", "Score"].includes(x.dom.innerHTML)) ? false : true)
+		update = function () {
+			ui.menu.systems.choose.buttons.forEach(x => x.dom.hidden = (["FPTP", "Condorcet", "Approval", "Score"].includes(x.dom.innerHTML)) ? false : true)
 		}
-	} else if (htmlname == "elect_bees.html") {
+	} else if (ui.presetName == "elect_bees") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1250,7 +1315,8 @@ function loadpreset(modelName) {
 			kindayee: "center",
 		}
 
-	} else if (htmlname == "elect_quotaApproval.html") {
+	} else if (ui.presetName == "elect_quotaApproval") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1269,7 +1335,8 @@ function loadpreset(modelName) {
 			hidegearconfig: true,
 		}
 
-	} else if (htmlname == "elect_try.html") {
+	} else if (ui.presetName == "elect_try") {
+		uiType = "election"
 		config = {
 			candidatePositions: [
 				[92, 69],
@@ -1291,7 +1358,8 @@ function loadpreset(modelName) {
 			configversion: 2.3
 		}
 
-	} else if (htmlname == "sandbox.html") {
+	} else if (ui.presetName == "sandbox") {
+		uiType = "sandbox"
 		config = {
 			description: "",
 			features: 4,
@@ -1315,7 +1383,8 @@ function loadpreset(modelName) {
 			yeeon: false,
 			// configversion: 2.5, // should stay at latest version
 		}
-	} else if (htmlname == "sandbox_original.html") {
+	} else if (ui.presetName == "sandbox_original") {
+		uiType = "sandbox original"
 		config = {
 			description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
 			features: 4,
@@ -1324,33 +1393,39 @@ function loadpreset(modelName) {
 			voters: 1
 		}
 		update = update_original
-	} else if (htmlname == "ballot1.html") {
+	} else if (ui.presetName == "ballot1") {
+		uiType = "ballot"
 		config = {
 			system: "Plurality"
 		}
 
-	} else if (htmlname == "ballot2.html") {
+	} else if (ui.presetName == "ballot2") {
+		uiType = "ballot"
 		config = {
 			system: "Ranked",
 			method: "IRV"
 		}
 
-	} else if (htmlname == "ballot3.html") {
+	} else if (ui.presetName == "ballot3") {
+		uiType = "ballot"
 		config = {
 			system: "Approval"
 		}
 
-	} else if (htmlname == "ballot4.html") {
+	} else if (ui.presetName == "ballot4") {
+		uiType = "ballot"
 		config = {
 			system: "Score"
 		}
 
-	} else if (htmlname == "ballot5.html") {
+	} else if (ui.presetName == "ballot5") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			firstStrategy: "normalize"
 		}
-	} else if (htmlname == "ballot6.html") {
+	} else if (ui.presetName == "ballot6") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			firstStrategy: "best frontrunner",
@@ -1358,13 +1433,15 @@ function loadpreset(modelName) {
 			showChoiceOfFrontrunners: true,
 			showChoiceOfStrategy: true
 		}
-	} else if (htmlname == "ballot7.html") {
+	} else if (ui.presetName == "ballot7") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			firstStrategy: "not the worst frontrunner",
 			showChoiceOfFrontrunners: true
 		}
-	} else if (htmlname == "ballot8.html") {
+	} else if (ui.presetName == "ballot8") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			firstStrategy: "normalize frontrunners only",
@@ -1372,7 +1449,8 @@ function loadpreset(modelName) {
 			showChoiceOfFrontrunners: true,
 			showChoiceOfStrategy: true
 		}
-	} else if (htmlname == "ballot9.html") {
+	} else if (ui.presetName == "ballot9") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			firstStrategy: "normalize frontrunners only",
@@ -1380,7 +1458,8 @@ function loadpreset(modelName) {
 			showChoiceOfFrontrunners: true,
 			doStarStrategy: true
 		}
-	} else if (htmlname == "ballot10.html") {
+	} else if (ui.presetName == "ballot10") {
+		uiType = "ballot"
 		config = {
 			system: "Three",
 			firstStrategy: "normalize frontrunners only",
@@ -1388,7 +1467,8 @@ function loadpreset(modelName) {
 			showChoiceOfFrontrunners: true,
 			doStarStrategy: true
 		}
-	} else if (htmlname == "ballot11.html") {
+	} else if (ui.presetName == "ballot11") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			firstStrategy: "best frontrunner",
@@ -1396,7 +1476,8 @@ function loadpreset(modelName) {
 			showChoiceOfFrontrunners: true,
 			showChoiceOfStrategy: true
 		}
-	} else if (htmlname == "ballot12.html") {
+	} else if (ui.presetName == "ballot12") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			firstStrategy: "not the worst frontrunner",
@@ -1404,44 +1485,50 @@ function loadpreset(modelName) {
 			showChoiceOfFrontrunners: true,
 			showChoiceOfStrategy: true
 		}
-		// } else if (htmlname == "election.html") {
-		// 	config = 
-	} else if (htmlname == "ballot13.html") {
+	} else if (ui.presetName == "ballot13") {
+		uiType = "ballot"
 		config = {
 			system: "Plurality",
 			method: "FPTP",
 			newWay: true
 		}
 
-	} else if (htmlname == "ballot14.html") {
+	} else if (ui.presetName == "ballot14") {
+		uiType = "ballot"
 		config = {
 			system: "Ranked",
 			method: "RankedPair",
 			newWay: true
 		}
 
-	} else if (htmlname == "ballot15.html") {
+	} else if (ui.presetName == "ballot15") {
+		uiType = "ballot"
 		config = {
 			system: "Approval",
 			newWay: true
 		}
 
-	} else if (htmlname == "ballot16.html") {
+	} else if (ui.presetName == "ballot16") {
+		uiType = "ballot"
 		config = {
 			system: "Score",
 			newWay: true
 		}
 
-	} else if (htmlname == "ballot17.html") {
+	} else if (ui.presetName == "ballot17") {
+		uiType = "ballot"
 		config = {
 			system: "Ranked",
 			method: "IRV",
 			newWay: true
 		}
 	}
-	return {
+
+	ui.preset = {
 		config: config,
 		update: update,
-		modelName: modelName
+		uiType: uiType,
 	}
+
+	return ui
 }

@@ -138,6 +138,10 @@ function _objF(obj,f) { // run function if it exists for each item of an object
 	// for example: run ui.menu.systems.configure(), ui.menu.nCandidates.configure(), et al.
 }
 
+function _rand5() {
+	return Math.round(100000 * Math.random())
+}
+
 
 function _convertImageToDataURLviaCanvas(img, outputFormat){
 	var canvas = document.createElement('CANVAS');

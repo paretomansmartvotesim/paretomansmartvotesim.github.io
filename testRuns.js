@@ -11,6 +11,11 @@ var e = [
         ["log","log.html"],
         ["quotaApproval","quotaApproval.html"],
     ]],
+    ["elections", [ 
+        ["e1","play/examples/election1.html"],
+        ["b1","play/examples/ballot1.html"],
+        ["b14","play/examples/ballot14.html"],
+    ]],
     ["borda viz", [ 
         [1,"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41WwXKbMBD9F511QEjGOLc2mZya9JCZXOKMRzGyrRlALhKZJpnk2_sWG7uN6lg2sMvTW2l3WbS8sYxdPDwIlXGh1CN_ECLnohy1UkKZFFwU6vGRM0HcXIIhaWAKRRU0INkFy68YZwrKBHLCLla69oazAjYsB3T-xERTsDMe_TFSYmSS8dMHODNwxAyhnD8pGoQeuh4-CgqMfcxxzOcso8ucwaURERFCF_qxyjam9da1fkROc9sr60NnlyGB643-gpZHiIwQFSGTCClOO7DsfXDNrW5MSmSg1QjuJHMaIWWEzOK8_-dRxM9CxNkQcTpEnA8RJ-QQ0drobunalV2fj37bGW9CKnu5cc6bxdb-NvXC21eTYOKabR_MjQkbV6XQa9ddDst0iey7rV4mOOIRqq4WK70Mrls8u2C6hOrQnWl1YqiNqaxuF43R7Xly2JgmYc4-2NqGl4Xf6G0CfRfWN3-p28pWOqS8AE-6rl24twnUZ-vvbLuuzffBxv9s65eTVuKLN5RK1K1WKTlt-3uEhF0qjfzDPJv6PNUHs70B_TyzctfYz_rOXNs6pBSlp3r8zKM9O0eDyWAhqOUgelLVodmIY98RxVFFVyEWNHQRBTHbz5Jnw30uiED3mD6HkOM4phYQmBY9DkoxDkxHpByR2WAqqZ8y_6tH0QPFdq_pWZPvUuypMt8vJ4e-ScoxBIm13tixNY2KHBW1U94BkTfmlezhTpFBlmTsbWWedHfkzYauKrjkaOxMDS7S-oLcUtT8dosPV4LyGJLUW7kgFR5IiMkO4Xu0GFKlKDEfgxV9DpT_3FHaP8gp-kKAF-zWkUZ5gfyrTPdp-VQ2hxyNhbenHUp2yO_7H3QVO2bUCAAA"],
         [2,"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41WTU_jMBD9Lz7nEMdJmnLbBXFa2AMSlxZVpnFbS0ncjZ1qAcFv3zemaQFvqZsPj8dvPB-Z5PWFpexiNuN5mvA8f0hmnGcJr0apEhCKMuFl_vCQMO6xBbBFSnPBLlh2xRKWQygwFuxiJRurElYCyjKozl_YaAJ0mgQHViqswOHpE5gpMHyKqM5flAQydv2AGDnlw97mOOdzltJtzhDSqOGBhm70Y7VuVWe16eyoOY3trrR1vV66CKxV8htYFmhEoMkDTRFoytMBLAfrTHsrWxWTGWANkjuJnASaKtBMw7r_51GEz4KH1eBhOXhYDx4W5JDRWsl-abqVXp_Pftsrq1wserkxxqrFVv9VzcLqZxVhYtrt4NSNchtTx8Ab0196N30k-m4rlxGBWKQq68VKLp3pFzvjVB_RHbJXnYxMtVW1lt2iVbI7D3Yb1UbsOTjdaPe0sBu5jYC_p_XDXsqu1rV0MS_Ao2wa4-51BHSn7Z3u1o366W3s7655OmnFv3lDqUXNahVT0264R0r4SsWBf6mdas5DrVPbG8DPI2tzje_Z0Ktr3biYprTUj19x9M3OQDApLDhRDrInMT-QDT_yDi-PIliFUJDAIjmG6X6XLPXzjBOA5tg-wyDGdWzNMWBbcByEclyYjJpq1Ey9qSAaZfbPgKaHFp97Sc-aYhd8DxXZ3p3wvEnCMQUBXy_sSE2jIEYhfxdeoaJo1DPZI5wyxViRsdW1epT9ETf1rMoTkYDPWe5DTCmknIjPO6ZJ9nECfzNBAvwJDAVxa-IP0pa-MDmV4c3bEPlXn2ZU5DcKgf4PwCe7NSRRFTB-aMp9Eb40yaEiY5vtq3doUD9__Qd6XTAvuQgAAA"],

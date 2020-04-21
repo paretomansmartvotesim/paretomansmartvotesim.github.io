@@ -6,7 +6,7 @@ A MODEL:
 
 ***************************/
 
-function Model(modelName){
+function Model(idModel){
 
 	var self = this;
 
@@ -29,7 +29,7 @@ function Model(modelName){
     }
 	Object.assign(self,{
 		// values used in init
-		id:modelName,
+		id:idModel,
 		size:300,
 		scale:1,
 		border:10,

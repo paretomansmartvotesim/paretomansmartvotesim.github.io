@@ -1,8 +1,9 @@
-function main(preset){
+function main(ui){
 
+	var presetName = ui.presetName
+	var preset = ui.preset
 	var config = preset.config
-	var modelName = preset.modelName
-    var basediv = document.querySelector("#" + modelName)
+    var basediv = document.querySelector("#" + presetName)
     // CREATE div stuff for sandbox
     function newDivOnBase(name) {
         var a = document.createElement("div");
@@ -71,7 +72,7 @@ function main(preset){
 			
 		var ui = {}
 		
-		var model = new Model(modelName);
+		var model = new Model(presetName);
 		ui.model = model
         model.createDOM()
 
