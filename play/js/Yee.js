@@ -1,10 +1,19 @@
 
 function Viz(model) {
+	// There are four places where drawings go.
+	// Viz 
+	// Arena
+	// Candidates
+	// Voters
+
+
 	var self = this
 
-	// var colorNewCan = 'hsl(0,100%,100%)'
-	var colorNewCan = 'hsl(0,0%,0%)'
-	var colorNewCan = '#ccc'
+	yee = new Yee(model)
+	beatMap = new BeatMap(model)
+	self.yee = yee
+	self.beatMap = beatMap
+
 
 	self.calculate = function() {
 		
@@ -14,29 +23,39 @@ function Viz(model) {
 				 // dragging the yee object, so no need to recalculate, we can save time...
 				 // unless we wanted to calculate one of these:
 				 if (model.kindayee == 'newcan') {
-					 self.calculateYee()
+					 yee.calculateYee()
 				 } 
 			 } else {
 				 // something caused an update and we aren't dragging the yee object
-				 self.calculateYee()
+				 yee.calculateYee()
 			 }
 		 }
 
 		if (model.checkDoBeatMap()) {
-			self.calculateBeatMap()
+			beatMap.calculateBeatMap()
 		}
 	}
 
 	self.drawBackground = function() {
 
 		if (model.yeeon) {
-			self.drawBackgroundYee()
+			yee.drawBackgroundYee()
 		}
 
 		if (model.checkDoBeatMap()) {
-			self.drawBackgroundBeatMap()
+			beatMap.drawBackgroundBeatMap()
 		}
 	}
+
+}
+
+function Yee(model) {
+	var self = this
+
+	
+	var colorNewCan = 'hsl(0,100%,100%)'
+	var colorNewCan = 'hsl(0,0%,0%)'
+	var colorNewCan = '#ccc'
 
 	self.calculateYee = function(){
 		var ctx = model.arena.ctx
@@ -565,6 +584,69 @@ function Viz(model) {
 
 	}
 
+	self.drawHexagon = function(x,y,size,ctx) {
+		ctx.beginPath();
+		ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
+
+		for (var side = 0.5; side < 7.5; side++) {
+			ctx.lineTo(x + size * Math.cos(side * 2 * Math.PI / 6), y + size * Math.sin(side * 2 * Math.PI / 6));
+		}
+		// ctx.fillStyle = fill;
+		ctx.fill();
+	}
+
+	self.drawYeeGuyBackground = function(x,y,ctx){
+		
+		// put circle behind yee candidate
+		if(model.yeeon){
+			ctx.beginPath();
+			ctx.arc(x, y, 60, 0, Math.TAU, true);
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = 8;
+			ctx.fillStyle = 'white';
+			var temp = ctx.globalAlpha
+			ctx.globalAlpha = 0.3
+			ctx.fill();
+			ctx.stroke();
+			ctx.globalAlpha = temp
+		}
+	}
+	
+	self.drawYeeAnnotation = function(x,y,ctx) {
+		
+		// make the candidate that is moving say "yee-yee!"
+		if(model.yeeon){
+			ctx.textAlign = "center";
+			var temp = ctx.globalAlpha
+			ctx.globalAlpha = 0.9
+			_drawStroked("yee-yee!",x,y+50,40,ctx);
+			var dot = 3
+			ctx.fillStyle = "#000"
+			ctx.fillRect(x-dot-1,y-dot-1,dot*2+2,dot*2+2);
+			ctx.fillStyle = "#fff"
+			ctx.fillRect(x-dot,y-dot,dot*2,dot*2);
+			ctx.globalAlpha = temp
+		}
+	}
+
+}
+
+
+
+function BeatMap(model) {
+	var self = this
+
+	// calculate Condorcet decision boundaries
+
+	// calculate medians in all directions
+	// detail: even number
+	// detail: counterclockwise
+	
+	// calculate winner circle against each candidate
+	
+	// The data is a list of points that connect to form a circle.  This is calcualted per candidate.
+
+
 	self.calculateBeatMap = function() {
 		// calculate medians
 
@@ -724,62 +806,5 @@ function Viz(model) {
 		}
 		ctx.globalCompositeOperation = tempComposite
 		ctx.globalAlpha = temp
-	}
-
-	self.drawHexagon = function(x,y,size,ctx) {
-		ctx.beginPath();
-		ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
-
-		for (var side = 0.5; side < 7.5; side++) {
-			ctx.lineTo(x + size * Math.cos(side * 2 * Math.PI / 6), y + size * Math.sin(side * 2 * Math.PI / 6));
-		}
-		// ctx.fillStyle = fill;
-		ctx.fill();
-	}
-
-	self.drawYeeGuyBackground = function(x,y,ctx){
-		
-		// put circle behind yee candidate
-		if(model.yeeon){
-			ctx.beginPath();
-			ctx.arc(x, y, 60, 0, Math.TAU, true);
-			ctx.strokeStyle = "white";
-			ctx.lineWidth = 8;
-			ctx.fillStyle = 'white';
-			var temp = ctx.globalAlpha
-			ctx.globalAlpha = 0.3
-			ctx.fill();
-			ctx.stroke();
-			ctx.globalAlpha = temp
-		}
-	}
-	
-	self.drawYeeAnnotation = function(x,y,ctx) {
-		
-		// make the candidate that is moving say "yee-yee!"
-		if(model.yeeon){
-			ctx.textAlign = "center";
-			var temp = ctx.globalAlpha
-			ctx.globalAlpha = 0.9
-			_drawStroked("yee-yee!",x,y+50,40,ctx);
-			var dot = 3
-			ctx.fillStyle = "#000"
-			ctx.fillRect(x-dot-1,y-dot-1,dot*2+2,dot*2+2);
-			ctx.fillStyle = "#fff"
-			ctx.fillRect(x-dot,y-dot,dot*2,dot*2);
-			ctx.globalAlpha = temp
-		}
-	}
-
-	self.calculateCondorcet = function(model) {
-		// condorcet guide
-
-		// calculate medians in all directions
-		// detail: even number
-		// detail: counterclockwise
-		
-		// calculate winner circle against each candidate
-		
-		// The data is a list of points that connect to form a circle.  This is calcualted per candidate.
 	}
 }

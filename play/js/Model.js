@@ -467,7 +467,7 @@ function Model(modelName){
 				finding = true
 				for(var i=0; i<self.candidates.length; i++){
 					var can = self.candidates[i]
-					goal[i] = self.viz.winSeek(can)
+					goal[i] = self.viz.yee.winSeek(can)
 				}
 				finding = false
 			}
