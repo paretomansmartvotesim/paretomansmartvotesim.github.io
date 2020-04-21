@@ -86,6 +86,7 @@ function Model(idModel){
 		doPlaceHoldDuringElection: true,
 		pairwiseMinimaps: "off",
 		doTextBallots: false,
+		behavior:"stand",
 	})
 	
 	self.viz = new Viz(self);
@@ -458,10 +459,8 @@ function Model(idModel){
 	var goal = []
 	var bounce = undefined
 	self.buzz = function() {
-
-		var motion = "bounce"
 		
-		if (motion=="goal") {
+		if (self.behavior == "goal") {
 			//find goal
 			if (!finding) {
 				finding = true
@@ -507,17 +506,8 @@ function Model(idModel){
 				c.x += unit.x * speed
 				c.y += unit.y * speed
 			}
-	
-			// random movement
-			seed++
-			Math.seedrandom(seed);
-			var stepsize = 1
-			for(var i=0; i<self.candidates.length; i++){
-				var c = self.candidates[i];
-				c.x += Math.round((Math.random()*2-1)*stepsize)
-				c.y += Math.round((Math.random()*2-1)*stepsize)
-			}
-		} else if (motion == "bounce") {
+			bumble()
+		} else if (self.behavior == "bounce") {
 			// bouncing
 	
 			if (bounce == undefined || bounce.length != self.candidates.length) {
@@ -560,6 +550,19 @@ function Model(idModel){
 			}
 			// radial
 		
+		} else if (self.behavior == "buzz") {
+			bumble()
+		}
+		function bumble() {
+			// random movement
+			seed++
+			Math.seedrandom(seed);
+			var stepsize = 1
+			for(var i=0; i<self.candidates.length; i++){
+				var c = self.candidates[i];
+				c.x += Math.round((Math.random()*2-1)*stepsize)
+				c.y += Math.round((Math.random()*2-1)*stepsize)
+			}
 		}
 	}
 	self.icon = function(id) {

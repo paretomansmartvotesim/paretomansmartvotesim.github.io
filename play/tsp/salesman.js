@@ -176,7 +176,7 @@ Ring.prototype.f = function(gain, n) {
 function TravelingSalesman() {
   this.N = 100; /* Number of cities. */
   this.cycle = 0; /* Number of complete survey done */
-  this.maxCycles = 30; /* Number of complete suerveys */
+  this.maxCycles = 100; /* Number of complete suerveys */
   this.cities = null; /* the samples */
   this.neurons = null; /* the neurons */
   this.alpha = 0.04; /* learning rate */

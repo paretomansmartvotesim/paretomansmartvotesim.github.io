@@ -445,7 +445,7 @@ function Yee(model) {
 
 		// do calculations
 		model.yeeobject = can
-		self.calculate()
+		self.calculateYee()
 		
 		// find closest winning point
 		var colorMe = can.fill

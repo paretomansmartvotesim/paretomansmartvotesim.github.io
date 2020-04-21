@@ -172,8 +172,10 @@ function Config(ui, config, initialConfig) {
         voterIcons: "circle",
         candidateIconsSet: ["name"],
         pairwiseMinimaps: "off",
+        doTextBallots: false,
         submitTextBallots: false,
         textBallotInput: "",
+        behavior: "stand",
     }
 
 
@@ -683,6 +685,8 @@ function Cypher(ui) {
         66:"pairwiseMinimaps",
         67:"submitTextBallots",
         68:"textBallotInput",
+        69:"doTextBallots",
+        70:"behavior",
     } // add more on to the end ONLY
         
     var encodeFields = {}
@@ -2623,6 +2627,8 @@ function Menu(ui,model,config,initialConfig, cConfig) {
             49: "candidateIcons",
             50: "pairwiseMinimaps",
             51: "textBallotInput",
+            52: "doTextBallots",
+            53: "behavior",
         })
         self.codebook[2].decodeVersion = 2.5
 
@@ -3344,14 +3350,6 @@ function Menu(ui,model,config,initialConfig, cConfig) {
 
 
 
-
-
-
-
-
-
-
-
     // if there is nothing in the menu, then don't show the option.
 
     // menuLevel select
@@ -3994,6 +3992,36 @@ function Menu(ui,model,config,initialConfig, cConfig) {
     }
     
 
+    ui.menu.behavior = new function () {
+        var self = this
+        self.list = [
+            {name:"stand",value:"stand",realname:"stand still",margin:4},
+            {name:"bounce",value:"bounce",realname:"run and bounce off the walls",margin:4},
+            {name:"buzz",value:"buzz",realname:"buzz around randomly",margin:4},
+            {name:"goal",value:"goal",realname:"seek the goal, try to win, using perfect information",margin:4},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            config.behavior = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT AND UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.behavior = config.behavior
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.behavior);
+        }
+        self.choose = new ButtonGroup({
+            label: "Candidate behavior over time:",
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+    }
+
 
 
     // run this after loading the whole menu
@@ -4106,6 +4134,7 @@ function Menu(ui,model,config,initialConfig, cConfig) {
             "beatMap",
             "ballotConcept",
             "powerChart",
+            "behavior",
             "doTextBallots",
             ["divDoTextBallots", [
                 "textBallotInput",
@@ -4162,6 +4191,7 @@ function Menu(ui,model,config,initialConfig, cConfig) {
                 ["advanced", [
                     "colorChooser",
                     "colorSpace",
+                    "behavior",
                 ]],
             ]],
             ["vote", [
