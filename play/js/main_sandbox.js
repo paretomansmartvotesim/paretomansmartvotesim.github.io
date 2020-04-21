@@ -4405,7 +4405,8 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
         descDOM.id = "description_container";
         var refNode = ui.dom.left;
         ui.dom.basediv.insertBefore(descDOM, refNode);
-        var descText = document.createElement("textarea");
+        ui.dom.descText = document.createElement("textarea");
+        var descText = ui.dom.descText
         descText.id = "description_text";
         descText.placeholder = "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
 
@@ -4444,7 +4445,7 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
             var pos = savePositions()  // saves the candidate and voter positions in the config.
             for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
             // Description
-            var description = ui.dom.basediv.querySelector("#description_text") || {value:""};
+            var description = ui.dom.descText || {value:""};
             config.description = description.value;
             // UPDATE MAIN //
             newURLs = cConfig.save()
@@ -4457,10 +4458,10 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
                 embedLink.innerHTML = "&lt;embed&gt;";
             }
             
-            var savelink = ui.dom.basediv.querySelector("#savelink");
-            savelink.value = "saving...";
+            var linkText = ui.dom.linkText
+            linkText.value = "saving...";
             setTimeout(function(){
-                savelink.value = newURLs.linkText;
+                linkText.value = newURLs.linkText;
             },750);
             
 
@@ -4471,7 +4472,8 @@ function UiArena(ui,model,config,initialConfig, cConfig) {
 
     ui.arena.linkText = new function() { // The share link textbox
         var self = this
-        var linkText = document.createElement("input");
+        ui.dom.linkText = document.createElement("input");
+        var linkText = ui.dom.linkText
         linkText.id = "savelink";
         linkText.placeholder = "[when you save your model, a link you can copy will show up here]";
         linkText.setAttribute("readonly", true);
