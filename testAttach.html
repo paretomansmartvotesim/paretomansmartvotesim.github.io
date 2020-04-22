@@ -116,32 +116,32 @@
 		<div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
 		</div>
 		<script>
-			main({quick:"sandbox"})
+			sandbox({quick:"sandbox"})
 			// the old grandfathered way
 		</script>
 	</div>
 	<div>
 		<script id="itsAPreset">
-			main({idScript:"itsAPreset",presetName:"sandbox"})
+			sandbox({idScript:"itsAPreset",presetName:"sandbox"})
 			// the new way
 		</script>
 	</div>
 	<div>
 		<script id="itsAPreset">
-			main({idScript:"itsAPreset"})
+			sandbox({idScript:"itsAPreset"})
 			// default
 		</script>
 	</div>
 	<div>
 		<script id="quickest">
-			main({idScript:"quickest",url:"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Ty27CMBD8lz374HdizhXH_gBwiGiokNJEDYkqFcG3d8aBhApVKsbs7MO7411zFi2rzSZZFdNObazRqtAEPihTWiATjDJFBApRmaR3OyWGZ0zQCpu6k5XYF1HiZaWVBFkdquZUK4kItOpp4UgBj1ZPC54SHqT--4uYhBhwUf_YpIs7Dv0IPobM5bqVq94K-BK5GRUz2m6nH37krVvX1TD29frYDHV_N-ctwvwW979mDQqb0dZf-6ql5udemKUtJi4QjTAeEtcOECl30IIxjBZ0DQTyWwg3-fxkDJOIkxFpHEQ5aSkfcJytnD7Hqq_BZeiPVfve1KTsTA50NidxbopfyDpkP8vStzuwd-DuwE_gAhOoSP2NSg5sItOnPGWDmTvlUdaTEUfiOYhci4p9VJB54wh8vpIPnLW6Ldpj5uwLNj2f4sMrf2mJGmlBCagprx0RinJEgfOyBC6nCrdnuwwoLAMKrFONQ05QPs42pMUT9QNmmY4R0c6Ir2J_7PcNKUXeSdrqI88ism_d4UBHsfx1WEsuP5a3SEChAwAA"})
+			sandbox({idScript:"quickest",url:"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Ty27CMBD8lz374HdizhXH_gBwiGiokNJEDYkqFcG3d8aBhApVKsbs7MO7411zFi2rzSZZFdNObazRqtAEPihTWiATjDJFBApRmaR3OyWGZ0zQCpu6k5XYF1HiZaWVBFkdquZUK4kItOpp4UgBj1ZPC54SHqT--4uYhBhwUf_YpIs7Dv0IPobM5bqVq94K-BK5GRUz2m6nH37krVvX1TD29frYDHV_N-ctwvwW979mDQqb0dZf-6ql5udemKUtJi4QjTAeEtcOECl30IIxjBZ0DQTyWwg3-fxkDJOIkxFpHEQ5aSkfcJytnD7Hqq_BZeiPVfve1KTsTA50NidxbopfyDpkP8vStzuwd-DuwE_gAhOoSP2NSg5sItOnPGWDmTvlUdaTEUfiOYhci4p9VJB54wh8vpIPnLW6Ldpj5uwLNj2f4sMrf2mJGmlBCagprx0RinJEgfOyBC6nCrdnuwwoLAMKrFONQ05QPs42pMUT9QNmmY4R0c6Ir2J_7PcNKUXeSdrqI88ism_d4UBHsfx1WEsuP5a3SEChAwAA"})
 			// the added way
 		</script>
 	<div>
 	<div id="parent">
 		<script>
             ui = {presetName:"sandbox"}
-            main(ui)
+            sandbox(ui)
 			var pa = document.getElementById("parent")
 			pa.appendChild(ui.dom.container)
 			// a convoluted way

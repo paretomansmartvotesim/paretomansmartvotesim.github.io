@@ -1,4 +1,4 @@
-function main(ui){
+function sandbox(ui){
 
 	var presetName = ui.presetName
 	var preset = ui.preset

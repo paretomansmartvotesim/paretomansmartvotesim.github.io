@@ -102,7 +102,7 @@ THE SPOILER EFFECT
 				</div>
 			</div>
 			<script>
-				var menu = new ButtonGroup({
+				var mainMenu = new ButtonGroup({
 					label: "Pages",
 					width: 240,
 					data: [{
@@ -149,7 +149,7 @@ THE SPOILER EFFECT
 						window.location.assign(data.url)
 					}
 				});
-				document.querySelector("#mainmenu").appendChild(menu.dom)
+				document.querySelector("#mainmenu").appendChild(mainMenu.dom)
 			</script>
 
 		</div>
@@ -282,7 +282,7 @@ THE SPOILER EFFECT
 				<div id="election31" class="div-election div-ballot-in-sandbox div-model" scrolling="no">
 				</div>
 				<script>
-					main({quick:"election31"})
+					sandbox({quick:"election31"})
 				</script>
 			</div>
 		</div>
@@ -300,7 +300,7 @@ THE SPOILER EFFECT
 					<div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
 					</div>
 					<script>
-						main({quick:"sandbox"})
+						sandbox({quick:"sandbox"})
 					</script>
 				</div>
 			</div>

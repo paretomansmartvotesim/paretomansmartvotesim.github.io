@@ -1,22 +1,26 @@
+function sandbox(ui) {
 
-// Search for HOWTO to see notes on making changes. (right now, just for renaming menus)
-
-function main(ui) {
-
-    // main runs the whole userland experience.
+    // sandbox runs the whole userland experience.
     // ui is a mother object for everything related to the User Interface.
     // in much the same way that model is the mother for everything simulation related.
 
+    // Search for HOWTO to see notes on making changes. (right now, just for renaming menus)
+
+
+    /////////////////
+    // INPUT GUIDE //
+    /////////////////
+
     // Example usage:
-    // main({idScript:"asdf",presetName:"sandbox"}) 
-    // main({idScript:"uiop"})
-    // ui = main()
+    // sandbox({idScript:"asdf",presetName:"sandbox"}) 
+    // sandbox({idScript:"uiop"})
+    // ui = sandbox()
     // Just put it inside <div><script id="idScript">
     
     // Like so:
 	// <div>
 	// 	    <script id="asdf">
-	// 		    main({idScript:"asdf",presetName:"sandbox"})
+	// 		    sandbox({idScript:"asdf",presetName:"sandbox"})
 	// 	    </script>
     // <div>
 
@@ -34,7 +38,7 @@ function main(ui) {
     
     // We can even do a url pasted directly from the address bar 
     // (only the part after the ? question mark is read into the Config)
-	// main({id:"uio",url:"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Ty27CMBD8lz374HdizhXH_gBwiGiokNJEDYkqFcG3d8aBhApVKsbs7MO7411zFi2rzSZZFdNObazRqtAEPihTWiATjDJFBApRmaR3OyWGZ0zQCpu6k5XYF1HiZaWVBFkdquZUK4kItOpp4UgBj1ZPC54SHqT--4uYhBhwUf_YpIs7Dv0IPobM5bqVq94K-BK5GRUz2m6nH37krVvX1TD29frYDHV_N-ctwvwW979mDQqb0dZf-6ql5udemKUtJi4QjTAeEtcOECl30IIxjBZ0DQTyWwg3-fxkDJOIkxFpHEQ5aSkfcJytnD7Hqq_BZeiPVfve1KTsTA50NidxbopfyDpkP8vStzuwd-DuwE_gAhOoSP2NSg5sItOnPGWDmTvlUdaTEUfiOYhci4p9VJB54wh8vpIPnLW6Ldpj5uwLNj2f4sMrf2mJGmlBCagprx0RinJEgfOyBC6nCrdnuwwoLAMKrFONQ05QPs42pMUT9QNmmY4R0c6Ir2J_7PcNKUXeSdrqI88ism_d4UBHsfx1WEsuP5a3SEChAwAA"})
+	// sandbox({id:"uio",url:"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Ty27CMBD8lz374HdizhXH_gBwiGiokNJEDYkqFcG3d8aBhApVKsbs7MO7411zFi2rzSZZFdNObazRqtAEPihTWiATjDJFBApRmaR3OyWGZ0zQCpu6k5XYF1HiZaWVBFkdquZUK4kItOpp4UgBj1ZPC54SHqT--4uYhBhwUf_YpIs7Dv0IPobM5bqVq94K-BK5GRUz2m6nH37krVvX1TD29frYDHV_N-ctwvwW979mDQqb0dZf-6ql5udemKUtJi4QjTAeEtcOECl30IIxjBZ0DQTyWwg3-fxkDJOIkxFpHEQ5aSkfcJytnD7Hqq_BZeiPVfve1KTsTA50NidxbopfyDpkP8vStzuwd-DuwE_gAhOoSP2NSg5sItOnPGWDmTvlUdaTEUfiOYhci4p9VJB54wh8vpIPnLW6Ldpj5uwLNj2f4sMrf2mJGmlBCagprx0RinJEgfOyBC6nCrdnuwwoLAMKrFONQ05QPs42pMUT9QNmmY4R0c6Ir2J_7PcNKUXeSdrqI88ism_d4UBHsfx1WEsuP5a3SEChAwAA"})
 
     // 
 
@@ -44,30 +48,31 @@ function main(ui) {
 	// <div>
 	// 	    <script id="later">
     //         ui = {presetName:"sandbox"}
-    //         main(ui)
+    //         sandbox(ui)
     //         ui.idScript = "later"
     //         ui.makeParentDivs()
 	// 	    </script>
     // <div>
     
-    // 
 
-    // Code Summary:
-    //      Use loader with Sandbox
 
-    var s = new Sandbox(ui)                 // the sandbox is the binder between the model and the config  // Set up all the menu items and buttons and divs
-    
 
-}
 
-function Sandbox(ui) {
-    // This sets up the Sandbox, with some help from the functions called below during the CREATE phase.  
+
+    /////////////
+    // SUMMARY //
+    /////////////
+
+    // This sets up the sandbox, with some help from the functions called below during the CREATE phase.  
     // The main tasks are 
-    //  Cypher: decyphering the URL,
-    //  Config: getting the configuration from it.
-    // Sandbox: binding functions into the Model simulation routine.  And creating the primary divs
-    //    Menu: Creating all the divs and assigning click events inside the left menu
-    // UiArena: " " outside the left menu
+    //     Attach: loads inputs, loads presets, and hooks into the web page
+    //      Model: setting up the model for simulations.
+    //  bindModel: binding functions into the Model simulation routine.  And creating the primary divs
+    //     Cypher: decyphering the URL,
+    //     Config: getting the configuration from it.
+    //       menu: Creating all the divs and assigning click events inside the left menu
+    //    uiArena: " " outside the left menu
+    //     Loader: Save some bandwidth 
 
     // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
 
@@ -85,7 +90,9 @@ function Sandbox(ui) {
     // we pass around the context, ui
 
 
-    var self = this
+
+
+    
 
     // CREATE the data structure
 
@@ -130,16 +137,7 @@ function Sandbox(ui) {
 
     var l = new Loader()
 
-    l.onload = function(assets){
-        // UPDATE SANDBOX
-
-        model.assets = assets
-        
-        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
-        _objF(ui.arena,"update")
-        _objF(ui.menu,"select");
-        model.start(); 
-    }; 
+    l.onload = ui.start
 
     var assets = [
         
@@ -189,8 +187,8 @@ function Attach(ui) {
     var self = this
 
     self.handleInputMain = function() {
-        // handles the input to main()
-        // e.g.  main({idScript:"asdf",presetName:"sandbox"}) 
+        // handles the input to sandbox()
+        // e.g.  sandbox({idScript:"asdf",presetName:"sandbox"}) 
         // see main for more
 
         // Defaults
@@ -306,7 +304,7 @@ function Attach(ui) {
             // goes from this
             //  <div>
             // 	    <script id="idScript">
-            // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
+            // 		    sandbox({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
             // 	    </script>
             //  <div>
             
@@ -315,7 +313,7 @@ function Attach(ui) {
             // 	    <div id="idModel" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
             // 	    </div>
             //      <script id="idScript">
-            // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
+            // 		    sandbox({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
             //      </script>
             // </div>
             // https://stackoverflow.com/a/758683
@@ -332,6 +330,17 @@ function bindModel(ui,model,config) {
 
     model.inSandbox = true
     
+    ui.start = function(assets){
+        // UPDATE SANDBOX
+
+        model.assets = assets
+        
+        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
+        _objF(ui.arena,"update")
+        _objF(ui.menu,"select");
+        model.start(); 
+    }; 
+
     model.start = function(){
 
         // This "model.start()" launches the model
@@ -1218,7 +1227,7 @@ function Cypher(ui) {
 
 function menu(ui,model,config,initialConfig, cConfig) {
 
-    // Each menu item is kind of similar to a mini instance of Sandbox.start.  That's because most of the stuff in Sandbox.start has already been done.  These small onChoose functions just launch when a button is pressed, which is after the whole Sandbox has loaded.
+    // Each menu item is kind of similar to a mini instance of model.start.  That's because most of the stuff in model.start has already been done.  These small onChoose functions just launch when a button is pressed, which is after the whole sandbox has loaded.
 
     // HOWTO: Copy and paste a button function below and then search and replace all the mentions of the name
     // the other places to look are in Cypher, Config, and Model

@@ -6,5 +6,5 @@ function main_preset() {
 	var presetName = htmlname.slice(0,htmlname.length-5)
 	var ui = loadpreset(presetName)
 	var preset = ui.preset
-	main(preset)
+	sandbox(preset)
 }

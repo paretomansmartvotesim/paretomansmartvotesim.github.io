@@ -1,4 +1,4 @@
-// Each main() makes a new Loader.  The Loader is configured with an .onload and updated with .load.
+// Each sandbox() makes a new Loader.  The Loader is configured with an .onload and updated with .load.
 // Then all the Loaders call the LoaderManager to say what files they need and to give a countdown function _onAssetLoad
 // LoaderManager calls the countdown for each Loader each time an image loads.
 // When the countdown reaches 0, the .onload's run
