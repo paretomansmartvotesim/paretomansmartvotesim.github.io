@@ -1,32 +1,16 @@
-function loadpreset(ui) {
+function _lookupPreset(ui) {
 
-	// clumsy grandfather
-	if (typeof(ui) == "string") {
-		ui = {
-			presetName:ui,
-			idModel:ui,
-		}
-	}
-
-
+	// load the preset corresponding to the ui.presetName
 
 	// e.g. loadpreset( {id:"sandbox"} )
 
 	// input:
 	// ui.presetName
-
-	// load the preset corresponding to the ui.presetName
-	// if we don't already have a ui.presetName, generate one
 	
 	// output: additional attributes
 	// ui.preset.config
 	// ui.preset.update
 	// ui.presetName (is generated if not provided)
-	
-
-    // ui.presetName: for the presets
-    // ui.idModel : for the divs
-    // ui.idScript: for the divs
 
 
 	// defaults
@@ -34,13 +18,6 @@ function loadpreset(ui) {
 	var update = () => null
 	var uiType = "election"
 	
-	// default presetName
-	if (! (ui && ui.presetName) ) {
-		if (ui == undefined) var ui = {}
-		ui.presetName = "sandbox"
-		// then we will end up skipping down to the bottom
-	}
-
 
 	// helpers
 	var update_original = function () {

@@ -4,31 +4,33 @@
 function main(ui) {
 
     // main runs the whole userland experience.
-    // ui is a mother object for everything related to the User Interface
+    // ui is a mother object for everything related to the User Interface.
     // in much the same way that model is the mother for everything simulation related.
 
     // Example usage:
-    // main({id:"asdf",presetName:"sandbox"})
-    // main({id:"uiop"})
+    // main({idScript:"asdf",presetName:"sandbox"}) 
+    // main({idScript:"uiop"})
     // ui = main()
-    // Just put it inside <div><script id="id">
+    // Just put it inside <div><script id="idScript">
     
     // Like so:
 	// <div>
 	// 	    <script id="asdf">
-	// 		    main({id:"asdf",presetName:"sandbox"})
+	// 		    main({idScript:"asdf",presetName:"sandbox"})
 	// 	    </script>
     // <div>
+
     // The input variables are:
-    // ui.idScript : what you call the divs
-    // ui.presetName : the name of the preset
-
-
-    // ui.presetName: for the presets
-    // ui.idModel : for the divs
-    // ui.idScript: for the divs
-
+    //      ui.idScript     : id of the current <script> div (required)
+    //      ui.idModel      : id of any <div> to be the model container, i.e. if you already know it and don't want to create one. feeds into createDOM()
+    //      ui.presetName   : the name of the preset (or, for grandfathered cases, also the same as the ui.idModel)
+    //      ui.preset       : all the preset data
+    //          .config     : the config.  It lists all the button settings.
+    //          .uiType     : determines the <div> attributes for the model container
+    //          .update     : clumsy script to run after loading buttons
+    //      ui.url          : paste any saved url in here to load that configuration
     
+    //
     
     // We can even do a url pasted directly from the address bar 
     // (only the part after the ? question mark is read into the Config)
@@ -39,6 +41,7 @@ function main(ui) {
     // and they can be chained together
     // e.g. main(loadpreset({id:"asdf",presetName:"sandbox"}))
 
+    // 
 
     // Finally, if id is not provided, then generate an id and leave the node dangling
     // ui.containerDiv will be generated with this id
@@ -53,55 +56,169 @@ function main(ui) {
 	// 	    </script>
     // <div>
     
+    // 
 
-    
-    // Defaults
-    // a little help filling in the ui (should have been done in html as above)
-    if (ui == undefined || ui.config == undefined || ui.presetName == undefined) {
-        ui = loadpreset(ui)
-    }
-    if (ui.idModel == undefined) {
-        ui.idModel = "model-" + _rand5()
-        ui.missingModelId = true
-    
-        if (ui.idScript == undefined) {
-            ui.idScript = "script-" + _rand5()
-            ui.danglingScript = true
-        }
-    
-    }
-    ui.url = ui.url || window.location.href
+    // Code Summary:
+    //      The code below handles the input and then calls Sandbox and Loader.
 
-
-    
-
-
-    // Set up all the menu items and buttons and divs
-    var s = new Sandbox(ui)   // the sandbox is the binder between the model and the config
-
-    // Filter which buttons will appear in the menu items. // Kind of clumsy but works.
-    if (ui.preset.update) ui.preset.update() 
-    
-
-
-
-    // CREATE
+    var s = new Sandbox(ui)                 // the sandbox is the binder between the model and the config  // Set up all the menu items and buttons and divs
     var l = new Loader()
-    // CONFIGURE
-    l.onload = s.start // this might look like an update but we're configuring Loader    
-    // INIT
+    l.onload = s.start
     l.load(s.assets);
+    return ui
 
+    // Note:
     // use loader to save on bandwidth
     // alternatively if we call the loader from all the places where we need the images, then we could just do
     // s.update()
     // for possibly greater speed, since we don't have to wait on the downloads.
 
 
-
-
-    return ui
 }
+
+function Attach(ui) {
+    var self = this
+
+    self.handleInputMain = function() {
+        // handles the input to main()
+        // e.g.  main({idScript:"asdf",presetName:"sandbox"}) 
+        // see main for more
+
+        // Defaults
+        // a little help filling in the ui (should have been done in html as above)
+        if (ui == undefined || ui.preset == undefined || ui.preset.config == undefined || ui.presetName == undefined) {
+            loadpreset(ui)
+        }
+        if (ui.idModel == undefined) {
+            ui.idModel = "model-" + _rand5()
+            ui.missingModelId = true
+        
+            if (ui.idScript == undefined) {
+                ui.idScript = "script-" + _rand5()
+                ui.danglingScript = true
+            }
+        
+        }
+        ui.url = ui.url || window.location.href
+
+    }
+
+    function loadpreset (ui)  {
+    
+        // if we don't already have a ui.presetName, generate one
+        // then look it up
+        
+        // ui.presetName: for the presets
+        // ui.idModel : for the divs.  This is
+    
+        if(ui.quick != undefined) {
+            ui.presetName = ui.quick
+            ui.idModel = ui.quick
+        }
+        
+        // default presetName
+        if (ui.presetName == undefined ) {
+            ui.presetName = "sandbox"
+            // then we will end up skipping down to the bottom
+        }
+    
+        _lookupPreset(ui)
+    }
+    
+
+    self.createDOM = function(model) {
+            
+        // Here are two boolean variables to consider
+        // ui.missingModelId : needs a new parent div
+        // ui.danglingScript : can't be appended to a parent div, so will leave dangling
+
+        // Here are the actual strings that these bools refer to
+        // ui.idModel : for the divs
+        // ui.idScript: for the divs
+
+        ui.dom = {}
+        if (ui.missingModelId) {
+            _makeParentDivs()
+        } else {
+            ui.dom.basediv = document.querySelector("#" + model.id)
+        }
+        ui.dom.left = newDivOnBase("left")
+        ui.dom.center = newDivOnBase("center")
+        ui.dom.right = newDivOnBase("right")
+        function newDivOnBase(name) {
+            var a = document.createElement("div");
+            a.setAttribute("id", name);
+            ui.dom.basediv.appendChild(a);
+            return a
+        }
+        // Details
+        model.createDOM()
+
+        var centerDiv = ui.dom.center
+        if (centerDiv.hasChildNodes()){
+            var firstNode = centerDiv.childNodes[0]
+            centerDiv.insertBefore(model.dom,firstNode);
+        } else {
+            centerDiv.appendChild(model.dom)
+        }
+        model.dom.removeChild(model.caption);
+        ui.dom.right.appendChild(model.caption);
+        model.caption.style.width = "";
+        
+        ui.makeParentDivs = _makeParentDivs
+        function _makeParentDivs() {
+            
+            // the model
+            var md = document.createElement('div'); 
+            md.id = ui.idModel
+            md.classList = "div-sandbox div-election div-ballot-in-sandbox div-model"
+
+            // the contain-model 
+            var cm = document.createElement('div'); 
+            cm.classList = "contain-model"
+            cm.setAttribute("scrolling","no")
+
+            // the script
+            if (ui.danglingScript) {
+                var pa = document.createElement('div'); 
+            } else {
+                var sc = document.getElementById(ui.idScript); 
+                var pa = sc.parentNode
+            }
+
+            // connecting
+            pa.appendChild(cm); 
+            cm.appendChild(md)
+
+            ui.dom.basediv = md
+            ui.dom.container = cm
+            ui.dom.parent = pa
+
+            // goes from this
+            //  <div>
+            // 	    <script id="idScript">
+            // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
+            // 	    </script>
+            //  <div>
+            
+            // to this
+            // <div class="contain-model">
+            // 	    <div id="idModel" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
+            // 	    </div>
+            //      <script id="idScript">
+            // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
+            //      </script>
+            // </div>
+            // https://stackoverflow.com/a/758683
+            // via https://stackoverflow.com/a/1219857
+
+            // if id is not provided, then uses the generated id and leave the node dangling
+            
+        }
+
+    }
+}
+
 
 function Config(ui, config, initialConfig) {
     //  Getting the configuration from a URL or previous version, requiring clean up.
@@ -118,7 +235,7 @@ function Config(ui, config, initialConfig) {
     ui.embed = false
     ui.maxVoters = 10 
     ui.tryNewURL = true
-    
+
     var all_candidate_names = Object.keys(Candidate.graphicsByIcon["Default"]) // helper
     var yes_all_candidates = {}
     for (var i = 0; i < all_candidate_names.length; i++) {
@@ -838,12 +955,17 @@ function Sandbox(ui) {
     // // start/ initialize
     // // The sandbox is the binder
 
-
+    // we pass around the context, ui
 
 
     var self = this
 
     // CREATE the data structure
+
+    // handle input
+    if (ui == undefined) ui = {}
+    var a = new Attach(ui)
+    a.handleInputMain()
 
     var model = new Model(ui.idModel)
 
@@ -856,7 +978,7 @@ function Sandbox(ui) {
     ui.cypher = new Cypher(ui)
     
     // CREATE the divs!
-    createDOM(ui,model)
+    a.createDOM(model)
     Menu(ui,model,config,initialConfig, cConfig)
     UiArena(ui,model,config,initialConfig, cConfig)
     
@@ -867,7 +989,11 @@ function Sandbox(ui) {
     // INIT
     // Read in the config file.
     cConfig.setConfig()
-
+    
+    // run some extra stuff specified by the preset
+    if (ui.preset.update) {
+        ui.preset.update()
+    } 
     
     self.start = function(assets){
         // UPDATE SANDBOX
@@ -922,99 +1048,6 @@ function Sandbox(ui) {
     ];
 
     
-
-}
-
-
-function createDOM(ui,model) {
-        
-    // Here are two boolean variables to consider
-    // ui.missingModelId : needs a new parent div
-    // ui.danglingScript : can't be appended to a parent div, so will leave dangling
-
-    // Here are the actual strings that these bools refer to
-    // ui.idModel : for the divs
-    // ui.idScript: for the divs
-
-    ui.dom = {}
-    if (ui.missingModelId) {
-        _makeParentDivs()
-    } else {
-        ui.dom.basediv = document.querySelector("#" + model.id)
-    }
-    ui.dom.left = newDivOnBase("left")
-    ui.dom.center = newDivOnBase("center")
-    ui.dom.right = newDivOnBase("right")
-    function newDivOnBase(name) {
-        var a = document.createElement("div");
-        a.setAttribute("id", name);
-        ui.dom.basediv.appendChild(a);
-        return a
-    }
-    // Details
-    model.createDOM()
-
-    var centerDiv = ui.dom.center
-    if (centerDiv.hasChildNodes()){
-        var firstNode = centerDiv.childNodes[0]
-        centerDiv.insertBefore(model.dom,firstNode);
-    } else {
-        centerDiv.appendChild(model.dom)
-    }
-    model.dom.removeChild(model.caption);
-    ui.dom.right.appendChild(model.caption);
-    model.caption.style.width = "";
-    
-    ui.makeParentDivs = _makeParentDivs
-    function _makeParentDivs() {
-        
-        // the model
-        var md = document.createElement('div'); 
-        md.id = ui.idModel
-        md.classList = "div-sandbox div-election div-ballot-in-sandbox div-model"
-
-        // the contain-model 
-        var cm = document.createElement('div'); 
-        cm.classList = "contain-model"
-        cm.setAttribute("scrolling","no")
-
-        // the script
-        if (ui.danglingScript) {
-            var pa = document.createElement('div'); 
-        } else {
-            var sc = document.getElementById(ui.idScript); 
-            var pa = sc.parentNode
-        }
-
-        // connecting
-        pa.appendChild(cm); 
-        cm.appendChild(md)
-
-        ui.dom.basediv = md
-        ui.dom.container = cm
-        ui.dom.parent = pa
-
-        // goes from this
-        //  <div>
-        // 	    <script id="idScript">
-        // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
-        // 	    </script>
-        //  <div>
-        
-        // to this
-        // <div class="contain-model">
-        // 	    <div id="idModel" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
-        // 	    </div>
-        //      <script id="idScript">
-        // 		    main({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})
-        //      </script>
-        // </div>
-        // https://stackoverflow.com/a/758683
-        // via https://stackoverflow.com/a/1219857
-
-        // if id is not provided, then uses the generated id and leave the node dangling
-        
-    }
 
 }
 

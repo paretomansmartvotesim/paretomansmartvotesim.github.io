@@ -116,7 +116,7 @@
 		<div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
 		</div>
 		<script>
-			main(loadpreset("sandbox"))
+			main({quick:"sandbox"})
 			// the old grandfathered way
 		</script>
 	</div>
@@ -124,6 +124,12 @@
 		<script id="itsAPreset">
 			main({idScript:"itsAPreset",presetName:"sandbox"})
 			// the new way
+		</script>
+	</div>
+	<div>
+		<script id="itsAPreset">
+			main({idScript:"itsAPreset"})
+			// default
 		</script>
 	</div>
 	<div>
@@ -135,8 +141,7 @@
 	<div id="parent">
 		<script>
             ui = {presetName:"sandbox"}
-            loadpreset(ui)
-            main(ui) // probably not working
+            main(ui)
 			var pa = document.getElementById("parent")
 			pa.appendChild(ui.dom.container)
 			// a convoluted way
