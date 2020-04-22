@@ -1,3 +1,37 @@
+// This is only used by original.html and sandbox/original.html
+// old way
+function loadpreset (ui)  {
+
+	// if we don't already have a ui.presetName, generate one
+	// then look it up
+	
+	// ui.presetName: for the presets
+	// ui.idModel : for the divs.  This is
+
+	// clumsy grandfather
+	if (typeof(ui) == "string") {
+		ui = {
+			presetName:ui,
+			idModel:ui,
+		}
+	}
+
+	if(ui.quick != undefined) {
+		ui.presetName = ui.quick
+		ui.idModel = ui.quick
+	}
+	
+	// default presetName
+	if (ui.presetName == undefined ) {
+		ui.presetName = "sandbox"
+		// then we will end up skipping down to the bottom
+	}
+
+	_lookupPreset(ui)
+	return ui
+}
+
+// new way
 function _lookupPreset(ui) {
 
 	// load the preset corresponding to the ui.presetName

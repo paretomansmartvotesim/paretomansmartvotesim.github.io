@@ -11,10 +11,16 @@ var e = [
         ["log","log.html"],
         ["quotaApproval","quotaApproval.html"],
     ]],
-    ["elections", [ 
-        ["e1","play/examples/election1.html"],
-        ["b1","play/examples/ballot1.html"],
-        ["b14","play/examples/ballot14.html"],
+    ["tests", [ 
+        ["testPreset","testPreset.html"],
+        ["test","test.html"],
+        ["try","try.html"],
+        ["play/examples/election1","play/examples/election1.html"],
+        ["play/examples/ballot1","play/examples/ballot1.html"],
+        ["testAttach","testAttach.html"],
+        ["sandbox/embedbox","sandbox/embedbox.html"],
+        ["sandbox/index","sandbox/index.html"],
+        ["sandbox/original","sandbox/original.html"],
     ]],
     ["borda viz", [ 
         [1,"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41WwXKbMBD9F511QEjGOLc2mZya9JCZXOKMRzGyrRlALhKZJpnk2_sWG7uN6lg2sMvTW2l3WbS8sYxdPDwIlXGh1CN_ECLnohy1UkKZFFwU6vGRM0HcXIIhaWAKRRU0INkFy68YZwrKBHLCLla69oazAjYsB3T-xERTsDMe_TFSYmSS8dMHODNwxAyhnD8pGoQeuh4-CgqMfcxxzOcso8ucwaURERFCF_qxyjam9da1fkROc9sr60NnlyGB643-gpZHiIwQFSGTCClOO7DsfXDNrW5MSmSg1QjuJHMaIWWEzOK8_-dRxM9CxNkQcTpEnA8RJ-QQ0drobunalV2fj37bGW9CKnu5cc6bxdb-NvXC21eTYOKabR_MjQkbV6XQa9ddDst0iey7rV4mOOIRqq4WK70Mrls8u2C6hOrQnWl1YqiNqaxuF43R7Xly2JgmYc4-2NqGl4Xf6G0CfRfWN3-p28pWOqS8AE-6rl24twnUZ-vvbLuuzffBxv9s65eTVuKLN5RK1K1WKTlt-3uEhF0qjfzDPJv6PNUHs70B_TyzctfYz_rOXNs6pBSlp3r8zKM9O0eDyWAhqOUgelLVodmIY98RxVFFVyEWNHQRBTHbz5Jnw30uiED3mD6HkOM4phYQmBY9DkoxDkxHpByR2WAqqZ8y_6tH0QPFdq_pWZPvUuypMt8vJ4e-ScoxBIm13tixNY2KHBW1U94BkTfmlezhTpFBlmTsbWWedHfkzYauKrjkaOxMDS7S-oLcUtT8dosPV4LyGJLUW7kgFR5IiMkO4Xu0GFKlKDEfgxV9DpT_3FHaP8gp-kKAF-zWkUZ5gfyrTPdp-VQ2hxyNhbenHUp2yO_7H3QVO2bUCAAA"],
@@ -46,7 +52,7 @@ var e = [
         ["Text Ballots","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VSy27CMBD8lz374HdizlWP_YGEQ0RDhURBDYkqFcG3d8ZuCBWqinE8-_Du7K7PomXVNMmqmNaqsUarShP4oExtgYxPygbqAlV6vVZieMcErbApO1mJfRIlXlZOSZDVttufeiURjlY9LFypYNHqYcFSw4LQf__hk-BjEvL_v0kXNY7DBD6GzOXaylW3Ar5E7oaqG2rb8uFPXo_PfTdOQ_-824_9MKvzFmF8i_qvWYLAZhz6z013oORvvTBLW0xcIBphPE6UHXCgMq3EgjGUFnQNDsS3OFyx-aIMRYrlqHLnbV2klC84zlZOH1M39OAyDrvu8LbvSdmZ7OhsjuVc8V_IOkQ_y9K3GdgZuBn4Ai5QgYr0X8jkwCYyfMpTNpi5Ux5pPRlxJJ6DyLko2HsBkRtHUB6TD5y1-lnUx8zZV2x6vsWHV_-SEiXSghCQU16OREjKEQXOyxKUukPpaFgGFJYBBebppjEHqO9nG9JiifoOM82RHtHeEF_FZjds9qQUWZMcuvc8i8i-HbdbGqq5rZGp5PINUZDL8aADAAA"],
         ["2 Text Ballots","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VSy27bMBD8lz3zwLdEH3ooihx76s3ygXHkwoBiobKMFgnib88MGVkugqKmKc4-uDu7y1fRstluk1Ux7dTWGq0aTeCDMq0FMj4pG6gLVOndTonhHRO0wqbsZCP2myjxsnFKgmwOeTj3SiIcrfq0cKWBRatPC5YWFoT-9x8-CT4mIf__N-mixnm6gI8hc7l2ctWdgC-Ru6HmhrqufviTp_Ghz_Nl6h-Ow9xPi7psEca3qP9aJAhsxqn_vc8nSv7WC7O2xcQVohHG40TZAQcq00osGENpQdfgQHyLw1Wbr8pQpViPpnTetlVK5YLjbOX865KnHlzm6ZhPP4eelJ0pjs6WWM5V_5WsQ_RXWfu2ALsAtwBfwRtUoCL9CzI5sIkMn8qUDWbulEdaT0YciecgSi4K9l5A5K0jqI_JB85afSzqY-HsGza93OLDa_-SEiXSghCQU76PREjKEQXOyxLUukPtaFgHFNYBBebJl7kEaO9nG9JqifoOM81Ij2hviK9if5z2AylF1iSn_FxmEdm38XCgoVnaGpkqf3nsePtp_NH_mb_mYRjn80e_3wFQ-nZ1ugMAAA"],
         ["Test Voters as candidates warning","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VSy27bMBD8lz3zwLdEH3ooihx76s3ygXHkwoBiobKMFgnib88MGVkugqKmKc7ukrvDWb6Kls12m6yKaae21mjVaAIflGktkPFJ2UBfoEvvdkoMz5igFSZtJxux30SJl41TEmRzyMO5VxKx0apPA0caRLT6NBBpEUHqf_-xJ2GPSaj__0m6uOM8XcDHkLlcO7nqTsCXyN1Qc0NdVz_8ydP40Of5MvUPx2Hup8VdpgjzW9z_WiwYFOPU_97nEy1_08Ksspi4QghhPFZcO2DBzbQSC8ZwWtA1WJDfYnE15qszVCvWpSnK27ZaqRxw7K2cf13y1IPLPB3z6efQk7IzZaOzJZdzdf9K1iH7q6y6LcAuwC3AV_AGF6hI_4JKDmwi06fSZYOeO-VR1pMRW-LZiFKLhr03kHnrCOpj8oG9Vh-D_lg4-4ail1N8eO1fVqJFWjACasr3kQhF2aLAflmCqmioioa1QWFtUGCdfJlLgva-tyGtkajvMMuM3BHtDfFV7I_TfiClyDvJKT-XXkTqNh4ODDSLrJGl8pfHjqefxh_9n_lrHoZxPn_o_Q4b5c5FugMAAA"],
-        ["test Attaching","testAttach.html"],
+        
         // ["",""],
         // ["",""],
         // ["",""],

@@ -36,11 +36,6 @@ function main(ui) {
     // (only the part after the ? question mark is read into the Config)
 	// main({id:"uio",url:"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Ty27CMBD8lz374HdizhXH_gBwiGiokNJEDYkqFcG3d8aBhApVKsbs7MO7411zFi2rzSZZFdNObazRqtAEPihTWiATjDJFBApRmaR3OyWGZ0zQCpu6k5XYF1HiZaWVBFkdquZUK4kItOpp4UgBj1ZPC54SHqT--4uYhBhwUf_YpIs7Dv0IPobM5bqVq94K-BK5GRUz2m6nH37krVvX1TD29frYDHV_N-ctwvwW979mDQqb0dZf-6ql5udemKUtJi4QjTAeEtcOECl30IIxjBZ0DQTyWwg3-fxkDJOIkxFpHEQ5aSkfcJytnD7Hqq_BZeiPVfve1KTsTA50NidxbopfyDpkP8vStzuwd-DuwE_gAhOoSP2NSg5sItOnPGWDmTvlUdaTEUfiOYhci4p9VJB54wh8vpIPnLW6Ldpj5uwLNj2f4sMrf2mJGmlBCagprx0RinJEgfOyBC6nCrdnuwwoLAMKrFONQ05QPs42pMUT9QNmmY4R0c6Ir2J_7PcNKUXeSdrqI88ism_d4UBHsfx1WEsuP5a3SEChAwAA"})
 
-    // Another example:
-    // main runs after loadpreset
-    // and they can be chained together
-    // e.g. main(loadpreset({id:"asdf",presetName:"sandbox"}))
-
     // 
 
     // Finally, if id is not provided, then generate an id and leave the node dangling
@@ -49,7 +44,6 @@ function main(ui) {
 	// <div>
 	// 	    <script id="later">
     //         ui = {presetName:"sandbox"}
-    //         loadpreset(ui)
     //         main(ui)
     //         ui.idScript = "later"
     //         ui.makeParentDivs()
@@ -59,20 +53,10 @@ function main(ui) {
     // 
 
     // Code Summary:
-    //      The code below handles the input and then calls Sandbox and Loader.
+    //      Use loader with Sandbox
 
     var s = new Sandbox(ui)                 // the sandbox is the binder between the model and the config  // Set up all the menu items and buttons and divs
-    var l = new Loader()
-    l.onload = s.start
-    l.load(s.assets);
-    return ui
-
-    // Note:
-    // use loader to save on bandwidth
-    // alternatively if we call the loader from all the places where we need the images, then we could just do
-    // s.update()
-    // for possibly greater speed, since we don't have to wait on the downloads.
-
+    
 
 }
 
@@ -993,9 +977,17 @@ function Sandbox(ui) {
     // run some extra stuff specified by the preset
     if (ui.preset.update) {
         ui.preset.update()
-    } 
-    
-    self.start = function(assets){
+    }
+
+    // Note:
+    // use loader to save on bandwidth
+    // alternatively if we call the loader from all the places where we need the images, then we could just do
+    // s.update()
+    // for possibly greater speed, since we don't have to wait on the downloads.
+
+    var l = new Loader()
+
+    l.onload = function(assets){
         // UPDATE SANDBOX
 
         model.assets = assets
@@ -1006,7 +998,7 @@ function Sandbox(ui) {
         model.start(); 
     }; 
 
-    self.assets = [
+    var assets = [
         
         // the peeps
         "play/img/voter_face.png",
@@ -1047,8 +1039,7 @@ function Sandbox(ui) {
 
     ];
 
-    
-
+    l.load(assets)
 }
 
 function bindModel(ui,model,config) {
