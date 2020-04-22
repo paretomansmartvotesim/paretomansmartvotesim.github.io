@@ -60,6 +60,131 @@ function main(ui) {
 
 }
 
+function Sandbox(ui) {
+    // This sets up the Sandbox, with some help from the functions called below during the CREATE phase.  
+    // The main tasks are 
+    //  Cypher: decyphering the URL,
+    //  Config: getting the configuration from it.
+    // Sandbox: binding functions into the Model simulation routine.  And creating the primary divs
+    //    Menu: Creating all the divs and assigning click events inside the left menu
+    // UiArena: " " outside the left menu
+
+    // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
+
+    // Basic description of main_sandbox.js
+    // First we load the config,
+    // Then we update the model and menu.
+    // Then wait for mouse events.
+
+    // // there are two parts, the model and the config.
+    // // load initial config
+    // // bind model and config using menu items (config step for )
+    // // start/ initialize
+    // // The sandbox is the binder
+
+    // we pass around the context, ui
+
+
+    var self = this
+
+    // CREATE the data structure
+
+    // handle input
+    if (ui == undefined) ui = {}
+    var a = new Attach(ui)
+    a.handleInputMain()
+
+    var model = new Model(ui.idModel)
+
+    var config = {}
+    var initialConfig = {}
+    bindModel(ui,model,config)
+
+    var cConfig = new Config(ui,config,initialConfig)
+
+    ui.cypher = new Cypher(ui)
+    
+    // CREATE the divs!
+    a.createDOM(model)
+    menu(ui,model,config,initialConfig, cConfig)
+    uiArena(ui,model,config,initialConfig, cConfig)
+    
+    // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
+    ui.cypher.setUpEncode()
+
+    
+    // INIT
+    // Read in the config file.
+    cConfig.setConfig()
+    
+    // run some extra stuff specified by the preset
+    if (ui.preset.update) {
+        ui.preset.update()
+    }
+
+    // Note:
+    // use loader to save on bandwidth
+    // alternatively if we call the loader from all the places where we need the images, then we could just do
+    // s.update()
+    // for possibly greater speed, since we don't have to wait on the downloads.
+
+    var l = new Loader()
+
+    l.onload = function(assets){
+        // UPDATE SANDBOX
+
+        model.assets = assets
+        
+        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
+        _objF(ui.arena,"update")
+        _objF(ui.menu,"select");
+        model.start(); 
+    }; 
+
+    var assets = [
+        
+        // the peeps
+        "play/img/voter_face.png",
+
+        "play/img/square.png",
+        "play/img/triangle.png",
+        "play/img/hexagon.png",
+        "play/img/pentagon.png",
+        "play/img/bob.png",
+
+        "play/img/square.svg",
+        "play/img/triangle.svg",
+        "play/img/hexagon.svg",
+        "play/img/pentagon.svg",
+        "play/img/bob.svg",
+
+        "play/img/blue_bee.png",
+        "play/img/yellow_bee.png",
+        "play/img/red_bee.png",
+        "play/img/green_bee.png",
+        "play/img/orange_bee.png",
+
+        // plus
+        "play/img/plusCandidate.png",
+        "play/img/plusOneVoter.png",
+        "play/img/plusVoterGroup.png",
+
+        // Ballot instructions
+        "play/img/ballot5_fptp.png",
+        "play/img/ballot5_ranked.png",
+        "play/img/ballot5_approval.png",
+        "play/img/ballot5_range.png",
+
+        // The boxes
+        "play/img/ballot5_box.png",
+        "play/img/ballot_rate.png",
+        "play/img/ballot_three.png"
+
+    ];
+
+    l.load(assets)
+}
+
 function Attach(ui) {
     var self = this
 
@@ -203,6 +328,135 @@ function Attach(ui) {
     }
 }
 
+function bindModel(ui,model,config) {
+
+    model.inSandbox = true
+    
+    model.start = function(){
+
+        // This "model.start()" launches the model
+        // So it is also useful as a template for everything that you might need to do after a button press.
+
+        // CREATE
+        
+        if (config.candidatePositions) {
+            for(var i=0; i<config.candidatePositions.length; i++) model.candidates.push(new Candidate(model))
+        } else {
+            for(var i=0; i<config.numOfCandidates; i++) model.candidates.push(new Candidate(model))
+        }
+
+        if (config.voterGroupTypes) {
+            for(var i=0; i<config.voterGroupTypes.length; i++) {
+                var vType = window[config.voterGroupTypes[i]]
+                var n = new vType(model)
+                model.voters.push(n)
+            }
+        } else if (config.oneVoter) {
+            model.voters.push(new SingleVoter(model))
+        } else {
+            for(var i=0; i<config.numVoterGroups; i++) model.voters.push(new GaussianVoters(model))
+        }
+        model.voterCenter = new VoterCenter(model)
+
+        // PRE CONFIGURE
+        model.dimensions = config.dimensions
+        
+        // CONFIGURE
+            // expand config to calculate some values to add to the model			
+            // load expanded config into the model
+            // configure writes to model and reads from config.  Sanity rule: configure does not read from model.
+        _objF(ui.menu,"configure")
+        // CONFIGURE DEFAULTS (model)
+        model.border = config.arena_border
+        model.HACK_BIG_RANGE = true;
+        // INIT
+        model.initDOM()
+        for (var i=0; i<model.candidates.length; i++) {
+            model.candidates[i].init()
+        }
+        model.initMODEL()
+        for (var i=0; i<model.voters.length; i++) {
+            model.voters[i].init()
+        }
+        model.arena.pileVoters()
+        model.arena.redistrict()
+		// INIT (menu)
+		ui.menu.presetconfig.init_sandbox()
+		// ui.menu.gearicon.init_sandbox()
+		ui.arena.desc.init_sandbox()
+        ui.menu.theme.init_sandbox();
+        // UPDATE
+        model.update()
+        ui.menu_update()
+        
+    };
+
+    model.onDraw = function(){
+
+        
+        ui.drawButtons() // make sure the icons show up
+        
+        // CREATE A BALLOT
+        
+        var myNode = ui.dom.right;
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+        }  // remove old one, if there was one
+        // ui.dom.basediv.querySelector("#ballot").remove()
+
+        var doOldBallot = false
+        if (config.oneVoter) {
+            if (doOldBallot) {
+                var BallotType = model.ballotType
+                var ballot = new BallotType(model);
+                ui.dom.right.appendChild(ballot.dom);
+            } else {
+                var divBallot = document.createElement("div")
+                ui.dom.right.appendChild(divBallot);
+            }
+        }
+        ui.dom.right.appendChild(model.caption);
+        
+        if (config.oneVoter) {
+            if (model.voters[0].voterGroupType == "SingleVoter") {
+                var text = ""
+                if (doOldBallot) ballot.update(model.voters[0].ballot);
+                if (doOldBallot) text += "<br />"
+                text += '<div class="div-ballot">'
+                text += model.voters[0].type.toTextV(model.voters[0].ballot);
+                text += '</div>'
+                if (0) {
+                    text += "<br /><br />"
+                    text += model.result.text
+                }
+                if (doOldBallot) {
+                    model.caption.innerHTML = text
+                } else {
+                    model.caption.innerHTML = ""
+                    divBallot.innerHTML = text
+                }
+            }
+        }
+    };
+
+    model.updateFromModel = function() {
+        _objF(ui.menu,"updateFromModel")
+    }
+
+    // helpers
+    
+
+    model.onInitModel = function() {
+        ui.drawButtons()
+    }
+    
+    model.onAddCandidate = function() {
+        var n = model.candidates.length
+        model.numOfCandidates = n
+        config.numOfCandidates = n
+        ui.menu.nCandidates.select()
+    }
+}
 
 function Config(ui, config, initialConfig) {
     //  Getting the configuration from a URL or previous version, requiring clean up.
@@ -917,262 +1171,7 @@ function Cypher(ui) {
 
 }
 
-function Sandbox(ui) {
-    // This sets up the Sandbox, with some help from the functions called below during the CREATE phase.  
-    // The main tasks are 
-    //  Cypher: decyphering the URL,
-    //  Config: getting the configuration from it.
-    // Sandbox: binding functions into the Model simulation routine.  And creating the primary divs
-    //    Menu: Creating all the divs and assigning click events inside the left menu
-    // UiArena: " " outside the left menu
-
-    // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
-
-    // Basic description of main_sandbox.js
-    // First we load the config,
-    // Then we update the model and menu.
-    // Then wait for mouse events.
-
-    // // there are two parts, the model and the config.
-    // // load initial config
-    // // bind model and config using menu items (config step for )
-    // // start/ initialize
-    // // The sandbox is the binder
-
-    // we pass around the context, ui
-
-
-    var self = this
-
-    // CREATE the data structure
-
-    // handle input
-    if (ui == undefined) ui = {}
-    var a = new Attach(ui)
-    a.handleInputMain()
-
-    var model = new Model(ui.idModel)
-
-    var config = {}
-    var initialConfig = {}
-    bindModel(ui,model,config)
-
-    var cConfig = new Config(ui,config,initialConfig)
-
-    ui.cypher = new Cypher(ui)
-    
-    // CREATE the divs!
-    a.createDOM(model)
-    Menu(ui,model,config,initialConfig, cConfig)
-    UiArena(ui,model,config,initialConfig, cConfig)
-    
-    // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
-    ui.cypher.setUpEncode()
-
-    
-    // INIT
-    // Read in the config file.
-    cConfig.setConfig()
-    
-    // run some extra stuff specified by the preset
-    if (ui.preset.update) {
-        ui.preset.update()
-    }
-
-    // Note:
-    // use loader to save on bandwidth
-    // alternatively if we call the loader from all the places where we need the images, then we could just do
-    // s.update()
-    // for possibly greater speed, since we don't have to wait on the downloads.
-
-    var l = new Loader()
-
-    l.onload = function(assets){
-        // UPDATE SANDBOX
-
-        model.assets = assets
-        
-        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
-        _objF(ui.arena,"update")
-        _objF(ui.menu,"select");
-        model.start(); 
-    }; 
-
-    var assets = [
-        
-        // the peeps
-        "play/img/voter_face.png",
-
-        "play/img/square.png",
-        "play/img/triangle.png",
-        "play/img/hexagon.png",
-        "play/img/pentagon.png",
-        "play/img/bob.png",
-
-        "play/img/square.svg",
-        "play/img/triangle.svg",
-        "play/img/hexagon.svg",
-        "play/img/pentagon.svg",
-        "play/img/bob.svg",
-
-        "play/img/blue_bee.png",
-        "play/img/yellow_bee.png",
-        "play/img/red_bee.png",
-        "play/img/green_bee.png",
-        "play/img/orange_bee.png",
-
-        // plus
-        "play/img/plusCandidate.png",
-        "play/img/plusOneVoter.png",
-        "play/img/plusVoterGroup.png",
-
-        // Ballot instructions
-        "play/img/ballot5_fptp.png",
-        "play/img/ballot5_ranked.png",
-        "play/img/ballot5_approval.png",
-        "play/img/ballot5_range.png",
-
-        // The boxes
-        "play/img/ballot5_box.png",
-        "play/img/ballot_rate.png",
-        "play/img/ballot_three.png"
-
-    ];
-
-    l.load(assets)
-}
-
-function bindModel(ui,model,config) {
-
-    model.inSandbox = true
-    
-    model.start = function(){
-
-        // This "model.start()" launches the model
-        // So it is also useful as a template for everything that you might need to do after a button press.
-
-        // CREATE
-        
-        if (config.candidatePositions) {
-            for(var i=0; i<config.candidatePositions.length; i++) model.candidates.push(new Candidate(model))
-        } else {
-            for(var i=0; i<config.numOfCandidates; i++) model.candidates.push(new Candidate(model))
-        }
-
-        if (config.voterGroupTypes) {
-            for(var i=0; i<config.voterGroupTypes.length; i++) {
-                var vType = window[config.voterGroupTypes[i]]
-                var n = new vType(model)
-                model.voters.push(n)
-            }
-        } else if (config.oneVoter) {
-            model.voters.push(new SingleVoter(model))
-        } else {
-            for(var i=0; i<config.numVoterGroups; i++) model.voters.push(new GaussianVoters(model))
-        }
-        model.voterCenter = new VoterCenter(model)
-
-        // PRE CONFIGURE
-        model.dimensions = config.dimensions
-        
-        // CONFIGURE
-            // expand config to calculate some values to add to the model			
-            // load expanded config into the model
-            // configure writes to model and reads from config.  Sanity rule: configure does not read from model.
-        _objF(ui.menu,"configure")
-        // CONFIGURE DEFAULTS (model)
-        model.border = config.arena_border
-        model.HACK_BIG_RANGE = true;
-        // INIT
-        model.initDOM()
-        for (var i=0; i<model.candidates.length; i++) {
-            model.candidates[i].init()
-        }
-        model.initMODEL()
-        for (var i=0; i<model.voters.length; i++) {
-            model.voters[i].init()
-        }
-        model.arena.pileVoters()
-        model.arena.redistrict()
-		// INIT (menu)
-		ui.menu.presetconfig.init_sandbox()
-		// ui.menu.gearicon.init_sandbox()
-		ui.arena.desc.init_sandbox()
-        ui.menu.theme.init_sandbox();
-        // UPDATE
-        model.update()
-        ui.menu_update()
-        
-    };
-
-    model.onDraw = function(){
-
-        
-        ui.drawButtons() // make sure the icons show up
-        
-        // CREATE A BALLOT
-        
-        var myNode = ui.dom.right;
-        while (myNode.firstChild) {
-            myNode.removeChild(myNode.firstChild);
-        }  // remove old one, if there was one
-        // ui.dom.basediv.querySelector("#ballot").remove()
-
-        var doOldBallot = false
-        if (config.oneVoter) {
-            if (doOldBallot) {
-                var BallotType = model.ballotType
-                var ballot = new BallotType(model);
-                ui.dom.right.appendChild(ballot.dom);
-            } else {
-                var divBallot = document.createElement("div")
-                ui.dom.right.appendChild(divBallot);
-            }
-        }
-        ui.dom.right.appendChild(model.caption);
-        
-        if (config.oneVoter) {
-            if (model.voters[0].voterGroupType == "SingleVoter") {
-                var text = ""
-                if (doOldBallot) ballot.update(model.voters[0].ballot);
-                if (doOldBallot) text += "<br />"
-                text += '<div class="div-ballot">'
-                text += model.voters[0].type.toTextV(model.voters[0].ballot);
-                text += '</div>'
-                if (0) {
-                    text += "<br /><br />"
-                    text += model.result.text
-                }
-                if (doOldBallot) {
-                    model.caption.innerHTML = text
-                } else {
-                    model.caption.innerHTML = ""
-                    divBallot.innerHTML = text
-                }
-            }
-        }
-    };
-
-    model.updateFromModel = function() {
-        _objF(ui.menu,"updateFromModel")
-    }
-
-    // helpers
-    
-
-    model.onInitModel = function() {
-        ui.drawButtons()
-    }
-    
-    model.onAddCandidate = function() {
-        var n = model.candidates.length
-        model.numOfCandidates = n
-        config.numOfCandidates = n
-        ui.menu.nCandidates.select()
-    }
-}
-
-function Menu(ui,model,config,initialConfig, cConfig) {
+function menu(ui,model,config,initialConfig, cConfig) {
 
     // Each menu item is kind of similar to a mini instance of Sandbox.start.  That's because most of the stuff in Sandbox.start has already been done.  These small onChoose functions just launch when a button is pressed, which is after the whole Sandbox has loaded.
 
@@ -4316,7 +4315,7 @@ function Menu(ui,model,config,initialConfig, cConfig) {
     // ]
 
 
-    var m1 = new menuTree(ui)
+    var m1 = new MenuTree(ui)
     m1.assignMenu( menu1 , ui.dom.left, "basediv" )
     // detail: seems harmless, but the basediv gets reattached.
     
@@ -4326,7 +4325,7 @@ function Menu(ui,model,config,initialConfig, cConfig) {
     m1.buildSubMenus()
     
 
-    var m2 = new menuTree(ui)
+    var m2 = new MenuTree(ui)
     m2.assignMenu( menu2 , ui.dom.left, "basediv" )
 
     m2.menuNameDivs["hidden"][0].hidden = true
@@ -4347,8 +4346,7 @@ function Menu(ui,model,config,initialConfig, cConfig) {
 
 }
 
-
-function menuTree(ui) {
+function MenuTree(ui) {
     var self = this
 
     // Loop through and collect nodes with the same name into a list
@@ -4402,7 +4400,7 @@ function menuTree(ui) {
 
 }
 
-function UiArena(ui,model,config,initialConfig, cConfig) {
+function uiArena(ui,model,config,initialConfig, cConfig) {
     
     ui.arena = {}
 
