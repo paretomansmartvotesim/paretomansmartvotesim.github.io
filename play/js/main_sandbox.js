@@ -463,6 +463,12 @@ function Config(ui, config, initialConfig) {
 
     var self = this
 
+    // see the HOWTO below
+
+    // When you add a new menu item or variable,
+    // add it to the defaults
+    // And when you change which variables are used,
+    // add some code to the cleanConfig.
     
 
     /////////////////////////////
@@ -539,6 +545,7 @@ function Config(ui, config, initialConfig) {
         textBallotInput: "",
         behavior: "stand",
     }
+    // HOWTO: add to the end here (or anywhere inside)
 
 
     self.setConfig = function() {
@@ -584,6 +591,21 @@ function Config(ui, config, initialConfig) {
 
     self.cleanConfig = function(config) {
         // Load the defaults.  This runs at the start and after loading a preset.
+
+        // HOWTO:
+        // cleanConfig:
+        // The only real problem that it's worth keeping track of version numbers for is:
+        // interpreting old parameters if I replaced them with something else in my config,
+        // and that is handled in here in cleanConfig.
+
+        // Incrementing:
+        // Increment the version number when you do something so weird that you can no longer run
+        // the previous version's update commands.
+        // For example, for version 2.3, I changed the way a variable is stored, so
+        // I couldn't run the same script to change it twice.
+        // An example where we don't need version updating
+        // is when we stop using one variable name and start using a different one.
+
 
         // FILENAME
         // config.presethtmlname = ui.url.substring(ui.url.lastIndexOf('/')+1);
@@ -735,7 +757,6 @@ function Config(ui, config, initialConfig) {
         }
         // add in features that were not included with the old version
         if (config.configversion == 2.4) { 
-            config.configversion = 2.5
                 
             // There is a problem in going from an old featureset to a new one.
             // The new features are not included in the set.
@@ -782,6 +803,7 @@ function Config(ui, config, initialConfig) {
                 config.yeeon = true
             }
 
+            config.configversion = 2.5
         }
 
         // now these corrections might have to be done to version 2.5, and they won't hurt the next version
@@ -796,7 +818,8 @@ function Config(ui, config, initialConfig) {
                 config.theme = "Default" // Merged two ideas
                 config.candidateIconsSet = ["name"]
             }
-    
+            
+            // there's no incompatibility problems yet, so no need to increment
         }
 
 
@@ -912,6 +935,9 @@ function Config(ui, config, initialConfig) {
 function Cypher(ui) {
     // Decyphers the URL
 
+    // See the HOWTO
+    // I explain that we don't really need to keep track of configversion in the codebooks.
+
     var self = this
     var doFriendlyURI = true
 
@@ -930,14 +956,6 @@ function Cypher(ui) {
                 var encode = codebook[k].encode
                 var field = codebook[k].field
                 var value = conf[field]
-                var _lookup = function(v) {
-                    var vs = JSON.stringify(v)
-                    if (vs in encode) {
-                        return encode[vs]
-                    } else {
-                        return "~" + vs // store as JSON String, and set a flag character
-                    }
-                }
                 if (Array.isArray(value)) {
                     var temp = []
                     for (var i =0; i < value.length; i++) {
@@ -946,6 +964,14 @@ function Cypher(ui) {
                     conf[field] = temp
                 } else {
                     conf[field] = _lookup(value) //  TODO: it is possible there could be a collision in encoded/decoded values
+                }
+                var _lookup = function(v) {
+                    var vs = JSON.stringify(v)
+                    if (vs in encode) {
+                        return encode[vs]
+                    } else {
+                        return "~" + vs // store as JSON String, and set a flag character
+                    }
                 }
             }
         }
@@ -1049,7 +1075,9 @@ function Cypher(ui) {
         68:"textBallotInput",
         69:"doTextBallots",
         70:"behavior",
-    } // add more on to the end ONLY
+    } 
+    // HOWTO
+    // add more on to the end ONLY
         
     var encodeFields = {}
     self.setUpEncode = function() {
@@ -1109,6 +1137,27 @@ function Cypher(ui) {
             }
         }
 
+        // HOWTO:
+
+        // Decoding:
+
+        // Why do we track the version of the encoding?  
+        // So that we run current links in old versions of this web app
+        // Why do we want to do that?
+        // Maybe we messed something up and need to use an old version 
+        // but don't want to re-create the link in the old version
+
+        // I guess I don't really need to do version numbers
+        // It's just too much work for a hypothetical benefit
+
+        // So just set the default version to the current one and don't worry. Its okay.
+
+        // cleanConfig:
+        // The only real problem that it's worth keeping track of version numbers for is:
+        // interpreting old parameters if I replaced them with something else in my config,
+        // and that is handled in cleanConfig.
+
+
         for (var e in ui.menu) {
             var item = ui.menu[e]
             if (item.codebook) {  
@@ -1119,11 +1168,7 @@ function Cypher(ui) {
         function _decode(codebook) {              
             for (k = 0; k < codebook.length; k++) {
                 var version = codebook[k].decodeVersion
-                if (conf.configversion < version) continue // the value wasn't encoded at this early version
-                // so maybe if the value was an unencoded number that happens to now equal a coded number,
-                // then we shouldn't change that number
-                // HOWTO: If we are looking at an old sandbox, then don't use codebooks with new words in them
-                // So, when you add new words to a codebook, put a version number on that page of words
+                if (conf.configversion < version) continue 
                 var decode = codebook[k].decode
                 var field = codebook[k].field
                 var value = config[field]
@@ -1175,6 +1220,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     // Each menu item is kind of similar to a mini instance of Sandbox.start.  That's because most of the stuff in Sandbox.start has already been done.  These small onChoose functions just launch when a button is pressed, which is after the whole Sandbox has loaded.
 
+    // HOWTO: Copy and paste a button function below and then search and replace all the mentions of the name
+    // the other places to look are in Cypher, Config, and Model
+    // as well as the menu trees at the end of this class.
 
     ui.menu = {}
 
