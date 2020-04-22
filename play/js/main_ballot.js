@@ -1,5 +1,11 @@
 
 function main_ballot(ui){
+
+    // handle input
+    if (ui == undefined) ui = {}
+    var a = new Attach(ui)
+    a.handleInputMain()
+
 	var presetName = ui.presetName
 	var preset = ui.preset
 	var config = preset.config

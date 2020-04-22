@@ -29,6 +29,8 @@
 	<script src="play/tsp/salesman.js"></script>
 
     <script src="play/js/main_ballot.js"></script>
+    <script src="play/js/main_sandbox.js"></script>
+    <!-- I really shouldn't have to have main_sandbox here, but it's okay, though clumsy. -->
     <script src="play/js/Presets.js"></script>
 
 <body>
@@ -37,7 +39,7 @@
     <div id="ballot1" class="div-ballot div-model" scrolling="no">
     </div>
     <script>
-        main_ballot(loadpreset("ballot1"))
+        main_ballot({quick:"ballot1"})
     </script>
 </body>
 
