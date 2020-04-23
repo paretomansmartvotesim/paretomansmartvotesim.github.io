@@ -74,24 +74,34 @@ function sandbox(ui) {
     //    uiArena: " " outside the left menu
     //     Loader: Save some bandwidth 
 
-    // Big update: Added pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. LOAD loads the input or defaults.  CREATE makes an empty data structure to be used.  CONFIGURE adds all the input to the data structure.  INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  UPDATE runs the actions, now that the data structure is complete.
+    // There is a pattern to the code: LOAD, CREATE, CONFIGURE, INIT, & UPDATE. 
+    // LOAD loads the input or defaults.  
+    // CREATE makes an empty data structure to be used.  
+    // CONFIGURE adds all the input to the data structure.  
+    // INIT completes the data structure by doing steps that needed to use the data structure as input, and is otherwise similar to CONFIGURE.  
+    // UPDATE runs the actions, now that the data structure is complete.
 
     // Basic description of main_sandbox.js
     // First we load the config,
     // Then we update the model and menu.
     // Then wait for mouse events.
 
-    // // there are two parts, the model and the config.
-    // // load initial config
-    // // bind model and config using menu items (config step for )
-    // // start/ initialize
-    // // The sandbox is the binder
-
+    // there are two parts, the model and the config.
+    // load initial config
+    // bind model and config using menu items (config step for )
+    // start/ initialize
+    // The sandbox is the binder
     // we pass around the context, ui
 
+    // See main_ballot.js for a more conceptual view of the data structures ui, model, and config
 
-
-
+    // So the basic concept of this user intervace is:
+    // Load some data into the model,
+    // Let the user modify it through a controls,
+    // Describe the controls with a configuration,
+    // Display the state of the model,
+    // Save the control data.
+    
     
 
     // CREATE the data structure
@@ -102,6 +112,7 @@ function sandbox(ui) {
     a.handleInputMain()
 
     var model = new Model(ui.idModel)
+    a.attachDOM(model)
 
     var config = {}
     var initialConfig = {}
@@ -111,76 +122,49 @@ function sandbox(ui) {
 
     ui.cypher = new Cypher(ui)
     
-    // CREATE the divs!
-    a.createDOM(model)
-    menu(ui,model,config,initialConfig, cConfig)
-    uiArena(ui,model,config,initialConfig, cConfig)
-    
-    // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
-    ui.cypher.setUpEncode()
 
-    
-    // INIT
-    // Read in the config file.
-    cConfig.setConfig()
-    
-    // run some extra stuff specified by the preset
-    if (ui.preset.update) {
-        ui.preset.update()
-    }
+    ui.start = function(assets){
 
-    // Note:
+        model.assets = assets
+
+        // CREATE the divs!
+        createDOM(ui,model)
+        menu(ui,model,config,initialConfig, cConfig)
+        uiArena(ui,model,config,initialConfig, cConfig)
+        
+        // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
+        ui.cypher.setUpEncode()
+    
+        
+        // INIT
+        // Read in the config file.
+        cConfig.setConfig()
+        
+        // run some extra stuff specified by the preset
+        if (ui.preset.update) {
+            ui.preset.update()
+        }
+
+        // UPDATE SANDBOX
+        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
+        _objF(ui.arena,"update")
+        _objF(ui.menu,"select");
+        model.start(); 
+    }; 
+
+    var l = new Loader()
+    l.onload = ui.start
+    l.load(sandbox.assets)
     // use loader to save on bandwidth
     // alternatively if we call the loader from all the places where we need the images, then we could just do
     // s.update()
     // for possibly greater speed, since we don't have to wait on the downloads.
 
-    var l = new Loader()
 
-    l.onload = ui.start
 
-    var assets = [
-        
-        // the peeps
-        "play/img/voter_face.png",
 
-        "play/img/square.png",
-        "play/img/triangle.png",
-        "play/img/hexagon.png",
-        "play/img/pentagon.png",
-        "play/img/bob.png",
 
-        "play/img/square.svg",
-        "play/img/triangle.svg",
-        "play/img/hexagon.svg",
-        "play/img/pentagon.svg",
-        "play/img/bob.svg",
 
-        "play/img/blue_bee.png",
-        "play/img/yellow_bee.png",
-        "play/img/red_bee.png",
-        "play/img/green_bee.png",
-        "play/img/orange_bee.png",
-
-        // plus
-        "play/img/plusCandidate.png",
-        "play/img/plusOneVoter.png",
-        "play/img/plusVoterGroup.png",
-
-        // Ballot instructions
-        "play/img/ballot5_fptp.png",
-        "play/img/ballot5_ranked.png",
-        "play/img/ballot5_approval.png",
-        "play/img/ballot5_range.png",
-
-        // The boxes
-        "play/img/ballot5_box.png",
-        "play/img/ballot_rate.png",
-        "play/img/ballot_three.png"
-
-    ];
-
-    l.load(assets)
 }
 
 function Attach(ui) {
@@ -196,6 +180,8 @@ function Attach(ui) {
         if (ui == undefined || ui.preset == undefined || ui.preset.config == undefined || ui.presetName == undefined) {
             loadpreset(ui)
         }
+        ui.missingModelId = false
+        ui.danglingScript = false
         if (ui.idModel == undefined) {
             ui.idModel = "model-" + _rand5()
             ui.missingModelId = true
@@ -233,7 +219,7 @@ function Attach(ui) {
     }
     
 
-    self.createDOM = function(model) {
+    self.attachDOM = function(model) {
             
         // Here are two boolean variables to consider
         // ui.missingModelId : needs a new parent div
@@ -249,30 +235,7 @@ function Attach(ui) {
         } else {
             ui.dom.basediv = document.querySelector("#" + model.id)
         }
-        ui.dom.left = newDivOnBase("left")
-        ui.dom.center = newDivOnBase("center")
-        ui.dom.right = newDivOnBase("right")
-        function newDivOnBase(name) {
-            var a = document.createElement("div");
-            a.setAttribute("id", name);
-            ui.dom.basediv.appendChild(a);
-            return a
-        }
-        // Details
-        model.createDOM()
-
-        var centerDiv = ui.dom.center
-        if (centerDiv.hasChildNodes()){
-            var firstNode = centerDiv.childNodes[0]
-            centerDiv.insertBefore(model.dom,firstNode);
-        } else {
-            centerDiv.appendChild(model.dom)
-        }
-        model.dom.removeChild(model.caption);
-        ui.dom.right.appendChild(model.caption);
-        model.caption.style.width = "";
         
-        ui.makeParentDivs = _makeParentDivs
         function _makeParentDivs() {
             
             // the model
@@ -329,17 +292,6 @@ function Attach(ui) {
 function bindModel(ui,model,config) {
 
     model.inSandbox = true
-    
-    ui.start = function(assets){
-        // UPDATE SANDBOX
-
-        model.assets = assets
-        
-        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
-        _objF(ui.arena,"update")
-        _objF(ui.menu,"select");
-        model.start(); 
-    }; 
 
     model.start = function(){
 
@@ -974,7 +926,7 @@ function Cypher(ui) {
                 } else {
                     conf[field] = _lookup(value) //  TODO: it is possible there could be a collision in encoded/decoded values
                 }
-                var _lookup = function(v) {
+                function _lookup(v) {
                     var vs = JSON.stringify(v)
                     if (vs in encode) {
                         return encode[vs]
@@ -1223,6 +1175,31 @@ function Cypher(ui) {
 
 
 
+}
+
+function createDOM(ui,model) {
+    ui.dom.left = newDivOnBase("left")
+    ui.dom.center = newDivOnBase("center")
+    ui.dom.right = newDivOnBase("right")
+    function newDivOnBase(name) {
+        var a = document.createElement("div");
+        a.setAttribute("id", name);
+        ui.dom.basediv.appendChild(a);
+        return a
+    }
+    // Details
+    model.createDOM()
+
+    var centerDiv = ui.dom.center
+    if (centerDiv.hasChildNodes()){
+        var firstNode = centerDiv.childNodes[0]
+        centerDiv.insertBefore(model.dom,firstNode);
+    } else {
+        centerDiv.appendChild(model.dom)
+    }
+    model.dom.removeChild(model.caption);
+    ui.dom.right.appendChild(model.caption);
+    model.caption.style.width = "";
 }
 
 function menu(ui,model,config,initialConfig, cConfig) {
@@ -4657,6 +4634,47 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
 
     
 }
+
+sandbox.assets = [
+    
+    // the peeps
+    "play/img/voter_face.png",
+
+    "play/img/square.png",
+    "play/img/triangle.png",
+    "play/img/hexagon.png",
+    "play/img/pentagon.png",
+    "play/img/bob.png",
+
+    "play/img/square.svg",
+    "play/img/triangle.svg",
+    "play/img/hexagon.svg",
+    "play/img/pentagon.svg",
+    "play/img/bob.svg",
+
+    "play/img/blue_bee.png",
+    "play/img/yellow_bee.png",
+    "play/img/red_bee.png",
+    "play/img/green_bee.png",
+    "play/img/orange_bee.png",
+
+    // plus
+    "play/img/plusCandidate.png",
+    "play/img/plusOneVoter.png",
+    "play/img/plusVoterGroup.png",
+
+    // Ballot instructions
+    "play/img/ballot5_fptp.png",
+    "play/img/ballot5_ranked.png",
+    "play/img/ballot5_approval.png",
+    "play/img/ballot5_range.png",
+
+    // The boxes
+    "play/img/ballot5_box.png",
+    "play/img/ballot_rate.png",
+    "play/img/ballot_three.png"
+
+];
 
 // helpers
 
