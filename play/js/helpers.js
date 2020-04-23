@@ -154,7 +154,7 @@ function _convertImageToDataURLviaCanvas(img, outputFormat){
 	return dataURL
 }
 
-function _convertLetterToDataURLviaCanvas(letter,color, outputFormat){
+function _convertNameToDataURLviaCanvas(letter,color, outputFormat){
 	var canvas = document.createElement('CANVAS');
 	var ctx = canvas.getContext('2d');
 	n = letter.length

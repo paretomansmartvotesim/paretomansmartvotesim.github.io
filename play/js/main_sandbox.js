@@ -3404,6 +3404,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
             config.theme = data.value
             // CONFIGURE
             self.configure()
+
+            if (config.theme == "Nicky" || config.theme == "Bees") {
+                config.colorChooser = "pick and repeat"
+            } else {
+                config.colorChooser = "pick and generate"
+            }
+            ui.menu.colorChooser.configure()
+            ui.menu.colorChooser.select()
+
             // INIT MODEL
 		    model.arena.initARENA()
             for(var i=0; i<model.candidates.length; i++) {
@@ -4636,8 +4645,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     ["divCustomNames", [
                         "namelist",
                     ]],
-                    "voterIcons",
                     "candidateIcons",
+                    "voterIcons",
                 ]],
                 ["advanced", [
                     "colorChooser",

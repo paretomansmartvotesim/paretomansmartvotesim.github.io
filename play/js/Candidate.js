@@ -49,8 +49,13 @@ function Candidate(model){
 				self.name = String.fromCharCode((serial % 26) + "A".charCodeAt(0));
 			}
 		}
-		self.nameSelf = new Graphicon(self, "name",char,model)
-		self.imageSelf = new Graphicon(self,"image",char,model)
+		self.nameSelf = new Graphicon(self, "name",char,model,charIndex,chars)
+		
+		if (model.theme == "Letters") {
+			self.imageSelf = self.nameSelf 
+		} else {
+			self.imageSelf = new Graphicon(self,"image",char,model,charIndex,chars)
+		}
 		self.fill = self.imageSelf.fill
 	}
 	
@@ -138,31 +143,59 @@ function Candidate(model){
 // id => img & fill
 
 Candidate.graphics = {
-	Default: [
+	Letters: [
 		{
 			icon: "square",
-			url: "play/img/square.svg",
-			fill: "hsl(240,80%,70%)"
+			fill: "hsl(240,80%,70%)",
 		},
 		{
 			icon: "triangle",
-			url: "play/img/triangle.svg",
-			fill: "hsl(45,80%,70%)"
+			fill: "hsl(45,80%,70%)",
 		},
 		{
 			icon: "hexagon",
-			url: "play/img/hexagon.svg",
-			fill: "hsl(0,80%,70%)"
+			fill: "hsl(0,80%,70%)",
 		},
 		{
 			icon: "pentagon",
 			url: "play/img/pentagon.svg",
-			fill: "hsl(90,80%,70%)"
+			fill: "hsl(90,80%,70%)",
+		},
+		{
+			icon: "bob",
+			fill: "hsl(30,80%,70%)",
+		}
+	],
+	Default: [
+		{
+			icon: "square",
+			url: "play/img/square.svg",
+			fill: "hsl(240,80%,70%)",
+			name: "square",
+		},
+		{
+			icon: "triangle",
+			url: "play/img/triangle.svg",
+			fill: "hsl(45,80%,70%)",
+			name: "triangle",
+		},
+		{
+			icon: "hexagon",
+			url: "play/img/hexagon.svg",
+			fill: "hsl(0,80%,70%)",
+			name: "hexagon",
+		},
+		{
+			icon: "pentagon",
+			url: "play/img/pentagon.svg",
+			fill: "hsl(90,80%,70%)",
+			name: "pentagon",
 		},
 		{
 			icon: "bob",
 			url: "play/img/bob.svg",
-			fill: "hsl(30,80%,70%)"
+			fill: "hsl(30,80%,70%)",
+			name: "bob",
 		}
 	],
 	Nicky: [
@@ -201,27 +234,32 @@ Candidate.graphics = {
 		{
 			icon: "square",
 			url: "play/img/blue_bee.png",
-			fill: "hsl(240,80%,70%)"
+			fill: "hsl(240,80%,70%)",
+			name: "blue",
 		},
 		{
 			icon: "triangle",
 			url: "play/img/yellow_bee.png",
-			fill: "hsl(45,80%,70%)"
+			fill: "hsl(45,80%,70%)",
+			name: "yellow",
 		},
 		{
 			icon: "hexagon",
 			url: "play/img/red_bee.png",
-			fill: "hsl(0,80%,70%)"
+			fill: "hsl(0,80%,70%)",
+			name: "red",
 		},
 		{
 			icon: "pentagon",
 			url: "play/img/green_bee.png",
-			fill: "hsl(90,80%,70%)"
+			fill: "hsl(90,80%,70%)",
+			name: "green",
 		},
 		{
 			icon: "bob",
 			url: "play/img/orange_bee.png",
-			fill: "hsl(30,80%,70%)"
+			fill: "hsl(30,80%,70%)",
+			name: "orange",
 		}
 	]
 };
@@ -249,14 +287,14 @@ Candidate.idFromSerial = function (serial,theme) {
 
 // put all the graphical stuff here... because it's difficult
 
-function Graphicon(candidate,option,char,model) {
+function Graphicon(candidate,option,char,model,charIndex,chars) {
 	var self = this
 	if (option == "name") {
 		// Make an image for the name
 		self.ext = "NA"
 		pickFillFromColorChooser()
 		if (candidate.dummy) return // don't make
-		makeLetterImage()
+		makeNameImage()
 	} else {
 		
 		// Load the regular image
@@ -321,7 +359,7 @@ function Graphicon(candidate,option,char,model) {
 					if (! candidate.dummy) model.update() // draw the UI.. maybe we don't need a whole bunch
 				})
 			} else if (0) {  // 0 used to be "Letters" theme
-				makeLetterImage()
+				makeNameImage()
 			} else { 
 				self.srcImg = self.url
 				makeImg()
@@ -491,9 +529,9 @@ function Graphicon(candidate,option,char,model) {
 		return blob;
 	}
 	
-	function makeLetterImage() {
+	function makeNameImage() {
 		model.nLoading++
-		self.png_b64 = _convertLetterToDataURLviaCanvas(candidate.name,self.fill, '.png')
+		self.png_b64 = _convertNameToDataURLviaCanvas(candidate.name,self.fill, '.png')
 		self.img = new Image()
 		self.img.src = self.png_b64 // base64 png
 		self.texticon_png = "<img src='"+self.img.src+"'/>"

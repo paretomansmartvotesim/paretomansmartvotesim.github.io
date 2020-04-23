@@ -575,7 +575,7 @@ function Model(idModel){
 			self.placeHolding = true
 			return "^Placeholder{" + id + "}"
 
-		} else if (self.candidateIconsSet.includes("name") && self.theme != "Nicky") {
+		} else if (self.theme == "Letters") {
 			var c = self.candidatesById[id]
 			return "<span class='letter' style='color:"+c.fill+";'><b>"+c.name.toUpperCase()+"</b></span>"
 		} else {
