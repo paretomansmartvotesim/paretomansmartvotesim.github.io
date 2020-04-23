@@ -533,7 +533,7 @@ function Yee(model) {
 			for(var k=0;k<model.gridx.length;k++) {
 				var ca = model.gridl[k]
 				
-				if (ca=="#ccc") { // make stripes instead of gray
+				if (ca=="#ccc" && model.computeMethod != "gpu" && model.computeMethod != "js") { // make stripes instead of gray // I'm not sure why this part didn't work for the other compute methods
 					var cb = model.gridb[k]
 					if (method_1) {
 						cb = cb.filter(function(x) {return color_filter_yee.includes(x)} )// filter the colors so that only the selected colors are displayed

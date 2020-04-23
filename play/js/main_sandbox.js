@@ -291,9 +291,10 @@ function Attach(ui) {
 
 function bindModel(ui,model,config) {
 
-    model.inSandbox = true
-
     model.start = function(){
+
+        // LOAD
+        model.inSandbox = true
 
         // This "model.start()" launches the model
         // So it is also useful as a template for everything that you might need to do after a button press.
@@ -502,7 +503,6 @@ function Config(ui, config, initialConfig) {
         candidateIconsSet: ["name"],
         pairwiseMinimaps: "off",
         doTextBallots: false,
-        submitTextBallots: false,
         textBallotInput: "",
         behavior: "stand",
     }
@@ -902,68 +902,9 @@ function Cypher(ui) {
     var self = this
     var doFriendlyURI = true
 
-    self.encode_config = function(config) {
-        var conf = _jcopy(config)
-        for (var e in ui.menu) {
-            var item = ui.menu[e]
-            if (item.codebook) {  
-                _encode(item.codebook)
-            }
-        }
-        _encode(ui.extraCodeBook)
-        
-        function _encode(codebook) {
-            for (k = 0; k < codebook.length; k++) {
-                var encode = codebook[k].encode
-                var field = codebook[k].field
-                var value = conf[field]
-                if (Array.isArray(value)) {
-                    var temp = []
-                    for (var i =0; i < value.length; i++) {
-                        temp.push(_lookup(value[i]))
-                    }
-                    conf[field] = temp
-                } else {
-                    conf[field] = _lookup(value) //  TODO: it is possible there could be a collision in encoded/decoded values
-                }
-                function _lookup(v) {
-                    var vs = JSON.stringify(v)
-                    if (vs in encode) {
-                        return encode[vs]
-                    } else {
-                        return "~" + vs // store as JSON String, and set a flag character
-                    }
-                }
-            }
-        }
-        //
-        // encode field names
-        for (var i in encodeFields) {
-            var n = encodeFields[i]
-            conf[n] = conf[i]
-            delete conf[i]
-        }
-        // zip
-        delete conf["configversion"]
-        var dataZ = pako.gzip( JSON.stringify(conf) ,{ to: 'string' })
-        var dataString = btoa(dataZ)
-        if (doFriendlyURI) dataString = Base64EncodeUrl(dataString)
-        if (ui.tryNewURL) {
-            return dataString
-        } else {
-            var co = {}
-            co["zipped"] = dataString
-            co["configversion"] = config["configversion"]
-            return co
-        }
-        // be careful to include all the zipped config items and add any new ones or they will appear as extras
-    }
-
+    var encodeFields = {}
     
-    // HOWTO: Add to the end of the list.  Don't add to the middle of this list.
-    // safer: use a dictionary
-    // These are the fields that show up in the URL, so we shorten them.
-    decodeFields = {
+    var decodeFields = {
         0:"candidatePositions",
         1:"voterPositions",
         2:"candidates",
@@ -975,7 +916,7 @@ function Cypher(ui) {
         7:"percentSecondStrategy",
         8:"voter_group_count",
         9:"voter_group_spread",
-        10:"sandboxsave",
+        10:"sandboxsave", // not needed anymore, but keep it
         11:"featurelist",
         12:"description",
         13:"keyyee",
@@ -1039,38 +980,73 @@ function Cypher(ui) {
     } 
     // HOWTO
     // add more on to the end ONLY
-        
-    var encodeFields = {}
+
+
     self.setUpEncode = function() {
 
-        for ([i,v] of Object.entries(decodeFields)) {
-            i = Number(i)
-            encodeFields[v] = i
+        _makeEncodeFields()
+
+        function _makeEncodeFields() {
+            for (var [i,v] of Object.entries(decodeFields)) {
+                i = Number(i)
+                encodeFields[v] = i
+            }
         }
         // set up encoders
         for (var e in ui.menu) {
             var item = ui.menu[e]
             if (item.codebook) {
-                _makeEncode(item.codebook)
+                for (var page of item.codebook) {
+                    _makeEncode(page)
+                }
             }
         }
 
-        _makeEncode(ui.extraCodeBook)
-    
-    }
-    
-    function _makeEncode(codebook) {
-        for (k = 0; k < codebook.length; k++) {
-            var decode = codebook[k].decode
-            var encode = {}
-            for (var [i,v] of Object.entries(decode)) {
-                var value = JSON.stringify(v)
-                i = Number(i)
-                encode[value] = i
-            }
-            codebook[k].encode = encode
+        for (var page of ui.extraCodeBook) {
+            _makeEncode(page)
         }
+    
     }
+
+    self.encode_config = function(config) {
+
+        // make a copy because we aren't going to modify config
+        var conf = _jcopy(config)
+        
+        step1encode(conf)
+        //
+        // encode field names
+        // console.log(conf)
+        // console.log(conf)
+        for (var i in encodeFields) {
+            var n = encodeFields[i]
+            conf[n] = conf[i]
+            delete conf[i]
+        }
+        // zip 
+        delete conf["configversion"]
+        var dataZ = pako.gzip( JSON.stringify(conf) ,{ to: 'string' })
+        var dataString = btoa(dataZ)
+        if (doFriendlyURI) dataString = Base64EncodeUrl(dataString)
+        if (ui.tryNewURL) {
+            return dataString
+        } else {
+            var co = {}
+            co["zipped"] = dataString
+            co["configversion"] = config["configversion"]
+            return co
+        }
+        // be careful to include all the zipped config items and add any new ones or they will appear as extras
+    }
+
+    
+    // HOWTO: Add to the end of the list.  Don't add to the middle of this list.
+    // safer: use a dictionary
+    // These are the fields that show up in the URL, so we shorten them.
+    
+        
+    
+    
     self.decode_config = function(config) {
         if (config.configversion == undefined) return config
         if (config.configversion <= 2.1) return config
@@ -1098,63 +1074,211 @@ function Cypher(ui) {
             }
         }
 
-        // HOWTO:
-
-        // Decoding:
-
-        // Why do we track the version of the encoding?  
-        // So that we run current links in old versions of this web app
-        // Why do we want to do that?
-        // Maybe we messed something up and need to use an old version 
-        // but don't want to re-create the link in the old version
-
-        // I guess I don't really need to do version numbers
-        // It's just too much work for a hypothetical benefit
-
-        // So just set the default version to the current one and don't worry. Its okay.
-
-        // cleanConfig:
-        // The only real problem that it's worth keeping track of version numbers for is:
-        // interpreting old parameters if I replaced them with something else in my config,
-        // and that is handled in cleanConfig.
-
-
-        for (var e in ui.menu) {
-            var item = ui.menu[e]
-            if (item.codebook) {  
-                _decode(item.codebook)
-            }
-        }
-        _decode(ui.extraCodeBook)
-        function _decode(codebook) {              
-            for (k = 0; k < codebook.length; k++) {
-                var version = codebook[k].decodeVersion
-                if (conf.configversion < version) continue 
-                var decode = codebook[k].decode
-                var field = codebook[k].field
-                var value = config[field]
-            
-                if (Array.isArray(value)) {
-                    var temp = []
-                    for (var i =0; i < value.length; i++) {
-                        temp.push(_lookup(value[i]))
-                    }
-                    config[field] = temp
-                } else {
-                    config[field] = _lookup(value)
-                }
-                function _lookup(v) {
-                    if (v in decode) {
-                        return decode[v]
-                    } else {    
-                        return JSON.parse(v.slice(1)) // remove the flag character and parse
-                    }
-                }
-            }
-        }
+        step1decode(config)
         return
     }
 
+
+    
+
+
+    function _makeEncode(page) {
+        var decode = page.decode
+
+        var encode = {}
+        for (var [i,v] of Object.entries(decode)) {
+            var value = JSON.stringify(v)
+            i = Number(i)
+            encode[value] = i
+        }
+        page.encode = encode
+    }
+
+    
+    function step1encode(conf) {
+        for (var e in ui.menu) {
+            var item = ui.menu[e]
+            if (item.codebook) {  
+                for (var page of item.codebook) {
+                    _encode(page,conf)
+                }
+            }
+        }
+        for (var page of ui.extraCodeBook) {
+            _encode(page,conf)
+        }
+    }
+
+    function _encode(page,conf) {
+        var encode = page.encode
+        var field = page.field
+
+        var value = conf[field]
+        if (Array.isArray(value)) {
+            var temp = []
+            for (var i =0; i < value.length; i++) {
+                temp.push(_lookupE(value[i],encode))
+            }
+            conf[field] = temp
+        } else {
+            conf[field] = _lookupE(value,encode) //  TODO: it is possible there could be a collision in encoded/decoded values
+        }
+    }
+    function _lookupE(v,encode) {
+        var vs = JSON.stringify(v)
+        if (vs in encode) {
+            return encode[vs]
+        } else {
+            return "~" + vs // store as JSON String, and set a flag character
+        }
+    }
+
+    function step1decode(config) {
+
+        // console.log("config before decoding",config)
+        for (var e in ui.menu) {
+            var item = ui.menu[e]
+            if (item.codebook) {  
+                for (var page of item.codebook) {
+                    _decode(page,config)
+                }
+            }
+        }
+        // console.log("config after decoding",config)
+
+        for (var page of ui.extraCodeBook) {
+            _decode(page,config)
+        }
+    }
+    function _decode(page,config) { 
+        var decode = page.decode
+        var field = page.field
+
+        var value = config[field]
+        // console.log(value)
+        if (Array.isArray(value)) {
+            var temp = []
+            for (var i =0; i < value.length; i++) {
+                temp.push(_lookup(value[i],decode))
+            }
+            config[field] = temp
+        } else {
+            var temp = _lookup(value,decode)
+            config[field] = temp
+        }
+    }
+    
+    
+    function _lookup2(v,decode) {
+        var f = removeTildas(v) 
+        if (f in decode) {
+            return decode[f]
+        } else { 
+            return f
+        }
+    }
+    function _lookup(v,decode) {
+        var debug = 0
+        var c = checkTilda(v)
+        if (c) {
+            var f = removeTildas(v)
+            if (debug >= 2) console.log(v,f)
+            return f
+        } 
+        if (v in decode) {
+            var d = decode[v]
+            if (debug >= 2) console.log(v,d)
+            return d
+        } else { 
+            // encode didn't work right on old versions, 
+            // so this is for grandfathering in the old URLs
+            if (debug >= 3) console.log("")
+            if (debug >= 2) console.log(v)
+            return v
+        }
+    }
+    function removeTildas(v) {
+        // check if first char is tilda
+        
+        if (typeof(v) != "string")  return v
+        var a = v.split("") 
+        if (a[0] == "~") {
+            // if it is then remove it
+            var b = v.slice(1)
+            var c = JSON.parse(b)
+            // and send it back into removeTildas
+            var d = removeTildas(c)
+            // and return the result
+            return d
+        } else {
+            // otherwise, return it
+            return v
+        }
+    }
+    function checkTilda(v) {
+        // check if first character is a tilda
+        if (typeof(v) != "string")  return false
+        var a = v.split("") 
+        if (a[0] == "~") {
+            return true
+        }
+        return false
+    }
+
+
+    // HOWTO:
+
+    // Decoding:
+
+    // Why do we track the version of the encoding?  
+    // So that we run current links in old versions of this web app
+    // Why do we want to do that?
+    // Maybe we messed something up and need to use an old version 
+    // but don't want to re-create the link in the old version
+
+    // I guess I don't really need to do version numbers
+    // It's just too much work for a hypothetical benefit
+
+    // So just set the default version to the current one and don't worry. Its okay.
+
+    // cleanConfig:
+    // The only real problem that it's worth keeping track of version numbers for is:
+    // interpreting old parameters if I replaced them with something else in my config,
+    // and that is handled in cleanConfig.
+
+
+    // Oh wait, there is a problem,
+    // When I open up old links,
+    // JSON Parse doesn't work on things not in the codebook
+    // 
+
+    // we should make sure no two codebooks are for the same fields
+
+    // maybe in the future
+    // an example codebook should be
+    // 
+    // self.codebook = {
+    //     system: {
+    //         0:"FPTP",
+    //         1:"+Primary",
+    //         2:"Top Two",
+    //         3:"RBVote",
+    //         4:"IRV", 
+    //         5:"Borda",
+    //         6:"Minimax",
+    //         7:"Schulze",
+    //         8:"RankedPair",
+    //         9:"Condorcet",
+    //         10:"Approval",
+    //         11:"Score",
+    //         12:"STAR",
+    //         13:"3-2-1",
+    //         14:"RRV", 
+    //         15:"RAV",
+    //         16:"STV",
+    //         17:"QuotaApproval",
+    //     },
+    // }
 
     // URL Friendly Base 64
     //  * use this to make a Base64 encoded string URL friendly, 
@@ -1322,30 +1446,29 @@ function menu(ui,model,config,initialConfig, cConfig) {
         var autoSwitchDim = false
         
         self.list = [
-            {name:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
-            {name:"+Primary", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.pluralityWithPrimary},
-            {name:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo, margin:4},
-            {name:"RBVote", realname:"Rob Legrand's RBVote (Ranked Ballot Vote)", voter:RankedVoter, ballot:"RankedBallot", election:Election.rbvote},
-            {name:"IRV", realname:"Instant Runoff Voting.  Sometimes called RCV Ranked Choice Voting but I call it IRV because there are many ways to have ranked ballots.", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv, margin:4},
-            {name:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda},
-            {name:"Minimax", realname:"Minimax Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.minimax, margin:4},
-            {name:"Schulze", realname:"Schulze Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.schulze},
-            {name:"RankedPair", realname:"Ranked Pairs Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs, margin:4},
-            {name:"Condorcet", realname:"Choose the Condorcet Winner, and if there isn't one, Tie", voter:RankedVoter, ballot:"RankedBallot", election:Election.condorcet},
-            {name:"Approval", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.approval, margin:4},
-            {name:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
-            {name:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
-            {name:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
-            {name:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv, margin:4},
-            {name:"RAV", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.rav},
-            {name:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
-            {name:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval},
-            {name:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",voter:RankedVoter, ballot:"RankedBallot", election:Election.quotaMinimax}
+            {name:"FPTP", value:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
+            {name:"+Primary", value:"+Primary", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.pluralityWithPrimary},
+            {name:"Top Two", value:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo, margin:4},
+            {name:"RBVote", value:"RBVote", realname:"Rob Legrand's RBVote (Ranked Ballot Vote)", voter:RankedVoter, ballot:"RankedBallot", election:Election.rbvote},
+            {name:"IRV", value:"IRV", realname:"Instant Runoff Voting.  Sometimes called RCV Ranked Choice Voting but I call it IRV because there are many ways to have ranked ballots.", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv, margin:4},
+            {name:"Borda", value:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda},
+            {name:"Minimax", value:"Minimax", realname:"Minimax Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.minimax, margin:4},
+            {name:"Schulze", value:"Schulze", realname:"Schulze Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.schulze},
+            {name:"RankedPair", value:"RankedPair", realname:"Ranked Pairs Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs, margin:4},
+            {name:"Condorcet", value:"Condorcet", realname:"Choose the Condorcet Winner, and if there isn't one, Tie", voter:RankedVoter, ballot:"RankedBallot", election:Election.condorcet},
+            {name:"Approval", value:"Approval", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.approval, margin:4},
+            {name:"Score", value:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
+            {name:"STAR", value:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
+            {name:"3-2-1", value:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
+            {name:"RRV", value:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv, margin:4},
+            {name:"RAV", value:"RAV", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.rav},
+            {name:"STV", value:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
+            {name:"QuotaApproval", value:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval},
+            {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",voter:RankedVoter, ballot:"RankedBallot", election:Election.quotaMinimax}
         ];
         self.codebook = [
             {
                 field: "system",
-                decodeVersion: 2.2,
                 decode: {
                     0:"FPTP",
                     1:"+Primary",
@@ -1364,19 +1487,20 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     14:"RRV", 
                     15:"RAV",
                     16:"STV",
-                    17:"QuotaApproval"
+                    17:"QuotaApproval",
+                    18:"QuotaMinimax",
                 }
             }
         ]
         self.listByName = function() {
             var votingSystem = self.list.filter(function(system){
-                return(system.name==config.system);
+                return(system.value==config.system);
             })[0];
             return votingSystem;
         }
         self.onChoose = function(data){
             // LOAD INPUT
-            config.system = data.name;
+            config.system = data.value;
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1434,34 +1558,33 @@ function menu(ui,model,config,initialConfig, cConfig) {
             showMenuItemsIf("divPairwiseMinimaps",  goPairwise)
         }
         self.select = function() {
-            self.choose.highlight("name", config.system)
+            self.choose.highlight("value", config.system)
         }
     }
 
     ui.menu.rbSystems = new function() { // Which RB voting system?
         var self = this
         self.list = [
-            {name:"Baldwin",rbelection:rbvote.calcbald, margin:4},
-            {name:"Black",rbelection:rbvote.calcblac},
-            {name:"Borda",rbelection:rbvote.calcbord, margin:4},
-            {name:"Bucklin",rbelection:rbvote.calcbuck},
-            {name:"Carey",rbelection:rbvote.calccare, margin:4},
-            {name:"Coombs",rbelection:rbvote.calccoom},
-            {name:"Copeland",rbelection:rbvote.calccope, margin:4},
-            {name:"Dodgson",rbelection:rbvote.calcdodg},
-            {name:"Hare",rbelection:rbvote.calchare, margin:4},
-            {name:"Nanson",rbelection:rbvote.calcnans},
-            {name:"Raynaud",rbelection:rbvote.calcrayn, margin:4},
-            {name:"Schulze",rbelection:rbvote.calcschu},
-            {name:"Simpson",rbelection:rbvote.calcsimp, margin:4},
-            {name:"Small",rbelection:rbvote.calcsmal},
-            {name:"Tideman",rbelection:rbvote.calctide}
+            {name:"Baldwin", value:"Baldwin",rbelection:rbvote.calcbald, margin:4},
+            {name:"Black", value:"Black",rbelection:rbvote.calcblac},
+            {name:"Borda", value:"Borda",rbelection:rbvote.calcbord, margin:4},
+            {name:"Bucklin", value:"Bucklin",rbelection:rbvote.calcbuck},
+            {name:"Carey", value:"Carey",rbelection:rbvote.calccare, margin:4},
+            {name:"Coombs", value:"Coombs",rbelection:rbvote.calccoom},
+            {name:"Copeland", value:"Copeland",rbelection:rbvote.calccope, margin:4},
+            {name:"Dodgson", value:"Dodgson",rbelection:rbvote.calcdodg},
+            {name:"Hare", value:"Hare",rbelection:rbvote.calchare, margin:4},
+            {name:"Nanson", value:"Nanson",rbelection:rbvote.calcnans},
+            {name:"Raynaud", value:"Raynaud",rbelection:rbvote.calcrayn, margin:4},
+            {name:"Schulze", value:"Schulze",rbelection:rbvote.calcschu},
+            {name:"Simpson", value:"Simpson",rbelection:rbvote.calcsimp, margin:4},
+            {name:"Small", value:"Small",rbelection:rbvote.calcsmal},
+            {name:"Tideman", value:"Tideman",rbelection:rbvote.calctide}
             ]	
             
         self.codebook = [
             {
                 field: "rbsystem",
-                decodeVersion: 2.2,
                 decode: {
                     0:"Baldwin",
                     1:"Black",
@@ -1483,13 +1606,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ]
         self.listByName = function() {
             var votingSystem = self.list.filter(function(system){
-                return(system.name==config.rbsystem);
+                return(system.value==config.rbsystem);
             })[0];
             return votingSystem;
         }
         self.onChoose = function(data){
             // LOAD INPUT
-            config.rbsystem = data.name;
+            config.rbsystem = data.value;
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1507,20 +1630,28 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.pollResults = undefined
         }
         self.select = function() {
-            self.choose.highlight("name", config.rbsystem)
+            self.choose.highlight("value", config.rbsystem)
         }
     }
 
     ui.menu.dimensions = new function () {
         var self = this
         self.list = [
-            {name:"2D",realname:"Two Position Dimensions",margin:4},
-            {name:"1D+B",realname:"One Position Dimension Horizontally, Plus Broadness in the Vertical Dimension", margin:4},
-            {name:"1D", realname:"One Dimension Horizontally, Vertical Doesn't Matter"}
+            {name:"2D", value:"2D",realname:"Two Position Dimensions",margin:4},
+            {name:"1D+B", value:"1D+B",realname:"One Position Dimension Horizontally, Plus Broadness in the Vertical Dimension", margin:4},
+            {name:"1D", value:"1D", realname:"One Dimension Horizontally, Vertical Doesn't Matter"}
         ]
+        self.codebook = [ {
+            field: "dimensions",
+            decode: {
+                0:"2D",
+                1:"1D+B",
+                2:"1D",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
-            config.dimensions = data.name
+            config.dimensions = data.value
             // CONFIGURE
             self.configure()
             // INIT (LOADER)	
@@ -1543,7 +1674,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.dimensions = config.dimensions
         }
         self.select = function() {
-            self.choose.highlight("name", config.dimensions);
+            self.choose.highlight("value", config.dimensions);
         }
         self.choose = new ButtonGroup({
             label: "Arena Dimensions:",
@@ -1556,20 +1687,35 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.nDistricts = new function () {
         var self = this
         self.list = [
-            {name:"1",margin:4},
-            {name:"2",margin:4},
-            {name:"3",margin:4},
-            {name:"4",margin:4},
-            {name:"5",margin:4},
-            {name:"6",margin:4},
-            {name:"7",margin:4},
-            {name:"8",margin:4},
-            {name:"9",margin:4},
-            {name:"10"}
+            {name:"1", value:1,margin:4},
+            {name:"2", value:2,margin:4},
+            {name:"3", value:3,margin:4},
+            {name:"4", value:4,margin:4},
+            {name:"5", value:5,margin:4},
+            {name:"6", value:6,margin:4},
+            {name:"7", value:7,margin:4},
+            {name:"8", value:8,margin:4},
+            {name:"9", value:9,margin:4},
+            {name:"10", value:10, value:"10"}
         ]
+        self.codebook = [ {
+            field: "nDistricts",
+            decode: {
+                0:0,
+                1:1,
+                2:2,
+                3:3,
+                4:4,
+                5:5,
+                6:6,
+                7:7,
+                8:8,
+                9:9,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
-            config.nDistricts = Number(data.name)
+            config.nDistricts = Number(data.value)
             // CONFIGURE
             self.configure()
             // INIT
@@ -1586,7 +1732,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
         }
         self.select = function() {
-            self.choose.highlight("name", config.nDistricts);
+            self.choose.highlight("value", config.nDistricts);
         }
         self.choose = new ButtonGroup({
             label: "Number of Districts:",
@@ -1599,20 +1745,35 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.seats = new function () {
         var self = this
         self.list = [
-            {name:"1",margin:4},
-            {name:"2",margin:4},
-            {name:"3",margin:4},
-            {name:"4",margin:4},
-            {name:"5",margin:4},
-            {name:"6",margin:4},
-            {name:"7",margin:4},
-            {name:"8",margin:4},
-            {name:"9",margin:4},
-            {name:"10"}
+            {name:"1", value:1,margin:4},
+            {name:"2", value:2,margin:4},
+            {name:"3", value:3,margin:4},
+            {name:"4", value:4,margin:4},
+            {name:"5", value:5,margin:4},
+            {name:"6", value:6,margin:4},
+            {name:"7", value:7,margin:4},
+            {name:"8", value:8,margin:4},
+            {name:"9", value:9,margin:4},
+            {name:"10", value:10}
         ]
+        self.codebook = [ {
+            field: "seats",
+            decode: {
+                0:0,
+                1:1,
+                2:2,
+                3:3,
+                4:4,
+                5:5,
+                6:6,
+                7:7,
+                8:8,
+                9:9,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
-            config.seats = Number(data.name)
+            config.seats = data.value
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1622,7 +1783,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.seats = config.seats
         }
         self.select = function() {
-            self.choose.highlight("name", config.seats);
+            self.choose.highlight("value", config.seats);
         }
         self.choose = new ButtonGroup({
             label: "How many Seats:",
@@ -1635,12 +1796,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.nVoterGroups = new function() { // How many voters?
         var self = this
         self.list = [
-            {realname: "Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
-            {realname: "One Group", name:"1", num:1, margin:5},
-            {realname: "Two Groups", name:"2", num:2, margin:5},
-            {realname: "Three Groups", name:"3", num:3, margin:6},
-            {realname: "Different Sized Groups (like a snowman)", name:"&#x2603;", num:3, snowman:true, margin:6},
-            {realname: "Custom Number of Voters and Sizes and Spreads", name:"X", num:4, x_voters:true},
+            {realname: "Single Voter", value:"Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
+            {realname: "One Group", value:"One Group", name:"1", num:1, margin:5},
+            {realname: "Two Groups", value:"Two Groups", name:"2", num:2, margin:5},
+            {realname: "Three Groups", value:"Three Groups", name:"3", num:3, margin:6},
+            {realname: "Different Sized Groups (like a snowman)", value:"Different Sized Groups (like a snowman)", name:"&#x2603;", num:3, snowman:true, margin:6},
+            {realname: "Custom Number of Voters and Sizes and Spreads", value:"Custom Number of Voters and Sizes and Spreads", name:"X", num:4, x_voters:true},
         ];
         self.codebook = [
             {
@@ -1652,7 +1813,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     4:"Different Sized Groups (like a snowman)",
                     5:"Custom Number of Voters and Sizes and Spreads"
                 },
-                decodeVersion: 2.2,
                 field: "nVoterGroupsRealName"
             },
             {
@@ -1662,7 +1822,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     2:3,
                     3:4,
                 },
-                decodeVersion: 2.2,
                 field: "numVoterGroups"
             },
             {
@@ -1670,8 +1829,42 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     0:"GaussianVoters",
                     1:"SingleVoter"
                 },
-                decodeVersion: 2.2,
                 field: "voterGroupTypes"
+            },
+            {
+                field: "snowman",
+                decode: {
+                    0:false,
+                    1:true,
+                }
+            },
+            {
+                field: "x_voters",
+                decode: {
+                    0:false,
+                    1:true,
+                }
+            },
+            {
+                field: "voterGroupSnowman",
+                decode: {
+                    0:false,
+                    1:true,
+                }
+            },
+            {
+                field: "voterGroupX",
+                decode: {
+                    0:false,
+                    1:true,
+                }
+            },
+            {
+                field: "oneVoter",
+                decode: {
+                    0:false,
+                    1:true,
+                }
             }
         ]
         self.listByName = function() { // when we load from a config
@@ -1695,7 +1888,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             } else {
                 config.numVoterGroups = data.num;
             }
-            config.nVoterGroupsRealName = data.realname // this set of attributes is calculated based on config
+            config.nVoterGroupsRealName = data.value // this set of attributes is calculated based on config
             config.snowman = data.snowman || false;
             config.x_voters = data.x_voters || false;
             config.oneVoter = data.oneVoter || false;
@@ -1816,7 +2009,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
         }
         self.select = function() {
-            self.choose.highlight("realname", config.nVoterGroupsRealName);
+            self.choose.highlight("value", config.nVoterGroupsRealName);
         }
         self.choose = new ButtonGroup({
             label: "how many groups of voters?",
@@ -1872,6 +2065,17 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.menu.group_count = new function() {  // group count
         var self = this
+        self.codebook = [ {
+            field: "voter_group_count",
+            decode: {
+                0:50,
+            }
+        },{
+            field: "voter_group_spread",
+            decode: {
+                0:190,
+            }
+        } ]
         self.onChoose = function(slider,n) {
             // LOAD INPUT
             config.voter_group_count[n] = slider.value;
@@ -2069,12 +2273,19 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.customNames = new function () {
         var self = this
         self.list = [
-            {name:"Yes",margin:4},
-            {name:"No"}
+            {name:"Yes", value:"Yes",margin:4},
+            {name:"No", value:"No"}
         ]
+        self.codebook = [ {
+            field: "customNames",
+            decode: {
+                0:"No",
+                1:"Yes",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
-            config.customNames = data.name
+            config.customNames = data.value
             // CONFIGURE
             self.configure()
             // INIT
@@ -2090,7 +2301,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.menu.namelist.choose.dom.hidden = (model.customNames == "Yes") ? false : true
         }
         self.select = function() {
-            self.choose.highlight("name", config.customNames);
+            self.choose.highlight("value", config.customNames);
         }
         self.choose = new ButtonGroup({
             label: "Customize Candidates' Names?",
@@ -2103,6 +2314,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
     
     ui.menu.namelist = new function () {
         var self = this
+        self.codebook = [ {
+            field: "namelist",
+            decode: {
+                0:"",
+            }
+        } ]
         self.onChoose = function(){
             // LOAD
             config.namelist = self.choose.dom.value
@@ -2132,15 +2349,16 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
         var self = this
         self.list = [
-            {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
-            {name:"N", realname:"normalize", margin:5},
-            {name:"F", realname:"normalize frontrunners only", margin:5},
-            {name:"F+", realname:"best frontrunner", margin:5},
-            {name:"F-", realname:"not the worst frontrunner"}
+            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:5},
+            {name:"N", value:"normalize", realname:"normalize", margin:5},
+            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:5},
+            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:5},
+            {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
         ];
+        // self.codebook was done below in ui.menu.secondStrategy
         self.onChoose = function(data){
             // LOAD INPUT
-            config.firstStrategy = data.realname;
+            config.firstStrategy = data.value;
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -2161,7 +2379,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
         }
         self.select = function() {
-            self.choose.highlight("realname", config.firstStrategy);
+            self.choose.highlight("value", config.firstStrategy);
         }
     }
 
@@ -2182,8 +2400,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.doTwoStrategies = new function() { // Is there a 2nd strategy?
         var self = this
         self.list = [
-            {realname: "opton for 2nd strategy", name:"2"}
+            {realname: "opton for 2nd strategy", name:"2", value:"2"}
         ];
+        self.codebook = [ {
+            field: "doTwoStrategies",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD INPUT
             config.doTwoStrategies = data.isOn
@@ -2203,8 +2428,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.select = function() {
             if (config.doTwoStrategies) {
-                self.choose.highlight("name", "2");
+                var a = ["2"]
+            } else {
+                var a = []
             }
+            self.choose.highlight("value", a)
         }
         self.choose = new ButtonGroup({
             label: "",
@@ -2218,41 +2446,38 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
         var self = this
         self.list = [
-            {name:"O", realname:"zero strategy. judge on an absolute scale.", margin:5},
-            {name:"N", realname:"normalize", margin:5},
-            {name:"F", realname:"normalize frontrunners only", margin:5},
-            {name:"F+", realname:"best frontrunner", margin:5},
-            {name:"F-", realname:"not the worst frontrunner"}
+            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:5},
+            {name:"N", value:"normalize", realname:"normalize", margin:5},
+            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:5},
+            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:5},
+            {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
         ];
         var decodeList = {
             0:"zero strategy. judge on an absolute scale.",
             1:"normalize",
             2:"normalize frontrunners only",
             3:"best frontrunner",
-            4:"not the worst frontrunner"
+            4:"not the worst frontrunner",
         }
         self.codebook = [
             {
                 decode: decodeList,
-                decodeVersion: 2.2,
                 field: "secondStrategies"
             },
             {
                 decode: decodeList,
-                decodeVersion: 2.2,
                 field: "secondStrategy"
             },
             {
                 decode: decodeList,
-                decodeVersion: 2.2,
                 field: "firstStrategy"
             }
         ]
         self.onChoose = function(data){
             // LOAD INPUT
-            config.secondStrategy = data.realname
+            config.secondStrategy = data.value
             for (var i = 0; i < ui.maxVoters; i++) {
-                config.secondStrategies[i] = data.realname
+                config.secondStrategies[i] = data.value
             }
             // CONFIGURE
             self.configure()
@@ -2268,7 +2493,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
         }
         self.select = function() {
-            self.choose.highlight("realname", config.secondStrategy);
+            self.choose.highlight("value", config.value);
             // if (config.secondStrategies[0] != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
             // 	self.choose.highlight("realname", config.secondStrategies[0]);
             // }
@@ -2323,19 +2548,19 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ui.menu.primaries = new function() {
             var self = this
             self.list = [
-                {name:"Yes",realname:"Yes", margin:5},
-                {name:"No",realname:"No"}
+                {name:"Yes", value:"Yes",realname:"Yes", margin:5},
+                {name:"No", value:"No",realname:"No"}
             ];
             self.onChoose = function(data){
-                config.primaries = data.name
+                config.primaries = data.value
                 self.configure()
                 model.update()
             };
             self.configure = function() {
-                model.primaries = data.name
+                model.primaries = data.value
             }
             self.select = function() {
-                self.choose.highlight("name", config.primaries)
+                self.choose.highlight("value", config.primaries)
             }
             self.choose = new ButtonGroup({
                 label: "Primaries?",
@@ -2349,13 +2574,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.autoPoll = new function() { // do a poll to find frontrunner
         var self = this
         self.list = [
-            {name:"Auto",realname:"Choose frontrunners automatically.", margin:5},
-            {name:"Manual",realname:"Press the poll button to find the frontrunners once."}
+            {name:"Auto", value:"Auto",realname:"Choose frontrunners automatically.", margin:5},
+            {name:"Manual", value:"Manual",realname:"Press the poll button to find the frontrunners once."}
         ];
         self.codebook = [
             {
                 field: "autoPoll",
-                decodeVersion: 2.2,
                 decode: {
                     0:"Auto",
                     1:"Manual"
@@ -2364,7 +2588,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ]
         self.onChoose = function(data){
             // LOAD INPUT
-            config.autoPoll = data.name
+            config.autoPoll = data.value
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -2376,7 +2600,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.autoPoll = config.autoPoll
         }
         self.select = function() {
-            self.choose.highlight("name", config.autoPoll)
+            self.choose.highlight("value", config.autoPoll)
         }
         self.choose = new ButtonGroup({
             label: "AutoPoll to find new frontrunner:",
@@ -2407,6 +2631,16 @@ function menu(ui,model,config,initialConfig, cConfig) {
             a[a.length-1].margin = 0
             return a
         }
+        self.codebook = [ {
+            field: "preFrontrunnerIds",
+            decode: {
+                0:"square",
+                1:"triangle",
+                2:"hexagon",
+                3:"pentagon",
+                4:"bob",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD INPUT
             var preFrontrunnerSet = new Set(config.preFrontrunnerIds)
@@ -2443,13 +2677,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.poll = new function() { // do a poll to find frontrunner
         var self = this
         self.list = [
-            {name:"Poll",margin:5},
-            {name:"Poll 2",realname:"Find the top 2 frontrunners."}
+            {name:"Poll",value:"Poll",margin:5},
+            {name:"Poll 2",value:"Poll 2",realname:"Find the top 2 frontrunners."}
         ];
         self.onChoose = function(data){
             // DO CALCULATIONS //
             // get poll results
-            if (data.name == "Poll") { // get last poll
+            if (data.value == "Poll") { // get last poll
                 var won = model.result.winners
             } else { // do new poll
                 model.doTop2 = true
@@ -2515,8 +2749,30 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 kindayee:"newcan",
                 margin:4
             })
+
+
             return a
         }
+        self.codebook = [ {
+            field: "kindayee",
+            decode: {
+                0:"voter",
+                1:"center",
+                2:"can",
+                3:"newcan",
+            }
+        },{
+            field: "keyyee",
+            decode: {
+                0:"newcan",
+                1:"mean",
+                2:"square",
+                3:"triangle",
+                4:"hexagon",
+                5:"pentagon",
+                6:"bob",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD INPUT
             config.kindayee = data.kindayee
@@ -2543,7 +2799,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             data: self.list,
             onChoose: self.onChoose,
         });
-        self.choose.dom.setAttribute("id",self.name) // interesting
+        self.choose.dom.setAttribute("id","yee") // interesting
     }
 
     ui.menu.yeefilter = new function() { 	// yee filter
@@ -2551,8 +2807,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [];
         self.makelist = function() {
             var a = []
-            var newListSerial = {}
-            var newListId = {}
+            var newListSerial = []
+            var newListId = []
             for (var i=0; i < model.candidates.length; i++) {
                 var c = model.candidates[i]
                 a.push({
@@ -2577,6 +2833,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.yeefilter = newListId
             return a
         }
+        self.codebook = [ {
+            field: "yeefilter",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD CONFIG //
             config.yeefilter[data.serial] = data.isOn
@@ -2603,7 +2866,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             onChoose: self.onChoose,
             isCheckboxBool: true
         });
-        self.choose.dom.setAttribute("id",self.name)
+        self.choose.dom.setAttribute("id","yeefilter")
     }
 
     ui.menu.gearconfig = new function() { 	// gear config - decide which menu items to do
@@ -2626,76 +2889,67 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.codebook = [
             {
+                field: "featurelist",
                 decode: {
-                    0:"systems",
-                    1:"rbSystems",
-                    2:"dimensions", // still need to keep this even though it isn't here anymore
-                    3:"nVoterGroups",
-                    4:"xVoterGroups",
-                    5:"group_count",
-                    6:"group_spread",
-                    7:"nCandidates",
-                    8:"firstStrategy",
-                    9:"doTwoStrategies",
-                    10:"secondStrategy",
-                    11:"percentSecondStrategy",
-                    12:"autoPoll",
-                    13:"frontrunners",
-                    14:"poll",
-                    15:"yee",
-                    16:"yeefilter",
-                    17:"gearicon",
+                    0: "systems",
+                    1: "rbSystems",
+                    2: "dimensions", // still need to keep this even though it isn't here anymore
+                    3: "nVoterGroups",
+                    4: "xVoterGroups",
+                    5: "group_count",
+                    6: "group_spread",
+                    7: "nCandidates",
+                    8: "firstStrategy",
+                    9: "doTwoStrategies",
+                    10: "secondStrategy",
+                    11: "percentSecondStrategy",
+                    12: "autoPoll",
+                    13: "frontrunners",
+                    14: "poll",
+                    15: "yee",
+                    16: "yeefilter",
+                    17: "gearicon",
+                    18: "seats",
+                    19: "nDistricts",
+                    20: "customNames",
+                    21: "namelist",
+                    22: "gearconfig",
+                    23: "presetconfig",
+                    24: "choose_pixel_size",
+                    25: "computeMethod",
+                    26: "colorChooser",
+                    27: "colorSpace",
+                    28: "spread_factor_voters",
+                    29: "arena_size",
+                    30: "median_mean",
+                    31: "theme",
+                    32: "utility_shape",
+                    33: "votersAsCandidates",
+                    34: "ballotVis",
+                    35: "visSingleBallotsOnly",
+                    36: "gearoff",
+                    37: "menuVersion",
+                    38: "menuLevel",
+                    39: "stepMenu",
+                    40: "doFeatureFilter",
+                    41: "spacer",
+                    42: "yeeon",
+                    43: "beatMap",
+                    44: "ballotConcept",
+                    45: "powerChart",
+                    46: "sidebarOn",
+                    47: "lastTransfer",
+                    48: "voterIcons",
+                    49: "candidateIcons",
+                    50: "pairwiseMinimaps",
+                    51: "textBallotInput",
+                    52: "doTextBallots",
+                    53: "behavior",
+                    54: "submitTextBallots",
                 },
-                decodeVersion: 2.2,
-                field: "featurelist"
             }
         ]
-
-        self.codebook[1] = _jcopy(self.codebook[0])
-        _fillInDefaults(self.codebook[1].decode, {
-            18:"seats",
-            19:"nDistricts",
-        })
-        self.codebook[1].decodeVersion = 2.4
-        
-        self.codebook[2] = _jcopy(self.codebook[1])
-        _fillInDefaults(self.codebook[2].decode, {
-            20: "customNames",
-            21: "namelist",
-            22: "gearconfig",
-            23: "presetconfig",
-            24: "choose_pixel_size",
-            25: "computeMethod",
-            26: "colorChooser",
-            27: "colorSpace",
-            28: "spread_factor_voters",
-            29: "arena_size",
-            30: "median_mean",
-            31: "theme",
-            32: "utility_shape",
-            33: "votersAsCandidates",
-            34: "ballotVis",
-            35: "visSingleBallotsOnly",
-            36: "gearoff",
-            37: "menuVersion",
-            38: "menuLevel",
-            39: "stepMenu",
-            40: "doFeatureFilter",
-            41: "spacer",
-            42: "yeeon",
-            43: "beatMap",
-            44: "ballotConcept",
-            45: "powerChart",
-            46: "sidebarOn",
-            47: "lastTransfer",
-            48: "voterIcons",
-            49: "candidateIcons",
-            50: "pairwiseMinimaps",
-            51: "textBallotInput",
-            52: "doTextBallots",
-            53: "behavior",
-        })
-        self.codebook[2].decodeVersion = 2.5
+        // HOWTO: This is another place to update when adding a new menu item
 
         self.onChoose = function(data){
             // LOAD INPUT
@@ -2819,6 +3073,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"12",val:12,margin:4},
             {name:"6",val:6}
         ]
+        self.codebook = [ {
+            field: "pixelsize",
+            decode: {
+                0:6,
+                1:12,
+                2:30,
+                3:60,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.pixelsize = data.val
@@ -2831,7 +3094,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.pixelsize = config.pixelsize
         }
         self.select = function() {
-            self.choose.highlight("name", config.pixelsize);
+            self.choose.highlight("val", config.pixelsize);
         }
         self.choose = new ButtonGroup({
             label: "size of pixels in yee diagram:",
@@ -2844,13 +3107,21 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.computeMethod = new function () {
         var self = this
         self.list = [
-            {name:"gpu",margin:4},
-            {name:"js",margin:4},
-            {name:"ez"}
+            {name:"gpu", value:"gpu",margin:4},
+            {name:"js", value:"js",margin:4},
+            {name:"ez", value:"ez"}
         ]
+        self.codebook = [ {
+            field: "computeMethod",
+            decode: {
+                0:"gpu",
+                1:"js",
+                2:"ez",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
-            config.computeMethod = data.val
+            config.computeMethod = data.value
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -2860,7 +3131,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.computeMethod = config.computeMethod
         }
         self.select = function() {
-            self.choose.highlight("name", config.computeMethod);
+            self.choose.highlight("value", config.computeMethod);
         }
         self.choose = new ButtonGroup({
             label: "method of computing yee diagram:",
@@ -2873,15 +3144,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.colorChooser = new function () {
         var self = this
         self.list = [
-            {name:"pick and repeat",margin:4},
-            {name:"pick and repeat w/ offset",margin:4},
-            {name:"generate all",margin:4},
-            {name:"pick and generate"}
+            {name:"pick and repeat", value:"pick and repeat",margin:4},
+            {name:"pick and repeat w/ offset", value:"pick and repeat w/ offset",margin:4},
+            {name:"generate all", value:"generate all",margin:4},
+            {name:"pick and generate", value:"pick and generate"}
         ]
         self.codebook = [
             {
                 field: "colorChooser",
-                decodeVersion: 2.2,
                 decode: {
                     0:"pick and repeat",
                     1:"pick and repeat w/ offset",
@@ -2892,7 +3162,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ]
         self.onChoose = function(data){
             // LOAD
-            config.colorChooser = data.name
+            config.colorChooser = data.value
             // CONFIGURE
             self.configure()
             // INIT
@@ -2906,7 +3176,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.colorChooser = config.colorChooser
         }
         self.select = function() {
-            self.choose.highlight("name", config.colorChooser);
+            self.choose.highlight("value", config.colorChooser);
         }
         self.choose = new ButtonGroup({
             label: "Method of Choosing Colors:",
@@ -2919,16 +3189,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.colorSpace = new function () {
         var self = this
         self.list = [
-            {name:"hsluv with dark"}
+            {name:"hsluv with dark", value:"hsluv with dark"}
             // ,margin:4},
-            // {name:"hsluv light",margin:4},
-            // {name:"cie sampling",margin:4},
-            // {name:"hsl with dark"}
+            // {name:"hsluv light", value:"hsluv light",margin:4},
+            // {name:"cie sampling", value:"cie sampling",margin:4},
+            // {name:"hsl with dark", value:"hsl with dark"}
         ]
         self.codebook = [
             {
                 field: "colorSpace",
-                decodeVersion: 2.2,
                 decode: {
                     0:"hsluv with dark"
                 }
@@ -2936,7 +3205,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ]
         self.onChoose = function(data){
             // LOAD
-            config.colorSpace = data.name
+            config.colorSpace = data.value
             // CONFIGURE
             self.configure()
             // INIT
@@ -2950,7 +3219,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.colorSpace = config.colorSpace
         }
         self.select = function() {
-            self.choose.highlight("name", config.colorSpace);
+            self.choose.highlight("value", config.colorSpace);
         }
         self.choose = new ButtonGroup({
             label: "Color Space:",
@@ -2967,6 +3236,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"2",val:2,margin:4},
             {name:"5",val:5}
         ]
+        self.codebook = [ {
+            field: "spread_factor_voters",
+            decode: {
+                0:0,
+                1:1,
+                2:2,
+                3:5,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.spread_factor_voters = data.val
@@ -2988,7 +3266,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
         }
         self.select = function() {
-            self.choose.highlight("name", config.spread_factor_voters);
+            self.choose.highlight("val", config.spread_factor_voters);
         }
         self.choose = new ButtonGroup({
             label: "Voter Spread:",
@@ -3007,7 +3285,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.codebook = [
             {
                 field: "arena_size",
-                decodeVersion: 2.2,
                 decode: {
                     0:300,
                     1:600
@@ -3056,7 +3333,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
         }
         self.select = function() {
-            self.choose.highlight("name", config.arena_size);
+            self.choose.highlight("val", config.arena_size);
         }
         self.choose = new ButtonGroup({
             label: "Arena size:",
@@ -3072,7 +3349,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"median",val:2,margin:4},
             {name:"mean",val:1}
         ]
-
+        self.codebook = [ {
+            field: "median_mean",
+            decode: {
+                0:0,
+                1:1,
+                2:2,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.median_mean = data.val
@@ -3098,26 +3382,26 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.theme = new function () {
         var self = this
         self.list = [
-            {name:"Default",realname:"Default",margin:4},
-            {name:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
-            {name:"Bees",realname:"The Bee mode style for Unsplit."},
+            {name:"Letters", value:"Letters",realname:"Default",margin:4},
+            {name:"Default", value:"Default",realname:"Default",margin:4},
+            {name:"Nicky", value:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
+            {name:"Bees", value:"Bees",realname:"The Bee mode style for Unsplit."},
         ]
 
         self.codebook = [
             {
                 field: "theme",
-                decodeVersion: 2.2,
                 decode: {
                     0:"Default",
                     1:"Nicky",
                     2:"Bees",
-                    3:"Letters", // no longer used but can't reuse this code
+                    3:"Letters",
                 }
             }
         ]
         self.onChoose = function(data){
             // LOAD
-            config.theme = data.name
+            config.theme = data.value
             // CONFIGURE
             self.configure()
             // INIT MODEL
@@ -3150,12 +3434,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.init_sandbox = function() {
             for (var i = 0; i < self.list.length; i++) {
-               ui.dom.basediv.classList.remove("div-model-theme-" + self.list[i].name)
+               ui.dom.basediv.classList.remove("div-model-theme-" + self.list[i].value)
             }
             ui.dom.basediv.classList.add("div-model-theme-" + model.theme)
         }
         self.select = function() {
-            self.choose.highlight("name", config.theme);
+            self.choose.highlight("value", config.theme);
         }
         self.choose = new ButtonGroup({
             label: "Theme:",
@@ -3168,14 +3452,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.utility_shape = new function () {
         var self = this
         self.list = [
-            {name:"linear",margin:4},
-            {name:"quadratic",margin:4},
-            {name:"log"}
+            {name:"linear", value:"linear",margin:4},
+            {name:"quadratic", value:"quadratic",margin:4},
+            {name:"log", value:"log"}
         ]
         self.codebook = [
             {
                 field: "utility_shape",
-                decodeVersion: 2.2,
                 decode: {
                     0:"linear",
                     1:"quadratic",
@@ -3185,7 +3468,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ]
         self.onChoose = function(data){
             // LOAD
-            config.utility_shape = data.name
+            config.utility_shape = data.value
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -3195,7 +3478,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.utility_shape = config.utility_shape
         }
         self.select = function() {
-            self.choose.highlight("name", config.utility_shape);
+            self.choose.highlight("value", config.utility_shape);
         }
         self.choose = new ButtonGroup({
             label: "Utility Shape:",
@@ -3214,10 +3497,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.codebook = [
             {
                 field: "votersAsCandidates",
-                decodeVersion: 2.5,
                 decode: {
-                    0:"yes",
-                    1:"no"
+                    0:false,
+                    1:true,
                 }
             }
         ]
@@ -3282,10 +3564,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.codebook = [
             {
                 field: "ballotVis",
-                decodeVersion: 2.5,
                 decode: {
-                    0:"yes",
-                    1:"no"
+                    0:false,
+                    1:true,
                 }
             }
         ]
@@ -3320,10 +3601,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.codebook = [
             {
                 field: "visSingleBallotsOnly",
-                decodeVersion: 2.5,
                 decode: {
-                    0:"yes",
-                    1:"no"
+                    0:false,
+                    1:true,
                 }
             }
         ]
@@ -3437,6 +3717,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"1",value:"1",margin:4},
             {name:"2",value:"2"}
         ]
+        self.codebook = [ {
+            field: "menuVersion",
+            decode: {
+                0:"0",
+                1:"1",
+                2:"2",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.menuVersion = data.value
@@ -3480,7 +3768,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ]
         self.codebook = [ {
             field: "menuLevel",
-            decodeVersion: 2.5,
             decode: {
                 0:"normal",  // stock?
                 1:"advanced" // epic?
@@ -3532,7 +3819,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ]
         self.codebook = [ {
             field: "stepMenu",
-            decodeVersion: 2.5,
             decode: {
                 0:"geom",
                 1:"style",
@@ -3573,6 +3859,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"yes",value:true,margin:4},
             {name:"no",value:false},
         ]
+        self.codebook = [ {
+            field: "doFeatureFilter",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.doFeatureFilter = data.value
@@ -3607,6 +3900,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"on",value:true,margin:4},
             {name:"off",value:false},
         ]
+        self.codebook = [ {
+            field: "yeeon",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.yeeon = data.value
@@ -3643,6 +3943,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"on",value:"on",margin:4},
             {name:"off",value:"off"},
         ]
+        self.codebook = [ {
+            field: "beatMap",
+            decode: {
+                0:"off",
+                1:"on",
+                2:"auto",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.beatMap = data.value
@@ -3677,6 +3985,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"on",value:"on",margin:4},
             {name:"off",value:"off"},
         ]
+        self.codebook = [ {
+            field: "ballotConcept",
+            decode: {
+                0:"off",
+                1:"on",
+                2:"auto",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.ballotConcept = data.value
@@ -3711,6 +4027,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // {name:"on",value:"on",margin:4},
             {name:"off",value:"off"},
         ]
+        self.codebook = [ {
+            field: "powerChart",
+            decode: {
+                0:"off",
+                1:"on",
+                2:"auto",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.powerChart = data.value
@@ -3747,6 +4071,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"on",value:"on",margin:4},
             {name:"off",value:"off"},
         ]
+        self.codebook = [ {
+            field: "sidebarOn",
+            decode: {
+                0:"off",
+                1:"on",
+                2:"auto",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.sidebarOn = data.value
@@ -3784,6 +4116,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"on",value:"on",margin:4},
             {name:"off",value:"off"},
         ]
+        self.codebook = [ {
+            field: "lastTransfer",
+            decode: {
+                0:"off",
+                1:"on",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.lastTransfer = data.value
@@ -3815,6 +4154,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"dots",value:"dots",realname:"dots",margin:4},
             {name:"off",value:"off",realname:"off"},
         ]
+        self.codebook = [ {
+            field: "voterIcons",
+            decode: {
+                0:"circle",
+                1:"top",
+                2:"dots",
+                3:"off",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.voterIcons = data.value
@@ -3846,6 +4194,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // {name:"off",value:"off",realname:"off"},
             {name:"dots",value:"dots",realname:"dots",margin:4},
         ]
+        self.codebook = [ {
+            field: "candidateIconsSet",
+            decode: {
+                0:"image",
+                1:"name",
+                2:"dots",
+            }
+        } ]
         var decoder = ["image","name","dots"] // be careful to only add to the end of this list
         var encoder = _simpleMakeEncode(decoder)
         self.onChoose = function(data){
@@ -3919,7 +4275,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         var b = _stringToArray(a)
         // b is [1,1,0]
         // which index to set?
-        var c = data.name
+        var c = data.value
         var d = encoder[c]
         // d is the index to set
         // what to set to?
@@ -3964,6 +4320,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"auto",value:"auto",margin:4},
             {name:"off",value:"off"},
         ]
+        self.codebook = [ {
+            field: "pairwiseMinimaps",
+            decode: {
+                0:"off",
+                1:"on",
+                2:"auto",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.pairwiseMinimaps = data.value
@@ -3993,6 +4357,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"Yes",value:true,margin:4},
             {name:"No",value:false}
         ]
+        self.codebook = [ {
+            field: "doTextBallots",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.doTextBallots = data.value
@@ -4026,6 +4397,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             self.configure()
         };
+        self.codebook = [ {
+            field: "textBallotInput",
+            decode: {
+                0:"",
+            }
+        } ]
         self.configure = function() {
             model.textBallotInput = config.textBallotInput
         }
@@ -4065,6 +4442,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"buzz",value:"buzz",realname:"buzz around randomly",margin:4},
             {name:"goal",value:"goal",realname:"seek the goal, try to win, using perfect information",margin:4},
         ]
+        self.codebook = [ {
+            field: "behavior",
+            decode: {
+                0:"stand",
+                1:"bounce",
+                2:"buzz",
+                3:"goal",
+            }
+        } ]
         self.onChoose = function(data){
             // LOAD
             config.behavior = data.value
@@ -4377,7 +4763,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
-
 }
 
 function MenuTree(ui) {
@@ -4565,11 +4950,25 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
     // additional codebooks
     ui.extraCodeBook = [
         {
-            decode:[
-                "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
-            ],
-            decodeVersion: 2.2,
+            decode:{
+                0:"",
+                1:"[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
+            },
             field: "description"
+        },
+        {
+            field: "hidegearconfig",
+            decode:{
+                0:false,
+                1:true,
+            },
+        },
+        {
+            field: "sandboxsave",
+            decode:{
+                0:false,
+                1:true,
+            },
         }
     ]
 
