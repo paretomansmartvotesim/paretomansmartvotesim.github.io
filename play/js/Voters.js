@@ -1877,12 +1877,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	}
 	self.drawPart = function(part,ctx){
 
-		if (model.showVoters != undefined && model.showVoters == false) {
-			var drawVoters = false
-		} else {
-			var drawVoters = true
-		}
-		if (drawVoters) {
+		if (model.showVoters) {
 			// DRAW ALL THE points
 			var circlesize = 10
 			var xs = []

@@ -87,6 +87,7 @@ function Model(idModel){
 		pairwiseMinimaps: "off",
 		doTextBallots: false,
 		behavior:"stand",
+		showVoters:true,
 	})
 	
 	self.viz = new Viz(self);

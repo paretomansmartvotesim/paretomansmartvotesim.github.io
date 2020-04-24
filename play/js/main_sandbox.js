@@ -500,7 +500,7 @@ function Config(ui, config, initialConfig) {
         sidebarOn: "on",
         lastTransfer: "on",
         voterIcons: "circle",
-        candidateIconsSet: ["name"],
+        candidateIconsSet: ["image"],
         pairwiseMinimaps: "off",
         doTextBallots: false,
         textBallotInput: "",
@@ -775,14 +775,13 @@ function Config(ui, config, initialConfig) {
     
             // so basically, we are getting rid of the "none" button in the yee chooser and making it into a separate control.
     
-            if (config.theme == "Letters") {
-                config.theme = "Default" // Merged two ideas
-                config.candidateIconsSet = ["name"]
+            if (config.behavior == undefined && config.theme == "Bees") {
+                config.behavior = "bounce"
             }
-            
-            // there's no incompatibility problems yet, so no need to increment
-        }
 
+            // there's no incompatibility problems yet, so no need to increment
+            // code below this if {} statement are still needed in future versions
+        }
 
         // Finally done with old versions!
 
@@ -3383,7 +3382,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         var self = this
         self.list = [
             {name:"Letters", value:"Letters",realname:"Default",margin:4},
-            {name:"Default", value:"Default",realname:"Default",margin:4},
+            {name:"Shapes", value:"Default",realname:"Default",margin:4},
             {name:"Nicky", value:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
             {name:"Bees", value:"Bees",realname:"The Bee mode style for Unsplit."},
         ]
@@ -3413,6 +3412,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.menu.colorChooser.configure()
             ui.menu.colorChooser.select()
 
+            if (config.theme == "Bees") {
+                config.behavior == "bounce"
+                ui.menu.behavior.configure()
+                ui.menu.behavior.select()
+            }
+
             // INIT MODEL
 		    model.arena.initARENA()
             for(var i=0; i<model.candidates.length; i++) {
@@ -3428,17 +3433,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.theme = config.theme
             if (config.theme == "Bees") {
                 model.showVoters = false
-                model.doBuzz = true
-                model.buzzInterval = setInterval(function(){
-                    if (model.doBuzz) {
-                        model.buzz()
-                        model.update()
-                    }
-                },60)
             } else {
                 model.showVoters = true
-                model.doBuzz = false
-                clearInterval(model.buzzInterval)
             }
         }
         self.init_sandbox = function() {
@@ -4470,6 +4466,18 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.configure = function() {
             model.behavior = config.behavior
+            if (config.behavior != "stand") {
+                model.doBuzz = true
+                model.buzzInterval = setInterval(function(){
+                    if (model.doBuzz) {
+                        model.buzz()
+                        model.update()
+                    }
+                },60)
+            } else {
+                model.doBuzz = false
+                clearInterval(model.buzzInterval)
+            }
         }
         self.select = function() {
             self.choose.highlight("value", config.behavior);
