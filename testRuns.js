@@ -28,6 +28,7 @@ var e = [
         ["splash/splash","splash/splash.html"],
         ["oncemore (not working)","oncemore.html"],
         ["rbvote/calc","rbvote/calc.html"],
+        ["testSwitcher","testSwitcher.html"],
     ]],
     ["borda viz", [ 
         [1,"http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA41WwXKbMBD9F511QEjGOLc2mZya9JCZXOKMRzGyrRlALhKZJpnk2_sWG7uN6lg2sMvTW2l3WbS8sYxdPDwIlXGh1CN_ECLnohy1UkKZFFwU6vGRM0HcXIIhaWAKRRU0INkFy68YZwrKBHLCLla69oazAjYsB3T-xERTsDMe_TFSYmSS8dMHODNwxAyhnD8pGoQeuh4-CgqMfcxxzOcso8ucwaURERFCF_qxyjam9da1fkROc9sr60NnlyGB643-gpZHiIwQFSGTCClOO7DsfXDNrW5MSmSg1QjuJHMaIWWEzOK8_-dRxM9CxNkQcTpEnA8RJ-QQ0drobunalV2fj37bGW9CKnu5cc6bxdb-NvXC21eTYOKabR_MjQkbV6XQa9ddDst0iey7rV4mOOIRqq4WK70Mrls8u2C6hOrQnWl1YqiNqaxuF43R7Xly2JgmYc4-2NqGl4Xf6G0CfRfWN3-p28pWOqS8AE-6rl24twnUZ-vvbLuuzffBxv9s65eTVuKLN5RK1K1WKTlt-3uEhF0qjfzDPJv6PNUHs70B_TyzctfYz_rOXNs6pBSlp3r8zKM9O0eDyWAhqOUgelLVodmIY98RxVFFVyEWNHQRBTHbz5Jnw30uiED3mD6HkOM4phYQmBY9DkoxDkxHpByR2WAqqZ8y_6tH0QPFdq_pWZPvUuypMt8vJ4e-ScoxBIm13tixNY2KHBW1U94BkTfmlezhTpFBlmTsbWWedHfkzYauKrjkaOxMDS7S-oLcUtT8dosPV4LyGJLUW7kgFR5IiMkO4Xu0GFKlKDEfgxV9DpT_3FHaP8gp-kKAF-zWkUZ5gfyrTPdp-VQ2hxyNhbenHUp2yO_7H3QVO2bUCAAA"],

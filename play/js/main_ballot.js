@@ -30,18 +30,20 @@ function main_ballot(ui){
 	// where I am able to make edits on the menu earlier in the code
 	// because I can create the DOM later.
 	
-
-    // handle input
+	
     if (ui == undefined) ui = {}
-    var a = new Attach(ui)
-    a.handleInputMain()
+    ui.attach = new Attach(ui)
+    // handle input
+	ui.attach.handleInputMain()
 
 	var model = new Model(ui.idModel)
-	a.attachDOM(model)
+	ui.model = model
+	ui.attach.attachDOM(model)
 
     var config = {}
 	var initialConfig = {}
 	var thePlan = {}
+	ui.config = config
 	
 	// load the config
 	configBallot(config, initialConfig, ui.preset.config)
@@ -99,7 +101,7 @@ function configBallot(config,initialConfig, presetConfig){
 		Approval:"Approval",
 		Score:"Score"
 	}
-	config.method = config.method || translate[config.system]
+	config.system = config.system || translate[config.ballotType] || "FPTP"
 	config.firstStrategy = config.firstStrategy || "zero strategy. judge on an absolute scale.";
 	config.preFrontrunnerIds = config.preFrontrunnerIds || ["square","triangle"];
 	config.doStarStrategy = config.doStarStrategy || false
@@ -117,9 +119,9 @@ function configBallot(config,initialConfig, presetConfig){
 }
 
 function setPlan(thePlan,config) {
-	thePlan.newWay = thePlan.newWay || false
+	thePlan.newWay = config.newWay || false
 	thePlan.way1 = true
-	thePlan.system = config.system  // it would also make it look nicer to separate config and plan
+	thePlan.ballotType = config.ballotType  // it would also make it look nicer to separate config and plan
 	thePlan.showChoiceOfStrategy = config.showChoiceOfStrategy || false
 	thePlan.showChoiceOfFrontrunners = config.showChoiceOfFrontrunners || false
 }
@@ -129,7 +131,7 @@ function planUI (ui,thePlan) {
 	// binds UI to plan
 	ui.newWay = thePlan.newWay
 	ui.way1 = thePlan.way1
-	ui.BallotType = window[thePlan.system+"Ballot"]
+	ui.BallotType = window[thePlan.ballotType+"Ballot"]
 	ui.showChoiceOfStrategy = thePlan.showChoiceOfStrategy
 	ui.showChoiceOfFrontrunners = thePlan.showChoiceOfFrontrunners
 }
@@ -308,8 +310,8 @@ function bindBallotModel(ui,model,config) {
 		// LOAD
 		model.size = 250
 		model.border = 2
-		model.VoterType = window[config.system+"Voter"];
-		model.system = config.method
+		model.VoterType = window[config.ballotType+"Voter"];
+		model.system = config.system
 		model.newWay = ui.newWay
 	}
 
@@ -349,7 +351,7 @@ function bindBallotModel(ui,model,config) {
 
 	};
 
-	model.onUpdate = function(){
+	_insertFunctionAfter( model.onUpdate, function() {
 		if (model.voters.length == 0) return
 		if (model.voters[0].voterGroupType == "GaussianVoters") return
 		if (model.newWay) {
@@ -357,7 +359,9 @@ function bindBallotModel(ui,model,config) {
 		} else {
 			ui.dom.ballot.update(model.voters[0].ballot);
 		}
-	};
+
+	})
+
 
 	model.onDraw = function(){	
 		if(model.showChoiceOfFrontrunners) {

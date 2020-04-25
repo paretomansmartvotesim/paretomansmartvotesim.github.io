@@ -1,7 +1,7 @@
 
 function main_ballot(ui){
 	var preset = ui.preset
-	var ballotType = preset.config.system
+	var ballotType = preset.config.ballotType
 	var presetName = ui.presetName
 
 	var VoterType = window[ballotType+"Voter"];

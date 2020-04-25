@@ -108,14 +108,18 @@ function sandbox(ui) {
 
     // handle input
     if (ui == undefined) ui = {}
-    var a = new Attach(ui)
-    a.handleInputMain()
+    ui.attach = new Attach(ui)
+    ui.attach.handleInputMain()
+
+
 
     var model = new Model(ui.idModel)
-    a.attachDOM(model)
+    ui.model = model
+    ui.attach.attachDOM(model)
 
     var config = {}
     var initialConfig = {}
+    ui.config = config
     bindModel(ui,model,config)
 
     var cConfig = new Config(ui,config,initialConfig)
@@ -234,18 +238,26 @@ function Attach(ui) {
             _makeParentDivs()
         } else {
             ui.dom.basediv = document.querySelector("#" + model.id)
+            ui.dom.container = ui.dom.basediv.parentNode
+
         }
+        if (ui.uiType == "ballot") {
+            ui.dom.basediv.classList = "div-ballot div-model"
+        } else {
+            ui.dom.basediv.classList = "div-sandbox div-election div-ballot-in-sandbox div-model"
+        }
+        
+        ui.dom.container.classList = "contain-model"
         
         function _makeParentDivs() {
             
             // the model
             var md = document.createElement('div'); 
             md.id = ui.idModel
-            md.classList = "div-sandbox div-election div-ballot-in-sandbox div-model"
+            
 
             // the contain-model 
             var cm = document.createElement('div'); 
-            cm.classList = "contain-model"
             cm.setAttribute("scrolling","no")
 
             // the script
@@ -286,6 +298,10 @@ function Attach(ui) {
             
         }
 
+    }
+    self.detach = function() {
+        _removeSubnodes(ui.dom.basediv)
+        ui.dom.container.class = ""
     }
 }
 
@@ -359,17 +375,13 @@ function bindModel(ui,model,config) {
         ui.drawButtons() // make sure the icons show up
         
         // CREATE A BALLOT
-        
-        var myNode = ui.dom.right;
-        while (myNode.firstChild) {
-            myNode.removeChild(myNode.firstChild);
-        }  // remove old one, if there was one
+        _removeSubnodes(ui.dom.right)  // remove old one, if there was one
         // ui.dom.basediv.querySelector("#ballot").remove()
 
         var doOldBallot = false
         if (config.oneVoter) {
             if (doOldBallot) {
-                var BallotType = model.ballotType
+                var BallotType = model.BallotType
                 var ballot = new BallotType(model);
                 ui.dom.right.appendChild(ballot.dom);
             } else {
@@ -1445,25 +1457,25 @@ function menu(ui,model,config,initialConfig, cConfig) {
         var autoSwitchDim = false
         
         self.list = [
-            {name:"FPTP", value:"FPTP", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.plurality, margin:4},
-            {name:"+Primary", value:"+Primary", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.pluralityWithPrimary},
-            {name:"Top Two", value:"Top Two", voter:PluralityVoter, ballot:"PluralityBallot", election:Election.toptwo, margin:4},
-            {name:"RBVote", value:"RBVote", realname:"Rob Legrand's RBVote (Ranked Ballot Vote)", voter:RankedVoter, ballot:"RankedBallot", election:Election.rbvote},
-            {name:"IRV", value:"IRV", realname:"Instant Runoff Voting.  Sometimes called RCV Ranked Choice Voting but I call it IRV because there are many ways to have ranked ballots.", voter:RankedVoter, ballot:"RankedBallot", election:Election.irv, margin:4},
-            {name:"Borda", value:"Borda", voter:RankedVoter, ballot:"RankedBallot", election:Election.borda},
-            {name:"Minimax", value:"Minimax", realname:"Minimax Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.minimax, margin:4},
-            {name:"Schulze", value:"Schulze", realname:"Schulze Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.schulze},
-            {name:"RankedPair", value:"RankedPair", realname:"Ranked Pairs Condorcet method.", voter:RankedVoter, ballot:"RankedBallot", election:Election.rankedPairs, margin:4},
-            {name:"Condorcet", value:"Condorcet", realname:"Choose the Condorcet Winner, and if there isn't one, Tie", voter:RankedVoter, ballot:"RankedBallot", election:Election.condorcet},
-            {name:"Approval", value:"Approval", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.approval, margin:4},
-            {name:"Score", value:"Score", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.score},
-            {name:"STAR", value:"STAR", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.star, margin:4},
-            {name:"3-2-1", value:"3-2-1", voter:ThreeVoter, ballot:"ThreeBallot", election:Election.three21},
-            {name:"RRV", value:"RRV", voter:ScoreVoter, ballot:"ScoreBallot", election:Election.rrv, margin:4},
-            {name:"RAV", value:"RAV", voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.rav},
-            {name:"STV", value:"STV", voter:RankedVoter, ballot:"RankedBallot", election:Election.stv, margin:4},
-            {name:"QuotaApproval", value:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballot:"ApprovalBallot", election:Election.quotaApproval},
-            {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",voter:RankedVoter, ballot:"RankedBallot", election:Election.quotaMinimax}
+            {name:"FPTP", value:"FPTP", voter:PluralityVoter, ballotType:"Plurality", election:Election.plurality, margin:4},
+            {name:"+Primary", value:"+Primary", voter:PluralityVoter, ballotType:"Plurality", election:Election.pluralityWithPrimary},
+            {name:"Top Two", value:"Top Two", voter:PluralityVoter, ballotType:"Plurality", election:Election.toptwo, margin:4},
+            {name:"RBVote", value:"RBVote", realname:"Rob Legrand's RBVote (Ranked Ballot Vote)", voter:RankedVoter, ballotType:"Ranked", election:Election.rbvote},
+            {name:"IRV", value:"IRV", realname:"Instant Runoff Voting.  Sometimes called RCV Ranked Choice Voting but I call it IRV because there are many ways to have ranked ballots.", voter:RankedVoter, ballotType:"Ranked", election:Election.irv, margin:4},
+            {name:"Borda", value:"Borda", voter:RankedVoter, ballotType:"Ranked", election:Election.borda},
+            {name:"Minimax", value:"Minimax", realname:"Minimax Condorcet method.", voter:RankedVoter, ballotType:"Ranked", election:Election.minimax, margin:4},
+            {name:"Schulze", value:"Schulze", realname:"Schulze Condorcet method.", voter:RankedVoter, ballotType:"Ranked", election:Election.schulze},
+            {name:"RankedPair", value:"RankedPair", realname:"Ranked Pairs Condorcet method.", voter:RankedVoter, ballotType:"Ranked", election:Election.rankedPairs, margin:4},
+            {name:"Condorcet", value:"Condorcet", realname:"Choose the Condorcet Winner, and if there isn't one, Tie", voter:RankedVoter, ballotType:"Ranked", election:Election.condorcet},
+            {name:"Approval", value:"Approval", voter:ApprovalVoter, ballotType:"Approval", election:Election.approval, margin:4},
+            {name:"Score", value:"Score", voter:ScoreVoter, ballotType:"Score", election:Election.score},
+            {name:"STAR", value:"STAR", voter:ScoreVoter, ballotType:"Score", election:Election.star, margin:4},
+            {name:"3-2-1", value:"3-2-1", voter:ThreeVoter, ballotType:"Three", election:Election.three21},
+            {name:"RRV", value:"RRV", voter:ScoreVoter, ballotType:"Score", election:Election.rrv, margin:4},
+            {name:"RAV", value:"RAV", voter:ApprovalVoter, ballotType:"Approval", election:Election.rav},
+            {name:"STV", value:"STV", voter:RankedVoter, ballotType:"Ranked", election:Election.stv, margin:4},
+            {name:"QuotaApproval", value:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballotType:"Approval", election:Election.quotaApproval},
+            {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",voter:RankedVoter, ballotType:"Ranked", election:Election.quotaMinimax}
         ];
         self.codebook = [
             {
@@ -1500,6 +1512,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.system = data.value;
+            config.ballotType = data.ballot
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1522,7 +1535,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             
             showMenuItemsIf("divRBVote", config.system === "RBVote")
             showMenuItemsIf("divLastTransfer", config.system === "IRV" || config.system === "STV")
-
+            
             
             var s = self.listByName()
             model.election = s.election
@@ -1542,7 +1555,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.tarena.canvas.hidden = true
             }
             model.voterType = s.voter // probably don't need
-            model.ballotType = window[s.ballot];
+            config.ballotType = s.ballotType
+            model.BallotType = window[s.ballotType+"Ballot"];
             model.voters.map(v=>{
                 v.setType( s.voter ); // calls "new VoterType(model)"
             }) 
@@ -1555,6 +1569,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 var goPairwise = false
             }
             showMenuItemsIf("divPairwiseMinimaps",  goPairwise)
+
+
         }
         self.select = function() {
             self.choose.highlight("value", config.system)
@@ -4490,6 +4506,46 @@ function menu(ui,model,config,initialConfig, cConfig) {
         });
     }
 
+    ui.menu.switcher = new function () {
+        var self = this
+        self.list = [
+            {name:"sandbox",value:"sandbox",realname:"sandbox",margin:4},
+            {name:"ballot",value:"ballot",realname:"ballot",margin:4},
+        ]
+        // self.codebook = [ {
+        //     field: "",
+        //     decode: {
+        //         0:"sandbox",
+        //         1:"ballot",
+        //     }
+        // } ]
+        self.onChoose = function(data){
+            // LOAD & CONFIGURE
+            if(ui.uiType != data.value || 1) {
+                ui.uiType = data.value
+                ui.switchedUI = true
+                // send the config over to the new ui
+                ui.updateConfig()
+                ui.preset.config = config
+                ui.preset.presetName = "switch"
+                // I guess the config will stay the same...
+                // UPDATE
+                model.update()
+            }
+        };
+        self.configure = function() {
+        }
+        self.select = function() {
+            self.choose.highlight("value", ui.uiType);
+        }
+        self.choose = new ButtonGroup({
+            label: "Switch UI",
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+    }
+
 
 
     // run this after loading the whole menu
@@ -4555,6 +4611,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ]],
             "voterIcons",
             "candidateIcons",
+            "switcher",
             "gearoff",
         ]],
         [ "main", [
@@ -4735,6 +4792,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 ]],
                 ["advanced", [
                     "computeMethod",
+                    "switcher",
                 ]],
             ]],
         ]],
@@ -4900,6 +4958,16 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         self.text.dom = descText
     }
 
+
+    ui.updateConfig = function() {
+        // UPDATE CONFIG //
+        var pos = savePositions()  // saves the candidate and voter positions in the config.
+        for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
+        // Description
+        var description = ui.dom.descText || {value:""};
+        config.description = description.value;
+    }
+
     ui.arena.save = new function() { // Create a "save" button
         var self = this
         var saveDOM = document.createElement("div");
@@ -4908,11 +4976,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         saveDOM.onclick = function(){
             // UPDATE CONFIG //
             config.sandboxsave = true // this seems to fix a bug
-            var pos = savePositions()  // saves the candidate and voter positions in the config.
-            for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
-            // Description
-            var description = ui.dom.descText || {value:""};
-            config.description = description.value;
+            ui.updateConfig()
             // UPDATE MAIN //
             newURLs = cConfig.save()
             
@@ -4935,6 +4999,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         ui.dom.center.appendChild(saveDOM);
         self.dom = saveDOM
     }
+
 
     ui.arena.linkText = new function() { // The share link textbox
         var self = this

@@ -8,6 +8,10 @@ function loadpreset (ui)  {
 	// ui.presetName: for the presets
 	// ui.idModel : for the divs.  This is
 
+	if (ui.presetName == "switch") {
+		return	
+	}
+
 	// clumsy grandfather
 	if (typeof(ui) == "string") {
 		ui = {
@@ -1407,38 +1411,38 @@ function _lookupPreset(ui) {
 	} else if (ui.presetName == "ballot1") {
 		uiType = "ballot"
 		config = {
-			system: "Plurality"
+			ballotType: "Plurality"
 		}
 
 	} else if (ui.presetName == "ballot2") {
 		uiType = "ballot"
 		config = {
-			system: "Ranked",
-			method: "IRV"
+			ballotType: "Ranked",
+			system: "IRV"
 		}
 
 	} else if (ui.presetName == "ballot3") {
 		uiType = "ballot"
 		config = {
-			system: "Approval"
+			ballotType: "Approval"
 		}
 
 	} else if (ui.presetName == "ballot4") {
 		uiType = "ballot"
 		config = {
-			system: "Score"
+			ballotType: "Score"
 		}
 
 	} else if (ui.presetName == "ballot5") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			firstStrategy: "normalize"
 		}
 	} else if (ui.presetName == "ballot6") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			firstStrategy: "best frontrunner",
 			preFrontrunnerIds: ["square", "triangle"],
 			showChoiceOfFrontrunners: true,
@@ -1447,14 +1451,14 @@ function _lookupPreset(ui) {
 	} else if (ui.presetName == "ballot7") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			firstStrategy: "not the worst frontrunner",
 			showChoiceOfFrontrunners: true
 		}
 	} else if (ui.presetName == "ballot8") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			firstStrategy: "normalize frontrunners only",
 			preFrontrunnerIds: ["square", "triangle"],
 			showChoiceOfFrontrunners: true,
@@ -1463,7 +1467,7 @@ function _lookupPreset(ui) {
 	} else if (ui.presetName == "ballot9") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			firstStrategy: "normalize frontrunners only",
 			preFrontrunnerIds: ["square", "triangle"],
 			showChoiceOfFrontrunners: true,
@@ -1472,7 +1476,7 @@ function _lookupPreset(ui) {
 	} else if (ui.presetName == "ballot10") {
 		uiType = "ballot"
 		config = {
-			system: "Three",
+			ballotType: "Three",
 			firstStrategy: "normalize frontrunners only",
 			preFrontrunnerIds: ["square", "triangle"],
 			showChoiceOfFrontrunners: true,
@@ -1481,7 +1485,7 @@ function _lookupPreset(ui) {
 	} else if (ui.presetName == "ballot11") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			firstStrategy: "best frontrunner",
 			preFrontrunnerIds: ["square", "triangle"],
 			showChoiceOfFrontrunners: true,
@@ -1490,7 +1494,7 @@ function _lookupPreset(ui) {
 	} else if (ui.presetName == "ballot12") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			firstStrategy: "not the worst frontrunner",
 			preFrontrunnerIds: ["square", "triangle"],
 			showChoiceOfFrontrunners: true,
@@ -1499,38 +1503,38 @@ function _lookupPreset(ui) {
 	} else if (ui.presetName == "ballot13") {
 		uiType = "ballot"
 		config = {
-			system: "Plurality",
-			method: "FPTP",
+			ballotType: "Plurality",
+			system: "FPTP",
 			newWay: true
 		}
 
 	} else if (ui.presetName == "ballot14") {
 		uiType = "ballot"
 		config = {
-			system: "Ranked",
-			method: "RankedPair",
+			ballotType: "Ranked",
+			system: "RankedPair",
 			newWay: true
 		}
 
 	} else if (ui.presetName == "ballot15") {
 		uiType = "ballot"
 		config = {
-			system: "Approval",
+			ballotType: "Approval",
 			newWay: true
 		}
 
 	} else if (ui.presetName == "ballot16") {
 		uiType = "ballot"
 		config = {
-			system: "Score",
+			ballotType: "Score",
 			newWay: true
 		}
 
 	} else if (ui.presetName == "ballot17") {
 		uiType = "ballot"
 		config = {
-			system: "Ranked",
-			method: "IRV",
+			ballotType: "Ranked",
+			system: "IRV",
 			newWay: true
 		}
 	}
@@ -1538,8 +1542,8 @@ function _lookupPreset(ui) {
 	ui.preset = {
 		config: config,
 		update: update,
-		uiType: uiType,
 	}
+	ui.uiType = uiType
 
 	return ui
 }

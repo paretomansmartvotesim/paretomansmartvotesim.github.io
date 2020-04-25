@@ -64,7 +64,8 @@ function Model(idModel){
 		//
 		voterType: PluralityVoter,
 		election: Election.plurality,
-		ballotType: PluralityBallot,
+		BallotType: PluralityBallot,
+		ballotType: "PluralityBallot",
 		rbelection: rbvote.calctide,
 		opt: {
 			IRV100: true, // show the final transfer to the winner (to reach 100%)
@@ -87,7 +88,7 @@ function Model(idModel){
 		pairwiseMinimaps: "off",
 		doTextBallots: false,
 		behavior:"stand",
-		showVoters:true,
+		showVoters:true
 	})
 	
 	self.viz = new Viz(self);
@@ -2365,3 +2366,5 @@ function Arena(arenaName, model) {
 		}
 	}
 }
+
+console.log('ding')

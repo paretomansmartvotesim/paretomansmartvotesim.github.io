@@ -3906,7 +3906,7 @@ function _getVoterArray(model) {
 				v.b[m] = 0 // zero out all the counts
 			}
 			
-			if (model.ballotType.name == "ApprovalBallot") { // not yet fully functional TODO
+			if (model.ballotType == "Approval") { // not yet fully functional TODO
 				
 				var ballot = ballots[k].approved
 				for (var n = 0; n < ballot.length; n++) {
@@ -3915,14 +3915,14 @@ function _getVoterArray(model) {
 					v.b[index] = 1
 				}
 				vs.push(v)
-			} else if (model.ballotType.name == "ScoreBallot") {
+			} else if (model.ballotType == "Score") {
 				var ballot = ballots[k]
 				for (var n = 0; n < model.candidates.length; n++) {
 					var id = model.candidates[n].id
 					v.b[n] = ballot[id]
 				}
 				vs.push(v)
-			} else if (model.ballotType.name == "RankedBallot" && model.system == "STV") {
+			} else if (model.ballotType == "Ranked" && model.system == "STV") {
 				var ballot = ballots[k]
 				for (var n=0; n<ballot.rank.length; n++) {
 					var cid = ballot.rank[n]

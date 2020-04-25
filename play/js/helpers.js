@@ -185,4 +185,20 @@ function _convertSVGToDataURLviaCanvas(img, outputFormat){
 	canvas = null; 
 	return dataURL
 }
-console.log('ding')
+
+// helper
+
+function _insertFunctionAfter(object,oldName,next) {
+	var old = object[oldName]
+    var newf = function () {
+        old()
+        next()
+    }
+    object[oldName] = newf
+}
+
+function _removeSubnodes(n) {
+	while (n.firstChild) {
+		n.removeChild(n.lastChild);
+	}
+}
