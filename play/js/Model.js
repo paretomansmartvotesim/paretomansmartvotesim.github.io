@@ -82,7 +82,7 @@ function Model(idModel){
         ballotConcept: "auto",
         powerChart: "auto",
 		voterIcons: "circle",
-		candidateIconsSet: ["image"],
+		candidateIconsSet: ["image","note"],
 		placeHoldDuringElection: false,
 		doPlaceHoldDuringElection: true,
 		pairwiseMinimaps: "off",
@@ -1773,6 +1773,8 @@ function Arena(arenaName, model) {
 	self.clear = function(){
 		// Clear it all!
 		self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
+		self.ctx.fillStyle = "white"
+		self.ctx.fillRect(0,0,self.canvas.width,self.canvas.height);
 	}
 
 	self.drawHorizontal = function(yLine) {

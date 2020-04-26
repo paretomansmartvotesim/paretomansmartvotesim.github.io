@@ -247,7 +247,11 @@ function Attach(ui) {
         }
         if (ui.uiType == "ballot") {
             ui.dom.basediv.classList = "div-ballot div-model"
-        } else {
+        } else if (ui.uiType == "election-ballot") {
+            ui.dom.basediv.classList = "div-election div-ballot div-model"
+        } else if (ui.uiType == "election") {
+            ui.dom.basediv.classList = "div-election div-ballot-in-sandbox div-model"
+        } else if (ui.uiType == "sandbox") {
             ui.dom.basediv.classList = "div-sandbox div-election div-ballot-in-sandbox div-model"
         }
         
@@ -514,7 +518,7 @@ function Config(ui, config, initialConfig) {
         sidebarOn: "on",
         lastTransfer: "off",
         voterIcons: "circle",
-        candidateIconsSet: ["image"],
+        candidateIconsSet: ["image","note"],
         pairwiseMinimaps: "off",
         doTextBallots: false,
         textBallotInput: "",
@@ -4249,6 +4253,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"name",value:"name",realname:"name",margin:4},
             // {name:"off",value:"off",realname:"off"},
             {name:"dots",value:"dots",realname:"dots",margin:4},
+            {name:"note",value:"note",realname:"annotation",margin:4},
         ]
         self.codebook = [ {
             field: "candidateIconsSet",
@@ -4256,6 +4261,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 0:"image",
                 1:"name",
                 2:"dots",
+                3:"note",
             }
         } ]
         var decoder = ["image","name","dots"] // be careful to only add to the end of this list

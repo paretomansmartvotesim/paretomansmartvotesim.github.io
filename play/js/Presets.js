@@ -1392,7 +1392,6 @@ function _lookupPreset(ui) {
 			autoPoll: "Auto",
 			visSingleBallotsOnly: false,
 			theme: "Letters",
-			candidateIconsSet: ["image"],
 			menuVersion: "2",
 			doFeatureFilter: false,
 			yeeon: false,
@@ -1456,7 +1455,7 @@ function _lookupPreset(ui) {
 			showChoiceOfFrontrunners: true
 		}
 	} else if (ui.presetName == "ballot8") {
-		uiType = "ballot"
+		uiType = "ballot-election"
 		config = {
 			ballotType: "Score",
 			firstStrategy: "normalize frontrunners only",
@@ -1465,7 +1464,7 @@ function _lookupPreset(ui) {
 			showChoiceOfStrategy: true
 		}
 	} else if (ui.presetName == "ballot9") {
-		uiType = "ballot"
+		uiType = "ballot-election"
 		config = {
 			ballotType: "Score",
 			firstStrategy: "normalize frontrunners only",
@@ -1474,7 +1473,7 @@ function _lookupPreset(ui) {
 			doStarStrategy: true
 		}
 	} else if (ui.presetName == "ballot10") {
-		uiType = "ballot"
+		uiType = "ballot-election"
 		config = {
 			ballotType: "Three",
 			firstStrategy: "normalize frontrunners only",
@@ -1483,7 +1482,7 @@ function _lookupPreset(ui) {
 			doStarStrategy: true
 		}
 	} else if (ui.presetName == "ballot11") {
-		uiType = "ballot"
+		uiType = "ballot-election"
 		config = {
 			ballotType: "Score",
 			firstStrategy: "best frontrunner",
@@ -1492,7 +1491,7 @@ function _lookupPreset(ui) {
 			showChoiceOfStrategy: true
 		}
 	} else if (ui.presetName == "ballot12") {
-		uiType = "ballot"
+		uiType = "ballot-election"
 		config = {
 			ballotType: "Score",
 			firstStrategy: "not the worst frontrunner",

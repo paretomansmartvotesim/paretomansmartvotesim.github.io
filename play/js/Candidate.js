@@ -75,12 +75,16 @@ function Candidate(model){
 	self.drawTie = function(ctx,arena) {
 		ctx.textAlign = "center";
 		var p = arena.modelToArena(self)
-		_drawStroked("TIE",p.x*2,p.y*2-35,40,ctx);
+		if (model.candidateIconsSet.includes("note")) {
+			_drawStroked("TIE",p.x*2,p.y*2-35,40,ctx);
+		}
 	}	
 	self.drawWin = function(ctx,arena) {
 		ctx.textAlign = "center";
 		var p = arena.modelToArena(self)
-		_drawStroked("WIN",p.x*2,p.y*2-35,40,ctx);
+		if (model.candidateIconsSet.includes("note")) {
+			_drawStroked("WIN",p.x*2,p.y*2-35,40,ctx);
+		}
 	}	
 	self.drawText = function(text,ctx,arena) {
 		ctx.textAlign = "center";
@@ -100,7 +104,9 @@ function Candidate(model){
 		//if(self.highlight) ctx.filter = "brightness(150%)"
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
-		self.drawBackAnnotation(x,y,ctx)
+		if (model.candidateIconsSet.includes("note")) {
+			self.drawBackAnnotation(x,y,ctx)
+		}
 		
 		if (model.customNames == "Yes") {
 			hsize = self.imageSelf.img.width / self.imageSelf.img.height * size
@@ -128,9 +134,11 @@ function Candidate(model){
 		// 	ctx.fillStyle = self.fill
 		// 	ctx.fill()
 
-		self.drawAnnotation(x,y,ctx)
-		if (self.selected) {
-			_drawStroked("SELECTED",x,y-5,40,ctx);			
+		if (model.candidateIconsSet.includes("note")) {
+			self.drawAnnotation(x,y,ctx)
+			if (self.selected) {
+				_drawStroked("SELECTED",x,y-5,40,ctx);			
+			}
 		}
 		if(self.highlight) ctx.globalAlpha = temp
 		//if(self.highlight) ctx.filter = "brightness(100%)"
