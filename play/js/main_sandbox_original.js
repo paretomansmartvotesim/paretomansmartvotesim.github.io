@@ -159,7 +159,7 @@ function sandbox(ui){
 				var s = self.listByName()
 				model.election = s.election
 				model.system = config.system;
-				// model.voterType = self.expVoterType()
+				// model.VoterType = self.expVoterType()
 				for(var i=0;i<model.voters.length;i++){
 					// model.voters[i].type = new (self.expVoterType())
 					model.voters[i].setType( s.voter ); // calls "new VoterType(model)"

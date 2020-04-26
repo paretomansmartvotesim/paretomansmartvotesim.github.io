@@ -1467,25 +1467,25 @@ function menu(ui,model,config,initialConfig, cConfig) {
         var autoSwitchDim = false
         
         self.list = [
-            {name:"FPTP", value:"FPTP", voter:PluralityVoter, ballotType:"Plurality", election:Election.plurality, margin:4},
-            {name:"+Primary", value:"+Primary", voter:PluralityVoter, ballotType:"Plurality", election:Election.pluralityWithPrimary},
-            {name:"Top Two", value:"Top Two", voter:PluralityVoter, ballotType:"Plurality", election:Election.toptwo, margin:4},
-            {name:"RBVote", value:"RBVote", realname:"Rob Legrand's RBVote (Ranked Ballot Vote)", voter:RankedVoter, ballotType:"Ranked", election:Election.rbvote},
-            {name:"IRV", value:"IRV", realname:"Instant Runoff Voting.  Sometimes called RCV Ranked Choice Voting but I call it IRV because there are many ways to have ranked ballots.", voter:RankedVoter, ballotType:"Ranked", election:Election.irv, margin:4},
-            {name:"Borda", value:"Borda", voter:RankedVoter, ballotType:"Ranked", election:Election.borda},
-            {name:"Minimax", value:"Minimax", realname:"Minimax Condorcet method.", voter:RankedVoter, ballotType:"Ranked", election:Election.minimax, margin:4},
-            {name:"Schulze", value:"Schulze", realname:"Schulze Condorcet method.", voter:RankedVoter, ballotType:"Ranked", election:Election.schulze},
-            {name:"RankedPair", value:"RankedPair", realname:"Ranked Pairs Condorcet method.", voter:RankedVoter, ballotType:"Ranked", election:Election.rankedPairs, margin:4},
-            {name:"Condorcet", value:"Condorcet", realname:"Choose the Condorcet Winner, and if there isn't one, Tie", voter:RankedVoter, ballotType:"Ranked", election:Election.condorcet},
-            {name:"Approval", value:"Approval", voter:ApprovalVoter, ballotType:"Approval", election:Election.approval, margin:4},
-            {name:"Score", value:"Score", voter:ScoreVoter, ballotType:"Score", election:Election.score},
-            {name:"STAR", value:"STAR", voter:ScoreVoter, ballotType:"Score", election:Election.star, margin:4},
-            {name:"3-2-1", value:"3-2-1", voter:ThreeVoter, ballotType:"Three", election:Election.three21},
-            {name:"RRV", value:"RRV", voter:ScoreVoter, ballotType:"Score", election:Election.rrv, margin:4},
-            {name:"RAV", value:"RAV", voter:ApprovalVoter, ballotType:"Approval", election:Election.rav},
-            {name:"STV", value:"STV", voter:RankedVoter, ballotType:"Ranked", election:Election.stv, margin:4},
-            {name:"QuotaApproval", value:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",voter:ApprovalVoter, ballotType:"Approval", election:Election.quotaApproval},
-            {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",voter:RankedVoter, ballotType:"Ranked", election:Election.quotaMinimax}
+            {name:"FPTP", value:"FPTP", ballotType:"Plurality", election:Election.plurality, margin:4},
+            {name:"+Primary", value:"+Primary", ballotType:"Plurality", election:Election.pluralityWithPrimary},
+            {name:"Top Two", value:"Top Two", ballotType:"Plurality", election:Election.toptwo, margin:4},
+            {name:"RBVote", value:"RBVote", realname:"Rob Legrand's RBVote (Ranked Ballot Vote)", ballotType:"Ranked", election:Election.rbvote},
+            {name:"IRV", value:"IRV", realname:"Instant Runoff Voting.  Sometimes called RCV Ranked Choice Voting but I call it IRV because there are many ways to have ranked ballots.", ballotType:"Ranked", election:Election.irv, margin:4},
+            {name:"Borda", value:"Borda", ballotType:"Ranked", election:Election.borda},
+            {name:"Minimax", value:"Minimax", realname:"Minimax Condorcet method.", ballotType:"Ranked", election:Election.minimax, margin:4},
+            {name:"Schulze", value:"Schulze", realname:"Schulze Condorcet method.", ballotType:"Ranked", election:Election.schulze},
+            {name:"RankedPair", value:"RankedPair", realname:"Ranked Pairs Condorcet method.", ballotType:"Ranked", election:Election.rankedPairs, margin:4},
+            {name:"Condorcet", value:"Condorcet", realname:"Choose the Condorcet Winner, and if there isn't one, Tie", ballotType:"Ranked", election:Election.condorcet},
+            {name:"Approval", value:"Approval", ballotType:"Approval", election:Election.approval, margin:4},
+            {name:"Score", value:"Score", ballotType:"Score", election:Election.score},
+            {name:"STAR", value:"STAR", ballotType:"Score", election:Election.star, margin:4},
+            {name:"3-2-1", value:"3-2-1", ballotType:"Three", election:Election.three21},
+            {name:"RRV", value:"RRV", ballotType:"Score", election:Election.rrv, margin:4},
+            {name:"RAV", value:"RAV", ballotType:"Approval", election:Election.rav},
+            {name:"STV", value:"STV", ballotType:"Ranked", election:Election.stv, margin:4},
+            {name:"QuotaApproval", value:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",ballotType:"Approval", election:Election.quotaApproval},
+            {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",ballotType:"Ranked", election:Election.quotaMinimax}
         ];
         self.codebook = [
             {
@@ -1522,7 +1522,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.system = data.value;
-            config.ballotType = data.ballot
+            config.ballotType = data.ballotType
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -1547,9 +1547,17 @@ function menu(ui,model,config,initialConfig, cConfig) {
             showMenuItemsIf("divLastTransfer", config.system === "IRV" || config.system === "STV")
             
             
+            model.system = config.system;
+
             var s = self.listByName()
             model.election = s.election
-            model.system = config.system;
+
+            
+            model.ballotType = config.ballotType || s.ballotType
+
+            model.BallotType = window[model.ballotType+"Ballot"];
+            model.VoterType = window[model.ballotType+"Voter"];
+
             var doTarena = model.checkGotoTarena()
             if (autoSwitchDim) {
                 if (doTarena) {
@@ -1564,16 +1572,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             } else {
                 model.tarena.canvas.hidden = true
             }
-            model.voterType = s.voter // probably don't need
-            config.ballotType = s.ballotType
-            model.BallotType = window[s.ballotType+"Ballot"];
             model.voters.map(v=>{
-                v.setType( s.voter ); // calls "new VoterType(model)"
+                v.setType( model.VoterType ); // calls "new VoterType(model)"
             }) 
             model.pollResults = undefined
 
             
-            if (model.voterType.name == "RankedVoter") {
+            if (model.ballotType == "Ranked") {
                 var goPairwise = model.voters[0].type.pickDescription().doPairs
             } else {
                 var goPairwise = false
@@ -1951,7 +1956,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
             showMenuItemsIf("divXVoterGroups", config.x_voters)
 
             // MODEL //
-            model.nVoterGroupsRealName = config.nVoterGroupsRealName	
+            model.nVoterGroupsRealName = config.nVoterGroupsRealName
+            
+            var s = ui.menu.systems.listByName()
+            model.VoterType = window[s.ballotType+"Voter"]
+            
             if (config.voterGroupTypes && config.voterPositions) {
                 // we are reading a config string of version 2.2 or greater
                 for(var i=0; i<config.voterPositions.length; i++){
@@ -1965,7 +1974,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         x_voters: config.voterGroupX[i],
                         disk: config.voterGroupDisk[i]
                     })
-                    model.voters[i].setType( ui.menu.systems.listByName().voter );	
+                    model.voters[i].setType( model.VoterType );		
                 }
             } else if (config.voterPositions) {
                 var num = model.voters.length
@@ -1979,7 +1988,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         snowman: config.snowman,
                         x_voters: config.x_voters
                     })
-                    model.voters[i].setType( ui.menu.systems.listByName().voter );	
+                    model.voters[i].setType( model.VoterType );	
                 }
             } else {
                 var num = model.voters.length
@@ -2028,7 +2037,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         snowman: config.snowman,
                         x_voters: config.x_voters
                     })
-                    model.voters[i].setType( ui.menu.systems.listByName().voter );	
+                    model.voters[i].setType( model.VoterType );	
 
                 }
             }

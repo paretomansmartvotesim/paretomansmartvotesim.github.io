@@ -62,10 +62,10 @@ function Model(idModel){
 		yeeobject: undefined,
 		yeeon: false,		
 		//
-		voterType: PluralityVoter,
+		VoterType: PluralityVoter,
 		election: Election.plurality,
 		BallotType: PluralityBallot,
-		ballotType: "PluralityBallot",
+		ballotType: "Plurality",
 		rbelection: rbvote.calctide,
 		opt: {
 			IRV100: true, // show the final transfer to the winner (to reach 100%)
@@ -625,7 +625,7 @@ function Model(idModel){
 
 	self.checkDoBeatMap = function() {
 		// ranked voter and not (original or IRV or Borda)
-		var autoBeatMap = (self.beatMap == "auto") && (self.voterType.name == "RankedVoter") && ! (self.doOriginal  || self.system == "IRV" || self.system == "STV" || self.system == "Borda")
+		var autoBeatMap = (self.beatMap == "auto") && (self.ballotType == "Ranked") && ! (self.doOriginal  || self.system == "IRV" || self.system == "STV" || self.system == "Borda")
 		var on = (self.beatMap == "on") || autoBeatMap
 		var doBeatMap = on && ( ! self.doTextBallots)
 		return doBeatMap
@@ -841,7 +841,7 @@ function Arena(arenaName, model) {
 					if (a > max) max = a
 				}
 				n.vid = max + 1
-				n.setType(model.voterType)
+				n.setType(model.VoterType)
 				n.firstStrategy = model.firstStrategy
 				n.secondStrategy = model.secondStrategy
                 n.spread_factor_voters = model.spread_factor_voters
