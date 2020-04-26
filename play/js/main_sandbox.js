@@ -127,13 +127,15 @@ function sandbox(ui) {
     ui.cypher = new Cypher(ui)
     
 
-    ui.start = function(assets){
+    var l = new Loader()
+    l.onload = function(assets){
 
         model.assets = assets
 
         // CREATE the divs!
         createDOM(ui,model)
         menu(ui,model,config,initialConfig, cConfig)
+        createMenu(ui)
         uiArena(ui,model,config,initialConfig, cConfig)
         
         // CONNECT : Step 2 of CREATE : make connections between code parts (just one connection here)
@@ -144,21 +146,22 @@ function sandbox(ui) {
         // Read in the config file.
         cConfig.setConfig()
         
+        // UPDATE SANDBOX
+        ui.menu.theme.init_sandbox();
+        _objF(ui.arena,"update")
+        model.initPlugin();  // this wants to set ui.menu.item.dom.hidden
+
+        ui.initButtons() // for those buttons that depend on the model, like the yeefilter buttons
+        _objF(ui.menu,"select");
+        
         // run some extra stuff specified by the preset
         if (ui.preset.update) {
             ui.preset.update()
         }
 
-        // UPDATE SANDBOX
-        ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
-        _objF(ui.arena,"update")
-        _objF(ui.menu,"select");
-        model.initPlugin(); 
+
         model.update()
     }; 
-
-    var l = new Loader()
-    l.onload = ui.start
     l.load(sandbox.assets)
     // use loader to save on bandwidth
     // alternatively if we call the loader from all the places where we need the images, then we could just do
@@ -372,7 +375,7 @@ function bindModel(ui,model,config) {
     model.onDraw = function(){
 
         
-        ui.drawButtons() // make sure the icons show up
+        ui.redrawButtons() // make sure the icons show up
         
         // CREATE A BALLOT
         _removeSubnodes(ui.dom.right)  // remove old one, if there was one
@@ -418,10 +421,9 @@ function bindModel(ui,model,config) {
     }
 
     // helpers
-    
 
-    model.onInitModel = function() {
-        ui.drawButtons()
+    model.onInitModel = function() { // works for onUpdate, too
+        ui.initButtons()
     }
     
     model.onAddCandidate = function() {
@@ -1377,14 +1379,22 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     
-    ui.drawButtons = function() {
+    ui.initButtons = function() {
 
         // draw sandbox buttons that depend on candidate images
         var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
         m.forEach(function(m) {
-            m.choose.buttonConfigs = m.makelist()
             m.choose.init()
             m.select()
+        })    
+
+    }
+    ui.redrawButtons = function() {
+
+        // draw sandbox buttons that depend on candidate images
+        var m = [ui.menu.yee, ui.menu.yeefilter, ui.menu.frontrunners]
+        m.forEach(function(m) {
+            m.choose.redraw()
         })    
 
     }
@@ -2632,7 +2642,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.menu.frontrunners = new function() { // frontrunners
         var self = this
-        self.list = [];
+        self.list = undefined
+        // the makelist menu items are of a different class
+        // they can't have things be dependent on them
+        // they have to wait for the update step
+        // they can depend on a configured model
+        // maybe the initDOM step woudl be a good place ot put them
         self.makelist = function() {
             var a = []
             for (var i=0; i < model.candidates.length; i++) {
@@ -2643,7 +2658,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     margin:5
                 })
             }
-            a[a.length-1].margin = 0
+            if (a.length > 0) a[a.length-1].margin = 0
             return a
         }
         self.codebook = [ {
@@ -2683,10 +2698,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.choose = new ButtonGroup({
             label: "who are the frontrunners?",
             width: 41,
-            data: self.list,
+            makeData: self.makelist,
             onChoose: self.onChoose,
             isCheckbox: true
-        });			
+        });	
     }
 
     ui.menu.poll = new function() { // do a poll to find frontrunner
@@ -2726,7 +2741,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.menu.yee = new function() { // yee
         var self = this
-        self.list = [];
+        self.list = undefined
         self.makelist = function() {
             var a = []
             for (var i=0; i < model.voters.length; i++) {
@@ -2811,7 +2826,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.choose = new ButtonGroup({
             label: "which object for yee map?",
             width: 21,
-            data: self.list,
+            makeData: self.makelist,
             onChoose: self.onChoose,
         });
         self.choose.dom.setAttribute("id","yee") // interesting
@@ -2819,7 +2834,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.menu.yeefilter = new function() { 	// yee filter
         var self = this
-        self.list = [];
+        self.list = undefined
         self.makelist = function() {
             var a = []
             var newListSerial = []
@@ -2877,7 +2892,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.choose = new ButtonGroup({
             label: "filter yee map?",
             width: 21,
-            data: self.list,
+            makeData: self.makelist,
             onChoose: self.onChoose,
             isCheckboxBool: true
         });
@@ -2973,16 +2988,20 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.configure()
         };
         self.configure = function() {
-            for (i in ui.menu) {
-                if(!config.doFeatureFilter || config.featurelist.includes(i)) {
-                    ui.menu[i].choose.dom.hidden = false
-                } else {
-                    ui.menu[i].choose.dom.hidden = true
-                }
-            }
+            _hideOrShowFeatures()
         }
         self.select = function() {
             self.choose.highlight("realname", config.featurelist);
+        }
+    }
+
+    function _hideOrShowFeatures() {
+        for (i in ui.menu) {
+            if(!config.doFeatureFilter || config.featurelist.includes(i)) {
+                ui.menu[i].choose.dom.hidden = false
+            } else {
+                ui.menu[i].choose.dom.hidden = true
+            }
         }
     }
 
@@ -3668,9 +3687,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.configure = function() {
             if (self.isOn) {
-                m1.menuNameDivs["gearList"][0].hidden = false
+                ui.m1.menuNameDivs["gearList"][0].hidden = false
             } else {
-                m1.menuNameDivs["gearList"][0].hidden = true
+                ui.m1.menuNameDivs["gearList"][0].hidden = true
             }
         }
         // no select because we don't want to save with the config menu open
@@ -3750,8 +3769,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.onChoose = function(data){
             // LOAD
             config.menuVersion = data.value
+            if (config.menuVersion !== "1") {
+                config.doFeatureFilter = false
+            }
             // CONFIGURE
             self.configure()
+            
+            if (config.menuVersion !== "1") {
+                ui.menu.doFeatureFilter.select()
+            }
         };
         self.configure = function() {
 
@@ -3760,14 +3786,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
             
             // reattach nodes
             if (config.menuVersion === "1") {
-                m1.buildSubMenus()
+                ui.m1.buildSubMenus()
             } else {
-                // 
-                ui.menu.doFeatureFilter.onChoose({value:false})
-                ui.menu.doFeatureFilter.select()
-
-                m2.buildSubMenus() // place menu items into dom structure
+                ui.m2.buildSubMenus() // place menu items into dom structure
             }
+            _hideOrShowFeatures()
             ui.menu_update() // actually hide/show things
         }
         self.choose = new ButtonGroup({
@@ -3802,21 +3825,23 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.configure()
         };
         self.configure = function() {
-            opts = ui.menu.stepMenu.choose.dom.children // stepMenu options
+            var hideButton = ui.menu.stepMenu.choose.buttonHidden // stepMenu options
 
             if (config.menuLevel === "normal") { // hide advanced features
-                for( var dom of m2.menuNameDivs["advanced"]) {
+                for( var dom of ui.m2.menuNameDivs["advanced"]) {
                     dom.hidden = true
                 }
-                opts[5].hidden = true // these options only have advanced features
-                opts[6].hidden = true
+                hideButton["ui"] = true
+                hideButton["dev"] = true // these options only have advanced features
             } else if (config.menuLevel === "advanced") {
-                for( var dom of m2.menuNameDivs["advanced"]) {
+                for( var dom of ui.m2.menuNameDivs["advanced"]) {
                     dom.hidden = false
                 }
-                opts[5].hidden = false
-                opts[6].hidden = false
+                hideButton["ui"] = false
+                hideButton["dev"] = false 
             }
+            ui.menu.stepMenu.choose.configureHidden()
+            // this update step is actually okay to have inside .configure()
         }
         self.choose = new ButtonGroup({
             label: "Options:", // Level of Expertise
@@ -3858,10 +3883,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.configure = function() {
             for (var e of self.list) {
-                m2.menuNameDivs[e.value][0].hidden = true
+                ui.m2.menuNameDivs[e.value][0].hidden = true
             }
             // one on
-            m2.menuNameDivs[config.stepMenu][0].hidden = false
+            ui.m2.menuNameDivs[config.stepMenu][0].hidden = false
         }
         self.choose = new ButtonGroup({
             label: "Steps:", // Sub Menu
@@ -4548,6 +4573,21 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
 
+    // helper
+    showMenuItemsIf = function(name,condition) {
+        if (condition) {
+            ui.m1.menuNameDivs[name][0].hidden = false
+            ui.m2.menuNameDivs[name][0].hidden = false
+        } else {
+            ui.m1.menuNameDivs[name][0].hidden = true
+            ui.m2.menuNameDivs[name][0].hidden = true
+        }
+    }
+
+
+}
+
+function createMenu(ui) {
 
     // run this after loading the whole menu
     ui.menu.gearconfig.initSpecial()
@@ -4811,33 +4851,22 @@ function menu(ui,model,config,initialConfig, cConfig) {
     // ]
 
 
-    var m1 = new MenuTree(ui)
-    m1.assignMenu( menu1 , ui.dom.left, "basediv" )
+    ui.m1 = new MenuTree(ui)
+    ui.m1.assignMenu( menu1 , ui.dom.left, "basediv" )
     // detail: seems harmless, but the basediv gets reattached.
     
-    m1.menuNameDivs["gearList"][0].hidden = true
-    m1.menuNameDivs["hidden"][0].hidden = true
+    ui.m1.menuNameDivs["gearList"][0].hidden = true
+    ui.m1.menuNameDivs["hidden"][0].hidden = true
 
-    m1.buildSubMenus()
+    ui.m1.buildSubMenus()
     
 
-    var m2 = new MenuTree(ui)
-    m2.assignMenu( menu2 , ui.dom.left, "basediv" )
+    ui.m2 = new MenuTree(ui)
+    ui.m2.assignMenu( menu2 , ui.dom.left, "basediv" )
 
-    m2.menuNameDivs["hidden"][0].hidden = true
+    ui.m2.menuNameDivs["hidden"][0].hidden = true
 
     
-
-    // helper
-    function showMenuItemsIf(name,condition) {
-        if (condition) {
-            m1.menuNameDivs[name][0].hidden = false
-            m2.menuNameDivs[name][0].hidden = false
-        } else {
-            m1.menuNameDivs[name][0].hidden = true
-            m2.menuNameDivs[name][0].hidden = true
-        }
-    }
 
 }
 

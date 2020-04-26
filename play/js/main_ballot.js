@@ -76,11 +76,11 @@ function main_ballot(ui){
 		createDOMB(ui,model) // doesn't depend on model
 		createUIArenaB(ui,model,config,initialConfig) // doesn't depend on model
 		 
+		createMenuB(ui) // the parts that the depend on the model get re-done with onUpdate
+
 		// INIT
 		model.assets = assets // doesn't need to be run with start because assets don't change
 		model.initPlugin(); // doesn't need initDOM or createDOMB internally because there are no settings on the ballot that change these
-		
-		createMenuB(ui) // depends on the model: model.initPlugin()
 		
 		if (ui.preset.update) ui.preset.update() // depends on the ui.menu being done (after createMenuB) // run some extra stuff specified by the preset
 	
@@ -231,7 +231,7 @@ function bindBallotMenu(ui,model,config) {
 				margin:5
 			})
 		}
-		a[a.length-1].margin = 0
+		if (a.length > 0) a[a.length-1].margin = 0
 		return a
 	}
 	
@@ -267,15 +267,6 @@ function bindBallotMenu(ui,model,config) {
 			isCheckbox: true
 		});
 	}
-	ui.menu.frun.update = function() {
-		// This update depends on the model
-
-		// notice that the .dom is preserved.
-		if(ui.showChoiceOfFrontrunners) {
-			ui.menu.frun.chooseFrun.updateNames()  // depends on frun.createDOM
-			// ui.menu.frun.chooseFrun.init()
-		}
-	}
 	ui.menu.frun.redraw = function() {
 		// we redraw these buttons because calls to model.icon might use a placeholder for an image when it's loading
 		if(ui.showChoiceOfFrontrunners) {
@@ -286,7 +277,7 @@ function bindBallotMenu(ui,model,config) {
 
 	ui.selectMENU = function(){
 		if(ui.menu.strategy.chooseVoterStrategyOn) ui.menu.strategy.chooseVoterStrategyOn.highlight("realname", config.firstStrategy);
-		if(ui.menu.chooseFrun) ui.menu.chooseFrun.highlight("realname", config.preFrontrunnerIds);
+		if(ui.menu.frun.chooseFrun) ui.menu.frun.chooseFrun.highlight("realname", config.preFrontrunnerIds);
 	};
 
 }
@@ -375,7 +366,10 @@ function bindBallotModel(ui,model,config) {
 
 	_insertFunctionAfter( model,"onUpdate", function() {
 		
-		ui.menu.frun.update()
+		if(ui.showChoiceOfStrategy) {
+			ui.menu.frun.chooseFrun.init()
+			ui.selectMENU()
+		}
 		
 		if (model.voters.length == 0) return
 		if (model.voters[0].voterGroupType == "GaussianVoters") return
@@ -389,30 +383,40 @@ function bindBallotModel(ui,model,config) {
 
 
 	model.onDraw = function(){
-		ui.menu.frun.redraw()
+		
+		var ready = model.nLoading == 0 ||  ! model.placeHolding
+		// ready to replace
+		// two different ways to replace the image
+
+
+		if ( ready ) {
+
+			// 1 : call draw again
+			ui.menu.frun.redraw()
+		}
+
 
 		if (model.voters.length == 0) return
 		if (model.voters[0].voterGroupType == "GaussianVoters") return
 		if (model.newWay) {
 			var text = model.voters[0].type.toTextH(model.voters[0].ballot);
-			if (model.placeHolding) {
-				if (model.nLoading > 0) {
-					// will do on next draw
-					return
+			if ( ready ) {
+
+				// 2 : replace the Placeholder
+				text = text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
+					return model.icon($1)
+				});  // https://stackoverflow.com/a/49262416
+
+				
+				if (ui.way1) {
+					ui.dom.caption.innerHTML = text
 				} else {
-					// ready to replace
-					text = text.replace(/\^Placeholder{(.*?)}/g, (match, $1) => {
-						return model.icon($1)
-					});  // https://stackoverflow.com/a/49262416
+					ui.dom.right.innerHTML = text
 				}
-			}
-			if (ui.way1) {
-				ui.dom.caption.innerHTML = text
-			} else {
-				ui.dom.right.innerHTML = text
 			}
 		}
 	}
+
 
 }
 

@@ -13,12 +13,15 @@ function ButtonGroup(config){
 	// check if there is a function to make the data
 	// this function can be used later to update the buttons
 	if (config.data == undefined) {
-		if (self.makeData == undefined) self.makeData = () => []
+		config.data = []
+		if (config.makeData == undefined) {
+			config.makeData = () => []
+		}
 		self.makeData = config.makeData
 		self.buttonConfigs = self.makeData();
-	} else {
-		self.buttonConfigs = config.data;
+		self.doMakeData = true
 	}
+	self.buttonConfigs = config.data;
 
 	self.onChoose = config.onChoose;
 	self.isCheckbox = config.isCheckbox || false;
@@ -31,6 +34,9 @@ function ButtonGroup(config){
 	self.dom.setAttribute("class", "button-group");
 
 	self.init = function() {
+
+		if (self.doMakeData) self.buttonConfigs = self.makeData();
+
 		// clear
 		self.dom.innerHTML = ''
 		self.buttons = [];
@@ -82,7 +88,7 @@ function ButtonGroup(config){
 
 	}
 
-	self.update = function() {
+	self.configureHidden = function() {
 		for (var [buttonName,hidden] of Object.entries(self.buttonHidden) ) {
 			self.buttonsByName[buttonName].dom.hidden = hidden
 		}
