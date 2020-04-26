@@ -15,7 +15,7 @@ l.onload = function(assets){
   var basediv = document.querySelector("#" + presetName)
   basediv.appendChild(model.dom);
 
-  model.start = function(){
+  model.initPlugin = function(){
     // CREATE
     model.voters.push(new SingleVoter(model))
     model.candidates.push(new Candidate(model))
@@ -41,7 +41,8 @@ l.onload = function(assets){
   };
 
   // UPDATE
-  model.start();
+  model.initPlugin();
+  model.update()
 
 };
 l.load([

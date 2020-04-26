@@ -163,9 +163,8 @@ function Model(idModel){
 
 	self.election = function(self,options){};
 
-	// Init!
-	self.start = function(){  // TO IMPLEMENT FURTHER IN CALLER
-		self.update();
+	self.initPlugin = function(){  // TO IMPLEMENT FURTHER IN CALLER
+		self.initMODEL() // replace this with more
 	};
 
 	// Reset!
@@ -174,7 +173,7 @@ function Model(idModel){
 		self.candidates = [];
 		self.voters = [];
 		// START - combination of CREATE, CONFIGURE, INIT, UPDATE
-		self.start();
+		self.initPlugin();
 	};
 
 	// Update!

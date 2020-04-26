@@ -14,7 +14,7 @@ l.onload = function(assets){
   var basediv = document.querySelector("#" + presetName)
   basediv.appendChild(model.dom);
 
-  model.start = function(){
+  model.initPlugin = function(){
     // CREATE
     model.voters.push(new SingleVoter(model))
     model.candidates.push(new Candidate(model))
@@ -29,8 +29,6 @@ l.onload = function(assets){
     model.initMODEL()
     model.voters[0].init()
     model.arena.redistrict()
-    // UPDATE
-    model.update()
   };
   model.onUpdate = function(){
     if (model.voters.length == 0) return
@@ -41,8 +39,11 @@ l.onload = function(assets){
     model.caption.innerHTML = text;
   };
 
+  // INIT
+  model.initPlugin();
+
   // UPDATE
-  model.start();
+  model.update()
 
 };
 l.load([

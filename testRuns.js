@@ -19,6 +19,7 @@ var e = [
         ["play/examples/election1","play/examples/election1.html"],
         ["play/examples/ballot1","play/examples/ballot1.html"],
         ["play/examples/model1","play/examples/model1.html"],
+        ["play/examples/model0","play/examples/model0.html"],
         ["play/examples/sandbox","play/examples/sandbox.html"],
         ["play/examples/ballot1_original","play/examples/ballot1_original.html"],
         ["testAttach","testAttach.html"],

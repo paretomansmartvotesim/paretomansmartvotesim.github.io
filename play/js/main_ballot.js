@@ -72,14 +72,22 @@ function main_ballot(ui){
 		// this line of code could go up or down, depending on whether we really need to load assets
 		// for example, createDOMB needs assets, and initDOM definitely needs assets
 		
+		
+		createDOMB(ui,model) // doesn't depend on model
+		createUIArenaB(ui,model,config,initialConfig) // doesn't depend on model
+		 
 		// INIT
-		model.assets = assets
+		model.assets = assets // doesn't need to be run with start because assets don't change
+		model.initPlugin(); // doesn't need initDOM or createDOMB internally because there are no settings on the ballot that change these
 		
-		createDOMUI(ui,model,config,initialConfig)
-
-		model.initDOM()
-		model.start();
+		createMenuB(ui) // depends on the model: model.initPlugin()
 		
+		if (ui.preset.update) ui.preset.update() // depends on the ui.menu being done (after createMenuB) // run some extra stuff specified by the preset
+	
+	
+		// UPDATE
+		model.update() // depends on the menu having been created: createMenuB()
+		ui.selectMENU()
     }; 
 
 	var l = new Loader()
@@ -136,20 +144,6 @@ function planUI (ui,thePlan) {
 	ui.showChoiceOfFrontrunners = thePlan.showChoiceOfFrontrunners
 }
 
-function createDOMUI (ui,model,config,initialConfig) {
-	// CREATE the divs
-	 // executes the plan
-	// builds the ui
-	createDOMB(ui,model) 
-	createMenuB(ui)
-	createUIArenaB(ui,model,config,initialConfig)
-
-	// run some extra stuff specified by the preset
-	if (ui.preset.update) {
-		ui.preset.update()
-	}
-
-}
 
 function createDOMB(ui,model) {
 	// This is what the ui is all about.  It makes the DOM.
@@ -184,6 +178,12 @@ function createDOMB(ui,model) {
 }
 
 function bindBallotMenu(ui,model,config) {
+
+	// the ui is a model that plugs into Model
+	// it needs an update
+	// and an init
+	// and those functions go into bindModel
+	// so these menu items may also need .update() and .draw()
 
 	ui.menu = {}
 
@@ -221,8 +221,7 @@ function bindBallotMenu(ui,model,config) {
 	function _iconButton(id) {
 		return "<span class='buttonshape'>"+model.icon(id)+"</span>"
 	}
-	frun = [];
-	frunMakelist = function() {
+	var frunMakelist = function() {
 		var a = []
 		for (var i=0; i < model.candidates.length; i++) {
 			var c = model.candidates[i]
@@ -249,6 +248,10 @@ function bindBallotMenu(ui,model,config) {
 			}
 		}
 		model.preFrontrunnerIds = config.preFrontrunnerIds
+		for (var i=0; i<model.voters.length; i++) {
+			model.voters[i].preFrontrunnerIds = config.preFrontrunnerIds
+		}
+		model.arena.districtsListCandidates()
 		model.update();
 
 	};
@@ -256,24 +259,41 @@ function bindBallotMenu(ui,model,config) {
 		// This is an important change.  It allows the user to put this whole bindBallotMenu function earlier in the code's logic
 		// That allows the coder to put more information into the menu item's section of code,
 		// which makes the code easier to read.
-		frunMakelist()
 		ui.menu.frun.chooseFrun = new ButtonGroup({
 			label: "who are the frontrunners?",
 			width: 42,
-			data: frun,
+			makeData: frunMakelist, // this depends on the model
 			onChoose: onChooseFrun,
 			isCheckbox: true
 		});
 	}
+	ui.menu.frun.update = function() {
+		// This update depends on the model
+
+		// notice that the .dom is preserved.
+		if(ui.showChoiceOfFrontrunners) {
+			ui.menu.frun.chooseFrun.updateNames()  // depends on frun.createDOM
+			// ui.menu.frun.chooseFrun.init()
+		}
+	}
+	ui.menu.frun.redraw = function() {
+		// we redraw these buttons because calls to model.icon might use a placeholder for an image when it's loading
+		if(ui.showChoiceOfFrontrunners) {
+			 // needed to call model.icon again for placeholders
+			ui.menu.frun.chooseFrun.redraw()
+		}
+	}
 
 	ui.selectMENU = function(){
-		if(ui.menu.strategy.chooseVoterStrategyOn) ui.menu.strategy.chooseVoterStrategyOn.highlight("realname", model.voters[0].firstStrategy);
-		if(ui.menu.chooseFrun) ui.menu.chooseFrun.highlight("realname", model.preFrontrunnerIds);
+		if(ui.menu.strategy.chooseVoterStrategyOn) ui.menu.strategy.chooseVoterStrategyOn.highlight("realname", config.firstStrategy);
+		if(ui.menu.chooseFrun) ui.menu.chooseFrun.highlight("realname", config.preFrontrunnerIds);
 	};
 
 }
 
 function createMenuB(ui) {
+	// depends on the model
+
 	if(ui.showChoiceOfStrategy) {
 		ui.menu.strategy.createDOM()
 		ui.dom.left.appendChild(ui.menu.strategy.chooseVoterStrategyOn.dom);
@@ -296,10 +316,14 @@ function createUIArenaB(ui,model,config,initialConfig) {
 	resetDOM.onclick = function(){
 		// LOAD
 		_copyAttributes(config, initialConfig)
-		// CREATE, CONFIGURE, INIT, UPDATE
+		// CREATE, CONFIGURE, INIT
+		if (ui.preset.update) ui.preset.update() // depends on the ui.menu being done (after createMenuB) // run some extra stuff specified by the preset
 		model.reset()
 		// UPDATE
+		model.update()
+		// UPDATE
 		ui.selectMENU()
+		
 	};
 	ui.dom.left.appendChild(resetDOM);
 }
@@ -315,8 +339,10 @@ function bindBallotModel(ui,model,config) {
 		model.newWay = ui.newWay
 	}
 
-	model.start = function(){
+	model.initPlugin = function(){
 
+		model.initDOM()
+		
 		// CREATE
 		model.voters.push(new SingleVoter(model))
 		model.candidates.push(new Candidate(model))
@@ -344,14 +370,13 @@ function bindBallotModel(ui,model,config) {
 		model.initMODEL()
 		model.voters[0].init()
 		model.arena.redistrict()
-		// UPDATE
-		model.update()
-
-		ui.selectMENU();
 
 	};
 
-	_insertFunctionAfter( model.onUpdate, function() {
+	_insertFunctionAfter( model,"onUpdate", function() {
+		
+		ui.menu.frun.update()
+		
 		if (model.voters.length == 0) return
 		if (model.voters[0].voterGroupType == "GaussianVoters") return
 		if (model.newWay) {
@@ -363,11 +388,8 @@ function bindBallotModel(ui,model,config) {
 	})
 
 
-	model.onDraw = function(){	
-		if(model.showChoiceOfFrontrunners) {
-			ui.menu.chooseFrun.buttonConfigs = ui.menu.frun.frunMakelist()
-			ui.menu.chooseFrun.init()
-		}
+	model.onDraw = function(){
+		ui.menu.frun.redraw()
 
 		if (model.voters.length == 0) return
 		if (model.voters[0].voterGroupType == "GaussianVoters") return

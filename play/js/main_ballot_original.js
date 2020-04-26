@@ -26,7 +26,7 @@ function main_ballot(ui){
 
 		var basediv = document.querySelector("#" + presetName)
 		basediv.appendChild(model.dom);
-		model.start = function(){
+		model.initPlugin = function(){
 			// CREATE
 			model.voters.push(new SingleVoter(model))
 			model.candidates.push(new Candidate(model))
@@ -62,7 +62,8 @@ function main_ballot(ui){
 		};
 
 		// UPDATE
-		model.start();
+		model.initPlugin();
+		model.update()
 
 	};
 

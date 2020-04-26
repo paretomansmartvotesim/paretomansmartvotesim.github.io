@@ -89,7 +89,7 @@ function sandbox(ui){
 		model.dom.removeChild(model.caption);
 		basediv.querySelector("#right").appendChild(model.caption);
 		model.caption.style.width = "";
-		model.start = function(){
+		model.initPlugin = function(){
 			// CREATE
 			for(var i=0; i<config.candidates; i++) model.candidates.push(new Candidate(model))
 			for(var i=0; i<config.voters; i++) model.voters.push(new GaussianVoters(model))
@@ -356,6 +356,7 @@ function sandbox(ui){
 				config = JSON.parse(JSON.stringify(initialConfig));
 				// RESET = CREATE, CONFIGURE, INIT, & UPDATE
 				model.reset()
+				model.update()
 
 				// Back to ol' UI
 				updateUI();
@@ -517,7 +518,8 @@ function sandbox(ui){
 		};
 
 		// UPDATE
-		model.start(); 
+		model.initPlugin(); 
+		model.update()
 		updateUI();  // Select the UI!
 		function updateUI() {
 			_menuF("select")

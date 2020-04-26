@@ -14,7 +14,7 @@ l.onload = function(assets){
   var basediv = document.querySelector("#" + presetName)
   basediv.appendChild(model.dom);
 
-	model.start = function(){
+	model.initPlugin = function(){
 		// CREATE
 		model.voters.push(new GaussianVoters(model))
 		model.candidates.push(new Candidate(model))
@@ -49,10 +49,12 @@ l.onload = function(assets){
 	resetDOM.style.left = "110px";
 	resetDOM.onclick = function(){
 		model.reset();
+		model.update()
 	};
 
 	// UPDATE
-	model.start();
+	model.initPlugin();
+	model.update()
 };
 l.load([
 	"play/img/voter_face.png",

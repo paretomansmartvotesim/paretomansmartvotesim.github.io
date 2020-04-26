@@ -153,7 +153,8 @@ function sandbox(ui) {
         ui.dom.basediv.classList.add("div-model-theme-" + config.theme)
         _objF(ui.arena,"update")
         _objF(ui.menu,"select");
-        model.start(); 
+        model.initPlugin(); 
+        model.update()
     }; 
 
     var l = new Loader()
@@ -307,12 +308,12 @@ function Attach(ui) {
 
 function bindModel(ui,model,config) {
 
-    model.start = function(){
+    model.initPlugin = function(){
 
         // LOAD
         model.inSandbox = true
 
-        // This "model.start()" launches the model
+        // This "model.initPlugin()" launches the model
         // So it is also useful as a template for everything that you might need to do after a button press.
 
         // CREATE
@@ -364,7 +365,6 @@ function bindModel(ui,model,config) {
 		ui.arena.desc.init_sandbox()
         ui.menu.theme.init_sandbox();
         // UPDATE
-        model.update()
         ui.menu_update()
         
     };
@@ -510,7 +510,7 @@ function Config(ui, config, initialConfig) {
         ballotConcept: "auto",
         powerChart: "auto",
         sidebarOn: "on",
-        lastTransfer: "on",
+        lastTransfer: "off",
         voterIcons: "circle",
         candidateIconsSet: ["image"],
         pairwiseMinimaps: "off",
@@ -1339,7 +1339,7 @@ function createDOM(ui,model) {
 
 function menu(ui,model,config,initialConfig, cConfig) {
 
-    // Each menu item is kind of similar to a mini instance of model.start.  That's because most of the stuff in model.start has already been done.  These small onChoose functions just launch when a button is pressed, which is after the whole sandbox has loaded.
+    // Each menu item is kind of similar to a mini instance of model.initPlugin.  That's because most of the stuff in model.initPlugin has already been done.  These small onChoose functions just launch when a button is pressed, which is after the whole sandbox has loaded.
 
     // HOWTO: Copy and paste a button function below and then search and replace all the mentions of the name
     // the other places to look are in Cypher, Config, and Model
@@ -3062,8 +3062,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.size = config.arena_size
                 // INIT (LOADER)
                 model.initDOM()
-                // RESET = CREATE, CONFIGURE, INIT, & UPDATE (FOR MODEL)
+                // RESET = CREATE, CONFIGURE, INIT (FOR MODEL)
                 model.reset()
+                model.update()
                 // UPDATE (MENU AND ARENA)
                 _objF(ui.arena,"update")
                 _objF(ui.menu,"select");
@@ -4910,8 +4911,9 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         resetDOM.onclick = function(){
             // LOAD INITIAL CONFIG
             cConfig.reset()
-            // RESET = CREATE, CONFIGURE, INIT, & UPDATE
+            // RESET = CREATE, CONFIGURE, INIT
             model.reset()
+            model.update()
             // UPDATE MENU //
             _objF(ui.menu,"select");
         };

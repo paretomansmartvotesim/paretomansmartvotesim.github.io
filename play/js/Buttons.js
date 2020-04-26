@@ -10,11 +10,21 @@ function ButtonGroup(config){
 	var self = this;
 	self.config = config;
 
-	self.buttonConfigs = config.data;
+	// check if there is a function to make the data
+	// this function can be used later to update the buttons
+	if (config.data == undefined) {
+		if (self.makeData == undefined) self.makeData = () => []
+		self.makeData = config.makeData
+		self.buttonConfigs = self.makeData();
+	} else {
+		self.buttonConfigs = config.data;
+	}
+
 	self.onChoose = config.onChoose;
 	self.isCheckbox = config.isCheckbox || false;
 	self.isCheckboxBool = config.isCheckboxBool || false;
 	self.justButton = config.justButton || false;
+	self.buttonHidden = config.buttonHidden || {}
 
 	// DOM!
 	self.dom = document.createElement("div");
@@ -24,17 +34,19 @@ function ButtonGroup(config){
 		// clear
 		self.dom.innerHTML = ''
 		self.buttons = [];
+		self.buttonsByName = {}
 		
 		// Label!
 		self.label = document.createElement("div");
 		self.label.setAttribute("class", "button-group-label");
-		self.label.innerHTML = config.label;
+		self.draw()
 		self.dom.appendChild(self.label);
 		
 		// Create & place buttons!
 		for(var i=0; i<self.buttonConfigs.length; i++){
 			var conf = self.buttonConfigs[i];
 			var button = new Button(conf, self.onToggle);
+			self.buttonsByName[conf.name] = button
 			button.dom.style.width = config.width+"px"; // whatever
 			if (conf.width) button.dom.style.width = conf.width+"px"; // whatever
 			self.buttons.push(button);
@@ -48,6 +60,31 @@ function ButtonGroup(config){
 				button.turnOn();
 				break;
 			}
+		}
+		self.draw()
+	}
+	self.updateNames = function() {
+		var data2 = self.makeData()
+		for(var i=0; i<self.buttonConfigs.length; i++){
+			self.buttonConfigs[i].name = data2[i].name
+			self.buttons[i].name = self.buttonConfigs[i].name
+		}
+	}
+	self.redraw = function() {
+		self.updateNames()
+		self.draw()
+	}
+	self.draw = function() {
+		self.label.innerHTML = config.label;
+		for(var button of self.buttons) {
+			button.draw()
+		}
+
+	}
+
+	self.update = function() {
+		for (var [buttonName,hidden] of Object.entries(self.buttonHidden) ) {
+			self.buttonsByName[buttonName].dom.hidden = hidden
 		}
 	}
 
@@ -121,13 +158,16 @@ function Button(buttonConfig, onChoose){
 	var self = this;
 
 	self.config = buttonConfig;
-
+	self.name = buttonConfig.name
 	self.dom = document.createElement("div");
 	self.dom.setAttribute("class", "button");
 	self.dom.style.marginRight = buttonConfig.margin+"px";
 
 	// Click!
-	self.dom.innerHTML = buttonConfig.name;
+	self.draw = function() {
+		self.dom.innerHTML = self.name
+	}
+	self.draw()
 	self.dom.setAttribute("title", buttonConfig.realname || "");
 	self.onClick = function(){
 		onChoose(self, buttonConfig);
