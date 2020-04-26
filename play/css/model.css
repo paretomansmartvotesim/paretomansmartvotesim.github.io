@@ -48,7 +48,7 @@ THE MAIN MODEL ITSELF
 }
 .div-model #caption{
 	cursor: default;
-	margin-top:10px;
+	/* margin-top:10px; */
 	text-align: center;
 	word-wrap: break-word;
 	text-align: left;

@@ -1,7 +1,9 @@
 var _onscroll = function(){
 	var scrollY = window.pageYOffset;
 	var innerHeight = window.innerHeight;
-	document.getElementById("splash_iframe").contentWindow.postMessage({
+	var a = document.getElementById("splash_iframe")
+	if (a == null) return
+	a.contentWindow.postMessage({
 		isOnScreen: (scrollY<400)
 	},"*");
 };

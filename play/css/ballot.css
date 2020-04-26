@@ -1,13 +1,19 @@
 /*********************
 BALLOT DESIGN
 **********************/
+.div-ballot {
+	background: #fff;
+	padding: 10px;
+    margin: -10px;
+}
 
 .div-ballot #ballot{
 
 	width: 375px;
 	height: 250px;
+	padding: 10px;
+	margin: 0px;
 	margin-left: 20px;
-	margin-bottom: 10px;
 
 	overflow: hidden;
 	float:left;
@@ -44,18 +50,28 @@ BALLOT DESIGN
 	height:260px;
 }
 
+.div-ballot > div{
+	vertical-align: top;
+}
 .div-ballot #b-left {
 	display:inline-block;
-	float:left;
+	float:none;
 	width:254px;
 	text-align: center;	
-	margin-right: 20px;
-	margin-bottom: 20px;
+	margin: 10px;
 }
 .div-ballot #b-right {
+	margin: 10px;
+	margin-left: -10px;
 	display:inline-block;
 }
 
+.div-ballot #caption {
+	text-align: center;
+}
+.div-ballot #caption > div > div{
+	text-align: left;
+}
 
 .div-ballot #caption{
 	margin-top: 0px;
@@ -115,6 +131,7 @@ BALLOT DESIGN
 	padding: .2em .6em;
 }
 .div-ballot #paper table.main{
+	margin-left: 20px;
 	margin-right: 20px;
 	margin-bottom: 20px;
 }
@@ -131,4 +148,37 @@ BALLOT DESIGN
 	/* transform: scale(.5); */
 	font-size: 50%;
 	line-height: 1.2em;
+}
+
+
+/* Extra Small Devices, Phones */ 
+@media (max-width : 650px) {
+
+	.div-ballot{
+		text-align:center;
+		display:block;
+	}
+	
+	.div-ballot #b-left,
+	.div-ballot #b-right{
+		display:inline-block;
+		float:none;
+		padding-right: 0px;
+		text-align: left;
+	}
+	.div-ballot #b-right{
+		margin-left: 10px;
+	}
+	.div-ballot #b-left{
+		text-align:center;
+	}
+	.div-ballot #paper {
+		text-align: center;
+	}
+	.div-ballot #paper div{
+		text-align: left;
+	}
+	.div-ballot #ballot{
+		margin-left: 0px;
+	}
 }

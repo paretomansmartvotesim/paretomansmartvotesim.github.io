@@ -6,25 +6,52 @@ Election/Sandbox design:
 
 ************/
 
+.div-election{
+	background-color: #ffffff;
+	padding: 10px;
+    margin: -10px;
+}
+
 .div-election #left, 
 .div-election #center, 
 .div-election #right{
 	float:left;
     /* min-height: 320px; */
     text-align: left;
+    margin: 10px;
 }
 .div-election #left{
-	max-width:230px;
-    padding-right: 20px;
+	max-width:220px;
 }
 .div-election #center{
     text-align: center;
     width:300px;
 }
-.div-election #right{
-    width: 220px;
-	padding-left: 20px;
+
+
+/* Extra Small Devices, Phones */ 
+@media (max-width : 540px) {
+	.div-election{
+		text-align:center;
+		display:block;
+	}
+	
+	.div-election #left,
+	.div-election #right,
+	.div-election #center{
+		display:inline-block;
+		float:none;
+		margin-left: 0px;
+		padding-left: 0px;
+		margin-right: 0px;
+		padding-right: 0px;
+        text-align: left;
+    }
+	.div-election #center{
+		text-align: center;
+	}
 }
+
 .div-election #caption{
 	text-align: left;
     line-height: 1.0em;
