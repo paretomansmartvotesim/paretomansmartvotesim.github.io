@@ -1281,7 +1281,8 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	var outtext = []
 	for(var i = model.candidates.length - 1; i >= 0; i--) {
 		var c = model.candidates[i]
-		intext.push(c.id)
+		var t = '[^{](' + c.id + ")"
+		intext.push(t)
 		outtext.push(model.icon(c.id))
 	}
 	// var outtext = Object.keys(model.candidatesById).map(x => model.icon(x))

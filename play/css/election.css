@@ -28,6 +28,9 @@ Election/Sandbox design:
     width:300px;
 }
 
+.div-election #right{
+    min-width: 220px;
+}
 
 /* Extra Small Devices, Phones */ 
 @media (max-width : 540px) {
@@ -56,6 +59,7 @@ Election/Sandbox design:
 	text-align: left;
     line-height: 1.0em;
     font-size: 23px;
+    max-width: 220px;
 }
 .div-election #caption .small{
 	font-size: 15px;

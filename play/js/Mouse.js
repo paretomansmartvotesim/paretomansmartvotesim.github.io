@@ -10,21 +10,25 @@ function Mouse(id, target){
 	self.y = 0;
 	self.pressed = false;
 	self.ctrlclick = false
+	self.isTouch = false
 	// Events!
 	var _onmousedown = function(event){
 		_onmousemove(event);
 		self.pressed = true;
 		if (event.ctrlKey) self.ctrlclick = true
+		self.isTouch = false
 		publish(self.id+"-mousedown");
 	};
 	var _onmousemove = function(event){
 		self.x = event.offsetX;
 		self.y = event.offsetY;
+		self.isTouch = false
 		publish(self.id+"-mousemove");
 	};
 	var _onmouseup = function(){
 		self.pressed = false;
 		self.ctrlclick = false
+		self.isTouch = false
 		publish(self.id+"-mouseup");
 	};
 
@@ -43,6 +47,7 @@ function Mouse(id, target){
 		_onTouchMove(event);
 		self.pressed = true;
 		if (event.ctrlKey) self.ctrlclick = true
+		self.isTouch = true
 		publish(self.id+"-mousedown");
 	},false);
 	target.addEventListener("touchmove", _onTouchMove=function(event){
@@ -57,6 +62,7 @@ function Mouse(id, target){
 		if(self.x>target.clientWidth) self.x=target.clientWidth;
 		if(self.y>target.clientHeight) self.y=target.clientHeight;
 		//console.log(target);
+		self.isTouch = true
 		publish(self.id+"-mousemove");
 		event.preventDefault();
 		
@@ -64,6 +70,7 @@ function Mouse(id, target){
 	document.body.addEventListener("touchend",function(event){
 		self.pressed = false;
 		self.ctrlclick = false
+		self.isTouch = true
 		publish(self.id+"-mouseup");
 	},false);
 

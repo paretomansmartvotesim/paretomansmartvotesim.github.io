@@ -7,7 +7,10 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 	self.y = 0
 	self.size = 20
 	self.grabsize = 20
+
+	self.touchFactor = 40/25 // multiply by this to get bigger distances for touch events
 	self.radiusScale = 25/40
+
 	
 	self.init = function () {
 		self.offX = 0;
@@ -19,6 +22,7 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		var dx = x-a.x;
 		var dy = y-a.y;
 		var r = self.grabsize * self.radiusScale
+		if (arena.mouse.isTouch) r *= self.touchFactor
 		return((dx*dx+dy*dy) < r*r);
 	};
 	self.hitDistance = function(x,y,arena){

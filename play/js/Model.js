@@ -974,6 +974,7 @@ function Arena(arenaName, model) {
 			var dx = p.x - self.x
 			var dy = p.y - self.y
 			var r = self.size * self.radiusScale
+			if (model.arena.mouse.isTouch) r *= d.touchFactor
 			if (dx * dx + dy * dy < r * r) {
 				// we have trash
 				self.size = 40
