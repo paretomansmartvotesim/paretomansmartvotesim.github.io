@@ -228,7 +228,7 @@ function bindBallotMenu(ui,model,config) {
 			a.push({
 				name:_iconButton(c.id),
 				realname:c.id,
-				margin:5
+				margin:4
 			})
 		}
 		if (a.length > 0) a[a.length-1].margin = 0

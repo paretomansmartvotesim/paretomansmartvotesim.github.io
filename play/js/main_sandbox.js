@@ -1712,7 +1712,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Arena Dimensions:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1770,7 +1770,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Number of Districts:",
-            width: 18,
+            width: 18.4,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1821,7 +1821,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "How many Seats:",
-            width: 18,
+            width: 18.4,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -1830,11 +1830,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.nVoterGroups = new function() { // How many voters?
         var self = this
         self.list = [
-            {realname: "Single Voter", value:"Single Voter", name:"&#50883;", num:1, margin:6, oneVoter:true},
-            {realname: "One Group", value:"One Group", name:"1", num:1, margin:5},
-            {realname: "Two Groups", value:"Two Groups", name:"2", num:2, margin:5},
-            {realname: "Three Groups", value:"Three Groups", name:"3", num:3, margin:6},
-            {realname: "Different Sized Groups (like a snowman)", value:"Different Sized Groups (like a snowman)", name:"&#x2603;", num:3, snowman:true, margin:6},
+            {realname: "Single Voter", value:"Single Voter", name:"&#50883;", num:1, margin:4, oneVoter:true},
+            {realname: "One Group", value:"One Group", name:"1", num:1, margin:4},
+            {realname: "Two Groups", value:"Two Groups", name:"2", num:2, margin:4},
+            {realname: "Three Groups", value:"Three Groups", name:"3", num:3, margin:4},
+            {realname: "Different Sized Groups (like a snowman)", value:"Different Sized Groups (like a snowman)", name:"&#x2603;", num:3, snowman:true, margin:4},
             {realname: "Custom Number of Voters and Sizes and Spreads", value:"Custom Number of Voters and Sizes and Spreads", name:"X", num:4, x_voters:true},
         ];
         self.codebook = [
@@ -2051,7 +2051,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "how many groups of voters?",
-            width: 32,
+            width: 33.33,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2343,7 +2343,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Customize Candidates' Names?",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2387,10 +2387,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.firstStrategy = new function() { // strategy 1 AKA unstrategic voters' strategy
         var self = this
         self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:5},
-            {name:"N", value:"normalize", realname:"normalize", margin:5},
-            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:5},
-            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:5},
+            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
+            {name:"N", value:"normalize", realname:"normalize", margin:4},
+            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
+            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:4},
             {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
         ];
         // self.codebook was done below in ui.menu.secondStrategy
@@ -2405,7 +2405,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.choose = new ButtonGroup({
             label: "what's voters' strategy?",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2474,7 +2474,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose,
             isCheckbox: true
@@ -2484,10 +2484,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
         var self = this
         self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:5},
-            {name:"N", value:"normalize", realname:"normalize", margin:5},
-            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:5},
-            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:5},
+            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
+            {name:"N", value:"normalize", realname:"normalize", margin:4},
+            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
+            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:4},
             {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
         ];
         var decodeList = {
@@ -2538,7 +2538,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "what's voters' 2nd strategy?",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2586,7 +2586,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         ui.menu.primaries = new function() {
             var self = this
             self.list = [
-                {name:"Yes", value:"Yes",realname:"Yes", margin:5},
+                {name:"Yes", value:"Yes",realname:"Yes", margin:4},
                 {name:"No", value:"No",realname:"No"}
             ];
             self.onChoose = function(data){
@@ -2602,7 +2602,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
             self.choose = new ButtonGroup({
                 label: "Primaries?",
-                width: 71,
+                width: 70.66,
                 data: self.list,
                 onChoose: self.onChoose
             });
@@ -2612,7 +2612,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.autoPoll = new function() { // do a poll to find frontrunner
         var self = this
         self.list = [
-            {name:"Auto", value:"Auto",realname:"Choose frontrunners automatically.", margin:5},
+            {name:"Auto", value:"Auto",realname:"Choose frontrunners automatically.", margin:4},
             {name:"Manual", value:"Manual",realname:"Press the poll button to find the frontrunners once."}
         ];
         self.codebook = [
@@ -2642,7 +2642,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "AutoPoll to find new frontrunner:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -2668,7 +2668,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 a.push({
                     name:_iconButton(c.id),
                     realname:c.id,
-                    margin:5
+                    margin:4
                 })
             }
             if (a.length > 0) a[a.length-1].margin = 0
@@ -2710,7 +2710,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "who are the frontrunners?",
-            width: 41,
+            width: 40.8,
             makeData: self.makelist,
             onChoose: self.onChoose,
             isCheckbox: true
@@ -2720,7 +2720,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.poll = new function() { // do a poll to find frontrunner
         var self = this
         self.list = [
-            {name:"Poll",value:"Poll",margin:5},
+            {name:"Poll",value:"Poll",margin:4},
             {name:"Poll 2",value:"Poll 2",realname:"Find the top 2 frontrunners."}
         ];
         self.onChoose = function(data){
@@ -2838,7 +2838,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "which object for yee map?",
-            width: 21,
+            width: 20.88,
             makeData: self.makelist,
             onChoose: self.onChoose,
         });
@@ -2904,7 +2904,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "filter yee map?",
-            width: 21,
+            width: 20.88,
             makeData: self.makelist,
             onChoose: self.onChoose,
             isCheckboxBool: true
@@ -2919,12 +2919,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.list = []
             var n=1
             for (var name in ui.menu) {
-                self.list.push({name:n,realname:name,margin:1})
+                var mar = (n % 10 == 0) ? 0 : 4 
+                self.list.push({name:n,realname:name,margin:mar})
                 n++
             }
             self.choose = new ButtonGroup({
                 label: "which menu options are displayed?",
-                width: 18,
+                width: 18.4,
                 data: self.list,
                 onChoose: self.onChoose,
                 isCheckbox: true
@@ -3030,13 +3031,26 @@ function menu(ui,model,config,initialConfig, cConfig) {
             var presetdescription = ["sandbox"]
 
             // and fill in the rest
-            for (var i=1;i<=c.nElection;i++) {presetnames.push("e"+i) ; presetModelNames.push("election"+i) ; presetdescription.push("election"+i)}
-            presetnames.push("O") ; presetModelNames.push(model.id) ; presetdescription.push("original intended preset")
+            for (var i=1;i<=c.nElection;i++) {
+                presetnames.push("e"+i)
+                presetModelNames.push("election"+i)
+                presetdescription.push("election"+i)
+            }
+            presetnames.push("O")
+            presetModelNames.push(model.id)
+            presetdescription.push("original intended preset")
             // TODO
-            for (var i=1;i<=c.nBallot;i++) {presetnames.push("b"+i) ; presetModelNames.push("ballot"+i) ; presetdescription.push("ballot"+i)}
+            for (var i=1;i<=c.nBallot;i++) {
+                presetnames.push("b"+i)
+                presetModelNames.push("ballot"+i)
+                presetdescription.push("ballot"+i)
+            }
             
             var presetconfig = []
-            for (i in presetnames) presetconfig.push({name:presetnames[i],realname:presetdescription[i],presetName:presetModelNames[i],margin:4})
+            for (i in presetnames) {
+                var mar = ((Number(i)+1) % 5 == 0) ? 0 : 4 
+                presetconfig.push({name:presetnames[i],realname:presetdescription[i],presetName:presetModelNames[i],margin:mar})
+            }
             return presetconfig
         }
         self.onChoose = function(data){
@@ -3104,7 +3118,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.choose = new ButtonGroup({
             label: "pick a preset:",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3146,7 +3160,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "size of pixels in yee diagram:",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3183,7 +3197,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "method of computing yee diagram:",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3318,7 +3332,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Voter Spread:",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3385,7 +3399,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Arena size:",
-            width: 41,
+            width: 40.8,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3421,7 +3435,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Median or Mean:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3432,7 +3446,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [
             {name:"Letters", value:"Letters",realname:"Default",margin:4},
             {name:"Shapes", value:"Default",realname:"Default",margin:4},
-            {name:"Nicky", value:"Nicky",realname:"The original style theme by Nicky Case",margin:4},
+            {name:"Nicky", value:"Nicky",realname:"The original style theme by Nicky Case",margin:0},
             {name:"Bees", value:"Bees",realname:"The Bee mode style for Unsplit."},
         ]
 
@@ -3497,7 +3511,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Theme:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3536,7 +3550,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Utility Shape:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3603,7 +3617,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Voters as Candidates:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3640,7 +3654,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Show Ballot Visuals:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3677,7 +3691,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Only Visualize Single Voters:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -3708,7 +3722,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         // no select because we don't want to save with the config menu open
         self.choose = new ButtonGroup({
             label: "",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose,
             isCheckbox: true
@@ -3808,7 +3822,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Menu Version:",
-            width: 71,
+            width: 70.66,
             data: self.list,
             onChoose: self.onChoose
         });
@@ -4253,7 +4267,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"name",value:"name",realname:"name",margin:4},
             // {name:"off",value:"off",realname:"off"},
             {name:"dots",value:"dots",realname:"dots",margin:4},
-            {name:"note",value:"note",realname:"annotation",margin:4},
+            {name:"note",value:"note",realname:"annotation",margin:0},
         ]
         self.codebook = [ {
             field: "candidateIconsSet",
@@ -4502,7 +4516,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"stand",value:"stand",realname:"stand still",margin:4},
             {name:"bounce",value:"bounce",realname:"run and bounce off the walls",margin:4},
             {name:"buzz",value:"buzz",realname:"buzz around randomly",margin:4},
-            {name:"goal",value:"goal",realname:"seek the goal, try to win, using perfect information",margin:4},
+            {name:"goal",value:"goal",realname:"seek the goal, try to win, using perfect information",margin:0},
         ]
         self.codebook = [ {
             field: "behavior",
