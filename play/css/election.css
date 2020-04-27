@@ -9,7 +9,7 @@ Election/Sandbox design:
 .div-election{
 	background-color: #ffffff;
 	padding: 10px;
-    margin: -10px;
+    /* margin: -10px; */
 }
 
 .div-election #left, 

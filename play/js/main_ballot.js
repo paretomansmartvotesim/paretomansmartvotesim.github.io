@@ -364,19 +364,27 @@ function bindBallotModel(ui,model,config) {
 
 	};
 
-	_insertFunctionAfter( model,"onUpdate", function() {
+	model.onInitModel = function() {
 		
 		if(ui.showChoiceOfStrategy) {
 			ui.menu.frun.chooseFrun.init()
 			ui.selectMENU()
 		}
+	}
+
+	_insertFunctionAfter( model,"onUpdate", function() {
+		
 		
 		if (model.voters.length == 0) return
-		if (model.voters[0].voterGroupType == "GaussianVoters") return
+		if (model.voters[0].voterGroupType == "GaussianVoters") {
+			var ballot = model.voters[0].ballot[0] // just pick the first ballot to show
+		} else {
+			var ballot = model.voters[0].ballot
+		}
 		if (model.newWay) {
 			// onDraw
 		} else {
-			ui.dom.ballot.update(model.voters[0].ballot);
+			ui.dom.ballot.update(ballot);
 		}
 
 	})

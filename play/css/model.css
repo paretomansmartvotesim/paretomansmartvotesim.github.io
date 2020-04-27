@@ -51,10 +51,10 @@ THE MAIN MODEL ITSELF
 	/* margin-top:10px; */
 	text-align: center;
 	word-wrap: break-word;
-	text-align: left;
 }
 
 .div-model #caption .small{
+	vertical-align: top;
 	font-size: 0.75em;
 }
 .div-model .letter{

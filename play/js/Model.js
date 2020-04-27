@@ -974,7 +974,7 @@ function Arena(arenaName, model) {
 			var dx = p.x - self.x
 			var dy = p.y - self.y
 			var r = self.size * self.radiusScale
-			if (model.arena.mouse.isTouch) r *= d.touchFactor
+			if (model.arena.mouse.isTouch) r += d.touchAdd
 			if (dx * dx + dy * dy < r * r) {
 				// we have trash
 				self.size = 40
@@ -1774,8 +1774,9 @@ function Arena(arenaName, model) {
 	self.clear = function(){
 		// Clear it all!
 		self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
-		self.ctx.fillStyle = "white"
-		self.ctx.fillRect(0,0,self.canvas.width,self.canvas.height);
+		// not sure why this doesn't work
+		// self.ctx.fillStyle = "white"
+		// self.ctx.fillRect(0,0,self.canvas.width,self.canvas.height);
 	}
 
 	self.drawHorizontal = function(yLine) {

@@ -8,7 +8,7 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 	self.size = 20
 	self.grabsize = 20
 
-	self.touchFactor = 40/25 // multiply by this to get bigger distances for touch events
+	self.touchAdd = 30 // add this to get bigger distances for touch events
 	self.radiusScale = 25/40
 
 	
@@ -22,7 +22,7 @@ function Draggable(){ // Voter and Candidate classes are extended to make them d
 		var dx = x-a.x;
 		var dy = y-a.y;
 		var r = self.grabsize * self.radiusScale
-		if (arena.mouse.isTouch) r *= self.touchFactor
+		if (arena.mouse.isTouch) r += self.touchAdd
 		return((dx*dx+dy*dy) < r*r);
 	};
 	self.hitDistance = function(x,y,arena){
@@ -77,7 +77,7 @@ function DraggableManager(arena,model){
 			if (d.isModify && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the mod gear
 			if(d.hitTest(arena.mouse.x, arena.mouse.y,arena)){
 				if (d.isVoterCenter && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the voterCenter if we are the mod gear.
-				if (d.isCandidate || d.isVoter || d.isVoterCenter) {
+				if (d.isCandidate || d.isVoter || d.isVoterCenter || d.isplus || d.istrash || (d.isModify && ! d.active)) {
 					doTies = true
 					tie.push(d)
 					continue

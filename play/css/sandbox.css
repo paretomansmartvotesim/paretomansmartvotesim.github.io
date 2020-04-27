@@ -19,8 +19,8 @@
 .div-sandbox #description_container{
 	clear: both;
 	overflow: hidden;
-	height: 120px;
-    margin-bottom: 15px;
+    height: 120px;
+    margin: 10px 0px;
     width:100%;
 }
 .div-sandbox textarea, .div-sandbox input{
@@ -36,7 +36,7 @@
     margin: 0 0 0 -10px;
 }
 .div-sandbox div#double_description_container {
-    margin: 0 12px;
+    margin: 0px 20px;
 }
 .div-sandbox div.topMenuSpacer {
     height: 0.5em;

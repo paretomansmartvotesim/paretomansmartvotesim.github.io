@@ -107,11 +107,11 @@ function ScoreVoter(model){
 					} else {
 						ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
 					}
-					ctx.closePath()
 				}
 			} else {
 				ctx.strokeStyle = "#888"
 			}
+			ctx.closePath()
 			ctx.setLineDash([]);
 			if (self.dottedCircle) ctx.setLineDash([5, 15]);
 			if (self.filledCircles) {
