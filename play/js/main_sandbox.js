@@ -523,6 +523,7 @@ function Config(ui, config, initialConfig) {
         doTextBallots: false,
         textBallotInput: "",
         behavior: "stand",
+        showToolbar: "on",
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -994,6 +995,7 @@ function Cypher(ui) {
         68:"textBallotInput",
         69:"doTextBallots",
         70:"behavior",
+        71:"showToolbar",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -2990,6 +2992,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     52: "doTextBallots",
                     53: "behavior",
                     54: "submitTextBallots",
+                    55: "showToolbar",
                 },
             }
         ]
@@ -4601,6 +4604,42 @@ function menu(ui,model,config,initialConfig, cConfig) {
         });
     }
 
+    
+    ui.menu.showToolbar = new function () {
+        var self = this
+        self.list = [
+            {name:"on",value:"on",realname:"on",margin:4},
+            {name:"off",value:"off",realname:"off"},
+        ]
+        self.codebook = [ {
+            field: "showToolbar",
+            decode: {
+                0:"off",
+                1:"on",
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.showToolbar = data.value
+            // CONFIGURE
+            self.configure()
+            model.initMODEL()
+            model.draw()
+        };
+        self.configure = function() {
+            model.showToolbar = config.showToolbar
+        }
+        self.choose = new ButtonGroup({
+            label: "Show Toolbar?", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.showToolbar);
+        }
+    }
+
 
     // helper
     showMenuItemsIf = function(name,condition) {
@@ -4681,6 +4720,7 @@ function createMenu(ui) {
             ]],
             "voterIcons",
             "candidateIcons",
+            "showToolbar",
             "switcher",
             "gearoff",
         ]],
@@ -4784,6 +4824,7 @@ function createMenu(ui) {
                     "voterIcons",
                 ]],
                 ["advanced", [
+                    "showToolbar",
                     "colorChooser",
                     "colorSpace",
                     "behavior",
