@@ -112,7 +112,8 @@ function Candidate(model){
 			hsize = self.imageSelf.img.width / self.imageSelf.img.height * size
 		}
 		if (model.candidateIconsSet.includes("image")) {
-			ctx.drawImage(self.imageSelf.img, x-size/2, y-size/2, size, size);
+			hsize = self.imageSelf.img.width / self.imageSelf.img.height * size
+			ctx.drawImage(self.imageSelf.img, x-hsize/2, y-size/2, hsize, size);
 		}
 		if (model.candidateIconsSet.includes("name")) {
 			hsize = self.nameSelf.img.width / self.nameSelf.img.height * size

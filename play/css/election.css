@@ -173,8 +173,8 @@ Election/Sandbox design:
 }
 
 #savelink{
-    margin: 10px 9px 0 0;
-    width:300px;
+    margin: 5px 0px;
+    width:100%;
 }
 
 .tinyURL{

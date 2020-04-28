@@ -6,8 +6,11 @@ function _drawStroked(text, x, y, textsize, ctx) {
 	_drawStrokedColor(text, x, y, textsize, 4, 'white', ctx, false)
 }
 function _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
+	ctx.save()
 	ctx.font = textsize + "px Sans-serif"
 	ctx.lineWidth = lw;
+	ctx.shadowColor = "rgba(0,0,0,0.3)";
+	ctx.shadowBlur = textsize * .1;
 	if (blend) { // blend color into border
 		ctx.strokeStyle = color;
 		ctx.strokeText(text, x, y);
@@ -18,6 +21,7 @@ function _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
 	ctx.strokeText(text, x, y);
 	ctx.fillStyle = color;
 	ctx.fillText(text, x, y);
+	ctx.restore()
 }
 
 function _drawArrow(ctx, fromx, fromy, tox, toy){
@@ -157,16 +161,26 @@ function _convertImageToDataURLviaCanvas(img, outputFormat){
 function _convertNameToDataURLviaCanvas(letter,color, outputFormat){
 	var canvas = document.createElement('CANVAS');
 	var ctx = canvas.getContext('2d');
-	n = letter.length
-	canvas.height = 40;
-	canvas.width = 40 * n;
-	x = canvas.width / 2
+	var textsize = 120; // retina
+
+	ctx.font = textsize + "px Sans-serif"
+	var text = ctx.measureText(letter)
+
+	canvas.height = textsize * 1.25 // extra space because we want uppercase to be centered
+	canvas.width = text.width * 1.25
+	canvas.style.height = canvas.height
+	canvas.style.width = canvas.width
+
+	var x = canvas.width / 2
+	var y = textsize
 	ctx.textAlign = "center"
-	if (n > 2) {
+	linewidth = textsize / 10
+	if (letter.length > 2) {
 		reduce = 1.5
-		_drawStrokedColor(letter,x,20 + 15 / reduce,40 / reduce,3,color,ctx, true);
+		//  _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
+		_drawStrokedColor(letter,x, y / reduce,textsize / reduce,linewidth/reduce,color,ctx, true);
 	} else {
-		_drawStrokedColor(letter,x,35,40,4,color,ctx, true);
+		_drawStrokedColor(letter,x,y,textsize,linewidth,color,ctx, true);
 	}
 	var dataURL = canvas.toDataURL(outputFormat);
 	canvas = null; 
