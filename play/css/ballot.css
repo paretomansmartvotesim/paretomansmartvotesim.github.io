@@ -5,6 +5,7 @@ BALLOT DESIGN
 	background: #fff;
 	padding: 10px;
     /* margin: -10px; */
+	text-align:center;
 }
 
 .div-ballot #ballot{
@@ -91,18 +92,23 @@ BALLOT DESIGN
 	line-height: 1.0em;
 }
 
+.div-ballot #paper {
+	text-align: center;
+}
 .div-ballot #paper div{
 	display: inline-block;
 	vertical-align:top;
+	text-align: left;
 }
 .div-ballot #paper table{
 	border-collapse: collapse;
 }
 .div-ballot #paper table.main{
-	min-width: 15em;
+	min-width: 240px;
 }
 .div-ballot #paper table.main2{
-	min-width: 8em;
+	min-width: 220px;
+	width: 220px;
 }
 .div-ballot #paper table.num{
 	border: 3px solid #302702;
@@ -152,32 +158,12 @@ BALLOT DESIGN
 
 /* Extra Small Devices, Phones */ 
 @media (max-width : 650px) {
-
-	.div-ballot{
-		text-align:center;
-		display:block;
-	}
-	
-	.div-ballot #b-left,
-	.div-ballot #b-right{
-		display:inline-block;
-		float:none;
-		padding-right: 0px;
-		text-align: left;
-	}
 	.div-ballot #b-right{
 		margin-left: 10px;
 	}
-	.div-ballot #b-left{
-		text-align:center;
-	}
-	.div-ballot #paper {
-		text-align: center;
-	}
-	.div-ballot #paper div{
-		text-align: left;
-	}
+
 	.div-ballot #ballot{
 		margin-left: 0px;
 	}
 }
+

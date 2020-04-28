@@ -15,17 +15,19 @@ Election/Sandbox design:
 .div-election #left, 
 .div-election #center, 
 .div-election #right{
-	float:left;
+	/* float:left; */
     /* min-height: 320px; */
     text-align: left;
     margin: 10px;
+    display:inline-block;
+    vertical-align: top;
 }
 .div-election #left{
 	max-width:220px;
 }
 .div-election #center{
     text-align: center;
-    width:300px;
+    width:304px;
 }
 
 .div-election #right{

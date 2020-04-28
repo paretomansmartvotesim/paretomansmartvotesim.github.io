@@ -75,7 +75,7 @@ function Model(idModel){
 			breakEliminationTiesIRV: true // break ties for eliminations of candidates in IRV
 		},
 		ballotVis: true, // turn on or off the visuals that show where the ballots go
-		visSingleBallotsOnly: true, // only show the single ballots as part of the ballotVis
+		visSingleBallotsOnly: false, // only show the single ballots as part of the ballotVis
 		beatMap: "auto",
         keyyee: "newcan",
         kindayee: "newcan",

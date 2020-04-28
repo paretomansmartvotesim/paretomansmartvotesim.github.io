@@ -22,6 +22,10 @@ THE MAIN MODEL ITSELF
 	text-align: left;
 	overflow: hidden;
 }
+.model {
+	display: inline-block;
+}
+
 .div-model-theme-Default .model .interactive{
     background-image: none;
 }
@@ -85,8 +89,9 @@ DAT RESET BUTTON
     padding: 2px 0;
     border-radius: 5px;
     border-bottom: 2px solid #888;
-	margin-top:10px;
-    margin-right: 9px;
+	/* margin-top:10px; */
+	/* margin-right: 9px; */
+	margin: 5px;
 
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
