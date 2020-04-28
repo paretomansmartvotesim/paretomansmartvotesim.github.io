@@ -1907,7 +1907,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			} else {
 				for(var i=0; i<self.points.length; i++){
 					if (model.voterIcons == "dots") {
-						_drawDot(xs[i], ys[i], ctx)
+						_drawDot(2, xs[i], ys[i], ctx)
 					} else if (model.voterIcons == "top") {
 						var c = _findClosestCan(xs[i],ys[i],self.district[i],model)
 						_drawCircleFill(xs[i],ys[i],circlesize,c.fill,ctx,model)
@@ -1938,21 +1938,25 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.drawBackAnnotation(x,y,ctx)
 		
 		if (model.voterIcons != "off") {
+			if (model.voterIcons == "dots") {
+				_drawDot(4, s.x, s.y, ctx)
+			} else {
 
-			_drawBlank(model, ctx, s.x, s.y, size)
-			_drawRing(ctx,s.x,s.y,self.size)
-			
-			// Face!
-			size = size*2;
-			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
-	
-			// Number ID
-			var textsize = 20
-			ctx.textAlign = "center";
-			
-			if(model.voters.length != 1) {
-				_drawStroked(self.vid+1,x+0*textsize,y+0*textsize,textsize,ctx);
-			}
+				_drawBlank(model, ctx, s.x, s.y, size)
+				_drawRing(ctx,s.x,s.y,self.size)
+				
+				// Face!
+				size = size*2;
+				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+		
+				// Number ID
+				var textsize = 20
+				ctx.textAlign = "center";
+				
+				if(model.voters.length != 1) {
+					_drawStroked(self.vid+1,x+0*textsize,y+0*textsize,textsize,ctx);
+				}
+			}				
 	
 		}
 		self.drawAnnotation(x,y,ctx)
@@ -1965,15 +1969,14 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 }
 
-function _drawDot(x,y,ctx) {
+function _drawDot(diameter,x,y,ctx) {
 	ctx.fillStyle = '#333'
 	// ctx.strokeStyle = '#333'
 	ctx.lineWidth = 1
 
 	// Just draw a circle.
 	ctx.beginPath()
-	var radius = 2
-	ctx.arc(x*2,y*2, radius, 0, Math.TAU, false)
+	ctx.arc(x*2,y*2, diameter, 0, Math.TAU, false)
 	ctx.fill()
 	// ctx.stroke()
 }
@@ -2083,7 +2086,7 @@ function SingleVoter(model){
 			var c = _findClosestCan(s.x,s.y,self.district[0],model)
 			_drawCircleFill(s.x,s.y,self.size,c.fill,ctx,model)
 		} else if (model.voterIcons == "dots") {
-			_drawDot(s.x, s.y, ctx)
+			_drawDot(2, s.x, s.y, ctx)
 		} 
 		
 			
@@ -2285,21 +2288,29 @@ function VoterCenter(model){
 		size = self.size
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
-		self.drawBackAnnotation(x,y,ctx)
-		if (oldway) {
-			_drawBlank(model, ctx, s.x, s.y, size);
-			_drawRing(ctx,s.x,s.y,self.size)
+
+		if (model.voterIcons != "off") {
 			
-			// Face!
-			size = size*2;
-			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
-
-		} else {
-			size = size*2;
-			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
-
+			self.drawBackAnnotation(x,y,ctx)
+			if (model.voterIcons == "dots") {
+				_drawDot(5, s.x, s.y, ctx)
+			} else {
+				if (oldway) {
+					_drawBlank(model, ctx, s.x, s.y, size);
+					_drawRing(ctx,s.x,s.y,self.size)
+					
+					// Face!
+					size = size*2;
+					ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+	
+				} else {
+					size = size*2;
+					ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+	
+				}
+			}
+			self.drawAnnotation(x,y,ctx)
 		}
-		self.drawAnnotation(x,y,ctx)
 
 		if(self.highlight) ctx.globalAlpha = temp
 	};
