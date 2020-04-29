@@ -90,6 +90,7 @@ function Model(idModel){
 		behavior:"stand",
 		showVoters:true,
 		showToolbar: "on",
+		rankedVizBoundary: "atWinner",
 	})
 	
 	self.viz = new Viz(self);

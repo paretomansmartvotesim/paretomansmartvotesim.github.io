@@ -524,6 +524,7 @@ function Config(ui, config, initialConfig) {
         textBallotInput: "",
         behavior: "stand",
         showToolbar: "on",
+        rankedVizBoundary: "atWinner",
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -996,6 +997,7 @@ function Cypher(ui) {
         69:"doTextBallots",
         70:"behavior",
         71:"showToolbar",
+        72:"rankedVizBoundary",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -2993,6 +2995,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     53: "behavior",
                     54: "submitTextBallots",
                     55: "showToolbar",
+                    56: "rankedVizBoundary",
                 },
             }
         ]
@@ -4640,6 +4643,46 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.rankedVizBoundary = new function () {
+        // where to put the boundary for a candidate's region
+        var self = this
+        self.list = [
+            {name:"atWinner",value:"atWinner",margin:4},
+            {name:"atMidpoint",value:"atMidpoint",margin:0},
+            {name:"atLoser",value:"atLoser",margin:4},
+            {name:"beforeWinner",value:"beforeWinner",margin:0},
+        ]
+        self.codebook = [ {
+            field: "rankedVizBoundary",
+            decode: {
+                0:"atLoser",
+                1:"atMidpoint",
+                2:"atWinner",
+                3:"beforeWinner",
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.rankedVizBoundary = data.value
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.draw()
+        };
+        self.configure = function() {
+            model.rankedVizBoundary = config.rankedVizBoundary
+        }
+        self.choose = new ButtonGroup({
+            label: "Beat Map", // Sub Menu
+            width: 108,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.rankedVizBoundary);
+        }
+    }
+
 
     // helper
     showMenuItemsIf = function(name,condition) {
@@ -4711,6 +4754,7 @@ function createMenu(ui) {
             "votersAsCandidates",
             "ballotVis",
             "visSingleBallotsOnly",
+            "rankedVizBoundary",
             "sidebarOn",
             ["divLastTransfer", [
                 "lastTransfer",
@@ -4885,6 +4929,7 @@ function createMenu(ui) {
                     "sidebarOn",
                     "ballotVis",
                     "visSingleBallotsOnly",
+                    "rankedVizBoundary",
                 ]],
             ]],
             ["ui", [

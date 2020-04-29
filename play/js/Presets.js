@@ -1395,6 +1395,7 @@ function _lookupPreset(ui) {
 			menuVersion: "2",
 			doFeatureFilter: false,
 			yeeon: false,
+			rankedVizBoundary: "atMidpoint",
 			// configversion: 2.5, // should stay at latest version
 		}
 	} else if (ui.presetName == "sandbox_original") {

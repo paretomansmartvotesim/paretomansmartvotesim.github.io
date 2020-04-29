@@ -982,7 +982,33 @@ function RankedVoter(model){
 				// var cc = model.arena.modelToArena(c)
 
 				// dist = Math.sqrt((meArena.x - cc.x) ** 2 + (meArena.y - cc.y) ** 2 )
-				dist = distF(model,me,c)
+				if (model.rankedVizBoundary === "atMidpoint" || model.rankedVizBoundary === "atLoser") {
+					if (i <= ballot.rank.length-2) {
+						var nextRank = ballot.rank[i+1];
+						var nextC = model.candidatesById[nextRank];
+						var distCurrent = distF(model,me,c)
+						var distNext = distF(model,me,nextC)
+						if (model.rankedVizBoundary === "atMidpoint") {
+							var dist = .5 * (distCurrent + distNext)
+						} else {
+							var dist = distNext
+						}
+					} else {
+						continue
+					}
+				} else if (model.rankedVizBoundary === "beforeWinner") {
+					if (i >= 1) {
+						var previousRank = ballot.rank[i-1];
+						var previousC = model.candidatesById[previousRank];
+						var distPrevious = distF(model,me,previousC)
+					} else {
+						var distPrevious = 0
+					}
+					var distCurrent = distF(model,me,c)
+					var dist = .5 * (distCurrent + distPrevious)
+				} else { // atWinner
+					var dist = distF(model,me,c)
+				}
 				
 
 				ctx.beginPath();
