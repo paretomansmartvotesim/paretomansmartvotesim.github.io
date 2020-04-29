@@ -3780,58 +3780,128 @@ function _drawBars(iDistrict, arena, model, round) {
 		} else {
 			var r = round - 1
 		}
-		var thisround = model.result.history.rounds[r]
 
-		var stillin = thisround.stillin
-		// who is still in the race
-		for (var i = 0; i < v.length; i++) {
-			var b = v[i].b
-			if (r==0) {
-				var quota = 1
-			} else {
-				var quota = thisround.q[model.districtIndexOfVoter[model.orderOfVoters[i]]]
+
+		var method = 2
+		if (method == 2) {
+			// loop through all the rounds we want to see
+			for (var m = 0	; m <= r; m++) {
+				var thisround = model.result.history.rounds[m]
+
+				// who is still in the race
+				var stillin = thisround.stillin
+
+				// for each voter
+				for (var i = 0; i < v.length; i++) {
+					var b = v[i].b
+					if (r==0) {
+						var quota = 1
+					} else {
+						var quota = thisround.q[model.districtIndexOfVoter[model.orderOfVoters[i]]]
+					}
+
+					// find who we are voting for
+					for (var k = 0; k < b.length; k++) {
+						var c = b[k]
+						if (stillin.includes(c)) {
+							var color = model.candidates[c].fill
+							break
+						}
+					}
+
+					// determine where to draw
+					var left = Math.round(i * widthRectangle)
+					var right = Math.round((i+1) * widthRectangle)
+					var middle = Math.round(pos+(m+quota*1) * heightRectangle)
+					var middle2 = Math.round(pos+(m+1-quota) * heightRectangle)
+					var top = Math.round(pos+(m) * heightRectangle)
+					var bottom = Math.round(pos+(m+1) * heightRectangle)
+
+					// draw candidate color
+					arena.ctx.fillStyle = color
+					arena.ctx.fillRect(left,top,right-left,bottom-top)
+					arena.ctx.fill()
+					
+					// draw amount of support
+					arena.ctx.fillStyle = "white"
+					supportMethod = "useTransparency"
+					if (supportMethod == "useTransparency") {
+						arena.ctx.globalAlpha = 1-quota
+						var width = right-left
+						var height = bottom-top
+						arena.ctx.fillRect(left,top,width,height)
+					} else { // "useVertical"
+						arena.ctx.globalAlpha = .7
+						var topdown = true
+						if (topdown) {
+							arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+						} else {
+							arena.ctx.fillRect(left,top,right-left,middle2-top)
+						}
+					}
+									
+					arena.ctx.globalAlpha = 1
+				}
+
 			}
-
-			for (var k = 0; k < b.length; k++) {
-				var c = b[k]
-				// determine where to draw
-				var left = Math.round(i * widthRectangle)
-				var right = Math.round((i+1) * widthRectangle)
-
-				var middle = Math.round(pos+(c+quota*1) * heightRectangle)
-				var middle2 = Math.round(pos+(c+1-quota) * heightRectangle)
-				var top = Math.round(pos+(c) * heightRectangle)
-				var bottom = Math.round(pos+(c+1) * heightRectangle)
-				
-				var color = model.candidates[c].fill
-				if (stillin.includes(c)) {
-					// draw support in color
+		} else {
+			var thisround = model.result.history.rounds[r]
+	
+			var stillin = thisround.stillin
+			// who is still in the race
+			for (var i = 0; i < v.length; i++) {
+				var b = v[i].b
+				if (r==0) {
+					var quota = 1
 				} else {
-					// draw support in grey
-					// var color = "#ccc"
-					middle = top // just solid grey, no quota stuff
+					var quota = thisround.q[model.districtIndexOfVoter[model.orderOfVoters[i]]]
 				}
-
-				arena.ctx.fillStyle = color
-				arena.ctx.fillRect(left,top,right-left,bottom-top)
-				arena.ctx.fill()
-				
-				arena.ctx.globalAlpha = .7
-				arena.ctx.fillStyle = "white"
-				if (1) {
-					arena.ctx.fillRect(left,middle,right-left,bottom-middle)
-				} else {
-					arena.ctx.fillRect(left,top,right-left,middle2-top)
-				}
-								
-				arena.ctx.globalAlpha = 1
-
-				if (stillin.includes(c)) {
-					break
-					// go through the list of people the voter voted for in order until we get to one that is still in the race
+	
+				for (var k = 0; k < b.length; k++) {
+					var c = b[k]
+					// determine where to draw
+					var left = Math.round(i * widthRectangle)
+					var right = Math.round((i+1) * widthRectangle)
+	
+					var middle = Math.round(pos+(c+quota*1) * heightRectangle)
+					var middle2 = Math.round(pos+(c+1-quota) * heightRectangle)
+					var top = Math.round(pos+(c) * heightRectangle)
+					var bottom = Math.round(pos+(c+1) * heightRectangle)
+					
+					var color = model.candidates[c].fill
+					if (stillin.includes(c)) {
+						// draw support in color
+					} else {
+						// draw support in grey
+						// var color = "#ccc"
+						middle = top // just solid grey, no quota stuff
+					}
+	
+					arena.ctx.fillStyle = color
+					arena.ctx.fillRect(left,top,right-left,bottom-top)
+					arena.ctx.fill()
+					
+					arena.ctx.globalAlpha = .7
+					arena.ctx.fillStyle = "white"
+					if (1) {
+						arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+					} else {
+						arena.ctx.fillRect(left,top,right-left,middle2-top)
+					}
+									
+					arena.ctx.globalAlpha = 1
+	
+					if (stillin.includes(c)) {
+						break
+						// go through the list of people the voter voted for in order until we get to one that is still in the race
+					}
 				}
 			}
+	
+
 		}
+
+
 	} else {
 		for (var i = 0; i < v.length; i++) {
 			var b = v[i].b
@@ -3875,7 +3945,6 @@ function _drawBars(iDistrict, arena, model, round) {
 			}
 		}
 	
-
 	}
 
 	// labels
