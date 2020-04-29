@@ -241,6 +241,15 @@ function Model(idModel){
 		if (self.checkGotoTarena()) // find order of voters
 		{
 			var v = _getVoterArray(self)
+			if (self.system == "STV") {
+				for (var voter of v) {
+					var newb = []
+					for (var [r,c] of Object.entries(voter.b)) {
+						newb[c] = r
+					}
+					voter.b = newb
+				}
+			}
 			if (v.length > 0) {
 				if (self.dimensions == "1D+B" || self.dimensions == "1D") {
 					// easy sort in 1D
@@ -932,6 +941,8 @@ function Arena(arenaName, model) {
 		};
 
 		self.tossInTrash = function() {
+			self.overTrash = false
+			
 			var d = model.arena.mouse.dragging
 			// find the candidate in the candidate list
 			for (var i=0; i < model.candidates.length; i++) {
