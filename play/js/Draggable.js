@@ -70,23 +70,37 @@ function DraggableManager(arena,model){
 				return model.yeeobject;
 			}
 		}
-		var doTies = false
-		var tie = []
+		var lowTie = []
+		var middleTie = []
+		var highTie = []
+		var checklow = true
+		var checkmiddle = true
 		for(var i=arena.draggables.length-1; i>=0; i--){ // top DOWN.
 			var d = arena.draggables[i];
-			if (d.isModify && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the mod gear
+			if (d.isModify && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the mod gear, you're dragging it to a target and you want to find it
 			if(d.hitTest(arena.mouse.x, arena.mouse.y,arena)){
 				if (d.isVoterCenter && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the voterCenter if we are the mod gear.
-				if (d.isCandidate || d.isVoter || d.isVoterCenter || d.isplus || d.istrash || (d.isModify && ! d.active)) {
-					doTies = true
-					tie.push(d)
-					continue
+				// low priority
+				if ( (d.isModify && d.active) || d.isright || d.isUp) {
+					highTie.push(d)
+					checkmiddle = false
+					checklow = false
+				} else if ( checkmiddle && (d.isCandidate || d.isVoter || d.isVoterCenter) ) {
+					middleTie.push(d)
+					checklow = false
+				} else if (checklow) { // (d.istrash || d.isplus || (d.isModify && ! d.active) )
+					// middle priority
+					lowTie.push(d)
 				}
-				if (doTies) continue
-				return d;
 			}
 		}
-		if (doTies) {
+		// there should be two priority classes, and we should pick among the high priorities first
+		if (highTie.length > 0) return _getClosest(highTie)
+		if (middleTie.length > 0) return _getClosest(middleTie)
+		if (lowTie.length > 0) return _getClosest(lowTie)
+		return null
+
+		function _getClosest(tie) {
 			if (tie.length == 1) return tie[0]
 			// which of the tied objects is closest?
 			var min = Infinity
@@ -100,7 +114,6 @@ function DraggableManager(arena,model){
 			}
 			return closest
 		}
-		return null;
 	}
 
 	// INTERFACING WITH THE *MOUSE*
