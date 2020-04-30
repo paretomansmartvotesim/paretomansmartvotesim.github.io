@@ -3892,7 +3892,11 @@ function _drawBars(iDistrict, arena, model, round) {
 	
 	heightRectangle = Math.min(200 / model.candidates.length, 200/5)
 	
+
 	if (model.system == "STV") {
+		var rowFunction = "rounds"
+		// var rowFunction = "candidates"
+
 		// use order
 		// use order with history
 		// use calculations from before, in the voting system
@@ -3905,8 +3909,7 @@ function _drawBars(iDistrict, arena, model, round) {
 		}
 
 
-		var method = 2
-		if (method == 2) {
+		if (rowFunction == "rounds") {
 			// loop through all the rounds we want to see
 			for (var m = 0	; m <= r; m++) {
 				var thisround = model.result.history.rounds[m]
@@ -4026,44 +4029,129 @@ function _drawBars(iDistrict, arena, model, round) {
 
 
 	} else {
-		for (var i = 0; i < v.length; i++) {
-			var b = v[i].b
-			if (model.system == "QuotaApproval" || model.system == "QuotaScore") { // workaround for now
-				var quota = Math.max(q[i],0)
-			} else {
-				if (r==0) {
-					var quota = 1
-				} else {
-					var quota = Math.max(model.result.history.rounds[r-1].q[model.districtIndexOfVoter[model.orderOfVoters[i]]],0)
+		
+		// var rowFunction = "rounds"
+		var rowFunction = "candidates"
+
+		if (rowFunction == "rounds") {
+			heightRectangle /= (r+1)
+			for (var m = 0	; m <= r; m++) {
+						
+				for (var i = 0; i < v.length; i++) {
+					var b = v[i].b
+					if (model.system == "QuotaApproval" || model.system == "QuotaScore") { // workaround for now
+						var quota = Math.max(q[i],0)
+					} else {
+						if (m==0) {
+							var quota = 1
+						} else {
+							var quota = Math.max(model.result.history.rounds[m-1].q[model.districtIndexOfVoter[model.orderOfVoters[i]]],0)
+						}
+					}
+					
+					for (var k = 0; k < b.length; k++) {
+						
+						var support = b[k] / model.result.history.maxscore
+						if (support > 0) {
+							var left = Math.round(i * widthRectangle)
+							var right = Math.round((i+1) * widthRectangle)
+			
+							var interleaveCandidates = false
+							if (interleaveCandidates) {
+								var g = m * b.length + k
+							} else {
+								var g = m + k * (r+1)
+							}
+							var middle = Math.round(pos+(g+quota*support) * heightRectangle)
+							var middle2 = Math.round(pos+(g+1-quota) * heightRectangle)
+							var top = Math.round(pos+(g) * heightRectangle)
+							var useHeight = true
+							if (useHeight) { // for STV, support = 1
+								var bottom = Math.round(pos+(g+support) * heightRectangle)
+							} else {
+								var bottom = Math.round(pos+(g+1) * heightRectangle)
+							}
+							
+							var color = model.candidates[k].fill
+							arena.ctx.fillStyle = color
+							arena.ctx.fillRect(left,top,right-left,bottom-top)
+							arena.ctx.fill()
+							
+							// draw amount of support
+							arena.ctx.fillStyle = "white"
+							supportMethod = "useTransparency"
+							if (supportMethod == "useTransparency") {
+								arena.ctx.globalAlpha = (1-quota) * support
+								var width = right-left
+								var height = bottom-top
+								arena.ctx.fillRect(left,top,width,height)
+							} else { // "useVertical"
+								arena.ctx.globalAlpha = .7
+								var topdown = true
+								if (topdown) {
+									arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+								} else {
+									arena.ctx.fillRect(left,top,right-left,middle2-top)
+								}
+							}
+											
+							arena.ctx.globalAlpha = 1
+						}
+					}
 				}
 			}
-			
-			for (var k = 0; k < b.length; k++) {
-				
-				var support = b[k] / model.result.history.maxscore
-				if (support > 0) {
-					var left = Math.round(i * widthRectangle)
-					var right = Math.round((i+1) * widthRectangle)
-	
-					var middle = Math.round(pos+(k+quota*support) * heightRectangle)
-					var middle2 = Math.round(pos+(k+1-quota) * heightRectangle)
-					var top = Math.round(pos+(k) * heightRectangle)
-					var bottom = Math.round(pos+(k+support) * heightRectangle)
-					
-					var color = model.candidates[k].fill
-					arena.ctx.fillStyle = color
-					arena.ctx.fillRect(left,top,right-left,bottom-top)
-					arena.ctx.fill()
-					
-					arena.ctx.globalAlpha = .7
-					arena.ctx.fillStyle = "white"
-					if (1) {
-						arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+
+		} else {
+			for (var i = 0; i < v.length; i++) {
+				var b = v[i].b
+				if (model.system == "QuotaApproval" || model.system == "QuotaScore") { // workaround for now
+					var quota = Math.max(q[i],0)
+				} else {
+					if (r==0) {
+						var quota = 1
 					} else {
-						arena.ctx.fillRect(left,top,right-left,middle2-top)
+						var quota = Math.max(model.result.history.rounds[r-1].q[model.districtIndexOfVoter[model.orderOfVoters[i]]],0)
 					}
-									
-					arena.ctx.globalAlpha = 1
+				}
+				
+				for (var k = 0; k < b.length; k++) {
+					
+					var support = b[k] / model.result.history.maxscore
+					if (support > 0) {
+						var left = Math.round(i * widthRectangle)
+						var right = Math.round((i+1) * widthRectangle)
+		
+						var middle = Math.round(pos+(k+quota*support) * heightRectangle)
+						var middle2 = Math.round(pos+(k+1-quota) * heightRectangle)
+						var top = Math.round(pos+(k) * heightRectangle)
+						var bottom = Math.round(pos+(k+support) * heightRectangle)
+						
+						var color = model.candidates[k].fill
+						arena.ctx.fillStyle = color
+						arena.ctx.fillRect(left,top,right-left,bottom-top)
+						arena.ctx.fill()
+						
+							// draw amount of support
+							arena.ctx.fillStyle = "white"
+							// var supportMethod = "useTransparency"
+							var supportMethod = "useVertical"
+							if (supportMethod == "useTransparency") {
+								arena.ctx.globalAlpha = (1-quota) * support
+								var width = right-left
+								var height = bottom-top
+								arena.ctx.fillRect(left,top,width,height)
+							} else { // "useVertical"
+								arena.ctx.globalAlpha = .7
+								var topdown = true
+								if (topdown) {
+									arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+								} else {
+									arena.ctx.fillRect(left,top,right-left,middle2-top)
+								}
+							}
+										
+						arena.ctx.globalAlpha = 1
+					}
 				}
 			}
 		}
