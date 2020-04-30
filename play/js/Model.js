@@ -71,7 +71,7 @@ function Model(idModel){
 			IRV100: true, // show the final transfer to the winner (to reach 100%)
 			IRVShowdown: false,  // show a reverse-direction transfer to represent the winner
 			showIRVTransfers: true,  // show lines representing transfers between rounds
-			breakWinTiesMultiSeat: false, // break ties for winning candidates in multi-winner methods
+			breakWinTiesMultiSeat: true, // break ties for winning candidates in multi-winner methods
 			breakEliminationTiesIRV: true // break ties for eliminations of candidates in IRV
 		},
 		ballotVis: true, // turn on or off the visuals that show where the ballots go
@@ -631,7 +631,7 @@ function Model(idModel){
 	self.checkGotoTarena = function() { 
 		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
 		// right now, we don't have a good visual of these for multiple districts, just one
-		return (self.nDistricts < 2) && (self.system == "QuotaApproval" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.powerChart == "off")
+		return (self.nDistricts < 2) && (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.powerChart == "off")
 	}
 
 	self.checkDoBeatMap = function() {

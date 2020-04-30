@@ -1382,7 +1382,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         
 
         // todo: move to config for menu item
-        var multiWinnerSystem = ( config.system == "QuotaApproval" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" || config.system == "QuotaMinimax")
+        var multiWinnerSystem = ( config.system == "QuotaApproval"  || config.system == "QuotaScore" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" || config.system == "QuotaMinimax")
         if (multiWinnerSystem) {
             ui.menu.seats.choose.dom.hidden = false
         } else {
@@ -1495,8 +1495,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"3-2-1", value:"3-2-1", ballotType:"Three", election:Election.three21},
             {name:"RRV", value:"RRV", ballotType:"Score", election:Election.rrv, margin:4},
             {name:"RAV", value:"RAV", ballotType:"Approval", election:Election.rav},
-            {name:"STV", value:"STV", ballotType:"Ranked", election:Election.stv, margin:4},
+            {name:"QuotaScore", value:"QuotaScore", realname:"Using a quota with score voting to make proportional representation.",ballotType:"Score", election:Election.quotaScore, margin:4},
             {name:"QuotaApproval", value:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",ballotType:"Approval", election:Election.quotaApproval},
+            {name:"STV", value:"STV", ballotType:"Ranked", election:Election.stv, margin:4},
             {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",ballotType:"Ranked", election:Election.quotaMinimax}
         ];
         self.codebook = [
@@ -1522,6 +1523,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     16:"STV",
                     17:"QuotaApproval",
                     18:"QuotaMinimax",
+                    19:"QuotaScore",
                 }
             }
         ]
@@ -3624,11 +3626,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.configure = function() {
             model.votersAsCandidates = config.votersAsCandidates
-            if (config.votersAsCandidates) {
-                model.opt.breakWinTiesMultiSeat = true
-            } else {
-                model.opt.breakWinTiesMultiSeat = false
-            }
         }
         self.select = function() {
             self.choose.highlight("value", config.votersAsCandidates);

@@ -2895,6 +2895,129 @@ Election.quotaApproval = function(district, model, options){
 	return result
 }
 
+Election.quotaScore = function(district, model, options){
+	
+	var v = _getVoterArray(model)
+
+	var seats = model.seats
+	var winners = []
+	var winnersIndexes = []
+	var maxscore = model.voters[0].type.maxscore
+	
+	if (options.sidebar) {
+		var text = ""
+		var history = {}
+		history.rounds = []
+		history.v = v
+		history.seats = seats
+		history.maxscore = maxscore
+		model.round = -1
+	}
+
+	var q = []
+	for (var i=0; i < v.length; i++) {
+		q.push(1)
+	}
+	for (var n = 0; n < district.candidates.length; n++) {
+		if (winners.length >= seats) {
+			break
+		}
+		var tally = []
+		for (var k = 0; k < district.candidates.length; k++) {
+			tally[k] = 0
+		}
+		for (var i = 0; i < v.length; i++) {
+			var b = v[i].b
+			var quota = Math.max(q[i],0)
+			
+			for (var k = 0; k < b.length; k++) {
+				if (winnersIndexes.includes(k)) continue
+				// add up the number of votes
+				tally[k] += quota * b[k] / maxscore
+			}
+		}
+		if(options.sidebar) {
+			text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
+			text += "Round " + (n+1);
+			text += "<br>";
+			for(var i=0; i<district.candidates.length; i++){
+				var c = district.candidates[i].id;
+				text += model.icon(c)+" got "+_percentFormat(district, tally[i])+"<br>";
+			}
+			text += "<br>";
+			text += '</div>'
+		}
+		// who won this round?
+		var roundWinners = _countWinner(tally) // need to exclude twice-winners
+		if (model.opt.breakWinTiesMultiSeat) {
+			roundWinners = roundWinners[Math.floor(Math.random() * roundWinners.length)]
+			roundWinners = [roundWinners]
+		}
+		roundWinners = roundWinners.map(x => Number(x))
+		roundWinners.forEach(x => winnersIndexes.push(Number(x)))
+		roundWinnersId = roundWinners.map( x => district.candidates[x].id)
+		roundWinnersId.forEach(x => winners.push(x))
+
+		// subtract off the quota
+		for (var i=0; i < roundWinners.length; i++) {
+			var winnerIndex = roundWinners[i]
+			var sum = tally[winnerIndex]
+			var rep = v.length / sum / seats
+			for (var k=0; k < v.length; k++) { 
+				var b = v[k].b
+				q[k] -= rep * b[winnerIndex] / maxscore // we could just multiply by b[wI]
+			}
+		}
+		if (options.sidebar) {
+			var roundHistory = {
+				winners: roundWinners,
+				q:q,
+				tally:tally
+			}
+			history.rounds.push(roundHistory)
+		}
+	}
+
+	
+	if(options.sidebar) {
+		text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
+		text += "Final Winners:";
+		text += "<br>";
+		for(var i=0; i<winners.length; i++){
+			var c = winners[i]
+			text += model.icon(c)+" ";
+		}
+		text += "<br>";
+		text += "<br>";
+		text += '</div>'
+	}
+	
+	var result = _result(winners,model)
+	if (options.sidebar) {
+		result.history = history
+		
+		result.text = text
+
+		result.eventsToAssign = [] // we have an interactive caption
+		// attach caption hover functions
+		for (var i=0; i < n+1; i++) {
+			var cbDraw = function(i) { // a function is returned, so that i has a new scope
+				return function() {
+					model.round = i+1
+					model.drawArenas()
+					model.round = -1
+				}
+			}
+			var e = {
+				eventID: "district"+district.i+"round" + (i+1),
+				f: cbDraw(i)
+			}
+			result.eventsToAssign.push(e)
+		}
+	}
+	return result
+}
+
 Election.toptwo = function(district, model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 
 	options = options || {};
@@ -3905,7 +4028,7 @@ function _drawBars(iDistrict, arena, model, round) {
 	} else {
 		for (var i = 0; i < v.length; i++) {
 			var b = v[i].b
-			if (model.system == "QuotaApproval") { // workaround for now
+			if (model.system == "QuotaApproval" || model.system == "QuotaScore") { // workaround for now
 				var quota = Math.max(q[i],0)
 			} else {
 				if (r==0) {
