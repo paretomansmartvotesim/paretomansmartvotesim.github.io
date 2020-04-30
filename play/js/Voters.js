@@ -1607,6 +1607,25 @@ var _drawRing = function (ctx, x, y, size) {
 		ctx.stroke();
 }
 
+var _drawThickRing = function (ctx, x, y, size) {
+
+	// RETINA
+	x = x*2;
+	y = y*2;
+	// Just draw a circle.		
+	ctx.strokeStyle = 'rgb(50,50,50)';
+	ctx.lineWidth = 3; // border
+	ctx.beginPath();
+	ctx.arc(x, y, size, 0, Math.TAU, true);
+	ctx.moveTo(x+size-8,y)
+	ctx.arc(x, y, size-8, 0, Math.TAU, true);
+	// ctx.arc(x, y, size, 0, 0, true);
+	ctx.closePath();
+	ctx.fillStyle = 'white'
+	ctx.fill('evenodd')
+	ctx.stroke();
+}
+
 var _drawBlank = function(model, ctx, x, y, size){
 	var slices = [{ num:1, fill:"#bbb" }];
 	_drawSlices(model, ctx, x, y, size, slices, 1);
@@ -1973,12 +1992,13 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				_drawDot(4, s.x, s.y, ctx)
 			} else {
 
-				_drawBlank(model, ctx, s.x, s.y, size)
-				_drawRing(ctx,s.x,s.y,self.size)
+				// _drawBlank(model, ctx, s.x, s.y, size)
+				// _drawRing(ctx,s.x,s.y,self.size)
+				_drawThickRing(ctx,s.x,s.y,self.size)
 				
 				// Face!
 				size = size*2;
-				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+				// ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 		
 				// Number ID
 				var textsize = 20
