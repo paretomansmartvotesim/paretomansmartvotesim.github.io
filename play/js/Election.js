@@ -1287,7 +1287,11 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	}
 	// var outtext = Object.keys(model.candidatesById).map(x => model.icon(x))
 	for (var i in intext) {
-		rbvote_string = rbvote_string.replace(new RegExp(intext[i],"g"),outtext[i])
+		
+		rbvote_string = rbvote_string.replace(new RegExp(intext[i],"g"), (match, $1) => {
+			return match.slice(0,1) + outtext[i]
+		})
+		// rbvote_string = rbvote_string.replace(new RegExp(intext[i],"g"),outtext[i])
 	}
 	rbvote_string = rbvote_string.replace('<th rowspan="5">for</th>',)
 
