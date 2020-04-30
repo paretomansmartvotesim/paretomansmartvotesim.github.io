@@ -620,9 +620,9 @@ function Model(idModel){
 		} else if (self.candidateIconsSet.includes("name") && self.theme != "Nicky") {
 			var c = self.candidatesById[id]
 			// return "<span class='letterBig' style='color:"+c.fill+";'>"+c.name.toUpperCase()+"</span>"
-			return "<span class='letterBig';'>"+c.name.toUpperCase()+"</span>"
+			return "<span class='letterBig'>"+c.name.toUpperCase()+"</span>"
 		} else {
-			return self.candidatesById[id].name.toUpperCase()
+			return "<span class='letterBig'>" + self.candidatesById[id].name.toUpperCase()+"</span>"
 		}
 
 		

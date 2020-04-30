@@ -20,6 +20,7 @@ l.onload = function(assets){
 		Object.assign( model.voters[0],    {x:150, y:150, type: new PluralityVoter(model)} )
 		Object.assign( model.candidates[0],{x: 50, y:125, icon:"square"} )
 		Object.assign( model.candidates[1],{x:250, y:125, icon:"triangle"} )
+		model.theme = "Letters"
 		// INIT
 		model.candidates[0].init()
 		model.candidates[1].init()

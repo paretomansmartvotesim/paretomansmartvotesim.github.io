@@ -754,7 +754,12 @@ function htmlBallot(model,rTitle,textByCandidate) {
 	for(var i=0; i < model.candidates.length; i++) {
 		var c = model.candidates[i]
 		var num = textByCandidate[i]
-		var name = model.icon(c.id) + " <b style='color:"+c.fill+"'>" + c.id.toUpperCase() + "</b>"
+		if (model.theme == "Letters") {
+			// icon is same as name
+			var name = model.icon(c.id) //+ " <b style='color:"+c.fill+"'>" + model.nameUpper(c.id) + "</b>"
+		} else {
+			var name = model.icon(c.id) + " <b style='color:"+c.fill+"'>" + model.nameUpper(c.id) + "</b>"
+		}
 		text += tRow.replace("#num",num).replace("#name",name)	
 	}
 	text += `

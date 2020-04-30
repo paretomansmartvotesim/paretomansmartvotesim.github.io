@@ -565,6 +565,10 @@ function Config(ui, config, initialConfig) {
             }
         }
         self.cleanConfig(c)
+        // overwrite 
+        if (ui.overwriteConfig != undefined) {
+            _addAttributes( c, ui.overwriteConfig )
+        }
         _copyAttributes(config,c)
         _copyAttributes(initialConfig,c)
     
@@ -2996,6 +3000,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     54: "submitTextBallots",
                     55: "showToolbar",
                     56: "rankedVizBoundary",
+                    57: "showDescription",
                 },
             }
         ]
@@ -3016,12 +3021,19 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     function _hideOrShowFeatures() {
+        var noneShow = true
         for (i in ui.menu) {
             if(!config.doFeatureFilter || config.featurelist.includes(i)) {
                 ui.menu[i].choose.dom.hidden = false
+                noneShow = false
             } else {
                 ui.menu[i].choose.dom.hidden = true
             }
+        }
+        if (noneShow) {
+            ui.dom.left.id = "noClass"
+        } else {
+            ui.dom.left.id = "left"
         }
     }
 
@@ -4572,6 +4584,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [
             {name:"sandbox",value:"sandbox",realname:"sandbox",margin:4},
             {name:"ballot",value:"ballot",realname:"ballot",margin:4},
+            {name:"election",value:"election",realname:"election",margin:4},
+            {name:"election-ballot",value:"election-ballot",realname:"election-ballot",margin:0},
         ]
         // self.codebook = [ {
         //     field: "",
@@ -4683,6 +4697,37 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.showDescription = new function () {
+        var self = this
+        self.list = [
+            {name:"on",value:"on",realname:"on",margin:4},
+            {name:"off",value:"off",realname:"off"},
+        ]
+        self.onChoose = function(data){
+            // LOAD
+            var show = data.value
+            config.sandboxsave = (show == "on")
+            // CONFIGURE
+            self.configure()
+        };
+        self.configure = function() {
+            ui.arena.desc.configure()
+        }
+        self.choose = new ButtonGroup({
+            label: "Show Description?", // Sub Menu
+            width: 52,
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            if (config.sandboxsave) {
+                var show = "on"
+            } else {
+                var show = "off"
+            }
+            self.choose.highlight("value", show);
+        }
+    }
 
     // helper
     showMenuItemsIf = function(name,condition) {
@@ -4765,6 +4810,7 @@ function createMenu(ui) {
             "voterIcons",
             "candidateIcons",
             "showToolbar",
+            "showDescription",
             "switcher",
             "gearoff",
         ]],
@@ -4938,6 +4984,7 @@ function createMenu(ui) {
                 ["advanced", [
                     "menuVersion",
                     "doFeatureFilter",
+                    "showDescription",
                     "gearconfig", 
                     "presetconfig",
                 ]],
@@ -5052,7 +5099,14 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         var resetDOM = document.createElement("div");
         resetDOM.id = "reset";
         resetDOM.innerHTML = "reset";
-        resetDOM.onclick = function(){
+        resetDOM.onclick = function(event){
+            // special keypress to get menu back
+            if (event.ctrlKey) {
+                config.doFeatureFilter = false
+                ui.menu.doFeatureFilter.configure()
+                ui.menu.doFeatureFilter.select()
+                return
+            }
             // LOAD INITIAL CONFIG
             cConfig.reset()
             // RESET = CREATE, CONFIGURE, INIT
@@ -5088,7 +5142,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
 		self.init_sandbox = function() {
 			descText.value = initialConfig.description;
 		}
-        self.update = function () {
+        self.configure = function () {
             
             if (config.sandboxsave) {
                 ui.dom.center.style.width = config.arena_size + model.border*2 + "px"
@@ -5121,7 +5175,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         saveDOM.innerHTML = "save:";
         saveDOM.onclick = function(){
             // UPDATE CONFIG //
-            config.sandboxsave = true // this seems to fix a bug
+            // config.sandboxsave = true // this seems to fix a bug
             ui.updateConfig()
             // UPDATE MAIN //
             newURLs = cConfig.save()

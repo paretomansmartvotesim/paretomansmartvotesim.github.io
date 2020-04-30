@@ -3080,7 +3080,7 @@ Election.plurality = function(district, model, options){
 		text = "<span class='small'>";
 		for(var i=0; i<district.candidates.length; i++){
 			var c = district.candidates[i].id;
-			text += c+": "+tally[c];
+			text += model.icon(c)+": "+tally[c];
 			text+=" votes";
 			if(i<district.candidates.length-1) text+=", ";
 		}

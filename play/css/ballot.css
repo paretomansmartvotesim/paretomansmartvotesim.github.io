@@ -7,6 +7,11 @@ BALLOT DESIGN
     /* margin: -10px; */
 	text-align:center;
 }
+.div-election .div-ballot {
+	
+    margin: 0px -10px;
+    padding: 0px;
+}
 
 .div-ballot #ballot{
 
@@ -104,10 +109,11 @@ BALLOT DESIGN
 	border-collapse: collapse;
 }
 .div-ballot #paper table.main{
-	min-width: 240px;
+	width: 220px;
+	
 }
 .div-ballot #paper table.main2{
-	min-width: 220px;
+	/* min-width: 220px; */
 	width: 220px;
 }
 .div-ballot #paper table.num{
@@ -135,11 +141,13 @@ BALLOT DESIGN
 .div-ballot #paper td.main{
 	padding: .2em .6em;
 }
-.div-ballot #paper table.main{
-	margin-left: 20px;
-	margin-right: 20px;
+.div-ballot #paper table.main,
+.div-ballot #paper table.main2{
+	margin-left: 10px;
+	margin-right: 10px;
 	margin-bottom: 20px;
 }
+
 .div-ballot #paper table.main2 th{
 	padding: .6em;
 	background-color: #F0EAD6;
@@ -151,8 +159,8 @@ BALLOT DESIGN
 
 .div-sandbox .div-ballot {
 	/* transform: scale(.5); */
-	font-size: 50%;
-	line-height: 1.2em;
+	font-size: 65%;
+	line-height: 1.1em;
 }
 
 

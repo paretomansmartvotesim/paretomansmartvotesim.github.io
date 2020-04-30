@@ -1301,7 +1301,8 @@ function _lookupPreset(ui) {
 			voterPositions: [
 				[155, 125]
 			],
-			hidegearconfig: true
+			hidegearconfig: true,
+			theme: "Letters",
 
 		}
 		update = function () {
