@@ -66,6 +66,7 @@ Election/Sandbox design:
     padding: 5px;
     background-color: white;
     border: 2px solid #ccc;
+    width: 220px;
 }
 .div-election #caption .small{
 	font-size: 15px;
