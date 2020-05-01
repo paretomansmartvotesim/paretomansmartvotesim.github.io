@@ -19,7 +19,7 @@ Election/Sandbox design:
 	/* float:left; */
     /* min-height: 320px; */
     text-align: left;
-    margin: 10px;
+    margin: 10px 10px 5px 10px;
     display:inline-block;
     vertical-align: top;
 }
@@ -178,7 +178,7 @@ Election/Sandbox design:
 }
 
 #savelink{
-    margin: 5px 0px;
+    margin: 5px 0px 0px 0px;
     width:100%;
 }
 

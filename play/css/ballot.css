@@ -109,14 +109,15 @@ BALLOT DESIGN
 	border-collapse: collapse;
 }
 .div-ballot #paper table.main{
+	padding: 2px;
 	background-color: #fff;
-	width: 220px;
+	width: 160px;
 	
 }
 .div-ballot #paper table.main2{
 	background-color: #fff;
 	/* min-width: 220px; */
-	width: 220px;
+	width: 160px;
 }
 .div-ballot #paper table.num{
     border: 2px solid #ccc;
@@ -129,7 +130,28 @@ BALLOT DESIGN
 	padding-top: 0px;
 }
 .div-ballot #paper td td{
-	padding: .2em;
+	padding: 2px;
+}
+.div-ballot #paper td.nameLabel{
+    vertical-align: middle;
+	font-size: 1.4em;
+	white-space: nowrap;
+}
+.div-ballot #paper td.nameLabel svg{
+    vertical-align: middle;
+}
+.div-ballot #paper td.nameLabel span.nameLabelName{
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: .8em;
+}
+
+.div-ballot #paper td.tallyText{
+	font-size: 1.11em;
+	padding: 2px;
+}
+.div-ballot #paper td.tallyText span.small{
+	font-size: .9em;
 }
 .div-ballot #paper td.num{
 	width: 1em;
@@ -137,32 +159,38 @@ BALLOT DESIGN
 	text-align: center;
 }
 .div-ballot #paper th.main{
-	padding: .6em;
+	padding: 5px;
 	background-color: #ccc;
 }
 .div-ballot #paper td.main{
-	padding: .2em .6em;
+	padding: 5px;
 }
 .div-ballot #paper table.main,
 .div-ballot #paper table.main2{
 	margin-left: 10px;
 	margin-right: 10px;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 .div-ballot #paper table.main2 th{
-	padding: .6em;
+	padding: 5px;
 	background-color: #F0EAD6;
 	color: #302702;
 }
 .div-ballot #paper table.main2 td{
-	padding: .6em;
+	padding: 5px;
 }
 
+.div-ballot #paper table.main th span.small,
+.div-ballot #paper table.main2 th span.small{
+	font-size: .8em;
+	line-height: .8em;
+	font-weight: normal;
+}
 .div-sandbox .div-ballot {
 	/* transform: scale(.5); */
 	font-size: 65%;
-	line-height: 1.1em;
+	line-height: 1.0em;
 }
 
 

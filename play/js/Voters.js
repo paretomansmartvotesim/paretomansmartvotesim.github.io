@@ -190,8 +190,8 @@ function ScoreVoter(model){
 		}
 
 		var rTitle = `
-		<em>Give EACH candidate a score<br>
-		<span class="small">from 0 (hate 'em) to 5 (love 'em)</span></em>
+		Give EACH candidate a score<br>
+		<em><span class="small">from 0 (hate 'em) to 5 (love 'em)</span></em>
 		`
 		text += htmlBallot(model,rTitle,scoreByCandidate)
 		return text
@@ -663,8 +663,8 @@ function ApprovalVoter(model){
 		}
 
 		var rTitle = `
-		<em>Who do you approve of?<br>
-		<span class="small">(pick as MANY as you like)</span></em>
+		Who do you approve of?<br>
+		<em><span class="small">(pick as MANY as you like)</span></em>
 		`
 		text += htmlBallot(model,rTitle,approvedByCandidate)
 		return text
@@ -709,7 +709,7 @@ function GeneralVoter() {
 		<em><span class="small">(how your vote counts)</span></em></th>
 		</tr>
 		<tr>
-		<td>#2</td>
+		<td class="tallyText">#2</td>
 		</tr>
 		</tbody>
 		</table>`.replace("#2",self.textTally(ballot))
@@ -775,7 +775,7 @@ function htmlBallot(model,rTitle,textByCandidate) {
 	</tbody>
 	</table>
 	</td>
-	<td>#name</td>
+	<td class="nameLabel">#name</td>
 	</tr>
 	`		
 	for(var i=0; i < model.candidates.length; i++) {
@@ -785,7 +785,7 @@ function htmlBallot(model,rTitle,textByCandidate) {
 			// icon is same as name
 			var name = model.icon(c.id) //+ " <b style='color:"+c.fill+"'>" + model.nameUpper(c.id) + "</b>"
 		} else {
-			var name = model.icon(c.id) + " <b style='color:"+c.fill+"'>" + model.nameUpper(c.id) + "</b>"
+			var name = model.icon(c.id) + " <span class='nameLabelName' style='color:"+c.fill+"'>" + model.nameUpper(c.id) + "</span>"
 		}
 		text += tRow.replace("#num",num).replace("#name",name)	
 	}
@@ -1273,8 +1273,8 @@ function RankedVoter(model){
 		}
 
 		var rTitle = `
-		<em>Rank in order of your choice:<br>
-		<span class="small">(1=1st choice, 2=2nd choice, etc...)</span></em>
+		Rank in order of your choice:<br>
+		<em><span class="small">(1=1st choice, 2=2nd choice, etc...)</span></em>
 		`
 		text += htmlBallot(model,rTitle,rankByCandidate)
 		return text
@@ -1570,8 +1570,8 @@ function PluralityVoter(model){
 		onePickByCandidate[c.i] = "&#x2714;"
 
 		var rTitle = `
-		<em>Who's your favorite candidate?<br>
-		<span class="small">(pick ONLY one)</span></em>
+		Who's your favorite candidate?<br>
+		<em><span class="small">(pick ONLY one)</span></em>
 		`
 		text += htmlBallot(model,rTitle,onePickByCandidate)
 		return text
