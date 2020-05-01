@@ -225,3 +225,10 @@ function _removeSubnodes(n) {
 		n.removeChild(n.lastChild);
 	}
 }
+
+function _removeClass(element,name) {
+	element.className = element.className.replace(new RegExp(name,"g"), "")
+}
+function _addClass(element,name) {
+	element.className = element.className + " " + name
+}

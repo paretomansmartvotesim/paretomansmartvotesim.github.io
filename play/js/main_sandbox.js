@@ -411,9 +411,12 @@ function bindModel(ui,model,config) {
                     text += model.result.text
                 }
                 if (doOldBallot) {
+                    _removeClass(model.caption,"displayNoneClass")
                     model.caption.innerHTML = text
                 } else {
                     model.caption.innerHTML = ""
+                    _addClass(model.caption,"displayNoneClass")
+                    // model.caption.style.display = "none"
                     divBallot.innerHTML = text
                 }
             }
@@ -3519,11 +3522,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             } else {
                 model.showVoters = true
             }
-            
+
 		    if (config.theme == "Nicky") {
+                model.useBorderColor = true
                 model.drawSliceMethod = "circlesNicky"
                 model.allCan = false
             } else {
+                model.useBorderColor = false
                 model.drawSliceMethod = "barChart"
                 model.allCan = true
             }

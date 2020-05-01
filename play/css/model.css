@@ -38,6 +38,7 @@ THE MAIN MODEL ITSELF
 .div-model .model .interactive{
 	background-size: 100% 100%;
     border: 2px solid #ccc;
+	background-color: white;
 }
 
 .div-model .model .interactive[cursor=grab]{

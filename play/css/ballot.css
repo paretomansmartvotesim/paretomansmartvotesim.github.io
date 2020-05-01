@@ -2,7 +2,7 @@
 BALLOT DESIGN
 **********************/
 .div-ballot {
-	background: #fff;
+    background-color: #f9feff;
 	padding: 10px;
     /* margin: -10px; */
 	text-align:center;
@@ -27,7 +27,7 @@ BALLOT DESIGN
 	color: #302707;
 
 	background-size: 100% 100%;
-	border: 2px solid #fff;
+	border: 2px solid #ccc;
 
 	position: relative;
 	
@@ -109,15 +109,17 @@ BALLOT DESIGN
 	border-collapse: collapse;
 }
 .div-ballot #paper table.main{
+	background-color: #fff;
 	width: 220px;
 	
 }
 .div-ballot #paper table.main2{
+	background-color: #fff;
 	/* min-width: 220px; */
 	width: 220px;
 }
 .div-ballot #paper table.num{
-	border: 3px solid #302702;
+    border: 2px solid #ccc;
 }
 /* .div-ballot #paper table{
 	min-width: unset;

@@ -93,6 +93,7 @@ function Model(idModel){
 		rankedVizBoundary: "atWinner",
 		drawSliceMethod: "barChart", // "circleBunch" or "old"
 		allCan: true,
+		useBorderColor: true,
 	})
 	
 	self.viz = new Viz(self);
@@ -2380,7 +2381,7 @@ function Arena(arenaName, model) {
 		}
 		
 		function setBorderColor() {
-			if (model.result) {
+			if (model.result && model.useBorderColor) {
 				self.canvas.style.borderColor = model.result.color;
 				if (model.yeeon) self.canvas.style.borderColor = "#fff"
 			}

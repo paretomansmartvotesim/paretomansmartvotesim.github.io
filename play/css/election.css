@@ -7,7 +7,8 @@ Election/Sandbox design:
 ************/
 
 .div-election{
-	background-color: #ffffff;
+    background-color: #f9feff;
+    border: 1px solid #ccc;
 	padding: 10px;
     /* margin: -10px; */
 }
@@ -62,6 +63,9 @@ Election/Sandbox design:
     line-height: 1.0em;
     font-size: 23px;
     max-width: 220px;
+    padding: 5px;
+    background-color: white;
+    border: 2px solid #ccc;
 }
 .div-election #caption .small{
 	font-size: 15px;
@@ -278,4 +282,8 @@ Election/Sandbox design:
 svg {
     width: 1em;
     height: 1em;
+}
+
+.displayNoneClass {
+    display:none !important;
 }
