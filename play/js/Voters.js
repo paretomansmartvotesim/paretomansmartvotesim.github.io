@@ -150,10 +150,12 @@ function ScoreVoter(model){
 			if (ballot[cID] == undefined) continue
 			var score = ballot[cID] - self.minscore;
 			leftover -= score;
-			slices.push({
-				num: score,
-				fill: c.fill
-			});
+			if (model.allCan || score > 0) {
+				slices.push({
+					num: score,
+					fill: c.fill
+				});
+			}
 			totalScore += score
 		}
 		totalSlices = totalScore
@@ -169,7 +171,13 @@ function ScoreVoter(model){
 			return;
 		}
 
-		_drawSlices(model, ctx, x, y, size, slices, totalSlices);
+		if (model.drawSliceMethod == "circleBunch") {
+			_drawCircleCollection(model, ctx, x, y, size, slices, totalSlices,self.maxscore);
+		} else if (model.drawSliceMethod == "barChart") {
+			_drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices,self.maxscore);
+		} else {
+			_drawSlices(model, ctx, x, y, size, slices, totalSlices);
+		}
 
 	};
 
@@ -615,11 +623,30 @@ function ApprovalVoter(model){
 		}
 
 		// Draw 'em slices
-		for(var i=0; i<ballot.approved.length; i++){
-			var candidate = model.candidatesById[ballot.approved[i]];
-			slices.push({ num:1, fill:candidate.fill });
+		if (model.allCan) {
+			for(var candidate of model.candidates) {
+				var approved = ballot.approved.includes(candidate.id)
+				if (approved) {
+					slices.push({ num:1, fill:candidate.fill });
+				} else {
+					slices.push({ num:0, fill:candidate.fill });
+				}
+			}
+		} else {
+			for(var i=0; i<ballot.approved.length; i++){
+				var candidate = model.candidatesById[ballot.approved[i]];
+				slices.push({ num:1, fill:candidate.fill });
+			}
 		}
-		_drawSlices(model, ctx, x, y, size, slices, ballot.approved.length);
+		
+
+		if (model.drawSliceMethod == "circleBunch") {
+			_drawCircleCollection(model, ctx, x, y, size, slices, slices.length,self.maxscore);
+		} else if (model.drawSliceMethod == "barChart") {
+			_drawVoterBarChart(model, ctx, x, y, size, slices, slices.length,self.maxscore);
+		} else {
+			_drawSlices(model, ctx, x, y, size, slices, ballot.approved.length);
+		}
 
 	};
 	self.textBallot = function(ballot) {
@@ -1223,10 +1250,14 @@ function RankedVoter(model){
 			}
 	
 		}
-		if (0) {
-			_drawSlices(model, ctx, x, y, size * Math.sqrt(weight), slices, totalSlices);
+		if (model.drawSliceMethod == "barChart") {
+			_drawRankList(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
 		} else {
-			_drawSlices(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
+			if (0) {
+				_drawSlices(model, ctx, x, y, size * Math.sqrt(weight), slices, totalSlices);
+			} else {
+				_drawSlices(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
+			}
 		}
 
 	};
@@ -1554,6 +1585,193 @@ function PluralityVoter(model){
 }
 
 // helper method...
+
+function _drawRankList(model, ctx, x, y, size, slices, totalSlices) {
+	x = x * 2
+	y = y * 2
+	size = size * 2
+	var maxscore = model.candidates.length
+	if (model.allCan) {
+
+		var yaxis = _lineVertical(slices.length, size) // points of main spiral
+	} else {
+		var yaxis = _lineVertical(model.candidates.length, size) // points of main spiral
+	}
+	var sizey = size / model.candidates.length
+	var sizex = size / maxscore
+	var subRects = false
+	_centeredRectStroke(ctx,x,y,size,size,'#888')
+	for(var i in slices){
+		var point = yaxis[i]
+		var slice = slices[i]
+		if (subRects) {
+			// sub collection
+			var xaxis = _lineHorizontal(slice.num, size) // points of yaxis
+			for (var subpoint of xaxis) {
+				xp = x + point[0] + subpoint[0]
+				yp = y + point[1] + subpoint[1] 
+				_centeredRect(ctx, xp, yp, sizex,sizey, slice.fill)
+			}
+		} else {
+			xp = x + point[0]
+			yp = y + point[1]
+			// _drawRing(ctx,xp/2,yp/2,subsize)
+			// _centeredRectStroke(ctx,xp,yp,sizex * slice.num,sizey)
+			// _centeredRect(ctx,xp,yp,sizex * slice.num,sizey,slice.fill)
+			_centeredRect(ctx,xp,yp,size,sizey,slice.fill)
+			// _drawSlices(model, ctx, xp/2, yp/2, subsize, [slice], maxscore)
+		}
+	}
+
+}
+
+function _drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices, maxscore) {
+	x = x * 2
+	y = y * 2
+	size = size * 2
+	if (model.allCan) {
+
+		var xaxis = _lineHorizontal(slices.length, size) // points of main spiral
+	} else {
+		var xaxis = _lineHorizontal(model.candidates.length, size) // points of main spiral
+	}
+	var sizex = size / model.candidates.length
+	var sizey = size / maxscore
+	var subRects = false
+	_centeredRectStroke(ctx,x,y,size,size)
+	for(var i in slices){
+		var point = xaxis[i]
+		var slice = slices[i]
+		if (subRects) {
+			// sub collection
+			var yaxis = _lineVertical(slice.num, size) // points of yaxis
+			for (var subpoint of yaxis) {
+				xp = x + point[0] + subpoint[0]
+				yp = y + point[1] + subpoint[1] 
+				_centeredRect(ctx, xp, yp, sizex,sizey, slice.fill)
+			}
+		} else {
+			xp = x + point[0]
+			yp = y + point[1]
+			// _drawRing(ctx,xp/2,yp/2,subsize)
+			_centeredRectStroke(ctx,xp,yp,sizex,sizey * slice.num)
+			_centeredRect(ctx,xp,yp,sizex,sizey * slice.num,slice.fill)
+			// _drawSlices(model, ctx, xp/2, yp/2, subsize, [slice], maxscore)
+		}
+	}
+}
+
+function _lineHorizontal(num,size) {
+	var points = [];
+	var step = size / num
+	for (var count = 0; count < num; count++) {
+		var x = (count+.5) * step - .5 * size
+		points.push([x,0])
+	}
+	return points
+}
+
+function _lineVertical(num,size) {
+	var points = [];
+	var step = size / num
+	for (var count = 0; count < num; count++) {
+		var y = (count+.5) * step - .5 * size
+		points.push([0,y])
+	}
+	return points
+}
+
+function _centeredRect(ctx, x, y, sizex, sizey, fill) {
+	ctx.fillStyle = fill;
+	ctx.beginPath()
+	ctx.rect(x - sizex * .5, y - sizey * .5, sizex, sizey)
+	ctx.closePath()
+	ctx.fill();
+}
+function _centeredRectStroke(ctx, x, y, sizex, sizey, color) {
+	color = color || 'black'
+	ctx.strokeStyle = color;
+	ctx.lineWidth = 1;
+	ctx.beginPath()
+	ctx.rect(x - sizex * .5, y - sizey * .5, sizex, sizey)
+	ctx.closePath()
+	ctx.stroke();
+}
+
+
+function _drawCircleCollection(model, ctx, x, y, size, slices, totalSlices, maxscore) {
+	x = x * 2
+	y = y * 2
+
+	if (model.allCan) {
+		var mainspiral = _spiral(slices.length, size) // points of main spiral
+	} else {
+		var mainspiral = _spiral(model.candidates.length, size) // points of main spiral
+	}
+	var subsize = size / Math.sqrt(model.candidates.length) // sub spiral is per candidate
+	var subSpirals = false
+	if (subSpirals) {
+		var pointsize = subsize / Math.sqrt(maxscore) // each score gets a point
+		subsize -= pointsize
+	}
+	for(var i in slices){
+		var point = mainspiral[i]
+		var slice = slices[i]
+		if (subSpirals) {
+			// sub collection
+			var subspiral = _spiral(slice.num, subsize) // points of subspiral
+			for (var subpoint of subspiral) {
+				xp = x + point[0] + subpoint[0]
+				yp = y + point[1] + subpoint[1] 
+				_simpleCircle(ctx, xp, yp, pointsize, slice.fill)
+			}
+		} else {
+			xp = x + point[0]
+			yp = y + point[1]
+			_drawRing(ctx,xp/2,yp/2,subsize)
+			_simpleCircle(ctx,xp,yp,subsize,'#ccc')
+			_drawSlices(model, ctx, xp/2, yp/2, subsize, [slice], maxscore)
+		}
+	}
+}
+
+function _simpleCircle(ctx, x, y, size, fill) {
+	ctx.fillStyle = fill;
+	ctx.beginPath()
+	ctx.arc(x, y, size, 0, Math.TAU, false);
+	ctx.closePath()
+	ctx.fill();
+}
+
+function _spiral(num,size) {
+	var points = [];
+	var angle = 0;
+	var _radius = 0;
+	var _radius_norm = 0;
+	var _spread_factor = size * 1
+	var theta = Math.TAU * .5 * (3 - Math.sqrt(5))
+	var center = {x:0,y:0}
+	for (var count = 0; count < num; count++) {
+		angle = theta * count
+		_radius_norm = Math.sqrt((count+.5)/num)
+		_radius = _radius_norm * _spread_factor
+
+		var x = Math.cos(angle)*_radius  + 150 ;
+		var y = Math.sin(angle)*_radius  + 150 ;
+		points.push([x,y]);
+		center.x += x
+		center.y += y
+	}
+	center.x /= num
+	center.y /= num
+	for (var point of points) {
+		point[0] -= center.x
+		point[1] -= center.y
+	}
+	return points
+}
+
+
 var _drawSlices = function(model, ctx, x, y, size, slices, totalSlices){
 
 	// RETINA
@@ -2127,12 +2345,26 @@ function SingleVoter(model){
 		var size = self.size;
 		if (model.voterIcons == "circle") {
 			
-			self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
-			_drawRing(ctx,s.x,s.y,self.size)
-
 			// Face!
-			size = size*2;
-			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+			var scoreTypeMethod =  (model.ballotType == "Score" || model.ballotType == "Approval" || model.ballotType == "Three")
+			if (scoreTypeMethod && model.drawSliceMethod == "circleBunch") {
+
+				_drawRing(ctx,s.x,s.y,self.size)
+				_simpleCircle(ctx,s.x*2,s.y*2,size,'#ccc')
+				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+	
+			} else if (scoreTypeMethod && model.drawSliceMethod == "barChart") {
+				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+			} else if (model.ballotType == "Ranked" && model.drawSliceMethod == "barChart") {
+				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+				size = size*2;
+				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+			} else {
+				_drawRing(ctx,s.x,s.y,self.size)
+				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+				size = size*2;
+				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+			}
 		} else if (model.voterIcons == "top") {
 			var c = _findClosestCan(s.x,s.y,self.district[0],model)
 			_drawCircleFill(s.x,s.y,self.size,c.fill,ctx,model)

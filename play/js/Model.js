@@ -91,6 +91,8 @@ function Model(idModel){
 		showVoters:true,
 		showToolbar: "on",
 		rankedVizBoundary: "atWinner",
+		drawSliceMethod: "barChart", // "circleBunch" or "old"
+		allCan: true,
 	})
 	
 	self.viz = new Viz(self);
@@ -1789,7 +1791,10 @@ function Arena(arenaName, model) {
 		self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
 		// not sure why this doesn't work
 		// self.ctx.fillStyle = "white"
+		// self.ctx.beginPath()
 		// self.ctx.fillRect(0,0,self.canvas.width,self.canvas.height);
+		// self.ctx.closePath()
+		// self.ctx.fill()
 	}
 
 	self.drawHorizontal = function(yLine) {

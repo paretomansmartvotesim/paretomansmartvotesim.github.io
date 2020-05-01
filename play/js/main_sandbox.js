@@ -3519,6 +3519,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
             } else {
                 model.showVoters = true
             }
+            
+		    if (config.theme == "Nicky") {
+                model.drawSliceMethod = "circlesNicky"
+                model.allCan = false
+            } else {
+                model.drawSliceMethod = "barChart"
+                model.allCan = true
+            }
         }
         self.init_sandbox = function() {
             for (var i = 0; i < self.list.length; i++) {

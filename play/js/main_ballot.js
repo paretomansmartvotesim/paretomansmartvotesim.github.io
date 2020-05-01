@@ -325,6 +325,7 @@ function bindBallotModel(ui,model,config) {
 		// LOAD
 		model.size = 250
 		model.border = 2
+		model.ballotType = config.ballotType
 		model.VoterType = window[config.ballotType+"Voter"];
 		model.system = config.system
 		model.newWay = ui.newWay
