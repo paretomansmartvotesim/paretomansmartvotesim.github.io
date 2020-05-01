@@ -91,8 +91,8 @@ function Model(idModel){
 		showVoters:true,
 		showToolbar: "on",
 		rankedVizBoundary: "atWinner",
-		drawSliceMethod: "barChart", // "circleBunch" or "old"
-		allCan: true,
+		drawSliceMethod: "circleNicky", // "circleBunch" or "old"
+		allCan: false,
 		useBorderColor: true,
 	})
 	

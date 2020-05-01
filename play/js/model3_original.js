@@ -25,6 +25,7 @@ l.onload = function(assets){
 		Object.assign( model.candidates[0],{x: 50, y:125, icon:"square"} )
 		Object.assign( model.candidates[1],{x:250, y:125, icon:"triangle"} )
 		Object.assign( model.candidates[2],{x:280, y:280, icon:"hexagon"} )
+		model.ballotConcept = "off"
 		// INIT
 		model.candidates[0].init()
 		model.candidates[1].init()
