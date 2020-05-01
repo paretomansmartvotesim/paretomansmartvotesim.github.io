@@ -166,16 +166,16 @@ function ScoreVoter(model){
 		// });
 		// FILL 'EM IN
 
-		if(totalScore==0){
-			_drawBlank(model, ctx, x, y, size);
-			return;
-		}
 
 		if (model.drawSliceMethod == "circleBunch") {
 			_drawCircleCollection(model, ctx, x, y, size, slices, totalSlices,self.maxscore);
 		} else if (model.drawSliceMethod == "barChart") {
 			_drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices,self.maxscore);
 		} else {
+			if(totalScore==0){
+				_drawBlank(model, ctx, x, y, size);
+				return;
+			}
 			_drawSlices(model, ctx, x, y, size, slices, totalSlices);
 		}
 
@@ -615,12 +615,7 @@ function ApprovalVoter(model){
 	
 	self.drawCircle = function(ctx, x, y, size, ballot){
 
-		// If none, whatever.
 		var slices = [];
-		if(ballot.approved.length==0){
-			_drawBlank(model, ctx, x, y, size);
-			return;
-		}
 
 		// Draw 'em slices
 		if (model.allCan) {
@@ -645,6 +640,10 @@ function ApprovalVoter(model){
 		} else if (model.drawSliceMethod == "barChart") {
 			_drawVoterBarChart(model, ctx, x, y, size, slices, slices.length,self.maxscore);
 		} else {
+			if(ballot.approved.length==0){
+				_drawBlank(model, ctx, x, y, size);
+				return;
+			}
 			_drawSlices(model, ctx, x, y, size, slices, ballot.approved.length);
 		}
 
