@@ -5,10 +5,77 @@
 
 // sanity rules: class creation code cannot read attributes from model.
 
-function ScoreVoter(model){
 
-	var self = this;
+function VoterModel(model,type) {
+	// 	super simple
+	// 	ballot
+	// 	single
+	// 	castBallotType
+	//  drawBallotType
+	//  drawTallyType
+	// 	drawMeType
+	// 	drawMapType
+	// 	will rename to Voter
+	
+	var self = this
+	type = type || 'Plurality'
+
+	var defaults = {
+		ballot: {},
+		crowdType: "single",
+		// castBallotType: "Plurality",
+		// drawBallotType: "Plurality",
+		// drawTallyType: "Plurality",
+		// drawMeType: "Plurality",
+		// drawMapType: "Plurality",
+	}
+	_addAttributes(self,defaults)
+
 	GeneralVoter.call(self,model)
+
+
+	// self.crowd = new VoterCrowd[self.crowdType](model, self)
+
+	self.setType = function(type) { // don't really need this, just a shortcut
+		self.castBallotType = type
+		self.drawBallotType = type
+		self.drawTallyType = type
+		self.drawMeType = type
+		self.drawMapType = type
+		
+		BallotOne[type](model,self)
+
+		// self.castBallot = new CastBallot[self.castBallotType](model, self)
+		// self.drawBallot = new DrawBallot[self.drawBallotType](model, self)
+		// self.drawTally = new DrawTally[self.drawTallyType](model, self)
+		// self.drawMap = new DrawMap[self.drawMapType](model, self)
+		// self.drawMe = new DrawMe[self.drawMeType](model, self)
+
+		// self.castBallot = () => CastBallot[self.castBallotType](model, self)
+		// self.drawBallot = () => DrawBallot[self.drawBallotType](model, self)
+		// self.drawTally = () => DrawTally[self.drawTallyType](model, self)
+		// self.drawMap = () => DrawMap[self.drawMapType](model, self)
+		// self.drawMe = () => DrawMe[self.drawMeType](model, self)
+
+		self.getBallot = CastBallot[self.castBallotType](model, self)
+		self.textBallot = DrawBallot[self.drawBallotType](model, self)
+		self.textTally = DrawTally[self.drawTallyType](model, self)
+		self.drawBG = DrawMap[self.drawMapType](model, self)
+		self.drawCircle = DrawMe[self.drawMeType](model, self)
+	}
+
+	self.setType(type) // Default
+}
+
+var BallotOne = {}
+var CastBallot = {}
+var DrawMap = {}
+var DrawMe = {}
+var DrawBallot = {}
+var DrawTally = {}
+BallotOne.Score = function (model, self) {
+// BallotOne.Score = function (model, voter) {
+	// var self = voter.ballot
 
 	self.maxscore = 5;
 	self.minscore = 0;
@@ -20,9 +87,16 @@ function ScoreVoter(model){
 	} else {
 		self.filledCircles = true // display scores with filled transparent circles rather than unfilled circles.
 	}
-	
+}
 
-	self.getBallot = function(x, y, strategy, iDistrict, i){
+CastBallot.Score = function (model,self) {
+// CastBallot.Score = function (model,voter) {
+	// var x = voter.x
+	// var y = voter.y
+	// var strategy = voter.strategy
+	// var iDistrict = voter.iDistrict
+	// var i = voter.i
+	return function(x, y, strategy, iDistrict, i){
 
 		doStar =  (model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
 		if (model.autoPoll == "Auto" && model.pollResults) {
@@ -49,10 +123,12 @@ function ScoreVoter(model){
 		self.dottedCircle = scoresfirstlast.dottedCircle
 		var scores = scoresfirstlast.scores
 		return scores
-		
-	};
+	}
 
-	self.drawBG = function(ctx, x, y, ballot, iDistrict, k){
+}
+DrawMap.Score = function (model,self) {
+
+	return function(ctx, x, y, ballot, iDistrict, k){
 
 		if (model.ballotConcept == "off") return
 
@@ -136,7 +212,11 @@ function ScoreVoter(model){
 		ctx.globalCompositeOperation = tempComposite
 	}
 
-	self.drawCircle = function(ctx, x, y, size, ballot){
+}
+
+DrawMe.Score = function (model,self) {
+
+	return function(ctx, x, y, size, ballot){
 
 		// There are #Candidates*5 slices
 		// Fill 'em in in order -- and the rest is gray.
@@ -181,7 +261,9 @@ function ScoreVoter(model){
 
 	};
 
-	self.textBallot = function(ballot){
+}
+DrawBallot.Score = function (model,self) {
+	return function(ballot){
 
 		var text = ""
 		var scoreByCandidate = []
@@ -196,7 +278,10 @@ function ScoreVoter(model){
 		text += htmlBallot(model,rTitle,scoreByCandidate)
 		return text
 	}
-	self.textTally = function(ballot){
+
+}
+DrawTally.Score = function (model,self) {
+	return function(ballot){
 		var system = model.system
 		
 		// todo: star preferences
@@ -249,7 +334,13 @@ function ScoreVoter(model){
 		}
 		return text
 	}
+
 }
+
+
+
+
+
 // helper functions for strategies
 
 function utility_function(utility_shape) {
@@ -504,19 +595,30 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 	return {scores:scores, radiusFirst:n , radiusLast:m, dottedCircle:dottedCircle}
 }
 
-function ThreeVoter(model){
-
-	var self = this;
-
-	ScoreVoter.call(self,model)
-
+BallotOne.Three = function (model,self) {
+	BallotOne.Score(model,self)
 	self.maxscore = 2
+	
+}
+CastBallot.Three = function (model,self) {
+	return CastBallot.Score(model,self)
+}
+DrawMap.Three = function (model,self) {
+	return DrawMap.Score(model,self)
 
-	var tempTextBallot = self.textBallot
-	self.textBallot = function(ballot){
-		return tempTextBallot(ballot).replace("5 (love 'em)","2 (love 'em)")
+}
+DrawMe.Three = function (model,self) {
+	return DrawMe.Score(model,self)
+
+}
+DrawBallot.Three = function (model,self) {
+	return function(ballot){
+		var f = DrawBallot.Score(model,self)
+		return f(ballot).replace("5 (love 'em)","2 (love 'em)")
 	}
-	self.textTally = function(ballot){
+}
+DrawTally.Three = function (model,self) {
+	return function(ballot){
 		var text = ""
 		cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
 		if (0){
@@ -585,18 +687,19 @@ function ThreeVoter(model){
 
 }
 
-function ApprovalVoter(model){
 
-	var self = this;
-	GeneralVoter.call(self,model)
-	ScoreVoter.call(self,model)
+BallotOne.Approval = function (model,self) {
+	BallotOne.Score(model,self)
 	self.maxscore = 1
 	self.defaultMax = 200 // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
 
-	self.subGetBallot = self.getBallot
-	self.getBallot = function(x, y, strategy, iDistrict, i){
+	
+}
+CastBallot.Approval = function (model,self) {
+	return function(x, y, strategy, iDistrict, i){
 		
-		var scores = self.subGetBallot(x,y,strategy, iDistrict, i)
+		var subGetBallot = CastBallot.Score(model,self)
+		var scores = subGetBallot(x,y,strategy, iDistrict, i)
 
 		// Anyone close enough. If anyone.
 		var approved = [];
@@ -612,8 +715,12 @@ function ApprovalVoter(model){
 		return { approved: approved };
 
 	};
-	
-	self.drawCircle = function(ctx, x, y, size, ballot){
+}
+DrawMap.Approval = function (model,self) {
+	return DrawMap.Score(model,self)
+}
+DrawMe.Approval = function (model,self) {
+	return function(ctx, x, y, size, ballot){
 
 		var slices = [];
 
@@ -648,7 +755,10 @@ function ApprovalVoter(model){
 		}
 
 	};
-	self.textBallot = function(ballot) {
+
+}
+DrawBallot.Approval = function (model,self) {
+	return function(ballot) {
 		var text = ""
 
 		var approvedByCandidate = []
@@ -668,7 +778,10 @@ function ApprovalVoter(model){
 		text += htmlBallot(model,rTitle,approvedByCandidate)
 		return text
 	}
-	self.textTally = function(ballot){
+
+}
+DrawTally.Approval = function (model,self) {
+	return function(ballot){
 		var text = ""
 		if (self.say) text += "<span class='small' style> Approved </span> <br />" 
 		
@@ -680,8 +793,8 @@ function ApprovalVoter(model){
 		}
 		return text
 	}
-}
 
+}
 function GeneralVoter() {
 	var self = this
 	self.say = false
@@ -799,12 +912,11 @@ function htmlBallot(model,rTitle,textByCandidate) {
 	return text
 }
 
-function RankedVoter(model){
-
-	var self = this;
-	GeneralVoter.call(self,model)
-	
-	self.getBallot = function(x, y, strategy, iDistrict, i){
+BallotOne.Ranked = function (model,self) {
+	// nothing to do
+}
+CastBallot.Ranked = function (model,self) {
+	return function(x, y, strategy, iDistrict, i){
 
 		// Rank the peeps I'm closest to...
 		var rank = [];
@@ -878,8 +990,9 @@ function RankedVoter(model){
 		return { rank:rank };
 
 	};
-
-	self.drawBG = function(ctx, x, y, ballot, iDistrict, i){
+}
+DrawMap.Ranked = function (model,self) {
+	return function(ctx, x, y, ballot, iDistrict, i){
 
 		if (model.ballotConcept == "off") return
 
@@ -1098,7 +1211,7 @@ function RankedVoter(model){
 			ctx.globalCompositeOperation = tempComposite
 			ctx.globalAlpha = temp
 		} 
-		if (model.pairwiseMinimaps == "auto" && self.pickDescription().doPairs) {
+		if (model.pairwiseMinimaps == "auto" && _pickRankedDescription(model).doPairs) {
 			// customization
 			var lineWidth = 1
 			var connectWidth = 1
@@ -1224,8 +1337,9 @@ function RankedVoter(model){
 		}
 
 	};
-
-	self.drawCircle = function(ctx, x, y, size, ballot, weight){
+}
+DrawMe.Ranked = function (model,self) {
+	return function(ctx, x, y, size, ballot, weight){
 
 		if (typeof weight === 'undefined') weight = 1
 		var slices = [];
@@ -1284,8 +1398,9 @@ function RankedVoter(model){
 		}
 
 	};
-
-	self.textBallot = function(ballot) {
+}
+DrawBallot.Ranked = function (model,self) {
+	return function(ballot) {
 		var text = ""
 
 		var rankByCandidate = []
@@ -1302,63 +1417,15 @@ function RankedVoter(model){
 		text += htmlBallot(model,rTitle,rankByCandidate)
 		return text
 	}
-	self.pickDescription = function() {
-		
-		// var onlyPoints = ["Borda"]
-		// var onlyPointsRB = ["Baldwin","Borda"]
-		// var noPreferenceChainRB = ["Black"]
-		// var onlyPreferenceChain = ["IRV","STV"]
-		// var onlyPreferenceChainRB = ["Bucklin","Carey","Coombs","Hare"]
-		// var onlyPairsRB = ["Copeland","Dodgson",]
-		regular = {
-			"IRV": 			{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
-			"Borda": 		{doChain:false, doPairs:false, doPoints:true , message:""},
-			"Minimax": 		{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Schulze": 		{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"RankedPair":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Condorcet":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"STV": 			{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."}
-		}
-			
-		rb = {
-			"Baldwin":	{doChain:true , doPairs:false, doPoints:true , message:"Points are assigned in each elimination round.  In round 1, they are as follows:"},
-			"Black":	{doChain:true , doPairs:true , doPoints:true , message:"These preferences are tallied by pairs. <br /><br /> If there is no Condorcet winner, then borda points are used."},
-			"Borda":	{doChain:false, doPairs:false, doPoints:true , message:""},
-			"Bucklin":	{doChain:false, doPairs:false, doPoints:false, message:"Round 1: only count 1's.  <br /> Round 2: include 1's and 2's.  <br /> Keep including more until approval gets above 50%."},
-			"Carey":	{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
-			"Coombs":	{doChain:true , doPairs:false, doPoints:false, message:"Only tally the bottom choice during elimination rounds."},
-			"Copeland":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Dodgson":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Hare":		{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
-			"Nanson":	{doChain:true , doPairs:false, doPoints:true , message:"Points are assigned in each elimination round.  In round 1, they are as follows:"},
-			"Raynaud":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Schulze":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Simpson":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Small":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
-			"Tideman":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."}
-		}
-		if (model.system=="RBVote") {
-			var pick = rb[model.rbsystem]
-		} else {
-			var pick = regular[model.system]
-		}
-		if (pick == undefined) {
-			pick = {
-				doChain: false,
-				doPairs: false,
-				doPoints: false,
-				message: "Not yet implemented."
-			}
-		}
-		return pick
-	}
-	self.textTally = function(ballot){
+}
+DrawTally.Ranked = function (model,self) {
+	return function(ballot){
 		var system = model.system
 		var rbsystem = model.rbsystem
 		// todo: star preferences
 		var text = ""
 
-		var pick = self.pickDescription()
+		var pick = _pickRankedDescription(model)
 
 		if(system=="RBVote" && rbsystem=="Bucklin") {
 			// put a 1 in each ranking
@@ -1481,15 +1548,61 @@ function RankedVoter(model){
 		return text
 	}
 }
-
-function PluralityVoter(model){
-
-	var self = this;
-	GeneralVoter.call(self,model)
-
+function _pickRankedDescription(model) {
+		
+	// var onlyPoints = ["Borda"]
+	// var onlyPointsRB = ["Baldwin","Borda"]
+	// var noPreferenceChainRB = ["Black"]
+	// var onlyPreferenceChain = ["IRV","STV"]
+	// var onlyPreferenceChainRB = ["Bucklin","Carey","Coombs","Hare"]
+	// var onlyPairsRB = ["Copeland","Dodgson",]
+	regular = {
+		"IRV": 			{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
+		"Borda": 		{doChain:false, doPairs:false, doPoints:true , message:""},
+		"Minimax": 		{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Schulze": 		{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"RankedPair":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Condorcet":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"STV": 			{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."}
+	}
+		
+	rb = {
+		"Baldwin":	{doChain:true , doPairs:false, doPoints:true , message:"Points are assigned in each elimination round.  In round 1, they are as follows:"},
+		"Black":	{doChain:true , doPairs:true , doPoints:true , message:"These preferences are tallied by pairs. <br /><br /> If there is no Condorcet winner, then borda points are used."},
+		"Borda":	{doChain:false, doPairs:false, doPoints:true , message:""},
+		"Bucklin":	{doChain:false, doPairs:false, doPoints:false, message:"Round 1: only count 1's.  <br /> Round 2: include 1's and 2's.  <br /> Keep including more until approval gets above 50%."},
+		"Carey":	{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
+		"Coombs":	{doChain:true , doPairs:false, doPoints:false, message:"Only tally the bottom choice during elimination rounds."},
+		"Copeland":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Dodgson":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Hare":		{doChain:true , doPairs:false, doPoints:false, message:"Only tally the top choice during elimination rounds."},
+		"Nanson":	{doChain:true , doPairs:false, doPoints:true , message:"Points are assigned in each elimination round.  In round 1, they are as follows:"},
+		"Raynaud":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Schulze":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Simpson":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Small":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."},
+		"Tideman":	{doChain:false, doPairs:true , doPoints:false, message:"These preferences are tallied by pairs."}
+	}
+	if (model.system=="RBVote") {
+		var pick = rb[model.rbsystem]
+	} else {
+		var pick = regular[model.system]
+	}
+	if (pick == undefined) {
+		pick = {
+			doChain: false,
+			doPairs: false,
+			doPoints: false,
+			message: "Not yet implemented."
+		}
+	}
+	return pick
+}
+BallotOne.Plurality = function (model,self) {
 	self.maxscore = 1; // just for autopoll
-
-	self.getBallot = function(x, y, strategy, iDistrict, i){
+}
+CastBallot.Plurality = function (model,self) {
+	return function(x, y, strategy, iDistrict, i){
 
 		if (model.autoPoll == "Auto" && model.pollResults) {
 			// if (model.autoPoll == "Auto" && (typeof model.pollResults !== 'undefined')) {
@@ -1532,8 +1645,9 @@ function PluralityVoter(model){
 		return { vote:closest.id };
 
 	};
-
-	self.drawBG = function(ctx, x, y, ballot, iDistrict, i){
+}
+DrawMap.Plurality = function (model,self) {
+	return function(ctx, x, y, ballot, iDistrict, i){
 		
 		if (model.ballotConcept == "off") return
 
@@ -1557,8 +1671,9 @@ function PluralityVoter(model){
 		ctx.stroke();
 
 	};
-
-	self.drawCircle = function(ctx, x, y, size, ballot){
+}
+DrawMe.Plurality = function (model,self) {
+	return function(ctx, x, y, size, ballot){
 
 		// RETINA
 		x = x*2;
@@ -1582,8 +1697,9 @@ function PluralityVoter(model){
 		if (model.yeeon) {ctx.stroke();}
 
 	};
-
-	self.textBallot = function(ballot) {
+}
+DrawBallot.Plurality = function (model,self) {
+	return function(ballot) {
 		var text = ""
 		var onePickByCandidate = []
 		for(var i = 0; i < model.candidates.length; i++) {
@@ -1599,14 +1715,14 @@ function PluralityVoter(model){
 		text += htmlBallot(model,rTitle,onePickByCandidate)
 		return text
 	}
-	self.textTally = function(ballot){
+}
+DrawTally.Plurality = function (model,self) {
+	return function(ballot){
 		var text = ""
 		if (self.say) text += "<span class='small' style> One vote for </span> " 
 		return text + model.icon(ballot.vote)
 	}
-
 }
-
 // helper method...
 
 function _drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight) {
@@ -2041,7 +2157,16 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	
 	// CONFIGURE DEFAULTS
 	_fillVoterDefaults(self)
-	self.type = new PluralityVoter(model)
+	// self.type = new PluralityVoter(model)
+	self.voterModel = new VoterModel(model,'Plurality')
+
+	self.setType = function(newType){
+		
+		// var VoterType = window[newType+"Voter"];
+		// self.type = new VoterType(model);
+		self.voterModel = new VoterModel(model,newType)
+		// self.voterModel.setType(newType)
+	}
 
 	
 	self.init = function () {
@@ -2209,9 +2334,6 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		
 	}
 
-	self.setType = function(newType){
-		self.type = new newType(model);
-	};
 
 	self.img = new Image();  // use the face
 	self.img.src = "play/img/voter_face.png";
@@ -2249,9 +2371,9 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			
 			// choose the threshold of voters for polls
 			var r_11 = Math.random() * 2 - 1 
-			self.type.poll_threshold_factor = _erfinv(r_11) * .2 + .5
+			self.voterModel.poll_threshold_factor = _erfinv(r_11) * .2 + .5
 			var iDistrict = self.district[i]
-			var ballot = self.type.getBallot(x, y, strategy, iDistrict, i);
+			var ballot = self.voterModel.getBallot(x, y, strategy, iDistrict, i);
 			self.ballots.push(ballot);
 			self.weights.push(1);
 		}
@@ -2293,7 +2415,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 					temp = ctx.globalAlpha
 					ctx.globalAlpha = .2
 					for(var i=0; i<self.points.length; i++){
-						self.type.drawBG(ctx, xs[i], ys[i], self.ballots[i], self.district[i], i)
+						self.voterModel.drawBG(ctx, xs[i], ys[i], self.ballots[i], self.district[i], i)
 					}
 					ctx.globalAlpha = temp
 				}
@@ -2305,7 +2427,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 						var c = _findClosestCan(xs[i],ys[i],self.district[i],model)
 						_drawCircleFill(xs[i],ys[i],circlesize,c.fill,ctx,model)
 					} else {
-						self.type.drawCircle(ctx, xs[i], ys[i], circlesize, self.ballots[i], self.weights[i]);
+						self.voterModel.drawCircle(ctx, xs[i], ys[i], circlesize, self.ballots[i], self.weights[i]);
 					}
 				}
 			}
@@ -2325,7 +2447,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		var s = model.arena.modelToArena(self)
 		var x = s.x*2;
 		var y = s.y*2;
-		//self.type.drawCircle(ctx, self.x, self.y, size, ballot);
+		//self.voterModel.drawCircle(ctx, self.x, self.y, size, ballot);
 		if(self.highlight) var temp = ctx.globalAlpha
 		if(self.highlight) ctx.globalAlpha = 0.8
 		self.drawBackAnnotation(x,y,ctx)
@@ -2409,10 +2531,15 @@ function SingleVoter(model){
 	
 	// CONFIGURE DEFAULTS
 	_fillVoterDefaults(self)
-	self.type = new PluralityVoter(model);
+	// self.type = new PluralityVoter(model);
+	self.voterModel = new VoterModel(model,'Plurality')
 
 	self.setType = function(newType){
-		self.type = new newType(model);
+		
+		// var VoterType = window[newType+"Voter"];
+		// self.type = new VoterType(model);
+		self.voterModel = new VoterModel(model,newType)
+		// self.voterModel.setType(newType)
 	};
 
 	self.init = function () {
@@ -2430,8 +2557,8 @@ function SingleVoter(model){
 		
 	}
 	self.update = function(){
-		self.type.poll_threshold_factor = .6
-		self.ballot = self.type.getBallot(self.x, self.y, self.firstStrategy, self.district, 0);
+		self.voterModel.poll_threshold_factor = .6
+		self.ballot = self.voterModel.getBallot(self.x, self.y, self.firstStrategy, self.district, 0);
 		self.ballots = [self.ballot]
 	};
 
@@ -2444,7 +2571,7 @@ function SingleVoter(model){
 	};
 	self.draw0 = function(ctx) {
 		var s = model.arena.modelToArena(self)
-		if (model.ballotVis) self.type.drawBG(ctx, s.x, s.y, self.ballot, self.district[0], 0);
+		if (model.ballotVis) self.voterModel.drawBG(ctx, s.x, s.y, self.ballot, self.district[0], 0);
 	}
 	self.draw1 = function(ctx) {
 		var s = model.arena.modelToArena(self)
@@ -2477,19 +2604,19 @@ function SingleVoter(model){
 
 				_drawRing(ctx,s.x,s.y,size)
 				_simpleCircle(ctx,s.x*2,s.y*2,size,'#ccc')
-				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+				self.voterModel.drawCircle(ctx, s.x, s.y, size, self.ballot);
 	
 			} else if (scoreTypeMethod && model.drawSliceMethod == "barChart") {
-				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+				self.voterModel.drawCircle(ctx, s.x, s.y, size, self.ballot);
 			} else if (model.ballotType == "Ranked" && model.drawSliceMethod == "barChart") {
-				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+				self.voterModel.drawCircle(ctx, s.x, s.y, size, self.ballot);
 				if (model.system != "Borda") {
 					size = size*2;
 					ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 				}
 			} else {
 				_drawRing(ctx,s.x,s.y,size)
-				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
+				self.voterModel.drawCircle(ctx, s.x, s.y, size, self.ballot);
 				size = size*2;
 				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 			}

@@ -4,7 +4,6 @@ function main_ballot(ui){
 	var ballotType = preset.config.ballotType
 	var presetName = ui.presetName
 
-	var VoterType = window[ballotType+"Voter"];
 	var BallotType = window[ballotType+"Ballot"];
 
 	var l = new Loader()
@@ -33,7 +32,7 @@ function main_ballot(ui){
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
 			// CONFIGURE
-			Object.assign( model.voters[0],    {x: 81, y: 92, type: new VoterType(model), 
+			Object.assign( model.voters[0],    {x: 81, y: 92, type: new oneVoter(model,ballotType), 
 				firstStrategy: "zero strategy. judge on an absolute scale."} )
 			Object.assign( model.candidates[0],{x: 41, y: 50, icon:"square"} )
 			Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )
@@ -47,7 +46,7 @@ function main_ballot(ui){
 			model.voters[0].init()
 			// UPDATE
 			if(ballotType=="Score") {
-				model.voters[0].type.minscore = 1
+				model.voters[0].voterModel.minscore = 1
 			}
 			model.arena.redistrict()
 			model.update()

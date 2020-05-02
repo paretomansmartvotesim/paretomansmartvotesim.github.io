@@ -404,7 +404,7 @@ function bindModel(ui,model,config) {
                 if (doOldBallot) ballot.update(model.voters[0].ballot);
                 if (doOldBallot) text += "<br />"
                 text += '<div class="div-ballot">'
-                text += model.voters[0].type.toTextV(model.voters[0].ballot);
+                text += model.voters[0].voterModel.toTextV(model.voters[0].ballot);
                 text += '</div>'
                 if (0) {
                     text += "<br /><br />"
@@ -1573,7 +1573,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.ballotType = config.ballotType || s.ballotType
 
             model.BallotType = window[model.ballotType+"Ballot"];
-            model.VoterType = window[model.ballotType+"Voter"];
 
             var doTarena = model.checkGotoTarena()
             if (autoSwitchDim) {
@@ -1590,13 +1589,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.tarena.canvas.hidden = true
             }
             model.voters.map(v=>{
-                v.setType( model.VoterType ); // calls "new VoterType(model)"
+                v.setType( model.ballotType ); // calls "new VoterType(model)"
             }) 
             model.pollResults = undefined
 
             
             if (model.ballotType == "Ranked") {
-                var goPairwise = model.voters[0].type.pickDescription().doPairs
+                var goPairwise = _pickRankedDescription(model).doPairs
             } else {
                 var goPairwise = false
             }
@@ -1991,7 +1990,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         x_voters: config.voterGroupX[i],
                         disk: config.voterGroupDisk[i]
                     })
-                    model.voters[i].setType( model.VoterType );		
+                    model.voters[i].setType( model.ballotType );		
                 }
             } else if (config.voterPositions) {
                 var num = model.voters.length
@@ -2005,7 +2004,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         snowman: config.snowman,
                         x_voters: config.x_voters
                     })
-                    model.voters[i].setType( model.VoterType );	
+                    model.voters[i].setType( model.ballotType );	
                 }
             } else {
                 var num = model.voters.length
@@ -2054,7 +2053,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         snowman: config.snowman,
                         x_voters: config.x_voters
                     })
-                    model.voters[i].setType( model.VoterType );	
+                    model.voters[i].setType( model.ballotType );	
 
                 }
             }

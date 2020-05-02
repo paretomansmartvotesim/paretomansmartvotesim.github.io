@@ -62,7 +62,7 @@ function Model(idModel){
 		yeeobject: undefined,
 		yeeon: false,		
 		//
-		VoterType: PluralityVoter,
+		// VoterType: PluralityVoter,
 		election: Election.plurality,
 		BallotType: PluralityBallot,
 		ballotType: "Plurality",
@@ -857,7 +857,7 @@ function Arena(arenaName, model) {
 					if (a > max) max = a
 				}
 				n.vid = max + 1
-				n.setType(model.VoterType)
+				n.setType(model.ballotType)
 				n.firstStrategy = model.firstStrategy
 				n.secondStrategy = model.secondStrategy
                 n.spread_factor_voters = model.spread_factor_voters

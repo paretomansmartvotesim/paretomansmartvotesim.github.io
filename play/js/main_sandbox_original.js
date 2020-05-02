@@ -137,12 +137,12 @@ function sandbox(ui){
 			self.name = "systems"
 
 			self.list = [
-				{name:"FPTP", voter:PluralityVoter, election:Election.plurality, margin:4},
-				{name:"IRV", voter:RankedVoter, election:Election.irv},
-				{name:"Borda", voter:RankedVoter, election:Election.borda, margin:4},
-				{name:"Condorcet", voter:RankedVoter, election:Election.condorcet},
-				{name:"Approval", voter:ApprovalVoter, election:Election.approval, margin:4},
-				{name:"Score", voter:ScoreVoter, election:Election.score}
+				{name:"FPTP", ballotType:"Plurality", election:Election.plurality, margin:4},
+				{name:"IRV", ballotType:"Ranked", election:Election.irv},
+				{name:"Borda", ballotType:"Ranked", election:Election.borda, margin:4},
+				{name:"Condorcet", ballotType:"Ranked", election:Election.condorcet},
+				{name:"Approval", ballotType:"Approval", election:Election.approval, margin:4},
+				{name:"Score", ballotType:"Score", election:Election.score}
 			];
 			self.listByName = function() {
 				var votingSystem = self.list.filter(function(system){
@@ -162,10 +162,8 @@ function sandbox(ui){
 				var s = self.listByName()
 				model.election = s.election
 				model.system = config.system;
-				// model.VoterType = self.expVoterType()
 				for(var i=0;i<model.voters.length;i++){
-					// model.voters[i].type = new (self.expVoterType())
-					model.voters[i].setType( s.voter ); // calls "new VoterType(model)"
+					model.voters[i].setType( s.ballotType ); // calls "new VoterType(model)"
 				}
 			}
 			self.select = function() {
@@ -218,7 +216,7 @@ function sandbox(ui){
 							num:(4-num),
 							x:pos[0], y:pos[1]
 						})
-						model.voters[i].setType( ui.menu.systems.listByName(config).voter ); // calls "new VoterType(model)"
+						model.voters[i].setType( ui.menu.systems.listByName(config).ballotType ); // calls "new VoterType(model)"
 					}
 				} else {
 					var voterPositions;
@@ -239,7 +237,7 @@ function sandbox(ui){
 							disk:(4-num),
 							x:pos[0], y:pos[1]
 						})
-						model.voters[i].setType( ui.menu.systems.listByName(config).voter ); // calls "new VoterType(model)"
+						model.voters[i].setType( ui.menu.systems.listByName(config).ballotType ); // calls "new VoterType(model)"
 					}
 				}
 			}

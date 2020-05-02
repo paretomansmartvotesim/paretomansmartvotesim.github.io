@@ -2906,7 +2906,7 @@ Election.quotaScore = function(district, model, options){
 	var seats = model.seats
 	var winners = []
 	var winnersIndexes = []
-	var maxscore = model.voters[0].type.maxscore
+	var maxscore = model.voters[0].voterModel.maxscore
 	
 	if (options.sidebar) {
 		var text = ""
@@ -3395,7 +3395,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 				if (electiontype == "irv"){
 					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally.firstpicks[c]) + ". ") + " "
 				} else {
-					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voters[0].type.maxscore) + ".") + " "
+					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voters[0].voterModel.maxscore) + ".") + " "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
 					//polltext += "<br>"
 				}
