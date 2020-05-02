@@ -2468,13 +2468,14 @@ function SingleVoter(model){
 		if(self.highlight) ctx.globalAlpha = 0.8
 		// Circle!
 		var size = self.size;
+		if (model.arena.mouse.pressed && model.arena.mouse.dragging == self) size *= 2
 		if (model.voterIcons == "circle") {
 			
 			// Face!
 			var scoreTypeMethod =  (model.ballotType == "Score" || model.ballotType == "Approval" || model.ballotType == "Three")
 			if (scoreTypeMethod && model.drawSliceMethod == "circleBunch") {
 
-				_drawRing(ctx,s.x,s.y,self.size)
+				_drawRing(ctx,s.x,s.y,size)
 				_simpleCircle(ctx,s.x*2,s.y*2,size,'#ccc')
 				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
 	
@@ -2487,14 +2488,14 @@ function SingleVoter(model){
 					ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 				}
 			} else {
-				_drawRing(ctx,s.x,s.y,self.size)
+				_drawRing(ctx,s.x,s.y,size)
 				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
 				size = size*2;
 				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 			}
 		} else if (model.voterIcons == "top") {
 			var c = _findClosestCan(s.x,s.y,self.district[0],model)
-			_drawCircleFill(s.x,s.y,self.size,c.fill,ctx,model)
+			_drawCircleFill(s.x,s.y,size,c.fill,ctx,model)
 		} else if (model.voterIcons == "dots") {
 			_drawDot(2, s.x, s.y, ctx)
 		} 

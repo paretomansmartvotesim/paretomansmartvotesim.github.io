@@ -65,11 +65,6 @@ function DraggableManager(arena,model){
 	// Helper: is Over anything?
 	self.isOver = function(){
 		// make a list
-		if (model.yeeon && model.yeeobject) { // Choose the yee object as a priority
-			if(model.yeeobject.hitTest(arena.mouse.x, arena.mouse.y,arena)){
-				return model.yeeobject;
-			}
-		}
 		var lowTie = []
 		var middleTie = []
 		var highTie = []
@@ -81,7 +76,7 @@ function DraggableManager(arena,model){
 			if(d.hitTest(arena.mouse.x, arena.mouse.y,arena)){
 				if (d.isVoterCenter && arena.mouse.dragging && arena.mouse.dragging.isModify) continue // skip the voterCenter if we are the mod gear.
 				// low priority
-				if ( (d.isModify && d.active) || d.isright || d.isUp) {
+				if ( (d.isModify && d.active) || d.isright || d.isUp || ( model.yeeon && d == model.yeeobject ) ) {
 					highTie.push(d)
 					checkmiddle = false
 					checklow = false

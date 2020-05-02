@@ -1288,7 +1288,7 @@ function Arena(arenaName, model) {
 			var v = model.voters[i]
 			self.draggables.push(v);
 		}
-		if(model.voterCenter) self.draggables.push(model.voterCenter)
+		if(model.voterCenter && model.voters.length > 1) self.draggables.push(model.voterCenter)
 		if (doControls) {
 			self.draggables.push(self.modify)
 			if (self.modify.active) {
@@ -2286,7 +2286,8 @@ function Arena(arenaName, model) {
 		}
 		
 		function drawVoterCenterAndAnotherYeeObject() {	
-			var oneVoter = (model.voters.length == 1 && model.voters[0].points.length == 1)
+			var oneVoter = (model.voters.length == 1)
+			// var oneVoter = (model.voters.length == 1 && model.voters[0].points.length == 1)
 			var isCenter = (typeof model.voterCenter !== 'undefined')
 			if (isCenter && ! oneVoter) {
 				model.voterCenter.draw(self.ctx)
