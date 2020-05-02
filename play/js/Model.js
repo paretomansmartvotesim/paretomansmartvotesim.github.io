@@ -94,6 +94,8 @@ function Model(idModel){
 		drawSliceMethod: "circleNicky", // "circleBunch" or "old"
 		allCan: false,
 		useBorderColor: true,
+		pairOrderByCandidate: true,
+		squareFirstChoice: true, 
 	})
 	
 	self.viz = new Viz(self);

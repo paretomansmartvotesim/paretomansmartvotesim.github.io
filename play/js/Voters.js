@@ -1242,15 +1242,39 @@ function RankedVoter(model){
 
 			var totalSlices = (n*(n+1))/2; // num of slices!
 	
+			var orderByCandidate = (model.drawSliceMethod == "barChart" && model.system == "Borda")
+			if (orderByCandidate) var slicesById = {}
+			
 			for(var i=0; i<ballot.rank.length; i++){
 				var rank = ballot.rank[i];
 				var candidate = model.candidatesById[rank];
-				slices.push({ num:(n-i), fill:candidate.fill });
+				var slice = { num:(n-i), fill:candidate.fill }
+				slices.push(slice);
+				if (orderByCandidate) slicesById[candidate.id] = slice
 			}
-	
+			
+			if (orderByCandidate) {
+				for(var [i,c] of Object.entries(model.district[0].candidates)){
+					slices[i] = slicesById[c.id]
+				}
+			}
 		}
 		if (model.drawSliceMethod == "barChart") {
-			_drawRankList(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
+			if (model.system == "Borda") {
+				_drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices,n);
+			} else if (model.system == "IRV") {
+				if (model.squareFirstChoice) {
+					_drawIRVStack(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
+				} else {
+					_drawRankList(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
+				}
+			} else {
+				if (model.pairOrderByCandidate) {
+					_drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight)
+				} else { // order by rank
+					_drawRankList(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
+				}
+			}
 		} else {
 			if (0) {
 				_drawSlices(model, ctx, x, y, size * Math.sqrt(weight), slices, totalSlices);
@@ -1585,19 +1609,93 @@ function PluralityVoter(model){
 
 // helper method...
 
+function _drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight) {
+	x = x * 2
+	y = y * 2
+	size = size * 2
+	// background stroke
+	_centeredRectStroke(ctx,x,y,size,size)
+
+	var n = model.candidates.length
+	pairtable = {}
+	for (var i=0; i < n; i++) {
+		var c = model.candidates[i]
+		pairtable[c.id] = {}
+		pairtable[c.id][c.id] = c.id
+	}
+	for (var i = 0; i < n; i++) {
+		var cidWin = ballot.rank[i]
+		for (var k = i + 1; k < n; k++) {
+			var cidLose = ballot.rank[k]
+			pairtable[cidWin][cidLose] = cidWin
+			pairtable[cidLose][cidWin] = cidWin
+		}
+	}
+	// now draw table
+	var sizeSquare = size / n
+	var yaxis = _lineVertical(n,size)
+	var xaxis = _lineHorizontal(n,size)
+	for (var i = 0; i < n; i++) {
+		for (var k = 0; k < n; k++) {
+			ci = model.candidates[i]
+			ck = model.candidates[k]
+			var cid = pairtable[ci.id][ck.id]
+			var fill = model.candidatesById[cid].fill
+			var xp = x + xaxis[i][0]
+			var yp = y + yaxis[k][1]
+			_centeredRect(ctx,xp,yp,sizeSquare,sizeSquare,fill)
+		}
+	}
+
+
+
+}
+
+function _drawIRVStack(model, ctx, x, y, size, slices, totalSlices) {
+	x = x * 2
+	y = y * 2
+	size = size * 2
+	var maxscore = model.candidates.length
+
+	//draw outline
+	_centeredRectStroke(ctx,x,y+size*.25,size,size*1.5)
+
+	// draw top slice
+	_centeredRect(ctx,x,y,size,size,slices[0].fill)
+	slices.shift() // remove top slice
+
+	var yaxis = _lineVertical( slices.length, size * .5 ) 
+
+	var sizeSquare = size/2  / (maxscore-1)
+	for(var i in slices){
+		var point = yaxis[i]
+		var slice = slices[i]
+		var xp = x
+		var yp = y + .75 * size + point[1]
+		_centeredRect(ctx,xp,yp,size,sizeSquare,slice.fill)
+	}
+	// _centeredRectStroke(ctx,x,y*1.25,size,size*1.5,'#888')
+	// _centeredRectStroke(ctx,x,y,size,size,'#888')
+
+}
+
 function _drawRankList(model, ctx, x, y, size, slices, totalSlices) {
 	x = x * 2
 	y = y * 2
 	size = size * 2
 	var maxscore = model.candidates.length
-	if (model.allCan) {
 
+	if (model.system == "IRV") { // not used anymore
+		var extra = slices.length / 3
+		for (var i = 0; i < extra; i++) slices.unshift(slices[0])
+	}
+
+	if (model.allCan) {
 		var yaxis = _lineVertical(slices.length, size) // points of main spiral
 	} else {
 		var yaxis = _lineVertical(model.candidates.length, size) // points of main spiral
 	}
-	var sizey = size / model.candidates.length
-	var sizex = size / maxscore
+	var sizeSquare = size / maxscore
 	var subRects = false
 	_centeredRectStroke(ctx,x,y,size,size,'#888')
 	for(var i in slices){
@@ -1607,17 +1705,31 @@ function _drawRankList(model, ctx, x, y, size, slices, totalSlices) {
 			// sub collection
 			var xaxis = _lineHorizontal(slice.num, size) // points of yaxis
 			for (var subpoint of xaxis) {
-				xp = x + point[0] + subpoint[0]
-				yp = y + point[1] + subpoint[1] 
-				_centeredRect(ctx, xp, yp, sizex,sizey, slice.fill)
+				var xp = x + point[0] + subpoint[0]
+				var yp = y + point[1] + subpoint[1] 
+				_centeredRect(ctx, xp, yp, sizeSquare,sizeSquare, slice.fill)
 			}
 		} else {
-			xp = x + point[0]
-			yp = y + point[1]
+			var xp = x + point[0]
+			var yp = y + point[1]
 			// _drawRing(ctx,xp/2,yp/2,subsize)
-			// _centeredRectStroke(ctx,xp,yp,sizex * slice.num,sizey)
-			// _centeredRect(ctx,xp,yp,sizex * slice.num,sizey,slice.fill)
-			_centeredRect(ctx,xp,yp,size,sizey,slice.fill)
+			// _centeredRectStroke(ctx,xp,yp,sizeSquare * slice.num,sizeSquare)
+			if (model.system == "IRV") { // not used anymore
+				_centeredRect(ctx,xp,yp,size,sizeSquare,slice.fill)
+			} else {
+					
+				xp = x + point[1]
+				yp = y + .5 * size
+				var sx = sizeSquare
+				var sy = sizeSquare * slice.num
+				
+				_bottomRect(ctx,xp,yp,sx,sy,slice.fill)
+				xp = x + .5 * size
+				yp = y + point[1]
+				var sx = sizeSquare * slice.num
+				var sy = sizeSquare
+				_rightRect(ctx,xp,yp,sx,sy,slice.fill)
+			}
 			// _drawSlices(model, ctx, xp/2, yp/2, subsize, [slice], maxscore)
 		}
 	}
@@ -1684,6 +1796,20 @@ function _centeredRect(ctx, x, y, sizex, sizey, fill) {
 	ctx.fillStyle = fill;
 	ctx.beginPath()
 	ctx.rect(x - sizex * .5, y - sizey * .5, sizex, sizey)
+	ctx.closePath()
+	ctx.fill();
+}
+function _bottomRect(ctx, x, y, sizex, sizey, fill) {
+	ctx.fillStyle = fill;
+	ctx.beginPath()
+	ctx.rect(x - sizex * .5, y - sizey, sizex, sizey)
+	ctx.closePath()
+	ctx.fill();
+}
+function _rightRect(ctx, x, y, sizex, sizey, fill) {
+	ctx.fillStyle = fill;
+	ctx.beginPath()
+	ctx.rect(x - sizex, y - sizey * .5, sizex, sizey)
 	ctx.closePath()
 	ctx.fill();
 }
@@ -2356,8 +2482,10 @@ function SingleVoter(model){
 				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
 			} else if (model.ballotType == "Ranked" && model.drawSliceMethod == "barChart") {
 				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
-				size = size*2;
-				ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+				if (model.system != "Borda") {
+					size = size*2;
+					ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+				}
 			} else {
 				_drawRing(ctx,s.x,s.y,self.size)
 				self.type.drawCircle(ctx, s.x, s.y, size, self.ballot);
