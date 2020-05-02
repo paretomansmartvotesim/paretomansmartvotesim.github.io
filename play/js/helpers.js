@@ -2,10 +2,11 @@
 Math.TAU = Math.PI*2;
 
 
-function _drawStroked(text, x, y, textsize, ctx) {
-	_drawStrokedColor(text, x, y, textsize, 4, 'white', ctx, false)
+function _drawStroked(text, x, y, textsize, ctx, textAlign) {
+	_drawStrokedColor(text, x, y, textsize, 4, 'white', ctx, false,textAlign)
 }
-function _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
+function _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend,textAlign) {
+	textAlign = textAlign || "center"
 	ctx.save()
 	ctx.font = textsize + "px Sans-serif"
 	ctx.lineWidth = lw;

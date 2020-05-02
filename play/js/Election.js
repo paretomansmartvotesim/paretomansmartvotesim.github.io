@@ -4164,11 +4164,11 @@ function _drawBars(iDistrict, arena, model, round) {
 
 	// labels
 	if (rowFunction == "rounds") {
-		_drawStroked("Votes by Round",70,150,40,arena.ctx)
+		_drawStroked("Votes by Round",10,150,40,arena.ctx,"start")
 	} else {
-		_drawStroked("Votes",70,150,40,arena.ctx)
+		_drawStroked("Votes",10,150,40,arena.ctx,"start")
 	}
-	_drawStroked("Power",70,480,40,arena.ctx)
+	_drawStroked("Power",10,480,40,arena.ctx,"start")
 	
 }
 
