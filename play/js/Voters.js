@@ -2281,7 +2281,7 @@ function VoterSet(model) {
 					x:  points[k][0] + xGroup,
 					y:  points[k][1] + yGroup,
 					b: [],
-					district: voterGroup.district[k]
+					iDistrict: voterGroup.voterPeople[k].iDistrict,
 				}
 				for (var m = 0; m < model.candidates.length; m++) {
 					v.b[m] = 0 // zero out all the counts
@@ -2370,13 +2370,6 @@ function VoterCrowd(model) {
 			voterPerson.y = y
 		}
 	}
-	self.setDistrict = function() {
-		for(var i=0; i<self.points.length; i++){
-			var voterPerson = self.voterPeople[i]
-			var iDistrict = self.district[i]
-			voterPerson.iDistrict = iDistrict
-		}	
-	}
 	self.updateBallots = function() {
 		for(var voterPerson of self.voterPeople){	
 			var ballot = self.voterModel.castBallot(voterPerson)
@@ -2404,8 +2397,6 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.updateVoterSet()
 
 		self.strategyPick()
-
-		self.setDistrict()
 
 		self.updateBallots()
 
@@ -2797,8 +2788,6 @@ function SingleVoter(model){
 		var voterPerson = self.voterPeople[0]
 
 		voterPerson.strategy = self.firstStrategy
-
-		self.setDistrict()
 
 		self.updateBallots()
 	};

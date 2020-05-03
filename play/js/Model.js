@@ -1701,7 +1701,7 @@ function Arena(arenaName, model) {
 
 			// assign
 			var d =  Math.floor(i * factor)
-			v.district = d
+			v.iDistrict = d
 			
 			// fill district[] with info on voters.
 			model.district[d].voters.push(v)
@@ -1734,13 +1734,10 @@ function Arena(arenaName, model) {
 				model.district[i].upperBound = borders[i]
 			}
 		}
-		// put voters into new districts
-		for (var i = 0; i < model.voters.length; i++) {
-			model.voters[i].district = []
-		}
+		// store district id with voters,
 		for (var i = 0; i < vs.length; i++) {
 			var v = vs[i]
-			model.voters[v.iGroup].district[v.iPoint] = v.district
+			model.voters[v.iGroup].voterPeople[v.iPoint].iDistrict = v.iDistrict
 		}
 
 		self.redistrictCandidates()
@@ -1762,7 +1759,7 @@ function Arena(arenaName, model) {
 		for (var i = 0; i < model.nDistricts; i++) {
 			var uB = model.district[i].upperBound
 			if (c.y < uB) {
-				c.district = i
+				c.iDistrict = i
 				break
 			}
 		}
@@ -1778,15 +1775,15 @@ function Arena(arenaName, model) {
 		// assign candidates to districts' lists
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i]
-			model.district[c.district].candidates.push(c)
-			model.district[c.district].candidatesById[c.id] = c
+			model.district[c.iDistrict].candidates.push(c)
+			model.district[c.iDistrict].candidatesById[c.id] = c
 		}
 
 		// assign frontrunners to districts' lists
 		for(var i=0; i<model.preFrontrunnerIds.length; i++){
 			var cid = model.preFrontrunnerIds[i]
 			var c = model.candidatesById[cid]
-			model.district[c.district].preFrontrunnerIds.push(cid)
+			model.district[c.iDistrict].preFrontrunnerIds.push(cid)
 		}
 	}
 

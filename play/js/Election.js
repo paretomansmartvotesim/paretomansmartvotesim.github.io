@@ -3680,7 +3680,7 @@ function _drawBars(iDistrict, arena, model, round) {
 
 	var v = model.getSortedVoters()
 	// get only the sorted voters for this district.
-	v = v.filter(x => x.district == iDistrict)
+	v = v.filter(x => x.iDistrict == iDistrict)
 	var v2 = []
 	// draw only the district's voters
 	model.districtIndexOfVoter = []
