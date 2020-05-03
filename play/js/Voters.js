@@ -2197,8 +2197,10 @@ function VoterPerson(model,voterModel) {
 		xArena: undefined,
 		yArena: undefined,
 		strategy: undefined,
+		iPoint: undefined,
+		iGroup: undefined,
+		iAll: undefined,
 		iDistrict: undefined,
-		i: undefined,
 		ballot: undefined,
 		weight: undefined,
 		// ballotType: voterModel.type,
@@ -2208,6 +2210,8 @@ function VoterPerson(model,voterModel) {
 
 function VoterSet(model) {
 	var self = this
+	self.allVoters = undefined
+	self.totalVoters = undefined
 	// self.crowds = [] // not ready yet
 	// self.districts = []
 	self.newCrowd = function() {
@@ -2215,7 +2219,34 @@ function VoterSet(model) {
 		// self.crowds.push({voterPeople:voterPeople})
 		return voterPeople
 	}
-	
+	self.init = function() {
+		// list voters
+		// Information about where to find the voters in the groups AKA model.voters[]
+		self.allVoters = []
+		var j = 0
+		for (var i = 0; i < model.voters.length; i++) {
+			var n = model.voters[i].points.length
+			for (var k = 0; k < n; k++) {
+				var voterPerson = model.voters[i].voterPeople[k]
+				voterPerson.iGroup = i
+				voterPerson.iAll = j
+				// voterPerson.iPont = k
+				self.allVoters.push(voterPerson)
+				j++
+			}
+		}
+		self.totalVoters = self.allVoters.length
+	}
+
+	self.getAllVoters = function() {
+		// a shallow copy of self.allVoters
+		var copyAll = []
+		for (var voterPerson of self.allVoters) {
+			copyAll.push(voterPerson)
+		}
+		return copyAll
+
+	}
 	self.getBallotsDistrict = function(district){
 		var ballots = [];
 		for(var i=0; i<district.voters.length; i++){
@@ -2321,6 +2352,30 @@ function VoterSet(model) {
 		return vs
 	}
 
+
+	self.getAllVoterInfo = function() {
+		
+		// list voters
+		// The district contains information about where to find the voters in the groups AKA model.voters[]
+		var vs = []
+		var j = 0
+		for (var i = 0; i < model.voters.length; i++) {
+			var voterGroup = model.voters[i]
+			var points = voterGroup.points
+			var yGroup = voterGroup.y
+			for (var k = 0; k < points.length; k++) {
+				var v = {
+					iGroup: i,
+					iAll: j,
+					iPoint: k,
+					y: points[k][1] + yGroup
+				}
+				j++
+				vs.push(v)
+			}
+		}
+	}
+
 }
 
 function VoterCrowd(model) {
@@ -2354,10 +2409,13 @@ function VoterCrowd(model) {
 		self.voterPeople.length = 0
 		for(var i=0; i<self.points.length; i++){
 			var voterPerson = new VoterPerson(model,self.voterModel)
-			voterPerson.i = i
+			voterPerson.iPoint = i
 			voterPerson.weight = 1
 			self.voterPeople.push(voterPerson)
 		}
+		
+		model.voterSet.init()
+		self.updateVoterSet()
 	}
 	self.updateVoterSet = function() {
 

@@ -1665,58 +1665,42 @@ function Arena(arenaName, model) {
 			}
 		}
 
-		// list voters
-		// The district contains information about where to find the voters in the groups AKA model.voters[]
-		var vs = []
-		var j = 0
-		for (var i = 0; i < model.voters.length; i++) {
-			var voterGroup = model.voters[i]
-			var points = voterGroup.points
-			var yGroup = voterGroup.y
-			for (var k = 0; k < points.length; k++) {
-				var v = {
-					iGroup: i,
-					iAll: j,
-					iPoint: k,
-					y: points[k][1] + yGroup
-				}
-				j++
-				vs.push(v)
-			}
-		}
+		// new sorted list of all voters
+		// still refers to original voterPerson objects.
+		var voterPeopleSorted = model.voterSet.getAllVoters() 
+		voterPeopleSorted.sort(function(a,b){return a.y - b.y})
 
-		// sort voters
-		vs.sort(function(a,b){return a.y - b.y})
-
-		// make equal assignments
-		var totalVoters = vs.length
-		var factor = model.nDistricts / totalVoters
+		// assign voters equally to districts, and make lists of voters in districts
+		var factor = model.nDistricts / model.voterSet.totalVoters
 		var oldDistrict = 0
-		var oldy = 0
-		var firsty = [0]
+		var oldy = 0 // boundary starts here
+		var firsty = [oldy]
 		var lasty = []
-		model.indexOfSortedVoterInDistrict = []
-		for (var i = 0; i < vs.length; i++) {
-			var v = vs[i]
+		for (var i = 0; i < voterPeopleSorted.length; i++) {
+			var voterPerson = voterPeopleSorted[i]
 
 			// assign
 			var d =  Math.floor(i * factor)
-			v.iDistrict = d
+			voterPerson.iDistrict = d  // store district id with voters,
 			
-			// fill district[] with info on voters.
-			model.district[d].voters.push(v)
-			model.indexOfSortedVoterInDistrict[i] = model.district[d].voters.length 
+			// not used.. but we could refer to a voter's order of assignment to a district
+			// voterPerson.iPointWithinDistrict = model.district[d].voters.length 
+
+			// fill district[] with references to voters.
+			model.district[d].voters.push(voterPerson)
 
 			// fill district borders for use with candidates
+			var y = voterPerson.y
 			if (oldDistrict != d) {
 				oldDistrict =  d
-				firsty.push(v.y)
-				lasty.push(v.y)
+				firsty.push(y)
+				lasty.push(y)
 			}
-			oldy = v.y
+			oldy = y
 		}
 		lasty.push(oldy)
 
+		// calculate district borders
 		var borders = []
 		for (var i = 0; i < model.nDistricts - 1; i++) {
 			var middle = ( firsty[i+1] + lasty[i] ) * .5
@@ -1733,11 +1717,6 @@ function Arena(arenaName, model) {
 			} else {
 				model.district[i].upperBound = borders[i]
 			}
-		}
-		// store district id with voters,
-		for (var i = 0; i < vs.length; i++) {
-			var v = vs[i]
-			model.voters[v.iGroup].voterPeople[v.iPoint].iDistrict = v.iDistrict
 		}
 
 		self.redistrictCandidates()
