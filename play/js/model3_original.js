@@ -21,7 +21,7 @@ l.onload = function(assets){
 		model.candidates.push(new Candidate(model))
 		model.candidates.push(new Candidate(model))
 		// CONFIGURE
-		Object.assign( model.voters[0],    {x:155, y:125, type: new oneVoter(model,"Plurality")} )
+		Object.assign( model.voters[0],    {x:155, y:125} )
 		Object.assign( model.candidates[0],{x: 50, y:125, icon:"square"} )
 		Object.assign( model.candidates[1],{x:250, y:125, icon:"triangle"} )
 		Object.assign( model.candidates[2],{x:280, y:280, icon:"hexagon"} )

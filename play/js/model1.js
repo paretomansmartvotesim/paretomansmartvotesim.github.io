@@ -20,7 +20,7 @@ l.onload = function(assets){
     model.candidates.push(new Candidate(model))
     model.candidates.push(new Candidate(model))
     // CONFIGURE
-    Object.assign( model.voters[0],    {x:125, y:200, type: new oneVoter(model,"Plurality")} )
+    Object.assign( model.voters[0],    {x:125, y:200} )
     Object.assign( model.candidates[0],{x: 50, y:125, icon:"square"} )
     Object.assign( model.candidates[1],{x:250, y:125, icon:"triangle"} )
     model.theme = "Letters"
@@ -34,7 +34,7 @@ l.onload = function(assets){
   model.onDraw = function(){
     if (model.voters.length == 0) return
     if (model.voters[0].voterGroupType == "GaussianVoters") return
-    var id = model.voters[0].ballot.vote;
+    var id = model.voters[0].voterPeople[0].ballot.vote;
     var color = model.candidatesById[id].fill;
     var text = "VOTES FOR <b style='color:"+color+"'>"+model.nameUpper(id)+"</b>";
     model.caption.innerHTML = text;

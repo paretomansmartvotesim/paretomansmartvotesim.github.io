@@ -156,6 +156,9 @@ function sandbox(ui){
 				// CONFIGURE
 				self.configure()
 				// UPDATE
+				for(var i=0;i<model.voters.length;i++){
+					model.voters[i].init()
+				}
 				model.update();
 			};
 			self.configure = function() {
@@ -163,7 +166,7 @@ function sandbox(ui){
 				model.election = s.election
 				model.system = config.system;
 				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].setType( s.ballotType ); // calls "new VoterType(model)"
+					model.voters[i].typeVoterModel = s.ballotType
 				}
 			}
 			self.select = function() {
@@ -216,7 +219,7 @@ function sandbox(ui){
 							num:(4-num),
 							x:pos[0], y:pos[1]
 						})
-						model.voters[i].setType( ui.menu.systems.listByName(config).ballotType ); // calls "new VoterType(model)"
+						model.voters[i].typeVoterModel = ui.menu.systems.listByName(config).ballotType // needs init
 					}
 				} else {
 					var voterPositions;
@@ -237,7 +240,7 @@ function sandbox(ui){
 							disk:(4-num),
 							x:pos[0], y:pos[1]
 						})
-						model.voters[i].setType( ui.menu.systems.listByName(config).ballotType ); // calls "new VoterType(model)"
+						model.voters[i].typeVoterModel = ui.menu.systems.listByName(config).ballotType // needs init
 					}
 				}
 			}

@@ -401,10 +401,11 @@ function bindModel(ui,model,config) {
         if (config.oneVoter) {
             if (model.voters[0].voterGroupType == "SingleVoter") {
                 var text = ""
-                if (doOldBallot) ballot.update(model.voters[0].ballot);
+                if (doOldBallot) ballot.update(model.voters[0].voterPeople[0].ballot);
                 if (doOldBallot) text += "<br />"
                 text += '<div class="div-ballot">'
-                text += model.voters[0].voterModel.toTextV(model.voters[0].ballot);
+                // text += model.voters[0].voterModel.toTextV(model.voters[0].voterPeople[0].ballot);
+                text += model.voters[0].voterModel.toTextV(model.voters[0].voterPeople[0]);
                 text += '</div>'
                 if (0) {
                     text += "<br /><br />"
@@ -1549,6 +1550,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 ui.menu.dimensions.onChoose({name:model.dimensions}) 
                 ui.menu.dimensions.select()
             }
+            for (var voter of model.voters) {
+                voter.init()
+            }
             model.update();
             ui.menu_update()
         };
@@ -1588,9 +1592,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
             } else {
                 model.tarena.canvas.hidden = true
             }
-            model.voters.map(v=>{
-                v.setType( model.ballotType ); // calls "new VoterType(model)"
-            }) 
+            for (var voter of model.voters) {
+                voter.typeVoterModel = model.ballotType // needs init
+            }
             model.pollResults = undefined
 
             
@@ -1990,7 +1994,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         x_voters: config.voterGroupX[i],
                         disk: config.voterGroupDisk[i]
                     })
-                    model.voters[i].setType( model.ballotType );		
+                    model.voters[i].typeVoterModel = model.ballotType // needs init	
                 }
             } else if (config.voterPositions) {
                 var num = model.voters.length
@@ -2004,7 +2008,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         snowman: config.snowman,
                         x_voters: config.x_voters
                     })
-                    model.voters[i].setType( model.ballotType );	
+                    model.voters[i].typeVoterModel = model.ballotType // needs init
                 }
             } else {
                 var num = model.voters.length
@@ -2053,7 +2057,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         snowman: config.snowman,
                         x_voters: config.x_voters
                     })
-                    model.voters[i].setType( model.ballotType );	
+                    model.voters[i].typeVoterModel = model.ballotType // needs init
 
                 }
             }

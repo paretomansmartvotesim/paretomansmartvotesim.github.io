@@ -12,6 +12,7 @@ function Model(idModel){
 
 	// CREATE DATA STRUCTURE
 	self.voters = [];
+	self.voterSet = new VoterSet(self)
 	self.candidates = [];
 	self.dom = document.createElement("div");
 	self.arena = new Arena("arena",self)
@@ -186,7 +187,7 @@ function Model(idModel){
 	// Update!
 	self.onUpdate = function(){}; // TO IMPLEMENT
 	self.getSortedVoters = function() {
-		var v = _getVoterArray(self)
+		var v = self.voterSet.getVoterArray()
 		var x = v.map( (d,i) => v[self.orderOfVoters[i]] )
 		return x
 	}
@@ -245,7 +246,7 @@ function Model(idModel){
 		
 		if (self.checkGotoTarena()) // find order of voters
 		{
-			var v = _getVoterArray(self)
+			var v = self.voterSet.getVoterArray()
 			if (self.system == "STV") {
 				for (var voter of v) {
 					var newb = []
@@ -668,7 +669,7 @@ function Model(idModel){
 	self.updateVC = function() {
 		
 		// make candidates in the positions of the voters
-		var vs = _getVoterArrayXY(self)
+		var vs = self.voterSet.getVoterArrayXY()
 		self.candidates = []
 		self.preFrontrunnerIds = []
 		for (var k = 0; k < vs.length; k ++) {
@@ -857,7 +858,7 @@ function Arena(arenaName, model) {
 					if (a > max) max = a
 				}
 				n.vid = max + 1
-				n.setType(model.ballotType)
+				n.typeVoterModel = model.ballotType // needs init
 				n.firstStrategy = model.firstStrategy
 				n.secondStrategy = model.secondStrategy
                 n.spread_factor_voters = model.spread_factor_voters
@@ -1351,7 +1352,7 @@ function Arena(arenaName, model) {
 	function _closestVoterIndex(d,model) { // returns where the candidate should be in the sorted list of voters
 		closest = 0
 		min = Infinity
-		var a = _getVoterArray(model)
+		var a = model.voterSet.getVoterArray()
 		for (var i = 0; i < a.length; i++) {
 			v = a[model.orderOfVoters[i]]
 			var dx = d.x - v.x
@@ -2302,7 +2303,11 @@ function Arena(arenaName, model) {
 				// unless it covers the one voter
 				if (! covering ) {
 
-					model.yeeobject.draw2(self.ctx,self)
+					if (model.yeeobject.isCandidate) {
+						model.yeeobject.draw(self.ctx,self)
+					} else {
+						model.yeeobject.draw2(self.ctx,self)
+					}
 				}
 			}
 		}

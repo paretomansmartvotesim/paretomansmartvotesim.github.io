@@ -79,7 +79,7 @@ Election.star = function(district, model, options){
 	}
 	frontrunners.sort(function(a,b){return tally[b]-tally[a]})
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 	var aWins = 0;
 	var bWins = 0;
 	for(var k=0; k<ballots.length; k++){
@@ -142,7 +142,7 @@ Election.star = function(district, model, options){
 
 Election.three21 = function(district, model, options){
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(district,model,options,"score")
 	
@@ -159,7 +159,7 @@ Election.three21 = function(district, model, options){
 	var finalists = semifinalists.slice(0,3);
 	finalists.sort(function(a,b){return tallies[0][a]-tallies[0][b]})
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 	var aWins = 0;
 	var bWins = 0;
 	for(var k=0; k<ballots.length; k++){
@@ -280,7 +280,7 @@ Election.condorcet = function(district, model, options){
 	text += "<span class='small'>";
 	text += "<b>who wins each one-on-one?</b><br>";
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	// Create the WIN tally
 	var tally = {};
@@ -414,7 +414,7 @@ Election.schulze = function(district, model, options){ // Pairs of candidates ar
 		text += "<b>who had the strongest wins, one-on-one?</b><br>";
 	}
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	// Create the WIN tally
 	var tally = {};
@@ -726,7 +726,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 		text += "<b>who had the strongest wins, one-on-one?</b><br>";
 	}
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	// Create the WIN tally
 	var tally = {};
@@ -906,7 +906,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 
 				for(var j=0; j<district.voters.length; j++){
 					var v = district.voters[j]
-					model.voters[v.iGroup].weights[v.iPoint] = weightcopy[j][ai][bi]
+					model.voters[v.iGroup].voterPeople[v.iPoint].weight = weightcopy[j][ai][bi]
 				}
 
 
@@ -1003,7 +1003,7 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 		text += "<b>who had the strongest wins, one-on-one?</b><br>";
 	}
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	// Create the WIN tally
 	var tally = {};
@@ -1258,7 +1258,7 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 
 	var text = "<span class='small'>";
 
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	rbvote.setreturnstring() // tell rbvote that we might want return strings (unless we're not doing the sidebar)
 	rbvote.readballots(ballots,district,model)
@@ -1316,7 +1316,7 @@ Election.rrv = function(district, model, options){
 		var text = ""
 		var history = {}
 		history.rounds = []
-		var v =  _getVoterArray(model)
+		var v =  model.voterSet.getVoterArray()
 		history.v = v
 		history.seats = numreps
 		history.maxscore = maxscore
@@ -1324,7 +1324,7 @@ Election.rrv = function(district, model, options){
 	}
 
 	var invmaxscore = 1/maxscore
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 	var ballotweight = []
 	var ballotsum = []
 	for(var i=0; i<ballots.length; i++){
@@ -1459,7 +1459,7 @@ Election.rav = function(district, model, options){
 		var text = ""
 		var history = {}
 		history.rounds = []
-		var v =  _getVoterArray(model)
+		var v =  model.voterSet.getVoterArray()
 		history.v = v
 		history.seats = numreps
 		history.maxscore = maxscore
@@ -1467,7 +1467,7 @@ Election.rav = function(district, model, options){
 	}
 
 	var invmaxscore = 1/maxscore
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 	var ballotweight = []
 	var ballotsum = []
 	for(var i=0; i<ballots.length; i++){
@@ -1653,7 +1653,7 @@ Election.irv = function(district, model, options){
 		var lastlosers = []
 		var losers = []
 	}
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	var text = "";
 	if (options.sidebar) text += "<span class='small'>";
@@ -1678,7 +1678,7 @@ Election.irv = function(district, model, options){
 		// var vt = []
 		// for (var i=0; i<model.voters.length; i++) {
 		// 	vt[i]=[]
-		// 	for (varj=0; j < model.voters[i].ballots.length; j++)
+		// 	for (varj=0; j < model.voters[i].voterPeople.length; j++)
 		// 	vt[i][j] = []
 		// 	Object.create(model.voters[i].ballots) // new copy
 		// }
@@ -1983,7 +1983,7 @@ Election.stv = function(district, model, options){
 		var text = ""
 		var history = {}
 		history.rounds = []
-		var v =  _getVoterArray(model)
+		var v =  model.voterSet.getVoterArray()
 		history.v = v
 		history.seats = numreps
 		history.maxscore = 5
@@ -2011,7 +2011,7 @@ Election.stv = function(district, model, options){
 	}
 	var loserslist = []
 	var winnerslist = []
-	var ballots = _getBallots(district, model);	
+	var ballots = model.voterSet.getBallotsDistrict(district)	
 	var ballotweight = []
 	for(var i=0; i<ballots.length; i++){
 		ballotweight[i] = 1
@@ -2129,7 +2129,7 @@ Election.stv = function(district, model, options){
 			// 3. Remove winner from candidates
 
 			candidates.splice(candidates.indexOf(winner), 1); // remove from candidates...
-			// var ballots = _getBallots(district, model);
+			// var ballots = model.voterSet.getBallotsDistrict(district)
 			for(var i=0; i<ballots.length; i++){
 				var rank = ballots[i].rank;
 				if (rank[0] === winner) {
@@ -2436,7 +2436,7 @@ Election.quotaMinimax = function(district, model, options){
 		var text = ""
 		var history = {}
 		history.rounds = []
-		var v =  _getVoterArray(model)
+		var v =  model.voterSet.getVoterArray()
 		history.v = v
 		history.seats = numreps
 		history.maxscore = 5
@@ -2458,7 +2458,7 @@ Election.quotaMinimax = function(district, model, options){
 		candidates.push(district.candidates[i].id);
 	}
 	var winnerslist = []
-	var ballots = _getBallots(district, model);	
+	var ballots = model.voterSet.getBallotsDistrict(district)	
 	var oldballots = _jcopy(ballots)
 	var ballotweight = []
 	var numcan = district.candidates.length
@@ -2775,7 +2775,7 @@ Election.quotaMinimax = function(district, model, options){
 
 Election.quotaApproval = function(district, model, options){
 	
-	var v = _getVoterArray(model)
+	var v = model.voterSet.getVoterArray()
 
 	var seats = model.seats
 	var winners = []
@@ -2901,7 +2901,7 @@ Election.quotaApproval = function(district, model, options){
 
 Election.quotaScore = function(district, model, options){
 	
-	var v = _getVoterArray(model)
+	var v = model.voterSet.getVoterArray()
 
 	var seats = model.seats
 	var winners = []
@@ -3264,7 +3264,8 @@ function _getBallots(district, model){
 	var ballots = [];
 	for(var i=0; i<district.voters.length; i++){
 		var v = district.voters[i]
-		var b = model.voters[v.iGroup].ballots[v.iPoint]
+		var b = model.voters[v.iGroup].voterPeople[v.iPoint].ballot
+		// var b = model.voters[v.iGroup].ballots[v.iPoint]
 		ballots = ballots.concat(b);
 	}
 	return ballots;
@@ -3429,7 +3430,7 @@ var _tally = function(district, model, tallyFunc){
 	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
 	
 	// Count 'em up
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 	for(var i=0; i<ballots.length; i++){
 		tallyFunc(tally, ballots[i]);
 	}
@@ -3490,7 +3491,7 @@ var _tally_primary = function(district, model, tallyFunc){
 		district.candidates = caninprimary[j]	
 		if (district.candidates.length == 0) district.candidates = oldcandidates // workaround
 		model.voters[j].update()
-		var ballots = model.voters[j].ballots
+		var ballots = model.voterSet.getBallotsCrowdAndDistrict(j,district)
 		for(var i=0; i<ballots.length; i++){
 			tallyFunc(tally, ballots[i]);
 		}
@@ -3511,7 +3512,7 @@ var _tally_i = function(district, model, tallyFunc){
 	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
 
 	// Count 'em up
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 	for(var i=0; i<ballots.length; i++){
 		tallyFunc(tally, ballots[i], i);
 	}
@@ -3532,7 +3533,7 @@ var _tallies = function(district, model, levels){
 	}
 
 	// Count 'em up
-	var ballots = _getBallots(district, model);
+	var ballots = model.voterSet.getBallotsDistrict(district)
 	for(var i=0; i<ballots.length; i++){
 		var ballot = ballots[i]
 		for(var candidate in ballot){
@@ -4171,86 +4172,6 @@ function _drawBars(iDistrict, arena, model, round) {
 	_drawStroked("Power",10,480,40,arena.ctx,"start")
 	
 }
-
-
-
-function _getVoterArray(model) {
-	// returns an array of all the voters and their distinguishing info
-
-	var vs = []
-	for (var i = 0; i < model.voters.length; i++) {
-		var voterGroup = model.voters[i]
-		var points = voterGroup.points
-		var xGroup = voterGroup.x
-		var yGroup = voterGroup.y
-		var ballots = voterGroup.ballots
-		for (var k = 0; k < points.length; k++) {
-			var v = {
-				x:  points[k][0] + xGroup,
-				y:  points[k][1] + yGroup,
-				b: [],
-				district: voterGroup.district[k]
-			}
-			for (var m = 0; m < model.candidates.length; m++) {
-				v.b[m] = 0 // zero out all the counts
-			}
-			
-			if (model.ballotType == "Approval") { // not yet fully functional TODO
-				
-				var ballot = ballots[k].approved
-				for (var n = 0; n < ballot.length; n++) {
-					var id = ballot[n]
-					var index = model.candidatesById[id].i
-					v.b[index] = 1
-				}
-				vs.push(v)
-			} else if (model.ballotType == "Score") {
-				var ballot = ballots[k]
-				for (var n = 0; n < model.candidates.length; n++) {
-					var id = model.candidates[n].id
-					v.b[n] = ballot[id]
-				}
-				vs.push(v)
-			} else if (model.ballotType == "Ranked" && model.system == "STV") {
-				var ballot = ballots[k]
-				for (var n=0; n<ballot.rank.length; n++) {
-					var cid = ballot.rank[n]
-					var ci = model.candidatesById[cid].i
-					// v.b[ci] = n+1
-					v.b[n] = ci
-				}
-				vs.push(v)
-				
-			} else {
-				vs.push(v)
-			}
-		}
-	}
-	return vs
-}
-
-
-
-function _getVoterArrayXY(model) {
-	// returns an array of all the voters and their distinguishing info
-
-	var vs = []
-	for (var i = 0; i < model.voters.length; i++) {
-		var voterGroup = model.voters[i]
-		var points = voterGroup.points
-		var xGroup = voterGroup.x
-		var yGroup = voterGroup.y
-		for (var k = 0; k < points.length; k++) {
-			var v = {
-				x:  points[k][0] + xGroup,
-				y:  points[k][1] + yGroup
-			}
-			vs.push(v)
-		}
-	}
-	return vs
-}
-
 
 function _percentileToX(percentile,model) {
 	var v = model.getSortedVoters()

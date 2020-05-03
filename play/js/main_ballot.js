@@ -344,7 +344,7 @@ function bindBallotModel(ui,model,config) {
 		Object.assign( model.candidates[0],{x: 41, y: 50, icon:"square"} )
 		Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )
 		Object.assign( model.candidates[2],{x:216, y:216, icon:"hexagon"} )
-		Object.assign( model.voters[0],    {x: 81, y: 92, type: new oneVoter(model,model.ballotType),
+		Object.assign( model.voters[0],    {x: 81, y: 92, typeVoterModel: model.ballotType,
 			firstStrategy: config.firstStrategy,
 			preFrontrunnerIds: config.preFrontrunnerIds} )
 		model.preFrontrunnerIds = config.preFrontrunnerIds;
@@ -376,11 +376,7 @@ function bindBallotModel(ui,model,config) {
 		
 		
 		if (model.voters.length == 0) return
-		if (model.voters[0].voterGroupType == "GaussianVoters") {
-			var ballot = model.voters[0].ballot[0] // just pick the first ballot to show
-		} else {
-			var ballot = model.voters[0].ballot
-		}
+		var ballot = model.voters[0].voterPeople[0].ballot // just pick the first ballot to show
 		if (model.newWay) {
 			// onDraw
 		} else {
@@ -407,7 +403,7 @@ function bindBallotModel(ui,model,config) {
 		if (model.voters.length == 0) return
 		if (model.voters[0].voterGroupType == "GaussianVoters") return
 		if (model.newWay) {
-			var text = model.voters[0].voterModel.toTextH(model.voters[0].ballot);
+			var text = model.voters[0].voterModel.toTextH(model.voters[0].voterPeople[0].ballot);
 			if ( ready ) {
 
 				// 2 : replace the Placeholder

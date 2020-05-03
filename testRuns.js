@@ -13,7 +13,7 @@ var e = [
     ]],
     ["tests", [ 
         ["testPreset","testPreset.html"],
-        ["test","test.html"],
+        ["test (Layout)","test.html"],
         ["testBallot","testBallot.html"],
         ["try","try.html"],
         ["play/examples/election1","play/examples/election1.html"],
@@ -83,8 +83,11 @@ var e = [
         ["borda linear","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8lVXOOaztONnsZyBu2x5KuxIVhUWiokIIvh3HU4RKVeVge_zIeJLP0Idxmkg1kvA6Tkzm1eYRU6zJnGpI0fU6Bmq1A8XkMMXcNysxt5hliCy1eZp_vczmldYrYexjSGHUGNT9bNMs_f9YbbFMH6-OZYabmXozQ7YimSGvkFhicpjDGL5X4Xl5n7ttd1y63bzd7-bu9Lh0p_3L2yoEqwJvSjBgThnGeFIya6yaqY5y7xGT38p2C5vBGE4AbYyYwRguiAZE1RukvUujKeSwsHeKIAs6YnMmin5aaUYS86Se9yXXNPV_tef6RJeaNYivIbluTH5Durw-ZaeYCl4a66TqoPYeKZZRiKJYRiGKQluFKIopOvhNClFyDwNpM-MbQdqsWNeIZIzIYJDxLAUMCnoL5HzYHA7L8f7jdba_cLd5eZp34esHuhl9mhQDAAA"],
         ["bimodal QuotaScore","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA5VTQW4bMQz8iqEzEYiUKGn9i6K9OTk47aIt4GYN2zkUQfv2jjgFcgiCotgDR6RIjobcl5TT_nDQXKTbgxxMs_Q8QXXRMV1aVKy2QFm0VSAvYiVAhWfGLDtcYyJrojozaxMv0-ND6gS4KssywcCdEXnexDxao6haFNW_BdTQJ0eCmmgJ1EACdB4k6aRurYt6Zjt1n4GS9llSTXtdJHkcGu6avPlwuSOS5c2HyHg3srwbUeipMBo3oKrUcFvap9_36cPzdjt-_Lxd1t239XS-7i7r-bJe16fb7vH7j-3L8bT7etmez9e7-5SQxpdopeFTtNGAuFbYwXfqEm4DAXhNg4ehr8GwjlU6UafAsI51ngZPSySUHPx1iqkRKBa5pTBORgWVDpjWv79ZqDGV_Qo1xG5BpSouDVoNWQQbqEiY88agMVJsmCiGjOVKlbympFVfob3CQkYT1lCi_g_H2uKVtXODqEldwuk5Tk49nMo69XDq4ZyQU1nvjI14sFPZlmk4n2bcTlZpHluKXyU1lmhk0DjbTgaduZ0TeTyeTtvt08_zihWL1Uq__gB3Br3y1wMAAA"],
         ["bimodal STV","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA-VVW25bRwzdinC_6WLIeXsZbdAfJx-ydYsKcaTCVgsURbv2HpJDBWiRFQSCMLzDN4c8_GtL2-PTk9RCnOcnepI-gmqNuCWligSVU3D1jkfIGZWTBHd2aLBSg4m724Pu6GYF3FGUYnjrJpdwV1NQMoKbQmOWZWSG3Xl3xSqUpS33WWS5zwxqmMIEd5qx3kjcLNIWNm6WuFMNk2PVMF0ebdnjESnaHYfcDNUR1jwrOGjhs0cYIyKbPYI1QzVKoDUzos1VnlIXkfNi6Y3MJWMEp7p4nFDqLmoJ7zrNEvSmFrWANatFi-zEpCO5--PyelEVTnWppzDIdx_2TPAefqUuv8ygplJzorAq1kGYUaQpoqxc1w2EXeaBl9YD87L0wJGV3UmIpaU4lyVLBab78jWW83kPxzU0RA-7aM83pdoIquJRqz0qnnBRkoKrd1xDzqkpwR36fGa5a_BuL61OZ-nRTAnemspp55a-CKnBSyFvja4mRlidd0fs49OWc-tacy46hFYE61CbGm7a8WUlLasQEneqYXKq4PVry1qP7PSGl8wMrR6GWhS0hbsWEfQIyudX44SdT7SxAU9B72RrfjDKUEbeHhNtZXtEdlu1jwZZhPvfH4Q7OIn-9wNnfJMzv8lhoCHjYJPI1KnYtWyP2z8ft58-_Hx43_cv74fb9bC_7i-3w8vxcjqfjrf9_XDZj2_7m7Juv-6Hl_1yw9f1l8Px8Hz-cj0dXw9_XPXqdH6_vZ2ff7-dr5cfPm4b7HvKXPzwnLn5gQy54EQ-2oobT7sXhIprYYtYEKHgcENS_BKGMg43JN2_hn9NU8jJMmUtOxsji-nm7HwPKcPSE5r6e_ppSZoXwSuXvW8YnZepUCU0Nw1CA-NSoQmdjB4mxRodJNL1pegHlCOdtkyC6QPWYRqBgYMAnFiomQnAAmDPhQBkuRG2XR6UJ7qPChNWbYHHQsD80qigKwdhcIAMlQmDUzNh0dRKgCVAYB1UJ2FTNqaG4cwYS2qIF2PZMZmEldET9hFhvDu6vFCvpBtK4ZMUPIE5DAilkQmIPwCvWFvIdtAApOoOBrDSzJhqmgBh3YA0UQythi4NRWgUJOneKGSrKTXd5uQYN3WN4K-bRiEhKyyQ4TTbYtUNhD_W0Va8SXUSC38l5SuZvT2VLPZk5fts2NJseEt3CPVRL9Mua7Kv6mNeHTCqj3l1wKiOPNUBo3bnDev-6oDRkh9upYkfbqVp0TPCaG6guf_mgNXdf3fA6g4zz8fX1-vtw5-_7UDYH4-Xz_tp-_tfUbHscpUKAAA"],
-        // ["",""],
+        ["bug new voter group not showing up in 1D+B","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSW27DMAy7i7-FQW_HvUrQkxTb2SeLAbYiaAxEDiXRNJXX4PE4z6WU60mnCtPkvfEgObR2IkGqs3axIX4-acjuEVaS4C7JKkEbk0zb2OEk6c2p3VeYL1Iw2HgIDR8PphH9zuJUuq2qnZVhuq3KHB8z62NGuI8W6QqjSd6wtgopYeNHR-0gTqBOEqG0iFesk6PCalSLskCVZtZi0gqGnAMsGqsAGp34OvC1usG4Fcl2Rzph2r1myEOQFdMpdK1dnEiD03BzKe-Myv7hfFkhbcHucHl3Z0N6h-rY0-j_Ue59hv9J4K-Vb89EYWK-syU77umrwWBMHXcMuBVwK64_AqYHWGKiBCwBt5IR4HliegmWDMy2hCQMT_Qm5jWhYKJ3bpe_fwHDP9pRCQMAAA"],
         
+        ["bug need to use districts","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8F9cuYsdONvkMRLfa4hBXcQIKGoT4dxwP14BW0Wr8iCcz3i8qNPd9KLdx8K5SuJcVmLNsGpHYYPVV81Uqx8Eka0a8cHwrV5rOVGkWJqM5mJymMLW4V_jfiYl-2tlOO-O0IyWflqVLlS1rihpUiQEc0AChQiww3qwBI6saZFFUSQuqANCoIfMcUNBoR7YhCxaNZZRUK6GkgqlCUAVTBVMNpl3496zLDePgrPAsrFzZom1JuwK5B3oPgnivK7Cctb_U1vI3Wcd_glwbqcOxQRcATDukOnbn2J3DtPfU6Vidw3QrABhuMNzA0jytLIENFA0KGtbeoaBjtmsyPV1ut7ePx8_3K016uLy-XJ_p-weEXJwVtAIAAA"],
+        // ["",""],
+        // ["",""],
     ]],
     // ["",""],
     // ["",""],
