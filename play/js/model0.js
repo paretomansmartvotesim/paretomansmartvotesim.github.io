@@ -9,7 +9,7 @@ model.preFrontrunnerIds = []
 model.initDOM()
 // INIT
 model.initPlugin()
-model.arena.redistrict()
+model.dm.redistrict()
 // UPDATE
 model.update()
 console.log(model)

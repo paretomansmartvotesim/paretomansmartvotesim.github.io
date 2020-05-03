@@ -365,7 +365,7 @@ function bindModel(ui,model,config) {
             model.voters[i].init()
         }
         model.arena.pileVoters()
-        model.arena.redistrict()
+        model.dm.redistrict()
 		// INIT (menu)
 		ui.menu.presetconfig.init_sandbox()
 		// ui.menu.gearicon.init_sandbox()
@@ -1711,7 +1711,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
-            model.arena.redistrict()
+            model.dm.redistrict()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }
@@ -1769,7 +1769,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             self.configure()
             // INIT
-            model.arena.redistrict()
+            model.dm.redistrict()
             // UPDATE
             model.update()
         };
@@ -1965,7 +1965,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
-            model.arena.redistrict()
+            model.dm.redistrict()
             // UPDATE
             model.update()
             ui.menu_update()
@@ -2098,7 +2098,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
-            model.arena.redistrict()
+            model.dm.redistrict()
             // UPDATE
             model.update()
             ui.menu_update()
@@ -2138,7 +2138,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // INIT
             model.voters[n].init()
             model.arena.pileVoters()
-            model.arena.redistrict()
+            model.dm.redistrict()
             // UPDATE
             model.update()
             ui.menu_update()
@@ -2257,7 +2257,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.initMODEL()
             // UPDATE
             
-            model.arena.redistrictCandidates()
+            model.dm.redistrictCandidates()
 
             // update model
             model.update()
@@ -2712,7 +2712,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             self.configure()
             // UPDATE
-            model.arena.districtsListCandidates()
+            model.dm.districtsListCandidates()
             model.update();
         };
         self.configure = function() {
@@ -2756,7 +2756,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.menu.frontrunners.select()
             // CONFIGURE AND UPDATE MODEL //
             ui.menu.frontrunners.configure()
-            model.arena.districtsListCandidates()
+            model.dm.districtsListCandidates()
             model.update();
         };
         self.choose = new ButtonGroup({
@@ -3343,7 +3343,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
-            model.arena.redistrict()
+            model.dm.redistrict()
             // UPDATE
             model.update()
         };
@@ -3402,7 +3402,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.voters[i].init()
             }
             model.arena.pileVoters()
-            model.arena.redistrict()
+            model.dm.redistrict()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
             }

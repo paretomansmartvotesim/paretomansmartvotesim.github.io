@@ -109,7 +109,7 @@ function sandbox(ui){
 			for (var i=0; i<model.voters.length; i++) {
 				model.voters[i].init()
 			}
-			model.arena.redistrict()
+			model.dm.redistrict()
 			model.update()
 		};
 
@@ -206,7 +206,7 @@ function sandbox(ui){
 					model.voters[i].init()
 				}
 				// UPDATE
-        		model.arena.redistrict()
+        		model.dm.redistrict()
 				model.update()
 			};
 			self.configure = function() {
@@ -286,7 +286,7 @@ function sandbox(ui){
 				}
 				model.initMODEL()
 				// UPDATE
-        		model.arena.redistrict()
+        		model.dm.redistrict()
 				model.update()
 			};
 			self.configure = function() {

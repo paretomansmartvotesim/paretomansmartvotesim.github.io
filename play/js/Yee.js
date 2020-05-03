@@ -82,7 +82,7 @@ function Yee(model) {
 				model.yeeobject = model.candidates[model.candidates.length - 1]
 				model.yeeobject.fill = colorNewCan
 
-				model.arena.redistrict()
+				model.dm.redistrict()
 			} else {
 				var nc = new Candidate(model)
 				model.candidates.push(nc)
@@ -93,7 +93,7 @@ function Yee(model) {
 				nc.init()
 				nc.icon = "newdude"
 				model.initMODEL()
-				model.arena.redistrict()
+				model.dm.redistrict()
 				// UPDATE
 				nc.fill = 'hsl(0,100%,100%)'
 				model.yeeobject = nc
@@ -417,12 +417,12 @@ function Yee(model) {
 			
 				// update the GUI
 				model.onAddCandidate()
-				model.arena.redistrict()
+				model.dm.redistrict()
 				model.yeeobject = undefined
 			
 			} else {
 
-				model.arena.redistrict()
+				model.dm.redistrict()
 				// UPDATE
 				// model.update()
 	

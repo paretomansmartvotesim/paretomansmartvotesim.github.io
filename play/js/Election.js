@@ -3288,7 +3288,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	polltext = ""
 	var oldkeep = model.preFrontrunnerIds // only a temporary change
 	model.preFrontrunnerIds = []
-	model.arena.districtsListCandidates()
+	model.dm.districtsListCandidates()
 
 	model.pollResults = undefined
 	if (options.sidebar) {
@@ -3386,7 +3386,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			}
 
 			model.preFrontrunnerIds = viable 
-			model.arena.districtsListCandidates()
+			model.dm.districtsListCandidates()
 		}
 
 		if(options.sidebar) {
@@ -3416,7 +3416,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	}
 	if (1) {
 		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
-		model.arena.districtsListCandidates()
+		model.dm.districtsListCandidates()
 	}
 
 	return polltext

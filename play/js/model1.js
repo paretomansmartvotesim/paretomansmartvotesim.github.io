@@ -29,7 +29,7 @@ l.onload = function(assets){
     model.candidates[1].init()
     model.initMODEL()
     model.voters[0].init()
-    model.arena.redistrict()
+    model.dm.redistrict()
   };
   model.onDraw = function(){
     if (model.voters.length == 0) return

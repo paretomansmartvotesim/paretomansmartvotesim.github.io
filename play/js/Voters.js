@@ -3197,3 +3197,123 @@ function _drawCircleFill(x,y,size,fill,ctx,model) {
 	ctx.fill()
 	if (model.yeeon) ctx.stroke()
 }
+
+
+function DistrictManager(model) {
+	var self = this
+	
+	self.redistrict = function() {
+		// calculate district lines
+
+		// create data structure
+		model.district = []
+		for (var i = 0; i < model.nDistricts; i++) {
+			model.district[i] = {
+				voters: [],
+				candidates: [],
+				i: i
+			}
+		}
+
+		// new sorted list of all voters
+		// still refers to original voterPerson objects.
+		var voterPeopleSorted = model.voterSet.getAllVoters() 
+		voterPeopleSorted.sort(function(a,b){return a.y - b.y})
+
+		// assign voters equally to districts, and make lists of voters in districts
+		var factor = model.nDistricts / model.voterSet.totalVoters
+		var oldDistrict = 0
+		var oldy = 0 // boundary starts here
+		var firsty = [oldy]
+		var lasty = []
+		for (var i = 0; i < voterPeopleSorted.length; i++) {
+			var voterPerson = voterPeopleSorted[i]
+
+			// assign
+			var d =  Math.floor(i * factor)
+			voterPerson.iDistrict = d  // store district id with voters,
+			
+			// not used.. but we could refer to a voter's order of assignment to a district
+			// voterPerson.iPointWithinDistrict = model.district[d].voters.length 
+
+			// fill district[] with references to voters.
+			model.district[d].voters.push(voterPerson)
+
+			// fill district borders for use with candidates
+			var y = voterPerson.y
+			if (oldDistrict != d) {
+				oldDistrict =  d
+				firsty.push(y)
+				lasty.push(y)
+			}
+			oldy = y
+		}
+		lasty.push(oldy)
+
+		// calculate district borders
+		var borders = []
+		for (var i = 0; i < model.nDistricts - 1; i++) {
+			var middle = ( firsty[i+1] + lasty[i] ) * .5
+			borders.push(middle)
+		}
+		for (var i = 0; i < model.nDistricts; i++) {
+			if (i == 0) {
+				model.district[i].lowerBound = -Infinity
+			} else {
+				model.district[i].lowerBound = borders[i-1]
+			}
+			if (i == model.nDistricts - 1) {
+				model.district[i].upperBound = Infinity
+			} else {
+				model.district[i].upperBound = borders[i]
+			}
+		}
+
+		self.redistrictCandidates()
+	}
+
+	self.redistrictCandidates = function() {
+		// fill candidates with info on district.
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i]
+			self.candidatePicksDistrict(c)
+		}
+
+		// fill district[] with info on candidates.
+		self.districtsListCandidates()
+	}
+
+	self.candidatePicksDistrict = function(c) {
+		// put candidate into correct district
+		for (var i = 0; i < model.nDistricts; i++) {
+			var uB = model.district[i].upperBound
+			if (c.y < uB) {
+				c.iDistrict = i
+				break
+			}
+		}
+	}
+	self.districtsListCandidates = function() {
+		// fill district[] with info on candidates.
+		// reset
+		for (var i = 0; i < model.nDistricts; i++) {
+			model.district[i].candidates = []
+			model.district[i].candidatesById = {}
+			model.district[i].preFrontrunnerIds = []
+		}
+		// assign candidates to districts' lists
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i]
+			model.district[c.iDistrict].candidates.push(c)
+			model.district[c.iDistrict].candidatesById[c.id] = c
+		}
+
+		// assign frontrunners to districts' lists
+		for(var i=0; i<model.preFrontrunnerIds.length; i++){
+			var cid = model.preFrontrunnerIds[i]
+			var c = model.candidatesById[cid]
+			model.district[c.iDistrict].preFrontrunnerIds.push(cid)
+		}
+	}
+
+}

@@ -48,7 +48,7 @@ function main_ballot(ui){
 			if(ballotType=="Score") {
 				model.voters[0].voterModel.minscore = 1
 			}
-			model.arena.redistrict()
+			model.dm.redistrict()
 			model.update()
 		};
 

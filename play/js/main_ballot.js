@@ -251,7 +251,7 @@ function bindBallotMenu(ui,model,config) {
 		for (var i=0; i<model.voters.length; i++) {
 			model.voters[i].preFrontrunnerIds = config.preFrontrunnerIds
 		}
-		model.arena.districtsListCandidates()
+		model.dm.districtsListCandidates()
 		model.update();
 
 	};
@@ -360,7 +360,7 @@ function bindBallotModel(ui,model,config) {
 		model.candidates[2].init()
 		model.initMODEL()
 		model.voters[0].init()
-		model.arena.redistrict()
+		model.dm.redistrict()
 
 	};
 
