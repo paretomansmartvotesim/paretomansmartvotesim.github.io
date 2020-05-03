@@ -3317,3 +3317,173 @@ function DistrictManager(model) {
 	}
 
 }
+
+// helper
+_pileVoters = function(model) {
+	if (model.dimensions != "2D") {
+		if (0) {
+			// list all the voters
+			// drop the voters
+			// store the new positions
+			var forward = true
+	
+			var betweenDist = 5
+			var stackDist = 5
+			var added = []
+			var todo = []
+	
+			if (forward) {
+				for (var m = 0; m < model.voters.length; m++) {
+					var points = model.voters[m].points
+					for (var i = 0; i < points.length; i++) {
+						todo.push([m,i])
+					}
+				}
+				// for (var i = 0 ; i < self.points.length; i++) {
+				// 	todo.push(i)
+				// }
+			} else {
+				// for (var i = self.points.length - 1 ; i >= 0; i--) {
+				// 	todo.push(i)
+				// }
+			}
+			var level = 1
+			while (todo.length > 0) {
+				for (var c = 0; c < todo.length; c++) {
+					var m = todo[c][0]
+					var i = todo[c][1]
+					// look for collisions
+					var collided = false
+					for (var d = 0; d < added.length; d++) {
+						var o = added[d][0]
+						var k = added[d][1]
+						x1 = model.voters[o].points[k][0] + model.voters[o].x
+						x2 = model.voters[m].points[i][0] + model.voters[m].x
+						xDiff = Math.abs(x1 - x2)
+						if (xDiff < betweenDist) {
+							collided = true
+							break
+						}
+					}
+					if (! collided) {
+						model.voters[m].points[i][2] = (level-1) * -stackDist
+						added.push([m,i])
+						todo.splice(c,1)
+						c--
+					}
+				}
+				level++
+				var added = []
+			}
+		}else {
+			// go through each voter and scale it and add to a background
+			var stdev = []
+			var amplitude = []
+			var radius = []
+			for (var m = 0; m < model.voters.length; m++) {
+				var v = model.voters[m]
+				var points = v.points
+				amp_factor = 70
+				var u = 1.5
+				if (!v.isGaussianVoters) {
+					stdev[m] = 5
+				} else if (v.x_voters) {
+					stdev[m] = v.stdev
+				} else if (v.snowman) {
+					if (v.disk == 3) {
+						stdev[m] = u * 42 // 60
+						radius[m] = 72
+					} else if (v.disk == 2) {
+						stdev[m] = u * 38 // 55
+						radius[m] = 72
+					} else if (v.disk == 1) {
+						stdev[m] = u * 29 // 45
+						radius[m] = 48
+					}
+				} else { // oldest method, disks
+					if (v.disk == 3) {
+						stdev[m] = 112
+					} else if (v.disk == 2) {
+						stdev[m] = u * 54 // 70
+						radius[m] = 96
+					} else if (v.disk == 1) {
+						stdev[m] = u * 41 // 60
+						radius[m] = 72
+					}
+				} 
+				stdev[m] = stdev[m] * model.spread_factor_voters * .5
+				radius[m] = radius[m] * model.spread_factor_voters * .5
+				if (v.x_voters) {
+					amplitude[m] = v.points.length/stdev[m] * amp_factor
+				} else if (v.disk) {
+					if (!v.snowman && v.disk==3) {
+						amplitude[m] = v.points.length/stdev[m] * amp_factor
+					} else {
+						amplitude[m] = v.points.length/radius[m] * amp_factor
+					}
+				} 
+				sum2 = 0
+				max = 0
+				for (var i = 0; i < v.points.length; i++) {
+					var x = v.points[i][0]
+					if (Math.abs(x) < 300) sum2 = sum2 + x ** 2
+					if (max < x) max = x
+				}
+				sd = Math.sqrt(sum2/points.length)
+				// console.log(sd)
+				// console.log(stdev[m])
+				// console.log(max)
+				for (var i = 0; i < points.length; i++) {
+					var x = v.points[i][0]
+					var y = v.points[i][1]
+					var back = 0
+					for (var k = 0; k < m; k++) {
+						var o = model.voters[k]
+						// add background
+						if (o.x_voters) {
+							back -= gaussian( x , o.x-v.x , stdev[k] ) * amplitude[k]
+						} else if (o.disk) {
+							if (!o.snowman && o.disk==3) {
+								back -= gaussian( x , o.x-v.x , stdev[k] ) * amplitude[k]
+							} else {
+								back -= disk( x , o.x-v.x , radius[k]+5) * .5 * (amplitude[k] + 15)
+							}
+						} 
+					}
+					// add voters
+					if (v.x_voters) {
+						v.points[i][2] = back + (_erf(y/stdev[m])-1) * .5 * gaussian(x,0,stdev[m]) * amplitude[m]
+					} else if (v.disk) {
+						if (!v.snowman && v.disk==3) {
+							v.points[i][2] = back + (_erf(y/stdev[m])-1) * .5 * gaussian(x,0,stdev[m]) * amplitude[m]
+						} else {
+							if (1) {
+								v.points[i][2] = back + ((y/Math.sqrt(radius[m] ** 2 - x ** 2))-1) * .25 * disk(x,0,radius[m] + 0) * amplitude[m]
+							} else if (0) {
+								v.points[i][2] = back + (intDisk0(y/(radius[m] + 0))-1) * .5 * disk(x,0,radius[m] + 0) * amplitude[m]
+							} else {
+								v.points[i][2] = back + (_erf(y/radius[m])-1) * .5 * disk(x,0,radius[m] + 5) * amplitude[m]
+							}
+						}
+					} // don't need to put single voters there...
+				}
+			}
+			function gaussian(x,mean,stdev) {
+				return Math.exp(-( (x - mean)**2 / (2 * stdev ** 2))) * 1/Math.sqrt(2*Math.PI)
+			}
+			function disk(x,mean,stdev) {
+				var inside = stdev ** 2 - (x - mean)**2
+				return (inside > 0) ? Math.sqrt(inside)/stdev : 0
+			}
+			function intDisk(x,mean,stdev) {
+				return (stdev ** 2 * (.5 * Math.asin(x/stdev) + .25 * Math.sin(2 * Math.asin(x/stdev)))) / (3.14 * .5)
+			}
+			function intDisk0(x) {
+				if (x < -1) return 0
+				if (x > 1) return 1
+				return ((.5 * Math.asin(x) + .25 * Math.sin(2 * Math.asin(x)))) / (3.14 * .5) + .5
+			}
+			
+		}
+	}
+}

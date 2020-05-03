@@ -364,7 +364,7 @@ function bindModel(ui,model,config) {
         for (var i=0; i<model.voters.length; i++) {
             model.voters[i].init()
         }
-        model.arena.pileVoters()
+        _pileVoters(model)
         model.dm.redistrict()
 		// INIT (menu)
 		ui.menu.presetconfig.init_sandbox()
@@ -1710,7 +1710,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
-            model.arena.pileVoters()
+            _pileVoters(model)
             model.dm.redistrict()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
@@ -1964,7 +1964,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             for(var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
-            model.arena.pileVoters()
+            _pileVoters(model)
             model.dm.redistrict()
             // UPDATE
             model.update()
@@ -2097,7 +2097,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             for(var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
-            model.arena.pileVoters()
+            _pileVoters(model)
             model.dm.redistrict()
             // UPDATE
             model.update()
@@ -2137,7 +2137,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.configure()
             // INIT
             model.voters[n].init()
-            model.arena.pileVoters()
+            _pileVoters(model)
             model.dm.redistrict()
             // UPDATE
             model.update()
@@ -3342,7 +3342,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
-            model.arena.pileVoters()
+            _pileVoters(model)
             model.dm.redistrict()
             // UPDATE
             model.update()
@@ -3401,7 +3401,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             for (var i=0; i<model.voters.length; i++) {
                 model.voters[i].init()
             }
-            model.arena.pileVoters()
+            _pileVoters(model)
             model.dm.redistrict()
             for (var i=0; i<model.candidates.length; i++) {
                 model.candidates[i].init()
