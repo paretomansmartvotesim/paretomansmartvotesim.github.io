@@ -2225,7 +2225,7 @@ function VoterSet(model) {
 		self.allVoters = []
 		var j = 0
 		for (var i = 0; i < model.voterGroups.length; i++) {
-			for (var k = 0; k < model.voterGroups[i].points.length; k++) {
+			for (var k = 0; k < model.voterGroups[i].voterPeople.length; k++) {
 				var voterPerson = model.voterGroups[i].voterPeople[k]
 				voterPerson.iGroup = i
 				voterPerson.iAll = j
