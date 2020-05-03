@@ -904,8 +904,8 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 					v.update() // easy way to only show the two candidates.
 				}
 
-				for(var j=0; j<district.voters.length; j++){
-					var v = district.voters[j]
+				for(var j=0; j<district.voterPeople.length; j++){
+					var v = district.voterPeople[j]
 					model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = weightcopy[j][ai][bi]
 				}
 
@@ -1393,7 +1393,7 @@ Election.rrv = function(district, model, options){
 			text += "<br><b>score as %:</b><br>";
 			for(var i=0; i<district.candidates.length; i++){
 				var c = district.candidates[i].id;
-				//text += model.icon(c)+"'s score: "+((tally[c]/district.voters.length).toFixed(2))+" out of 5.00<br>";
+				//text += model.icon(c)+"'s score: "+((tally[c]/district.voterPeople.length).toFixed(2))+" out of 5.00<br>";
 				text += model.icon(c)+": "+_percentFormat(district, tally[c] / maxscore)
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
@@ -1540,7 +1540,7 @@ Election.rav = function(district, model, options){
 			text += "<br><b>score as %:</b><br>";
 			for(var i=0; i<district.candidates.length; i++){
 				var c = district.candidates[i].id;
-				//text += model.icon(c)+"'s score: "+((tally[c]/district.voters.length).toFixed(2))+" out of 5.00<br>";
+				//text += model.icon(c)+"'s score: "+((tally[c]/district.voterPeople.length).toFixed(2))+" out of 5.00<br>";
 				text += model.icon(c)+": "+_percentFormat(district, tally[c])
 				if (winner == c) text += " &larr;"//" <--"
 				text += "<br>";
@@ -1755,7 +1755,7 @@ Election.irv = function(district, model, options){
 		// Do they have more than 50%?
 		var winners = _countWinner(tally);
 		var winner = winners[0];
-		var ratio = tally[winner] / district.voters.length;
+		var ratio = tally[winner] / district.voterPeople.length;
 		var option100 = model.opt.IRV100
 		if (option100) {
 			if (candidates.length == 1) {
@@ -2097,7 +2097,7 @@ Election.stv = function(district, model, options){
 		// Do they have more than 50%?
 		var winners = _countWinner(tally);
 		var winner = winners[0];  // there needs to be a better tiebreaker here. TODO
-		var ratio = tally[winner]/district.voters.length;
+		var ratio = tally[winner]/district.voterPeople.length;
 		
 		// show all the transfers if the 100% option is chosen
 		var option100 = model.opt.IRV100
@@ -3262,8 +3262,8 @@ Election.plurality = function(district, model, options){
 // HELPERS:
 function _getBallots(district, model){
 	var ballots = [];
-	for(var i=0; i<district.voters.length; i++){
-		var v = district.voters[i]
+	for(var i=0; i<district.voterPeople.length; i++){
+		var v = district.voterPeople[i]
 		var b = model.voterGroups[v.iGroup].voterPeople[v.iPoint].ballot
 		// var b = model.voterGroups[v.iGroup].ballots[v.iPoint]
 		ballots = ballots.concat(b);
@@ -3298,7 +3298,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			// this strategy could be further refined by voting for people who will be eliminated but who we like better
 		} else {
 			polltext += "<b>polling for viable candidates: </b><br>";
-			//polltext += "<b>(score > " + (100*threshold/district.voters.length).toFixed(0) + " = half max)</b><br>"
+			//polltext += "<b>(score > " + (100*threshold/district.voterPeople.length).toFixed(0) + " = half max)</b><br>"
 		}
 	}
 	for (var k=0;k<5;k++) { // do the polling many times
@@ -3651,7 +3651,7 @@ function _tietext(model,winners) {
 }
 
 function _percentFormat(district,count) {
-	var a = "" + (100*count/(district.voters.length)).toFixed(0)
+	var a = "" + (100*count/(district.voterPeople.length)).toFixed(0)
 	var dopadding = false
 	if (dopadding) {
 		for (var i = a.length; i < 2; i ++) {
@@ -3685,15 +3685,15 @@ function _drawBars(iDistrict, arena, model, round) {
 	// draw only the district's voters
 	model.districtIndexOfVoter = []
 	for (var i = 0; i < v.length; i++) {
-		model.districtIndexOfVoter[model.district[iDistrict].voters[i].iAll] = i
+		model.districtIndexOfVoter[model.district[iDistrict].voterPeople[i].iAll] = i
 	}
 
 	// There are two sorts here... one for all voters and one for the district
 	// we want to use the one for all voters... and we want to get data that is based on the one for the districtq[]
 	// definitions
 	//   q[iAll] or q[iDistSort]
-	//   district[].voters[iDistSort]
-	//   iAll = district[].voters[iDistSort].iAll
+	//   district[].voterPeople[iDistSort]
+	//   iAll = district[].voterPeople[iDistSort].iAll
 	//   v[iTSP]
 	//   iAll = orderOfVoters[iTSP]
 	//   iDistSort = model.districtIndexOfVoter[iAll]

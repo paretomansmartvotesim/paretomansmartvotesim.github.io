@@ -2103,7 +2103,7 @@ function DistrictManager(model) {
 		model.district = []
 		for (var i = 0; i < model.nDistricts; i++) {
 			model.district[i] = {
-				voters: [],
+				voterPeople: [],
 				candidates: [],
 				i: i
 			}
@@ -2128,10 +2128,10 @@ function DistrictManager(model) {
 			voterPerson.iDistrict = d  // store district id with voters,
 			
 			// not used.. but we could refer to a voter's order of assignment to a district
-			// voterPerson.iPointWithinDistrict = model.district[d].voters.length 
+			// voterPerson.iPointWithinDistrict = model.district[d].voterPeople.length 
 
 			// fill district[] with references to voters.
-			model.district[d].voters.push(voterPerson)
+			model.district[d].voterPeople.push(voterPerson)
 
 			// fill district borders for use with candidates
 			var y = voterPerson.y

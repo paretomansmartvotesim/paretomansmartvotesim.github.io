@@ -128,7 +128,7 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 		var scorange = voterModel.maxscore - voterModel.minscore
 		var step = (voterModel.radiusLast - voterModel.radiusFirst)/scorange;
 
-		var nVoters = model.district[iDistrict].voters.length
+		var nVoters = model.district[iDistrict].voterPeople.length
 
 		// Draw big ol' circles.
 		var lastDist = Infinity
@@ -1100,7 +1100,7 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 
 			me = {x:x, y:y}
 			// var meArena = model.arena.modelToArena(me)
-			var nVoters = model.district[iDistrict].voters.length
+			var nVoters = model.district[iDistrict].voterPeople.length
 			
 			var tempComposite = ctx.globalCompositeOperation
 
@@ -2248,8 +2248,8 @@ function VoterSet(model) {
 	}
 	self.getBallotsDistrict = function(district){
 		var ballots = [];
-		for(var i=0; i<district.voters.length; i++){
-			var v = district.voters[i]
+		for(var i=0; i<district.voterPeople.length; i++){
+			var v = district.voterPeople[i]
 			var b = model.voterGroups[v.iGroup].voterPeople[v.iPoint].ballot
 			ballots = ballots.concat(b);
 		}
@@ -2257,8 +2257,8 @@ function VoterSet(model) {
 	};
 	self.getBallotsCrowdAndDistrict = function(iCrowd,district) {
 		var ballots = [];
-		for(var i=0; i<district.voters.length; i++){
-			var v = district.voters[i]
+		for(var i=0; i<district.voterPeople.length; i++){
+			var v = district.voterPeople[i]
 			if (v.iGroup == iCrowd) {
 				// var b = self.crowds[iCrowd].voterPeople[v.iPoint].ballot
 				var b = model.voterGroups[iCrowd].voterPeople[v.iPoint].ballot
