@@ -203,7 +203,7 @@ function bindBallotMenu(ui,model,config) {
 	var onChooseVoterStrategyOn = function(data){
 		config.firstStrategy = data.realname;
 		model.firstStrategy = config.firstStrategy
-		model.voters[0].firstStrategy = config.firstStrategy;
+		model.voterGroups[0].firstStrategy = config.firstStrategy;
 		model.update();
 
 	};
@@ -248,8 +248,8 @@ function bindBallotMenu(ui,model,config) {
 			}
 		}
 		model.preFrontrunnerIds = config.preFrontrunnerIds
-		for (var i=0; i<model.voters.length; i++) {
-			model.voters[i].preFrontrunnerIds = config.preFrontrunnerIds
+		for (var i=0; i<model.voterGroups.length; i++) {
+			model.voterGroups[i].preFrontrunnerIds = config.preFrontrunnerIds
 		}
 		model.dm.districtsListCandidates()
 		model.update();
@@ -335,7 +335,7 @@ function bindBallotModel(ui,model,config) {
 		model.initDOM()
 		
 		// CREATE
-		model.voters.push(new SingleVoter(model))
+		model.voterGroups.push(new SingleVoter(model))
 		model.candidates.push(new Candidate(model))
 		model.candidates.push(new Candidate(model))
 		model.candidates.push(new Candidate(model))
@@ -344,7 +344,7 @@ function bindBallotModel(ui,model,config) {
 		Object.assign( model.candidates[0],{x: 41, y: 50, icon:"square"} )
 		Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )
 		Object.assign( model.candidates[2],{x:216, y:216, icon:"hexagon"} )
-		Object.assign( model.voters[0],    {x: 81, y: 92, typeVoterModel: model.ballotType,
+		Object.assign( model.voterGroups[0],    {x: 81, y: 92, typeVoterModel: model.ballotType,
 			firstStrategy: config.firstStrategy,
 			preFrontrunnerIds: config.preFrontrunnerIds} )
 		model.preFrontrunnerIds = config.preFrontrunnerIds;
@@ -359,7 +359,7 @@ function bindBallotModel(ui,model,config) {
 		model.candidates[1].init()
 		model.candidates[2].init()
 		model.initMODEL()
-		model.voters[0].init()
+		model.voterGroups[0].init()
 		model.dm.redistrict()
 
 	};
@@ -375,8 +375,8 @@ function bindBallotModel(ui,model,config) {
 	_insertFunctionAfter( model,"onUpdate", function() {
 		
 		
-		if (model.voters.length == 0) return
-		var ballot = model.voters[0].voterPeople[0].ballot // just pick the first ballot to show
+		if (model.voterGroups.length == 0) return
+		var ballot = model.voterGroups[0].voterPeople[0].ballot // just pick the first ballot to show
 		if (model.newWay) {
 			// onDraw
 		} else {
@@ -400,10 +400,10 @@ function bindBallotModel(ui,model,config) {
 		}
 
 
-		if (model.voters.length == 0) return
-		if (model.voters[0].voterGroupType == "GaussianVoters") return
+		if (model.voterGroups.length == 0) return
+		if (model.voterGroups[0].voterGroupType == "GaussianVoters") return
 		if (model.newWay) {
-			var text = model.voters[0].voterModel.toTextH(model.voters[0].voterPeople[0].ballot);
+			var text = model.voterGroups[0].voterModel.toTextH(model.voterGroups[0].voterPeople[0].ballot);
 			if ( ready ) {
 
 				// 2 : replace the Placeholder

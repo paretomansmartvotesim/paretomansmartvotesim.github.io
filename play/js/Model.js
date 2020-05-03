@@ -11,7 +11,7 @@ function Model(idModel){
 	var self = this;
 
 	// CREATE DATA STRUCTURE
-	self.voters = [];
+	self.voterGroups = [];
 	self.voterSet = new VoterSet(self)
 	self.district = []
 	self.dm = new DistrictManager(self)
@@ -157,7 +157,7 @@ function Model(idModel){
 			} else if (self.kindayee == "can") {
 				return self.candidatesById[self.keyyee]
 			} else if (self.kindayee=="voter") {
-				return self.voters[self.keyyee]
+				return self.voterGroups[self.keyyee]
 			} else if (self.kindayee=="center") { 
 				return self.voterCenter
 			} else if (self.kindayee=="newcan") { 
@@ -181,7 +181,7 @@ function Model(idModel){
 	self.reset = function(){
 		// RE-CREATE DATA STRUCTURE
 		self.candidates = [];
-		self.voters = [];
+		self.voterGroups = [];
 		// START - combination of CREATE, CONFIGURE, INIT, UPDATE
 		self.initPlugin();
 	};
@@ -241,8 +241,8 @@ function Model(idModel){
 		self.viz.calculate()
 
 		// get the ballots for this election
-		for(var i=0; i<self.voters.length; i++){
-			var voter = self.voters[i];
+		for(var i=0; i<self.voterGroups.length; i++){
+			var voter = self.voterGroups[i];
 			voter.update();
 		}
 		
@@ -855,8 +855,8 @@ function Arena(arenaName, model) {
 					n.disk = 1
 				}
 				var max = 0
-				for (var i = 0; i < model.voters.length; i++) {
-					var a = model.voters[i].vid
+				for (var i = 0; i < model.voterGroups.length; i++) {
+					var a = model.voterGroups[i].vid
 					if (a > max) max = a
 				}
 				n.vid = max + 1
@@ -864,7 +864,7 @@ function Arena(arenaName, model) {
 				n.firstStrategy = model.firstStrategy
 				n.secondStrategy = model.secondStrategy
                 n.spread_factor_voters = model.spread_factor_voters
-				model.voters.push(n)
+				model.voterGroups.push(n)
 				// INIT
 				model.initMODEL()
 				n.init()
@@ -971,10 +971,10 @@ function Arena(arenaName, model) {
 			model.preFrontrunnerIds[i]
 
 			// find the voter in the list
-			for (var i=0; i < model.voters.length; i++) {
-				if (model.voters[i] == d) {
+			for (var i=0; i < model.voterGroups.length; i++) {
+				if (model.voterGroups[i] == d) {
 					// delete candidate
-					model.voters.splice(i,1)
+					model.voterGroups.splice(i,1)
 					break
 				}
 			}
@@ -1287,11 +1287,11 @@ function Arena(arenaName, model) {
 			var c = model.candidates[i]
 			self.draggables.push(c);
 		}
-		for (var i=0; i<model.voters.length; i++) {
-			var v = model.voters[i]
+		for (var i=0; i<model.voterGroups.length; i++) {
+			var v = model.voterGroups[i]
 			self.draggables.push(v);
 		}
-		if(model.voterCenter && model.voters.length > 1) self.draggables.push(model.voterCenter)
+		if(model.voterCenter && model.voterGroups.length > 1) self.draggables.push(model.voterCenter)
 		if (doControls) {
 			self.draggables.push(self.modify)
 			if (self.modify.active) {
@@ -1643,8 +1643,8 @@ function Arena(arenaName, model) {
 					return c
 				}
 			}
-			for(var i=0; i<model.voters.length; i++){
-				var voter = model.voters[i];
+			for(var i=0; i<model.voterGroups.length; i++){
+				var voter = model.voterGroups[i];
 				if (voter.highlight) {
 					return voter
 				}
@@ -1815,14 +1815,14 @@ function Arena(arenaName, model) {
 		}
 
 		function drawVoters0() {
-			for(var i=0; i<model.voters.length; i++){
-				var voter = model.voters[i];
+			for(var i=0; i<model.voterGroups.length; i++){
+				var voter = model.voterGroups[i];
 				voter.draw0(self.ctx,self);
 			}
 		}
 		function drawVoters1() {
-			for(var i=0; i<model.voters.length; i++){
-				var voter = model.voters[i];
+			for(var i=0; i<model.voterGroups.length; i++){
+				var voter = model.voterGroups[i];
 				voter.draw1(self.ctx,self);
 			}
 		}
@@ -1975,15 +1975,15 @@ function Arena(arenaName, model) {
 		}
 
 		function drawVoters2() {
-			for(var i=0; i<model.voters.length; i++){
-				var voter = model.voters[i];
+			for(var i=0; i<model.voterGroups.length; i++){
+				var voter = model.voterGroups[i];
 				voter.draw2(self.ctx,self);
 			}
 		}
 		
 		function drawVoterCenterAndAnotherYeeObject() {	
-			var oneVoter = (model.voters.length == 1)
-			// var oneVoter = (model.voters.length == 1 && model.voters[0].points.length == 1)
+			var oneVoter = (model.voterGroups.length == 1)
+			// var oneVoter = (model.voterGroups.length == 1 && model.voterGroups[0].points.length == 1)
 			var isCenter = (typeof model.voterCenter !== 'undefined')
 			if (isCenter && ! oneVoter) {
 				model.voterCenter.draw(self.ctx)
@@ -1993,7 +1993,7 @@ function Arena(arenaName, model) {
 			// draw the Yee object last so it is easy to see.
 			if (model.yeeon && model.yeeobject) {
 				var yeeCenter = (isCenter) ? (model.yeeobject == model.voterCenter) : false
-				var yeeOne = model.yeeobject == model.voters[0]
+				var yeeOne = model.yeeobject == model.voterGroups[0]
 				var covering = (oneVoter && (yeeOne || yeeCenter) )
 				// unless it covers the one voter
 				if (! covering ) {
@@ -2227,8 +2227,8 @@ _pileVoters = function(model) {
 			var todo = []
 	
 			if (forward) {
-				for (var m = 0; m < model.voters.length; m++) {
-					var points = model.voters[m].points
+				for (var m = 0; m < model.voterGroups.length; m++) {
+					var points = model.voterGroups[m].points
 					for (var i = 0; i < points.length; i++) {
 						todo.push([m,i])
 					}
@@ -2251,8 +2251,8 @@ _pileVoters = function(model) {
 					for (var d = 0; d < added.length; d++) {
 						var o = added[d][0]
 						var k = added[d][1]
-						x1 = model.voters[o].points[k][0] + model.voters[o].x
-						x2 = model.voters[m].points[i][0] + model.voters[m].x
+						x1 = model.voterGroups[o].points[k][0] + model.voterGroups[o].x
+						x2 = model.voterGroups[m].points[i][0] + model.voterGroups[m].x
 						xDiff = Math.abs(x1 - x2)
 						if (xDiff < betweenDist) {
 							collided = true
@@ -2260,7 +2260,7 @@ _pileVoters = function(model) {
 						}
 					}
 					if (! collided) {
-						model.voters[m].points[i][2] = (level-1) * -stackDist
+						model.voterGroups[m].points[i][2] = (level-1) * -stackDist
 						added.push([m,i])
 						todo.splice(c,1)
 						c--
@@ -2274,8 +2274,8 @@ _pileVoters = function(model) {
 			var stdev = []
 			var amplitude = []
 			var radius = []
-			for (var m = 0; m < model.voters.length; m++) {
-				var v = model.voters[m]
+			for (var m = 0; m < model.voterGroups.length; m++) {
+				var v = model.voterGroups[m]
 				var points = v.points
 				amp_factor = 70
 				var u = 1.5
@@ -2332,7 +2332,7 @@ _pileVoters = function(model) {
 					var y = v.points[i][1]
 					var back = 0
 					for (var k = 0; k < m; k++) {
-						var o = model.voters[k]
+						var o = model.voterGroups[k]
 						// add background
 						if (o.x_voters) {
 							back -= gaussian( x , o.x-v.x , stdev[k] ) * amplitude[k]

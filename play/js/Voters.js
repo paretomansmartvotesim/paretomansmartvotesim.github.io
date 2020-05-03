@@ -2221,13 +2221,12 @@ function VoterSet(model) {
 	}
 	self.init = function() {
 		// list voters
-		// Information about where to find the voters in the groups AKA model.voters[]
+		// Information about where to find the voters in the groups AKA model.voterGroups[]
 		self.allVoters = []
 		var j = 0
-		for (var i = 0; i < model.voters.length; i++) {
-			var n = model.voters[i].points.length
-			for (var k = 0; k < n; k++) {
-				var voterPerson = model.voters[i].voterPeople[k]
+		for (var i = 0; i < model.voterGroups.length; i++) {
+			for (var k = 0; k < model.voterGroups[i].points.length; k++) {
+				var voterPerson = model.voterGroups[i].voterPeople[k]
 				voterPerson.iGroup = i
 				voterPerson.iAll = j
 				// voterPerson.iPont = k
@@ -2251,7 +2250,7 @@ function VoterSet(model) {
 		var ballots = [];
 		for(var i=0; i<district.voters.length; i++){
 			var v = district.voters[i]
-			var b = model.voters[v.iGroup].voterPeople[v.iPoint].ballot
+			var b = model.voterGroups[v.iGroup].voterPeople[v.iPoint].ballot
 			ballots = ballots.concat(b);
 		}
 		return ballots;
@@ -2262,14 +2261,14 @@ function VoterSet(model) {
 			var v = district.voters[i]
 			if (v.iGroup == iCrowd) {
 				// var b = self.crowds[iCrowd].voterPeople[v.iPoint].ballot
-				var b = model.voters[iCrowd].voterPeople[v.iPoint].ballot
+				var b = model.voterGroups[iCrowd].voterPeople[v.iPoint].ballot
 				ballots.push(b)
 			}
 		}
 		return ballots;
 	}
 	self.getBallotsCrowd = function(iCrowd) {
-		var voterPeople = model.voters[iCrowd].voterPeople
+		var voterPeople = model.voterGroups[iCrowd].voterPeople
 		var ballots = []
 		for (var voterPerson of voterPeople) {
 			ballots.push(voterPerson.ballot)
@@ -2281,8 +2280,8 @@ function VoterSet(model) {
 		// returns an array of all the voters and their distinguishing info
 
 		var vs = []
-		for (var i = 0; i < model.voters.length; i++) {
-			var voterGroup = model.voters[i]
+		for (var i = 0; i < model.voterGroups.length; i++) {
+			var voterGroup = model.voterGroups[i]
 			var points = voterGroup.points
 			var xGroup = voterGroup.x
 			var yGroup = voterGroup.y
@@ -2301,8 +2300,8 @@ function VoterSet(model) {
 		// returns an array of all the voters and their distinguishing info
 	
 		var vs = []
-		for (var i = 0; i < model.voters.length; i++) {
-			var voterGroup = model.voters[i]
+		for (var i = 0; i < model.voterGroups.length; i++) {
+			var voterGroup = model.voterGroups[i]
 			var points = voterGroup.points
 			var xGroup = voterGroup.x
 			var yGroup = voterGroup.y
@@ -2356,11 +2355,11 @@ function VoterSet(model) {
 	self.getAllVoterInfo = function() {
 		
 		// list voters
-		// The district contains information about where to find the voters in the groups AKA model.voters[]
+		// The district contains information about where to find the voters in the groups AKA model.voterGroups[]
 		var vs = []
 		var j = 0
-		for (var i = 0; i < model.voters.length; i++) {
-			var voterGroup = model.voters[i]
+		for (var i = 0; i < model.voterGroups.length; i++) {
+			var voterGroup = model.voterGroups[i]
 			var points = voterGroup.points
 			var yGroup = voterGroup.y
 			for (var k = 0; k < points.length; k++) {
@@ -2715,7 +2714,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 	function _drawCenter(ctx) {
 
 		 // Don't draw a individual group under a votercenter, which looks weird.
-		// if(model.voterCenter && model.voters.length == 1) return
+		// if(model.voterCenter && model.voterGroups.length == 1) return
 		// I guess this fixed something.. at some point.. but not anymore
 
 		// Circle!
@@ -2746,7 +2745,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				var textsize = 20
 				ctx.textAlign = "center";
 				
-				if(model.voters.length != 1) {
+				if(model.voterGroups.length != 1) {
 					_drawStroked(self.vid+1,x*2+0*textsize,y*2+0*textsize,textsize,ctx);
 				}
 			}				
@@ -2971,8 +2970,8 @@ function VoterCenter(model){
 		var x = 0
 		var y = 0
 		var totalnumbervoters = 0
-		for(var i=0; i<model.voters.length; i++){
-			var voter = model.voters[i]
+		for(var i=0; i<model.voterGroups.length; i++){
+			var voter = model.voterGroups[i]
 			var numbervoters = voter.points.length
 			x += voter.x * numbervoters
 			y += voter.y * numbervoters
@@ -3003,8 +3002,8 @@ function VoterCenter(model){
 			}
 			xvals = []
 			yvals = []
-			for(i=0; i<model.voters.length; i++){
-				voter = model.voters[i]
+			for(i=0; i<model.voterGroups.length; i++){
+				voter = model.voterGroups[i]
 				for(m=0; m<voter.points.length; m++) {
 					point = voter.points[m]
 					xvals.push(point[0]+voter.x)
@@ -3032,8 +3031,8 @@ function VoterCenter(model){
 			}
 
 			d = 0
-			for(i=0; i<model.voters.length; i++){
-				voter = model.voters[i]
+			for(i=0; i<model.voterGroups.length; i++){
+				voter = model.voterGroups[i]
 				xv = voter.x
 				yv = voter.y
 				xd = xv - x
@@ -3050,8 +3049,8 @@ function VoterCenter(model){
 						yg = yt[j]
 						// calculate distance
 						dg=0
-						for(i=0; i<model.voters.length; i++){
-							voter = model.voters[i]
+						for(i=0; i<model.voterGroups.length; i++){
+							voter = model.voterGroups[i]
 							xv = voter.x
 							yv = voter.y
 							xd = xv - xg
@@ -3071,9 +3070,9 @@ function VoterCenter(model){
 			// now we do it again for all the individual points within the voter group
 			
 			d=0
-			for(i=0; i<model.voters.length; i++){
+			for(i=0; i<model.voterGroups.length; i++){
 				
-				voter = model.voters[i]
+				voter = model.voterGroups[i]
 				for(m=0; m<voter.points.length; m++) {
 					point = voter.points[m]
 					xv = point[0]+voter.x
@@ -3092,8 +3091,8 @@ function VoterCenter(model){
 					yg = yt[j]
 					// calculate distance
 					dg=0
-					for(i=0; i<model.voters.length; i++){
-						voter = model.voters[i]
+					for(i=0; i<model.voterGroups.length; i++){
+						voter = model.voterGroups[i]
 						for(m=0; m<voter.points.length; m++) {
 							point = voter.points[m]
 							xv = point[0]+voter.x
@@ -3124,9 +3123,9 @@ function VoterCenter(model){
 	self.drag = function() {
 		var oldcenter = self.findVoterCenter()
 		var changecenter = {x:self.x - oldcenter.x, y:self.y - oldcenter.y}
-		for(var i=0; i<model.voters.length; i++){
-			model.voters[i].x += changecenter.x
-			model.voters[i].y += changecenter.y
+		for(var i=0; i<model.voterGroups.length; i++){
+			model.voterGroups[i].x += changecenter.x
+			model.voterGroups[i].y += changecenter.y
 		}
 	}
 

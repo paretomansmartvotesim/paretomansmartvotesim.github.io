@@ -899,14 +899,14 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 					model.candidates.splice(i, 1); // remove from candidates...
 				}
 
-				for (var i=0; i < model.voters.length; i++) {
-					v = model.voters[i]
+				for (var i=0; i < model.voterGroups.length; i++) {
+					v = model.voterGroups[i]
 					v.update() // easy way to only show the two candidates.
 				}
 
 				for(var j=0; j<district.voters.length; j++){
 					var v = district.voters[j]
-					model.voters[v.iGroup].voterPeople[v.iPoint].weight = weightcopy[j][ai][bi]
+					model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = weightcopy[j][ai][bi]
 				}
 
 
@@ -915,8 +915,8 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 				model.dontdrawwinners = false
 				district.candidates = dBackup
 				model.candidates = mBackup
-				for (var i=0; i < model.voters.length; i++) {
-					model.voters[i].update()
+				for (var i=0; i < model.voterGroups.length; i++) {
+					model.voterGroups[i].update()
 				}
 
 				// also draw past winners
@@ -1672,18 +1672,18 @@ Election.irv = function(district, model, options){
 	var loserslist = []
 
 	if(options.sidebar) {
-		// var ov = model.voters // original voters
-		// var temp = JSON.parse(JSON.stringify(model.voters)) // save the voters before changing them
-		// model.voters = temp
+		// var ov = model.voterGroups // original voters
+		// var temp = JSON.parse(JSON.stringify(model.voterGroups)) // save the voters before changing them
+		// model.voterGroups = temp
 		// var vt = []
-		// for (var i=0; i<model.voters.length; i++) {
+		// for (var i=0; i<model.voterGroups.length; i++) {
 		// 	vt[i]=[]
-		// 	for (varj=0; j < model.voters[i].voterPeople.length; j++)
+		// 	for (varj=0; j < model.voterGroups[i].voterPeople.length; j++)
 		// 	vt[i][j] = []
-		// 	Object.create(model.voters[i].ballots) // new copy
+		// 	Object.create(model.voterGroups[i].ballots) // new copy
 		// }
-		// model.voters = vt
-		// // model.voters = model.voters.map( x => Object.create(x)) // new copy
+		// model.voterGroups = vt
+		// // model.voterGroups = model.voterGroups.map( x => Object.create(x)) // new copy
 	}
 	while(!resolved){
 
@@ -1874,15 +1874,15 @@ Election.irv = function(district, model, options){
 
 	if(options.sidebar) {
 		
-		for(var i=0; i<model.voters.length; i++){
-			var voter = model.voters[i];
+		for(var i=0; i<model.voterGroups.length; i++){
+			var voter = model.voterGroups[i];
 			voter.update();
 		}
-		// for (var i=0; i<model.voters.length; i++) {
-		// 	model.voters[i].ballots = temp[i].ballots // originals
+		// for (var i=0; i<model.voterGroups.length; i++) {
+		// 	model.voterGroups[i].ballots = temp[i].ballots // originals
 		// }
-		// model.voters = temp // restore the original ballots
-		// model.voters = ov
+		// model.voterGroups = temp // restore the original ballots
+		// model.voterGroups = ov
 	}
 
 	if (drawFlows) {
@@ -2419,8 +2419,8 @@ Election.stv = function(district, model, options){
 	}
 
 	// we messed around with the rankings, so lets put them back
-	for(var j=0; j<model.voters.length; j++){
-		model.voters[j].update();
+	for(var j=0; j<model.voterGroups.length; j++){
+		model.voterGroups[j].update();
 	}
 
 	return result;
@@ -2766,8 +2766,8 @@ Election.quotaMinimax = function(district, model, options){
 	}
 
 	// we messed around with the rankings, so lets put them back
-	for(var j=0; j<model.voters.length; j++){
-		model.voters[j].update();
+	for(var j=0; j<model.voterGroups.length; j++){
+		model.voterGroups[j].update();
 	}
 
 	return result;
@@ -2906,7 +2906,7 @@ Election.quotaScore = function(district, model, options){
 	var seats = model.seats
 	var winners = []
 	var winnersIndexes = []
-	var maxscore = model.voters[0].voterModel.maxscore
+	var maxscore = model.voterGroups[0].voterModel.maxscore
 	
 	if (options.sidebar) {
 		var text = ""
@@ -3043,8 +3043,8 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 	// only do 2 candidates
 	var oldcandidates = district.candidates
 	district.candidates = district.candidates.filter( x => toptwo.includes(x.id)) 
-	for(var j=0; j<model.voters.length; j++){
-		model.voters[j].update();
+	for(var j=0; j<model.voterGroups.length; j++){
+		model.voterGroups[j].update();
 	}
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -3113,8 +3113,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// only do 2 candidates
 	var oldcandidates = district.candidates
 	district.candidates = district.candidates.filter( x => pwinners.includes(x.id)) 
-	for(var j=0; j<model.voters.length; j++){
-		model.voters[j].update();
+	for(var j=0; j<model.voterGroups.length; j++){
+		model.voterGroups[j].update();
 	}
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -3264,8 +3264,8 @@ function _getBallots(district, model){
 	var ballots = [];
 	for(var i=0; i<district.voters.length; i++){
 		var v = district.voters[i]
-		var b = model.voters[v.iGroup].voterPeople[v.iPoint].ballot
-		// var b = model.voters[v.iGroup].ballots[v.iPoint]
+		var b = model.voterGroups[v.iGroup].voterPeople[v.iPoint].ballot
+		// var b = model.voterGroups[v.iGroup].ballots[v.iPoint]
 		ballots = ballots.concat(b);
 	}
 	return ballots;
@@ -3277,9 +3277,9 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 
 	var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 	var skipthis =  true
-	for(var i=0;i<model.voters.length;i++){ // someone is looking at frontrunners, then don't skipthis
-		if (! not_f.includes(model.firstStrategy) && model.voters[0].percentSecondStrategy != 100) skipthis = false
-		if (! not_f.includes(model.voters[i].secondStrategy) && model.voters[0].percentSecondStrategy != 0) skipthis = false
+	for(var i=0;i<model.voterGroups.length;i++){ // someone is looking at frontrunners, then don't skipthis
+		if (! not_f.includes(model.firstStrategy) && model.voterGroups[0].percentSecondStrategy != 100) skipthis = false
+		if (! not_f.includes(model.voterGroups[i].secondStrategy) && model.voterGroups[0].percentSecondStrategy != 0) skipthis = false
 	}   //not_f.includes(config.firstStrategy) && not_f.includes(config.secondStrategy)
 	if (skipthis) return ""
 
@@ -3304,8 +3304,8 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	for (var k=0;k<5;k++) { // do the polling many times
 			
 		// get the ballots (hold the poll)
-		for(var i=0; i<model.voters.length; i++){
-			var voter = model.voters[i];
+		for(var i=0; i<model.voterGroups.length; i++){
+			var voter = model.voterGroups[i];
 			voter.update();
 		}
 
@@ -3342,8 +3342,8 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			/// Get really good polling results.
 			temp1 = model.pollResults // doing a poll without strategy.  not sure if this would work
 			model.pollResults = undefined
-			for(var i=0; i<model.voters.length; i++){
-				var voter = model.voters[i];
+			for(var i=0; i<model.voterGroups.length; i++){
+				var voter = model.voterGroups[i];
 				voter.update();
 			}
 			var ballots = _getBallots(district, model) // kinda double effort here but okay
@@ -3396,7 +3396,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 				if (electiontype == "irv"){
 					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally.firstpicks[c]) + ". ") + " "
 				} else {
-					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voters[0].voterModel.maxscore) + ".") + " "
+					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
 					//polltext += "<br>"
 				}
@@ -3407,8 +3407,8 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	}		
 	if (electiontype == "irv") polltext += "<br>"
 	// get the ballots
-	for(var i=0; i<model.voters.length; i++){
-		var voter = model.voters[i];
+	for(var i=0; i<model.voterGroups.length; i++){
+		var voter = model.voterGroups[i];
 		voter.update();
 	}
 	if (options.sidebar){
@@ -3453,7 +3453,7 @@ var _tally_primary = function(district, model, tallyFunc){
 	var primaries_tallies = []
 	var oldcandidates = district.candidates// temporary change
 	caninprimary = []
-	for ( var j = 0; j < model.voters.length; j++){
+	for ( var j = 0; j < model.voterGroups.length; j++){
 		caninprimary.push([])
 	}
 	
@@ -3461,10 +3461,10 @@ var _tally_primary = function(district, model, tallyFunc){
 		var can = district.candidates[c]
 		var maxdist2 = Infinity
 		var votebelong = 0
-		for ( var j = 0; j < model.voters.length; j++){
-			var dist2 = distF2(model, model.voters[j], can)
-			// var dx = model.voters[j].x - can.x
-			// var dy = model.voters[j].y - can.y
+		for ( var j = 0; j < model.voterGroups.length; j++){
+			var dist2 = distF2(model, model.voterGroups[j], can)
+			// var dx = model.voterGroups[j].x - can.x
+			// var dy = model.voterGroups[j].y - can.y
 			// var dist2 = dx*dx + dy*dy
 			if (dist2 < maxdist2) {
 				votebelong = j
@@ -3481,7 +3481,7 @@ var _tally_primary = function(district, model, tallyFunc){
 	// }
 	// if (problem) return "we gotta problem"
 
-	for ( var j = 0; j < model.voters.length; j++){
+	for ( var j = 0; j < model.voterGroups.length; j++){
 		
 		// Create the tally
 		var tally = {};
@@ -3490,7 +3490,7 @@ var _tally_primary = function(district, model, tallyFunc){
 		// Count 'em up
 		district.candidates = caninprimary[j]	
 		if (district.candidates.length == 0) district.candidates = oldcandidates // workaround
-		model.voters[j].update()
+		model.voterGroups[j].update()
 		var ballots = model.voterSet.getBallotsCrowdAndDistrict(j,district)
 		for(var i=0; i<ballots.length; i++){
 			tallyFunc(tally, ballots[i]);

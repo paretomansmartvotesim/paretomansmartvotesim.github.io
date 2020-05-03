@@ -15,12 +15,12 @@ l.onload = function(assets){
 
 	model.initPlugin = function(){
 		// CREATE
-		model.voters.push(new GaussianVoters(model))
+		model.voterGroups.push(new GaussianVoters(model))
 		model.candidates.push(new Candidate(model))
 		model.candidates.push(new Candidate(model))
 		model.candidates.push(new Candidate(model))
 		// CONFIGURE
-		Object.assign( model.voters[0],    {x:155, y:125} )
+		Object.assign( model.voterGroups[0],    {x:155, y:125} )
 		Object.assign( model.candidates[0],{x: 50, y:125, icon:"square"} )
 		Object.assign( model.candidates[1],{x:250, y:125, icon:"triangle"} )
 		Object.assign( model.candidates[2],{x:280, y:280, icon:"hexagon"} )
@@ -30,7 +30,7 @@ l.onload = function(assets){
 		model.candidates[1].init()
 		model.candidates[2].init()
 		model.initMODEL()
-		model.voters[0].init()
+		model.voterGroups[0].init()
 		model.election = Election.plurality;
 		model.optionsForElection =  {sidebar:true, original:true}
 		model.dm.redistrict()

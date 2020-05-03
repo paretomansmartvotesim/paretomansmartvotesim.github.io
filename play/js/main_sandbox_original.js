@@ -95,7 +95,7 @@ function sandbox(ui){
 		model.initPlugin = function(){
 			// CREATE
 			for(var i=0; i<config.candidates; i++) model.candidates.push(new Candidate(model))
-			for(var i=0; i<config.voters; i++) model.voters.push(new GaussianVoters(model))
+			for(var i=0; i<config.voters; i++) model.voterGroups.push(new GaussianVoters(model))
 			// CONFIGURE
 			//     expand config to calculate some values to add to the model			
 			//     load expanded config into the model
@@ -106,8 +106,8 @@ function sandbox(ui){
 				model.candidates[i].init()
 			}
 			model.initMODEL()
-			for (var i=0; i<model.voters.length; i++) {
-				model.voters[i].init()
+			for (var i=0; i<model.voterGroups.length; i++) {
+				model.voterGroups[i].init()
 			}
 			model.dm.redistrict()
 			model.update()
@@ -156,8 +156,8 @@ function sandbox(ui){
 				// CONFIGURE
 				self.configure()
 				// UPDATE
-				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].init()
+				for(var i=0;i<model.voterGroups.length;i++){
+					model.voterGroups[i].init()
 				}
 				model.update();
 			};
@@ -165,8 +165,8 @@ function sandbox(ui){
 				var s = self.listByName()
 				model.election = s.election
 				model.system = config.system;
-				for(var i=0;i<model.voters.length;i++){
-					model.voters[i].typeVoterModel = s.ballotType
+				for(var i=0;i<model.voterGroups.length;i++){
+					model.voterGroups[i].typeVoterModel = s.ballotType
 				}
 			}
 			self.select = function() {
@@ -194,16 +194,16 @@ function sandbox(ui){
 				config.voters = data.num;
 				config.voterPositions = null
 				// CREATE
-				model.voters = []
+				model.voterGroups = []
 				for(var i=0; i<config.voters; i++) {
-					model.voters.push(new GaussianVoters(model))
+					model.voterGroups.push(new GaussianVoters(model))
 				}
 				// CONFIGURE
 				self.configure()
 				// INIT
 				model.initMODEL()
-				for(var i=0; i<model.voters.length; i++) {
-					model.voters[i].init()
+				for(var i=0; i<model.voterGroups.length; i++) {
+					model.voterGroups[i].init()
 				}
 				// UPDATE
         		model.dm.redistrict()
@@ -215,11 +215,11 @@ function sandbox(ui){
 				if (config.voterPositions) {
 					for(var i=0; i<num; i++){
 						var pos = config.voterPositions[i];
-						Object.assign(model.voters[i], {
+						Object.assign(model.voterGroups[i], {
 							num:(4-num),
 							x:pos[0], y:pos[1]
 						})
-						model.voters[i].typeVoterModel = ui.menu.systems.listByName(config).ballotType // needs init
+						model.voterGroups[i].typeVoterModel = ui.menu.systems.listByName(config).ballotType // needs init
 					}
 				} else {
 					var voterPositions;
@@ -236,11 +236,11 @@ function sandbox(ui){
 					})[0];
 					for(var i=0; i<num; i++){
 						var pos = voterPositions[i];
-						Object.assign(model.voters[i], {
+						Object.assign(model.voterGroups[i], {
 							disk:(4-num),
 							x:pos[0], y:pos[1]
 						})
-						model.voters[i].typeVoterModel = ui.menu.systems.listByName(config).ballotType // needs init
+						model.voterGroups[i].typeVoterModel = ui.menu.systems.listByName(config).ballotType // needs init
 					}
 				}
 			}
@@ -457,8 +457,8 @@ function sandbox(ui){
 
 			// Voter positions
 			positions = [];
-			for(var i=0; i<model.voters.length; i++){
-				var voter = model.voters[i];
+			for(var i=0; i<model.voterGroups.length; i++){
+				var voter = model.voterGroups[i];
 				positions.push([
 					Math.round(voter.x),
 					Math.round(voter.y)

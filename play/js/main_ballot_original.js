@@ -27,26 +27,26 @@ function main_ballot(ui){
 		basediv.appendChild(model.dom);
 		model.initPlugin = function(){
 			// CREATE
-			model.voters.push(new SingleVoter(model))
+			model.voterGroups.push(new SingleVoter(model))
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
 			model.candidates.push(new Candidate(model))
 			// CONFIGURE
-			Object.assign( model.voters[0],    {x: 81, y: 92, typeVoterModel: ballotType,
+			Object.assign( model.voterGroups[0],    {x: 81, y: 92, typeVoterModel: ballotType,
 				firstStrategy: "zero strategy. judge on an absolute scale."} )
 			Object.assign( model.candidates[0],{x: 41, y: 50, icon:"square"} )
 			Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )
 			Object.assign( model.candidates[2],{x:216, y:216, icon:"hexagon"} )
-			model.voters[0].firstStrategy = "zero strategy. judge on an absolute scale.";
+			model.voterGroups[0].firstStrategy = "zero strategy. judge on an absolute scale.";
 			// INIT
 			model.candidates[0].init()
 			model.candidates[1].init()
 			model.candidates[2].init()
 			model.initMODEL()
-			model.voters[0].init()
+			model.voterGroups[0].init()
 			// UPDATE
 			if(ballotType=="Score") {
-				model.voters[0].voterModel.minscore = 1
+				model.voterGroups[0].voterModel.minscore = 1
 			}
 			model.dm.redistrict()
 			model.update()
@@ -57,7 +57,7 @@ function main_ballot(ui){
 		var ballot = new BallotType(model);
 		basediv.appendChild(ballot.dom);
 		model.onUpdate = function(){
-			ballot.update(model.voters[0].voterPeople[0].ballot);
+			ballot.update(model.voterGroups[0].voterPeople[0].ballot);
 		};
 
 		// UPDATE

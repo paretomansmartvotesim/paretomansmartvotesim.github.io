@@ -17,11 +17,11 @@ l.onload = function(assets){
 
   model.initPlugin = function(){
     // CREATE
-    model.voters.push(new SingleVoter(model))
+    model.voterGroups.push(new SingleVoter(model))
     model.candidates.push(new Candidate(model))
     model.candidates.push(new Candidate(model))
     // CONFIGURE
-    Object.assign( model.voters[0],    {x:125, y:200} )
+    Object.assign( model.voterGroups[0],    {x:125, y:200} )
     Object.assign( model.candidates[0],{x: 50, y:125, icon:"square"} )
     Object.assign( model.candidates[1],{x:250, y:125, icon:"triangle"} )
     model.ballotConcept = "off"
@@ -29,13 +29,13 @@ l.onload = function(assets){
     model.candidates[0].init()
     model.candidates[1].init()
     model.initMODEL()
-    model.voters[0].init()
+    model.voterGroups[0].init()
     model.dm.redistrict()
     // UPDATE
     model.update()
   };
   model.onUpdate = function(){
-    var id = model.voters[0].voterPeople[0].ballot.vote;
+    var id = model.voterGroups[0].voterPeople[0].ballot.vote;
     var color = model.candidatesById[id].fill;
     var text = "VOTES FOR <b style='color:"+color+"'>"+id.toUpperCase()+"</b>";
     model.caption.innerHTML = text;

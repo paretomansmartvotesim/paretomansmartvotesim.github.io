@@ -140,8 +140,8 @@ function Yee(model) {
 			var av = [], xv = [], yv = [] , vg = [] , xvcenter = [] , yvcenter = []// candidates
 			var movethisidx, whichtypetomove
 			var i = 0
-			for (var vidx in model.voters) {
-				var v = model.voters[vidx]
+			for (var vidx in model.voterGroups) {
+				var v = model.voterGroups[vidx]
 				av.push(v)
 				xvcenter.push(v.x*2)
 				yvcenter.push(v.y*2)
@@ -211,10 +211,10 @@ function Yee(model) {
 		}
 		if (model.yeeobject == model.voterCenter) {
 			var voterso = []
-			for(var i=0; i<model.voters.length; i++){
+			for(var i=0; i<model.voterGroups.length; i++){
 				voterso[i] = {}
-				voterso[i].x = model.voters[i].x
-				voterso[i].y = model.voters[i].y
+				voterso[i].x = model.voterGroups[i].x
+				voterso[i].y = model.voterGroups[i].y
 			}
 		}
 
@@ -358,14 +358,14 @@ function Yee(model) {
 					x:model.yeeobject.x - saveo.x, 
 					y:model.yeeobject.y - saveo.y
 				}
-				for(var j=0; j<model.voters.length; j++){
-					model.voters[j].x = voterso[j].x + changecenter.x
-					model.voters[j].y = voterso[j].y + changecenter.y
+				for(var j=0; j<model.voterGroups.length; j++){
+					model.voterGroups[j].x = voterso[j].x + changecenter.x
+					model.voterGroups[j].y = voterso[j].y + changecenter.y
 				}
 			}
 			
-			for(var j=0; j<model.voters.length; j++){
-				model.voters[j].update();
+			for(var j=0; j<model.voterGroups.length; j++){
+				model.voterGroups[j].update();
 			}
 			if (model.nDistricts > 1) {
 
@@ -402,9 +402,9 @@ function Yee(model) {
 			model.yeeobject.y = saveo.y;
 		}
 		if (model.yeeobject == model.voterCenter) {
-			for(var i=0; i<model.voters.length; i++){
-				model.voters[i].x = voterso[i].x
-				model.voters[i].y = voterso[i].y
+			for(var i=0; i<model.voterGroups.length; i++){
+				model.voterGroups[i].x = voterso[i].x
+				model.voterGroups[i].y = voterso[i].y
 			}
 		}
 
@@ -663,8 +663,8 @@ function BeatMap(model) {
 		}
 		xvals = []
 		yvals = []
-		for(i=0; i<model.voters.length; i++){
-			voter = model.voters[i]
+		for(i=0; i<model.voterGroups.length; i++){
+			voter = model.voterGroups[i]
 			for(m=0; m<voter.points.length; m++) {
 				point = voter.points[m]
 				xvals.push(point[0]+voter.x)
