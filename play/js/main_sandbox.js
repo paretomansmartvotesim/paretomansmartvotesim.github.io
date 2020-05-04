@@ -1551,8 +1551,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 ui.menu.dimensions.select()
             }
             for (var voter of model.voterGroups) {
-                voter.init()
+                voter.initVoterModel()
             }
+            model.dm.redistrict()
             model.update();
             ui.menu_update()
         };
@@ -2188,6 +2189,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.configureN(n)
             // INIT
             model.voterGroups[n].init()
+            _pileVoters(model)
+            model.dm.redistrict()
             // UPDATE
             model.update()
             ui.menu_update()

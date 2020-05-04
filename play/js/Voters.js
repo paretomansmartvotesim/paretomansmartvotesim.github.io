@@ -1042,6 +1042,7 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 	
 		} else if (model.system == "IRV" || model.system == "STV") {
 			if (1) {
+				if (ballot.rank.length == 0) return
 				var candidate = model.candidatesById[ballot.rank[0]];
 		
 				// RETINA
@@ -1361,6 +1362,7 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson) {
 	var size = voterPerson.size
 	var ballot = voterPerson.ballot
 	var weight = voterPerson.weight
+	var iDistrict = voterPerson.iDistrict
 	{
 
 		if (typeof weight === 'undefined') weight = 1
@@ -1390,7 +1392,7 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson) {
 			}
 			
 			if (orderByCandidate) {
-				for(var [i,c] of Object.entries(model.district[0].candidates)){
+				for(var [i,c] of Object.entries(model.district[iDistrict].candidates)){
 					slices[i] = slicesById[c.id]
 				}
 			}
@@ -1772,12 +1774,17 @@ function _drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight) {
 	// background stroke
 	_centeredRectStroke(ctx,x,y,size,size)
 
-	var n = model.candidates.length
+	var districtCandidateIDs = []
+	for (var c of model.candidates) {
+		if (ballot.rank.includes(c.id)) districtCandidateIDs.push(c.id)
+	}
+
+	var n = ballot.rank.length
 	pairtable = {}
 	for (var i=0; i < n; i++) {
-		var c = model.candidates[i]
-		pairtable[c.id] = {}
-		pairtable[c.id][c.id] = c.id
+		var cid = ballot.rank[i]
+		pairtable[cid] = {}
+		pairtable[cid][cid] = cid
 	}
 	for (var i = 0; i < n; i++) {
 		var cidWin = ballot.rank[i]
@@ -1793,9 +1800,9 @@ function _drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight) {
 	var xaxis = _lineHorizontal(n,size)
 	for (var i = 0; i < n; i++) {
 		for (var k = 0; k < n; k++) {
-			ci = model.candidates[i]
-			ck = model.candidates[k]
-			var cid = pairtable[ci.id][ck.id]
+			icid = districtCandidateIDs[i]
+			kcid = districtCandidateIDs[k]
+			var cid = pairtable[icid][kcid]
 			var fill = model.candidatesById[cid].fill
 			var xp = x + xaxis[i][0]
 			var yp = y + yaxis[k][1]
@@ -2330,7 +2337,7 @@ function VoterSet(model) {
 					var ballot = ballots[k]
 					for (var n = 0; n < model.candidates.length; n++) {
 						var id = model.candidates[n].id
-						v.b[n] = ballot[id]
+						v.b[n] = ballot[id] || 0
 					}
 					vs.push(v)
 				} else if (model.ballotType == "Ranked" && model.system == "STV") {

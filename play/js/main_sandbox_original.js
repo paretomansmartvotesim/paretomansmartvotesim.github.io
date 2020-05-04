@@ -159,6 +159,7 @@ function sandbox(ui){
 				for(var i=0;i<model.voterGroups.length;i++){
 					model.voterGroups[i].init()
 				}
+				model.dm.redistrict()
 				model.update();
 			};
 			self.configure = function() {
