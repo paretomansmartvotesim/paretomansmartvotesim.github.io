@@ -68,7 +68,44 @@ function _lookupPreset(ui) {
 	}
 	
 	// configurations
-	if (ui.presetName == "election1") {
+	
+	if (ui.presetName == "sandbox") {
+		uiType = "sandbox"
+		config = {
+			description: "",
+			features: 4,
+			system: "FPTP",
+			candidates: 5,
+			voters: 1,
+			doFullStrategyConfig: true,
+			doTwoStrategies: false,
+			doPercentFirst: false,
+			arena_size: 300,
+			arena_border: 2,
+			spread_factor_voters: 2,
+			firstStrategy: "normalize",
+			secondStrategy: "normalize frontrunners only",
+			autoPoll: "Auto",
+			visSingleBallotsOnly: false,
+			theme: "Letters",
+			menuVersion: "2",
+			doFeatureFilter: false,
+			yeeon: false,
+			rankedVizBoundary: "atMidpoint",
+			stepMenu: "vote",
+			// configversion: 2.5, // should stay at latest version
+		}
+	} else if (ui.presetName == "sandbox_original") {
+		uiType = "sandbox original"
+		config = {
+			description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
+			features: 4,
+			system: "FPTP",
+			candidates: 5,
+			voters: 1
+		}
+		update = update_original
+	} else if (ui.presetName == "election1") {
 		uiType = "election"
 		update = update_original
 		config = {
@@ -1374,41 +1411,6 @@ function _lookupPreset(ui) {
 			configversion: 2.3
 		}
 
-	} else if (ui.presetName == "sandbox") {
-		uiType = "sandbox"
-		config = {
-			description: "",
-			features: 4,
-			system: "FPTP",
-			candidates: 5,
-			voters: 1,
-			doFullStrategyConfig: true,
-			doTwoStrategies: false,
-			doPercentFirst: false,
-			arena_size: 300,
-			arena_border: 2,
-			spread_factor_voters: 2,
-			firstStrategy: "normalize",
-			secondStrategy: "normalize frontrunners only",
-			autoPoll: "Auto",
-			visSingleBallotsOnly: false,
-			theme: "Letters",
-			menuVersion: "2",
-			doFeatureFilter: false,
-			yeeon: false,
-			rankedVizBoundary: "atMidpoint",
-			// configversion: 2.5, // should stay at latest version
-		}
-	} else if (ui.presetName == "sandbox_original") {
-		uiType = "sandbox original"
-		config = {
-			description: "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob.",
-			features: 4,
-			system: "FPTP",
-			candidates: 5,
-			voters: 1
-		}
-		update = update_original
 	} else if (ui.presetName == "ballot1") {
 		uiType = "ballot"
 		config = {
