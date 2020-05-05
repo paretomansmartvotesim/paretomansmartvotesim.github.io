@@ -5148,7 +5148,6 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         ui.dom.descText = document.createElement("textarea");
         var descText = ui.dom.descText
         descText.id = "description_text";
-        descText.placeholder = "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
 
         containText = document.createElement("div");
         containText.id = "double_description_container";
@@ -5167,6 +5166,11 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
             } else {
                 descDOM.hidden = true
                 descText.hidden = true
+            }
+            if (config.theme == "Nicky") {
+                descText.placeholder = "[type a description for your model here. for example...]\n\nLook, it's the whole shape gang! Steven Square, Tracy Triangle, Henry Hexagon, Percival Pentagon, and last but not least, Bob."
+            } else {
+                descText.placeholder = "[type a description for your model here.]"
             }
         }
         self.dom = descDOM

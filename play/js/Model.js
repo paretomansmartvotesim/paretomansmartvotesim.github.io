@@ -975,9 +975,12 @@ function Arena(arenaName, model) {
 				if (model.voterGroups[i] == d) {
 					// delete candidate
 					model.voterGroups.splice(i,1)
+					// need to init voterSet
+					model.voterSet.init()
 					break
 				}
 			}
+
 
 			// INIT
 			model.initMODEL()

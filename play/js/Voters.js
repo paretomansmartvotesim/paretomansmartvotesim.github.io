@@ -2676,7 +2676,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		}
 	}
 	self.draw2 = function(ctx){
-		if ( ! model.doOriginal) {
+		if ( model.theme != "Nicky") {
 			_drawCenter(ctx)
 		}
 	}
@@ -3208,7 +3208,10 @@ function VoterCenter(model){
 	
 				} else {
 					size = size*2;
-					ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+
+					_drawThickRing(ctx,x/2,y/2,size/2*.7)
+
+					// ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 	
 				}
 			}
