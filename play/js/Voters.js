@@ -792,113 +792,196 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 		var temp = ctx.globalAlpha
 		var lastDist = Infinity
 		var scorange = ballot.rank.length
-		if (model.doVoterMapGPU) {
-			voterPerson.rad = []
-			voterPerson.idxCan = []
-		}
-		for(var i=ballot.rank.length-1; i>=0; i--){
+		var winsAndLosses = false
+		if (winsAndLosses) {
 
-			// reverse order
+			var mult = 2 * cmul	
+			ctx.globalAlpha = Math.max(.002, 1 * mult / nVoters / scorange) // donuts get lighter towards the center
+			
+
+			var nRanks = ballot.rank.length
+
+			// list distances and fill colors
+			var aDist = []
+			var aFill = []
+			for (var cid of ballot.rank) {
+				c = model.candidatesById[cid]
+				aDist.push(distF(model,me,c))
+				aFill.push(c.fill)
+			}
+
+			// find mindpoints
+			var aMidpoints = []
+			for (var i = 0; i < nRanks - 1; i++) {
+				aMidpoints.push( .5 * (aDist[i] + aDist[i+1]) )
+			}
+
+			// find boundaries of each zone
+			var aZoneStart = []
+			var aZoneEnd = []
+			for (var i = 0; i < nRanks; i++) {
+				if (i==0) {
+					aZoneStart.push(0)
+				} else {
+					aZoneStart.push(aMidpoints[i-1])
+				}
+				if (i == nRanks) {
+					aZoneEnd.push(Infinity)
+				} else {
+					aZoneEnd.push(aMidpoints[i])
+				}
+			}
+
+			for (var i = 0; i < nRanks - 1; i++) {
+				// notice bottom candidate gets no zones
+				
+				// set fill
+				ctx.fillStyle = aFill[i]
+
+				// make losing zone
+				ctx.beginPath()
+				ctx.arc(x*2, y*2, aZoneEnd[i]*2, 0, Math.TAU, false)
+				ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+				ctx.closePath()
+
+				// draw other's losses
+				ctx.fill("evenodd")
+				var a = 4
 
 
-			// Line width
-			var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
+				// make winning zone
+				ctx.beginPath()
+				ctx.arc(x*2, y*2, aZoneStart[i]*2, 0, Math.TAU, false)
+				ctx.arc(x*2, y*2, aZoneEnd[i]*2, 0, Math.TAU, false)
+				ctx.closePath()
 
-			// To which candidate...
-			var rank = ballot.rank[i];
-			var c = model.candidatesById[rank];
-			// var cc = model.arena.modelToArena(c)
-
-			// dist = Math.sqrt((meArena.x - cc.x) ** 2 + (meArena.y - cc.y) ** 2 )
-			if (model.rankedVizBoundary === "atMidpoint" || model.rankedVizBoundary === "atLoser") {
-				if (i <= ballot.rank.length-2) {
-					var nextRank = ballot.rank[i+1];
-					var nextC = model.candidatesById[nextRank];
-					var distCurrent = distF(model,me,c)
-					var distNext = distF(model,me,nextC)
-					if (model.rankedVizBoundary === "atMidpoint") {
-						var dist = .5 * (distCurrent + distNext)
-					} else {
-						var dist = distNext
+				// draw wins
+				var nWins = nRanks - i - 1
+				if (0) {
+					if (nWins > 0) {
+						ctx.fill("evenodd")
 					}
 				} else {
+					if (1) {
+						ctx.fillStyle = "#fff"
+					}
+					for (var k = 0; k < nWins; k++) {
+						ctx.fill("evenodd")
+					}
+				}
+
+				
+			}
+		} else {
+			if (model.doVoterMapGPU) {
+				voterPerson.rad = []
+				voterPerson.idxCan = []
+			}
+			for(var i=ballot.rank.length-1; i>=0; i--){
+
+				// reverse order
+
+
+				// Line width
+				var lineWidth = ((ballot.rank.length-i)/ballot.rank.length)*8;
+
+				// To which candidate...
+				var rank = ballot.rank[i];
+				var c = model.candidatesById[rank];
+				// var cc = model.arena.modelToArena(c)
+
+				// dist = Math.sqrt((meArena.x - cc.x) ** 2 + (meArena.y - cc.y) ** 2 )
+				if (model.rankedVizBoundary === "atMidpoint" || model.rankedVizBoundary === "atLoser") {
+					if (i <= ballot.rank.length-2) {
+						var nextRank = ballot.rank[i+1];
+						var nextC = model.candidatesById[nextRank];
+						var distCurrent = distF(model,me,c)
+						var distNext = distF(model,me,nextC)
+						if (model.rankedVizBoundary === "atMidpoint") {
+							var dist = .5 * (distCurrent + distNext)
+						} else {
+							var dist = distNext
+						}
+					} else {
+						continue
+					}
+				} else if (model.rankedVizBoundary === "beforeWinner") {
+					if (i >= 1) {
+						var previousRank = ballot.rank[i-1];
+						var previousC = model.candidatesById[previousRank];
+						var distPrevious = distF(model,me,previousC)
+					} else {
+						var distPrevious = 0
+					}
+					var distCurrent = distF(model,me,c)
+					var dist = .5 * (distCurrent + distPrevious)
+				} else { // atWinner
+					var dist = distF(model,me,c)
+				}
+				
+				if (model.doVoterMapGPU) {
+					voterPerson.rad.push(dist)
+					if (doColors) {
+						voterPerson.idxCan.push(c.i)
+					} else {
+						voterPerson.idxCan.push(0)
+					}
 					continue
 				}
-			} else if (model.rankedVizBoundary === "beforeWinner") {
-				if (i >= 1) {
-					var previousRank = ballot.rank[i-1];
-					var previousC = model.candidatesById[previousRank];
-					var distPrevious = distF(model,me,previousC)
-				} else {
-					var distPrevious = 0
-				}
-				var distCurrent = distF(model,me,c)
-				var dist = .5 * (distCurrent + distPrevious)
-			} else { // atWinner
-				var dist = distF(model,me,c)
-			}
-			
-			if (model.doVoterMapGPU) {
-				voterPerson.rad.push(dist)
+
+				ctx.beginPath();
+				ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
+				
+				var invert = true // CAN CHANGE
+				var donuts = true
 				if (doColors) {
-					voterPerson.idxCan.push(c.i)
-				} else {
-					voterPerson.idxCan.push(0)
+					donuts = false
 				}
-				continue
-			}
-
-			ctx.beginPath();
-			ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
-			
-			var invert = true // CAN CHANGE
-			var donuts = true
-			if (doColors) {
-				donuts = false
-			}
-			if (invert) {
-				if (donuts) {
-					if (lastDist == Infinity) {
-						ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+				if (invert) {
+					if (donuts) {
+						if (lastDist == Infinity) {
+							ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+						} else {
+							ctx.arc(x*2, y*2, lastDist*2, 0, Math.TAU, false);
+						}
+						lastDist = dist // copy
 					} else {
-						ctx.arc(x*2, y*2, lastDist*2, 0, Math.TAU, false);
+						ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
 					}
-					lastDist = dist // copy
-				} else {
-					ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height)
+					ctx.closePath()
 				}
-				ctx.closePath()
-			}
 
-			if (doColors) {
-				ctx.fillStyle = c.fill
-			} else {
-				ctx.fillStyle = '#000'
-			}
-			ctx.strokeStyle = "#000";
-			
-			// ctx.setLineDash([]);
+				if (doColors) {
+					ctx.fillStyle = c.fill
+				} else {
+					ctx.fillStyle = '#000'
+				}
+				ctx.strokeStyle = "#000";
+				
+				// ctx.setLineDash([]);
 
-			var doLines = false
-			if (doLines) {
-				ctx.globalAlpha = .01
-				ctx.stroke()
-			}
-			if (doColors) {
-				var mult = 2 * cmul
-			} else {
-				var mult = 1
-			}				
-			if (donuts) {
-				ctx.globalAlpha = Math.max(.002, 1 * mult / nVoters * (i+1) / scorange) // donuts get lighter towards the center
-			} else {
-				ctx.globalAlpha = Math.max(.002, 1 * mult / nVoters / scorange) // donuts get lighter towards the center
-			}
-			if (invert) {
-				// .002 seems to be a limit
-				ctx.fill("evenodd")
-			} else {
-				ctx.fill()
+				var doLines = false
+				if (doLines) {
+					ctx.globalAlpha = .01
+					ctx.stroke()
+				}
+				if (doColors) {
+					var mult = 2 * cmul
+				} else {
+					var mult = 1
+				}				
+				if (donuts) {
+					ctx.globalAlpha = Math.max(.002, 1 * mult / nVoters * (i+1) / scorange) // donuts get lighter towards the center
+				} else {
+					ctx.globalAlpha = Math.max(.002, 1 * mult / nVoters / scorange) // donuts get lighter towards the center
+				}
+				if (invert) {
+					// .002 seems to be a limit
+					ctx.fill("evenodd")
+				} else {
+					ctx.fill()
+				}
+
 			}
 		}
 		if (0) {
