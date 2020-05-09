@@ -776,7 +776,7 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 			// ctx.globalCompositeOperation = "hue"; cmul = 1 // great for small numbers (best on color matching) but fails for large numbers
 			// ctx.globalCompositeOperation = "lighter"; cmul = .4 // 1  // good for small number // bad for large number
 			// ctx.globalCompositeOperation = "darker"; cmul = .5 // compatibility issues & order matters
-			// ctx.globalCompositeOperation = "lighten"; cmul = 4 // kinda good for small numbers // bad because background too bright
+			// ctx.globalCompositeOperation = "lighten"; cmul = 1 // kinda good for small numbers // bad because background too bright
 			// ctx.globalCompositeOperation = "darken"; cmul = .3 // not uniform 1,2,3 // not dark enough
 		} else {
 			// ctx.globalCompositeOperation = "source-over"
@@ -898,6 +898,16 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 				// .002 seems to be a limit
 				ctx.fill("evenodd")
 			} else {
+				ctx.fill()
+			}
+		}
+		if (0) {
+			// final circle in the middle... hmm doesn't seem to make much difference.
+			if (doColors) { 
+				ctx.fillStyle = 'white'
+				ctx.beginPath();
+				ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
+				ctx.closePath()
 				ctx.fill()
 			}
 		}

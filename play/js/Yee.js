@@ -825,10 +825,11 @@ function BeatMap(model) {
 
 VoterMapGPU = function(model) {
 	var self = this
-
+	var backup = false
 	self.init = function(){
 		
 		self.canvasGPU = document.createElement('canvas')
+		if (backup) return
 		
 		var ProcessorType = "gpu"
 		self.gpu = new GPU({
@@ -906,6 +907,10 @@ VoterMapGPU = function(model) {
 		}
 		colorData = getColorScale(colors) // just a list of colors in an array
 		
+		if (backup) {
+			doBackup()
+			return
+		}
 
 		var changedVotingModel = false
 		var changedNumValues = (numValues != self.oldNumValues)
@@ -1012,7 +1017,50 @@ VoterMapGPU = function(model) {
 				.setGraphical(true);
 
 		}
-		
+		function doBackup () {
+			// doesn't work because rgb values are too small
+			// transparency values are too small too I guess
+			
+			self.canvasGPU.width = width
+			self.canvasGPU.height = height
+			var ctx = self.canvasGPU.getContext('2d')
+			ctx.save()
+			ctx.fillStyle = "black"
+			ctx.fillRect(0,0,width,height)
+			ctx.globalCompositeOperation = "source-over"
+			var c1 = 1/numValues
+			// var c2 = 1/255**2 /numValues
+			var c2 = 1/255 /numValues
+			ctx.globalAlpha = c1
+			var insideColor = 'white'
+			// var insideColor = `rgba(${c1},${c1},${c1},1)`
+			for (var i = 0; i < numValues; i++) {
+				
+				// outside color
+				var c = idxCan[i]
+				ctx.fillStyle = colors[c]
+				// r2 = c2 * colorData[c * 4] ** 2
+				// g2 = c2 * colorData[1 + c * 4] ** 2
+				// b2 = c2 * colorData[2 + c * 4] ** 2
+				// r2 = c2 * colorData[c * 4]
+				// g2 = c2 * colorData[1 + c * 4]
+				// b2 = c2 * colorData[2 + c * 4]
+				// ctx.fillStyle = `rgba(${r2},${g2},${b2},1)`
+				ctx.beginPath()
+				ctx.arc(xpos[i]*2, ypos[i]*2, rad[i]*2, 0, Math.TAU, false)
+				ctx.rect(0,0,width,height)
+				ctx.closePath()
+				ctx.fill('evenodd')
+				// inside color
+				ctx.fillStyle = insideColor
+				ctx.beginPath()
+				ctx.arc(xpos[i]*2, ypos[i]*2, rad[i]*2, 0, Math.TAU, false)
+				ctx.closePath()
+				ctx.fill()
+				
+			}
+			ctx.restore()
+		}
 	}
 	
 	self.drawVoterMapGPU = function () {
