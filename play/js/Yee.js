@@ -11,6 +11,8 @@ function Viz(model) {
 
 	var yee = new Yee(model)
 	var beatMap = new BeatMap(model)
+	var voterMapGPU = new VoterMapGPU(model)
+	voterMapGPU.init()
 	self.yee = yee
 	self.beatMap = beatMap
 
@@ -34,6 +36,10 @@ function Viz(model) {
 		if (model.checkDoBeatMap()) {
 			beatMap.calculateBeatMap()
 		}
+
+		if (model.doVoterMapGPU) {
+			voterMapGPU.calculateVoterMapGPU()
+		}
 	}
 
 	self.drawBackground = function() {
@@ -44,6 +50,10 @@ function Viz(model) {
 
 		if (model.checkDoBeatMap()) {
 			beatMap.drawBackgroundBeatMap()
+		}
+
+		if (model.doVoterMapGPU) {
+			voterMapGPU.drawVoterMapGPU()
 		}
 	}
 
@@ -417,8 +427,12 @@ function Yee(model) {
 			
 				// update the GUI
 				model.onAddCandidate()
+
 				model.dm.redistrict()
 				model.yeeobject = undefined
+				for(var voterGroup of model.voterGroups){
+					voterGroup.update()
+				}
 			
 			} else {
 
@@ -807,4 +821,226 @@ function BeatMap(model) {
 		ctx.globalCompositeOperation = tempComposite
 		ctx.globalAlpha = temp
 	}
+}
+
+VoterMapGPU = function(model) {
+	var self = this
+
+	self.init = function(){
+		
+		self.canvasGPU = document.createElement('canvas')
+		
+		var ProcessorType = "gpu"
+		self.gpu = new GPU({
+			processor: ProcessorType,
+			canvas: self.canvasGPU,
+		});
+
+		self.oldNumValues = undefined
+		
+		// document.body.appendChild(self.canvasGPU);
+		// var width = model.size
+		// var height = model.size
+		// canvasGPU.width = width*2;
+		// canvasGPU.height = height*2;
+		// canvasGPU.style.width = width+"px";
+		// canvasGPU.style.height = height+"px";
+
+	}
+	self.calculateVoterMapGPU = function() {
+	// 	self.flag = true // flag to do calculation
+	// 	self.renderGPU()
+	// }
+	// self.renderGPU = function() {
+	// 	if (self.flag = false) return
+	// 	self.flag = false
+
+		if (model.ballotType == "Plurality" || model.system == "IRV" || model.system == "STV") return
+		if (model.voterSet.totalVoters == 0) return
+		if (model.voterSet.allVoters[0].ballot == undefined) return
+
+		// need some calculations
+		for(var voterGroup of model.voterGroups) {
+			for(var voterPerson of voterGroup.voterPeople){
+				voterGroup.voterModel.drawMap(model.arena.ctx, voterPerson)
+			}
+		}
+		
+		// required to be constant to compile kernel, I think
+		var numVoters = model.voterSet.totalVoters
+
+		var width = model.size * 2
+		var height = model.size * 2
+
+		var xpos1 = model.voterSet.getArrayAttr('x')
+		var ypos1 = model.voterSet.getArrayAttr('y')
+		var rad1 = model.voterSet.getArrayAttr('rad')
+		var idxCan1 = model.voterSet.getArrayAttr('idxCan')
+
+		// for multiple radii per voter
+		var xpos = []
+		var ypos = []
+		var rad = []
+		var idxCan = []
+		for (var i = 0; i < numVoters; i++) {
+			for (var k = 0; k < rad1[i].length; k++) {
+				xpos.push(xpos1[i])
+				ypos.push(ypos1[i])
+				rad.push(rad1[i][k])
+				idxCan.push(idxCan1[i][k])
+			}
+		}
+
+		var numCircles = rad1[0].length
+		var numValues = numVoters * numCircles
+		var numValues = xpos.length
+
+
+		// candidate color list
+		var colors = []
+		for (var i = 0; i < model.candidates.length; i++) {
+			colors.push(model.candidates[i].fill)
+		}
+		if (model.ballotType == "Score" || model.ballotType == "Approval" || model.ballotType == "Three" || model.system == "Borda") {
+			colors[0] = "#000"
+		}
+		colorData = getColorScale(colors) // just a list of colors in an array
+		
+
+		var changedVotingModel = false
+		var changedNumValues = (numValues != self.oldNumValues)
+
+		if (changedVotingModel || changedNumValues) {
+			Acompile()
+			self.oldNumValues = numValues
+		}
+		self.render(
+			xpos,
+			ypos,
+			idxCan,
+			colorData,
+			rad,
+		);
+
+			
+		function Acompile() {
+			var theKernel = function (
+				xpos,
+				ypos,
+				idxCan,
+				colorData,
+				rad,
+			) {
+				var dist = 0;
+				var r = 0.0;
+				var g = 0.0;
+				var b = 0.0;
+			
+				for (var i = 0; i < this.constants.numPoints; i++) {
+					var x = this.thread.x - xpos[i] * 2,
+						y = this.thread.y - ( 600 - ypos[i] * 2);
+			
+					dist = Math.sqrt(x * x + y * y);
+			
+					if (dist > rad[i] * 2) { 
+			
+						var c = idxCan[i]
+
+						r = r + (colorData[c * 4] / 255) **2  / this.constants.numPoints;
+						g = g + (colorData[1 + c * 4] / 255) **2  / this.constants.numPoints;
+						b = b + (colorData[2 + c * 4] / 255) **2  / this.constants.numPoints;
+					} else { // white
+						r = r + 1 / this.constants.numPoints;
+						g = g + 1 / this.constants.numPoints;
+						b = b + 1 / this.constants.numPoints;
+					}
+					this.color(Math.sqrt(r),Math.sqrt(g),Math.sqrt(b),1)
+					
+				}
+			}
+
+			self.render =  self.gpu.createKernel(theKernel)
+				.setConstants({
+					numPoints: numValues
+				})
+				.setOutput([width, height])
+				.setGraphical(true);
+		}
+		function Bcompile() {
+			var c1 = 1/numValues
+			var c2 = 1/255**2 /numValues
+			var theKernel = function (
+				xpos,
+				ypos,
+				idxCan,
+				colorData,
+				rad,
+			) {
+				// var sum = this.vec4(0,0,0,1) // maybe
+				var r = 0.0;
+				var g = 0.0;
+				var b = 0.0;
+			
+				for (var i = 0; i < this.constants.numPoints; i++) {
+					var x = this.thread.x - xpos[i] * 2,
+						y = this.thread.y - ( 600 - ypos[i] * 2);
+			
+					if (x * x + y * y > (rad[i] * 2)**2 ) { 
+			
+						var c = idxCan[i]
+
+						r += this.constants.c2 * colorData[c * 4] ** 2
+						g += this.constants.c2 * colorData[1 + c * 4] ** 2
+						b += this.constants.c2 * colorData[2 + c * 4] ** 2
+					} else { // white
+						r += this.constants.c1
+						g += this.constants.c1
+						b += this.constants.c1
+					}
+					
+				}
+				this.color(Math.sqrt(r),Math.sqrt(g),Math.sqrt(b))
+			
+			}
+			self.render =  self.gpu.createKernel(theKernel)
+				.setConstants({
+					numPoints: numValues,
+					c1: c1,
+					c2: c2,
+				})
+				.setOutput([width, height])
+				.setGraphical(true);
+
+		}
+		
+	}
+	
+	self.drawVoterMapGPU = function () {
+		// self.renderGPU() // only runs if update was called (flag)
+
+		var arena = model.arena
+		var ctx = arena.ctx
+		ctx.save()
+
+		ctx.globalAlpha = .8
+		ctx.drawImage(self.canvasGPU, 0, 0);
+
+		ctx.restore()
+
+	}
+	
+	var getColorScale = function (colors) {
+		var canvasColorScale = document.createElement("canvas");
+		canvasColorScale.width = 256;
+		canvasColorScale.height = 1;
+		canvasColorScale.style.display = "none";
+		var contextColorScale = canvasColorScale.getContext("2d");
+		for (var i = 0; i < colors.length; ++i) {
+			contextColorScale.fillStyle = colors[i];
+			contextColorScale.fillRect(i, 0, 256, 1);
+		}
+		return contextColorScale.getImageData(0, 0, 255, 1).data;
+		// return contextColorScale.getImageData(0, 0, colors.length-1, 1).data;
+	}
+
 }

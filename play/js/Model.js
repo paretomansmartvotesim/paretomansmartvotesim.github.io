@@ -99,6 +99,7 @@ function Model(idModel){
 		useBorderColor: true,
 		pairOrderByCandidate: true,
 		squareFirstChoice: true, 
+		doVoterMapGPU: false,
 	})
 	
 	self.viz = new Viz(self);
@@ -238,13 +239,14 @@ function Model(idModel){
 		}
 
 		
-		self.viz.calculate()
 
 		// get the ballots for this election
 		for(var i=0; i<self.voterGroups.length; i++){
 			var voter = self.voterGroups[i];
 			voter.update();
 		}
+		
+		self.viz.calculate()
 		
 		if (self.checkGotoTarena()) // find order of voters
 		{

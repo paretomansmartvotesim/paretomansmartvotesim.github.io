@@ -102,7 +102,7 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 	var y = voterPerson.y
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
-	var i = voterPerson.i
+	var i = voterPerson.iPoint
 
 // return function(x, y, strategy, iDistrict, i){
 
@@ -126,10 +126,15 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 	var cans = model.district[iDistrict].candidates
 	var scoresfirstlast = dostrategy(model,x,y,voterModel.minscore,voterModel.maxscore,strategy,viable,cans,voterModel.defaultMax,doStar,model.utility_shape)
 	
-	voterModel.radiusFirst[i] = scoresfirstlast.radiusFirst
+	voterModel.radiusFirst[i] = scoresfirstlast.radiusFirst // this is okay for now but could mess up if one voterModel is shared by more than one voterCrowd
 	voterModel.radiusLast[i] = scoresfirstlast.radiusLast
 	voterModel.dottedCircle = scoresfirstlast.dottedCircle
 	var scores = scoresfirstlast.scores
+
+	// store info on voterPerson
+	voterPerson.radiusFirst = scoresfirstlast.radiusFirst
+	voterPerson.radiusLast = scoresfirstlast.radiusLast
+
 	return scores
 
 
@@ -164,7 +169,7 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 	var y = voterPerson.y
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
-	var i = voterPerson.i
+	var i = voterPerson.iPoint
 
 
 	// Rank the peeps I'm closest to...
@@ -548,7 +553,7 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 	var y = voterPerson.yArena
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
-	var k = voterPerson.i
+	var k = voterPerson.iPoint
 	var ballot = voterPerson.ballot
 
 
@@ -565,16 +570,22 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 	var finv = inverse_utility_function(model.utility_shape)
 
 	
-	var tempComposite = ctx.globalCompositeOperation
-	// ctx.globalCompositeOperation = "source-over"
-	// ctx.globalCompositeOperation = "multiply" // kinda cloudy
-	// ctx.globalCompositeOperation = "screen"
-	// ctx.globalCompositeOperation = "overlay"
-	// ctx.globalCompositeOperation = "hue"
-	ctx.globalCompositeOperation = "lighter"  // seems good
-	// ctx.globalCompositeOperation = "darker" // compatibility issues
-	// ctx.globalCompositeOperation = "lighten"
-	// ctx.globalCompositeOperation = "darken" // not uniform 1,2,3
+
+	if (model.doVoterMapGPU) {
+		voterPerson.rad = []
+		voterPerson.idxCan = []
+	} else {
+		var tempComposite = ctx.globalCompositeOperation
+		// ctx.globalCompositeOperation = "source-over"
+		// ctx.globalCompositeOperation = "multiply" // kinda cloudy
+		// ctx.globalCompositeOperation = "screen"
+		// ctx.globalCompositeOperation = "overlay"
+		// ctx.globalCompositeOperation = "hue"
+		ctx.globalCompositeOperation = "lighter"  // seems good
+		// ctx.globalCompositeOperation = "darker" // compatibility issues
+		// ctx.globalCompositeOperation = "lighten"
+		// ctx.globalCompositeOperation = "darken" // not uniform 1,2,3
+	}
 
 	for(var i=0;i<scorange;i++){
 		//var dist = step*(i+.5) + voterModel.radiusFirst
@@ -585,6 +596,12 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 		var x1 = finv(frac*(worst-best)+best)
 		var dist = x1 * voterModel.radiusLast[k]
 		
+		if (model.doVoterMapGPU) {
+			voterPerson.rad.push(dist)
+			voterPerson.idxCan.push(0)
+			continue
+		}
+
 		ctx.lineWidth = (i+5-scorange)*2 + 2;
 		ctx.beginPath();
 		ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
@@ -645,12 +662,14 @@ DrawMap.Approval = function (ctx, model,voterModel,voterPerson) {
 	DrawMap.Score(ctx,model,voterModel,voterPerson)
 }
 
+
+// CalculateMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 	var x = voterPerson.xArena
 	var y = voterPerson.yArena
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
-	var i = voterPerson.i
+	var i = voterPerson.iPoint
 	var ballot = voterPerson.ballot
 	
 
@@ -773,6 +792,10 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 		var temp = ctx.globalAlpha
 		var lastDist = Infinity
 		var scorange = ballot.rank.length
+		if (model.doVoterMapGPU) {
+			voterPerson.rad = []
+			voterPerson.idxCan = []
+		}
 		for(var i=ballot.rank.length-1; i>=0; i--){
 
 			// reverse order
@@ -815,6 +838,15 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 				var dist = distF(model,me,c)
 			}
 			
+			if (model.doVoterMapGPU) {
+				voterPerson.rad.push(dist)
+				if (doColors) {
+					voterPerson.idxCan.push(c.i)
+				} else {
+					voterPerson.idxCan.push(0)
+				}
+				continue
+			}
 
 			ctx.beginPath();
 			ctx.arc(x*2, y*2, dist*2, 0, Math.TAU, false);
@@ -1004,7 +1036,7 @@ DrawMap.Plurality = function (ctx, model,voterModel,voterPerson) {
 	var y = voterPerson.yArena
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
-	var i = voterPerson.i
+	var i = voterPerson.iPoint
 	var ballot = voterPerson.ballot
 
 	
@@ -2325,30 +2357,16 @@ function VoterSet(model) {
 		return vs
 	}
 
-
-	self.getAllVoterInfo = function() {
-		
-		// list voters
-		// The district contains information about where to find the voters in the groups AKA model.voterGroups[]
-		var vs = []
-		var j = 0
-		for (var i = 0; i < model.voterGroups.length; i++) {
-			var voterGroup = model.voterGroups[i]
-			var points = voterGroup.points
-			var yGroup = voterGroup.y
-			for (var k = 0; k < points.length; k++) {
-				var v = {
-					iGroup: i,
-					iAll: j,
-					iPoint: k,
-					y: points[k][1] + yGroup
-				}
-				j++
-				vs.push(v)
+	self.getArrayAttr = function(a) {
+		// returns an array of all the voters and their distinguishing info
+		var s = []
+		for (var voterGroup of model.voterGroups) {
+			for (var voterPerson of voterGroup.voterPeople) {
+				s.push( voterPerson[a] )
 			}
 		}
+		return s
 	}
-
 }
 
 function VoterCrowd(model) {

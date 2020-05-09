@@ -4697,13 +4697,17 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             self.configure()
             // UPDATE
-            model.draw()
+            if (model.doVoterMapGPU) {
+                model.update()
+            } else {
+                model.draw()
+            }
         };
         self.configure = function() {
             model.rankedVizBoundary = config.rankedVizBoundary
         }
         self.choose = new ButtonGroup({
-            label: "Beat Map", // Sub Menu
+            label: "Boundaries for Ranked Viz", // Sub Menu
             width: 108,
             data: self.list,
             onChoose: self.onChoose
