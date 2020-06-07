@@ -6,6 +6,8 @@ These are the build instructions. That means, if you want to run the site locall
 
 Why? Because I’m using a build tool, Jekyll. The reason I'm using Jekyll is I want to modularize my html, and jekyll seems to be popular and minimal, and github does it.
 
+If you really don't want to run jekyll, I also have a repository for the [build](https://paretoman.github.io/ballot_site/).  So you can start from there.  But really, you're making it harder on yourself to do things like add new pages.
+
 Here are instructions for building this site on your local machine.
 
 1.  Install Ruby. You might want to follow [these instructions from jekyll​](https://jekyllrb.com/docs/installation/windows/).

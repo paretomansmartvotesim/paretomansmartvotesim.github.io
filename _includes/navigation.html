@@ -1,0 +1,58 @@
+
+	<div class="words" style="text-align: center">
+		<div style="width:242px; display: inline-block">
+			<div id="mainmenu" class="div-election">
+			</div>
+		</div>
+		<script>
+			var mainMenu = new ButtonGroup({
+				label: "Pages",
+				width: 218,
+				data: [{
+						name: "Original",
+						url: "original.html",
+						margin: 5
+					},
+					{
+						name: "Approval Voting",
+						url: "approval_superman.html",
+						margin: 5
+					},
+					{
+						name: "An Even Better Ballot",
+						url: "newer.html",
+						margin: 5
+					},
+					{
+						name: "Condorcet Methods",
+						url: "log.html",
+						margin: 5
+					},
+					{
+						name: "Quota Methods",
+						url: "quotaApproval.html",
+						margin: 5
+					},
+					{
+						name: "Bees",
+						url: "bees.html",
+						margin: 5
+					},
+					{
+						name: "Test Runs",
+						url: "testRuns.html",
+						margin: 5
+					},
+					{
+						name: "Sandbox",
+						url: "sandbox/"
+					}
+				],
+				onChoose: function (data) {
+					window.location.assign(data.url)
+				}
+			});
+			document.querySelector("#mainmenu").appendChild(mainMenu.dom)
+		</script>
+
+	</div>
