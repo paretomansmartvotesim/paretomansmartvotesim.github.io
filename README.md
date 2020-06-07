@@ -4,3 +4,5 @@
 an interactive guide to alternative voting systems
 
 **[play/read it here](http://ncase.me/ballot)**
+
+[modify it here](http://paretoman.github.io/ballot/modify)
