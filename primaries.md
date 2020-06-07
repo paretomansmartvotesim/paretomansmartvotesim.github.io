@@ -1,7 +1,7 @@
 ---
+description: An Interactive Guide to Voting
 layout: page
 title: Primaries
-description: An Interactive Guide to Voting
 ---
 
 We Don’t Need Primaries
