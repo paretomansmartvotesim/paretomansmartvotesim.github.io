@@ -1,3 +1,7 @@
+---
+layout: none
+---
+
 No, this is not about the 2016 U.S. election. Not *just* that, anyway.
 
 First, I need to explain a weird glitch in our voting system.
