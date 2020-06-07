@@ -1,6 +1,6 @@
 ---
 description: An Interactive Guide to Voting
-layout: page-1
+layout: page
 title: Primaries
 ---
 
