@@ -11,13 +11,10 @@ layout: none
 </head>
 
 <body>
-
-    <div class="banner">
-        <h1>{{ page.title }}</h1>
-        <p>{{ page.description }}</p><p>By Paretoman and Contributors </p><p>Based off Work by Nicky Case</p>
-        <p>{{ page.date | date: '%B %d, %Y' }}</p>
-    </div>
-    
+    {% capture byline_calc %}
+        By Paretoman and Contributors, {{ page.date | date: '%B %d, %Y' }}
+    {% endcapture %}
+	{% include banner.html title=page.title banner=page.banner description=page.description byline=byline_calc %}
 
     <div id="content">
         <div class="words">

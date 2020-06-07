@@ -1,6 +1,7 @@
 ---
+byline: 'by Paretoman, May 2018'
 description: An Interactive Guide to Voting
-layout: page
+layout: page-2
 title: Primaries
 ---
 
@@ -30,6 +31,8 @@ Let’s back up a little here and describe what the purpose of voting systems is
 A referendum is actually pretty simple; you just say yes or no. Really the hard part of the referendum is to decide what the wording is going to be for the question.  The wording is not up to you; that's up to the group that puts the initiative together or the legislators that wrote the referendum.  That hard part is where the work happens; it’s where consideration of what the voters want happens.
 
 \<yes, no, referendum\> [link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy04DMQz8lSrnHOJHnE0_AnHggnZ7KFIPSCuKoBwqBN-O46FwqKpIGcdjTybOZyppO8-1Zaq8yzOrZdJpt8uJBkHKfu7jLGlbctLYa-zmFZyvltc2Z0q-Ws5MN5l-kyH3SA4UFZJb1khzuCAYIzgjWCMDuBFSR7-WHXpk2fU8yRSyzMExZFiRdBlxgAw3nCacejRICTs0RkNBCJREADAkrjQTygwE1KT_9WtIjYAuAV8CGe0j0OjSfzm1sKoNHwNz2iNZMbLqeul7SY-H92V52dwdN0tKnobRKij6_VNMruLJtaFkilsrnmwFgMEZ5m8YnFX8jhszSBgcGYbeCgC9jQOe9ut6PD2cXw_u8379eNuvz6dz-voBzxfmQJcCAAA) [simpler](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy2oDMQz8leCzD9bD8m4-ovTQS9jdQwo5FJamtMkhlObbK2v6OIRgsB4jjUfyZyppO021Zaq85InVMumwLDlRB0iGTMY9lrQtOWncNW7zCs43x2ubIyXfHEeGu8h4FyHXSG4oKiS3rJHmUEEQRlBGkEaGFhdC6tafZTdjgOx8nmRCxIExaFijkZ1G3BiSDdGAaIwGKSGH-mrAJGASgYEgcaaJUGYAwCbjX792qnBixO7wr-Nkk3RHo0v_6RQzasPHQJyOkaxYWXW-dJ3T7vAxz6-bh-NmTsnTEFoxcv35U2yuYuTaUDLEqxUjW4GhIDfs38BiFb_jwgwUBkWGpbcCg97GYZ7363o8PV3eDq7zcT2_79eX0yV9fQNrFEaklwIAAA)
+
+{% include sim.html title="Referendum" caption="Yes or No" id="yesno_sim" link="[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy04DMQz8lSrnHOJHnE0_AnHggnZ7KFIPSCuKoBwqBN-O46FwqKpIGcdjTybOZyppO8-1Zaq8yzOrZdJpt8uJBkHKfu7jLGlbctLYa-zmFZyvltc2Z0q-Ws5MN5l-kyH3SA4UFZJb1khzuCAYIzgjWCMDuBFSR7-WHXpk2fU8yRSyzMExZFiRdBlxgAw3nCacejRICTs0RkNBCJREADAkrjQTygwE1KT_9WtIjYAuAV8CGe0j0OjSfzm1sKoNHwNz2iNZMbLqeul7SY-H92V52dwdN0tKnobRKij6_VNMruLJtaFkilsrnmwFgMEZ5m8YnFX8jhszSBgcGYbeCgC9jQOe9ut6PD2cXw_u8379eNuvz6dz-voBzxfmQJcCAAA)" %} 
 
 For an election, the hard part happens in the primary.  In the general election there's two choices (at least in the United States, where I'm from, there's two choices). There's not a lot to think about. Each party has put up their nominee, and you pick the one closest to you. The hard part happens in the primary.  That's where you have many more competitors. There are two primaries going on at the same time, and in each one there is the same decision process, where the party wants to put up a candidate that can beat the other party. 
 

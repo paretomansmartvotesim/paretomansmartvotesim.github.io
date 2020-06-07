@@ -1,6 +1,9 @@
 ---
-title: To Build an Even Better Ballot?
-description: an addendum to @ncasenmare's interactive guide to alternative voting methods
+title: An Even Better Ballot
+banner: To Build a<span class="notation">n Even</span> Better Ballot
+description: An addendum to the Interactive Guide to Approval Voting
+description-banner: An <span class="notation">addendum to the</span> Interactive Guide to Approval Voting
+byline: by <span class="notation">Jameson Quinn &</span> nicky case, <span class="strike">dec 2016</span> <span class="notation">sep 2017</span></p>
 hashtag: "@bettercount_us"
 ---
 <!doctype html>
@@ -30,11 +33,9 @@ SPLASH!
 
 - - - - - - - - - -->
 
-<div class="banner">
-	<h1>To Build a<span class="notation">n Even</span> Better Ballot</h1>
-	<p>An <span class="notation">addendum to the</span> Interactive Guide to Approval Voting</p>
-	<p>by <span class="notation">Jameson Quinn &</span> nicky case, <span class="strike">dec 2016</span> <span class="notation">sep 2017</span></p>
-</div>
+
+	{% include banner.html title=page.title banner=page.banner description=page.description description-banner=page.description-banner byline=page.byline %}
+
 
 	</div>
 

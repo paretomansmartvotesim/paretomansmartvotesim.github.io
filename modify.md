@@ -6,7 +6,7 @@ These are the build instructions. That means, if you want to run the site locall
 
 Why? Because I’m using a build tool, Jekyll. The reason I'm using Jekyll is I want to modularize my html, and jekyll seems to be popular and minimal, and github does it.
 
-If you really don't want to run jekyll, I also have a repository for the [build](https://paretoman.github.io/ballot_site/).  So you can start from there.  But really, you're making it harder on yourself to do things like add new pages.
+If you really don't want to run jekyll, I also have a repository for the [build](https://paretoman.github.io/ballot_site/). So you can start from there. But really, you're making it harder on yourself to do things like add new pages.
 
 Here are instructions for building this site on your local machine.
 
@@ -22,6 +22,6 @@ bundle exec jekyll serve
 
 Other tips for Developing the site:
 
--   I edit markdown with [Texts](http://www.texts.io/).
+-   I edit markdown with [Texts](http://www.texts.io/) after copying it in from a better word processor.
 
--   Here's a good [tutorial](https://learn.cloudcannon.com/) for jekyll from CloudCannon.
+-   Here's a good [tutorial](https://learn.cloudcannon.com/) for jekyll from CloudCannon.  The jekyll site has great tutorials, too.
