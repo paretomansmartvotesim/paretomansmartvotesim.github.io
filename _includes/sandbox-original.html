@@ -3,11 +3,7 @@
 			<div class="sim-sandbox">
 				<div class="sim-container">
 					<h1 class="caption-test" style="margin: 30px 0 15px 0;">SANDBOX MODE! <a href="sandbox/original.html">(link to <em>just</em> this)</a></h1>
-					<div id="sandbox_original" class="div-sandbox div-election div-ballot-in-sandbox div-model div-model-theme-Nicky" style="min-height:508px" scrolling="no">
-					</div>
-					<script>
-						sandbox(loadpreset("sandbox_original"))
-					</script>
+					{% include sandbox-call-original.html %}
 				</div>
 			</div>
 			<div class="words words-original">

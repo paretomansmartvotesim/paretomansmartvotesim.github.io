@@ -27,7 +27,8 @@ a:hover{ color: hsl(240,80%,80%); }
 	-webkit-text-stroke: 1px black;
 }
 
-#sandbox-section{
+#sandbox-section,
+#sandbox-index-section{
 	/* background: #EFE9D5; */
 	background-color: #bed7dbd2;
 }
@@ -209,8 +210,11 @@ li{
 	pointer-events: none;
 }
 #sandbox-section{
-	overflow:hidden;
 	margin-top: 50px;
+}
+#sandbox-section,
+#sandbox-index-section{
+	overflow:hidden;
 	border-bottom: 5px solid rgba(0,0,0,0.2);
 	padding: 30px 0;
 }
