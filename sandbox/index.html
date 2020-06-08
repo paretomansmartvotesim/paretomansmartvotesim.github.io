@@ -9,29 +9,20 @@ hashtag: "@ncasenmare"
 
 <head>
 
-	<!-- Meta -->
-    <title>{{ page.title }}</title>
-    {% include meta-1.html %}
-    {% include meta-viewport.html %}
-    {% include meta-share.html title=page.title description=page.description hashtag=page.hashtag %}
-
-	<base href="../" />
-	
-	{% include css-1.html %}
-	
-    {% include js-viewport.html %}
-	<!-- <script src="../dev/js/gpu.js/gpu-browser.js"></script> -->
-    {% include js-1.html %}
+    {% include head-1.html %}
 
 	<style>
 		body {
 			margin: 0;
+			min-width: 380px;
+		}
+
+		#content {			
 			font-family: Helvetica, Arial, sans-serif;
 			font-size: 22px;
 			color: #333;
 			font-weight: 300;
 			line-height: 1.5em;
-			min-width: 380px;
 		}
 
 		b,
@@ -75,7 +66,13 @@ hashtag: "@ncasenmare"
 </head>
 
 <body>
+
+    {%- include header.html -%}
+
 	{% include sandbox-index.html %}
+
+    {%- include footer.html -%}
+
 </body>
 
 </html>

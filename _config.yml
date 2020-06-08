@@ -24,10 +24,19 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: paretoman1
 github_username:  paretoman
+author:
+  name: Paretoman
+  email: smartvotingsimulator1@gmail.com
+minima:
+  social_links:
+    github: Paretoman
+    twitter: Paretoman1
+    youtube_channel: UCrwpT8YjxePjH0RxSCwbTlQ
+    youtube_channel_name: Paretoman
 
 # # Build settings
 markdown: kramdown
-theme: minima
+# theme: minima
 plugins:
   - jekyll-feed
 

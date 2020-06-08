@@ -1,14 +1,18 @@
 
-	<!-- Meta -->
+    <!-- Meta -->
+    
+    {% include meta-minima.html %}
     <title>{{ page.title }}</title>
     {% include meta-1.html %}
     {% include meta-viewport.html %}
     {% include meta-share.html title=page.title description=page.description hashtag=page.hashtag %}
-    
-    <base target="_blank">
+
+    <base href="/">
+    <!-- <base target="_blank"> -->
     
     {% include css-index.html %}
     {% include css-1.html %}
 
     {% include js-viewport.html %}
+	<!-- <script src="../dev/js/gpu.js/gpu-browser.js"></script> -->
     {% include js-1.html %}

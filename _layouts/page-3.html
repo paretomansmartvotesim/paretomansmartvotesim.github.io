@@ -1,18 +1,8 @@
 ---
-layout: none
+layout: default-1
 ---
-<!doctype html>
-<html lang="en">
-
-<head>
-    <base href="/">
-    {% include head-1.html %}
-
-</head>
-
-<body>
     {% capture byline_calc %}
-        By Paretoman and Contributors, {{ page.date | date: '%B %d, %Y' }}
+        By Paretoman, {{ page.date | date: '%B %d, %Y' }}
     {% endcapture %}
 	{% include banner.html title=page.title banner=page.banner description=page.description byline=byline_calc %}
 
@@ -21,8 +11,3 @@ layout: none
             {{ content }}
         </div>
     </div>
-
-</body>
-
-</html>
-
