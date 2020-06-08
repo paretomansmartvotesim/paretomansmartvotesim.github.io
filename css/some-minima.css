@@ -18,6 +18,20 @@ a:hover { color: #111111; text-decoration: underline; }
 .social-media-list a:hover, .pagination a:hover { text-decoration: none; }
 .social-media-list a:hover .username, .pagination a:hover .username { text-decoration: underline; }
 
+
+
+/** Code formatting */
+.highlight > pre, code { font-family: "Menlo", "Inconsolata", "Consolas", "Roboto Mono", "Ubuntu Mono", "Liberation Mono", "Courier New", monospace; font-size: 0.9375em; border: 1px solid #e8e8e8; border-radius: 3px; background-color: #eeeeff; }
+
+.highlight > code { padding: 1px 5px; }
+
+.highlight > pre { padding: 8px 12px; overflow-x: auto; }
+.highlight > pre > code { border: 0; padding-right: 0; padding-left: 0; }
+
+.highlight { border-radius: 3px; background: #eeeeff; }
+.highlighter-rouge .highlight { background: #eeeeff; }
+
+
 /** Wrapper */
 .wrapper { padding-right: 15px; padding-left: 15px; }
 @media screen and (min-width: 800px) { .wrapper {  padding-right: 30px; padding-left: 30px; } }
@@ -33,11 +47,20 @@ a:hover { color: #111111; text-decoration: underline; }
 .svg-icon { width: 16px; height: 16px; display: inline-block; fill: currentColor; padding: 5px 3px 2px 5px; vertical-align: text-bottom; }
 
 
+/** Tables */
+.words > table { margin-bottom: 30px; width: 100%; text-align: left; color: #3f3f3f; border-collapse: collapse; border: 1px solid #e8e8e8; }
+.words > table tr:nth-child(even) { background-color: #f7f7f7; }
+.words > table th, table td { padding: 10px 15px; }
+.words > table th { background-color: #f0f0f0; border: 1px solid #e0e0e0; }
+.words > table td { border: 1px solid #e8e8e8; }
+@media screen and (max-width: 800px) { .words > table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; -ms-overflow-style: -ms-autohiding-scrollbar; } }
+
+
 /** Site header */
 .site-header, .site-footer { --text-1: white; --text-2: grey; --back:#222;}
 .site-header { background-color: var(--back); color: var(--text-1);}
 
-.site-header { border-top: 5px solid var(--text-1); border-bottom: 1px solid #e8e8e8; min-height: 55.95px; line-height: 1.2; position: relative; }
+.site-header { border-top: 5px solid var(--back); border-bottom: 1px solid #e8e8e8; min-height: 55.95px; line-height: 1.2; position: relative; }
 
 .site-title { font-size: 1.625rem; font-weight: 300; letter-spacing: -1px; margin-bottom: 0; float: left; }
 @media screen and (max-width: 600px) { .site-title { padding-right: 45px; } }

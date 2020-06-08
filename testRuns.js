@@ -113,5 +113,5 @@ for (var [d,a] of e) {
 c +=  + "</ul></p>"
 
 
-document.querySelector("body").innerHTML = c
+document.querySelector("body").innerHTML += c
 console.log("done")

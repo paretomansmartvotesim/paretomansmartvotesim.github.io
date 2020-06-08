@@ -1,4 +1,5 @@
 ---
+layout: page-2
 title: Modify the Simulator
 ---
 
