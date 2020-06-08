@@ -1,6 +1,6 @@
 
             {% assign share_url = page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url | uri_escape -%}
-            {% assign share_text = page.banner| default:page.title | default:"" | uri_escape %}
+            {% assign share_text = page.banner | default:page.title | default:"" | uri_escape %}
             <div style="text-align:center; color:#fff; background-color: #222;margin-bottom:0px;">
 				Share this:
 				<ul class="share-buttons">
@@ -20,7 +20,7 @@
                         </a>
                     </li>
                     <li class="email">
-                        <a href="mailto:?subject={{ share_text }}&body={{ share_text }}:{{site.url}}" target="_blank" title="Send email">
+                        <a href="mailto:?subject={{ share_text }}&body={{ share_text }}:{{ share_url }}" target="_blank" title="Send email">
                             <img alt="Send email" src="/social/Email.png">
                         </a>
                     </li>
