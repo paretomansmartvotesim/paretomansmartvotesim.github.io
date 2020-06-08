@@ -2,6 +2,8 @@
 	<div class="banner">
 		<h1>{{ include.banner | default: include.title }}</h1>
 		<p>{{ include.description-banner | default: include.description }}</p>
+		{%- if include.byline -%}
 		<p>{{ include.byline }}</p>
 		<p>Based off Work by Nicky Case</p>
+		{%- endif -%}
 	</div>
