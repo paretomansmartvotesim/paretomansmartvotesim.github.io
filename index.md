@@ -1,9 +1,9 @@
 ---
+twuser: paretoman1
 byline: 'By Paretoman and Contributors, May 2020'
 description: An Explorable Guide to Group Decision Making
 banner: Smart Voting Simulator
 layout: page-3
-hashtag: '@paretoman1'
 title: Home
 ---
 
