@@ -100,6 +100,12 @@ a:hover{ color: hsl(240,80%,80%); }
 	display: block;
 	height: auto;
 }
+
+.words > img { 
+    display: block;
+	margin: 0 auto;
+}
+
 #content p .underline{
 	text-decoration: underline;
 }

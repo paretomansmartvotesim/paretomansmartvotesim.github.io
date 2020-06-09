@@ -6,6 +6,14 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight { mar
 
 hr { margin-top: 30px; margin-bottom: 30px; }
 
+/** Images */
+.words > img { max-width: 100%; vertical-align: middle; }
+
+/** Figures */
+.words > figure > img { display: block; }
+
+.words > figcaption { font-size: 14px; }
+
 /** Lists */
 ul, ol { margin-left: 30px; }
 
