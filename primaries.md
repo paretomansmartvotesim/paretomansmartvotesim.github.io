@@ -1,7 +1,7 @@
 ---
 byline: 'by Paretoman, May 2018'
 description: An Interactive Guide to Voting
-layout: page-2
+layout: page-3
 title: Primaries
 ---
 
