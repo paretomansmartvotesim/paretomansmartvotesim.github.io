@@ -1,5 +1,5 @@
 ---
-layout: page-3
+layout: page-2
 ---
 
 [Jekyll](https://jekyllrb.com/) is now helping to organize this site. Check the [docs](https://jekyllrb.com/docs/). Here’s [install](https://jekyllrb.com/docs/installation/windows/) instructions for windows.

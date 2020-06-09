@@ -1,9 +1,22 @@
 
+	
+	{% if page.byline %}
+		{% assign do_byline = true %}
+	{% endif %}
+	{% capture byline_calc %}
+		{% if page.date %}
+			{% assign do_byline = true %}
+			By Paretoman, {{ page.date | date: '%B %d, %Y' }}
+		{% else %}
+			{{ page.byline }}
+		{% endif %}
+	{% endcapture %}
+
 	<div class="banner">
-		<h1>{{ include.banner | default: include.title }}</h1>
-		<p>{{ include.description-banner | default: include.description }}</p>
-		{%- if include.byline -%}
-		<p>{{ include.byline }}</p>
+		<h1>{{ page.banner | default: page.title }}</h1>
+		<p>{{ page.description-banner | default: page.description }}</p>
+		{%- if do_byline -%}
+		<p>{{ byline_calc }}</p>
 		<p>Based off Work by Nicky Case</p>
 		{%- endif -%}
 	</div>

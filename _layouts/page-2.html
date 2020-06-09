@@ -1,10 +1,9 @@
 ---
 layout: default-1
 ---
-{% include banner.html title=page.title banner=page.banner description=page.description description-banner=page.description-banner byline=page.byline %}
-
-<div id="content">
-    <div class="words">
-        {{ content }}
+    {% include banner.html %}
+    <div id="content">
+        <div class="words">
+            {{ content }}
+        </div>
     </div>
-</div>
