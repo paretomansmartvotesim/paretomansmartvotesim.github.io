@@ -1,20 +1,6 @@
 ---
+layout: page-4
 ---
-<!doctype html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    
-    {% include css-index.html %}
-    {% include css-1.html %}
-
-    {% include js-1.html %}
-</head>
-
-<body>
-    <div id="content">
         <div class="sim-intro">
                 <div class="sim-container">
                 <div id="model1" class="div-model">
@@ -97,29 +83,25 @@
                 </script>
             </div>
         </div>
-    </div>
-    <div id="sandbox-section">
-        <div class="sim-sandbox">
-                <div class="sim-container">
-                <div id="sandbox_original" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
+        <div id="sandbox-section">
+            <div class="sim-sandbox">
+                    <div class="sim-container">
+                    <div id="sandbox_original" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
+                    </div>
+                    <script>
+                        sandbox({quick:"sandbox_original"})
+                    </script>
                 </div>
-                <script>
-                    sandbox({quick:"sandbox_original"})
-                </script>
             </div>
         </div>
-    </div>
-    <div id="sandbox-section">
-        <div class="sim-sandbox">
-                <div class="sim-container">
-                <div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
+        <div id="sandbox-section">
+            <div class="sim-sandbox">
+                    <div class="sim-container">
+                    <div id="sandbox" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
+                    </div>
+                    <script>
+                        sandbox({quick:"sandbox"})
+                    </script>
                 </div>
-                <script>
-                    sandbox({quick:"sandbox"})
-                </script>
             </div>
         </div>
-    </div>
-</body>
-
-</html>

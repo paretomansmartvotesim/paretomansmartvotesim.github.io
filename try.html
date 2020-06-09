@@ -1,43 +1,10 @@
 ---
+layout: page-6
 title: To Build a Better Ballot - QAPR
 description: an interactive guide to alternative voting methods
 byline: By Paretoman
 hashtag: "@paretoman1"
 ---
-
-<!doctype html>
-<html lang="en">
-
-<head>
-	{% include head-1.html %}
-	<style>
-		body {
-			background:#000;
-		}
-	</style>
-
-</head>
-
-<body>
-
-	<!-- - - - - - - - -
-
-SPLASH!
-
-- - - - - - - - - -->
-
-	{% include banner.html title=page.title banner=page.banner description=page.description byline=page.byline %}
-
-
-	</div>
-
-	<!-- - - - - - - - -
-
-LOG
-
-- - - - - - - - - -->
-
-	<div id="content">
 
 		<div class="words">
 
@@ -85,30 +52,18 @@ LOG
 		</div>
 		
 		<div class="sim-ballot">
-				<div class="sim-container">
-					<h2 class="ballot_title" style="margin-bottom: 0.15em;">UNSTRATEGIC BALLOT</h2>
-					<p class="ballot_caption">Judge, don't choose.</p>
-	
-					<div id="ballot17" class="div-ballot div-model" scrolling="no">
-					</div>
-					<script>
-						main_ballot({quick:"ballot17"})
-					</script>
+			<div class="sim-container">
+				<h2 class="ballot_title" style="margin-bottom: 0.15em;">UNSTRATEGIC BALLOT</h2>
+				<p class="ballot_caption">Judge, don't choose.</p>
+
+				<div id="ballot17" class="div-ballot div-model" scrolling="no">
 				</div>
+				<script>
+					main_ballot({quick:"ballot17"})
+				</script>
 			</div>
-			<div>
-				</p>
-				<p>Putting it all together, here's a sandbox for you to try out all the different systems and to make your own scenarios:</p>
-			</div>
-
-		<!-- - - - - - - - -
-
-PART IV:
-SANDBOX
-
-- - - - - - - - - -->
-
-		{% include sandbox.html %}
-
-
-	</div>
+		</div>
+		<div>
+			</p>
+			<p>Putting it all together, here's a sandbox for you to try out all the different systems and to make your own scenarios:</p>
+		</div>
