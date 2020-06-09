@@ -1,2 +1,6 @@
 
+	{% if page.min-width %}
+	<meta name="viewport" content="width=device-width, initial-scale=1, min-width={{page.min-width}}">
+	{% else %}
 	<meta name="viewport" content="width=device-width, initial-scale=1, min-width=380">
+	{% endif %}
