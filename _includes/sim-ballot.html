@@ -1,0 +1,10 @@
+
+	<div class="sim-ballot">
+		<div class="sim-container">
+			<h2 class="ballot_title" style="margin-bottom: 0.15em;">{{ include.title }}</h2>
+			<p class="ballot_caption">{{ include.caption }}</p>
+			<script id="{{ include.id }}">
+				sandbox({idScript:"{{ include.id }}",url:"{{ include.url }}"})
+			</script>
+		</div>
+	</div>
