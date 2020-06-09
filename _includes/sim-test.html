@@ -2,7 +2,7 @@
 <div class="sim-test">
 	<div class="sim-container">
 		<p class="caption-test">
-			{{ include.caption }}
+			{{ include.caption | replace: "`", "" }}
 		</p>
 		<div id="{{ include.id }}" class="div-election div-ballot-in-sandbox div-model" scrolling="no">
 		</div>
