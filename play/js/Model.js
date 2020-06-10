@@ -100,6 +100,7 @@ function Model(idModel){
 		pairOrderByCandidate: true,
 		squareFirstChoice: true, 
 		doVoterMapGPU: false,
+		devOverrideShowAllFeatures: false,
 	})
 	
 	self.viz = new Viz(self);

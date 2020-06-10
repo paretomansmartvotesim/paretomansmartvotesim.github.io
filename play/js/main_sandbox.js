@@ -3048,7 +3048,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
     function _hideOrShowFeatures() {
         var noneShow = true
         for (i in ui.menu) {
-            if(!config.doFeatureFilter || config.featurelist.includes(i)) {
+            // go through all the menu items
+            // if the feature is listed or the feature filter is off, show the feature
+            // or if the Override is on
+            // and , show the feature
+            if(model.devOverrideShowAllFeatures || !config.doFeatureFilter || config.featurelist.includes(i)) {
                 ui.menu[i].choose.dom.hidden = false
                 noneShow = false
             } else {
@@ -5136,9 +5140,8 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         resetDOM.onclick = function(event){
             // special keypress to get menu back
             if (event.ctrlKey) {
-                config.doFeatureFilter = false
+                model.devOverrideShowAllFeatures = ! model.devOverrideShowAllFeatures
                 ui.menu.doFeatureFilter.configure()
-                ui.menu.doFeatureFilter.select()
                 return
             }
             // LOAD INITIAL CONFIG
