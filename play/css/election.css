@@ -120,6 +120,12 @@ Election/Sandbox design:
     -o-transition: all 0.1s;
     transition: all 0.1s;
 }
+
+.div-election .button svg{
+    font-size: 20px;
+}
+
+
 .div-election .button:hover{
 	background: #ddd;
 	border-color: #999;
