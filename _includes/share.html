@@ -6,27 +6,27 @@
 				<ul class="share-buttons">
                     <li class="reddit">
                         <a href="http://www.reddit.com/submit?url={{ share_url }}&title={{ share_text }}" target="_blank">
-                            <img height="32" width="32" alt="Post on Reddit" src="/social/reddit.png">
+                            <img height="32" width="32" alt="Post on Reddit" src="{{ "/social/reddit.png" | relative_url }}">
                         </a>
                     </li>
                     <li class="hn">
                         <a href="http://news.ycombinator.com/submitlink?u={{ share_url }}&t={{ share_text }}" target="_blank">
-                            <img height="32" width="32" alt="Share on Hacker News" src="/social/ycombinator.png">
+                            <img height="32" width="32" alt="Share on Hacker News" src="{{ "/social/ycombinator.png" | relative_url }}">
                         </a>
                     </li>
                     <li class="twitter">
                         <a href="https://twitter.com/intent/tweet?via=paretoman1&url={{ share_url }}&text={{ share_text }}" target="_blank">
-                            <img alt="Tweet" src="/social/Twitter.png">
+                            <img alt="Tweet" src="{{ "/social/Twitter.png" | relative_url }}">
                         </a>
                     </li>
                     <li class="email">
                         <a href="mailto:?subject={{ share_text }}&body={{ share_text }}:{{ share_url }}" target="_blank" title="Send email">
-                            <img alt="Send email" src="/social/Email.png">
+                            <img alt="Send email" src="{{ "/social/Email.png" | relative_url }}">
                         </a>
                     </li>
                     <li>
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url }}&t={{ share_text }}" title="Share on Facebook" target="_blank">
-                            <img alt="Share on Facebook" src="/social/Facebook.png">
+                            <img alt="Share on Facebook" src="{{ "/social/Facebook.png" | relative_url }}">
                         </a>
                     </li>
 				</ul>
