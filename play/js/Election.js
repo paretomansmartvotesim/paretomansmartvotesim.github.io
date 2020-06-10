@@ -1240,7 +1240,7 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 
 		if (resultRB.str) { // e.g. when the sidebar is on
 			// replace some of the html in the output of rbvote to make it match the style of betterballot
-			var rbvote_string = (resultRB.str).replace("style.css","../play/css/rbvote.css").replace()
+			var rbvote_string = (resultRB.str).replace("style.css","./play/css/rbvote.css").replace()
 			rbvote_string = rbvote_string.replace('<th rowspan="5">for</th>',)
 			text += rbvote_string
 		}
@@ -1276,7 +1276,7 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	if (!options.sidebar) return result 
 	
 	// replace some of the html in the output of rbvote to make it match the style of betterballot
-	var rbvote_string = (resultRB.str).replace("style.css","../play/css/rbvote.css").replace()
+	var rbvote_string = (resultRB.str).replace("style.css","./play/css/rbvote.css").replace()
 	var intext = []
 	var outtext = []
 	for(var i = model.candidates.length - 1; i >= 0; i--) {
