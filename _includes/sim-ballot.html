@@ -3,8 +3,15 @@
 	<div class="sim-container">
 		<h2 class="ballot_title" style="margin-bottom: 0.15em;">{{ include.title }}</h2>
 		<p class="ballot_caption">{{ include.caption | replace: "`", ""}}</p>
-		<script id="{{ include.id }}">
-			sandbox({idScript:"{{ include.id }}",url:"{{ include.url }}"})
-		</script>
+        {% if include.url %}
+        <script id="{{ include.id }}">
+            sandbox({idScript:"{{ include.id }}",url:"{{ include.url }}"})
+        </script>
+        {% endif %}
+        {% if include.link %}
+        <script id="{{ include.id }}">
+            sandbox({idScript:"{{ include.id }}",link:"{{ include.link }}"})
+        </script>
+        {% endif %}
 	</div>
 </div>
