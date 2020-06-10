@@ -1,22 +1,22 @@
 - name: Home
-  link: /
+  link: .
 - name: Original
-  link: /original.html
+  link: original.html
 - name: Primaries
-  link: /primaries.html
+  link: primaries.html
 - name: Approval Voting
-  link: /approval_superman.html
+  link: approval_superman.html
 - name: An Even Better Ballot
-  link: /newer.html
+  link: newer.html
 - name: Condorcet Methods
-  link: /log.html
+  link: log.html
 - name: Quota Methods
-  link: /quotaApproval.html
+  link: quotaApproval.html
 - name: Bees
-  link: /bees.html
+  link: bees.html
 - name: Test Runs
-  link: /testRuns.html
+  link: testRuns.html
 - name: Blog
-  link: /blog.html
+  link: blog.html
 - name: Sandbox
-  link: /sandbox/
+  link: sandbox/
