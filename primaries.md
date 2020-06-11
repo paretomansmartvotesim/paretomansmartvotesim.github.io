@@ -14,8 +14,8 @@ We're going to go over each aspect of voting and see how other methods of voting
 
 Primaries were created to allow a party to deal with vote splitting, but there are other ways to vote that beat primaries on this original design point.  Additionally, better systems can have better competition which produces better candidates.  They also can encourage voters to vote honestly without having to watch the polls to help them vote strategically.  Most fundamentally, they avoid splitting the vote so voters don't have to coordinate on who they should support and who they will encourage to drop out.
 
-|                                                 | Lots of Scenarios | Best Case Scenario |
-|-------------------------------------------------|-------------------|--------------------|
+| Method of Voting                                | Lots of Scenarios | Best Case Scenario |
+| ----------------------------------------------- | ----------------- | ------------------ |
 | Primaries with Choose Only One Plurality Voting | Bad               | Good               |
 | Alternative Voting Methods without Primaries    | Good              | Good               |
 
@@ -130,7 +130,7 @@ The payoffs only exist in the way that they affect the decisions each group make
 | A **→** 4             |
 | B **→** 3             |
 | C **→** 2             |
-| D **→ **1             |
+| D **→** 1             |
 
 Now, let's take an action (in the language of game theory).  Let's have each party pick a nominee.  What happens if the parties pick A and C as the nominees?  C is closer to the middle so C wins in the general election.  
 
@@ -166,7 +166,7 @@ We can extend this table to consider when the AB party nominates B.  We add rows
 
 **Strategy Table for AB** - Row is AB party, columns are CD party and chance.
 
-|      | D+         | D-         | C+         | C-        |
+| AB's Nominee | D+         | D-         | C+         | C-        |
 | ---- | ---------- | ---------- | ---------- | --------- |
 | A    | A **→** 4 | D **→** 1  | C **→** 2  | C **→** 2 |
 | B    | B **→** 3 | B **→** 3 | B **→** 3 | C **→** 2 |
@@ -179,23 +179,23 @@ Which candidate should you choose?  If you choose A, then you'll either lose to
 
 **Utility Table for AB - Averaging out Chance**
 
-|      | C +/- | D +/- |
-| ---- | ----- | ----- |
-| A    | 2.5   | 2     |
-| B    | 3     | 2.5   |
+| AB's Nominee | C +/- | D +/- |
+| ------------ | ----- | ----- |
+| A            | 2.5   | 2     |
+| B            | 3     | 2.5   |
 
 **Strategy Table for AB - Averaging out Chance and the CD Party's Choice**
 
-|      | C/D , +/- |
-| ---- | --------- |
-| A    | 2.25      |
-| B    | 2.75      |
+| AB's Nominee | C/D +/- |
+| ------------ | ------- |
+| A            | 2.25    |
+| B            | 2.75    |
 
 The same strategy works for both sides, which means that there is a competitive pressure.  Both sides should choose a more moderate candidate.  And knowing what the other side is going to do affects your strategy.  You’re even more convinced that your only chance to win is to pick a moderate.  Both parties are concerned with picking someone electable.  We talked about this earlier: electability is a consideration of whether the candidate you choose will win the general election.
 
 We can make the same table for the CD party.  D is the party center candidate and C is the moderate. You can be lucky (+),  or you could be unlucky (-).  And you can even use the same values in reverse.  You have D C B A in order from best to worst and I used the numbers 4 3 2 1 again.  
 
-Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.   By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly-wrong technical sense, no candidate is better than any other candidate.  I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game.  The numbers are really just here as useful tools for making comparisons for a single player.  Maybe you could extend the idea if you had two outcomes being decided.
+Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.  By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly-wrong technical sense, no candidate is better than any other candidate.  I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game.   The numbers are really just here as useful tools for making comparisons for a single player.  Maybe you could extend the idea if you had two outcomes being decided.
 
 **CD Party's Utility (or Happiness) for Each Outcome**
 
@@ -204,14 +204,14 @@ Side Note: They could be any numbers just as long as the candidates are in this 
 | A **→** 1             |
 | B **→** 2             |
 | C **→** 3             |
-| D **→ **4             |
+| D **→** 4             |
 
 **Strategy Table for CD** - Row is CD party, columns are AB party and chance.
 
-|      | A+         | A-         | B+         | B-        |
-| ---- | ---------- | ---------- | ---------- | --------- |
-| D    | D **→** 4 | A **→** 1  | B **→** 2  | B **→** 2 |
-| C    | C **→** 3 | C **→** 3 | C **→** 3 | B **→** 2 |
+| AB's Nominee | A+         | A-         | B+         | B-        |
+| ------------ | ---------- | ---------- | ---------- | --------- |
+| D            | D **→** 4  | A **→** 1  | B **→** 2  | B **→** 2 |
+| C            | C **→** 3  | C **→** 3  | C **→** 3  | B **→** 2 |
 
 <!--Repeating, maybe take out-->
 
@@ -219,9 +219,9 @@ Will the parties actually behave strategically like this?  Well that would be t
 
 Voters can try to find out what's best for everybody by looking at the polls.  Specifically, there are head-to-head polls done each election that put one candidate from one side against one candidate from the other side.  If a voter sees that the candidate they like best would lose to a candidate from the other side then rationally, if they want to have an effect on the results of the election, they need to support someone else.  They need to support a candidate that can win: a candidate that is electable.  <!--\<third time mentioning electable\> \<maybe take out whole paragraph\>-->
 
-Let's show this competitive pressure with a map.  If a candidate enters the race in the right position, they can win.  The map below shows those positions in grey.  Even existing candidates will feel this pressure to move toward the middle.
+Let's show this competitive pressure with a map.  If a candidate enters the race in the right position, they can win.  The map below shows those positions in grey.  This win region is only on the side with the losing party because the winning party doesn't need a new candidate and won't vote for them.  All the pressure is on the losing party, which is kind of common sense.  If you're losing, you need to try harder.  Even existing candidates will feel this pressure to move toward the middle.  
 
-{% include sim.html id='new_can_win_circle_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSMW7DMAz8SsBZgyiKku1HFB26FLaHFMhQwGiKNhmCon17T7oCARoEHo7UUacj6S-JMs2zx6A-rmFWrUGLtWjUoFURpepgUztrwboG0XZpMJR6KzDv10GYTDFIlkmDeI8LSlO4-VBbwcRw84EZ7jLjXUZjf06btZYmpjSkmUBLWro_hQHNQDzngLGTCTo4TMoMMglAmcTGEmQMUHhYmQ3Mxn7BYjeqbSRUMiqZEWjIoDRjzvxacSFNTWO7ioFZyKAzZVu_Wa9huoZGwRbmrpH_P5HZfa5cFW3nkSvjEB3a8rPI8-FzWd52D8fdIoJjtuBswf-27ASqOlV96G87h1EiQXtJ4WYKR1q8e8cfJ4XzLHRUuI5KR5V3a-rwst-24-np8n6Az8ft_LHfXk8X-f4FCc9gkM4CAAA)'
+{% include sim.html id='new_can_win_circle_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8SuVzDrHjOLv7CMSBC9rdQ5F6QFpRBOVQIXg7jgdUoarKYeyMMxnbn5RpmmeVxFXXNA-jB-KBZE2sY4_MSW3rmoh77fBXK1I84k4UmnIipYkT1YjNSyVdHa9tzuR0dZwZbjLjTYZzfMfdWk8FKQyxAmCJLfyxG2B19O86jEFKjkwYmcuIA2QEjYnLFAfDZUM2IBvjQclhlPtIoFSgVAoAhoorzZzi9FIDCcWCZtnHVZxUSPZelS-hXMICsR5qKOh_eUXf2rAkGNYRy8L4qivT90KPh_dledndHXcLkV_DfIX5-rvfCoBqhWod4ueKMVgGcJQYdmIYptVw3lszTNLgyLCIBkcNb5sEPO237Xh6OL8e3Of99vG2355PZ_r6AYOZc4K_AgAA)'
 
 title='Candidate Pressure'
 
@@ -247,17 +247,17 @@ Or you may feel that you can't betray your favorite. Emotionally it is hard to v
 
 Additionally there's another concern in this strategic scenario. If one party knows the other party's choice, then they can adjust their strategy. In particular, if one party knows the other party chose a party center candidate, then suddenly a lot of candidates become electable that are not moderates but closer to their own party’s center. 
 
-Here's an example. You have ABCD.   Now say D is the CD party’s choice.   Then the game table gets cut in half.  Which candidate should the AB party put forward?  Say there's a candidate between A and B: call them E.  E might have a 3.5 utility for that party. and so it becomes clear that E is a lot better candidate than B in all respects.  So E is chosen E wins even though they are not the best candidate for everyone, and B is a better candidate for everyone. maybe party would choose E  because we are both electable and they might as well get something more .so that's a negative see you competitive pressure can go away when a candidate is chosen by the other party. and you end up with a candidate that is not good for everybody but just good for one party 
+Here's an example. You have ABCD.   Now say D is the CD party’s choice.   Then the game table gets cut in half.  Which candidate should the AB party put forward?  Say there's a candidate between A and B: call them E.  Say E has a 3.5 utility for that party; that's better than B at 3.  The AB party would choose E because E and B are both electable and they might as well get something more.  So E is chosen, and E wins the general election even though they are not the best candidate for everyone; B is a better candidate for everyone; more people prefer B over E. That's a problem: competitive pressure can go away when a candidate is chosen by the other party. You end up with a candidate that is not good for everybody but just good for one party.
 
 **AB Strategy Table When D is Certain**
 
-|      | D+          | D-          |
-| ---- | ----------- | ----------- |
-| A    | A **→** 4   | D **→** 1   |
-| E    | E **→** 3.5 | E **→** 3.5 |
-| B    | B **→** 3   | B **→** 3   |
+| AB's Nominee | D+          | D-          |
+| ------------ | ----------- | ----------- |
+| A            | A **→** 4   | D **→** 1   |
+| E            | E **→** 3.5 | E **→** 3.5 |
+| B            | B **→** 3   | B **→** 3   |
 
-{% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRsU5DMQz8F88ZYjtxXt5XMLA9vaFIDEgRINQOFYJvx_G1dKiqDGfnnPPZ-aZM67bZkrjmPW2s4pF4JNoud32SvO-JOGr7f0W9EkprTlRo5UQ1YvNSSXfHa5szOd0dZ5aHTH_IcI52PK3NVJDCEBcALLEB3AAXR283ocet5MiEYwZxGXGAjGAwcRl1gIw0ZAuyHg80h1GeK-EgFIZUwcOQutLGyTV_309jkEfxxFAEZcXQnDQVJwuk58yFb6HcQoXoDEsolGuby63FGKXhs2C8dHwa1lhhumL8qrGTevnXCsD4taFkiU4V41sGYImG0Q1LtBpO1Y0YJAwODB_Q4KDhbZOAl8MYH8fn8-crrfQ0Tl-H8XY8088fFbDPGbcCAAA)'
+{% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu27DMAz8F84axIco21_RoZvhIQU6FDDaokiGoGi-vRQvQYYg0HCkjjoexV-qtKxr18LWt7KyRtRqRFItIh531YOdtq0Q34qTEEZJEEpLLWS0cKGWsUeplIcTtT2YWh5OMNNTZn7KcM12PKyNVJDCEBsAltgBYSCcE0e7AXPeSs1MOGeQkJEAyAgGk5DRAMhIRzYhm_OB1jTK40s4CYWSKgCGNJRWLqF5-TztO0WUTxxFUFYMzUWLBWmQHjMb30O5hwrREVoq2K3N9dZzDOtYFozbjKXhGxtMN5huMN2ue20AjN86uCk7NYzvFYBPdOzC8Yne0qmGEYeEw4FjAR0OOt52SXg77PvX8fX8_U4Lveynn8P-cTzT3z9nZQwauAIAAA)'
 
 title='Information Failure'
 
@@ -269,7 +269,7 @@ comment='remove C, add E between A and B.  In reference to ABCD in a line.' %}
 
 The same scenario plays out when one party is dominant: when we don't have a 50-50 split between parties. There is no reason for a party to back down from nominating somebody who they think they would be best for their party without thinking about what's best for everyone.  And if nobody is considering you then you don't have any representation, because choices are made without you.  And in this scenario where there is a “safe seat”, the losing side doesn't get any representation. 
 
-{% include sim.html id='party_dominance_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itSpDtcOJDCcOAQnMKE_HtWOxhjjFExuzer0czeb2ll3TZfKlk71I2Eo-KoWPrtW1_y26EWmsPJ6AjGx42QsrZatKxUi2XtMcr16cRsD6bVpxPM8pIZLxlq-RxNa7NltDBECoAlckAYIA2M5yaMdM0tOw4dDmAAZBjBOGQkADLc0S3oRl6QlkZproSSEBgSAQ9DEkob1Txz1EFCURCWquS6FJIzq9K95HspueoppJoK-iivnva14yfBsCK2YX0Gs4bYhtgGs2aYRGzrGFnyJUNsbwDKSUdkh4pbOpUw4pBwOPCR0OGg427nhI_jvp8v79evz7KWt_3n-7ifLtfy9w-0wIbSsAIAAA)'
+{% include sim.html id='party_dominance_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itcpDtcOJAicBBjnMIE_3tWOwQTjFExuzej0ezeT2ll3TZfKlk71o2Eo-KoWPrftyFZHWuhKU5GRzA-UhyElLXVomWlWixrDynXpxPaHkyrTyeY5SUzXjLU8jma0WbLaBGIFIBI5IAIQBoYz00YmZpbdhw-HMAA2DAG47CRANhwR7egG3lBWgaluRJKQuAkAkAgCaeNap4pdZBwFAxLVXJdCss5q9Kj5EcpuepppJoO-t9ePeNrx09CYMXYhvUZwhrCGsIawppBibGtg1vyJcPY3gCUSsc_cCzPLZNKBHFYOBL4SOhI0HG3c8L7ad-_rm-380dZy2H_vpz2z-ut3H8Bqm2nobACAAA)'
 
 title='Party Dominance'
 
@@ -296,7 +296,7 @@ You might think you can look at polls and polls will tell you who can win the no
 
 What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates E and F.  E and F are just as moderate as B, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  B&F share the same space at the bottom, so  B might say to F, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts F into kind of a bluffing game if he stays in. A bluffing game is a game where you threaten to do something in order to get what you want.  
 
-{% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKe9-xUp0i1XXCBFYCEhXIoj5N8ja-5RHIeLkSV5PBr9llbWbfNRydqhbiQcEUfE0m-5VontWh2ZG5R9h1ooCZbbM4uIZkHK2mrRslItlrFHK9eHE709Kq0-nKiMp5XlaYVafkdT2rwyrhBECoAkckAIIA2M7zxgySwHTySZcgYOGg4ADWMwDhoJAA133AZuSz6QlkJpWkJZEAgSQR2CJJi2cPV6ZrujAayCgalK1Wppm4J6zqx0D_keCkhnqMmij9-o5yjasTCI1wWLg5UG4QYLTNIXu-zWALDAOlpG_mawwBsARjrGdxjplmolhDgoHAocS-hQ0PG2c8Lbcd8_T6_nr_eylpf95_u4f5zO5e8fMWHyWtACAAA)'
+{% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8S2oXsR07m30FBd3qikOiQFoJhI7ihPg7jofjitUpxYxjZzK2v0st67b5Qmz1RBurBJNgov12x0asyaQS92QLZ92JCqfA-H8WxcYzoWWtVFpZmYol9ygVOpyo7ZGpdDiRWR5mxsMM1_yOp7UZCkIY4gaAJXZAGOAWGN95wMhbCZ24FM4eJGQkADKCxiRkNAAy0hEtiEY-0JpGeY6EM6FQUgXAkIbSFlO9nVnuKICqomEmpUaWY2uQnj03vlO5U4XopC1V2vGb5tlK61gYzLeBxWGUBuMG4wbj9rdbA2AE1pFb8jfDCLwCMEjHPhyDdEu3GkYcEg4HjiV0OOh42yXh5bzv75fn68drWcvT_vV53t8u1_LzC2hXf73QAgAA)'
 
 title='Center Squeeze'
 
@@ -308,7 +308,7 @@ Now they're going to talk about their poll numbers.  Maybe they'll use that to 
 
 The problem is those polls aren't accurate. If you put B&F head to head, then B would easily win, but in a choose-only-one poll, B can get squeezed out because E&F take votes from both sides.  Even though B is the center candidate, B can lose because B can get squeezed out.
 
-{% include sim.html id='amplify_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKe9-xUp0i1XXCBFYCEhXIoj5N8ja-5RHIeLkSV5PBr9llbWbfNRydqhbiQcEUfE0m-5VontWh2ZG5R9h1ooCZbbM4uIZkHK2mrRslItlrFHK9eHE709Kq0-nKiMp5XlaYVafkdT2rwyrhBECoAkckAIIA2M7zxgySwHTySZcgYOGg4ADWMwDhoJAA133AZuSz6QlkJpWkJZEAgSQR2CJJi2cPV6ZrujAayCgalK1Wppm4J6zqx0D_keCkhnqMmij9-o5yjasTCI1wWLg5UG4QYLTNIXu-zWALDAOlpG_mawwBsARjrGdxjplmolhDgoHAocS-hQ0PG2c8Lbcd8_T6_nr_eylpf95_u4f5zO5e8fMWHyWtACAAA)'
+{% include sim.html id='amplify_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDQQz8F9VbrF67d_6KFOmOKxxIEViSEOzChOTbo9XYpDDm4EaP1WgkfVOlw7axSmGXvYTFhdnTqoVX2fdCPN8sGk_6dJUOtZDl3_Pf4oGUuy_e9sjUcvdFZnmYWR9muGY7noKmK3AhiKGIIYkbIASwBUY7DVgzKsETQQkeDggaCQCNGIKeBQIa6fAWeGsW6Nwdz4VwhhU8qgDI0eDZ6Pf9PAaV4L1a_5EkaChBF50L4GIlzkA2m8zZjW-G3Ay99jfLOvOsA6W1HMM6jgXhtmbQsUaHbIdsh2zH-O4AjO8dOSzRMX6rACyx4RYNS2yeN9QQ0kDRoKDhAB0KOmq7JLwcx_g4PV8-X-lAT-P8dRxvpwv9_AFQpOx0pQIAAA)'
 
 title='Poll Amplification'
 
@@ -330,15 +330,19 @@ Finally, we can think about some other ideas that we touched on.  Can the numbe
 
 <!--Link to multi-winner method page that is a future project for now-->
 
+### Rankings
+
+We said we could use utilities because it would help us put the candidates in order.   But we couldn't make sense of adding utilities from different people, so we don't need to add.  Grades have an order and can't be added, so maybe we could use those.  But grades imply comparisons between different people, and that doesn't make sense either.  Really, the most accurate notation we could use would be rankings.  Rankings only have an order.  That's it.  No adding, no comparisons between different people.  Exactly what we need.
+
 ### Chicken Dilemma
 
-Even in some better voting methods, there can be a game of chicken.  The game of chicken is weird.  Let's consider the center squeeze example with B E F again.  F voters can pull back their support from B if they think F can win against E. And some of the B supporters can pull away from F. But if the F supporters are overconfident, they can lose to B. There's a better chicken dilemma explanation in [the article on scored systems](./newer.html).
+Even in some better voting methods, there can be a game of chicken.  The game of chicken is weird.  Let's consider the center squeeze example with B E F again.  F voters can pull back their support from B if they think F can win against E. And some of the B supporters can pull away from F. But if the F supporters are overconfident, they can lose to B. There's a better chicken dilemma explanation in [the article on scored systems](./newer.html). Personally, I haven't thought of the chicken dilemma for pairwise voting.  It's a hard situation to think about.
 
-{% include sim.html id='chicken_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu3IDMQj8F2oKAQLp_Cvna115kipVJv72gDaPy3gyKla8ltXqnRpd9l2ssww9eJfNWTzqpspi8ziYZPVIsKhUpW6z_3R79RhdGlOniyT4CiLHjOu088nmkRWZnBs2fSrOLDZ-OlnZ_q1IWxullPbGIpVT5FIZPa70ertdiTIujQnQKAFIRdITc7kl5CZl0mTNpMqaUAXgpQoa9TWgoNGBaCICi5XFJcjAY-Ax8Bh4LHl2ery83e_EGX_dfjOLIECILVZ2CHf2LPX27U0Fcg50tYGh2znoi6f7ORdLTh_4TjykbyvpMNkFoEuMG2odSbjqsMMHWubfH3D4Eg0AVwK_FXAlfL3AUlGAKyAltgUDUgZmR0n5-ASZ-JpRzAIAAA)'
+{% include sim.html id='chicken_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwUoEMQz9l5xzaJIm3Zmb_-Bt2cMK3gZ3ERVE9NtN8xQHFilMmvTl9eV1PqjRejzKWFjcTnyUNlhi1C5YTE8nJpmYEF4060NZJXKjE9r7BBitjanTKhm8ksge45uV4JEnFEbZJvkZjbjtV0IOCWl8s_Jk-fdEWt0rU6zILCgKECdTXQaok0BILdIz5oWWIdmVSZMpiyoIiiJoFDTq1aCg0YHsgAwsNp2dOnLKWTatTrPCGnjMpxlfT6_bRpz5z-6vUgQBQtxi0wLhzp5Hvf36MRPZJ1owMHTbJ714uu9rUXL6wENikL5U0WGsYwzHGG5ljmMMdwTY4aP0Okx12BENQQoZeJuAqeElfP4cAYqAglgqDCgY6B1Q8HDetsvL_fv1kVa6u16fL2_njT6_Ab_6IUHSAgAA)'
 
 title='Chicken Dilemma'
 
-caption='I want to win, but I also want to help my friend win.'
+caption='1. I want my friend to win, but 2. I would rather me win.'
 
 comment='just B E F' %}
 

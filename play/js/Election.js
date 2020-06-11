@@ -3095,37 +3095,65 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 Election.pluralityWithPrimary = function(district, model, options){
 	options = options || {};
 
-	// Tally the approvals & get winner!
-	var ptallies = _tally_primary(district, model, function(tally, ballot){
+	// Voters used regular FPTP to vote, now we find out where the parties are.
+
+	// find the parties
+	model.parties = _assign_parties(district, model)
+
+	// Take polls and vote
+	let dopoll = "Auto" == model.autoPoll
+	if (dopoll) var polltext = doPollAndUpdateBallots(district,model,options,"plurality+primary")
+
+	// Look at each voter group and get tallies for all the candidates
+	let ptallies = _tally_primary(district, model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
 	// if ("we gotta problem" == ptallies) {
 	// 	model.result.colors = ["#aaa"]
 	// 	return
 	// }
-
-	pwinners = []
+	
+	// Who won each primary?
+	let pwinners = []
 	for (var i in ptallies) {
 		var tally = ptallies[i]
 		pwinners = pwinners.concat(_countWinner(tally))
 	}
 
+
+	// Now we vote in the general election.
 	// only do 2 candidates
 	var oldcandidates = district.candidates
 	district.candidates = district.candidates.filter( x => pwinners.includes(x.id)) 
+	// erase polls (not for general election)
+	var oldPollResults = model.pollResults
+	model.pollResults = undefined
+
 	for(var j=0; j<model.voterGroups.length; j++){
 		model.voterGroups[j].update();
 	}
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
-
 	// return original candidates and update voters' ballots 
+	// So we can see who they voted for in the primary.
 	// TODO: make this better.
 	district.candidates = oldcandidates
-	var ptallies = _tally_primary(district, model, function(tally, ballot){
-		tally[ballot.vote]++;
-	});
+	model.pollResults = oldPollResults
+	
+	for(var j=0; j<model.voterGroups.length; j++){
+		model.voterGroups[j].update();
+	}
+
+	// maybe don't need to do this again, but just to check.
+	ptallies = _tally_primary(district, model, function(tally, ballot){
+		tally[ballot.vote]++
+	})
+
+
+	// clear the old poll results. we're done with casting ballots.
+	model.pollResults = undefined
+
 
 	var winners = _countWinner(tally);
 	var result = _result(winners,model)
@@ -3271,6 +3299,28 @@ function _getBallots(district, model){
 	return ballots;
 };
 
+function head2HeadPoll(district,ballots) {
+	head2head = {}
+	// For each combination... who's the better ranking?
+	for(var i=0; i<district.candidates.length; i++){
+		var a = district.candidates[i];
+		head2head[a.id] = {}
+		for(var j=0; j<district.candidates.length; j++){
+			var b = district.candidates[j];
+			// How many votes did A get?
+			var aWins = 0;
+			for(var m=0; m<ballots.length; m++){
+				var rank = ballots[m].rank;
+				if(rank.indexOf(a.id)<rank.indexOf(b.id)){
+					aWins++; // a wins!
+				}
+			}
+			head2head[a.id][b.id] = aWins
+		}
+	}
+	return head2head
+}
+
 var doPollAndUpdateBallots = function(district,model,options,electiontype){
 
 	// check to see if there is a need for checking frontrunners
@@ -3347,27 +3397,23 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 				voter.update();
 			}
 			var ballots = _getBallots(district, model) // kinda double effort here but okay
-			head2head = {}
-			// For each combination... who's the better ranking?
-			for(var i=0; i<district.candidates.length; i++){
-				var a = district.candidates[i];
-				head2head[a.id] = {}
-				for(var j=0; j<district.candidates.length; j++){
-					var b = district.candidates[j];
-					// How many votes did A get?
-					var aWins = 0;
-					for(var m=0; m<ballots.length; m++){
-						var rank = ballots[m].rank;
-						if(rank.indexOf(a.id)<rank.indexOf(b.id)){
-							aWins++; // a wins!
-						}
-					}
-					head2head[a.id][b.id] = aWins
-				}
-			}
+			let head2head = head2HeadPoll(district,ballots)
 			model.pollResults = temp1
 
 			tally = {head2head:head2head, firstpicks:pre_tally}
+
+		} else if( electiontype == "plurality+primary") {
+			
+			let ballots = []
+			for (let voterGroup of model.voterGroups) {
+				for (let voterPerson of voterGroup.voterPeople) {
+					let ballot = CastBallot.Ranked(model,voterGroup.voterModel,voterPerson)
+					ballots.push(ballot)
+				}
+			}
+			let head2head = head2HeadPoll(district,ballots)
+			tally = {head2head:head2head}
+			
 		}
 		
 		model.pollResults = tally
@@ -3395,7 +3441,9 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 				var c = district.candidates[i].id;
 				if (electiontype == "irv"){
 					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally.firstpicks[c]) + ". ") + " "
-				} else {
+				} else if (electiontype == "plurality+primary") {
+					// need to put head2head results here
+				}else {
 					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
 					//polltext += "<br>"
@@ -3411,6 +3459,9 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 		var voter = model.voterGroups[i];
 		voter.update();
 	}
+	// clear the old poll results after we've gotten the ballots
+	// model.pollResults = undefined
+
 	if (options.sidebar){
 		// model.draw() // not sure why this was here
 	}
@@ -3448,11 +3499,9 @@ var _tally = function(district, model, tallyFunc){
 
 }
 
-var _tally_primary = function(district, model, tallyFunc){
+var _assign_parties = function(district, model){
 
-	var primaries_tallies = []
-	var oldcandidates = district.candidates// temporary change
-	caninprimary = []
+	let caninprimary = []
 	for ( var j = 0; j < model.voterGroups.length; j++){
 		caninprimary.push([])
 	}
@@ -3473,11 +3522,18 @@ var _tally_primary = function(district, model, tallyFunc){
 		}
 		caninprimary[votebelong].push(district.candidates[c])
 	}
+	return caninprimary
+}
+
+var _tally_primary = function(district, model, tallyFunc){
+
+	var primaries_tallies = []
+	var oldcandidates = district.candidates// temporary change
 
 	// make sure there are candidates in each primary
 	// problem = false
-	// for ( var j in caninprimary){
-	// 	if (caninprimary[j].length == 0) problem = true
+	// for ( var j in model.parties){
+	// 	if (model.parties[j].length == 0) problem = true
 	// }
 	// if (problem) return "we gotta problem"
 
@@ -3488,7 +3544,7 @@ var _tally_primary = function(district, model, tallyFunc){
 		for(var candidateID in model.candidatesById) tally[candidateID] = 0;
 
 		// Count 'em up
-		district.candidates = caninprimary[j]	
+		district.candidates = model.parties[j]	
 		if (district.candidates.length == 0) district.candidates = oldcandidates // workaround
 		model.voterGroups[j].update()
 		var ballots = model.voterSet.getBallotsCrowdAndDistrict(j,district)
@@ -3499,8 +3555,8 @@ var _tally_primary = function(district, model, tallyFunc){
 	}
 	district.candidates = oldcandidates // reset
 	// Return it.
-	model.drawArenas()
-	return primaries_tallies;
+	// model.drawArenas()
+	return primaries_tallies
 
 }
 
