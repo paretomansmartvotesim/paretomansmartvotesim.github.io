@@ -150,10 +150,10 @@ li{
 	padding: 0px 20px;
 }
 .sim-ballot{
-	margin: 35px auto 50px auto;
+	margin: 35px -20px 50px -20px;
 }
 .sim-test{
-	margin: 50px auto 40px auto;
+	margin: 50px -20px 40px -20px;
 }
 .contain-model{
 	position: relative;

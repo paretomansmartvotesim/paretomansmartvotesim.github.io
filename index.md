@@ -41,8 +41,9 @@ And those are the basic vote-tallying methods. You just need to add the rule tha
 
 The spoiler effect is one of those problems. Even though {% include str.html str='`<span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span>`' %} should win, the election system is spoiling this. But if you use approval or condorcet or score, then it'll work out.
 
-{% include sim-test.html title='' caption='`drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>C</b></span> to <em>just under</em> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> to create a spoiler effect.<br> then compare the 6 different voting methods:`' id='election31' %}
+{% include sim-test.html title='' caption='`drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>C</b></span> to <em>just under</em> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> to create a spoiler effect.<br> then compare these four different voting methods:`' id='election31' %}
 
 There's a lot of details, but that's the gist of it.
 
 Putting it all together, here's a sandbox for you to try out all the different systems and to make your own scenarios:
+

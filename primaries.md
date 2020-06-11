@@ -1,8 +1,8 @@
 ---
-byline: 'by Paretoman, May 2018'
-description: An Interactive Guide to Voting
 layout: page-3
 title: Primaries
+description: An Interactive Guide to Voting
+byline: 'by Paretoman, May 2018'
 ---
 
 We Don’t Need Primaries
@@ -10,7 +10,7 @@ We Don’t Need Primaries
 
 I’m going to talk about what we're trying to achieve when we vote.  And I'd like to talk about how using primaries and choosing only one candidate on our ballots will only achieve accurate representation in the best case scenario. In many cases, a lot of votes are wasted, and a lot of voters receive no consideration.
 
-We're going to go over each aspect of voting and see how other methods of voting can work in more scenarios.  And I’m going to try to make it easier to think about voting by using diagrams. Voting is not an easy subject because there are many voters and each have different perspectives.  There are also a lot of strategic considerations you have to make. Voting is hard, but it could be easier.  You should walk away from this piece wanting to change how we vote.
+We're going to go over each aspect of voting and see how other methods of voting can work in more scenarios.  And I’m going to try to make it easier to think about voting by using diagrams. Voting is not an easy subject because there are many voters and each have different perspectives.  There are also a lot of strategic considerations you have to make. Voting is hard, but it could be easier.  You should walk away from this tutorial wanting to change how we vote.
 
 Primaries were created to allow a party to deal with vote splitting, but there are other ways to vote that beat primaries on this original design point.  Additionally, better systems can have better competition which produces better candidates.  They also can encourage voters to vote honestly without having to watch the polls to help them vote strategically.  Most fundamentally, they avoid splitting the vote so voters don't have to coordinate on who they should support and who they will encourage to drop out.
 
@@ -26,127 +26,262 @@ There are ways to vote that beat primaries at their own game.  Specifically the
 
 ### Basics
 
-Let’s back up a little here and describe what the purpose of voting systems is.  You use voting systems when you have a large group of people and have to come to a decision. This can be a referendum or a ballot initiative or you could elect a representative to make the decision for you. 
+Let’s back up a little here and ask what the purpose of voting systems is.  You use voting systems when you have a large group of people and have to come to a decision. This can be a referendum or a ballot initiative, or you could elect a representative to make the decision for you. 
 
-A referendum is actually pretty simple; you just say yes or no. Really the hard part of the referendum is to decide what the wording is going to be for the question.  The wording is not up to you; that's up to the group that puts the initiative together or the legislators that wrote the referendum.  That hard part is where the work happens; it’s where consideration of what the voters want happens.
+A referendum is actually pretty simple; you just say yes or no. Really, the *hard *part of the referendum is to decide what the wording is going to be for the question.  The wording is not up to you; that's up to the group that puts the initiative together or the legislators that wrote the referendum.  This group tries to consider what the voters want, and that is the hard part.  It’s part of the mechanism for the idea that you are represented.
 
-\<yes, no, referendum\> [link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy04DMQz8lSrnHOJHnE0_AnHggnZ7KFIPSCuKoBwqBN-O46FwqKpIGcdjTybOZyppO8-1Zaq8yzOrZdJpt8uJBkHKfu7jLGlbctLYa-zmFZyvltc2Z0q-Ws5MN5l-kyH3SA4UFZJb1khzuCAYIzgjWCMDuBFSR7-WHXpk2fU8yRSyzMExZFiRdBlxgAw3nCacejRICTs0RkNBCJREADAkrjQTygwE1KT_9WtIjYAuAV8CGe0j0OjSfzm1sKoNHwNz2iNZMbLqeul7SY-H92V52dwdN0tKnobRKij6_VNMruLJtaFkilsrnmwFgMEZ5m8YnFX8jhszSBgcGYbeCgC9jQOe9ut6PD2cXw_u8379eNuvz6dz-voBzxfmQJcCAAA) [simpler](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy2oDMQz8leCzD9bD8m4-ovTQS9jdQwo5FJamtMkhlObbK2v6OIRgsB4jjUfyZyppO021Zaq85InVMumwLDlRB0iGTMY9lrQtOWncNW7zCs43x2ubIyXfHEeGu8h4FyHXSG4oKiS3rJHmUEEQRlBGkEaGFhdC6tafZTdjgOx8nmRCxIExaFijkZ1G3BiSDdGAaIwGKSGH-mrAJGASgYEgcaaJUGYAwCbjX792qnBixO7wr-Nkk3RHo0v_6RQzasPHQJyOkaxYWXW-dJ3T7vAxz6-bh-NmTsnTEFoxcv35U2yuYuTaUDLEqxUjW4GhIDfs38BiFb_jwgwUBkWGpbcCg97GYZ7363o8PV3eDq7zcT2_79eX0yV9fQNrFEaklwIAAA)
+{% include sim.html title="Referendum - Your Ballot" caption="Yes or No?" id="yesno_sim" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy04DMQz8lVXOOcSPOLv9CMSBC9rdQ5F6QFpRBOVQofbbcTwCDlUVKY4z9ngm-U4l7ea5tkyV1zyzWiYd1zUn6gDJmMm455J2JSeNvcZuXsH5Znltc6Tkm-XIeBeZ7iJUYhx1RT1lpBBEUESQRK6JPLgAUo8-jj1MAbLz-CUTMg6MQcMajew04sFw2ZCNyKZokBJCqT8JmARMIggQJM40E8oMANhk-uvXThWHbq1bVf49ONks_aDRpf90Co_a8CEQp1Nc1oLgfOm6pOH58Dksy9vwcByWlByA1CrxEhWma0WA6dpQMsbcCtNWEGDY8AOGp7MahrpYA4VBk-HZG76vobdxDHvZb9vx9HR-P7jSx-3rY7-9ns7p8gN-hdYHkQIAAA)" %}
 
-{% include sim.html title="Referendum" caption="Yes or No" id="yesno_sim" link="[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy04DMQz8lSrnHOJHnE0_AnHggnZ7KFIPSCuKoBwqBN-O46FwqKpIGcdjTybOZyppO8-1Zaq8yzOrZdJpt8uJBkHKfu7jLGlbctLYa-zmFZyvltc2Z0q-Ws5MN5l-kyH3SA4UFZJb1khzuCAYIzgjWCMDuBFSR7-WHXpk2fU8yRSyzMExZFiRdBlxgAw3nCacejRICTs0RkNBCJREADAkrjQTygwE1KT_9WtIjYAuAV8CGe0j0OjSfzm1sKoNHwNz2iNZMbLqeul7SY-H92V52dwdN0tKnobRKij6_VNMruLJtaFkilsrnmwFgMEZ5m8YnFX8jhszSBgcGYbeCgC9jQOe9ut6PD2cXw_u8379eNuvz6dz-voBzxfmQJcCAAA)" %} 
+And lets see a whole group of people.
 
-For an election, the hard part happens in the primary.  In the general election there's two choices (at least in the United States, where I'm from, there's two choices). There's not a lot to think about. Each party has put up their nominee, and you pick the one closest to you. The hard part happens in the primary.  That's where you have many more competitors. There are two primaries going on at the same time, and in each one there is the same decision process, where the party wants to put up a candidate that can beat the other party. 
+{% include sim.html title="Referendum - Result" caption="Everybody Votes" id="yesno_many_sim" link="[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRsWpDMQz8leDZgyVL8nM-onToUt7LkEKGwqMpbTKE0n57ZR1phxAMPktnnU_yVyppO8_aMinv8sximWTa7XKiQZCwx33ENW1LThK7xm5-g_PN8rvNmZJvljPTXabfZajEczQcjZARwhDBEcESGcANkDj6c-zQI8uu40l2HXLg4BgyLEi6THWADDdEE6IeBbWEURojoSAqDNUKHoaqK82EawYCarX_1UtIjQNdD3w91FE-DhJV8i8nFlal4UNgTnoktQBcL_0s6fnwuSxvm4fjZknJ02hZa8xB0bIqAC1rw5UpXlW0bAWAwRnaNQzONNqpbswgYXBkGHrD5zXUNg542a_r8fR0eT-4z8f1_LFfX0-X9P0LH8D-m48CAAA)" %}
 
-\<A or B, vote\> [link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy2oDMQz8leCzD9bD8m4-ovTQS9jdQwo5FJamtMkhlObbK2v6OIRgsB4jjUfyZyppO021Zaq85InVMumwLDlRB0iGTMY9lrQtOWncNW7zCs43x2ubIyXfHEeGu8h4FyHXSG4oKiS3rJHmUEEQRlBGkEaGFhdC6tafZTdjgOx8nmRCxIExaFijkZ1G3BiSDdGAaIwGKSGH-mrAJGASgYEgcaaJUGYAwCbjX792qnBixO7wr-Nkk3RHo0v_6RQzasPHQJyOkawF_-R86Tqn3eFjnl83D8fNnJKnIbQKan_-FJurGLk2lAzxasXIVmAo-gz7NyzOKn7HhRkoDIoMS29Q1NDbOMzzfl2Pp6fL28F1Pq7n9_36crqkr2_QiZiylwIAAA)
+For an election, the hard part happens in the primary.  The general election is easy: there's two choices (at least in the United States, where I'm from, there's two choices). There's not a lot to think about. Each party has put up their nominee, and you pick the one closest to you. 
 
-### End of Basics
+{% include sim.html title="General Election" caption="A or B?" id="ab_sim_general" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXCDFwcKFcCmOkH-PrOGS4jgWPJJHGo-036WVddusVzLe68bqlXTZ91poEqQc-Zi5lLXVonlanh4VXB--qO3BtPrwBbM8ZcZThlo-R9PRTBkpDBEcESyRA8IAaWA8xwEjbzl04pJDhwI4OYYMKy5DRgIgwx3Zgmxkg7Q0SnMllITAkAh4GJJQ2ghlDgJqMv76NaVmQPeA74HM9hlodum_nHpa1Y4fAnM68tKwKoMxw4gmObdhRDMARrSOkiVfMYzoDYBFOcZzLMot7UsYcUg4HDiW3OGgo7dzwtvpOC7X19vHe1nLy_H1eTrO11v5-QXpTWN6fwIAAA)" %}
 
-\< basics should be a color section\>
+The hard part happens in the primary.  That's where you have many more competitors. There are two primaries going on at the same time, and in each one there is the same decision process, where one party wants to put up a candidate that can beat the other party. 
 
-I’m going to tell you about another way we could vote, and it’s easier.  Instead of posing this question, “What is what candidate do you think would be best overall?”, we can ask voters, “What is best for you?”.  That is a much easier question to ask.  You don't have to make people guess.  The best part is that you still get the same benefit: you get to unite a whole side behind the person that is best for all voters. 
+{% include sim.html title="Primary Election" caption="A or B? Which would beat the other party?" id="ab_sim_primary" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)" %}
+
+### Pairwise Ranking
+
+I’m going to tell you about another way we could vote, and it’s easier.  Instead of posing this question, “What candidate do you think would be best overall?”, we can ask voters, “Who is best for you?”.  That is a much easier question to ask.  You don't have to make people guess.  The best part is that you still get the same benefit: you get to unite a whole side behind the person that is best for all voters. 
 
 What does that look like? The easiest example of this is a pairwise ranking, because in a pairwise ranking, for every pair, your full support goes to the candidate you prefer.  If there's a great candidate that's in the middle, and there's another great candidate that's more towards your side, you’re not going to be in a dilemma of which one to vote for.  You can throw all your support to the candidate that's on your side when they are matched against the other side, so he gets the full support of his side.  and also, your full weight will count towards the middle candidate over candidates from the other side, and that completely solves the problem that the primary was trying to solve. The whole purpose of the primary was to say that we want our single vote to matter the most.  Now, when you count by pairs, your vote - your full vote -  counts for the candidate you prefer over any other candidate.
 
-\<three candidates, two on one side, one on other\> [link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8lZPrFLHjOJv9CApEg3a3OMRWnO6QuAYh-HYcj5CQTqcU4-dkbH9RpnlZrCVW2dLCIm7psDq7xduWiEeJTmnqwys050RKc09UwzbPS7p5Xts8k9PN88x0N9PvZti1sgNHRUktaYQlVDCEsQIgjQ0tLoTV0b8tDj2S4nweFIbnNOIAGtFolBoNYgg2eBO8Hg0lhxweqwFTAVMpAAgqzrT4SlFoSIGvYGSOlemgGzUaYw5D_gwnXMowNPr0P6ViUm04DyRqj2DN4VVnpJ-VnvePdT0fHi6HlcjDkFtLkFbIrdhfxeAVrBXrqxjcMoDjD8MVDOuzihu5MAOFQZFh9Q2KGnqbBLwcT6fL9enzfXedj8fz2_5K379KuNr2ogIAAA)
+{% include sim.html title='Pairwise Ranking'
 
-It’s much clearer what happens when you think of the candidate’s perspective.  All their supporters are behind them.  They get the full weight of their supporters versus the other side. The candidate doesn't need to worry about splitting votes with anybody.
+caption='Your full support always counts for the better candidate in each pair of candidates.'
 
-\<mouse over pairs to see support\>
+comment='three candidates, two on one side, one on other' id='pairwise_intro' link='[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8ysl1ithxks0-ggLRoN0tDrEVpzskrkEI3o7tERLS6ZTCdmxPZiZflGleltYTq2xpYRHL1LPBlvG2JWIf0SlNw6tCc06kNI9ENfJmfUk3x2a7dXK6OdaZ7nbG3Q7neI6dj5eCEoRYEUCJjRNbMAKsFu25YmFEUwzHLoVRGYxYAIxoLEqNBWm47KgmVCMWSg6i7JYAqQCpFAQQKoa0mJUYbGgBr0Aqh1XqcD6jLs_lqvwlBrgUTzT29D-kQql2fAso6ojLCsOqIdLPSs_7x7qeDw-Xw0pk16BbS7hRIbxWBAivQK2wr0J4ywgckw2_0GBfqyHJyTZANDBqsL6DUYdhXQLi5Xg6Xa5Pn--78Xw8nt_2V_r-BYwzE2-aAgAA)' %}
 
-So, by solving the problem of splitting votes, which is caused by limiting your vote to choose only one candidate, a head-to-head pairwise ranked ballot would achieve the goal of the primary, better than the primary could. It does even better because the voter knows, themselves, who is better for themselves.  The voter knows their own preferences better than they can guess the preferences of the entire population (or watch polls).  There is no more hard part of guessing what nominees to put forward.  You're asking more from the voter, and it's information that the voter has: what their own preferences are.  
+It’s much clearer what happens when you think of the candidate’s perspective.  All their supporters are behind them.  They get the full weight of their supporters when they face the other party. The candidate doesn't need to worry about splitting votes with anybody.
 
-If in a primary, the voters are not engaged and not paying attention to the head-to-head polls, then their vote can be manipulated by whatever media they are consuming. The polling data itself could even be inaccurate.  A better voting system wouldn’t ask you to find the middle from the polling data.  It would find the middle for you.
+{% include sim.html title='Pairwise Election'
 
-We will discuss more voting systems later in the page.
+caption='Each candidate gets the full weight of their side against the other party. Mouse over each pair to see the support'
 
-[Maybe move this to Vote splitting discussion]
+comment='mouse over pairs to see support' id='pairwise_election' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8ysl1ijiOk80-ggLRoN0tDrEVpzskaBCCt2N7ihM6nVKMnbEnY-ebMs3Lojmxji0tzD1xE48GJ-5sUelqbNm2ROzFk1iJOiEabUYIzTlRpXkk0oiblZZ0c6y2G5PTzTFmusuMuwzneI7dmqcFKQxxBcASmyc2MANcDe05hxFkyZEVRmYyxQAypUZjMRkxaLjsyCZkIxokh1H2lUBJoCQCgCExpcX268dLG0goCoZlW5d9BFVI-qyVr2G5hgIxD2so1P_yFXPXjk-C4TriUrE-NWX6Xel5_1jX8-HhcliJ7BrmVVCLNagCsAaFqk7xsmINLQM4Khv-pGGZTcO5j9Yg0eCo4SM6HHX09hLwcjydLp9PX--7-Xw8nt_2V_r5A7EXqU-9AgAA)' %}
+
+So, this solves the problem of splitting votes, which is caused by limiting your vote to choose only one candidate.  The head-to-head pairwise ranked ballot achieves the goal of the primary in a better way than the primary could. It does better because each voter knows for themself, who is better for themself.  The voter knows their own preferences better than they can guess the preferences of the entire population (or watch polls).  There is no more hard part of guessing what nominees to put forward.  You're asking more from the voter, and it's information that the voter has: what their own preferences are.  
+
+If, in a primary, the voters are not engaged and not paying attention to the head-to-head polls, then their vote can be manipulated by whatever media they are consuming. The polling data itself could even be inaccurate.  A better voting system wouldn’t ask you to find the middle from the polling data.  It would find the middle for you.
+
+Now, the voting system is smarter, and the voter also needs to get smarter.  The voter needs to do more work because now they have to consider every candidate.  With primaries, we got away with doing our civic duty pretty easily: we voted for one candidate and said, “Well I voted for that guy, that's all I need to do.”  Now it’s your duty to consider all the candidates.
+
+### A Brief Intro to the World of Voting Methods
+
+{% comment %} Maybe move this to Vote splitting discussion {% endcomment %}
 
 There are also other ways to count ranked ballots and there are other kinds of ballots that avoid vote-splitting.  Scored ballots avoid vote splitting.  A scored ballot allows you to give a rating from 0 to 5 on a candidate. A specific kind of scored ballot is an approval ballot, which allows you to rate on a very simple scale: do you approve or not?  And simply because you are no longer limited to vote for a single candidate, you can vote for that candidate without feeling like you’re splitting with other groups of voters that support other candidates.  Why would you split if you are not forced into the dilemma of choosing one?
 
-\<link to RCV page\> IRV avoids some vote splitting by using a process of elimination.
+Also, up to now, we haven't called our voting system by it's proper English name: First Past the Post (FPTP). FPTP is another name for our choose only one voting method.
 
-\<link to more about approval voting page\>
+{% comment %} How do I actually show vote splitting? {% endcomment %}
 
-\<link to STAR, score, strategy\>
+{% comment %} Todo: Need to add +Primaries {% endcomment %}
 
-(It’s actually a little harder to vote with rated ballots because the voter has to watch the polls but it works out pretty much the same as counting by pairs.)
+{% include sim-test.html title='More Voting Methods' caption='`drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>C</b></span> to <em>just under</em> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> to create a spoiler effect.<br> then compare these four different voting methods:`' id='election31' %}
 
-Now, the voter does need to get smarter because now they have to consider every candidate.  With primaries, we got away with doing our civic duty pretty easily: we voted for one candidate and said, “Well I voted for that guy, that's all I need to do.”  Now it’s your duty to consider all the candidates.
+Another method you've likely heard of if you are reading this page is Ranked Choice Voting (RCV), which is a new name (as of the past 20 years) for Instant Runoff Voting (IRV).  It is also a name that is used for Single Transferable Voting (STV), which is different than IRV, and so you have to tell from the context which method people are talking about. IRV avoids some vote splitting by using a process of elimination.  It's worth getting into on its own page.
+
+Also, it’s actually a little harder to vote with scored ballots because the voter has to watch the polls but it works out pretty much the same as counting by pairs.
+
+Read more about:
+
+* [RCV, IRV, and STV](./rcv.html).
+
+* [Approval Voting](approval_superman.html)
+
+* [Score Voting](newer.html)
+
+This is just a brief introduction to the world of voting methods.  We will discuss more voting systems later in the page.
 
 Game Theory: The Competitive Pressure that the Primary Relies on has a Flaw and Only Works in the Best Case Scenario
 --------------------------------------------------------------------------------------------------------------------
 
 Primaries rely on competitive pressure to get good results for the voters.  If the scenario changes so that the competitive pressure breaks down, then the results are not good.
 
-Say we have a set of candidates in two primaries, ABCD, arranged in a line, like in the drawing below.  There are some candidates more towards the middle that would better represent all the voters: that’s B and C.  Ideally, in the best case scenario, B or C would win.   That's what we want the voting system to do.  We also want B&C to actually run.  We want them to not think that they will cause any problems for their party by splitting votes or in some other way. 
+### Game Rules
 
-This is kind of a game.  There's two players: the AB party and the CD party. A party takes an action by nominating a candidate.  The party is happier when their candidate wins.   They are the least happy when an extreme candidate of the other party wins.  This defines what is known in game theory as a normal form game.
+Say we have a set of candidates in two primaries, ABCD, arranged in a line, like in the drawing below.  There are some candidates more towards the middle that would better represent all the voters: that’s B and C.  Ideally, in the best case scenario, B or C would win.   That's what we want the voting system to do.  We also want B&C to actually run.  We want them to not think that they will cause any problems for their party by splitting votes or in any other way. 
 
-I'm going to draw two tables to show how happy each party is with each outcome.  These numbers are called the payoff or the utility.  I'm putting the party center candidate as the first row.  That's A for the AB party and it D for the CD party.
+This is kind of a game.  There's two players: the AB party and the CD party. A party takes an action by nominating a candidate.  The party is happier when their candidate wins.   They are the least happy when an extreme candidate of the other party wins.  This defines what is known in game theory as a normal form game.
 
-\<read more about game theory here [link](https://www.youtube.com/user/gametheoryonline), there are some quiz quesitons that are only on the coursera site\>
+{% include sim.html id='game_setup_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)'
 
-The payoffs only exist in the way that they affect the decisions each group makes.  It would be easy to add these numbers up, but it’s hard to make sense of them.  To really get into this idea, you’d have to think about things like how society should work, and that you’d like all voters to be treated equally. It’s an idea worth getting back to.  For now, you can just understand that a voter would like the outcome to be a bigger number.
+title='Game with Two Players'
 
-So I'm going to assign these numbers for the AB party: ABCD -\> 4321. And the same numbers  
+caption='The AB party and the CD party are the players.  The action is nominating a candidate in the primary.  The outcome is who wins the general election.'
 
-\<chart ABCD 4321\>
+comment='basically, four candidates, ABCD, in a line with +Primaries as the voting system. A is center. D is center. B and C are moderates' %}
 
-Let’s look at an example.  What happens if the parties pick A and C as the nominees?  C is closer to the middle so C wins in the general election.  
+### Strategy
 
-Let’s look at another example: what happens if the parties pick A and D as the nominees?  It could be a tie.  I'm just going to assume that there's a 50/50 chance between A and D.  Even though we could average those two possibilities, I want to show all the possible outcomes, so I'll add another column: one column for the best case and one column for the worst case.  This is like adding another player to represent chance.
+Let's focus on the AB party.  Let's draw a table that shows how happy the AB party is with each outcome.  These numbers are called the payoff or the utility. For this example, we have assigned these numbers for the AB party: A B C D -\> 4 3 2 1.   We're assuming that all these candidates are considered based on their position rather than any other qualities that would make them appeal to a broader base.  
 
-\<strategy chart for AB\> 
+The payoffs only exist in the way that they affect the decisions each group makes.  It would be easy to add these numbers up, but it’s hard to make sense of them.  To really get into this idea, you’d have to think about things like how society should work, and that you’d like all voters to be treated equally. It’s an idea worth getting back to.  For now, you can just understand that a voter would like the outcome to be a bigger number.  
 
-Say you’re the AB party.  Let’s look at your strategy chart. You have several outcomes that you can’t control on the columns. and the row is your choice.  
+**AB Party's Utility (or Happiness) for Each Outcome**
 
-Which candidate should you choose?  If you choose A, then you'll either lose to the more moderate C or you’ll have a toss-up between the best case or worst case, A and D.  If you choose B you’ll probably come out on top with a more moderate candidate.  So you probably should choose B.  If you really don’t know what the other side is going to do, you could just add up your scores for each case.
+| Outcome **→** Utility |
+| --------------------- |
+| A **→** 4             |
+| B **→** 3             |
+| C **→** 2             |
+| D **→ **1             |
+
+Now, let's take an action (in the language of game theory).  Let's have each party pick a nominee.  What happens if the parties pick A and C as the nominees?  C is closer to the middle so C wins in the general election.  
+
+{% include sim.html id='action_1_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ3n1FinTLFhe44sAkIdwVR0jeHlkT2OI4XIykkccj-TuVtG6btkzKe96ok0d933OiSfQaad6Y2SOahKS15FTTSjlpxOatnB-O9zZnSn44zvSnzPKUoRLP0bQ2U0YKQ1QBsEQGcANUHf05dliiyq7jRaaYgTk4hgxjMHYZcYAMN2Qd2RIXZK5u2hKKssCOCFjYEdfZXO_3_TZGyjTbDQ3QFIw7l1ULJp8hHSEfoYTYFKk1blc9KhbGa8P3wGpd8E1YnMKoYmCV2IL-_6QCMLA2tPR4RTGwFQDWZhjXsDbTcCluxCBhcGBYeYODhruNA95OY3xcX--f57Sml3H7Oo3L9Z5-_gBbft_olgIAAA)'
+
+title='Action Example'
+
+caption='The AB party nominates A.  The CD party nominates C.  C wins the general election.'
+
+comment='not sure if I need this' %}
+
+Let’s look at another example: what happens if the parties pick A and D as the nominees?  It could be a tie. 
+
+{% include sim.html id='action_2_tie_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8S-oUsR072X0FBd1qi0OiQIoAobvihODtOB50W5xOKcbOJJMZ5zuVtG5b40xqe964zqrve040iV6inQR5pZOQtJacalopJ43a_Cjnu-VnmzMl3y1n-kNmechQiedoWpsto4UhqgBYIgO4AaqO_hw7LLHLruObTJGBOTiGDCMYu4w4QIYbuo5uiQsyRzdtCcW2wI4IWNgR19lc7_f9Mka6Ic1rhoPQFsQWJ2rBBGZJR8lHKSE6RWqN21WPHYsAteGbYLku-C4MUGFYEVwlpqH_P6oABNeGIz1eUQS3AsD4DLEN4zO9xTBIGBwYRt_goOFu44CX0xgf5-fr52ta09O4fJ3G2_mafv4AxW1RZ54CAAA)'
+
+title='Tie Example'
+
+caption='The AB party nominates A.  The CD party nominates D.  There is a tie in the general election.'
+
+comment='not sure if I need this' %}
+
+In a real election with millions of voters, there won't be a tie, so let's model this tie as a probability: there's a 50/50 chance between A and D.  How do we compute the utility?  We could average the two utilities of the two outcomes.  But we wouldn't get the full picture.  We want to know what our risks are, so we consider both possibilities.  There is another variable.  It's kind of like another player.  We're treating chance as another player in the game.
+
+I'm going to use a table to show these actions and the utility of the outcome.  The table below shows the utility for the AB party when the AB party nominates A.  In each column is a different set of actions that are outside the control of the AB party.  I used a +/- sign to represent chance. D+ means chance favors us, and D- means we had a negative outcome.  The entries in the table show the outcome and the utility of that outcome.
+
+**Outcomes When AB party nominates A** - Columns are CD party and chance.
+
+| D+   | D-   | C    |
+| ---- | ---- | ---- |
+| A **→** 4 | D **→** 1 | C **→** 2 |
+
+We can extend this table to consider when the AB party nominates B.  We add rows for each action the AB party can take.  
+
+**Strategy Table for AB** - Row is AB party, columns are CD party and chance.
+
+|      | D+         | D-         | C+         | C-        |
+| ---- | ---------- | ---------- | ---------- | --------- |
+| A    | A **→** 4 | D **→** 1  | C **→** 2  | C **→** 2 |
+| B    | B **→** 3 | B **→** 3 | B **→** 3 | C **→** 2 |
+
+### Playing the Game
+
+Say you’re the AB party.  Let’s look at your strategy table. You have several outcomes that you can’t control on the columns. and the row is your choice.  
+
+Which candidate should you choose?  If you choose A, then you'll either lose to the more moderate C or you’ll have a toss-up between your most favorite and your least favorite, A and D.  If you choose B you’ll probably come out on top with a more moderate candidate.  So you probably should choose B.  If you really don’t know what the other side is going to do, you could just add up your scores for each case.
+
+**Utility Table for AB - Averaging out Chance**
+
+|      | C +/- | D +/- |
+| ---- | ----- | ----- |
+| A    | 2.5   | 2     |
+| B    | 3     | 2.5   |
+
+**Strategy Table for AB - Averaging out Chance and the CD Party's Choice**
+
+|      | C/D , +/- |
+| ---- | --------- |
+| A    | 2.25      |
+| B    | 2.75      |
 
 The same strategy works for both sides, which means that there is a competitive pressure.  Both sides should choose a more moderate candidate.  And knowing what the other side is going to do affects your strategy.  You’re even more convinced that your only chance to win is to pick a moderate.  Both parties are concerned with picking someone electable.  We talked about this earlier: electability is a consideration of whether the candidate you choose will win the general election.
 
-We can make the same chart for the CD party.  D is the party center candidate and C is the moderate. You can be lucky (+),  or you could be unlucky (-).  And you can even use the same values in reverse.  You have DCBA in order from best to worst and I used the numbers 4321 again.  They could be any numbers just as long as the candidates are in this order.  for example the numbers could be  8 6 1 0. 
+We can make the same table for the CD party.  D is the party center candidate and C is the moderate. You can be lucky (+),  or you could be unlucky (-).  And you can even use the same values in reverse.  You have D C B A in order from best to worst and I used the numbers 4 3 2 1 again.  
 
-\<DC strategy chart\>
+Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.   By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly-wrong technical sense, no candidate is better than any other candidate.  I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game.  The numbers are really just here as useful tools for making comparisons for a single player.  Maybe you could extend the idea if you had two outcomes being decided.
 
-There is one detail. We're assuming that all these candidates are considered based on their position rather than any other qualities that would make them appeal to a broader base.  
+**CD Party's Utility (or Happiness) for Each Outcome**
 
-[Repeating, maybe take out]
+| Outcome **→** Utility |
+| --------------------- |
+| A **→** 1             |
+| B **→** 2             |
+| C **→** 3             |
+| D **→ **4             |
 
-Will the party actually behave strategically like this?  Well that is the best case scenario, but it may not happen.  We would like voters to behave in this strategic way because, optimistically, there would be this competitive pressure between the parties.  Having that competitive pressure would encourage more moderate candidates to run.   The party has to think if the other party is going to challenge them with a moderate candidate, and in this best case scenario, we have each party putting out a candidate that would best represent everybody, not just one side.
+**Strategy Table for CD** - Row is CD party, columns are AB party and chance.
 
-Voters can try to find out what's best for everybody by looking at the polls.  Specifically, there are head-to-head polls done each election that put one candidate from one side against one candidate from the other side.  If a voter sees that the candidate they like best would lose to a candidate from the other side then rationally, if they want to have an effect on the results of the election, they need to support someone else.  They need to support a candidate that can win: a candidate that is electable.  \<third time mentioning electable\> \<maybe take out whole paragraph\>
+|      | A+         | A-         | B+         | B-        |
+| ---- | ---------- | ---------- | ---------- | --------- |
+| D    | D **→** 4 | A **→** 1  | B **→** 2  | B **→** 2 |
+| C    | C **→** 3 | C **→** 3 | C **→** 3 | B **→** 2 |
 
-\<So here’s like a example where you have a new candidate and you have a new map of that where that new candidate should go In order to win and there will actually be a circle there and this is with the primary and first-past-the-post voting.\>
+<!--Repeating, maybe take out-->
 
-### Other Voter Behavior
+Will the parties actually behave strategically like this?  Well that would be the best case scenario, but it may not happen.  We would like voters to behave in this strategic way because, optimistically, there would be this competitive pressure between the parties.  Having that competitive pressure would encourage more moderate candidates to run.   Each party has to consider if the other party is going to challenge them with a moderate candidate, and **in this best case scenario, we have each party putting out a candidate that would best represent everybody, not just one side**.
+
+Voters can try to find out what's best for everybody by looking at the polls.  Specifically, there are head-to-head polls done each election that put one candidate from one side against one candidate from the other side.  If a voter sees that the candidate they like best would lose to a candidate from the other side then rationally, if they want to have an effect on the results of the election, they need to support someone else.  They need to support a candidate that can win: a candidate that is electable.  <!--\<third time mentioning electable\> \<maybe take out whole paragraph\>-->
+
+Let's show this competitive pressure with a map.  If a candidate enters the race in the right position, they can win.  The map below shows those positions in grey.  Even existing candidates will feel this pressure to move toward the middle.
+
+{% include sim.html id='new_can_win_circle_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSMW7DMAz8SsBZgyiKku1HFB26FLaHFMhQwGiKNhmCon17T7oCARoEHo7UUacj6S-JMs2zx6A-rmFWrUGLtWjUoFURpepgUztrwboG0XZpMJR6KzDv10GYTDFIlkmDeI8LSlO4-VBbwcRw84EZ7jLjXUZjf06btZYmpjSkmUBLWro_hQHNQDzngLGTCTo4TMoMMglAmcTGEmQMUHhYmQ3Mxn7BYjeqbSRUMiqZEWjIoDRjzvxacSFNTWO7ioFZyKAzZVu_Wa9huoZGwRbmrpH_P5HZfa5cFW3nkSvjEB3a8rPI8-FzWd52D8fdIoJjtuBswf-27ASqOlV96G87h1EiQXtJ4WYKR1q8e8cfJ4XzLHRUuI5KR5V3a-rwst-24-np8n6Az8ft_LHfXk8X-f4FCc9gkM4CAAA)'
+
+title='Candidate Pressure'
+
+caption='A new candidate can enter the contest if they are in the center.  (when there is competitive pressure)'
+
+comment='FPTP+primary with win map for new can, same setup as before' %}
+
+<!--Doesn't work-->
+
+(That's all the game theory you need for this article.  Later, you can see more [game theory through this class on youtube](https://www.youtube.com/user/gametheoryonline). There are some quiz questions that are only on the Coursera site.)
+
+### Problems with this Game Model
+
+#### Other Voter Behavior
 
 Primaries will only work if everything goes according to this plan.  You can’t rely on all voters to behave in the same way.  Voters might consider other things than electablility.  Some voters don't pay attention to the polls.  And you could imagine some voters don't know what is best for everybody. There is also a rational argument for choosing your favorite even if they are not electable because maybe your focus is not to affect the election that's happening now but to affect an election that is going to happen in the future or to affect decisions that are made by your party in a convention.
 
-### Honesty
+#### Honesty
 
 Or you may feel that you can't betray your favorite. Emotionally it is hard to vote strategically because you know it's your duty to vote, and you'll be abandoning the people on your side that voted for the candidate that you like the best.  They stood up for the right thing, and maybe you should do your duty to report your opinion so that we can all make a better decision together.  But you are pulled in another direction by a candidate who also needs your vote, and although they don’t agree with you on as much, you choose them over your favorite because they agree with you on a lot of things, and you can’t betray them as well.  You’d rather not betray anyone.
 
-### Lopsided Districts
+#### Asymmetric Information
 
-Additionally there's another concern in this strategic scenario. If one party knows the other party's choice, then they can adjust their strategy. So if one party knows the other party chose a party center candidate, then suddenly a lot of candidates become electable that are not moderates but instead in their own party’s center. 
+Additionally there's another concern in this strategic scenario. If one party knows the other party's choice, then they can adjust their strategy. In particular, if one party knows the other party chose a party center candidate, then suddenly a lot of candidates become electable that are not moderates but closer to their own party’s center. 
 
-[Choose D, Add E]
+Here's an example. You have ABCD.   Now say D is the CD party’s choice.   Then the game table gets cut in half.  Which candidate should the AB party put forward?  Say there's a candidate between A and B: call them E.  E might have a 3.5 utility for that party. and so it becomes clear that E is a lot better candidate than B in all respects.  So E is chosen E wins even though they are not the best candidate for everyone, and B is a better candidate for everyone. maybe party would choose E  because we are both electable and they might as well get something more .so that's a negative see you competitive pressure can go away when a candidate is chosen by the other party. and you end up with a candidate that is not good for everybody but just good for one party 
 
-Here's an example. You have ABCD.   Now say D is the CD party’s choice.   Then the game table gets cut in half.  Which candidate should the party put forward?  Say there's a candidate between a and b: call them e.  he might have a 3.5 rating for that party. and so it becomes clear that E is a lot better candidate than B in all respects.  So E is chosen E wins even though they are not the best candidate for everyone, and B is a better candidate for everyone. maybe party would choose E  because we are both electable and they might as well get something more .so that's a negative see you competitive pressure can go away when a candidate is chosen by the other party. and you end up with a candidate that is not good for everybody but just good for one party 
+**AB Strategy Table When D is Certain**
 
-\<game table in half, only D considered\>
+|      | D+        | D-        |
+| ---- | --------- | --------- |
+| A    | A **→** 4 | D **→** 1 |
+| B    | B **→** 3 | B **→** 3 |
 
-\<As a side note I actually made this a zero-sum game which means that no candidate is better than any other candidate\>
+{% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRsU5DMQz8F88ZYjtxXt5XMLA9vaFIDEgRINQOFYJvx_G1dKiqDGfnnPPZ-aZM67bZkrjmPW2s4pF4JNoud32SvO-JOGr7f0W9EkprTlRo5UQ1YvNSSXfHa5szOd0dZ5aHTH_IcI52PK3NVJDCEBcALLEB3AAXR283ocet5MiEYwZxGXGAjGAwcRl1gIw0ZAuyHg80h1GeK-EgFIZUwcOQutLGyTV_309jkEfxxFAEZcXQnDQVJwuk58yFb6HcQoXoDEsolGuby63FGKXhs2C8dHwa1lhhumL8qrGTevnXCsD4taFkiU4V41sGYImG0Q1LtBpO1Y0YJAwODB_Q4KDhbZOAl8MYH8fn8-crrfQ0Tl-H8XY8088fFbDPGbcCAAA)'
 
-[No 50-50]
+title='Information Failure'
 
-The same scenario plays out when one party is dominant: when we don't have a 50-50 split between parties. There is no reason for a party to back down from nominating somebody who they think they would be best for their party without thinking about what's best for everyone.  And if nobody is considering you then you don't have any representation.  That's basically how primaries give you representation which is to consider how you might vote. And in this scenario where there is a “safe seat”, the losing side doesn't get any representation. 
+caption='D is certain, so E is chosen even though more people would prefer the moderate B.'
 
-\<next color background for each big section\>
+comment='remove C, add E between A and B.  In reference to ABCD in a line.' %}
+
+#### Lopsided Districts
+
+The same scenario plays out when one party is dominant: when we don't have a 50-50 split between parties. There is no reason for a party to back down from nominating somebody who they think they would be best for their party without thinking about what's best for everyone.  And if nobody is considering you then you don't have any representation, because choices are made without you.  And in this scenario where there is a “safe seat”, the losing side doesn't get any representation. 
+
+{% include sim.html id='party_dominance_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itSpDtcOJDCcOAQnMKE_HtWOxhjjFExuzer0czeb2ll3TZfKlk71I2Eo-KoWPrtW1_y26EWmsPJ6AjGx42QsrZatKxUi2XtMcr16cRsD6bVpxPM8pIZLxlq-RxNa7NltDBECoAlckAYIA2M5yaMdM0tOw4dDmAAZBjBOGQkADLc0S3oRl6QlkZproSSEBgSAQ9DEkob1Txz1EFCURCWquS6FJIzq9K95HspueoppJoK-iivnva14yfBsCK2YX0Gs4bYhtgGs2aYRGzrGFnyJUNsbwDKSUdkh4pbOpUw4pBwOPCR0OGg427nhI_jvp8v79evz7KWt_3n-7ifLtfy9w-0wIbSsAIAAA)'
+
+title='Party Dominance'
+
+caption='One party can leave out any consideration of the other voters and choose a candidate from their own party center.'
+
+comment='The big party picks a candidate in their own center, since all their own candidates are electable.' %}
+
+<!--next color background for each big section-->
 
 The Primary Does not Eliminate Vote Splitting: Choose Only One Splits Votes in the Primary Too
 ----------------------------------------------------------------------------------------------
 
-[Alt title: Primaries only work in the case where there are at most two electable candidates in each primary.]
+<!--Alt title = Primaries only work in the case where there are at most two electable candidates in each primary.-->
 
 Let's finally get back to vote splitting.  I think we've saved the best for last
 
@@ -156,15 +291,29 @@ What happens when you do have vote splitting? How do people strategize in that s
 
 When there are more than two candidates, the voters need to coordinate to put their unified support behind a candidate. This coordination problem might involve some lying.  You might say, “Well, my candidate is doing really well, and yours isn't doing very well. You should back my candidate and your candidate should probably drop out.  You don't want to waste your vote.”
 
-You might think you can look at polls and polls will tell you who can win the nomination (a kind of electability) but there are no head-to-head polls in the primary, so you’re out of luck.  Nearly all the polls I've seen are general election polls with one person from each party.  The only meaningful polls I've seen have been from election reform organizations like Fair Vote and the Center for Election Science. [footnotes](#footnotes)  The only polls I have seen on the news are choose only one polls that are trying to break the news earlier about which candidate is going to win. 
+You might think you can look at polls and polls will tell you who can win the nomination (a kind of electability) but there are no head-to-head polls in the primary, so you’re out of luck.  Nearly all the polls I've seen are general election polls with one person from each party.  The only meaningful polls I've seen have been from election reform organizations like Fair Vote and the Center for Election Science. <!--[footnotes](#footnotes)-->  The only polls I have seen on the news are choose only one polls that are trying to break the news earlier about which candidate is going to win. 
 
-What happens when there are a few electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates E and F.  E and F are just as moderate as B, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  E&F share the same space at the bottom, so  E might say to F, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts F into kind of a bluffing game if he stays in. A bluffing game is where you threaten to do something in order to get what you want.  
+What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates E and F.  E and F are just as moderate as B, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  B&F share the same space at the bottom, so  B might say to F, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts F into kind of a bluffing game if he stays in. A bluffing game is a game where you threaten to do something in order to get what you want.  
 
-Now they're going to talk about their poll numbers.  Maybe they'll use that to try to convince people that they might be able to win. The poll numbers are important to voters so they can tell who they should be coordinating with to show their support. The voters are going to go nuts here because if they only had one candidate, they could easily show how large their group is, but because they have two candidates splitting their group’s support, the voters have less of a chance of being considered by the candidates.  Now E&F, they have more supporters than B, and they could win if they decide to work together.  If E&F really feel like they are closer together than B, then they are on the same team.  Voters will also realize if perhaps F is not getting as many votes or maybe E is not getting as many votes by looking at the polls.  Then voters will switch their vote to whichever one, E or F, has a little advantage.  The little advantage now becomes a bigger advantage.  The polls get amplified and locked in.
+{% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKe9-xUp0i1XXCBFYCEhXIoj5N8ja-5RHIeLkSV5PBr9llbWbfNRydqhbiQcEUfE0m-5VontWh2ZG5R9h1ooCZbbM4uIZkHK2mrRslItlrFHK9eHE709Kq0-nKiMp5XlaYVafkdT2rwyrhBECoAkckAIIA2M7zxgySwHTySZcgYOGg4ADWMwDhoJAA133AZuSz6QlkJpWkJZEAgSQR2CJJi2cPV6ZrujAayCgalK1Wppm4J6zqx0D_keCkhnqMmij9-o5yjasTCI1wWLg5UG4QYLTNIXu-zWALDAOlpG_mawwBsARjrGdxjplmolhDgoHAocS-hQ0PG2c8Lbcd8_T6_nr_eylpf95_u4f5zO5e8fMWHyWtACAAA)'
 
-The problem is those polls aren't accurate. If you put E&F head to head, then E would easily win, but in a choose-only-one poll, E can get squeezed out because B&F take votes from both sides.  Even though E is the center candidate, E can lose because E can get squeezed out.
+title='Center Squeeze'
 
-\<diagram, maybe just showing B, E, and F\>
+caption='E gets squeezed out, even though E is the best option'
+
+comment='could be titled vote-splitting.  Maybe just show EBF, not ACD' %}
+
+Now they're going to talk about their poll numbers.  Maybe they'll use that to try to convince people that they might be able to win. The poll numbers are important to voters so they can tell who they should be coordinating with to show their support. The voters are going to go nuts here because if they only had one candidate, they could easily show how large their group is, but because they have two candidates splitting their group’s support, the voters have less of a chance of being considered by the candidates.  Now B&F, they have more supporters than E, and they could win if they decide to work together.  If B&F really feel like they are closer together than E, then they are on the same team.  Voters will also realize if perhaps F is not getting as many votes or maybe B is not getting as many votes by looking at the polls.  Then voters will switch their vote to whichever one, B or F, has a little advantage.  The little advantage now becomes a bigger advantage.  The polls get amplified and locked in.
+
+The problem is those polls aren't accurate. If you put B&F head to head, then B would easily win, but in a choose-only-one poll, B can get squeezed out because E&F take votes from both sides.  Even though B is the center candidate, B can lose because B can get squeezed out.
+
+{% include sim.html id='amplify_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKe9-xUp0i1XXCBFYCEhXIoj5N8ja-5RHIeLkSV5PBr9llbWbfNRydqhbiQcEUfE0m-5VontWh2ZG5R9h1ooCZbbM4uIZkHK2mrRslItlrFHK9eHE709Kq0-nKiMp5XlaYVafkdT2rwyrhBECoAkckAIIA2M7zxgySwHTySZcgYOGg4ADWMwDhoJAA133AZuSz6QlkJpWkJZEAgSQR2CJJi2cPV6ZrujAayCgalK1Wppm4J6zqx0D_keCkhnqMmij9-o5yjasTCI1wWLg5UG4QYLTNIXu-zWALDAOlpG_mawwBsARjrGdxjplmolhDgoHAocS-hQ0PG2c8Lbcd8_T6_nr_eylpf95_u4f5zO5e8fMWHyWtACAAA)'
+
+title='Poll Amplification'
+
+caption='A small advantage in polls becomes a big advantage.'
+
+comment='right now, this isnt implemented' %}
 
 Afterword
 ---------
@@ -178,10 +327,24 @@ Footnotes
 
 Finally, we can think about some other ideas that we touched on.  Can the numbers in the utility table be determined?  There could be a balance between how much utility of voter gets from a candidate and how many points they give the candidate on their ballot.  If they pretend to like the candidate more than they really do so that the candidate gets elected, then maybe there can be some risk to that. The risk might be that the candidate is the only candidate that the voter gets to choose, while other voters get to be considered in the election of multiple candidates.  So there can be some trade-off between voting for that candidate with a reasonable number of points versus exaggerating your support.   That means, we might be able to see what voters really think.
 
+<!--Link to multi-winner method page that is a future project for now-->
+
 ### Chicken Dilemma
 
-but more relevantly, even in some better voting methods, there can be a game of chicken. game of chicken is weird, like in the example with b e and f, f voters can pull back their support from e if they think f can win against b. And some of the E supporters can pull away from f. But if the F supporters are overconfident, they can lose to b.there's a better chicken dilemma explanation in the article on rated systems. So we'll leave it to that.
+Even in some better voting methods, there can be a game of chicken.  The game of chicken is weird.  Let's consider the center squeeze example with B E F again.  F voters can pull back their support from B if they think F can win against E. And some of the B supporters can pull away from F. But if the F supporters are overconfident, they can lose to B. There's a better chicken dilemma explanation in [the article on scored systems](./newer.html).
+
+{% include sim.html id='chicken_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu3IDMQj8F2oKAQLp_Cvna115kipVJv72gDaPy3gyKla8ltXqnRpd9l2ssww9eJfNWTzqpspi8ziYZPVIsKhUpW6z_3R79RhdGlOniyT4CiLHjOu088nmkRWZnBs2fSrOLDZ-OlnZ_q1IWxullPbGIpVT5FIZPa70ertdiTIujQnQKAFIRdITc7kl5CZl0mTNpMqaUAXgpQoa9TWgoNGBaCICi5XFJcjAY-Ax8Bh4LHl2ery83e_EGX_dfjOLIECILVZ2CHf2LPX27U0Fcg50tYGh2znoi6f7ORdLTh_4TjykbyvpMNkFoEuMG2odSbjqsMMHWubfH3D4Eg0AVwK_FXAlfL3AUlGAKyAltgUDUgZmR0n5-ASZ-JpRzAIAAA)'
+
+title='Chicken Dilemma'
+
+caption='I want to win, but I also want to help my friend win.'
+
+comment='just B E F' %}
 
 ### Primary Variations in the US
 
 Let's talk a little bit about the variations on the primary.  In the US, these variations serve to amplify the wins that a candidate gets in a state.  One party uses a winner-take-all primary, which puts people into districts and only counts the votes for the candidate with the highest number of votes of a district.  This highest number is called a plurality of votes as opposed to a majority of votes (more than 50%).  The other party uses a method that dumps any votes for a candidate that got less than 15%, then rounds votes to the nearest quota, which is just a number that makes it easy to assign delegates.  Then if none of the candidates gets a majority of the rounded totals, the party requires a majority of delegate votes to decide the nominee. Both parties make different states vote at different times so one state may vote based on the results from another state’s vote.  All these variations amplify the wins.  Vote splitting, itself, amplifies the wins.
+
+## Try the Sandbox
+
+Finally, here's a sandbox where you can use many more options to modify the election configuration and try new scenarios with more voting methods.

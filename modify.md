@@ -23,6 +23,6 @@ bundle exec jekyll serve
 
 Other tips for Developing the site:
 
--   I edit markdown with [Texts](http://www.texts.io/) after copying it in from a better word processor.
+-   I edit markdown with [Typora](https://typora.io/) after copying it in from a better word processor.
 
 -   Here's a good [tutorial](https://learn.cloudcannon.com/) for jekyll from CloudCannon.  The jekyll site has great tutorials, too.
