@@ -251,10 +251,11 @@ Here's an example. You have ABCD.   Now say D is the CD party’s choice.   Th
 
 **AB Strategy Table When D is Certain**
 
-|      | D+        | D-        |
-| ---- | --------- | --------- |
-| A    | A **→** 4 | D **→** 1 |
-| B    | B **→** 3 | B **→** 3 |
+|      | D+          | D-          |
+| ---- | ----------- | ----------- |
+| A    | A **→** 4   | D **→** 1   |
+| E    | E **→** 3.5 | E **→** 3.5 |
+| B    | B **→** 3   | B **→** 3   |
 
 {% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRsU5DMQz8F88ZYjtxXt5XMLA9vaFIDEgRINQOFYJvx_G1dKiqDGfnnPPZ-aZM67bZkrjmPW2s4pF4JNoud32SvO-JOGr7f0W9EkprTlRo5UQ1YvNSSXfHa5szOd0dZ5aHTH_IcI52PK3NVJDCEBcALLEB3AAXR283ocet5MiEYwZxGXGAjGAwcRl1gIw0ZAuyHg80h1GeK-EgFIZUwcOQutLGyTV_309jkEfxxFAEZcXQnDQVJwuk58yFb6HcQoXoDEsolGuby63FGKXhs2C8dHwa1lhhumL8qrGTevnXCsD4taFkiU4V41sGYImG0Q1LtBpO1Y0YJAwODB_Q4KDhbZOAl8MYH8fn8-crrfQ0Tl-H8XY8088fFbDPGbcCAAA)'
 
