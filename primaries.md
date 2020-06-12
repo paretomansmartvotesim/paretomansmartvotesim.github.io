@@ -221,7 +221,7 @@ Voters can try to find out what's best for everybody by looking at the polls.  
 
 Let's show this competitive pressure with a map.  If a candidate enters the race in the right position, they can win.  The map below shows those positions in grey.  This win region is only on the side with the losing party because the winning party doesn't need a new candidate and won't vote for them.  All the pressure is on the losing party, which is kind of common sense.  If you're losing, you need to try harder.  Even existing candidates will feel this pressure to move toward the middle.  
 
-{% include sim.html id='new_can_win_circle_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8SuVzDrHjOLv7CMSBC9rdQ5F6QFpRBOVQIXg7jgdUoarKYeyMMxnbn5RpmmeVxFXXNA-jB-KBZE2sY4_MSW3rmoh77fBXK1I84k4UmnIipYkT1YjNSyVdHa9tzuR0dZwZbjLjTYZzfMfdWk8FKQyxAmCJLfyxG2B19O86jEFKjkwYmcuIA2QEjYnLFAfDZUM2IBvjQclhlPtIoFSgVAoAhoorzZzi9FIDCcWCZtnHVZxUSPZelS-hXMICsR5qKOh_eUXf2rAkGNYRy8L4qivT90KPh_dledndHXcLkV_DfIX5-rvfCoBqhWod4ueKMVgGcJQYdmIYptVw3lszTNLgyLCIBkcNb5sEPO237Xh6OL8e3Of99vG2355PZ_r6AYOZc4K_AgAA)'
+{% include sim.html id='new_can_win_circle_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8SuVzDrHjOLv7CMSBC9rdQ5F6QFpRBOVQIXg7jgdUoarKwXbGmYzHn5RpmmeVxFXXNA-jJ-KJZE2sY8_MQW3rmoh77_DXK1I84w4UmnIipYkT1cjNWyVdHe9tjuR0dRwZbiLjTYRzfMddWi8FJQSxIkASW-hjF8Dq0b_rYQxQclTCqJxGPIBGMJg4TfFguGyoBlRjPCg5hHK3BExF4m0pwCGoONPMKU5vNYBgLBiW3a7ioIKyz6p8SeWSFpD1VINB_9Mr5taGJUGwjlgW7KvOTN8LPR7el-Vld3fcLUR-DRsqxNff_VYEsFaw1iF-rrDBMgJHi2EnBjOthvI-msFJgyLDIhoUNbxtsO9pv23H08P59eA677ePt_32fDrT1w_cKFitvwIAAA)'
 
 title='Candidate Pressure'
 
@@ -243,6 +243,8 @@ Primaries will only work if everything goes according to this plan.  You can’
 
 Or you may feel that you can't betray your favorite. Emotionally it is hard to vote strategically because you know it's your duty to vote, and you'll be abandoning the people on your side that voted for the candidate that you like the best.  They stood up for the right thing, and maybe you should do your duty to report your opinion so that we can all make a better decision together.  But you are pulled in another direction by a candidate who also needs your vote, and although they don’t agree with you on as much, you choose them over your favorite because they agree with you on a lot of things, and you can’t betray them as well.  You’d rather not betray anyone.
 
+<!--example here with honest voters, just like the two player game example, but people voting honestly and losing for their party.  Honest Voters - Honesty is not the best policy.  Strategy would have helped elect the best candidate. honest_sim-->
+
 #### Asymmetric Information
 
 Additionally there's another concern in this strategic scenario. If one party knows the other party's choice, then they can adjust their strategy. In particular, if one party knows the other party chose a party center candidate, then suddenly a lot of candidates become electable that are not moderates but closer to their own party’s center. 
@@ -257,7 +259,7 @@ Here's an example. You have ABCD.   Now say D is the CD party’s choice.   Th
 | E            | E **→** 3.5 | E **→** 3.5 |
 | B            | B **→** 3   | B **→** 3   |
 
-{% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu27DMAz8F84axIco21_RoZvhIQU6FDDaokiGoGi-vRQvQYYg0HCkjjoexV-qtKxr18LWt7KyRtRqRFItIh531YOdtq0Q34qTEEZJEEpLLWS0cKGWsUeplIcTtT2YWh5OMNNTZn7KcM12PKyNVJDCEBsAltgBYSCcE0e7AXPeSs1MOGeQkJEAyAgGk5DRAMhIRzYhm_OB1jTK40s4CYWSKgCGNJRWLqF5-TztO0WUTxxFUFYMzUWLBWmQHjMb30O5hwrREVoq2K3N9dZzDOtYFozbjKXhGxtMN5huMN2ue20AjN86uCk7NYzvFYBPdOzC8Yne0qmGEYeEw4FjAR0OOt52SXg77PvX8fX8_U4Lveynn8P-cTzT3z9nZQwauAIAAA)'
+{% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu24DQQj8F-otlseyd_cVKdKdrnCkFJFOSRTZhRXF3x6WseXCsrYAdmAY4JcqLevatbD1rays4bUanlQLj8df9UCnbSvEt-QEhJESgNJSCxktXKil75Eq5eFFbg-klocXyPQUmZ8iXLMdD2kjFIQQxAYDSewwISCUE0e7Yeb8lZqRcM4gQSNhQCMYTIJGw4BGOqIJ0ZwFWlMoj5VwAipZqwocgjSYVi7xf_k87TuFlyWOJDArhuaixQI0UI-Zje-u3F0F6XAtGezW5vrrKcU6jgXhNuNoWGOD6IbxG0S3610bDMZvHdiUnRrG9wqDJTpu4Viit1SqIcRB4VDgOECHgo7ajrW9Hfb96_h6_n6nhV72089h_zie6e8fixjlGbgCAAA)'
 
 title='Information Failure'
 
@@ -269,7 +271,7 @@ comment='remove C, add E between A and B.  In reference to ABCD in a line.' %}
 
 The same scenario plays out when one party is dominant: when we don't have a 50-50 split between parties. There is no reason for a party to back down from nominating somebody who they think they would be best for their party without thinking about what's best for everyone.  And if nobody is considering you then you don't have any representation, because choices are made without you.  And in this scenario where there is a “safe seat”, the losing side doesn't get any representation. 
 
-{% include sim.html id='party_dominance_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itcpDtcOJAicBBjnMIE_3tWOwQTjFExuzej0ezeT2ll3TZfKlk71o2Eo-KoWPrftyFZHWuhKU5GRzA-UhyElLXVomWlWixrDynXpxPaHkyrTyeY5SUzXjLU8jma0WbLaBGIFIBI5IAIQBoYz00YmZpbdhw-HMAA2DAG47CRANhwR7egG3lBWgaluRJKQuAkAkAgCaeNap4pdZBwFAxLVXJdCss5q9Kj5EcpuepppJoO-t9ePeNrx09CYMXYhvUZwhrCGsIawppBibGtg1vyJcPY3gCUSsc_cCzPLZNKBHFYOBL4SOhI0HG3c8L7ad-_rm-380dZy2H_vpz2z-ut3H8Bqm2nobACAAA)'
+{% include sim.html id='party_dominance_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itcpDtcOJAicBBjnMIE_3tWOwQTjFExuzer0czeT2ll3TZfKlk71o2Eo-KoWPrftyFZHWuhOZyMjmB85HAQUtZWi5aVarGsPUa5Pp2Y7cG0-nSCWV4y4yVDLZ-jaW22jBaGSAGwRA4IA6SB8dyEka65ZcehwwEMgAwjGIeMBECGO7oF3cgL0tIozZVQEsJ5VwQ8DEkobVTzzFEHCUVBWKqS61JIzqxKj5IfpeSqp5BqKuh_efW0oB0_CYYVsQ3rM5g1xDaYNZg1wyRiWwe35EuG2N4AlJOOf-BYnls6lTDikHA48JHQ4aDjbse63k_7_nV9u50_yloO-_fltH9eb-X-C08n7YKwAgAA)'
 
 title='Party Dominance'
 
@@ -296,7 +298,7 @@ You might think you can look at polls and polls will tell you who can win the no
 
 What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates E and F.  E and F are just as moderate as B, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  B&F share the same space at the bottom, so  B might say to F, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts F into kind of a bluffing game if he stays in. A bluffing game is a game where you threaten to do something in order to get what you want.  
 
-{% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8S2oXsR07m30FBd3qikOiQFoJhI7ihPg7jofjitUpxYxjZzK2v0st67b5Qmz1RBurBJNgov12x0asyaQS92QLZ92JCqfA-H8WxcYzoWWtVFpZmYol9ygVOpyo7ZGpdDiRWR5mxsMM1_yOp7UZCkIY4gaAJXZAGOAWGN95wMhbCZ24FM4eJGQkADKCxiRkNAAy0hEtiEY-0JpGeY6EM6FQUgXAkIbSFlO9nVnuKICqomEmpUaWY2uQnj03vlO5U4XopC1V2vGb5tlK61gYzLeBxWGUBuMG4wbj9rdbA2AE1pFb8jfDCLwCMEjHPhyDdEu3GkYcEg4HjiV0OOh42yXh5bzv75fn68drWcvT_vV53t8u1_LzC2hXf73QAgAA)'
+{% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMW4EMQj8i2sKAwav9xUp0q2uuEgpIq2UKLoUpyh_D2ZyuWJ1cgEYGIbhu9SybpsvxFZPtLFKeBKeaL_9sRFrelKJe3oLZ92JCifA-G-LYuOZ0LJWKq2sTMXS9ygVOryo7ZGpdHiRWR5mxsMM1xzHk9oMBSEIcYMBJXaYIMAtbIzzMCN_JXDiUzh3kICRMIARLCYBo2EAIx3Rgmhkg9YkylMSzoRK9qoiD0IaSFuoenuz3FEAVMXCTEqNLGVrgJ47N767cncVoNNtidKOY5onndZxMJBvA4eDlAbiBgkMxO3vtgYDCawjt-Q0gwReYSCk4x4OId2SrQYRB4SDgeMIHQw6ejukeznv-_vl-frxWtbytH99nve3y7X8_AL0S0pr0AIAAA)'
 
 title='Center Squeeze'
 

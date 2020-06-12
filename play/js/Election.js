@@ -3102,7 +3102,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 	// Take polls and vote
 	let dopoll = "Auto" == model.autoPoll
-	if (dopoll) var polltext = doPollAndUpdateBallots(district,model,options,"plurality+primary")
+	if (dopoll) var polltext = doPrimaryPollAndUpdateBallots(district,model,options,"plurality")
 
 	// Look at each voter group and get tallies for all the candidates
 	let ptallies = _tally_primary(district, model, function(tally, ballot){
@@ -3126,8 +3126,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 	var oldcandidates = district.candidates
 	district.candidates = district.candidates.filter( x => pwinners.includes(x.id)) 
 	// erase polls (not for general election)
-	var oldPollResults = model.pollResults
-	model.pollResults = undefined
+	var oldPrimaryPollResults = model.primaryPollResults
+	model.primaryPollResults = undefined
 
 	for(var j=0; j<model.voterGroups.length; j++){
 		model.voterGroups[j].update();
@@ -3139,7 +3139,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// So we can see who they voted for in the primary.
 	// TODO: make this better.
 	district.candidates = oldcandidates
-	model.pollResults = oldPollResults
+	model.primaryPollResults = oldPrimaryPollResults
 	
 	for(var j=0; j<model.voterGroups.length; j++){
 		model.voterGroups[j].update();
@@ -3152,7 +3152,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 
 	// clear the old poll results. we're done with casting ballots.
-	model.pollResults = undefined
+	model.primaryPollResults = undefined
 
 
 	var winners = _countWinner(tally);
@@ -3165,6 +3165,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// Caption
 	var winner = winners[0];
 	var text = "";
+	text += polltext
 	text += "<span class='small'>";
 	for (var i in ptallies) {
 		var tally1 = ptallies[i]
@@ -3340,7 +3341,6 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	model.preFrontrunnerIds = []
 	model.dm.districtsListCandidates()
 
-	model.pollResults = undefined
 	if (options.sidebar) {
 		if (electiontype=="irv") {
 			polltext += "A low-risk strategy in IRV is to look at who wins and make a compromise if you're not winning.  Voters look down their ballot and pick the first one that defeats the current winner head to head. <br> <br>"
@@ -3353,11 +3353,6 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	}
 	for (var k=0;k<5;k++) { // do the polling many times
 			
-		// get the ballots (hold the poll)
-		for(var i=0; i<model.voterGroups.length; i++){
-			var voter = model.voterGroups[i];
-			voter.update();
-		}
 
 		// count the votes in the poll
 
@@ -3402,18 +3397,6 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 
 			tally = {head2head:head2head, firstpicks:pre_tally}
 
-		} else if( electiontype == "plurality+primary") {
-			
-			let ballots = []
-			for (let voterGroup of model.voterGroups) {
-				for (let voterPerson of voterGroup.voterPeople) {
-					let ballot = CastBallot.Ranked(model,voterGroup.voterModel,voterPerson)
-					ballots.push(ballot)
-				}
-			}
-			let head2head = head2HeadPoll(district,ballots)
-			tally = {head2head:head2head}
-			
 		}
 		
 		model.pollResults = tally
@@ -3441,8 +3424,6 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 				var c = district.candidates[i].id;
 				if (electiontype == "irv"){
 					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally.firstpicks[c]) + ". ") + " "
-				} else if (electiontype == "plurality+primary") {
-					// need to put head2head results here
 				}else {
 					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
@@ -3452,6 +3433,14 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			polltext += "<br>"
 		}
 		// end of one poll
+
+		
+			
+		// update voter decisions based on poll
+		for(var i=0; i<model.voterGroups.length; i++){
+			var voter = model.voterGroups[i];
+			voter.update();
+		}
 	}		
 	if (electiontype == "irv") polltext += "<br>"
 	// get the ballots
@@ -3471,6 +3460,52 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	}
 
 	return polltext
+}
+
+
+var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype){
+
+	// do head to head polling to find electable candidates
+
+	let polltext = ""
+	model.primaryPollResults = {}
+
+	if (options.sidebar) {
+		polltext += "<b>polling for electable candidates: </b><br>";
+	}
+
+	// voters have already cast ballots
+
+	// we just need to count them
+	let ballots = []
+	for (let voterGroup of model.voterGroups) {
+		for (let voterPerson of voterGroup.voterPeople) {
+			let ballot = CastBallot.Ranked(model,voterGroup.voterModel,voterPerson)
+			ballots.push(ballot)
+		}
+	}
+	let head2head = head2HeadPoll(district,ballots)
+	model.primaryPollResults.head2head = head2head
+
+	if(options.sidebar) {
+		
+		for(var i=0; i<district.candidates.length; i++){
+			var c = district.candidates[i].id;
+			// todo
+		}
+		polltext += "<br>"
+	}
+
+	// update ballots based on head to head results
+	for(var i=0; i<model.voterGroups.length; i++){
+		var voter = model.voterGroups[i];
+		voter.update();
+	}
+
+	// 
+	let polltext2 = doPollAndUpdateBallots(district,model,options,electiontype)
+
+	return polltext + polltext2
 }
 
 

@@ -254,88 +254,73 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	
 	// return function(x, y, strategy, iDistrict, i){
 
-	if (model.autoPoll == "Auto" && model.pollResults) {
-		if (model.system != "+Primary") {
-			// if (model.autoPoll == "Auto" && (typeof model.pollResults !== 'undefined')) {
-			tally = model.pollResults
-	
-			var factor = voterModel.poll_threshold_factor
-			var max1 = 0
-			for (var can in tally) {
-				if (tally[can] > max1) max1 = tally[can]
-			}
-			var threshold = max1 * factor
-			var viable = []
-			for (var can in tally) {
-				if (tally[can] > threshold) viable.push(can)
-			}
-		} else {
-			// check for defeats against other party's candidates
-			let hh = model.pollResults.head2head  // format hh[win][against] = numwins
-			
-			// What party do we belong to?
-			// What candidate is closest to us?
-			let c = _findClosestCan(x,y,iDistrict,model)
+	// check primary polls for electable candidates
+	if (model.system == "+Primary" && model.primaryPollResults) {
+
+		// check for defeats against other party's candidates
+		let hh = model.primaryPollResults.head2head  // format hh[win][against] = numwins
+		
+		// What party do we belong to?
+		// Check our group id
+		var iMyParty = voterPerson.iGroup
+		var myParty = model.parties[iMyParty]
+
+
+		// Which candidates are defeated badly?
+		var electset = []
+		for (let a of myParty) {
+			let electable = true
 			for (let i = 0; i < model.parties.length; i++) {
-				if (model.parties[i].includes(c)) {
-					var iMyParty = i
-					var myParty = model.parties[i]
+				if (iMyParty !== i) {
+					let party = model.parties[i]
+					for (let b of party) {
+						// check how badly we are defeated
+						let howbad = hh[b.id][a.id] / hh[a.id][b.id]
+
+						if (howbad > 1.1) {
+							// this parameter can be changed.
+							electable = false
+						}
+						
+					}
 				}
 			}
+			if (electable) {
+				electset.push(a)
+			}
+		}
 
-			// Which candidates are defeated badly?
-			var electset = []
+		// if no candidates are electable
+		if (electset.length == 0) {
+			// find the most electable candidate
+			// the one with the best "worst defeat"
+			let mostelectable = {id:null};
+			let leastbad = Infinity;
 			for (let a of myParty) {
-				let electable = true
+				let worstdefeat = 0
 				for (let i = 0; i < model.parties.length; i++) {
 					if (iMyParty !== i) {
 						let party = model.parties[i]
 						for (let b of party) {
-							// check how badly we are defeated
 							let howbad = hh[b.id][a.id] / hh[a.id][b.id]
-
-							if (howbad > 1.1) {
-								// this parameter can be changed.
-								electable = false
-							}
-							
-						}
-					}
-				}
-				if (electable) {
-					electset.push(a)
-				}
-			}
-
-			// if no candidates are electable
-			if (electset.length == 0) {
-				// find the most electable candidate
-				// the one with the best "worst defeat"
-				let mostelectable = {id:null};
-				let leastbad = Infinity;
-				for (let a of myParty) {
-					let worstdefeat = 0
-					for (let i = 0; i < model.parties.length; i++) {
-						if (iMyParty !== i) {
-							let party = model.parties[i]
-							for (let b of party) {
-								let howbad = hh[b.id][a.id] / hh[a.id][b.id]
-								// also, find the most electable
-								if (worstdefeat < howbad) { 
-									worstdefeat = howbad
-								}
+							// also, find the most electable
+							if (worstdefeat < howbad) { 
+								worstdefeat = howbad
 							}
 						}
 					}
-					if (leastbad > worstdefeat) {
-						leastbad = worstdefeat
-						mostelectable = a
-					}
 				}
-				electset = [mostelectable]
+				if (leastbad > worstdefeat) {
+					leastbad = worstdefeat
+					mostelectable = a
+				}
 			}
+			electset = [mostelectable]
+		}
 
-			// vote for the closest electable candidate
+		// has there been an inside-party poll?
+		if (model.pollResults === undefined) {
+			// if not, then vote for the closest electable candidate
 			var closest = {id:null};
 			var closestDistance = Infinity;
 			var cans = model.district[iDistrict].candidates
@@ -349,18 +334,59 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			}
 			return { vote:closest.id };
 		}
+		let a = 3
+		if (electset.length > 1) {
+			console.log('hi')
+		}
+	}
+
+	if (model.autoPoll == "Auto") {
+		if (model.pollResults) {
+			// if (model.autoPoll == "Auto" && (typeof model.pollResults !== 'undefined')) {
+			let tally = model.pollResults
+	
+			// are we casting a ballot in a primary?
+			if (model.primaryPollResults) {
+				// reduce tally to just those candidates in my primary
+				let oldtally = tally
+				tally = {}
+				for (let e of electset) {
+					tally[e.id] = oldtally[e.id] // only put electable candidates from your primary in the tally
+				}
+			}
+	
+			var factor = voterModel.poll_threshold_factor
+			var max1 = 0
+			for (var can in tally) {
+				if (tally[can] > max1) max1 = tally[can]
+			}
+			var threshold = max1 * factor
+			var viable = []
+			for (var can in tally) {
+				if (tally[can] > threshold) viable.push(can)
+			}
+		} else {
+			// all are viable
+			viable = []
+			for (let c of model.district[iDistrict].candidates) {
+				viable.push(c.id)
+			}
+		}
 	} else {
 		var viable = model.district[iDistrict].preFrontrunnerIds
 	}
-
 	// Who am I closest to? Use their fill
 	var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
 	
-	if (model.election == Election.pluralityWithPrimary) checkOnlyFrontrunners = false // workaround
 	
 	var closest = {id:null};
 	var closestDistance = Infinity;
 	var cans = model.district[iDistrict].candidates
+
+	// if we looked at the primary poll results, then we should only pick from the electable set
+	if (model.primaryPollResults) {
+		cans = electset
+	}
 	for(var j=0;j<cans.length;j++){
 		var c = cans[j];
 		if(checkOnlyFrontrunners && ! viable.includes(c.id)  ) {
