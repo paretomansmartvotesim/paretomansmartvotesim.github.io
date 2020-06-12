@@ -421,13 +421,23 @@ function bindModel(ui,model,config) {
                 if (doOldBallot) {
                     _removeClass(model.caption,"displayNoneClass")
                     model.caption.innerHTML = text
+                    var target = model.caption
                 } else {
                     model.caption.innerHTML = ""
                     _addClass(model.caption,"displayNoneClass")
                     // model.caption.style.display = "none"
                     divBallot.innerHTML = text
+                    var target = divBallot
+                }
+                if (model.tallyEventsToAssign) {
+                    for (let e of model.tallyEventsToAssign) {
+                        target.querySelector("#" + e.eventID).addEventListener("mouseover", e.f)
+                        target.querySelector("#" + e.eventID).addEventListener("mouseleave", ()=>model.draw())
+                    }
+                    model.tallyEventsToAssign = undefined
                 }
             }
+            
         }
     };
 

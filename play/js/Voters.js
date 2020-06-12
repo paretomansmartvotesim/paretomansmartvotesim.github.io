@@ -2092,6 +2092,7 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 	var rbsystem = model.rbsystem
 	// todo: star preferences
 	var text = ""
+	var eventsToAssign = []
 
 	var pick = _pickRankedDescription(model)
 
@@ -2179,23 +2180,40 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 			text += "</pre></span>"
 		}
 		if(1){
+
+			let district = model.district[voterPerson.iDistrict]
+			
 			text += "<span class='small'>"
 			// text += " Pair Preferences:  <br />"
 			text += "<pre>" 
 			for(var i=1; i<ballot.rank.length; i++){
 				text += ""
+				let iid = ballot.rank[i]
 				for(var j=0; j<i; j++){
+					let jid = ballot.rank[j]
+					
+					let eventID = 'tallypair_' + iid + '_' + jid + '_' + _rand5()
+					let e = {
+						eventID: eventID,
+						f: pairDraw(model,district,iid,jid,false)
+					}
+					eventsToAssign.push(e)
+
+					text += '<span id="' + eventID + '">'
+
 					if (j>0) text += "  "
-					text += model.icon(ballot.rank[j]) + ">"
-					text += model.icon(ballot.rank[i])
+					text += model.icon(jid) + ">"
+					text += model.icon(iid)
+
+					text += "</span>"
 				} 
 				// 01  
 				// 02  12
 				// 03  13  23
-				text += "</span>"
 				text += "<br />"
 				text += "<br />"
 			}
+			text += "</span>"
 			text += "</pre>"
 		}
 	}
@@ -2213,6 +2231,7 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 		}
 	}
 
+	model.tallyEventsToAssign = eventsToAssign
 	return text
 	
 }
