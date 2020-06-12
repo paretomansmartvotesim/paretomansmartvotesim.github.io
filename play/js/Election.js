@@ -3570,7 +3570,24 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	return polltext
 }
 
-function strategyTable(model) {
+function cellText(model,opt,hh,a,b) {
+	let win = hh[a.id][b.id]
+	let loss = hh[b.id][a.id]
+	if (opt.entity == "winner") {
+		let winnerTally = Math.max(win,loss)
+		var pairText = Math.round(100*winnerTally / (win+loss))
+	} else { // opt.entity == "row"
+		// let pairText = win + '-' + loss
+		// let pairText = win
+		var pairText = Math.round(100*win / (win+loss))
+	}
+	let winnerColor = (win == loss) ? "#ccc" : (win > loss) ? a.fill : b.fill
+	let cellText = "<span class='nameLabelName' style='color:"+winnerColor+"'>" + pairText + "</span>"
+	// row += '<td bgcolor="' + winnerColor + '">' + cellText + '</td>'
+	return cellText
+}
+
+function strategyTable(model,opt) {
 
 	let a = model.parties[0]
 	let b = model.parties[1]
@@ -3596,15 +3613,7 @@ function strategyTable(model) {
 		let row = "<tr>"
 		row += '<td>' + model.icon(a[k].id) + '</td>'
 		for (let i = 0; i < b.length; i++) {
-			let win = hh[a[k].id][b[i].id]
-			let loss = hh[b[i].id][a[k].id]
-			// let pairText = win + '-' + loss
-			// let pairText = win
-			let pairText = Math.round(100*win / (win+loss))
-			let winnerColor = (win == loss) ? "#ccc" : (win > loss) ? a[k].fill : b[i].fill
-			pairText = "<span class='nameLabelName' style='color:"+winnerColor+"'>" + pairText + "</span>"
-			// row += '<td bgcolor="' + winnerColor + '">' + pairText + '</td>'
-			row += '<td>' + pairText + '</td>'
+			row += '<td>' + cellText(model,opt,hh,a[k],b[i]) + '</td>'
 		}
 		row += "</tr>"
 
@@ -3618,18 +3627,15 @@ function strategyTable(model) {
 	return text
 }
 
-function pairwiseTable(district,model) {
+function pairwiseTable(district,model,opt) {
 
 	let a = district.candidates
 	let b = a
 	let text = ""
 	let header = `
-	<table class="strategyTable">
-	<tbody>
+	<table class="strategyTable"><tbody>
 	<tr>
-	<th>
-	+
-	</th>
+	<th>+</th>
 	`
 	for (let i = 0; i < b.length; i++) {
 		header += '<th>' + model.icon(b[i].id) + '</th>'
@@ -3647,17 +3653,9 @@ function pairwiseTable(district,model) {
 			if (i === k) {
 				// row += '<td>' + model.icon(a[k].id) + ' </td>'
 				row += '<td> </td>'
-				continue
+			} else {
+				row += '<td>' + cellText(model,opt,hh,a[k],b[i]) + '</td>'
 			}
-			let win = hh[a[k].id][b[i].id]
-			let loss = hh[b[i].id][a[k].id]
-			// let pairText = win + '-' + loss
-			// let pairText = win
-			let pairText = Math.round(100*win / (win+loss))
-			let winnerColor = (win == loss) ? "#ccc" : (win > loss) ? a[k].fill : b[i].fill
-			pairText = "<span class='nameLabelName' style='color:"+winnerColor+"'>" + pairText + "</span>"
-			// row += '<td bgcolor="' + winnerColor + '">' + pairText + '</td>'
-			row += '<td>' + pairText + '</td>'
 		}
 		row += "</tr>"
 
@@ -3702,12 +3700,19 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	let head2head = head2HeadPoll(district,ballots)
 	model.primaryPollResults.head2head = head2head
 
+
 	if(options.sidebar) {
-		if (model.parties.length == 2) {
+		// let opt = {entity:"row"}
+		let opt = {entity:"winner"}
+		if (opt.entity == "row") {
 			polltext += "Vote % for Row Nominee<br>"
-			polltext += strategyTable(model)
+		} else { // opt.entity == "winner"
+			polltext += "Vote % for Winning Nominee<br>"
+		}
+		if (model.parties.length == 2) {
+			polltext += strategyTable(model,opt)
 		} else {
-			polltext += pairwiseTable(district,model)
+			polltext += pairwiseTable(district,model,opt)
 		}
 		polltext += "</span><br>"
 	}
