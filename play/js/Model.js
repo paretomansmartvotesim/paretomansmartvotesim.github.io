@@ -470,7 +470,7 @@ function Model(idModel){
 					for (var i=0; i < self.result.eventsToAssign.length; i++) {
 						var e = self.result.eventsToAssign[i]
 						self.caption.querySelector("#" + e.eventID).addEventListener("mouseover", e.f)
-						self.caption.querySelector("#" + e.eventID).addEventListener("mouseout", ()=>self.draw())
+						self.caption.querySelector("#" + e.eventID).addEventListener("mouseleave", ()=>self.draw())
 					}
 				}
 			}

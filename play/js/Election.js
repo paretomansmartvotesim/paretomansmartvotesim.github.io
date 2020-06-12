@@ -376,7 +376,7 @@ Election.condorcet = function(district, model, options){
 			var winner = (aWins>bWins) ? a : b;
 			var loser = (aWins<=bWins) ? a : b;
 
-			let eventID = 'pair_' + a.id + '_' + b.id
+			let eventID = 'pair_' + a.id + '_' + b.id + '_' + _rand5()
 			let e = {
 				eventID: eventID,
 				f: pairDraw(model,district,a.id,b.id,aWins==bWins)
@@ -1025,7 +1025,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 		}
 
 
-		var eventID = 'pair_' + a.id + '_' + b.id
+		var eventID = 'pair_' + a.id + '_' + b.id + '_' + _rand5()
 		if (options.round) eventID += '_round' + options.round
 		eventID += '_district' + district.i
 		text += '<div id="' + eventID + '" class="pair">' // onmouseover="showOnlyPair(' + a.id + ',' + b.id + ')">'
