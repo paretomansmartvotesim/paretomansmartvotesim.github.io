@@ -251,14 +251,16 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	var y = voterPerson.y
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
+
+	let district = model.district[iDistrict]
 	
 	// return function(x, y, strategy, iDistrict, i){
 
 	// check primary polls for electable candidates
-	if (model.system == "+Primary" && model.primaryPollResults) {
+	if (model.system == "+Primary" && district.primaryPollResults) {
 
 		// check for defeats against other party's candidates
-		let hh = model.primaryPollResults.head2head  // format hh[win][against] = numwins
+		let hh = district.primaryPollResults.head2head  // format hh[win][against] = numwins
 		
 		// What party do we belong to?
 		// Check our group id
@@ -323,7 +325,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			// if not, then vote for the closest electable candidate
 			var closest = {id:null};
 			var closestDistance = Infinity;
-			var cans = model.district[iDistrict].candidates
+			var cans = district.candidates
 			for(var j=0;j<electset.length;j++){
 				let e = electset[j];
 				var dist = distF2(model,{x:x,y:y},e)
@@ -346,7 +348,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			let tally = model.pollResults
 	
 			// are we casting a ballot in a primary?
-			if (model.primaryPollResults) {
+			if (district.primaryPollResults) {
 				// reduce tally to just those candidates in my primary
 				let oldtally = tally
 				tally = {}
@@ -368,12 +370,12 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 		} else {
 			// all are viable
 			viable = []
-			for (let c of model.district[iDistrict].candidates) {
+			for (let c of district.candidates) {
 				viable.push(c.id)
 			}
 		}
 	} else {
-		var viable = model.district[iDistrict].preFrontrunnerIds
+		var viable = district.preFrontrunnerIds
 	}
 	// Who am I closest to? Use their fill
 	var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
@@ -381,10 +383,10 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	
 	var closest = {id:null};
 	var closestDistance = Infinity;
-	var cans = model.district[iDistrict].candidates
+	var cans = district.candidates
 
 	// if we looked at the primary poll results, then we should only pick from the electable set
-	if (model.primaryPollResults) {
+	if (district.primaryPollResults) {
 		cans = electset
 	}
 	for(var j=0;j<cans.length;j++){

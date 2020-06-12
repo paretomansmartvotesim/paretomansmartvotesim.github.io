@@ -87,6 +87,8 @@ var e = [
         ["bug new voter group not showing up in 1D+B","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSW27DMAy7i7-FQW_HvUrQkxTb2SeLAbYiaAxEDiXRNJXX4PE4z6WU60mnCtPkvfEgObR2IkGqs3axIX4-acjuEVaS4C7JKkEbk0zb2OEk6c2p3VeYL1Iw2HgIDR8PphH9zuJUuq2qnZVhuq3KHB8z62NGuI8W6QqjSd6wtgopYeNHR-0gTqBOEqG0iFesk6PCalSLskCVZtZi0gqGnAMsGqsAGp34OvC1usG4Fcl2Rzph2r1myEOQFdMpdK1dnEiD03BzKe-Myv7hfFkhbcHucHl3Z0N6h-rY0-j_Ue59hv9J4K-Vb89EYWK-syU77umrwWBMHXcMuBVwK64_AqYHWGKiBCwBt5IR4HliegmWDMy2hCQMT_Qm5jWhYKJ3bpe_fwHDP9pRCQMAAA"],
         
         ["bug need to use districts","http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8F9cuYsdONvkMRLfa4hBXcQIKGoT4dxwP14BW0Wr8iCcz3i8qNPd9KLdx8K5SuJcVmLNsGpHYYPVV81Uqx8Eka0a8cHwrV5rOVGkWJqM5mJymMLW4V_jfiYl-2tlOO-O0IyWflqVLlS1rihpUiQEc0AChQiww3qwBI6saZFFUSQuqANCoIfMcUNBoR7YhCxaNZZRUK6GkgqlCUAVTBVMNpl3496zLDePgrPAsrFzZom1JuwK5B3oPgnivK7Cctb_U1vI3Wcd_glwbqcOxQRcATDukOnbn2J3DtPfU6Vidw3QrABhuMNzA0jytLIENFA0KGtbeoaBjtmsyPV1ut7ePx8_3K016uLy-XJ_p-weEXJwVtAIAAA"],
+        ["primaries in districts","http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRvWqDMQx8F88arB_L9vcUHbp9ZEihQ-GDlpIOofTdK-uGEELwIMknn0-n31LLtu9cJ7HqiXa2QTzHyqYT97YyZ-LqpxMVXt1jkDAHIDJpyrrXslUqVjam0jL36BR6ONHbA6n0cAIZT5H5FOGanzJnh1Iny2tJFQxhbAiQxo4QQtgixrcrzLyVmpVw0krQSATQCAaUoNEIoJGOaqCa-UBryuFlDSegkm9VgUOQBtMe5q6zWh0gGBVDc9gWmykGyjWc8S2VW6ogW6klg93TG-itY1kQbBNLq1k1iG0Yu0Fsg9gG9xrGbh3YyJ8axvaKAPMcO3CY5w0bCiEOCocCh_EdCjredtj1dj6Oz8vr9eu9bOXl-Pk-Hx-Xa_n7B4FISwG4AgAA"],
+        // ["",""],
         // ["",""],
         // ["",""],
     ]],

@@ -3231,8 +3231,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 	var oldcandidates = district.candidates
 	district.candidates = district.candidates.filter( x => pwinners.includes(x.id)) 
 	// erase polls (not for general election)
-	var oldPrimaryPollResults = model.primaryPollResults
-	model.primaryPollResults = undefined
+	var oldPrimaryPollResults = district.primaryPollResults
+	district.primaryPollResults = undefined
 
 	for(var j=0; j<model.voterGroups.length; j++){
 		model.voterGroups[j].update();
@@ -3244,7 +3244,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// So we can see who they voted for in the primary.
 	// TODO: make this better.
 	district.candidates = oldcandidates
-	model.primaryPollResults = oldPrimaryPollResults
+	district.primaryPollResults = oldPrimaryPollResults
 	
 	for(var j=0; j<model.voterGroups.length; j++){
 		model.voterGroups[j].update();
@@ -3257,7 +3257,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 
 	// clear the old poll results. we're done with casting ballots.
-	model.primaryPollResults = undefined
+	district.primaryPollResults = undefined
 
 
 	var winners = _countWinner(tally);
@@ -3587,7 +3587,7 @@ function cellText(model,opt,hh,a,b) {
 	return cellText
 }
 
-function strategyTable(model,opt) {
+function strategyTable(district,model,opt) {
 
 	let a = model.parties[0]
 	let b = model.parties[1]
@@ -3607,7 +3607,7 @@ function strategyTable(model,opt) {
 
 	text += header
 
-	let hh = model.primaryPollResults.head2head
+	let hh = district.primaryPollResults.head2head
 
 	for (let k = 0; k < a.length; k++) {
 		let row = "<tr>"
@@ -3644,7 +3644,7 @@ function pairwiseTable(district,model,opt) {
 
 	text += header
 
-	let hh = model.primaryPollResults.head2head
+	let hh = district.primaryPollResults.head2head
 
 	for (let k = 0; k < a.length; k++) {
 		let row = "<tr>"
@@ -3675,7 +3675,7 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	// do head to head polling to find electable candidates
 
 	let polltext = ""
-	model.primaryPollResults = {}
+	district.primaryPollResults = {}
 
 
 	if (model.parties.length < 2) {
@@ -3698,7 +3698,7 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 		}
 	}
 	let head2head = head2HeadPoll(district,ballots)
-	model.primaryPollResults.head2head = head2head
+	district.primaryPollResults.head2head = head2head
 
 
 	if(options.sidebar) {
@@ -3710,7 +3710,7 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 			polltext += "Vote % for Winning Nominee<br>"
 		}
 		if (model.parties.length == 2) {
-			polltext += strategyTable(model,opt)
+			polltext += strategyTable(district,model,opt)
 		} else {
 			polltext += pairwiseTable(district,model,opt)
 		}
