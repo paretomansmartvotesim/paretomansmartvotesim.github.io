@@ -1420,7 +1420,12 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson) {
 			}
 		} else {
 			if (model.pairOrderByCandidate) {
-				_drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight)
+				if (n==2) {
+					ballot_sub = {rank: [ballot.rank[0]]}
+					_drawPairTableByCandidate(model, ctx, x, y, size, ballot_sub, weight)
+				} else {
+					_drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight)
+				}
 			} else { // order by rank
 				_drawRankList(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
 			}
@@ -1494,6 +1499,7 @@ function _drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight) {
 		}
 	}
 	// now draw table
+	size = size * Math.sqrt(weight)
 	var sizeSquare = size / n
 	var yaxis = _lineVertical(n,size)
 	var xaxis = _lineHorizontal(n,size)

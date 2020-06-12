@@ -297,3 +297,13 @@ svg {
 .displayNoneClass {
     display:none !important;
 }
+
+.strategyTable {
+    background-color: #222;
+}
+.strategyTable th {
+    text-align: center;
+}
+.strategyTable td {
+    text-align: right;
+}

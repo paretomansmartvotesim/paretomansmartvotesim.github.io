@@ -54,13 +54,13 @@ What does that look like? The easiest example of this is a pairwise ranking, bec
 
 caption='Your full support always counts for the better candidate in each pair of candidates.'
 
-comment='three candidates, two on one side, one on other' id='pairwise_intro' link='[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8ysl1ithxks0-ggLRoN0tDrEVpzskrkEI3o7tERLS6ZTCdmxPZiZflGleltYTq2xpYRHL1LPBlvG2JWIf0SlNw6tCc06kNI9ENfJmfUk3x2a7dXK6OdaZ7nbG3Q7neI6dj5eCEoRYEUCJjRNbMAKsFu25YmFEUwzHLoVRGYxYAIxoLEqNBWm47KgmVCMWSg6i7JYAqQCpFAQQKoa0mJUYbGgBr0Aqh1XqcD6jLs_lqvwlBrgUTzT29D-kQql2fAso6ojLCsOqIdLPSs_7x7qeDw-Xw0pk16BbS7hRIbxWBAivQK2wr0J4ywgckw2_0GBfqyHJyTZANDBqsL6DUYdhXQLi5Xg6Xa5Pn--78Xw8nt_2V_r-BYwzE2-aAgAA)' %}
+comment='three candidates, two on one side, one on other' id='pairwise_intro' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRvU6DMQx8lcpzhvgvafoQDIgFfV-HIjpRtUh0QQieHccnJASqMtiO7cvd5YMq7ZaFXYtU2ZeFR2QyM1EpomO_L8Q5o71wq7NW2tVCRrtRyDNvMRHjf0_M9ujU8u9EZ3uzM252uOZzPBnNUlCCEBsCKHFw4ghBgC1iPKcRRjYlcOJSGFXASATAiOWieC5Iw2VHtUU1ckFrEuVpCZAUSKoIIKSBtHBhDDa0gKeQymmVTbg5Y1PelGvykwTgojOx3LPfkAal1vEtoGgjLx2GeSDS10qPx7d1PW_uLpuVKK5B1zXdcAh3R4BwB6rDPofwVhE4Jxt-ocG-5ilpkm2AaGDUYH0How7DuiTE0-F0ulwf3l-PwfP-cH45PtPnN_ziP1OdAgAA)' %}
 
 It’s much clearer what happens when you think of the candidate’s perspective.  All their supporters are behind them.  They get the full weight of their supporters when they face the other party. The candidate doesn't need to worry about splitting votes with anybody.
 
 {% include sim.html title='Pairwise Election'
 
-caption='Each candidate gets the full weight of their side against the other party. Mouse over each pair to see the support'
+caption='Each candidate gets the full weight of their side against the other party. Mouse over each pair to see the support.'
 
 comment='mouse over pairs to see support' id='pairwise_election' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8ysl1ijiOk80-ggLRoN0tDrEVpzskaBCCt2N7ihM6nVKMnbEnY-ebMs3Lojmxji0tzD1xE48GJ-5sUelqbNm2ROzFk1iJOiEabUYIzTlRpXkk0oiblZZ0c6y2G5PTzTFmusuMuwzneI7dmqcFKQxxBcASmyc2MANcDe05hxFkyZEVRmYyxQAypUZjMRkxaLjsyCZkIxokh1H2lUBJoCQCgCExpcX268dLG0goCoZlW5d9BFVI-qyVr2G5hgIxD2so1P_yFXPXjk-C4TriUrE-NWX6Xel5_1jX8-HhcliJ7BrmVVCLNagCsAaFqk7xsmINLQM4Khv-pGGZTcO5j9Yg0eCo4SM6HHX09hLwcjydLp9PX--7-Xw8nt_2V_r5A7EXqU-9AgAA)' %}
 
@@ -76,7 +76,9 @@ Now, the voting system is smarter, and the voter also needs to get smarter.  The
 
 There are also other ways to count ranked ballots and there are other kinds of ballots that avoid vote-splitting.  Scored ballots avoid vote splitting.  A scored ballot allows you to give a rating from 0 to 5 on a candidate. A specific kind of scored ballot is an approval ballot, which allows you to rate on a very simple scale: do you approve or not?  And simply because you are no longer limited to vote for a single candidate, you can vote for that candidate without feeling like you’re splitting with other groups of voters that support other candidates.  Why would you split if you are not forced into the dilemma of choosing one?
 
-Also, up to now, we haven't called our voting system by it's proper English name: First Past the Post (FPTP). FPTP is another name for our choose only one voting method.
+I think scored ballots aren't quite as good as pairwise because the voter has to watch the polls to decide which candidates need their vote.  This is a little more work for the voter, but in the end, it works out pretty much the same as counting by pairs.
+
+Also, up to now, we haven't called our voting system by it's proper English name: First Past the Post (FPTP). FPTP is another name for our choose only one voting method.  Let's compare these methods in the simulation below.
 
 {% comment %} How do I actually show vote splitting? {% endcomment %}
 
@@ -86,8 +88,6 @@ Also, up to now, we haven't called our voting system by it's proper English name
 
 Another method you've likely heard of if you are reading this page is Ranked Choice Voting (RCV), which is a new name (as of the past 20 years) for Instant Runoff Voting (IRV).  It is also a name that is used for Single Transferable Voting (STV), which is different than IRV, and so you have to tell from the context which method people are talking about. IRV avoids some vote splitting by using a process of elimination.  It's worth getting into on its own page.
 
-Also, it’s actually a little harder to vote with scored ballots because the voter has to watch the polls but it works out pretty much the same as counting by pairs.
-
 Read more about:
 
 * [RCV, IRV, and STV](./rcv.html).
@@ -96,7 +96,7 @@ Read more about:
 
 * [Score Voting](newer.html)
 
-This is just a brief introduction to the world of voting methods.  We will discuss more voting systems later in the page.
+This is just a brief introduction to the world of voting methods.  After you're finished with this page, see the other pages on this site for more explorable explanations of voting methods.
 
 Game Theory: The Competitive Pressure that the Primary Relies on has a Flaw and Only Works in the Best Case Scenario
 --------------------------------------------------------------------------------------------------------------------
@@ -229,8 +229,6 @@ caption='A new candidate can enter the contest if they are in the center.  (when
 
 comment='FPTP+primary with win map for new can, same setup as before' %}
 
-<!--Doesn't work-->
-
 (That's all the game theory you need for this article.  Later, you can see more [game theory through this class on youtube](https://www.youtube.com/user/gametheoryonline). There are some quiz questions that are only on the Coursera site.)
 
 ### Problems with this Game Model
@@ -243,7 +241,13 @@ Primaries will only work if everything goes according to this plan.  You can’
 
 Or you may feel that you can't betray your favorite. Emotionally it is hard to vote strategically because you know it's your duty to vote, and you'll be abandoning the people on your side that voted for the candidate that you like the best.  They stood up for the right thing, and maybe you should do your duty to report your opinion so that we can all make a better decision together.  But you are pulled in another direction by a candidate who also needs your vote, and although they don’t agree with you on as much, you choose them over your favorite because they agree with you on a lot of things, and you can’t betray them as well.  You’d rather not betray anyone.
 
-<!--example here with honest voters, just like the two player game example, but people voting honestly and losing for their party.  Honest Voters - Honesty is not the best policy.  Strategy would have helped elect the best candidate. honest_sim-->
+{% include sim.html id='honest_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQWoDMQz8i88-WLIke_cVPfS27CGFHgILKSU9hNK_V9JQQgnBsCN7tOMZ-bu0sm6bzUrW9roRUyW1qGZU6hVLVHPfa6FoHn8t3LtXEkQva6tF8qv5NW_l-rC8dzjT6sNyZj5llqcMeQByCGux5bydYIjgiGCJDOAGSBz9uoAlT7nljinl2GXYATIsOHSZ7gAZHthN7Jb8obc0SjESKHUGdPAw1F1p8zHGilYDCcWOsOTj6k4KJCOr0L3ke9khFqWkgvyXF0sLMvBIMCxLHmrDmxEAsRVmFbFVAYitA9zMmxSxrQEQ2fAGhuGZptOIYpAwODAMfsDBwL8D43o7Hcfl-nr7eC9reTm-Pk_H-XorP7971Na8sAIAAA)'
+
+title='Honest Voters'
+
+caption='Honesty is not the best policy.  Strategy would have helped elect the best candidate.'
+
+comment='example here with honest voters, just like the two player game example, but people voting honestly and losing for their party' %}
 
 #### Asymmetric Information
 

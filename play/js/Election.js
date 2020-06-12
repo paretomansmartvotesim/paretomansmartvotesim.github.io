@@ -274,6 +274,68 @@ Election.approval = function(district, model, options){
 	return result;
 };
 
+// Just use pairDraw()
+// function _condorcetPairDraw(model,district,aid,bid,tie) {
+// 	return function() {
+// 		// make a backup
+// 		var dBackup = [] // TODO: make a copy instead of a backup
+// 		for (var i = 0; i < district.candidates.length; i++) {
+// 			dBackup.push(district.candidates[i])
+// 		}
+// 		var mBackup = [] // TODO: make a copy instead of a backup
+// 		for (var i = 0; i < model.candidates.length; i++) {
+// 			mBackup.push(model.candidates[i])
+// 		} // hmm... TODO: is this a mistake?  should we be using model instead of district?
+
+// 		// remove all candidates except the pair
+// 		// start at the end of the list
+// 		for (var i = district.candidates.length-1; i >= 0; i--) {
+// 			c = district.candidates[i]
+// 			if (c.id == aid) {
+// 				var ai = i
+// 				continue // skip
+// 			}
+// 			if (c.id == bid) {
+// 				var bi = i
+// 				continue // skip
+// 			}
+// 			district.candidates.splice(i, 1); // remove from candidates...
+// 		}
+
+// 		// need to remove the candidates from the model list.
+// 		for (var i = model.candidates.length-1; i >= 0; i--) {
+// 			c = model.candidates[i]
+// 			if (c.id == aid) continue // skip
+// 			if (c.id == bid) continue // skip
+// 			model.candidates.splice(i, 1); // remove from candidates...
+// 		}
+
+// 		for (var i=0; i < model.voterGroups.length; i++) {
+// 			v = model.voterGroups[i]
+// 			v.update() // easy way to only show the two candidates.
+// 		}
+
+
+
+// 		model.dontdrawwinners = true
+// 		model.drawArenas()
+// 		model.dontdrawwinners = false
+// 		district.candidates = dBackup
+// 		model.candidates = mBackup
+// 		for (var i=0; i < model.voterGroups.length; i++) {
+// 			model.voterGroups[i].update()
+// 		}
+
+// 		// draw this pair's better half
+// 		if (! tie) {
+// 			district.candidates[ai].drawText("Better",model.arena.ctx,model.arena) 
+// 		} else {
+// 			district.candidates[ai].drawText("Tie",model.arena.ctx,model.arena) 
+// 			district.candidates[bi].drawText("Tie",model.arena.ctx,model.arena) 
+// 		}
+// 	}
+// }
+
 Election.condorcet = function(district, model, options){
 
 	var text = "";
@@ -289,6 +351,8 @@ Election.condorcet = function(district, model, options){
 	var beatsMe = {}
 	for(var candidateID in model.candidatesById) beatsMe[candidateID] = []
 
+	// make a list of mouseover events
+	let eventsToAssign = []
 
 	// For each combination... who's the better ranking?
 	for(var i=0; i<district.candidates.length-1; i++){
@@ -311,6 +375,15 @@ Election.condorcet = function(district, model, options){
 			// WINNER?
 			var winner = (aWins>bWins) ? a : b;
 			var loser = (aWins<=bWins) ? a : b;
+
+			let eventID = 'pair_' + a.id + '_' + b.id
+			let e = {
+				eventID: eventID,
+				f: pairDraw(model,district,a.id,b.id,aWins==bWins)
+			}
+			eventsToAssign.push(e)
+
+			text += '<div id="' + eventID + '">'
 			if (aWins != bWins) {
 				tally[winner.id]++;
 				beatsMe[loser.id].push(winner.id)
@@ -331,6 +404,9 @@ Election.condorcet = function(district, model, options){
 				tally[b.id]++;
 				text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
 			}
+			text += '</div>'
+
+
 		}
 	}
 
@@ -397,6 +473,7 @@ Election.condorcet = function(district, model, options){
 	// what's the loop?
 
 	result.text = text;
+	result.eventsToAssign = eventsToAssign
 
 	return result;
 };
@@ -713,6 +790,99 @@ Election.schulze = function(district, model, options){ // Pairs of candidates ar
 	return result;
 };
 
+
+function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a function is returned, so that i has a new scope
+	return function() {
+		// make a backup
+		var dBackup = [] // TODO: make a copy instead of a backup
+		for (var i = 0; i < district.candidates.length; i++) {
+			dBackup.push(district.candidates[i])
+		}
+		var mBackup = [] // TODO: make a copy instead of a backup
+		for (var i = 0; i < model.candidates.length; i++) {
+			mBackup.push(model.candidates[i])
+		} // hmm... TODO: is this a mistake?  should we be using model instead of district?
+
+		// remove all candidates except the pair
+		// start at the end of the list
+		for (var i = district.candidates.length-1; i >= 0; i--) {
+			c = district.candidates[i]
+			if (c.id == aid) {
+				var ai = i
+				continue // skip
+			}
+			if (c.id == bid) {
+				var bi = i
+				continue // skip
+			}
+			district.candidates.splice(i, 1); // remove from candidates...
+		}
+
+		// need to remove the candidates from the model list.
+		for (var i = model.candidates.length-1; i >= 0; i--) {
+			c = model.candidates[i]
+			if (c.id == aid) continue // skip
+			if (c.id == bid) continue // skip
+			model.candidates.splice(i, 1); // remove from candidates...
+		}
+
+		for (var i=0; i < model.voterGroups.length; i++) {
+			v = model.voterGroups[i]
+			v.update() // easy way to only show the two candidates.
+		}
+
+		if (weightcopy) {
+			var backupWC = []
+			for(var j=0; j<district.voterPeople.length; j++){
+				var v = district.voterPeople[j]
+				backupWC[j] = model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight
+			}
+			for(var j=0; j<district.voterPeople.length; j++){
+				var v = district.voterPeople[j]
+				model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = weightcopy[j][ai][bi]
+			}
+		}
+
+
+		model.dontdrawwinners = true
+
+		// draw - the main action
+		model.drawArenas()
+
+		
+		// restore backups
+		model.dontdrawwinners = false
+		district.candidates = dBackup
+		model.candidates = mBackup
+		if (weightcopy) {
+			for(var j=0; j<district.voterPeople.length; j++){
+				var v = district.voterPeople[j]
+				model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = backupWC[j]
+			}
+		}
+		for (var i=0; i < model.voterGroups.length; i++) {
+			model.voterGroups[i].update()
+		}
+
+		// also draw past winners
+		
+		if (weightcopy) {
+			for (var i = 0; i < pastwinnerscopy.length; i++) {
+				var p = pastwinnerscopy[i]
+				model.candidatesById[p].draw(model.arena.ctx,model.arena)
+				model.candidatesById[p].drawText("WON",model.arena.ctx,model.arena)
+			}
+		}
+		// draw this pair's better half
+		if (! tie) {
+			district.candidates[ai].drawText("Better",model.arena.ctx,model.arena) 
+		} else {
+			district.candidates[ai].drawText("Tie",model.arena.ctx,model.arena) 
+			district.candidates[bi].drawText("Tie",model.arena.ctx,model.arena) 
+		}
+	}
+}
+
 // PairElimination
 Election.minimax = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
@@ -864,73 +1034,8 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 			var weightcopy = _jcopy(options.ballotweight)
 			var pastwinnerscopy = _jcopy(options.pastwinners)
 		}
-		var pairDraw = function(aid,bid,tie) { // a function is returned, so that i has a new scope
-			return function() {
-				// make a backup
-				var dBackup = [] // TODO: make a copy instead of a backup
-				for (var i = 0; i < district.candidates.length; i++) {
-					dBackup.push(district.candidates[i])
-				}
-				var mBackup = [] // TODO: make a copy instead of a backup
-				for (var i = 0; i < model.candidates.length; i++) {
-					mBackup.push(model.candidates[i])
-				} // hmm... TODO: is this a mistake?  should we be using model instead of district?
 
-				// remove all candidates except the pair
-				// start at the end of the list
-				for (var i = district.candidates.length-1; i >= 0; i--) {
-					c = district.candidates[i]
-					if (c.id == aid) {
-						var ai = i
-						continue // skip
-					}
-					if (c.id == bid) {
-						var bi = i
-						continue // skip
-					}
-					district.candidates.splice(i, 1); // remove from candidates...
-				}
-
-				// need to remove the candidates from the model list.
-				for (var i = model.candidates.length-1; i >= 0; i--) {
-					c = model.candidates[i]
-					if (c.id == aid) continue // skip
-					if (c.id == bid) continue // skip
-					model.candidates.splice(i, 1); // remove from candidates...
-				}
-
-				for (var i=0; i < model.voterGroups.length; i++) {
-					v = model.voterGroups[i]
-					v.update() // easy way to only show the two candidates.
-				}
-
-				for(var j=0; j<district.voterPeople.length; j++){
-					var v = district.voterPeople[j]
-					model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = weightcopy[j][ai][bi]
-				}
-
-
-				model.dontdrawwinners = true
-				model.drawArenas()
-				model.dontdrawwinners = false
-				district.candidates = dBackup
-				model.candidates = mBackup
-				for (var i=0; i < model.voterGroups.length; i++) {
-					model.voterGroups[i].update()
-				}
-
-				// also draw past winners
-				for (var i = 0; i < pastwinnerscopy.length; i++) {
-					var p = pastwinnerscopy[i]
-					model.candidatesById[p].draw(model.arena.ctx,model.arena)
-					model.candidatesById[p].drawText("WON",model.arena.ctx,model.arena)
-				}
-				// draw this pair's better half
-				if (! tie) district.candidates[ai].drawText("Better",model.arena.ctx,model.arena)
-			}
-		}
-
-		eventsToAssign.push({eventID,f:pairDraw(a.id,b.id,pairs[i].tie)})
+		eventsToAssign.push({eventID,f:pairDraw(model,district,a.id,b.id,pairs[i].tie,weightcopy,pastwinnerscopy)})
 		if (pairs[i].tie) {
 			if(reverseExplanation) {
 				text += begintext + model.icon(a.id)+"&"+model.icon(b.id) + " tie" + endtext	
@@ -3167,16 +3272,19 @@ Election.pluralityWithPrimary = function(district, model, options){
 	var text = "";
 	text += polltext
 	text += "<span class='small'>";
-	for (var i in ptallies) {
+	for (let i in ptallies) {
 		var tally1 = ptallies[i]
 		var ip1 = i*1+1
 		text += "<b>primary for group " + ip1 + ":</b><br>";
 		var pwin = _countWinner(tally1)
-		for(var i=0; i<district.candidates.length; i++){
-			var c = district.candidates[i].id;
-			text += model.icon(c)+" got "+_percentFormat(district, tally1[c]);
-			if (pwin.includes(c)) text += " &larr;"
-			text += "<br>"
+		for(let k=0; k<district.candidates.length; k++){
+			let c = district.candidates[k]
+			let cid = c.id
+			if (model.parties[i].includes(c)) {
+				text += model.icon(cid)+" got "+_percentFormat(district, tally1[cid]);
+				if (pwin.includes(cid)) text += " &larr;"
+				text += "<br>"
+			}
 		}
 		text += "<br>"
 	}
@@ -3462,6 +3570,107 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	return polltext
 }
 
+function strategyTable(model) {
+
+	let a = model.parties[0]
+	let b = model.parties[1]
+	let text = ""
+	let header = `
+	<table class="strategyTable">
+	<tbody>
+	<tr>
+	<th>
+	+
+	</th>
+	`
+	for (let i = 0; i < b.length; i++) {
+		header += '<th>' + model.icon(b[i].id) + '</th>'
+	}
+	header += '</tr>'
+
+	text += header
+
+	let hh = model.primaryPollResults.head2head
+
+	for (let k = 0; k < a.length; k++) {
+		let row = "<tr>"
+		row += '<td>' + model.icon(a[k].id) + '</td>'
+		for (let i = 0; i < b.length; i++) {
+			let win = hh[a[k].id][b[i].id]
+			let loss = hh[b[i].id][a[k].id]
+			// let pairText = win + '-' + loss
+			// let pairText = win
+			let pairText = Math.round(100*win / (win+loss))
+			let winnerColor = (win == loss) ? "#ccc" : (win > loss) ? a[k].fill : b[i].fill
+			pairText = "<span class='nameLabelName' style='color:"+winnerColor+"'>" + pairText + "</span>"
+			// row += '<td bgcolor="' + winnerColor + '">' + pairText + '</td>'
+			row += '<td>' + pairText + '</td>'
+		}
+		row += "</tr>"
+
+		text += row
+	}
+
+	let footer = "</body></table>"
+	
+	text += footer
+	
+	return text
+}
+
+function pairwiseTable(district,model) {
+
+	let a = district.candidates
+	let b = a
+	let text = ""
+	let header = `
+	<table class="strategyTable">
+	<tbody>
+	<tr>
+	<th>
+	+
+	</th>
+	`
+	for (let i = 0; i < b.length; i++) {
+		header += '<th>' + model.icon(b[i].id) + '</th>'
+	}
+	header += '</tr>'
+
+	text += header
+
+	let hh = model.primaryPollResults.head2head
+
+	for (let k = 0; k < a.length; k++) {
+		let row = "<tr>"
+		row += '<td>' + model.icon(a[k].id) + '</td>'
+		for (let i = 0; i < b.length; i++) {
+			if (i === k) {
+				// row += '<td>' + model.icon(a[k].id) + ' </td>'
+				row += '<td> </td>'
+				continue
+			}
+			let win = hh[a[k].id][b[i].id]
+			let loss = hh[b[i].id][a[k].id]
+			// let pairText = win + '-' + loss
+			// let pairText = win
+			let pairText = Math.round(100*win / (win+loss))
+			let winnerColor = (win == loss) ? "#ccc" : (win > loss) ? a[k].fill : b[i].fill
+			pairText = "<span class='nameLabelName' style='color:"+winnerColor+"'>" + pairText + "</span>"
+			// row += '<td bgcolor="' + winnerColor + '">' + pairText + '</td>'
+			row += '<td>' + pairText + '</td>'
+		}
+		row += "</tr>"
+
+		text += row
+	}
+
+	let footer = "</body></table>"
+	
+	text += footer
+	
+	return text
+}
+
 
 var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype){
 
@@ -3470,7 +3679,13 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	let polltext = ""
 	model.primaryPollResults = {}
 
+
+	if (model.parties.length < 2) {
+		return doPollAndUpdateBallots(district,model,options,electiontype)
+	}
+
 	if (options.sidebar) {
+		polltext += "<span class='small'>"
 		polltext += "<b>polling for electable candidates: </b><br>";
 	}
 
@@ -3488,14 +3703,15 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	model.primaryPollResults.head2head = head2head
 
 	if(options.sidebar) {
-		
-		for(var i=0; i<district.candidates.length; i++){
-			var c = district.candidates[i].id;
-			// todo
+		if (model.parties.length == 2) {
+			polltext += "Vote % for Row Nominee<br>"
+			polltext += strategyTable(model)
+		} else {
+			polltext += pairwiseTable(district,model)
 		}
-		polltext += "<br>"
+		polltext += "</span><br>"
 	}
-
+	
 	// update ballots based on head to head results
 	for(var i=0; i<model.voterGroups.length; i++){
 		var voter = model.voterGroups[i];
