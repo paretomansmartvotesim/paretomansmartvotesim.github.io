@@ -1,11 +1,13 @@
 - name: Home
   link: .
-- name: Original
-  link: original.html
-- name: Primaries
-  link: primaries.html
+- name: Common Ground
+  link: commonground.html
 - name: Approval Voting
   link: approval_superman.html
+- name: Primaries
+  link: primaries.html
+- name: Original
+  link: original.html
 - name: An Even Better Ballot
   link: newer.html
 - name: Condorcet Methods

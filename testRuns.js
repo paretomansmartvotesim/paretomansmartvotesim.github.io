@@ -10,6 +10,16 @@ var e = [
         ["newer","newer.html"],
         ["log","log.html"],
         ["quotaApproval","quotaApproval.html"],
+        ["primaries","primaries.html"],
+        ["common ground","commonground.html"],
+        ["modify","modify.html"],
+        ["blog","blog.html"],
+    ]],
+    ["drafts", [ 
+        ["draft common ground - old index","draft-common-ground.html"],
+        ["oncemore","oncemore.html"],
+        ["essay","essay.html"],
+        ["essay-dec-5","essay-dec-5.html"],
     ]],
     ["tests", [ 
         ["testPreset","testPreset.html"],
