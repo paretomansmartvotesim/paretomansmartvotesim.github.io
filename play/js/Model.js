@@ -704,6 +704,16 @@ function Model(idModel){
 		self.onAddCandidate()
 		
 	}
+
+	self.updateDistrictBallots = function(iDistrict) {
+		// for(let voterPerson of self.district[iDistrict].voterPeople){
+		// 	var ballot = self.voterGroups[0].voterModel.castBallot(voterPerson)
+		// 	voterPerson.ballot = ballot
+		// }
+		for(let voterGroup of self.voterGroups){
+			voterGroup.updateDistrictBallots(iDistrict);
+		}
+	}
 };
 
 function Arena(arenaName, model) {

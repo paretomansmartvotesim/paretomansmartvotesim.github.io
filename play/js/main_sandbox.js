@@ -1619,7 +1619,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
             for (var voter of model.voterGroups) {
                 voter.typeVoterModel = model.ballotType // needs init
             }
-            model.pollResults = undefined
+            for (let district of model.district) {
+                district.pollResults = undefined
+            }
 
             
             if (model.ballotType == "Ranked") {
@@ -1701,7 +1703,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.configure= function() {
             model.rbsystem = config.rbsystem
             model.rbelection = self.listByName().rbelection
-            model.pollResults = undefined
+            for (let district of model.district) {
+                district.pollResults = undefined
+            }
         }
         self.select = function() {
             self.choose.highlight("value", config.rbsystem)

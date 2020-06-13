@@ -102,13 +102,15 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 	var y = voterPerson.y
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
+	let district = model.district[iDistrict]
 	var i = voterPerson.iPoint
+
 
 // return function(x, y, strategy, iDistrict, i){
 
 	doStar =  (model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
-	if (model.autoPoll == "Auto" && model.pollResults) {
-		tally = model.pollResults
+	if (model.autoPoll == "Auto" && district.pollResults) {
+		tally = district.pollResults
 
 		var factor = voterModel.poll_threshold_factor
 		var max1 = 0
@@ -169,6 +171,7 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 	var y = voterPerson.y
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
+	let district = model.district[iDistrict]
 	var i = voterPerson.iPoint
 
 
@@ -198,7 +201,7 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 	});
 
 	var considerFrontrunners =  (strategy != "normalize"  &&  strategy != "zero strategy. judge on an absolute scale.")
-	if (considerFrontrunners && model.election == Election.irv && model.autoPoll == "Auto" && model.pollResults) {
+	if (considerFrontrunners && model.election == Election.irv && model.autoPoll == "Auto" && district.pollResults) {
 		// we can do an irv strategy here
 
 		// so first figure out if our candidate is winning
@@ -211,7 +214,7 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 
 		if ( weLost ) {
 			// find out if our second choice could win head to head
-			var tally = model.pollResults
+			var tally = district.pollResults
 			for (var i in rank) {
 				var ourguy = rank[i]
 				if (ourguy == winguy) {
@@ -251,7 +254,6 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	var y = voterPerson.y
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
-
 	let district = model.district[iDistrict]
 	
 	// return function(x, y, strategy, iDistrict, i){
@@ -321,7 +323,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 		}
 
 		// has there been an inside-party poll?
-		if (model.pollResults === undefined) {
+		if (district.pollResults === undefined) {
 			// if not, then vote for the closest electable candidate
 			var closest = {id:null};
 			var closestDistance = Infinity;
@@ -343,9 +345,9 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	}
 
 	if (model.autoPoll == "Auto") {
-		if (model.pollResults) {
-			// if (model.autoPoll == "Auto" && (typeof model.pollResults !== 'undefined')) {
-			let tally = model.pollResults
+		if (district.pollResults) {
+			// if (model.autoPoll == "Auto" && (typeof district.pollResults !== 'undefined')) {
+			let tally = district.pollResults
 	
 			// are we casting a ballot in a primary?
 			if (district.primaryPollResults) {
@@ -2650,6 +2652,14 @@ function VoterCrowd(model) {
 		for(var voterPerson of self.voterPeople){	
 			var ballot = self.voterModel.castBallot(voterPerson)
 			voterPerson.ballot = ballot
+		}
+	}
+	self.updateDistrictBallots = function(iDistrict) {
+		for(var voterPerson of self.voterPeople){	
+			if (voterPerson.iDistrict == iDistrict) {
+				var ballot = self.voterModel.castBallot(voterPerson)
+				voterPerson.ballot = ballot
+			}
 		}
 	}
 }

@@ -3233,10 +3233,11 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// erase polls (not for general election)
 	var oldPrimaryPollResults = district.primaryPollResults
 	district.primaryPollResults = undefined
+	var oldPollResults = district.pollResults
+	district.pollResults = undefined
 
-	for(var j=0; j<model.voterGroups.length; j++){
-		model.voterGroups[j].update();
-	}
+	model.updateDistrictBallots(district.i);
+
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
@@ -3245,10 +3246,9 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// TODO: make this better.
 	district.candidates = oldcandidates
 	district.primaryPollResults = oldPrimaryPollResults
+	district.pollResults = oldPollResults
 	
-	for(var j=0; j<model.voterGroups.length; j++){
-		model.voterGroups[j].update();
-	}
+	model.updateDistrictBallots(district.i);
 
 	// maybe don't need to do this again, but just to check.
 	ptallies = _tally_primary(district, model, function(tally, ballot){
@@ -3274,6 +3274,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	text += "<span class='small'>";
 	for (let i in ptallies) {
 		var tally1 = ptallies[i]
+		let totalPeopleInPrimary = district.voterPeople.filter(x => x.iGroup == i).length
 		var ip1 = i*1+1
 		text += "<b>primary for group " + ip1 + ":</b><br>";
 		var pwin = _countWinner(tally1)
@@ -3281,7 +3282,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 			let c = district.candidates[k]
 			let cid = c.id
 			if (model.parties[i].includes(c)) {
-				text += model.icon(cid)+" got "+_percentFormat(district, tally1[cid]);
+				text += model.icon(cid)+" got "+_primaryPercentFormat(tally1[cid], totalPeopleInPrimary);
 				if (pwin.includes(cid)) text += " &larr;"
 				text += "<br>"
 			}
@@ -3397,16 +3398,6 @@ Election.plurality = function(district, model, options){
 
 
 // HELPERS:
-function _getBallots(district, model){
-	var ballots = [];
-	for(var i=0; i<district.voterPeople.length; i++){
-		var v = district.voterPeople[i]
-		var b = model.voterGroups[v.iGroup].voterPeople[v.iPoint].ballot
-		// var b = model.voterGroups[v.iGroup].ballots[v.iPoint]
-		ballots = ballots.concat(b);
-	}
-	return ballots;
-};
 
 function head2HeadPoll(district,ballots) {
 	head2head = {}
@@ -3493,21 +3484,20 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			Election.irv(district,model,options2) // do an IRV election to find out who wins
 			
 			/// Get really good polling results.
-			temp1 = model.pollResults // doing a poll without strategy.  not sure if this would work
-			model.pollResults = undefined
-			for(var i=0; i<model.voterGroups.length; i++){
-				var voter = model.voterGroups[i];
-				voter.update();
-			}
-			var ballots = _getBallots(district, model) // kinda double effort here but okay
+			temp1 = district.pollResults // doing a poll without strategy.  not sure if this would work
+			district.pollResults = undefined
+			
+			model.updateDistrictBallots(district.i);
+			
+			var ballots = model.voterSet.getBallotsDistrict(district)
 			let head2head = head2HeadPoll(district,ballots)
-			model.pollResults = temp1
+			district.pollResults = temp1
 
 			tally = {head2head:head2head, firstpicks:pre_tally}
 
 		}
 		
-		model.pollResults = tally
+		district.pollResults = tally
 
 		// decide who the frontrunners are
 		if (0) { // 0 - let the voters have individual thresholds
@@ -3545,19 +3535,13 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 		
 			
 		// update voter decisions based on poll
-		for(var i=0; i<model.voterGroups.length; i++){
-			var voter = model.voterGroups[i];
-			voter.update();
-		}
+		model.updateDistrictBallots(district.i);
 	}		
 	if (electiontype == "irv") polltext += "<br>"
 	// get the ballots
-	for(var i=0; i<model.voterGroups.length; i++){
-		var voter = model.voterGroups[i];
-		voter.update();
-	}
+	model.updateDistrictBallots(district.i);
 	// clear the old poll results after we've gotten the ballots
-	// model.pollResults = undefined
+	// district.pollResults = undefined
 
 	if (options.sidebar){
 		// model.draw() // not sure why this was here
@@ -3687,20 +3671,19 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 		polltext += "<b>polling for electable candidates: </b><br>";
 	}
 
-	// voters have already cast ballots
-
-	// we just need to count them
-	let ballots = []
-	for (let voterGroup of model.voterGroups) {
-		for (let voterPerson of voterGroup.voterPeople) {
-			let ballot = CastBallot.Ranked(model,voterGroup.voterModel,voterPerson)
-			ballots.push(ballot)
-		}
+	// voters have already cast plurality ballots
+	// but we need them to cast ranked ballots
+	var ballots = []
+	let rankedVM = new VoterModel(model,"Ranked")
+	for (let voterPerson of district.voterPeople) {
+		let ballot = rankedVM.castBallot(voterPerson)
+		ballots.push(ballot)
 	}
 	let head2head = head2HeadPoll(district,ballots)
 	district.primaryPollResults.head2head = head2head
 
 
+	// display results
 	if(options.sidebar) {
 		// let opt = {entity:"row"}
 		let opt = {entity:"winner"}
@@ -3718,11 +3701,8 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	}
 	
 	// update ballots based on head to head results
-	for(var i=0; i<model.voterGroups.length; i++){
-		var voter = model.voterGroups[i];
-		voter.update();
-	}
-
+	model.updateDistrictBallots(district.i);
+	
 	// 
 	let polltext2 = doPollAndUpdateBallots(district,model,options,electiontype)
 
@@ -3784,36 +3764,23 @@ var _assign_parties = function(district, model){
 var _tally_primary = function(district, model, tallyFunc){
 
 	var primaries_tallies = []
-	var oldcandidates = district.candidates// temporary change
+	// look at only the candidates in the party
 
-	// make sure there are candidates in each primary
-	// problem = false
-	// for ( var j in model.parties){
-	// 	if (model.parties[j].length == 0) problem = true
-	// }
-	// if (problem) return "we gotta problem"
 
 	for ( var j = 0; j < model.voterGroups.length; j++){
 		
-		// Create the tally
-		var tally = {};
-		for(var candidateID in model.candidatesById) tally[candidateID] = 0;
-
-		// Count 'em up
-		district.candidates = model.parties[j]	
-		if (district.candidates.length == 0) district.candidates = oldcandidates // workaround
-		model.voterGroups[j].update()
-		var ballots = model.voterSet.getBallotsCrowdAndDistrict(j,district)
-		for(var i=0; i<ballots.length; i++){
-			tallyFunc(tally, ballots[i]);
+		let ballots = model.voterSet.getBallotsCrowdAndDistrict(j,district)
+		
+		var tally = {}
+		for (let c of district.candidates) {
+			tally[c.id] = 0
+		}
+		for(let ballot of ballots){
+			tallyFunc(tally, ballot);
 		}
 		primaries_tallies.push(tally)
 	}
-	district.candidates = oldcandidates // reset
-	// Return it.
-	// model.drawArenas()
 	return primaries_tallies
-
 }
 
 
@@ -3964,6 +3931,17 @@ function _tietext(model,winners) {
 
 function _percentFormat(district,count) {
 	var a = "" + (100*count/(district.voterPeople.length)).toFixed(0)
+	var dopadding = false
+	if (dopadding) {
+		for (var i = a.length; i < 2; i ++) {
+			a = "&nbsp;&nbsp;" + a
+		}	
+	}
+	return a
+}
+
+function _primaryPercentFormat(count,total) {
+	var a = "" + (100*count/total).toFixed(0)
 	var dopadding = false
 	if (dopadding) {
 		for (var i = a.length; i < 2; i ++) {
