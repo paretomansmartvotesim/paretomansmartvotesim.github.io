@@ -241,7 +241,7 @@ Primaries will only work if everything goes according to this plan.  You can’
 
 Or you may feel that you can't betray your favorite. Emotionally it is hard to vote strategically because you know it's your duty to vote, and you'll be abandoning the people on your side that voted for the candidate that you like the best.  They stood up for the right thing, and maybe you should do your duty to report your opinion so that we can all make a better decision together.  But you are pulled in another direction by a candidate who also needs your vote, and although they don’t agree with you on as much, you choose them over your favorite because they agree with you on a lot of things, and you can’t betray them as well.  You’d rather not betray anyone.
 
-{% include sim.html id='honest_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQWoDMQz8i88-WLIke_cVPfS27CGFHgILKSU9hNK_V9JQQgnBsCN7tOMZ-bu0sm6bzUrW9roRUyW1qGZU6hVLVHPfa6FoHn8t3LtXEkQva6tF8qv5NW_l-rC8dzjT6sNyZj5llqcMeQByCGux5bydYIjgiGCJDOAGSBz9uoAlT7nljinl2GXYATIsOHSZ7gAZHthN7Jb8obc0SjESKHUGdPAw1F1p8zHGilYDCcWOsOTj6k4KJCOr0L3ke9khFqWkgvyXF0sLMvBIMCxLHmrDmxEAsRVmFbFVAYitA9zMmxSxrQEQ2fAGhuGZptOIYpAwODAMfsDBwL8D43o7Hcfl-nr7eC9reTm-Pk_H-XorP7971Na8sAIAAA)'
+{% include sim.html id='honest_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu27DMAz8F80axIco21_RoZvhIQUyFDDQokiHoOi_l-QlDYIg0HCkjz7dUT-llWVdTSt12-pKTNdqiqp7xSxe6bbVQjE8-DLC8k9IWVotWhaqpWdtPsr14fjscKbVh-PM9JSZnzLU8joKa9EyWhgiBcASGcANkDr6dQFzfuWWHVNmYJdhB8gwgrHLiANkeKCb0M35g7Q0SrESKAkDBDwMiSutvt84MWogoSgIS74ucVIhGVmVbiXfSoFYlJoKei-vlhZ04JFgWGc8FtbXCYDYHWb75T07ALH7ADflTR2xrQEQ2fAGhuVZT6cRxSBhcGBY_ICDgX8H1vV22PeP0-v581iW8rJ_fx3299O5_P4Blbio3bACAAA)'
 
 title='Honest Voters'
 

@@ -2,10 +2,10 @@
   link: .
 - name: Common Ground
   link: commonground.html
-- name: Approval Voting
-  link: approval_superman.html
 - name: Primaries
   link: primaries.html
+- name: Approval Voting
+  link: approval_superman.html
 - name: Original
   link: original.html
 - name: An Even Better Ballot

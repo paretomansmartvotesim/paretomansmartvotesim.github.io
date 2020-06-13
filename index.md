@@ -7,20 +7,19 @@ layout: page-2
 title: Home
 ---
 
-{% include card.html title='Finding Common Ground' description='Start here. Jump right in' url='commonground.html' img='img/venn-diagram.png' %}
+{% include card.html title='Finding Common Ground' description=' - #1 Start here. Jump right in.' url='commonground.html' img='img/venn-diagram.png' %}
 
+{% include card.html title='Primaries' description=" - #2 we don't need them" url='primaries.html' img='img/primary-strategy.png' %}
 
-{% include card.html title='Approval Voting' description='#2' url='approval_superman.html' img='img/winner-circle.png' %}
+{% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval_superman.html' img='img/winner-circle.png' %}
 
-{% include card.html title='Primaries' description='#3' url='primaries.html' img='img/primary-strategy.png' %}
+{% include card.html title="To Build a Better Ballot" description=" - Nicky Case's Original Sim" url='original.html' img='img/split-vote.png' %}
 
-{% include card.html title="Nicky Case's Original - To Build a Better Ballot" description='' url='original.html' img='img/split-vote.png' %}
+{% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer.html' img='img/chicken.png' %}
 
-{% include card.html title="Jameson Quinn's Extension of Nicky's Sim" description='to show strategies for score voting, introduce STAR, and play the game of chicken' url='newer.html' img='img/chicken.png' %}
+{% include card.html title="Condorcet Methods" description=' - draft' url='log.html' img='img/condorcet.png' %}
 
-{% include card.html title="Condorcet Methods" description='draft' url='log.html' img='img/condorcet.png' %}
-
-{% include card.html title="Sandbox" description='Try Everything' url='sandbox/index.html' img='img/sandbox.png' %}
+{% include card.html title="Sandbox" description=' - try everything' url='sandbox/index.html' img='img/sandbox.png' %}
 
 # Intro
 
