@@ -2208,6 +2208,16 @@ function DistrictManager(model) {
 				break
 			}
 		}
+
+		// put candidate into correct party
+		var min = Infinity
+		for ( var j = 0; j < model.voterGroups.length; j++){
+			var dist2 = distF2(model, model.voterGroups[j], c)
+			if (min > dist2) {
+				min = dist2
+				c.iParty = j
+			}
+		}
 	}
 	self.districtsListCandidates = function() {
 		// fill district[] with info on candidates.
@@ -2216,7 +2226,12 @@ function DistrictManager(model) {
 			model.district[i].candidates = []
 			model.district[i].candidatesById = {}
 			model.district[i].preFrontrunnerIds = []
+			model.district[i].partyCandidates = []
+			for ( var j = 0; j < model.voterGroups.length; j++)  {
+				model.district[i].partyCandidates.push([])
+			}
 		}
+		
 		// assign candidates to districts' lists
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i]
@@ -2230,6 +2245,13 @@ function DistrictManager(model) {
 			var c = model.candidatesById[cid]
 			model.district[c.iDistrict].preFrontrunnerIds.push(cid)
 		}
+
+		// assign candidates to district partyCandidates
+		for(var i=0; i<model.candidates.length; i++){
+			var c = model.candidates[i]
+			model.district[c.iDistrict].partyCandidates[c.iParty].push(c)
+		}
+
 	}
 
 }

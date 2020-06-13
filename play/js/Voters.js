@@ -269,16 +269,17 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 		// What party do we belong to?
 		// Check our group id
 		var iMyParty = voterPerson.iGroup
-		var myParty = model.parties[iMyParty]
+		var parties = district.partyCandidates
+		var myParty = parties[iMyParty]
 
 
 		// Which candidates are defeated badly?
 		var electset = []
 		for (let a of myParty) {
 			let electable = true
-			for (let i = 0; i < model.parties.length; i++) {
+			for (let i = 0; i < parties.length; i++) {
 				if (iMyParty !== i) {
-					let party = model.parties[i]
+					let party = parties[i]
 					for (let b of party) {
 						// check how badly we are defeated
 						let howbad = hh[b.id][a.id] / hh[a.id][b.id]
@@ -304,9 +305,9 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			let leastbad = Infinity;
 			for (let a of myParty) {
 				let worstdefeat = 0
-				for (let i = 0; i < model.parties.length; i++) {
+				for (let i = 0; i < parties.length; i++) {
 					if (iMyParty !== i) {
-						let party = model.parties[i]
+						let party = parties[i]
 						for (let b of party) {
 							let howbad = hh[b.id][a.id] / hh[a.id][b.id]
 							// also, find the most electable
@@ -339,10 +340,6 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 				}
 			}
 			return { vote:closest.id };
-		}
-		let a = 3
-		if (electset.length > 1) {
-			console.log('hi')
 		}
 	}
 
@@ -387,12 +384,18 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	
 	var closest = {id:null};
 	var closestDistance = Infinity;
-	var cans = district.candidates
 
+	var cans = district.candidates
+	// if we're in a primary, then we should only vote for our parties candidates
+	if (model.system == "+Primary" && district.doGeneral == undefined){
+		var iMyParty = voterPerson.iGroup
+		cans = district.partyCandidates[iMyParty]
+	}
 	// if we looked at the primary poll results, then we should only pick from the electable set
 	if (district.primaryPollResults && model.doElectabilityPolls) {
 		cans = electset
 	}
+
 	for(var j=0;j<cans.length;j++){
 		var c = cans[j];
 		if(checkOnlyFrontrunners && ! viable.includes(c.id)  ) {

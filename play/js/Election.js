@@ -3226,10 +3226,7 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 Election.pluralityWithPrimary = function(district, model, options){
 	options = options || {};
 
-	// Voters used regular FPTP to vote, now we find out where the parties are.
-
-	// find the parties
-	model.parties = _assign_parties(district, model)
+	// Voters used regular FPTP to vote
 
 	// Take polls and vote
 	var polltext = doPrimaryPollAndUpdateBallots(district,model,options,"plurality")
@@ -3264,6 +3261,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.freshPoll = false
 	var tempFreshPrimaryPoll = district.freshPrimaryPoll
 	district.freshPrimaryPoll = false
+	district.doGeneral = true
 
 	model.updateDistrictBallots(district.i);
 
@@ -3278,6 +3276,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.pollResults = oldPollResults
 	district.freshPoll = tempFreshPoll
 	district.freshPrimaryPoll = tempFreshPrimaryPoll
+	district.doGeneral = undefined
 	
 	model.updateDistrictBallots(district.i);
 
@@ -3313,7 +3312,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 		for(let k=0; k<district.candidates.length; k++){
 			let c = district.candidates[k]
 			let cid = c.id
-			if (model.parties[i].includes(c)) {
+			if (district.partyCandidates[i].includes(c)) {
 				text += model.icon(cid)+" got "+_primaryPercentFormat(tally1[cid], totalPeopleInPrimary);
 				if (pwin.includes(cid)) text += " &larr;"
 				text += "<br>"
@@ -3615,8 +3614,8 @@ function cellText(model,opt,hh,a,b) {
 
 function strategyTable(district,model,opt) {
 
-	let a = model.parties[0]
-	let b = model.parties[1]
+	let a = district.partyCandidates[0]
+	let b = district.partyCandidates[1]
 	let text = ""
 	let header = `
 	<table class="strategyTable">
@@ -3703,7 +3702,8 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	let polltext = ""
 	district.primaryPollResults = {}
 
-	if (! model.doElectabilityPolls || model.parties.length < 2) {
+	let numParties = district.partyCandidates.length
+	if (! model.doElectabilityPolls || numParties < 2) {
 		return doPollAndUpdateBallots(district,model,options,electiontype)
 	}
 
@@ -3735,7 +3735,7 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 		} else { // opt.entity == "winner"
 			polltext += "Vote % for Winning Nominee<br>"
 		}
-		if (model.parties.length == 2) {
+		if (numParties == 2) {
 			polltext += strategyTable(district,model,opt)
 		} else {
 			polltext += pairwiseTable(district,model,opt)
