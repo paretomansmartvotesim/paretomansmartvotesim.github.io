@@ -12,10 +12,6 @@
   link: newer.html
 - name: Condorcet Methods
   link: log.html
-- name: Quota Methods
-  link: quotaApproval.html
-- name: Bees
-  link: bees.html
 - name: Test Runs
   link: testRuns.html
 - name: Blog
