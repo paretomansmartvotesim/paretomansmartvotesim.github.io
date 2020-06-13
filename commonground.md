@@ -7,9 +7,7 @@ byline: 'By Paretoman and Contributors, June 2020'
 twuser: paretoman1
 ---
 
-# Finding Common Ground
-
-Hello I'm going to show you how to find common ground as a group.   We'll go over the following:
+Hello, I'm going to show you how to find common ground as a group.   We'll go over the following:
 
 * what we mean by the middle, 
 
