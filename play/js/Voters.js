@@ -2201,7 +2201,7 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 					let eventID = 'tallypair_' + iid + '_' + jid + '_' + _rand5()
 					let e = {
 						eventID: eventID,
-						f: pairDraw(model,district,iid,jid,false)
+						f: pairDraw(model,district,jid,iid,false)
 					}
 					eventsToAssign.push(e)
 
