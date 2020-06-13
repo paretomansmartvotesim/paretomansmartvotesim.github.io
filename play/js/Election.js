@@ -3436,9 +3436,13 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	// just sets the frontrunners and reruns the ballots, then sets the frontrunners back to normal, but keeps the altered ballots.
 
 	polltext = ""
-	var oldkeep = model.preFrontrunnerIds // only a temporary change
-	model.preFrontrunnerIds = []
-	model.dm.districtsListCandidates()
+
+	var oldway = false
+	if (oldway) {
+		var oldkeep = model.preFrontrunnerIds // only a temporary change
+		model.preFrontrunnerIds = []
+		model.dm.districtsListCandidates()
+	}
 
 	if (options.sidebar) {
 		if (electiontype=="irv") {
@@ -3500,7 +3504,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 		district.pollResults = tally
 
 		// decide who the frontrunners are
-		if (0) { // 0 - let the voters have individual thresholds
+		if (oldway) { // 0 - let the voters have individual thresholds
 			var factor = .5
 			var max1 = 0
 			for (var can in tally) {
@@ -3546,7 +3550,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	if (options.sidebar){
 		// model.draw() // not sure why this was here
 	}
-	if (1) {
+	if (oldway) {
 		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
 		model.dm.districtsListCandidates()
 	}
