@@ -225,7 +225,7 @@ Let's show this competitive pressure with a map.  If a candidate enters the race
 
 title='Candidate Pressure'
 
-caption='A new candidate can enter the contest if they are in the center.  (when there is competitive pressure)'
+caption="A new candidate can enter the contest if they're in the center.  (when there is competitive pressure)"
 
 comment='FPTP+primary with win map for new can, same setup as before' %}
 
@@ -350,7 +350,7 @@ Even in some better voting methods, there can be a game of chicken.  The game of
 
 title='Chicken Dilemma'
 
-caption='1. I want my friend to win, but 2. I would rather me win.'
+caption='I want my friend to win.. but I would rather win myself.'
 
 comment='just B E F' %}
 

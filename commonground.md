@@ -85,7 +85,7 @@ So everybody writes their rankings on the ballot, and then we count all the ball
 
 {% include sim-ballot.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8i88-xImdbPbMCxC31R4KXURFta3aIoQQvB0nQy-gag8Te-zJ2NlPCjROU0kssc48iRjLkNrJgueGdqqeK42NsXrO5plJWltS9rIWJhoDk9JYmYxGYcpeEPjf57XlJjPcZOpNRkK_WpqhFkaEMCQKMEDuzsQNiDr6deZQOxldx5NRek2MAMhEReQyySEjWRANiFwl-h5CNyptJVBKUEpQSlBKrjQJ_36tOKMdmgnjCkdOrE5rk2112sZsY2u8HtKV0t6rf6UVU2vBE8Gu1p40LM8EAKsGq4bdGZ7TMLRBxYZ-l2HoHAAYOOMFMlSy9VH8j6IMiQwHGWsvcFDQW-DgcbPfHy4PH8eFRrrfrK_LlpjOL4f3u-X8dNodL7vD6tT327pdnner018_VpCSNcoCAAA)' title='Rankings' 
 
-caption='You are saying something about each pair of options.  Mouse over the Tally Pairs to see how each pair is represented in your ranking.' 
+caption='You are saying something about each pair of options.  Mouse over each pair in the tally to see how each pair is represented in your ranking.' 
 
 comment='ranked ballot with pairs' id='pair_ballot_sim' %}
 
@@ -166,7 +166,7 @@ And of course, there's primaries, which is the way we do things now, and can wor
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)' title='Primaries' 
 
-caption='In reality, they dont always work so nice.' 
+caption="Here's a best-case scenario.  In reality, they don't always work so nice." 
 
 comment='an best case example of primaries ABCD two groups' id='primaries_sim' %}
 
