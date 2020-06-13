@@ -56,12 +56,17 @@ a:hover { text-decoration: underline; }
 
 
 /** Tables */
-.words > table { margin-bottom: 30px; width: 100%; text-align: left; color: #3f3f3f; border-collapse: collapse; border: 1px solid #e8e8e8; }
+.words > table { margin-bottom: 30px; width: 100%; text-align: left; color: #3f3f3f; border-collapse: collapse; 
+  text-align: center;
+  /* border: 1px solid #e8e8e8;  */
+}
 .words > table tr:nth-child(even) { background-color: #f7f7f7; }
 .words > table th, .words > table td { padding: 10px 15px; }
 .words > table th { background-color: #f0f0f0; border: 1px solid #e0e0e0; }
 .words > table td { border: 1px solid #e8e8e8; }
-@media screen and (max-width: 800px) { .words > table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; -ms-overflow-style: -ms-autohiding-scrollbar; } }
+/* @media screen and (max-width: 800px) {  */
+  .words > table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; -ms-overflow-style: -ms-autohiding-scrollbar; } 
+/* } */
 
 
 /** Site header */
