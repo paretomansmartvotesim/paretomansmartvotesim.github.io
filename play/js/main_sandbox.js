@@ -546,6 +546,7 @@ function Config(ui, config, initialConfig) {
         behavior: "stand",
         showToolbar: "on",
         rankedVizBoundary: "atWinner",
+        doElectabilityPolls: true,
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -1023,6 +1024,7 @@ function Cypher(ui) {
         70:"behavior",
         71:"showToolbar",
         72:"rankedVizBoundary",
+        73:"doElectabilityPolls",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -1590,7 +1592,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             
             showMenuItemsIf("divRBVote", config.system === "RBVote")
             showMenuItemsIf("divLastTransfer", config.system === "IRV" || config.system === "STV")
-            
+            // showMenuItemsIf("doElectabilityPolls", config.system == "+Primary")
             
             model.system = config.system;
 
@@ -3040,6 +3042,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     55: "showToolbar",
                     56: "rankedVizBoundary",
                     57: "showDescription",
+                    58: "doElectabilityPolls",
                 },
             }
         ]
@@ -4781,6 +4784,42 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.doElectabilityPolls = new function () {
+        // where to put the boundary for a candidate's region
+        var self = this
+        self.list = [
+            {name:"Yes",value:true,margin:4},
+            {name:"No",value:false}
+        ]
+        self.codebook = [ {
+            field: "doElectabilityPolls",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.doElectabilityPolls = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT AND UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.doElectabilityPolls = config.doElectabilityPolls
+        }
+        self.choose = new ButtonGroup({
+            label: "Do electability Polls?", // Sub Menu
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.doElectabilityPolls);
+        }
+    }
+
     // helper
     showMenuItemsIf = function(name,condition) {
         if (condition) {
@@ -4886,6 +4925,7 @@ function createMenu(ui) {
             ["divCustomNames", [
                 "namelist",
             ]],
+            "doElectabilityPolls",
             "firstStrategy",
             "doTwoStrategies",
             [ "divSecondStrategy", [
@@ -4978,6 +5018,7 @@ function createMenu(ui) {
                         "rbSystems",
                     ]],
                     "seats",
+                    "doElectabilityPolls",
                     "firstStrategy",
                     "doTwoStrategies",
                     [ "divSecondStrategy", [

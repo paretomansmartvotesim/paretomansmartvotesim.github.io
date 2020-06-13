@@ -259,7 +259,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	// return function(x, y, strategy, iDistrict, i){
 
 	// check primary polls for electable candidates
-	if (model.system == "+Primary" && district.primaryPollResults) {
+	if (model.system == "+Primary" && district.primaryPollResults && model.doElectabilityPolls) {
 
 		// check for defeats against other party's candidates
 		let hh = district.primaryPollResults.head2head  // format hh[win][against] = numwins
@@ -350,7 +350,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			let tally = district.pollResults
 	
 			// are we casting a ballot in a primary?
-			if (district.primaryPollResults) {
+			if (district.primaryPollResults && model.doElectabilityPolls) {
 				// reduce tally to just those candidates in my primary
 				let oldtally = tally
 				tally = {}
@@ -388,7 +388,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	var cans = district.candidates
 
 	// if we looked at the primary poll results, then we should only pick from the electable set
-	if (district.primaryPollResults) {
+	if (district.primaryPollResults && model.doElectabilityPolls) {
 		cans = electset
 	}
 	for(var j=0;j<cans.length;j++){

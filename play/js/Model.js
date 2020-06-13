@@ -101,6 +101,7 @@ function Model(idModel){
 		squareFirstChoice: true, 
 		doVoterMapGPU: false,
 		devOverrideShowAllFeatures: false,
+		doElectabilityPolls: true,
 	})
 	
 	self.viz = new Viz(self);
@@ -320,6 +321,8 @@ function Model(idModel){
 						self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 						self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
 						self.placeHoldDuringElection = false
+						self.district[i].freshPoll = false
+						self.district[i].freshPrimaryPoll = false
 					}
 				}
 
@@ -366,6 +369,8 @@ function Model(idModel){
 				self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 				self.result = self.election(self.district[0], self,self.optionsForElection);
 				self.placeHoldDuringElection = false
+				self.district[0].freshPoll = false
+				self.district[0].freshPrimaryPoll = false
 				self.district[0].result = self.result
 			}
 		}

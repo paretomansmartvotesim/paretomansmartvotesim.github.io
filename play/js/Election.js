@@ -10,7 +10,10 @@ var Election = {};
 
 Election.score = function(district, model, options){
 
-	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(district,model,options,"score")
+	var polltext = ""
+	if ("Auto" == model.autoPoll) {
+		polltext += doPollAndUpdateBallots(district,model,options,"score")
+	}
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -61,8 +64,11 @@ Election.score = function(district, model, options){
 
 Election.star = function(district, model, options){
 
-	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(district,model,options,"score")
-
+	var polltext = ""
+	if ("Auto" == model.autoPoll) {
+		polltext += doPollAndUpdateBallots(district,model,options,"score")	
+		district.pollResults = undefined // clear polls for next time
+	}
 
 	var maxscore = 5
 
@@ -144,7 +150,11 @@ Election.three21 = function(district, model, options){
 
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
-	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(district,model,options,"score")
+	var polltext = ""
+	if ("Auto" == model.autoPoll) {
+		polltext += doPollAndUpdateBallots(district,model,options,"score")	
+		district.pollResults = undefined // clear polls for next time
+	}
 	
 	// Tally the approvals & get winner!
 	var tallies = _tallies(district, model, 3);
@@ -227,7 +237,11 @@ Election.three21 = function(district, model, options){
 
 Election.approval = function(district, model, options){
 
-	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(district,model,options,"approval")
+	var polltext = ""
+	if ("Auto" == model.autoPoll) {
+		polltext += doPollAndUpdateBallots(district,model,options,"approval")	
+		district.pollResults = undefined // clear polls for next time
+	}
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -1747,8 +1761,11 @@ Election.irv = function(district, model, options){
 
 	var dopoll = "Auto" == model.autoPoll
 	if (options.dontpoll) dopoll = false
-	if (dopoll) polltext = doPollAndUpdateBallots(district,model,options,"irv")
-
+	var polltext = ""
+	if (dopoll) {
+		polltext += doPollAndUpdateBallots(district,model,options,"irv")	
+		district.pollResults = undefined // clear polls for next time
+	}
 	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
 	if (drawFlows) {
 		var transfers = []
@@ -2050,6 +2067,8 @@ Election.irv = function(district, model, options){
 		result.lastlosers = lastlosers
 		result.nBallots = ballots.length
 	}
+
+	// district.pollResults = undefined // clear polls for next time
 
 	if (!options.sidebar) return result
 
@@ -3131,8 +3150,11 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 
 	options = options || {};
 
-	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(district,model,options,"plurality")
-
+	var polltext = ""
+	if ("Auto" == model.autoPoll) {
+		polltext += doPollAndUpdateBallots(district,model,options,"plurality")	
+		// district.pollResults = undefined // clear polls for next time
+	}
 	// Tally the approvals & get winner!
 	var tally1 = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -3162,6 +3184,10 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 
 	if (model.doTop2) var theTop2 = _sortTally(tally).slice(0,2)
 	if (model.doTop2) result.theTop2 = theTop2
+
+	
+	district.pollResults = undefined // clear polls for next time
+
 	if (!options.sidebar) return result
 
 	// Caption
@@ -3206,8 +3232,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	model.parties = _assign_parties(district, model)
 
 	// Take polls and vote
-	let dopoll = "Auto" == model.autoPoll
-	if (dopoll) var polltext = doPrimaryPollAndUpdateBallots(district,model,options,"plurality")
+	var polltext = doPrimaryPollAndUpdateBallots(district,model,options,"plurality")
 
 	// Look at each voter group and get tallies for all the candidates
 	let ptallies = _tally_primary(district, model, function(tally, ballot){
@@ -3235,6 +3260,10 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.primaryPollResults = undefined
 	var oldPollResults = district.pollResults
 	district.pollResults = undefined
+	var tempFreshPoll = district.freshPoll
+	district.freshPoll = false
+	var tempFreshPrimaryPoll = district.freshPrimaryPoll
+	district.freshPrimaryPoll = false
 
 	model.updateDistrictBallots(district.i);
 
@@ -3247,6 +3276,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.candidates = oldcandidates
 	district.primaryPollResults = oldPrimaryPollResults
 	district.pollResults = oldPollResults
+	district.freshPoll = tempFreshPoll
+	district.freshPrimaryPoll = tempFreshPrimaryPoll
 	
 	model.updateDistrictBallots(district.i);
 
@@ -3257,6 +3288,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 
 	// clear the old poll results. we're done with casting ballots.
+	district.pollResults = undefined
 	district.primaryPollResults = undefined
 
 
@@ -3323,7 +3355,11 @@ Election.plurality = function(district, model, options){
 	var result = {}
 
 	
-	if ("Auto" == model.autoPoll) polltext = doPollAndUpdateBallots(district,model,options,"plurality")
+	var polltext = ""
+	if ("Auto" == model.autoPoll) {
+		polltext += doPollAndUpdateBallots(district,model,options,"plurality")	
+		district.pollResults = undefined // clear polls for next time
+	}
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -3433,18 +3469,22 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	}   //not_f.includes(config.firstStrategy) && not_f.includes(config.secondStrategy)
 	if (skipthis) return ""
 
+	district.freshPoll = true // we can use these poll results
+
 	// just sets the frontrunners and reruns the ballots, then sets the frontrunners back to normal, but keeps the altered ballots.
 
 	polltext = ""
 
 	var oldway = false
-	if (oldway) {
+	var oldway2 = false
+	if (oldway2) {
 		var oldkeep = model.preFrontrunnerIds // only a temporary change
 		model.preFrontrunnerIds = []
 		model.dm.districtsListCandidates()
 	}
 
 	if (options.sidebar) {
+		polltext += '<span class="small" >'
 		if (electiontype=="irv") {
 			polltext += "A low-risk strategy in IRV is to look at who wins and make a compromise if you're not winning.  Voters look down their ballot and pick the first one that defeats the current winner head to head. <br> <br>"
 			polltext += "<b>Polling first preferences: </b></br>"
@@ -3542,15 +3582,12 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 		model.updateDistrictBallots(district.i);
 	}		
 	if (electiontype == "irv") polltext += "<br>"
-	// get the ballots
-	model.updateDistrictBallots(district.i);
-	// clear the old poll results after we've gotten the ballots
-	// district.pollResults = undefined
 
 	if (options.sidebar){
+		polltext += "</span><br>"
 		// model.draw() // not sure why this was here
 	}
-	if (oldway) {
+	if (oldway2) {
 		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
 		model.dm.districtsListCandidates()
 	}
@@ -3665,10 +3702,11 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	let polltext = ""
 	district.primaryPollResults = {}
 
-
-	if (model.parties.length < 2) {
+	if (! model.doElectabilityPolls || model.parties.length < 2) {
 		return doPollAndUpdateBallots(district,model,options,electiontype)
 	}
+
+	district.freshPrimaryPoll = true
 
 	if (options.sidebar) {
 		polltext += "<span class='small'>"

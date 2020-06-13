@@ -388,6 +388,8 @@ function Yee(model) {
 					if (model.district[k].candidates.length > 0) {
 						result_k = model.election( model.district[k], model, model.optionsForElection );
 						result.colors = [].concat(result.colors , result_k.colors)
+						model.district[k].freshPoll = false
+						model.district[k].freshPrimaryPoll = false
 					}
 
 				}
@@ -398,6 +400,8 @@ function Yee(model) {
 				}
 			} else {
 				var result = model.election(model.district[0], model, {sidebar:false, yeefast:true});
+				model.district[0].freshPoll = false
+				model.district[0].freshPrimaryPoll = false
 			}
 
 
