@@ -4837,10 +4837,10 @@ function createMenu(ui) {
             "gearicon",
         ]],
         [ "gearList", [
+            "menuVersion",
             "doFeatureFilter",
             "gearconfig", // start of hidden list
             "presetconfig",
-            "menuVersion",
             "computeMethod",
             "colorChooser",
             "colorSpace",
@@ -4966,7 +4966,6 @@ function createMenu(ui) {
                     "voterIcons",
                 ]],
                 ["advanced", [
-                    "showToolbar",
                     "colorChooser",
                     "colorSpace",
                     "behavior",
@@ -5037,6 +5036,7 @@ function createMenu(ui) {
                     "menuVersion",
                     "doFeatureFilter",
                     "showDescription",
+                    "showToolbar",
                     "gearconfig", 
                     "presetconfig",
                 ]],

@@ -18,6 +18,10 @@ title: Home
 
 {% include card.html title="Jameson Quinn's Extension of Nicky's Sim" description='to show strategies for score voting, introduce STAR, and play the game of chicken' url='newer.html' img='img/chicken.png' %}
 
+{% include card.html title="Condorcet Methods" description='draft' url='log.html' img='img/condorcet.png' %}
+
+{% include card.html title="Sandbox" description='Try Everything' url='sandbox/index.html' img='img/sandbox.png' %}
+
 # Intro
 
 Take a look at this great interactive sketch that Nicky Case made. You have two candidates {% include str.html str='`<span class="letterBig" style="color:hsl(240,80%,70%);"><b>A</b></span> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> and you have a voter <img src="play/img/voter.png" />`' %} . Just move the voter and you'll see that he is just gonna vote for whoever he's closest to.
