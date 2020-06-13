@@ -207,22 +207,24 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 		// so first figure out if our candidate is winning
 		// should figure out how close we are to winning
 		
+		var tally = district.pollResults
+
 		// who do we have first?
 		var ourFirst = rank[0]
 		// who was first?
-		var weLost = ! model.result.winners.includes(ourFirst)
+		var weLost = ! tally.winners.includes(ourFirst)
+		// var weLost = ! model.result.winners.includes(ourFirst)
 
 		if ( weLost ) {
 			// find out if our second choice could win head to head
-			var tally = district.pollResults
 			for (var i in rank) {
 				var ourguy = rank[i]
 				if (ourguy == winguy) {
 					break // there is no better candidate, so let's just keep the same strategy
 				}
 				var ourguyWins = true
-				for (var iwinguy in model.result.winners) {
-					var winguy = model.result.winners[iwinguy]
+				for (var iwinguy in tally.winners) {
+					var winguy = tally.winners[iwinguy]
 					var ours = tally.head2head[ourguy][winguy]
 					var theirs = tally.head2head[winguy][ourguy]
 					if (theirs > ours) ourguyWins = false

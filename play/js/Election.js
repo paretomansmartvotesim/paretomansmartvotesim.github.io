@@ -3525,8 +3525,9 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			});
 
 			var options2 = {dontpoll:true, sidebar:true}
-			Election.irv(district,model,options2) // do an IRV election to find out who wins
-			
+			var result = Election.irv(district,model,options2) // do an IRV election to find out who wins
+			var winners = result.winners
+
 			/// Get really good polling results.
 			temp1 = district.pollResults // doing a poll without strategy.  not sure if this would work
 			district.pollResults = undefined
@@ -3536,8 +3537,8 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			var ballots = model.voterSet.getBallotsDistrict(district)
 			let head2head = head2HeadPoll(district,ballots)
 			district.pollResults = temp1
-
-			tally = {head2head:head2head, firstpicks:pre_tally}
+			
+			tally = {head2head:head2head, firstpicks:pre_tally, winners:winners}
 
 		}
 		
