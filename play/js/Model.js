@@ -209,18 +209,8 @@ function Model(idModel){
 	self.update = function(){
 
 		
-        if (self.checkRunTextBallots()){ // TODO: make text ballots work for every method, so we don't have to do this step and we can 
-
-			if (self.textBallotInput == "") return // no need to annoy the user
-			// run an election with RBVote
-			if (self.system === "RBVote") {
-				self.result = self.election("",self,self.optionsForElection)
-				self.district[0].result = self.result
-				self.drawSidebar()
-			}
-			// self.onDraw()
-			// self.onUpdate()
-			publish(self.id+"-update");
+        if (self.checkRunTextBallots() && self.textBallotInput !== "" ){ // TODO: make text ballots work for every method, so we don't have to do this step and we can 
+			self.textBallotUpdate()
 			return
 		}
 
@@ -239,18 +229,84 @@ function Model(idModel){
 		if (self.votersAsCandidates) {
 			self.updateVC()
 			self.votersAsCandidates = false
-		}
-
-		
+		}		
 
 		// get the ballots for this election
 		for(var i=0; i<self.voterGroups.length; i++){
 			var voter = self.voterGroups[i];
-			voter.update();
+			voter.updatePeople();
 		}
 		
-		self.viz.calculate()
+		self.viz.calculateBeforeElection()
+
+
+		for(var i=0; i<self.candidates.length; i++){
+			var c = self.candidates[i];
+			c.update(); // doesn't do anything... yet
+		}
+		 
+		// did we manually select the winners? (with ctrl-click)
+		var selected = self.selection()
 		
+		if (selected.winners.length > 0) {
+			self.result = selected
+			if (self.doTop2) self.result.theTop2 = selected
+			self.updateBallots()
+		} else {
+			self.updateBallots()
+			self.doTheElection()
+		}
+		
+		self.sortVoters()
+		
+		self.viz.calculateAfterElection()
+		 
+		self.draw()
+
+		// Update!
+		self.onUpdate();
+		publish(self.id+"-update");
+
+	};
+
+
+	self.updateFromModel = function() {} // hook
+
+	self.onDraw = function(){}; // TO IMPLEMENT
+	self.draw = function() {
+		
+		if (self.nLoading > 0) return // still loading, will call later and save some computing cycles
+		// The drawing system and the loading assets system are connected here.
+
+		if (self.checkRunTextBallots()) {
+			self.arena.canvas.hidden = true
+			self.drawSidebar() 
+			return
+		} else {
+			self.arena.canvas.hidden = false
+		}
+
+		// three things need to be drawn.  The arenas, the sidebar, and maybe more, like the main_sandbox or the main_ballot or whatever else calls new Model
+		self.drawArenas()
+		self.drawSidebar()
+		self.onDraw()
+	}
+
+	self.textBallotUpdate = function() {
+		// run an election with RBVote
+		if (self.system === "RBVote") {
+			self.result = self.election("",self,self.optionsForElection)
+			self.district[0].result = self.result
+			self.drawSidebar()
+		}
+		// self.onDraw()
+		// self.onUpdate()
+		publish(self.id+"-update");
+		return
+	}
+
+	self.sortVoters = function() {
+
 		if (self.checkGotoTarena()) // find order of voters
 		{
 			var v = self.voterSet.getVoterArray()
@@ -283,11 +339,10 @@ function Model(idModel){
 				}
 			}
 		}
-		for(var i=0; i<self.candidates.length; i++){
-			var c = self.candidates[i];
-			c.update(); // doesn't do anything... yet
-		}
+		
+	}
 
+	self.selection = function() {
 		var selected = {}
 		selected.winners = []
 		selected.colors = []
@@ -305,107 +360,78 @@ function Model(idModel){
 			selected.winner = selected.winners[0]
 			selected.color = "#ccc"
 		}
-		if (selected.winners.length > 0) {
-			self.result = selected
-			if (self.doTop2) self.result.theTop2 = selected
-		} else {
-
-			// for the moment, this works, but ideally there would be separate components of the STV, RRV etc elections for the powerCharts
-			// we make sure that we generate the data now so we have it later.
-			self.optionsForElection.sidebar = self.optionsForElection.sidebar || self.checkGotoTarena()
-
-			if (self.nDistricts > 1) {
-				for (var i = 0; i < self.nDistricts; i++) {
-					if (self.district[i].candidates.length == 0) {
-						self.district[i].result = undefined
-					} else {
-						self.placeHoldDuringElection = self.doPlaceHoldDuringElection
-						self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
-						self.placeHoldDuringElection = false
-						self.district[i].freshPoll = false
-						self.district[i].freshPrimaryPoll = false
-					}
-				}
-
-				// put all the results together
-				self.result = {
-					winners: [],
-					colors: [],
-					color: [],
-					history: [],
-					eventsToAssign: [],
-					text: ''
-				}
-				if (self.doTop2) self.result.theTop2 = []
-				for (var i = 0; i < self.nDistricts; i++) {
-					self.result.text += "<br>"
-					self.result.text += "<br>"
-					self.result.text += "District " + (i+1)
-					self.result.text += "<br>"
-					if (self.district[i].candidates.length == 0) continue
-					self.result.text += self.district[i].result.text
-					self.result.winners = [].concat(self.result.winners , self.district[i].result.winners)
-					self.result.colors = [].concat(self.result.colors , self.district[i].result.colors)
-					self.result.color = [].concat(self.result.color , self.district[i].result.color)
-					if (self.district[i].result.eventsToAssign) self.result.eventsToAssign = [].concat(self.result.eventsToAssign , self.district[i].result.eventsToAssign)
-					if (self.doTop2) self.result.theTop2 = [].concat(self.result.theTop2 , self.district[i].result.theTop2)
-				}
-				// for now, just give the history for the first district with candidates
-				for (var i = 0; i < self.nDistricts; i++) {
-					if (self.district[i].candidates.length > 0) {
-						self.result.history = self.district[i].result.history
-						break
-					}
-				}
-				
-				// for (var i = 0; i < self.nDistricts; i++) {
-				// 	self.result.history =[].concat(self.result.history , self.district[i].result.history)
-				// 	self.result.history.push =[].concat(self.result.history , self.district[i].result.history)
-				// }
-
-				// TODO: visualize many districts results in tarena
-				
-
-			} else {
-				self.placeHoldDuringElection = self.doPlaceHoldDuringElection
-				self.result = self.election(self.district[0], self,self.optionsForElection);
-				self.placeHoldDuringElection = false
-				self.district[0].freshPoll = false
-				self.district[0].freshPrimaryPoll = false
-				self.district[0].result = self.result
-			}
-		}
-		 
-		self.draw()
-
-		// Update!
-		self.onUpdate();
-		publish(self.id+"-update");
-
-	};
-
-
-	self.updateFromModel = function() {} // hook
-
-	self.onDraw = function(){}; // TO IMPLEMENT
-	self.draw = function() {
-		
-		if (self.nLoading > 0) return // still loading, will call later and save some computing cycles
-		// The drawing system and the loading assets system are connected here.
-
-		if (self.checkRunTextBallots()) {
-			self.arena.canvas.hidden = true
-			self.drawSidebar() 
-			return
-		} else {
-			self.arena.canvas.hidden = false
-		}
-
-		// three things need to be drawn.  The arenas, the sidebar, and maybe more, like the main_sandbox or the main_ballot or whatever else calls new Model
-		self.drawArenas()
-		self.drawSidebar()
-		self.onDraw()
+		return selected
 	}
+
+	self.doTheElection = function() {
+		
+		// for the moment, this works, but ideally there would be separate components of the STV, RRV etc elections for the powerCharts
+		// we make sure that we generate the data now so we have it later.
+		self.optionsForElection.sidebar = self.optionsForElection.sidebar || self.checkGotoTarena()
+
+		if (self.nDistricts > 1) {
+			for (var i = 0; i < self.nDistricts; i++) {
+				if (self.district[i].candidates.length == 0) {
+					self.district[i].result = undefined
+				} else {
+					self.placeHoldDuringElection = self.doPlaceHoldDuringElection
+					self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
+					self.placeHoldDuringElection = false
+					self.district[i].freshPoll = false
+					self.district[i].freshPrimaryPoll = false
+				}
+			}
+
+			// put all the results together
+			self.result = {
+				winners: [],
+				colors: [],
+				color: [],
+				history: [],
+				eventsToAssign: [],
+				text: ''
+			}
+			if (self.doTop2) self.result.theTop2 = []
+			for (var i = 0; i < self.nDistricts; i++) {
+				self.result.text += "<br>"
+				self.result.text += "<br>"
+				self.result.text += "District " + (i+1)
+				self.result.text += "<br>"
+				if (self.district[i].candidates.length == 0) continue
+				self.result.text += self.district[i].result.text
+				self.result.winners = [].concat(self.result.winners , self.district[i].result.winners)
+				self.result.colors = [].concat(self.result.colors , self.district[i].result.colors)
+				self.result.color = [].concat(self.result.color , self.district[i].result.color)
+				if (self.district[i].result.eventsToAssign) self.result.eventsToAssign = [].concat(self.result.eventsToAssign , self.district[i].result.eventsToAssign)
+				if (self.doTop2) self.result.theTop2 = [].concat(self.result.theTop2 , self.district[i].result.theTop2)
+			}
+			// for now, just give the history for the first district with candidates
+			for (var i = 0; i < self.nDistricts; i++) {
+				if (self.district[i].candidates.length > 0) {
+					self.result.history = self.district[i].result.history
+					break
+				}
+			}
+			
+			// for (var i = 0; i < self.nDistricts; i++) {
+			// 	self.result.history =[].concat(self.result.history , self.district[i].result.history)
+			// 	self.result.history.push =[].concat(self.result.history , self.district[i].result.history)
+			// }
+
+			// TODO: visualize many districts results in tarena
+			
+
+		} else {
+			self.placeHoldDuringElection = self.doPlaceHoldDuringElection
+			self.result = self.election(self.district[0], self,self.optionsForElection);
+			self.placeHoldDuringElection = false
+			self.district[0].freshPoll = false
+			self.district[0].freshPrimaryPoll = false
+			self.district[0].result = self.result
+		}
+
+	}
+
 	self.drawArenas = function() {
 
 		self.arena.clear()
@@ -718,6 +744,11 @@ function Model(idModel){
 		// }
 		for(let voterGroup of self.voterGroups){
 			voterGroup.updateDistrictBallots(iDistrict);
+		}
+	}
+	self.updateBallots = function() {
+		for(let voterGroup of self.voterGroups){
+			voterGroup.updateBallots();
 		}
 	}
 };

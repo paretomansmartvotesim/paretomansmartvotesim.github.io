@@ -2718,16 +2718,24 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.initVoterSet()
 	}
 
+
 	self.update = function(){
+	
+		self.updatePeople()
+
+		self.updateBallots()
+
+	};
+
+	
+	self.updatePeople = function() {
 
 		self.updateVoterSet()
 
 		self.strategyPick()
 
-		self.updateBallots()
+	}
 
-	};
-	
 	self.initPoints = function () {
 		// puts the voters into position
 				
@@ -3131,6 +3139,13 @@ function SingleVoter(model){
 	}
 	self.update = function(){
 
+		self.updatePeople()
+
+		self.updateBallots()
+	};
+
+	self.updatePeople = function() {
+
 		self.updateVoterSet()
 
 		self.voterModel.poll_threshold_factor = .6
@@ -3140,8 +3155,7 @@ function SingleVoter(model){
 
 		voterPerson.strategy = self.firstStrategy
 
-		self.updateBallots()
-	};
+	}
 
 	// DRAW!
 	self.draw = function(ctx){

@@ -16,8 +16,7 @@ function Viz(model) {
 	self.yee = yee
 	self.beatMap = beatMap
 
-
-	self.calculate = function() {
+	self.calculateBeforeElection = function() {
 		
 		// calculate yee if its turned on and we haven't already calculated it ( we aren't dragging the yee object)
 		 if (model.yeeon) {
@@ -33,6 +32,10 @@ function Viz(model) {
 			 }
 		 }
 
+	}
+
+	self.calculateAfterElection = function() {
+		
 		if (model.checkDoBeatMap()) {
 			beatMap.calculateBeatMap()
 		}
