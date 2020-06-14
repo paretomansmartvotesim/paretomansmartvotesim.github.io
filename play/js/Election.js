@@ -3498,20 +3498,21 @@ Election.pluralityWithPrimary = function(district, model, options){
 	return result
 }
 
-function _beginElection(district,model,options) {
+function _beginElection(district,model,options,polltype) {
 	_electionDefaults(options)
 	var polltext = ""
 
 	if ( ! options.justCount ) {
 
 		if ("Auto" == model.autoPoll) {
-			polltext += runPoll(district,model,options,"plurality")
+			polltext += runPoll(district,model,options,polltype)
 		}
 
 		model.updateDistrictBallots(district)
 
 	}
 
+	return polltext
 }
 
 function _endElection(district,model,options) {
@@ -3523,23 +3524,7 @@ function _endElection(district,model,options) {
 
 Election.plurality = function(district, model, options){
 
-	_beginElection(district,model,options)
-	
-	var polltext = ""
-
-	if ( ! options.justCount ) {
-
-		if ("Auto" == model.autoPoll) {
-			polltext += runPoll(district,model,options,"plurality")
-		}
-
-		model.updateDistrictBallots(district)
-
-		if ("Auto" == model.autoPoll) {
-			district.pollResults = undefined // clear polls for next time
-		}
-
-	}
+	var polltext = _beginElection(district,model,options,"plurality")
 	
 
 	// if (model.primaries == "Yes"){
@@ -3658,7 +3643,7 @@ function head2HeadPoll(district,ballots) {
 var runPoll = function(district,model,options,electiontype){
 
 	// check to see if there is a need for polling
-	
+
 	if ( ! model.checkRunPoll ) return ""
 
 	polltext = ""
