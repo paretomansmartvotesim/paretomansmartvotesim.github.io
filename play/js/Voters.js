@@ -257,73 +257,49 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	var iDistrict = voterPerson.iDistrict
 	let district = model.district[iDistrict]
 
-	// check primary polls for electable candidates
-	var considerElectability = model.system == "+Primary" && district.primaryPollResults && model.doElectabilityPolls
-	if (considerElectability) {
+	// first, make a list of all the candidates
+	// if we're in a primary then consider electability (if there are polls)
+	//   consider only viable candidates (if there are polls)
+	//   find the closest candidate
+	//   return
+	// if we're in a general election then consider only viable candidates (if there are polls) 
 
-		// check for defeats against other party's candidates
-		let hh = district.primaryPollResults.head2head  // format hh[win][against] = numwins
-		
-		// What party do we belong to?
-		// Check our group id
-		var iMyParty = voterPerson.iParty
-		var parties = district.parties
-
-		// Which candidates not defeated badly?
-		var electset = _electable(iMyParty,parties,hh)
-
-		// if no candidates are electable
-		if (electset.length == 0) {
-			// find the most electable candidate
-			// the one with the best "worst defeat"
-			var electset = _mostElectable(iMyParty,parties,hh)
-		}
-		// has there been an inside-party poll?
-		var noStrategyWithinParty = district.pollResults === undefined
-		if (noStrategyWithinParty) {
-			// if not, then vote for the closest electable candidate
-			var closest = _findClosest(model,electset,x,y)
-			return { vote:closest.id };
-		}
-	}
-
-	if (model.autoPoll == "Auto") {
-		if (district.pollResults) {
-			// if (model.autoPoll == "Auto" && (typeof district.pollResults !== 'undefined')) {
-			let tally = district.pollResults
-	
-			// are we casting a ballot in a primary?
-			if (considerElectability) {
-				// reduce tally to just those candidates in my primary who are electable
-				tally = _electsetTally(electset, tally)
-			}
-			var viable = _findViable(tally,voterModel)
-			
-		} else {
-			// all are viable
-			var viable = district.candidates.map(c => c.id)
-		}
-	} else {
-		var viable = district.preFrontrunnerIds
-	}
-
+	// first, make a list of all the candidates
 	var cans = district.candidates
+	
+	if (district.primaryPollResults && model.stage == "primary") { // primary is here for safety 
 
-	// if we're in a primary, then we should only vote for our parties candidates
-	let isPrimaryVote = model.system == "+Primary" && model.stage == "primary"
-	if (isPrimaryVote){
-		var iMyParty = voterPerson.iParty
-		cans = district.parties[iMyParty].candidates
+		// if we're in a primary 
+		// then consider electability (if there are polls)
+		if (model.doElectabilityPolls) {
+			cans = _bestElectable(model, voterPerson)
+		} else {
+			// otherwise, only consider our party's candidates
+			cans = district.parties[voterPerson.iParty].candidates
+		}
 	}
-	// if we looked at the primary poll results, then we should only pick from the electable set
-	if (considerElectability) {
-		cans = electset
-	}
-	// do we have a strategy for the frontrunners?
-	var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
+
+	// if we have a strategy, then
+	var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && strategy!="normalize")
 	if (checkOnlyFrontrunners) {
-		cans = cans.filter(c => viable.includes(c.id))
+
+		//   consider only viable candidates (if there are polls, 
+		if (district.pollResults && model.autoPoll == "Auto") { // Auto is here for safety
+			var viable = _findViableFromSet(cans, district, voterModel)
+
+		} else if (model.autoPoll == "Manual") {  // manually set viable candidates, if we want to
+			var viable = district.preFrontrunnerIds
+
+		} else { // we're the first to take the polls, so any candidate is viable
+			var viable = cans.map(c => c.id)
+		}
+
+		// but only if there is more than one viable candidate
+		if (viable.length > 1) {
+			cans = viable.map(cid => model.candidatesById[cid])
+		}
 	}
+
 	// Who am I closest to?
 	var closest = _findClosest(model,cans,x,y)
 
@@ -331,6 +307,31 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	return { vote:closest.id };
 
 }
+
+function _bestElectable(model, voterPerson) {
+	let iDistrict = voterPerson.iDistrict
+	let district = model.district[iDistrict]
+
+	// check for defeats against other party's candidates
+	let hh = district.primaryPollResults.head2head  // format hh[win][against] = numwins
+	
+	// What party do we belong to?
+	// Check our group id
+	var iMyParty = voterPerson.iParty
+	var parties = district.parties
+
+	// Which candidates not defeated badly?
+	var electset = _electable(iMyParty,parties,hh)
+
+	// if no candidates are electable
+	if (electset.length == 0) {
+		// find the most electable candidate
+		// the one with the best "worst defeat"
+		var electset = _mostElectable(iMyParty,parties,hh)
+	}
+	return electset
+}
+
 
 function _electable(iMyParty,parties,hh) {
 	// Which candidates are not defeated badly?
@@ -405,7 +406,14 @@ function _findClosest(model,electset,x,y) {
 	return closest
 }
 
-function _electsetTally(electset, tally) {
+function _findViableFromSet(cans, district, voterModel) {
+	let tally = district.pollResults
+	tally = _tallyFromSet(cans, tally)
+	var viable = _findViable(tally,voterModel)
+	return viable
+}
+
+function _tallyFromSet(electset, tally) {
 	let oldtally = tally
 	var tally = {}
 	for (let e of electset) {
@@ -413,6 +421,7 @@ function _electsetTally(electset, tally) {
 	}
 	return tally
 }
+
 
 function _findViable(tally,voterModel) {
 	var factor = voterModel.poll_threshold_factor
