@@ -1552,8 +1552,9 @@ function Arena(arenaName, model) {
 				drawExtraTrash()
 				drawVotes()
 				drawVoters2()
+				drawVoterCenter()
 				drawCandidates()
-				drawVoterCenterAndAnotherYeeObject()
+				drawAnotherYeeObject()
 				drawFlashydude()
 				drawWinners()
 			} else {
@@ -1572,7 +1573,8 @@ function Arena(arenaName, model) {
 				drawVotes()
 				drawVoters2()
 				if (!flashyFirst) drawFlashydude()
-				drawVoterCenterAndAnotherYeeObject()
+				drawVoterCenter()
+				drawAnotherYeeObject()
 			}
 			drawModify()
 			setBorderColor()
@@ -1605,7 +1607,8 @@ function Arena(arenaName, model) {
 		// 	drawCandidates()
 		// }
 		// if (self.id == "arena") {
-		// 	drawVoterCenterAndAnotherYeeObject()
+		// 	drawVoterCenter()
+		// 	drawAnotherYeeObject()
 		// }
 		// if (!(flashydude && flashydude.isCandidate && model.dimensions != "2D")) drawFlashydude()
 
@@ -2004,12 +2007,21 @@ function Arena(arenaName, model) {
 			}
 		}
 		
-		function drawVoterCenterAndAnotherYeeObject() {	
+		function drawVoterCenter() {	
 			var oneVoter = (model.voterGroups.length == 1)
 			// var oneVoter = (model.voterGroups.length == 1 && model.voterGroups[0].points.length == 1)
 			var isCenter = (typeof model.voterCenter !== 'undefined')
 			if (isCenter && ! oneVoter) {
 				model.voterCenter.draw(self.ctx)
+			}
+		}
+		
+		function drawAnotherYeeObject() {
+			var oneVoter = (model.voterGroups.length == 1)
+			// var oneVoter = (model.voterGroups.length == 1 && model.voterGroups[0].points.length == 1)
+			var isCenter = (typeof model.voterCenter !== 'undefined')
+
+			if (isCenter && ! oneVoter) {
 				return
 			}
 
