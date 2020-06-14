@@ -264,8 +264,10 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	//   return
 	// if we're in a general election then consider only viable candidates (if there are polls) 
 
-	// first, make a list of all the candidates
-	var cans = district.candidates
+	// make a list of all the candidates in this stage
+	// if it's a primary, then only consider our party's candidates
+	var cans = district.stages[model.stage].candidates
+
 	
 	if (district.primaryPollResults && model.stage == "primary") { // primary is here for safety 
 
@@ -273,9 +275,6 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 		// then consider electability (if there are polls)
 		if (model.doElectabilityPolls) {
 			cans = _bestElectable(model, voterPerson)
-		} else {
-			// otherwise, only consider our party's candidates
-			cans = district.parties[voterPerson.iParty].candidates
 		}
 	}
 
@@ -2668,6 +2667,11 @@ function VoterSet(model) {
 		var stageInfo = {}
 		stageInfo[model.stage] = {ballot:ballot}
 		_addAttributes(voterPerson.stages, stageInfo)
+	}
+	self.loadDistrictStageBallots = function(district,stage) {
+		for(var voterPerson of district.voterPeople){
+			voterPerson.ballot = voterPerson.stages[stage].ballot
+		}			
 	}
 }
 
