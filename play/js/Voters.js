@@ -387,7 +387,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 
 	var cans = district.candidates
 	// if we're in a primary, then we should only vote for our parties candidates
-	if (model.system == "+Primary" && district.doGeneral == undefined){
+	if (model.system == "+Primary" && model.stage == "primary"){
 		var iMyParty = voterPerson.iParty
 		cans = district.parties[iMyParty].candidates
 	}
@@ -2670,9 +2670,9 @@ function VoterCrowd(model) {
 			voterPerson.ballot = ballot
 		}
 	}
-	self.updateDistrictBallots = function(iDistrict) {
+	self.updateDistrictBallots = function(district) {
 		for(var voterPerson of self.voterPeople){	
-			if (voterPerson.iDistrict == iDistrict) {
+			if (voterPerson.iDistrict == district.i) {
 				var ballot = self.voterModel.castBallot(voterPerson)
 				voterPerson.ballot = ballot
 			}

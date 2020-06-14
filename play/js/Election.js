@@ -12,14 +12,22 @@ Election.score = function(district, model, options){
 
 	_electionDefaults(options)
 	
-	if ( ! options.justCount ) {
-		model.updateBallots()
-	}
-
 	var polltext = ""
-	if ("Auto" == model.autoPoll) {
-		polltext += doPollAndUpdateBallots(district,model,options,"score")
+	
+	if ( ! options.justCount ) {
+			
+		if ("Auto" == model.autoPoll) {
+			polltext += runPoll(district,model,options,"score")
+		}
+
+		model.updateDistrictBallots(district)
+			
+		// if ("Auto" == model.autoPoll) {
+		// 	district.pollResults = undefined // clear polls for next time
+		// }
+		
 	}
+	
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -72,15 +80,22 @@ Election.star = function(district, model, options){
 
 	_electionDefaults(options)
 	
-	if ( ! options.justCount ) {
-		model.updateBallots()
-	}
-
 	var polltext = ""
-	if ("Auto" == model.autoPoll) {
-		polltext += doPollAndUpdateBallots(district,model,options,"score")	
-		district.pollResults = undefined // clear polls for next time
+
+	if ( ! options.justCount ) {
+
+		if ("Auto" == model.autoPoll) {
+			polltext += runPoll(district,model,options,"score")	
+		}
+
+		model.updateDistrictBallots(district)
+
+		if ("Auto" == model.autoPoll) {
+			district.pollResults = undefined // clear polls for next time
+		}
+
 	}
+	
 
 	var maxscore = 5
 
@@ -162,18 +177,24 @@ Election.three21 = function(district, model, options){
 
 	_electionDefaults(options)
 	
-	if ( ! options.justCount ) {
-		model.updateBallots()
-	}
-
-	var ballots = model.voterSet.getBallotsDistrict(district)
-
 	var polltext = ""
-	if ("Auto" == model.autoPoll) {
-		polltext += doPollAndUpdateBallots(district,model,options,"score")	
-		district.pollResults = undefined // clear polls for next time
+
+	if ( ! options.justCount ) {
+
+		if ("Auto" == model.autoPoll) {
+			polltext += runPoll(district,model,options,"score")	
+		}
+
+		model.updateDistrictBallots(district)
+
+		if ("Auto" == model.autoPoll) {
+			district.pollResults = undefined // clear polls for next time
+		}
 	}
 	
+	
+	var ballots = model.voterSet.getBallotsDistrict(district)
+
 	// Tally the approvals & get winner!
 	var tallies = _tallies(district, model, 3);
 
@@ -257,15 +278,21 @@ Election.approval = function(district, model, options){
 
 	_electionDefaults(options)
 	
-	if ( ! options.justCount ) {
-		model.updateBallots()
-	}
-
 	var polltext = ""
-	if ("Auto" == model.autoPoll) {
-		polltext += doPollAndUpdateBallots(district,model,options,"approval")	
-		district.pollResults = undefined // clear polls for next time
+
+	if ( ! options.justCount ) {
+
+		if ("Auto" == model.autoPoll) {
+			polltext += runPoll(district,model,options,"approval")	
+		}
+
+		model.updateDistrictBallots(district)
+
+		if ("Auto" == model.autoPoll) {
+			district.pollResults = undefined // clear polls for next time
+		}
 	}
+	
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -379,7 +406,7 @@ Election.condorcet = function(district, model, options){
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	var text = "";
@@ -528,7 +555,7 @@ Election.schulze = function(district, model, options){ // Pairs of candidates ar
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	var reverseExplanation = true
@@ -939,7 +966,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	var reverseExplanation = true
@@ -1156,7 +1183,7 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 
 	if ( ! (options.justCount || false) ) {
 		if ( ! (options.justCount || false) ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 	}
 
@@ -1385,7 +1412,7 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	if (model.checkRunTextBallots()) {
@@ -1485,7 +1512,7 @@ Election.rrv = function(district, model, options){
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	var numreps = model.seats
@@ -1634,7 +1661,7 @@ Election.rav = function(district, model, options){
 	_electionDefaults(options)
 
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 	
 	var numreps = model.seats
@@ -1785,7 +1812,7 @@ Election.borda = function(district, model, options){
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	// Tally the approvals & get winner!
@@ -1832,18 +1859,26 @@ Election.borda = function(district, model, options){
 Election.irv = function(district, model, options){
 
 	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateBallots()
-	}
 
 	var dopoll = "Auto" == model.autoPoll
 	if (options.dontpoll) dopoll = false
 	var polltext = ""
-	if (dopoll) {
-		polltext += doPollAndUpdateBallots(district,model,options,"irv")	
-		district.pollResults = undefined // clear polls for next time
+	
+	if ( ! options.justCount ) {
+
+		if (dopoll) {
+			polltext += runPoll(district,model,options,"irv")	
+		}
+
+		model.updateDistrictBallots(district)
+
+		if (dopoll) {
+			district.pollResults = undefined // clear polls for next time
+		}
 	}
+	
+	
+
 	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
 	if (drawFlows) {
 		var transfers = []
@@ -2171,7 +2206,7 @@ Election.stv = function(district, model, options){
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	var numreps = model.seats
@@ -2639,7 +2674,7 @@ Election.quotaMinimax = function(district, model, options){
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 
 	var numreps = model.seats
@@ -2993,7 +3028,7 @@ Election.quotaApproval = function(district, model, options){
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 	
 	var v = model.voterSet.getVoterArray()
@@ -3125,7 +3160,7 @@ Election.quotaScore = function(district, model, options){
 	_electionDefaults(options)
 	
 	if ( ! options.justCount ) {
-		model.updateBallots()
+		model.updateDistrictBallots(district)
 	}
 	
 	var v = model.voterSet.getVoterArray()
@@ -3253,15 +3288,22 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 
 	_electionDefaults(options)
 	
+	var polltext = ""
+
 	if ( ! options.justCount ) {
-		model.updateBallots()
+
+		if ("Auto" == model.autoPoll) {
+			polltext += runPoll(district,model,options,"plurality")	
+		}
+
+		model.updateDistrictBallots(district)
+
+		// if ("Auto" == model.autoPoll) {
+		// 	district.pollResults = undefined // clear polls for next time
+		// }
 	}
 
-	var polltext = ""
-	if ("Auto" == model.autoPoll) {
-		polltext += doPollAndUpdateBallots(district,model,options,"plurality")	
-		// district.pollResults = undefined // clear polls for next time
-	}
+
 	// Tally the approvals & get winner!
 	var tally1 = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -3334,12 +3376,14 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 	_electionDefaults(options)
 	
-	if ( ! options.justCount ) {
-		model.updateBallots()
-	}
+	model.stage = "primary"
 
 	// Take polls and vote
-	var polltext = doPrimaryPollAndUpdateBallots(district,model,options,"plurality")
+	var polltext = runPrimaryPoll(district,model,options,"plurality")
+
+	if ( ! options.justCount ) {
+		model.updateDistrictBallots(district)
+	}
 
 	// Look at each voter group and get tallies for all the candidates
 	let ptallies = _tally_primary(district, model, function(tally, ballot){
@@ -3371,9 +3415,9 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.freshPoll = false
 	var tempFreshPrimaryPoll = district.freshPrimaryPoll
 	district.freshPrimaryPoll = false
-	district.doGeneral = true
 
-	model.updateDistrictBallots(district.i);
+	model.stage = "general"
+	model.updateDistrictBallots(district);
 
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -3386,9 +3430,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.pollResults = oldPollResults
 	district.freshPoll = tempFreshPoll
 	district.freshPrimaryPoll = tempFreshPrimaryPoll
-	district.doGeneral = undefined
-	
-	model.updateDistrictBallots(district.i);
+	model.stage = "primary"	
+	model.updateDistrictBallots(district);
 
 	// maybe don't need to do this again, but just to check.
 	ptallies = _tally_primary(district, model, function(tally, ballot){
@@ -3458,9 +3501,22 @@ Election.plurality = function(district, model, options){
 
 	_electionDefaults(options)
 	
+	var polltext = ""
+
 	if ( ! options.justCount ) {
-		model.updateBallots()
+
+		if ("Auto" == model.autoPoll) {
+			polltext += runPoll(district,model,options,"plurality")
+		}
+
+		model.updateDistrictBallots(district)
+
+		if ("Auto" == model.autoPoll) {
+			district.pollResults = undefined // clear polls for next time
+		}
+
 	}
+	
 
 	// if (model.primaries == "Yes"){
 	// 	Election.pluralityWithPrimary(model, options)
@@ -3468,12 +3524,6 @@ Election.plurality = function(district, model, options){
 	// }
 	var result = {}
 	
-	var polltext = ""
-	if ("Auto" == model.autoPoll) {
-		polltext += doPollAndUpdateBallots(district,model,options,"plurality")	
-		district.pollResults = undefined // clear polls for next time
-	}
-
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -3576,7 +3626,7 @@ function head2HeadPoll(district,ballots) {
 	return head2head
 }
 
-var doPollAndUpdateBallots = function(district,model,options,electiontype){
+var runPoll = function(district,model,options,electiontype){
 
 	// check to see if there is a need for checking frontrunners
 
@@ -3615,6 +3665,8 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 	}
 	for (var k=0;k<5;k++) { // do the polling many times
 			
+		// get polling information
+		model.updateDistrictBallots(district);
 
 		// count the votes in the poll
 
@@ -3651,7 +3703,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 			temp1 = district.pollResults // doing a poll without strategy.  not sure if this would work
 			district.pollResults = undefined
 			
-			model.updateDistrictBallots(district.i);
+			model.updateDistrictBallots(district);
 			
 			var ballots = model.voterSet.getBallotsDistrict(district)
 			let head2head = head2HeadPoll(district,ballots)
@@ -3696,10 +3748,6 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 		}
 		// end of one poll
 
-		
-			
-		// update voter decisions based on poll
-		model.updateDistrictBallots(district.i);
 	}		
 	if (electiontype == "irv") polltext += "<br>"
 
@@ -3815,7 +3863,7 @@ function pairwiseTable(district,model,opt) {
 }
 
 
-var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype){
+var runPrimaryPoll = function(district,model,options,electiontype){
 
 	// do head to head polling to find electable candidates
 
@@ -3824,7 +3872,7 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 
 	let numParties = district.parties.length
 	if (! model.doElectabilityPolls || numParties < 2) {
-		return doPollAndUpdateBallots(district,model,options,electiontype)
+		return runPoll(district,model,options,electiontype)
 	}
 
 	district.freshPrimaryPoll = true
@@ -3834,14 +3882,15 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 		polltext += "<b>polling for electable candidates: </b><br>";
 	}
 
-	// voters have already cast plurality ballots
-	// but we need them to cast ranked ballots
+	// ask voters to cast ranked ballots
 	var ballots = []
 	let rankedVM = new VoterModel(model,"Ranked")
 	for (let voterPerson of district.voterPeople) {
 		let ballot = rankedVM.castBallot(voterPerson)
 		ballots.push(ballot)
 	}
+
+	// tally the ranked ballots
 	let head2head = head2HeadPoll(district,ballots)
 	district.primaryPollResults.head2head = head2head
 
@@ -3863,11 +3912,8 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 		polltext += "</span><br>"
 	}
 	
-	// update ballots based on head to head results
-	model.updateDistrictBallots(district.i);
-	
 	// 
-	let polltext2 = doPollAndUpdateBallots(district,model,options,electiontype)
+	let polltext2 = runPoll(district,model,options,electiontype)
 
 	return polltext + polltext2
 }

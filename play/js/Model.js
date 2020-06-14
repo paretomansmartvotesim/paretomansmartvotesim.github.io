@@ -103,6 +103,7 @@ function Model(idModel){
 		devOverrideShowAllFeatures: false,
 		doElectabilityPolls: true,
 		partyRule: 'crowd',
+		stage: "general",
 	})
 	
 	self.viz = new Viz(self);
@@ -366,6 +367,7 @@ function Model(idModel){
 
 	self.doTheElection = function() {
 		
+
 		// for the moment, this works, but ideally there would be separate components of the STV, RRV etc elections for the powerCharts
 		// we make sure that we generate the data now so we have it later.
 		self.optionsForElection.sidebar = self.optionsForElection.sidebar || self.checkGotoTarena()
@@ -375,6 +377,7 @@ function Model(idModel){
 				if (self.district[i].candidates.length == 0) {
 					self.district[i].result = undefined
 				} else {
+					self.stage = "general"
 					self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 					self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
 					self.placeHoldDuringElection = false
@@ -423,6 +426,7 @@ function Model(idModel){
 			
 
 		} else {
+			self.stage = "general"
 			self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 			self.result = self.election(self.district[0], self,self.optionsForElection);
 			self.placeHoldDuringElection = false
@@ -738,13 +742,13 @@ function Model(idModel){
 		
 	}
 
-	self.updateDistrictBallots = function(iDistrict) {
+	self.updateDistrictBallots = function(district) {
 		// for(let voterPerson of self.district[iDistrict].voterPeople){
 		// 	var ballot = self.voterGroups[0].voterModel.castBallot(voterPerson)
 		// 	voterPerson.ballot = ballot
 		// }
 		for(let voterGroup of self.voterGroups){
-			voterGroup.updateDistrictBallots(iDistrict);
+			voterGroup.updateDistrictBallots(district);
 		}
 	}
 	self.updateBallots = function() {
