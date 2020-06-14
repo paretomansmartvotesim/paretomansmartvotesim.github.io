@@ -3375,11 +3375,14 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 Election.pluralityWithPrimary = function(district, model, options){
 
 	_electionDefaults(options)
+
+	var polltext = ""
 	
 	model.stage = "primary"
 
 	// Take polls and vote
-	var polltext = runPrimaryPoll(district,model,options,"plurality")
+	polltext += runPrimaryPoll(district,model,options,"plurality")
+	polltext += runPoll(district,model,options,"plurality")
 
 	if ( ! options.justCount ) {
 		model.updateDistrictBallots(district)
@@ -3419,6 +3422,9 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.freshPrimaryPoll = false
 
 	model.stage = "general"
+	
+	var generalPollText = runPoll(district,model,options,"plurality")
+
 	model.updateDistrictBallots(district);
 
 	var tally = _tally(district,model, function(tally, ballot){
@@ -3476,6 +3482,9 @@ Election.pluralityWithPrimary = function(district, model, options){
 		text += "<br>"
 	}
 	text += "<b>general election:</b><br>";
+	
+	text += generalPollText
+
 	for(var i=0; i<district.candidates.length; i++){
 		var c = district.candidates[i].id;
 		if (pwinners.includes(c)) text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
@@ -3640,7 +3649,7 @@ function head2HeadPoll(district,ballots) {
 	return head2head
 }
 
-var runPoll = function(district,model,options,electiontype){
+function runPoll(district,model,options,electiontype){
 
 	// check to see if there is a need for polling
 
@@ -3849,7 +3858,7 @@ var runPrimaryPoll = function(district,model,options,electiontype){
 
 	let numParties = district.parties.length
 	if (! model.doElectabilityPolls || numParties < 2) {
-		return runPoll(district,model,options,electiontype)
+		return ""
 	}
 
 	district.freshPrimaryPoll = true
@@ -3889,10 +3898,7 @@ var runPrimaryPoll = function(district,model,options,electiontype){
 		polltext += "</span><br>"
 	}
 	
-	// 
-	let polltext2 = runPoll(district,model,options,electiontype)
-
-	return polltext + polltext2
+	return polltext
 }
 
 
