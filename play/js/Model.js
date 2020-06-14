@@ -102,6 +102,7 @@ function Model(idModel){
 		doVoterMapGPU: false,
 		devOverrideShowAllFeatures: false,
 		doElectabilityPolls: true,
+		partyRule: 'crowd',
 	})
 	
 	self.viz = new Viz(self);
@@ -2130,7 +2131,11 @@ function DistrictManager(model) {
 				i: i,
 				parties: [],
 			}
-			var numParties = model.voterGroups.length // for now, the number of votergroups is the number of parties
+			if (model.partyRule == 'leftright') {
+				var numParties = 2
+			} else {
+				var numParties = model.voterGroups.length // for now, the number of votergroups is the number of parties
+			}
 			for ( var j = 0; j < numParties; j++)  { 
 				model.district[i].parties.push({voterPeople:[],candidates:[]})
 			}
@@ -2193,7 +2198,11 @@ function DistrictManager(model) {
 		// put voters into parties
 		for (var i = 0; i < voterPeopleSorted.length; i++) {
 			var voterPerson = voterPeopleSorted[i]
-			let iParty = voterPerson.iGroup
+			if (model.partyRule == 'leftright') {
+				var iParty = ( voterPerson.x > model.size * .5 ) ? 1 : 0
+			} else { // 'crowd'
+				var iParty = voterPerson.iGroup
+			}
 			voterPerson.iParty = iParty  // easy, for now
 			var d = voterPerson.iDistrict
 			model.district[d].parties[iParty].voterPeople.push(voterPerson) // fill district.parties[i].voters with references to voters
@@ -2224,12 +2233,16 @@ function DistrictManager(model) {
 		}
 
 		// put candidate into correct party
-		var min = Infinity
-		for ( var j = 0; j < model.voterGroups.length; j++){
-			var dist2 = distF2(model, model.voterGroups[j], c)
-			if (min > dist2) {
-				min = dist2
-				c.iParty = j
+		if (model.partyRule == 'leftright') {
+			c.iParty = ( c.x > model.size * .5 ) ? 1 : 0
+		} else {
+			var min = Infinity
+			for ( var j = 0; j < model.voterGroups.length; j++){
+				var dist2 = distF2(model, model.voterGroups[j], c)
+				if (min > dist2) {
+					min = dist2
+					c.iParty = j
+				}
 			}
 		}
 	}
@@ -2237,11 +2250,12 @@ function DistrictManager(model) {
 		// fill district[] with info on candidates.
 		// reset
 		for (var i = 0; i < model.nDistricts; i++) {
-			model.district[i].candidates = []
-			model.district[i].candidatesById = {}
-			model.district[i].preFrontrunnerIds = []
-			for ( var j = 0; j < model.voterGroups.length; j++)  {
-				model.district[i].parties[j].candidates = []
+			var district = model.district[i]
+			district.candidates = []
+			district.candidatesById = {}
+			district.preFrontrunnerIds = []
+			for ( var j = 0; j < district.parties.length; j++)  {
+				district.parties[j].candidates = []
 			}
 		}
 		

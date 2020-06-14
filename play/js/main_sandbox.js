@@ -547,6 +547,7 @@ function Config(ui, config, initialConfig) {
         showToolbar: "on",
         rankedVizBoundary: "atWinner",
         doElectabilityPolls: true,
+        partyRule: "crowd",
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -1025,6 +1026,7 @@ function Cypher(ui) {
         71:"showToolbar",
         72:"rankedVizBoundary",
         73:"doElectabilityPolls",
+        74:"partyRule",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3043,6 +3045,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     56: "rankedVizBoundary",
                     57: "showDescription",
                     58: "doElectabilityPolls",
+                    59: "partyRule",
                 },
             }
         ]
@@ -4820,6 +4823,43 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.partyRule = new function () {
+        // where to put the boundary for a candidate's region
+        var self = this
+        self.list = [
+            {name:"crowd",value:"crowd",margin:4},
+            {name:"left-right",value:"leftright",margin:0},
+        ]
+        self.codebook = [ {
+            field: "partyRule",
+            decode: {
+                0:"crowd",
+                1:"leftright",
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.partyRule = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT AND UPDATE
+            model.dm.redistrict()
+            model.update()
+        };
+        self.configure = function() {
+            model.partyRule = config.partyRule
+        }
+        self.choose = new ButtonGroup({
+            label: "How do we register parties?", // Sub Menu
+            width: bw(2),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.partyRule);
+        }
+    }
+
     // helper
     showMenuItemsIf = function(name,condition) {
         if (condition) {
@@ -4888,6 +4928,7 @@ function createMenu(ui) {
             "median_mean",
             "utility_shape",
             "votersAsCandidates",
+            "partyRule",
             "ballotVis",
             "visSingleBallotsOnly",
             "rankedVizBoundary",
@@ -4993,6 +5034,7 @@ function createMenu(ui) {
                     "median_mean",
                     "utility_shape",
                     "votersAsCandidates",
+                    "partyRule",
                 ]],
             ]],
             ["style", [
