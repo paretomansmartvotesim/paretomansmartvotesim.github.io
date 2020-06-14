@@ -3404,8 +3404,10 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 	// Now we vote in the general election.
 	// only do 2 candidates
-	var oldcandidates = district.candidates
-	district.candidates = district.candidates.filter( x => pwinners.includes(x.id)) 
+	_addAttributes( district.stages, {primary: {candidates: district.candidates} })
+	_addAttributes( district.stages, {general: {candidates: district.candidates.filter( x => pwinners.includes(x.id)) } } ) 
+	district.candidates = district.stages["general"].candidates
+
 	// erase polls (not for general election)
 	var oldPrimaryPollResults = district.primaryPollResults
 	district.primaryPollResults = undefined
@@ -3425,7 +3427,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// return original candidates and update voters' ballots 
 	// So we can see who they voted for in the primary.
 	// TODO: make this better.
-	district.candidates = oldcandidates
+	district.candidates = district.stages["primary"].candidates
 	district.primaryPollResults = oldPrimaryPollResults
 	district.pollResults = oldPollResults
 	district.freshPoll = tempFreshPoll
@@ -3496,10 +3498,32 @@ Election.pluralityWithPrimary = function(district, model, options){
 	return result
 }
 
+function _beginElection(district,model,options) {
+	_electionDefaults(options)
+	var polltext = ""
+
+	if ( ! options.justCount ) {
+
+		if ("Auto" == model.autoPoll) {
+			polltext += runPoll(district,model,options,"plurality")
+		}
+
+		model.updateDistrictBallots(district)
+
+	}
+
+}
+
+function _endElection(district,model,options) {
+	if ("Auto" == model.autoPoll) {
+		district.pollResults = undefined // clear polls for next time
+	}
+
+}
 
 Election.plurality = function(district, model, options){
 
-	_electionDefaults(options)
+	_beginElection(district,model,options)
 	
 	var polltext = ""
 
@@ -3534,7 +3558,10 @@ Election.plurality = function(district, model, options){
 	
 	if (model.doTop2) var theTop2 = _sortTally(tally).slice(0,2)
 	if (model.doTop2) result.theTop2 = theTop2
-	if (!options.sidebar) return result
+	if (!options.sidebar) {
+		_endElection(district,model,options)
+		return result
+	}
 
 
 	// Caption
@@ -3592,6 +3619,8 @@ Election.plurality = function(district, model, options){
 		// text = "<b>TIE</b> <br> <br>" + text;
 	}
 	result.text = text;
+	
+	_endElection(district,model,options)
 	return result
 };
 

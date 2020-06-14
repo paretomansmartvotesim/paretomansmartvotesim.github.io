@@ -2640,7 +2640,9 @@ function VoterSet(model) {
 		let ballot = voterPerson.voterModel.castBallot(voterPerson)
 		voterPerson.ballot = ballot
 		// store ballot for current stage
-		_addAttributes(voterPerson.stages[model.stage], {ballot:ballot})
+		var stageInfo = {}
+		stageInfo[model.stage] = {ballot:ballot}
+		_addAttributes(voterPerson.stages, stageInfo)
 	}
 }
 

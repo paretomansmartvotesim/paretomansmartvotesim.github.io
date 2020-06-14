@@ -2170,6 +2170,7 @@ function DistrictManager(model) {
 				candidates: [],
 				i: i,
 				parties: [],
+				stages: {},
 			}
 			if (model.partyRule == 'leftright') {
 				var numParties = 2
