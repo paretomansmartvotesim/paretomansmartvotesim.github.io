@@ -175,7 +175,9 @@ function Model(idModel){
 	}
 	self.onInitModel = function() {} // a hook for a caller
 
-	self.election = function(self,options){};
+	self.election = function(){
+		self.updateBallots()
+	};
 
 	self.initPlugin = function(){  // TO IMPLEMENT FURTHER IN CALLER
 		self.initMODEL() // replace this with more
@@ -253,7 +255,6 @@ function Model(idModel){
 			if (self.doTop2) self.result.theTop2 = selected
 			self.updateBallots()
 		} else {
-			self.updateBallots()
 			self.doTheElection()
 		}
 		

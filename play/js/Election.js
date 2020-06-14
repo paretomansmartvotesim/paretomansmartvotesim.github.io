@@ -10,6 +10,12 @@ var Election = {};
 
 Election.score = function(district, model, options){
 
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
+
 	var polltext = ""
 	if ("Auto" == model.autoPoll) {
 		polltext += doPollAndUpdateBallots(district,model,options,"score")
@@ -63,6 +69,12 @@ Election.score = function(district, model, options){
 };
 
 Election.star = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var polltext = ""
 	if ("Auto" == model.autoPoll) {
@@ -147,6 +159,12 @@ Election.star = function(district, model, options){
 };
 
 Election.three21 = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
@@ -236,6 +254,12 @@ Election.three21 = function(district, model, options){
 };
 
 Election.approval = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var polltext = ""
 	if ("Auto" == model.autoPoll) {
@@ -351,6 +375,12 @@ Election.approval = function(district, model, options){
 // }
 
 Election.condorcet = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var text = "";
 	text += "<span class='small'>";
@@ -494,6 +524,12 @@ Election.condorcet = function(district, model, options){
 
 // PairElimination
 Election.schulze = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var reverseExplanation = true
 
@@ -900,6 +936,12 @@ function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a 
 // PairElimination
 Election.minimax = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
+
 	var reverseExplanation = true
 
 	var text = "";
@@ -1111,6 +1153,12 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 
 // PairElimination
 Election.rankedPairs = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
+
+	if ( ! (options.justCount || false) ) {
+		if ( ! (options.justCount || false) ) {
+		model.updateBallots()
+	}
+	}
 
 	var reverseExplanation = false
 
@@ -1334,6 +1382,12 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 
 Election.rbvote = function(district, model, options){ // Use the RBVote from Rob Legrand
 
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
+
 	if (model.checkRunTextBallots()) {
 		// var filler = {candidates:[]}
 		// result = _check01(filler,model)
@@ -1427,6 +1481,12 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 };
 
 Election.rrv = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var numreps = model.seats
 	var maxscore = 5
@@ -1570,6 +1630,12 @@ Election.rrv = function(district, model, options){
 };
 
 Election.rav = function(district, model, options){
+
+	_electionDefaults(options)
+
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 	
 	var numreps = model.seats
 	var maxscore = 1
@@ -1716,6 +1782,12 @@ Election.rav = function(district, model, options){
 
 Election.borda = function(district, model, options){
 
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
+
 	// Tally the approvals & get winner!
 	var numcan = district.candidates.length
 	var tally = _tally(district,model, function(tally, ballot){
@@ -1758,6 +1830,12 @@ Election.borda = function(district, model, options){
 };
 
 Election.irv = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var dopoll = "Auto" == model.autoPoll
 	if (options.dontpoll) dopoll = false
@@ -2089,6 +2167,12 @@ Election.irv = function(district, model, options){
 };
 
 Election.stv = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var numreps = model.seats
 	
@@ -2552,6 +2636,12 @@ Election.stv = function(district, model, options){
 
 Election.quotaMinimax = function(district, model, options){
 
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
+
 	var numreps = model.seats
 
 	var pairEventsToAssign = []
@@ -2628,6 +2718,7 @@ Election.quotaMinimax = function(district, model, options){
 		tempOptions.ballotweight = ballotweight
 		tempOptions.round = roundNum
 		tempOptions.pastwinners = winnerslist
+		tempOptions.justCount = true
 		var roundResult = Election.minimax(district, model,tempOptions)
 
 
@@ -2898,6 +2989,12 @@ Election.quotaMinimax = function(district, model, options){
 };
 
 Election.quotaApproval = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 	
 	var v = model.voterSet.getVoterArray()
 
@@ -3024,6 +3121,12 @@ Election.quotaApproval = function(district, model, options){
 }
 
 Election.quotaScore = function(district, model, options){
+
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 	
 	var v = model.voterSet.getVoterArray()
 
@@ -3148,7 +3251,11 @@ Election.quotaScore = function(district, model, options){
 
 Election.toptwo = function(district, model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 
-	options = options || {};
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	var polltext = ""
 	if ("Auto" == model.autoPoll) {
@@ -3224,9 +3331,12 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 };
 
 Election.pluralityWithPrimary = function(district, model, options){
-	options = options || {};
 
-	// Voters used regular FPTP to vote
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
 
 	// Take polls and vote
 	var polltext = doPrimaryPollAndUpdateBallots(district,model,options,"plurality")
@@ -3346,13 +3456,17 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 Election.plurality = function(district, model, options){
 
+	_electionDefaults(options)
+	
+	if ( ! options.justCount ) {
+		model.updateBallots()
+	}
+
 	// if (model.primaries == "Yes"){
 	// 	Election.pluralityWithPrimary(model, options)
 	// 	return
 	// }
-	options = options || {};
 	var result = {}
-
 	
 	var polltext = ""
 	if ("Auto" == model.autoPoll) {
@@ -3433,6 +3547,12 @@ Election.plurality = function(district, model, options){
 
 
 // HELPERS:
+
+function _electionDefaults(options) {
+	_fillInDefaults(options, {
+		justCount: false,
+	})
+}
 
 function head2HeadPoll(district,ballots) {
 	head2head = {}
@@ -3523,7 +3643,7 @@ var doPollAndUpdateBallots = function(district,model,options,electiontype){
 				tally[first]++;
 			});
 
-			var options2 = {dontpoll:true, sidebar:true}
+			var options2 = {dontpoll:true, sidebar:true, justCount:true}
 			var result = Election.irv(district,model,options2) // do an IRV election to find out who wins
 			var winners = result.winners
 
