@@ -3619,7 +3619,7 @@ Election.plurality = function(district, model, options){
 		// text = "<b>TIE</b> <br> <br>" + text;
 	}
 	result.text = text;
-	
+
 	_endElection(district,model,options)
 	return result
 };
@@ -3657,41 +3657,26 @@ function head2HeadPoll(district,ballots) {
 
 var runPoll = function(district,model,options,electiontype){
 
-	// check to see if there is a need for checking frontrunners
-
-	var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
-	var skipthis =  true
-	for(var i=0;i<model.voterGroups.length;i++){ // someone is looking at frontrunners, then don't skipthis
-		if (! not_f.includes(model.firstStrategy) && model.voterGroups[0].percentSecondStrategy != 100) skipthis = false
-		if (! not_f.includes(model.voterGroups[i].secondStrategy) && model.voterGroups[0].percentSecondStrategy != 0) skipthis = false
-	}   //not_f.includes(config.firstStrategy) && not_f.includes(config.secondStrategy)
-	if (skipthis) return ""
-
-	district.freshPoll = true // we can use these poll results
-
-	// just sets the frontrunners and reruns the ballots, then sets the frontrunners back to normal, but keeps the altered ballots.
+	// check to see if there is a need for polling
+	
+	if ( ! model.checkRunPoll ) return ""
 
 	polltext = ""
 
-	var oldway = false
-	var oldway2 = false
-	if (oldway2) {
-		var oldkeep = model.preFrontrunnerIds // only a temporary change
-		model.preFrontrunnerIds = []
-		model.dm.districtsListCandidates()
-	}
 
 	if (options.sidebar) {
 		polltext += '<span class="small" >'
 		if (electiontype=="irv") {
 			polltext += "A low-risk strategy in IRV is to look at who wins and make a compromise if you're not winning.  Voters look down their ballot and pick the first one that defeats the current winner head to head. <br> <br>"
-			polltext += "<b>Polling first preferences: </b></br>"
+			polltext += "Reporting results is done with both head-to-head and instant runoff tallies."
+			polltext += "<b>Here are polls for first preferences: </b></br>"
 			// this strategy could be further refined by voting for people who will be eliminated but who we like better
 		} else {
 			polltext += "<b>polling for viable candidates: </b><br>";
 			//polltext += "<b>(score > " + (100*threshold/district.voterPeople.length).toFixed(0) + " = half max)</b><br>"
 		}
 	}
+
 	for (var k=0;k<5;k++) { // do the polling many times
 			
 		// get polling information
@@ -3744,23 +3729,6 @@ var runPoll = function(district,model,options,electiontype){
 		
 		district.pollResults = tally
 
-		// decide who the frontrunners are
-		if (oldway) { // 0 - let the voters have individual thresholds
-			var factor = .5
-			var max1 = 0
-			for (var can in tally) {
-				if (tally[can] > max1) max1 = tally[can]
-			}
-			var threshold = max1 * factor
-			var viable = []
-			for (var can in tally) {
-				if (tally[can] > threshold) viable.push(can)
-			}
-
-			model.preFrontrunnerIds = viable 
-			model.dm.districtsListCandidates()
-		}
-
 		if(options.sidebar) {
 			
 			for(var i=0; i<district.candidates.length; i++){
@@ -3784,11 +3752,6 @@ var runPoll = function(district,model,options,electiontype){
 		polltext += "</span><br>"
 		// model.draw() // not sure why this was here
 	}
-	if (oldway2) {
-		model.preFrontrunnerIds = oldkeep // something interesting happens when you turn this off.
-		model.dm.districtsListCandidates()
-	}
-
 	return polltext
 }
 

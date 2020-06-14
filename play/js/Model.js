@@ -707,6 +707,16 @@ function Model(idModel){
 	self.checkRunTextBallots = function() {
 		return self.system == "RBVote" && self.doTextBallots
 	}
+
+	self.checkRunPoll = function() {
+		var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+		var skipthis =  true
+		for(var i=0;i<self.voterGroups.length;i++){ // someone is looking at frontrunners, then don't skipthis
+			if (! not_f.includes(self.firstStrategy) && self.voterGroups[0].percentSecondStrategy != 100) skipthis = false
+			if (! not_f.includes(self.voterGroups[i].secondStrategy) && self.voterGroups[0].percentSecondStrategy != 0) skipthis = false
+		}   //not_f.includes(config.firstStrategy) && not_f.includes(config.secondStrategy)
+		return ! skipthis
+	}
 		
 
 	self.updateVC = function() {
