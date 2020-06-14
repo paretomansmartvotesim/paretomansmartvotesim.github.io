@@ -268,19 +268,19 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 		
 		// What party do we belong to?
 		// Check our group id
-		var iMyParty = voterPerson.iGroup
-		var parties = district.partyCandidates
+		var iMyParty = voterPerson.iParty
+		var parties = district.parties
 		var myParty = parties[iMyParty]
 
 
 		// Which candidates are defeated badly?
 		var electset = []
-		for (let a of myParty) {
+		for (let a of myParty.candidates) {
 			let electable = true
 			for (let i = 0; i < parties.length; i++) {
 				if (iMyParty !== i) {
 					let party = parties[i]
-					for (let b of party) {
+					for (let b of party.candidates) {
 						// check how badly we are defeated
 						let howbad = hh[b.id][a.id] / hh[a.id][b.id]
 
@@ -303,12 +303,12 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			// the one with the best "worst defeat"
 			let mostelectable = {id:null};
 			let leastbad = Infinity;
-			for (let a of myParty) {
+			for (let a of myParty.candidates) {
 				let worstdefeat = 0
 				for (let i = 0; i < parties.length; i++) {
 					if (iMyParty !== i) {
 						let party = parties[i]
-						for (let b of party) {
+						for (let b of party.candidates) {
 							let howbad = hh[b.id][a.id] / hh[a.id][b.id]
 							// also, find the most electable
 							if (worstdefeat < howbad) { 
@@ -388,8 +388,8 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	var cans = district.candidates
 	// if we're in a primary, then we should only vote for our parties candidates
 	if (model.system == "+Primary" && district.doGeneral == undefined){
-		var iMyParty = voterPerson.iGroup
-		cans = district.partyCandidates[iMyParty]
+		var iMyParty = voterPerson.iParty
+		cans = district.parties[iMyParty].candidates
 	}
 	// if we looked at the primary poll results, then we should only pick from the electable set
 	if (district.primaryPollResults && model.doElectabilityPolls) {
@@ -2441,6 +2441,7 @@ function VoterPerson(model,voterModel) {
 		iGroup: undefined,
 		iAll: undefined,
 		iDistrict: undefined,
+		iParty: undefined,
 		ballot: undefined,
 		weight: undefined,
 		// ballotType: voterModel.type,
@@ -2506,6 +2507,16 @@ function VoterSet(model) {
 			}
 		}
 		return ballots;
+	}
+	self.getBallotsPartyAndDistrict = function(iParty,district) {
+		var ballots = [];
+		var voterPeople = district.parties[iParty].voterPeople
+		for(var i=0; i<voterPeople.length; i++){
+			var voterPerson = voterPeople[i]
+			var b = voterPerson.ballot
+			ballots.push(b)
+		}
+		return ballots
 	}
 	self.getBallotsCrowd = function(iCrowd) {
 		var voterPeople = model.voterGroups[iCrowd].voterPeople

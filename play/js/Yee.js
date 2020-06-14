@@ -373,6 +373,12 @@ function Yee(model) {
 					model.voterGroups[j].y = voterso[j].y + changecenter.y
 				}
 			}
+			if (model.yeeobject.isVoter) {
+				model.dm.redistrict()
+			}
+			if (model.yeeobject.isCandidate) {
+				model.dm.redistrictCandidates()
+			}
 			
 			for(var j=0; j<model.voterGroups.length; j++){
 				model.voterGroups[j].update();

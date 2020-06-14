@@ -2127,7 +2127,12 @@ function DistrictManager(model) {
 			model.district[i] = {
 				voterPeople: [],
 				candidates: [],
-				i: i
+				i: i,
+				parties: [],
+			}
+			var numParties = model.voterGroups.length // for now, the number of votergroups is the number of parties
+			for ( var j = 0; j < numParties; j++)  { 
+				model.district[i].parties.push({voterPeople:[],candidates:[]})
 			}
 		}
 
@@ -2185,6 +2190,15 @@ function DistrictManager(model) {
 			}
 		}
 
+		// put voters into parties
+		for (var i = 0; i < voterPeopleSorted.length; i++) {
+			var voterPerson = voterPeopleSorted[i]
+			let iParty = voterPerson.iGroup
+			voterPerson.iParty = iParty  // easy, for now
+			var d = voterPerson.iDistrict
+			model.district[d].parties[iParty].voterPeople.push(voterPerson) // fill district.parties[i].voters with references to voters
+		}
+
 		self.redistrictCandidates()
 	}
 
@@ -2226,9 +2240,8 @@ function DistrictManager(model) {
 			model.district[i].candidates = []
 			model.district[i].candidatesById = {}
 			model.district[i].preFrontrunnerIds = []
-			model.district[i].partyCandidates = []
 			for ( var j = 0; j < model.voterGroups.length; j++)  {
-				model.district[i].partyCandidates.push([])
+				model.district[i].parties[j].candidates = []
 			}
 		}
 		
@@ -2246,10 +2259,10 @@ function DistrictManager(model) {
 			model.district[c.iDistrict].preFrontrunnerIds.push(cid)
 		}
 
-		// assign candidates to district partyCandidates
+		// assign candidates to district party candidates
 		for(var i=0; i<model.candidates.length; i++){
 			var c = model.candidates[i]
-			model.district[c.iDistrict].partyCandidates[c.iParty].push(c)
+			model.district[c.iDistrict].parties[c.iParty].candidates.push(c)
 		}
 
 	}

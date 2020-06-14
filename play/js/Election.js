@@ -3305,14 +3305,14 @@ Election.pluralityWithPrimary = function(district, model, options){
 	text += "<span class='small'>";
 	for (let i in ptallies) {
 		var tally1 = ptallies[i]
-		let totalPeopleInPrimary = district.voterPeople.filter(x => x.iGroup == i).length
+		let totalPeopleInPrimary = district.parties[i].voterPeople.length
 		var ip1 = i*1+1
 		text += "<b>primary for group " + ip1 + ":</b><br>";
 		var pwin = _countWinner(tally1)
 		for(let k=0; k<district.candidates.length; k++){
 			let c = district.candidates[k]
 			let cid = c.id
-			if (district.partyCandidates[i].includes(c)) {
+			if (district.parties[i].candidates.includes(c)) {
 				text += model.icon(cid)+" got "+_primaryPercentFormat(tally1[cid], totalPeopleInPrimary);
 				if (pwin.includes(cid)) text += " &larr;"
 				text += "<br>"
@@ -3614,8 +3614,8 @@ function cellText(model,opt,hh,a,b) {
 
 function strategyTable(district,model,opt) {
 
-	let a = district.partyCandidates[0]
-	let b = district.partyCandidates[1]
+	let a = district.parties[0].candidates
+	let b = district.parties[1].candidates
 	let text = ""
 	let header = `
 	<table class="strategyTable">
@@ -3702,7 +3702,7 @@ var doPrimaryPollAndUpdateBallots = function(district,model,options,electiontype
 	let polltext = ""
 	district.primaryPollResults = {}
 
-	let numParties = district.partyCandidates.length
+	let numParties = district.parties.length
 	if (! model.doElectabilityPolls || numParties < 2) {
 		return doPollAndUpdateBallots(district,model,options,electiontype)
 	}
@@ -3778,44 +3778,17 @@ var _tally = function(district, model, tallyFunc){
 
 }
 
-var _assign_parties = function(district, model){
-
-	let caninprimary = []
-	for ( var j = 0; j < model.voterGroups.length; j++){
-		caninprimary.push([])
-	}
-	
-	for (var c in district.candidates){
-		var can = district.candidates[c]
-		var maxdist2 = Infinity
-		var votebelong = 0
-		for ( var j = 0; j < model.voterGroups.length; j++){
-			var dist2 = distF2(model, model.voterGroups[j], can)
-			// var dx = model.voterGroups[j].x - can.x
-			// var dy = model.voterGroups[j].y - can.y
-			// var dist2 = dx*dx + dy*dy
-			if (dist2 < maxdist2) {
-				votebelong = j
-				maxdist2 = dist2
-			}
-		}
-		caninprimary[votebelong].push(district.candidates[c])
-	}
-	return caninprimary
-}
-
 var _tally_primary = function(district, model, tallyFunc){
 
 	var primaries_tallies = []
 	// look at only the candidates in the party
 
-
-	for ( var j = 0; j < model.voterGroups.length; j++){
-		
-		let ballots = model.voterSet.getBallotsCrowdAndDistrict(j,district)
-		
+	var numParties = district.parties.length
+	for ( var j = 0; j < numParties; j++){
+		let ballots = model.voterSet.getBallotsPartyAndDistrict(j,district)
 		var tally = {}
-		for (let c of district.candidates) {
+		var candidates = district.parties[j].candidates
+		for (let c of candidates) {
 			tally[c.id] = 0
 		}
 		for(let ballot of ballots){
@@ -3825,7 +3798,6 @@ var _tally_primary = function(district, model, tallyFunc){
 	}
 	return primaries_tallies
 }
-
 
 var _tally_i = function(district, model, tallyFunc){
 
