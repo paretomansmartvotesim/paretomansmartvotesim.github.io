@@ -2445,7 +2445,8 @@ function VoterPerson(model,voterModel) {
 		ballot: undefined,
 		weight: undefined,
 		// ballotType: voterModel.type,
-		// voterModel: voterModel, // will set later in bulk
+		voterModel: voterModel,
+		stages: {},
 	})
 }
 
@@ -2612,6 +2613,35 @@ function VoterSet(model) {
 		}
 		return s
 	}
+
+	self.updateBallots = function() {
+		for (var voterGroup of model.voterGroups) {
+			self.updateCrowdBallots(voterGroup)
+		}
+	}
+	self.updateCrowdBallots = function(crowd) {
+		for(var voterPerson of crowd.voterPeople){
+			self.updatePersonBallot(voterPerson)
+		}
+	}
+	self.updateCrowdDistrictBallots = function(crowd,district) {
+		for(var voterPerson of crowd.voterPeople){
+			if (voterPerson.iDistrict == district.i) {
+				self.updatePersonBallot(voterPerson)
+			}
+		}
+	}
+	self.updateDistrictBallots = function(district) {
+		for(var voterPerson of district.voterPeople){
+			self.updatePersonBallot(voterPerson)
+		}
+	}
+	self.updatePersonBallot = function(voterPerson) {
+		let ballot = voterPerson.voterModel.castBallot(voterPerson)
+		voterPerson.ballot = ballot
+		// store ballot for current stage
+		_addAttributes(voterPerson.stages[model.stage], {ballot:ballot})
+	}
 }
 
 function VoterCrowd(model) {
@@ -2665,18 +2695,10 @@ function VoterCrowd(model) {
 		}
 	}
 	self.updateBallots = function() {
-		for(var voterPerson of self.voterPeople){	
-			var ballot = self.voterModel.castBallot(voterPerson)
-			voterPerson.ballot = ballot
-		}
+		model.voterSet.updateCrowdBallots(self)
 	}
 	self.updateDistrictBallots = function(district) {
-		for(var voterPerson of self.voterPeople){	
-			if (voterPerson.iDistrict == district.i) {
-				var ballot = self.voterModel.castBallot(voterPerson)
-				voterPerson.ballot = ballot
-			}
-		}
+		model.voterSet.updateCrowdDistrictBallots(self,district)
 	}
 }
 

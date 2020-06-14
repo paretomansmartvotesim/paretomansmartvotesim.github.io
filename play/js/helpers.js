@@ -91,7 +91,7 @@ function _copyAttributes(to,from) {
 function _addAttributes(to,from) {
 	// create copy of 'from'
 	from = from || {}
-	to = to || {} // maybe don't need this line?
+	to = to || {}
 	for (var name in from) {
 		to[name] = from[name];
 	}

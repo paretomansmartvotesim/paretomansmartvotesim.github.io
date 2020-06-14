@@ -743,18 +743,10 @@ function Model(idModel){
 	}
 
 	self.updateDistrictBallots = function(district) {
-		// for(let voterPerson of self.district[iDistrict].voterPeople){
-		// 	var ballot = self.voterGroups[0].voterModel.castBallot(voterPerson)
-		// 	voterPerson.ballot = ballot
-		// }
-		for(let voterGroup of self.voterGroups){
-			voterGroup.updateDistrictBallots(district);
-		}
+		self.voterSet.updateDistrictBallots(district)
 	}
 	self.updateBallots = function() {
-		for(let voterGroup of self.voterGroups){
-			voterGroup.updateBallots();
-		}
+		self.voterSet.updateBallots()
 	}
 };
 
