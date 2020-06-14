@@ -256,8 +256,6 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
 	let district = model.district[iDistrict]
-	
-	// return function(x, y, strategy, iDistrict, i){
 
 	// check primary polls for electable candidates
 	var considerElectability = model.system == "+Primary" && district.primaryPollResults && model.doElectabilityPolls
@@ -271,10 +269,8 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 		var iMyParty = voterPerson.iParty
 		var parties = district.parties
 
-
 		// Which candidates not defeated badly?
 		var electset = _electable(iMyParty,parties,hh)
-
 
 		// if no candidates are electable
 		if (electset.length == 0) {
@@ -282,7 +278,6 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			// the one with the best "worst defeat"
 			var electset = _mostElectable(iMyParty,parties,hh)
 		}
-
 		// has there been an inside-party poll?
 		var noStrategyWithinParty = district.pollResults === undefined
 		if (noStrategyWithinParty) {
@@ -298,7 +293,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 			let tally = district.pollResults
 	
 			// are we casting a ballot in a primary?
-			if (district.primaryPollResults && model.doElectabilityPolls) {
+			if (considerElectability) {
 				// reduce tally to just those candidates in my primary who are electable
 				tally = _electsetTally(electset, tally)
 			}
@@ -311,28 +306,25 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	} else {
 		var viable = district.preFrontrunnerIds
 	}
-	// Who am I closest to? Use their fill
-	var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
-	
-	
-	var closest = {id:null};
-	var closestDistance = Infinity;
 
 	var cans = district.candidates
+
 	// if we're in a primary, then we should only vote for our parties candidates
-	if (model.system == "+Primary" && model.stage == "primary"){
+	let isPrimaryVote = model.system == "+Primary" && model.stage == "primary"
+	if (isPrimaryVote){
 		var iMyParty = voterPerson.iParty
 		cans = district.parties[iMyParty].candidates
 	}
 	// if we looked at the primary poll results, then we should only pick from the electable set
-	if (district.primaryPollResults && model.doElectabilityPolls) {
+	if (considerElectability) {
 		cans = electset
 	}
-
+	// do we have a strategy for the frontrunners?
+	var checkOnlyFrontrunners = (strategy!="zero strategy. judge on an absolute scale." && viable.length > 1 && strategy!="normalize")
 	if (checkOnlyFrontrunners) {
 		cans = cans.filter(c => viable.includes(c.id))
 	}
-
+	// Who am I closest to?
 	var closest = _findClosest(model,cans,x,y)
 
 	// Vote for the CLOSEST
