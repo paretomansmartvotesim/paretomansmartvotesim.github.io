@@ -2469,7 +2469,7 @@ function VoterPerson(model,voterModel) {
 		ballot: undefined,
 		weight: undefined,
 		// ballotType: voterModel.type,
-		voterModel: voterModel,
+		// voterModel: voterModel,
 		stages: {},
 	})
 }
@@ -2661,7 +2661,8 @@ function VoterSet(model) {
 		}
 	}
 	self.updatePersonBallot = function(voterPerson) {
-		let ballot = voterPerson.voterModel.castBallot(voterPerson)
+		var voterModel = model.voterGroups[voterPerson.iGroup].voterModel
+		var ballot = voterModel.castBallot(voterPerson)
 		voterPerson.ballot = ballot
 		// store ballot for current stage
 		var stageInfo = {}
