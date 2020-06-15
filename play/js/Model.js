@@ -1747,7 +1747,7 @@ function Arena(arenaName, model) {
 				}
 				if (go) { // use transparency to draw candidate
 					temp = ctx.globalAlpha
-					ctx.globalAlpha = .3
+					ctx.globalAlpha = (model.theme == "Letters") ? .8 : .4
 					c.draw(ctx,self);
 					ctx.globalAlpha = temp
 				} else {

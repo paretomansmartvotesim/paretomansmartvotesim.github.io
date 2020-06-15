@@ -1445,7 +1445,7 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson) {
 	if (model.drawSliceMethod == "barChart") {
 		if (model.system == "Borda") {
 			_drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices,n);
-		} else if (model.system == "IRV") {
+		} else if (model.system == "IRV" || model.system == "STV") {
 			if (model.squareFirstChoice) {
 				_drawIRVStack(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
 			} else {
