@@ -10,24 +10,7 @@ var Election = {};
 
 Election.score = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	var polltext = ""
-	
-	if ( ! options.justCount ) {
-			
-		if ("Auto" == model.autoPoll) {
-			polltext += runPoll(district,model,options,"score")
-		}
-
-		model.updateDistrictBallots(district)
-			
-		// if ("Auto" == model.autoPoll) {
-		// 	district.pollResults = undefined // clear polls for next time
-		// }
-		
-	}
-	
+	var polltext = _beginElection(district,model,options,"score")	
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -78,25 +61,8 @@ Election.score = function(district, model, options){
 
 Election.star = function(district, model, options){
 
-	_electionDefaults(options)
+	var polltext = _beginElection(district,model,options,"score")	
 	
-	var polltext = ""
-
-	if ( ! options.justCount ) {
-
-		if ("Auto" == model.autoPoll) {
-			polltext += runPoll(district,model,options,"score")	
-		}
-
-		model.updateDistrictBallots(district)
-
-		if ("Auto" == model.autoPoll) {
-			district.pollResults = undefined // clear polls for next time
-		}
-
-	}
-	
-
 	var maxscore = 5
 
 	// Tally the approvals & get winner!
@@ -175,23 +141,7 @@ Election.star = function(district, model, options){
 
 Election.three21 = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	var polltext = ""
-
-	if ( ! options.justCount ) {
-
-		if ("Auto" == model.autoPoll) {
-			polltext += runPoll(district,model,options,"score")	
-		}
-
-		model.updateDistrictBallots(district)
-
-		if ("Auto" == model.autoPoll) {
-			district.pollResults = undefined // clear polls for next time
-		}
-	}
-	
+	var polltext = _beginElection(district,model,options,"score")		
 	
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
@@ -276,23 +226,7 @@ Election.three21 = function(district, model, options){
 
 Election.approval = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	var polltext = ""
-
-	if ( ! options.justCount ) {
-
-		if ("Auto" == model.autoPoll) {
-			polltext += runPoll(district,model,options,"approval")	
-		}
-
-		model.updateDistrictBallots(district)
-
-		if ("Auto" == model.autoPoll) {
-			district.pollResults = undefined // clear polls for next time
-		}
-	}
-	
+	var polltext = _beginElection(district,model,options,"approval")	
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -403,11 +337,7 @@ Election.approval = function(district, model, options){
 
 Election.condorcet = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var text = "";
 	text += "<span class='small'>";
@@ -552,11 +482,7 @@ Election.condorcet = function(district, model, options){
 // PairElimination
 Election.schulze = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var reverseExplanation = true
 
@@ -963,11 +889,7 @@ function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a 
 // PairElimination
 Election.minimax = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var reverseExplanation = true
 
@@ -1181,11 +1103,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 // PairElimination
 Election.rankedPairs = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
-	if ( ! (options.justCount || false) ) {
-		if ( ! (options.justCount || false) ) {
-		model.updateDistrictBallots(district)
-	}
-	}
+	_beginElection(district,model,options,"nopoll")	
 
 	var reverseExplanation = false
 
@@ -1409,11 +1327,7 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 
 Election.rbvote = function(district, model, options){ // Use the RBVote from Rob Legrand
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	if (model.checkRunTextBallots()) {
 		// var filler = {candidates:[]}
@@ -1509,11 +1423,7 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 
 Election.rrv = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var numreps = model.seats
 	var maxscore = 5
@@ -1658,11 +1568,7 @@ Election.rrv = function(district, model, options){
 
 Election.rav = function(district, model, options){
 
-	_electionDefaults(options)
-
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 	
 	var numreps = model.seats
 	var maxscore = 1
@@ -1809,11 +1715,7 @@ Election.rav = function(district, model, options){
 
 Election.borda = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	// Tally the approvals & get winner!
 	var numcan = district.candidates.length
@@ -1858,26 +1760,7 @@ Election.borda = function(district, model, options){
 
 Election.irv = function(district, model, options){
 
-	_electionDefaults(options)
-
-	var dopoll = "Auto" == model.autoPoll
-	if (options.dontpoll) dopoll = false
-	var polltext = ""
-	
-	if ( ! options.justCount ) {
-
-		if (dopoll) {
-			polltext += runPoll(district,model,options,"irv")	
-		}
-
-		model.updateDistrictBallots(district)
-
-		if (dopoll) {
-			district.pollResults = undefined // clear polls for next time
-		}
-	}
-	
-	
+	var polltext = _beginElection(district,model,options,"irv")	
 
 	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
 	if (drawFlows) {
@@ -1893,7 +1776,7 @@ Election.irv = function(district, model, options){
 	var text = "";
 	if (options.sidebar) text += "<span class='small'>";
 
-	if (dopoll) text += polltext;
+	text += polltext;
 	var resolved = null;
 	var roundNum = 1;
 
@@ -2204,11 +2087,7 @@ Election.irv = function(district, model, options){
 
 Election.stv = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var numreps = model.seats
 	
@@ -2672,11 +2551,7 @@ Election.stv = function(district, model, options){
 
 Election.quotaMinimax = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var numreps = model.seats
 
@@ -3026,11 +2901,7 @@ Election.quotaMinimax = function(district, model, options){
 
 Election.quotaApproval = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 	
 	var v = model.voterSet.getVoterArray()
 
@@ -3158,11 +3029,7 @@ Election.quotaApproval = function(district, model, options){
 
 Election.quotaScore = function(district, model, options){
 
-	_electionDefaults(options)
-	
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
+	var polltext = _beginElection(district,model,options,"nopoll")	
 	
 	var v = model.voterSet.getVoterArray()
 
@@ -3287,23 +3154,7 @@ Election.quotaScore = function(district, model, options){
 
 Election.toptwo = function(district, model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 
-	_electionDefaults(options)
-	
-	var polltext = ""
-
-	if ( ! options.justCount ) {
-
-		if ("Auto" == model.autoPoll) {
-			polltext += runPoll(district,model,options,"plurality")	
-		}
-
-		model.updateDistrictBallots(district)
-
-		// if ("Auto" == model.autoPoll) {
-		// 	district.pollResults = undefined // clear polls for next time
-		// }
-	}
-
+	var polltext = _beginElection(district,model,options,"plurality")	
 
 	// Tally the approvals & get winner!
 	var tally1 = _tally(district,model, function(tally, ballot){
@@ -3383,7 +3234,9 @@ Election.pluralityWithPrimary = function(district, model, options){
 	district.stages["primary"] = {candidates: district.candidates}
 
 	// Take polls and vote
+	district.primaryPollResults = undefined
 	polltext += runPrimaryPoll(district,model,options,"plurality")
+	district.pollResults = undefined
 	polltext += runPoll(district,model,options,"plurality")
 
 	if ( ! options.justCount ) {
@@ -3407,11 +3260,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 	model.stage = "general"
 	district.stages["general"] = {candidates: district.candidates.filter( x => pwinners.includes(x.id)) }
 
-	// erase polls (not for general election)
-	district.primaryPollResults = undefined
+	// fresh polls for general election
 	district.pollResults = undefined
-
-	
 	var generalPollText = runPoll(district,model,options,"plurality")
 
 	model.updateDistrictBallots(district);
@@ -3489,12 +3339,15 @@ Election.pluralityWithPrimary = function(district, model, options){
 }
 
 function _beginElection(district,model,options,polltype) {
+
 	_electionDefaults(options)
+
 	var polltext = ""
 
 	if ( ! options.justCount ) {
 
-		if ("Auto" == model.autoPoll) {
+		if ("Auto" == model.autoPoll && ! options.dontpoll && polltype !== "nopoll") {
+			district.pollResults = undefined 
 			polltext += runPoll(district,model,options,polltype)
 		}
 
@@ -3506,9 +3359,6 @@ function _beginElection(district,model,options,polltype) {
 }
 
 function _endElection(district,model,options) {
-	if ("Auto" == model.autoPoll) {
-		district.pollResults = undefined // clear polls for next time
-	}
 
 }
 
@@ -3605,6 +3455,7 @@ Election.plurality = function(district, model, options){
 function _electionDefaults(options) {
 	_fillInDefaults(options, {
 		justCount: false,
+		dontpoll: false,
 	})
 }
 
