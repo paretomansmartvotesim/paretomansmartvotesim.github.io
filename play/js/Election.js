@@ -3341,6 +3341,9 @@ Election.pluralityWithPrimary = function(district, model, options){
 function _beginElection(district,model,options,polltype) {
 
 	_electionDefaults(options)
+	
+	district.stages = {}
+	district.stages["general"] = {candidates: district.candidates }
 
 	var polltext = ""
 
@@ -3605,6 +3608,9 @@ function runPoll(district,model,options,electiontype){
 
 	}
 
+	// not yet needed
+	district.stages[model.stage].pollResults = district.pollResults
+
 	if (options.sidebar) {
 		if (model.stage == "primary") {
 			for (let i in collectTallies[0]) {	
@@ -3767,6 +3773,8 @@ var runPrimaryPoll = function(district,model,options,electiontype){
 	let head2head = head2HeadPoll(model,district,ballots)
 	district.primaryPollResults.head2head = head2head
 
+	// not yet needed
+	district.stages[model.stage].primaryPollResults = district.primaryPollResults
 
 	// display results
 	if(options.sidebar) {

@@ -2313,7 +2313,7 @@ function DistrictManager(model) {
 			model.district[c.iDistrict].candidatesById[c.id] = c
 		}
 
-		
+		// this can be removed, but I'm not sure of the affects
 		for (let district of model.district) {
 			district.stages["general"] = {candidates: district.candidates}
 		}

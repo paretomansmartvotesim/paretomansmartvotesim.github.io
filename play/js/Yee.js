@@ -384,7 +384,7 @@ function Yee(model) {
 			}
 			
 			for(var j=0; j<model.voterGroups.length; j++){
-				model.voterGroups[j].update();
+				model.voterGroups[j].updatePeople();
 			}
 			if (model.nDistricts > 1) {
 
@@ -440,7 +440,7 @@ function Yee(model) {
 				model.dm.redistrict()
 				model.yeeobject = undefined
 				for(var voterGroup of model.voterGroups){
-					voterGroup.update()
+					voterGroup.updatePeople()
 				}
 			
 			} else {
