@@ -408,10 +408,10 @@ function bindModel(ui,model,config) {
         if (config.oneVoter) {
             if (model.voterGroups[0].voterGroupType == "SingleVoter") {
                 var text = ""
-                if (doOldBallot) ballot.update(model.voterGroups[0].voterPeople[0].ballot);
+                if (doOldBallot) ballot.update(model.voterGroups[0].voterPeople[0].stages[model.stage].ballot);
                 if (doOldBallot) text += "<br />"
                 text += '<div class="div-ballot">'
-                // text += model.voterGroups[0].voterModel.toTextV(model.voterGroups[0].voterPeople[0].ballot);
+                // text += model.voterGroups[0].voterModel.toTextV(model.voterGroups[0].voterPeople[0].stages[model.stage].ballot);
                 text += model.voterGroups[0].voterModel.toTextV(model.voterGroups[0].voterPeople[0]);
                 text += '</div>'
                 if (0) {

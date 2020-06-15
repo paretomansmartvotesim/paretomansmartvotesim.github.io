@@ -867,7 +867,7 @@ VoterMapGPU = function(model) {
 
 		if (model.ballotType == "Plurality" || model.system == "IRV" || model.system == "STV") return
 		if (model.voterSet.totalVoters == 0) return
-		if (model.voterSet.allVoters[0].ballot == undefined) return
+		if (model.voterSet.allVoters[0].stages[model.stage].ballot == undefined) return
 
 		// need some calculations
 		for(var voterGroup of model.voterGroups) {

@@ -58,8 +58,6 @@ function VoterModel(model,type) {
 var InitVoterModel = {}
 
 InitVoterModel.Score = function (model, voterModel) {
-// InitVoterModel.Score = function (model, voterPerson) {
-	// var voterModel = voterPerson.ballot
 
 	voterModel.maxscore = 5;
 	voterModel.minscore = 0;
@@ -694,7 +692,7 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
 	var k = voterPerson.iPoint
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 
 	if (model.ballotConcept == "off") return
@@ -810,7 +808,7 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
 	var i = voterPerson.iPoint
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	
 
 	if (model.ballotConcept == "off") return
@@ -1270,7 +1268,7 @@ DrawMap.Plurality = function (ctx, model,voterModel,voterPerson) {
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
 	var i = voterPerson.iPoint
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 	
 	if (model.ballotConcept == "off") return
@@ -1303,7 +1301,7 @@ DrawMe.Score = function (ctx, model,voterModel,voterPerson) {
 	var x = voterPerson.xArena
 	var y = voterPerson.yArena
 	var size = voterPerson.size
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	var weight = voterPerson.weight
 
 
@@ -1361,7 +1359,7 @@ DrawMe.Approval = function (ctx, model,voterModel,voterPerson) {
 	var x = voterPerson.xArena
 	var y = voterPerson.yArena
 	var size = voterPerson.size
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	var weight = voterPerson.weight
 
 
@@ -1405,7 +1403,7 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson) {
 	var x = voterPerson.xArena
 	var y = voterPerson.yArena
 	var size = voterPerson.size
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	var weight = voterPerson.weight
 	var iDistrict = voterPerson.iDistrict
 
@@ -1478,7 +1476,7 @@ DrawMe.Plurality = function (ctx, model,voterModel,voterPerson) {
 	var x = voterPerson.xArena
 	var y = voterPerson.yArena
 	var size = voterPerson.size
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 	// RETINA
 	x = x*2;
@@ -1879,7 +1877,7 @@ function _drawBlank(model, ctx, x, y, size){
 var DrawBallot = {}
 
 DrawBallot.Score = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 	var text = ""
 	var scoreByCandidate = []
@@ -1905,7 +1903,7 @@ DrawBallot.Three = function (model,voterModel,voterPerson) {
 }
 
 DrawBallot.Approval = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	
 	var text = ""
 
@@ -1930,7 +1928,7 @@ DrawBallot.Approval = function (model,voterModel,voterPerson) {
 }
 
 DrawBallot.Ranked = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 	var text = ""
 
@@ -1951,7 +1949,7 @@ DrawBallot.Ranked = function (model,voterModel,voterPerson) {
 }
 
 DrawBallot.Plurality = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 	var text = ""
 	var onePickByCandidate = []
@@ -1973,7 +1971,7 @@ DrawBallot.Plurality = function (model,voterModel,voterPerson) {
 var DrawTally = {}
 
 DrawTally.Score = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	
 	var system = model.system
 	
@@ -2031,7 +2029,7 @@ DrawTally.Score = function (model,voterModel,voterPerson) {
 }
 
 DrawTally.Three = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	
 	var text = ""
 	cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
@@ -2102,7 +2100,7 @@ DrawTally.Three = function (model,voterModel,voterPerson) {
 }
 
 DrawTally.Approval = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 	var text = ""
 	if (voterModel.say) text += "<span class='small' style> Approved </span> <br />" 
@@ -2119,7 +2117,7 @@ DrawTally.Approval = function (model,voterModel,voterPerson) {
 }
 
 DrawTally.Ranked = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 
 	var system = model.system
 	var rbsystem = model.rbsystem
@@ -2321,7 +2319,7 @@ function _pickRankedDescription(model) {
 }
 
 DrawTally.Plurality = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.ballot
+	var ballot = voterPerson.stages[model.stage].ballot
 	{
 		var text = ""
 		if (voterModel.say) text += "<span class='small' style> One vote for </span> " 
@@ -2516,7 +2514,7 @@ function VoterSet(model) {
 		var ballots = [];
 		for(var i=0; i<district.voterPeople.length; i++){
 			var v = district.voterPeople[i]
-			var b = model.voterGroups[v.iGroup].voterPeople[v.iPoint].ballot
+			var b = model.voterGroups[v.iGroup].voterPeople[v.iPoint].stages[model.stage].ballot
 			ballots = ballots.concat(b);
 		}
 		return ballots;
@@ -2526,8 +2524,8 @@ function VoterSet(model) {
 		for(var i=0; i<district.voterPeople.length; i++){
 			var v = district.voterPeople[i]
 			if (v.iGroup == iCrowd) {
-				// var b = self.crowds[iCrowd].voterPeople[v.iPoint].ballot
-				var b = model.voterGroups[iCrowd].voterPeople[v.iPoint].ballot
+				// var b = self.crowds[iCrowd].voterPeople[v.iPoint].stages[model.stage].ballot
+				var b = model.voterGroups[iCrowd].voterPeople[v.iPoint].stages[model.stage].ballot
 				ballots.push(b)
 			}
 		}
@@ -2538,7 +2536,7 @@ function VoterSet(model) {
 		var voterPeople = district.parties[iParty].voterPeople
 		for(var i=0; i<voterPeople.length; i++){
 			var voterPerson = voterPeople[i]
-			var b = voterPerson.ballot
+			var b = voterPerson.stages[model.stage].ballot
 			ballots.push(b)
 		}
 		return ballots
@@ -2547,7 +2545,7 @@ function VoterSet(model) {
 		var voterPeople = model.voterGroups[iCrowd].voterPeople
 		var ballots = []
 		for (var voterPerson of voterPeople) {
-			ballots.push(voterPerson.ballot)
+			ballots.push(voterPerson.stages[model.stage].ballot)
 		}
 		return ballots
 	}
@@ -2663,7 +2661,7 @@ function VoterSet(model) {
 	self.updatePersonBallot = function(voterPerson) {
 		var voterModel = model.voterGroups[voterPerson.iGroup].voterModel
 		var ballot = voterModel.castBallot(voterPerson)
-		voterPerson.ballot = ballot
+		voterPerson.stages[model.stage].ballot = ballot
 		// store ballot for current stage
 		var stageInfo = {}
 		stageInfo[model.stage] = {ballot:ballot}
@@ -2671,7 +2669,7 @@ function VoterSet(model) {
 	}
 	self.loadDistrictStageBallots = function(district,stage) {
 		for(var voterPerson of district.voterPeople){
-			voterPerson.ballot = voterPerson.stages[stage].ballot
+			voterPerson.stages[model.stage].ballot = voterPerson.stages[stage].ballot
 		}			
 	}
 }

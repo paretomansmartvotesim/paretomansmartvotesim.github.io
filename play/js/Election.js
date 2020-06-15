@@ -746,8 +746,8 @@ function pairDraw(model,district,winid,loseid,tie,weightcopy,pastwinnerscopy) { 
 
 		// leave only the pair in the ballot
 		for (let voterPerson of district.voterPeople) {
-			voterPerson.stages["backup"] = {ballot: _jcopy(voterPerson.ballot)}
-			voterPerson.ballot.rank = voterPerson.ballot.rank.filter(cid => [winid,loseid].includes(cid))
+			voterPerson.stages["backup"] = {ballot: _jcopy(voterPerson.stages[model.stage].ballot)}
+			voterPerson.stages[model.stage].ballot.rank = voterPerson.stages[model.stage].ballot.rank.filter(cid => [winid,loseid].includes(cid))
 		}
 
 		if (weightcopy) {

@@ -57,7 +57,7 @@ function main_ballot(ui){
 		var ballot = new BallotType(model);
 		basediv.appendChild(ballot.dom);
 		model.onUpdate = function(){
-			ballot.update(model.voterGroups[0].voterPeople[0].ballot);
+			ballot.update(model.voterGroups[0].voterPeople[0].stages[model.stage].ballot);
 		};
 
 		// UPDATE

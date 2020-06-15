@@ -403,7 +403,7 @@ function bindBallotModel(ui,model,config) {
 		if (model.voterGroups.length == 0) return
 		if (model.voterGroups[0].voterGroupType == "GaussianVoters") return
 		if (model.newWay) {
-			var text = model.voterGroups[0].voterModel.toTextH(model.voterGroups[0].voterPeople[0].ballot);
+			var text = model.voterGroups[0].voterModel.toTextH(model.voterGroups[0].voterPeople[0].stages[model.stage].ballot);
 			if ( ready ) {
 
 				// 2 : replace the Placeholder
