@@ -177,7 +177,12 @@ function Model(idModel){
 	self.onInitModel = function() {} // a hook for a caller
 
 	self.election = function(){
-		self.updateBallots()
+		self.stage = "general"
+		for (let district of self.district) {
+			district.stages = {}
+			district.stages["general"] = {candidates: district.candidates }
+			self.updateDistrictBallots(district)
+		}
 	};
 
 	self.initPlugin = function(){  // TO IMPLEMENT FURTHER IN CALLER
@@ -377,7 +382,6 @@ function Model(idModel){
 				if (self.district[i].candidates.length == 0) {
 					self.district[i].result = undefined
 				} else {
-					self.stage = "general"
 					self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 					self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
 					self.placeHoldDuringElection = false
@@ -424,7 +428,6 @@ function Model(idModel){
 			
 
 		} else {
-			self.stage = "general"
 			self.placeHoldDuringElection = self.doPlaceHoldDuringElection
 			self.result = self.election(self.district[0], self,self.optionsForElection);
 			self.placeHoldDuringElection = false
@@ -2123,14 +2126,12 @@ function Arena(arenaName, model) {
 					var result = district.result
 					
 					if(result && result.winners) {
-						for(var i=0; i<district.candidates.length; i++){
-							var c = district.candidates[i];
-							if (result.winners.includes(c.id)) {
-								if (result.winners.length > model.seats) {
-									c.drawTie(self.ctx,self)
-								} else {
-									c.drawWin(self.ctx,self)
-								}
+						for (let wid of result.winners) {
+							let c = model.candidatesById[wid]
+							if (result.winners.length > model.seats) {
+								c.drawTie(self.ctx,self)
+							} else {
+								c.drawWin(self.ctx,self)
 							}
 						}
 					}
@@ -2312,11 +2313,6 @@ function DistrictManager(model) {
 			var c = model.candidates[i]
 			model.district[c.iDistrict].candidates.push(c)
 			model.district[c.iDistrict].candidatesById[c.id] = c
-		}
-
-		// this can be removed, but I'm not sure of the affects
-		for (let district of model.district) {
-			district.stages["general"] = {candidates: district.candidates}
 		}
 
 		// assign frontrunners to districts' lists

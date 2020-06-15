@@ -391,7 +391,6 @@ function _mostElectable(iMyParty,parties,hh) {
 function _findClosest(model,electset,x,y) {
 	var closest = {id:null};
 	var closestDistance = Infinity;
-	// var cans = district.candidates
 	for(var j=0;j<electset.length;j++){
 		let e = electset[j];
 		var dist = distF2(model,{x:x,y:y},e)

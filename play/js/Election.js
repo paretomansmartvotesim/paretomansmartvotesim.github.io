@@ -11,7 +11,8 @@ var Election = {};
 Election.score = function(district, model, options){
 
 	options = _electionDefaults(options)
-	var polltext = _beginElection(district,model,options,"score")	
+	var polltext = _beginElection(district,model,options,"score")
+	let candids = district.stages[model.stage].candidates
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -64,6 +65,7 @@ Election.star = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"score")	
+	let candids = district.stages[model.stage].candidates
 	
 	var maxscore = 5
 
@@ -144,7 +146,8 @@ Election.star = function(district, model, options){
 Election.three21 = function(district, model, options){
 
 	options = _electionDefaults(options)
-	var polltext = _beginElection(district,model,options,"score")		
+	var polltext = _beginElection(district,model,options,"score")	
+	let candids = district.stages[model.stage].candidates	
 	
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
@@ -231,6 +234,7 @@ Election.approval = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"approval")	
+	let candids = district.stages[model.stage].candidates
 
 	// Tally the approvals & get winner!
 	var tally = _tally(district,model, function(tally, ballot){
@@ -281,6 +285,7 @@ Election.condorcet = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	var text = "";
 	text += "<span class='small'>";
@@ -428,6 +433,7 @@ Election.schulze = function(district, model, options){ // Pairs of candidates ar
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	var reverseExplanation = true
 
@@ -808,6 +814,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	var reverseExplanation = true
 
@@ -1023,6 +1030,7 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	var reverseExplanation = false
 
@@ -1249,6 +1257,7 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	
 	options = _electionDefaults(options)
 	_beginElection_rbvote(district,model)
+	let candids = district.stages[model.stage].candidates
 
 	if (model.checkRunTextBallots()) {
 		// var filler = {candidates:[]}
@@ -1346,6 +1355,7 @@ Election.rrv = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	var numreps = model.seats
 	var maxscore = 5
@@ -1492,6 +1502,7 @@ Election.rav = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 	
 	var numreps = model.seats
 	var maxscore = 1
@@ -1640,6 +1651,7 @@ Election.borda = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	// Tally the approvals & get winner!
 	var numcan = district.candidates.length
@@ -1686,6 +1698,7 @@ Election.irv = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"irv")	
+	let candids = district.stages[model.stage].candidates
 
 	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
 	if (drawFlows) {
@@ -2001,6 +2014,7 @@ Election.stv = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	var numreps = model.seats
 	
@@ -2462,6 +2476,7 @@ Election.quotaMinimax = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 
 	var numreps = model.seats
 
@@ -2510,8 +2525,13 @@ Election.quotaMinimax = function(district, model, options){
 	var all1 = _jcopy(ballotweight)
 	var ballotcounted = _jcopy(all1)
 
+
+	
+	// 	model.stage = "working"
+	// 	model.voterSet.copyDistrictBallotsToStage(district,"working")
+	// var workingCandids = district.stages[model.stage].candidates
 	var oldCandidates = district.candidates
-	district.candidates = _jcopy(oldCandidates)
+	district.stages[model.stage].candidates = _jcopy(oldCandidates)
 	for ( var roundNum = 1; roundNum <= numreps; roundNum++) {
 
 		
@@ -2685,7 +2705,7 @@ Election.quotaMinimax = function(district, model, options){
 		district.candidates.splice(cids.indexOf(winner), 1); // remove from candidates...
 
 	}
-	district.candidates = oldCandidates
+	district.stages[model.stage].candidates = oldCandidates
 	
 	if (options.sidebar) {
 		
@@ -2809,6 +2829,7 @@ Election.quotaApproval = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 	
 	var v = model.voterSet.getVoterArray()
 
@@ -2938,6 +2959,7 @@ Election.quotaScore = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
+	let candids = district.stages[model.stage].candidates
 	
 	var v = model.voterSet.getVoterArray()
 
@@ -3064,6 +3086,7 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"plurality")	
+	let candids = district.stages[model.stage].candidates
 
 	// Tally the approvals & get winner!
 	var tally1 = _tally(district,model, function(tally, ballot){
@@ -3140,6 +3163,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	_electionDefaults(options)
 
 	var polltext = _beginElection_pluralityWithPrimary(district,model,options)
+	let candids = district.stages[model.stage].candidates
 	
 	// Look at each voter group and get tallies for all the candidates
 	let ptallies = _tally_primary(district, model, function(tally, ballot){
@@ -3237,7 +3261,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 }
 
 function _beginElection(district,model,options,polltype) {
-
+	
 	district.stages = {}
 	model.stage = "general"
 	district.stages["general"] = {candidates: district.candidates }
@@ -3278,6 +3302,7 @@ function _beginElection_pluralityWithPrimary(district,model,options) {
 }
 
 function _beginElection_rbvote(district,model) {
+
 	district.stages = {}
 	model.stage = "general"
 	district.stages["general"] = {candidates: district.candidates }
@@ -3288,6 +3313,7 @@ Election.plurality = function(district, model, options){
 
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"plurality")
+	let candids = district.stages[model.stage].candidates
 	
 
 	// if (model.primaries == "Yes"){
@@ -3623,6 +3649,7 @@ function strategyTable(district,model,opt) {
 
 function pairwiseTable(district,model,opt) {
 
+	let candids = district.stages[model.stage].candidates
 	let a = district.candidates
 	let b = a
 	let text = ""
@@ -4495,6 +4522,8 @@ function _xToPercentile(x,model) {
 }
 
 _check01 = function(district,model) {
+	let candids = district.stages[model.stage].candidates
+
 	result = {good:false}
 	if (district.candidates.length === 0) {
 	    result = _result([],model)
