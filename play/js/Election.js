@@ -3488,7 +3488,7 @@ function runPoll(district,model,options,electiontype){
 
 	// check to see if there is a need for polling
 
-	if ( ! model.checkRunPoll ) return ""
+	if ( ! model.checkRunPoll() ) return ""
 
 	polltext = ""
 
@@ -3496,8 +3496,10 @@ function runPoll(district,model,options,electiontype){
 	if (options.sidebar) {
 		polltext += '<span class="small" >'
 		if (electiontype=="irv") {
-			polltext += "A low-risk strategy in IRV is to look at who wins and make a compromise if you're not winning.  Voters look down their ballot and pick the first one that defeats the current winner head to head. <br> <br>"
+			polltext += "A low-risk strategy in IRV is to look at who wins and make a compromise if you're not winning.  Voters look down their ballot and pick the first one that defeats the current winner head to head."
+			polltext += " <br> <br>"
 			polltext += "Reporting results is done with both head-to-head and instant runoff tallies."
+			polltext += " <br> <br>"
 			polltext += "<b>Here are polls for first preferences: </b></br>"
 			// this strategy could be further refined by voting for people who will be eliminated but who we like better
 		} else {
@@ -3506,6 +3508,7 @@ function runPoll(district,model,options,electiontype){
 		}
 	}
 
+	var lastTally = {}
 	for (var k=0;k<5;k++) { // do the polling many times
 			
 		// get polling information
@@ -3535,7 +3538,7 @@ function runPoll(district,model,options,electiontype){
 		} else if (electiontype=="irv"){
 
 			// for the report, get the first preferences
-			var pre_tally = _tally(district,model, function(tally, ballot){
+			var tally = _tally(district,model, function(tally, ballot){
 				var first = ballot.rank[0]; // just count #1
 				tally[first]++;
 			});
@@ -3554,18 +3557,22 @@ function runPoll(district,model,options,electiontype){
 			let head2head = head2HeadPoll(model, district,ballots)
 			district.pollResults = temp1
 			
-			tally = {head2head:head2head, firstpicks:pre_tally, winners:winners}
+			var results = {head2head:head2head, firstpicks:tally, winners:winners}
 
 		}
 		
-		district.pollResults = tally
+		if (electiontype == 'irv') {
+			district.pollResults = results
+		} else {
+			district.pollResults = tally
+		}
 
 		if(options.sidebar) {
 			
 			for(var i=0; i<candidates.length; i++){
 				var c = candidates[i].id;
 				if (electiontype == "irv"){
-					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally.firstpicks[c]) + ". ") + " "
+					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally[c]) + ". ") + " "
 				}else {
 					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
 					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
@@ -3576,8 +3583,14 @@ function runPoll(district,model,options,electiontype){
 		}
 		// end of one poll
 
-	}		
-	if (electiontype == "irv") polltext += "<br>"
+		// check if the results are the same as the previous poll, then quit if they are the same
+		if (_isEquivalent(lastTally,tally)) {
+			break
+		}
+		// update last tally
+		lastTally = _jcopy(tally)
+
+	}
 
 	if (options.sidebar){
 		polltext += "</span><br>"
