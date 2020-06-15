@@ -1240,7 +1240,6 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 Election.rbvote = function(district, model, options){ // Use the RBVote from Rob Legrand
 
 	options = _electionDefaults(options)
-	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	if (model.checkRunTextBallots()) {
 		// var filler = {candidates:[]}
