@@ -744,13 +744,18 @@ function pairDraw(model,district,winid,loseid,tie,weightcopy,pastwinnerscopy) { 
 		// we have a backup in the "general" stage
 		// so we can edit the ballots directly
 
+		// model.stage = "pair"
+		// model.voterSet.copyDistrictBallotsToStage(district,"pair")
+		// // I could also copy candidates over, but I don't need to.
+
+		model.voterSet.copyDistrictBallotsToStage(district,"backup")
+
 		// leave only the pair in the ballot
 		for (let voterPerson of district.voterPeople) {
-			voterPerson.stages["backup"] = {ballot: _jcopy(voterPerson.stages[model.stage].ballot)}
 			voterPerson.stages[model.stage].ballot.rank = voterPerson.stages[model.stage].ballot.rank.filter(cid => [winid,loseid].includes(cid))
 		}
 
-		if (weightcopy) {
+		if (weightcopy) { // we should really use a proper data structure like .round (similar to .stage)
 			var backupWC = []
 			for(var j=0; j<district.voterPeople.length; j++){
 				var v = district.voterPeople[j]
@@ -775,7 +780,9 @@ function pairDraw(model,district,winid,loseid,tie,weightcopy,pastwinnerscopy) { 
 				model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = backupWC[j]
 			}
 		}
-		model.voterSet.loadDistrictStageBallots(district,"backup")
+
+		// model.stage = "general"
+		model.voterSet.loadDistrictBallotsFromStage(district,"backup")
 
 		// also draw past winners
 		
@@ -1239,7 +1246,9 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 
 Election.rbvote = function(district, model, options){ // Use the RBVote from Rob Legrand
 
+	
 	options = _electionDefaults(options)
+	_beginElection_rbvote(district,model)
 
 	if (model.checkRunTextBallots()) {
 		// var filler = {candidates:[]}
@@ -3078,7 +3087,7 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 	});
 
 	model.stage = "general" // set to general for display purposes
-	model.voterSet.loadDistrictStageBallots(district,"general")
+	model.voterSet.loadDistrictBallotsFromStage(district,"general")
 
 
 	var winners = _countWinner(tally);
@@ -3130,21 +3139,8 @@ Election.pluralityWithPrimary = function(district, model, options){
 
 	_electionDefaults(options)
 
-	var polltext = ""
+	var polltext = _beginElection_pluralityWithPrimary(district,model,options)
 	
-	model.stage = "primary"
-	district.stages["primary"] = {candidates: district.candidates}
-
-	// Take polls and vote
-	district.primaryPollResults = undefined
-	polltext += runPrimaryPoll(district,model,options,"plurality")
-	district.pollResults = undefined
-	polltext += runPoll(district,model,options,"plurality")
-
-	if ( ! options.justCount ) {
-		model.updateDistrictBallots(district)
-	}
-
 	// Look at each voter group and get tallies for all the candidates
 	let ptallies = _tally_primary(district, model, function(tally, ballot){
 		tally[ballot.vote]++;
@@ -3175,7 +3171,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	// So we can see who they voted for in the primary.
 	// TODO: make this better.
 	// district.candidates = district.stages["primary"].candidates
-	model.voterSet.loadDistrictStageBallots(district,"primary")
+	model.voterSet.loadDistrictBallotsFromStage(district,"primary")
 
 	// cleanup
 	model.stage = "general" // for display purposes
@@ -3241,8 +3237,9 @@ Election.pluralityWithPrimary = function(district, model, options){
 }
 
 function _beginElection(district,model,options,polltype) {
-	
+
 	district.stages = {}
+	model.stage = "general"
 	district.stages["general"] = {candidates: district.candidates }
 
 	var polltext = ""
@@ -3261,8 +3258,30 @@ function _beginElection(district,model,options,polltype) {
 	return polltext
 }
 
-function _endElection(district,model,options) {
+function _beginElection_pluralityWithPrimary(district,model,options) {
 
+	district.stages = {}
+	model.stage = "primary"
+	district.stages["primary"] = {candidates: district.candidates}
+	
+	polltext = ""
+	// Take polls and vote
+	district.primaryPollResults = undefined
+	polltext += runPrimaryPoll(district,model,options,"plurality")
+	district.pollResults = undefined
+	polltext += runPoll(district,model,options,"plurality")
+	
+	if ( ! options.justCount ) {
+		model.updateDistrictBallots(district)
+	}
+	return polltext
+}
+
+function _beginElection_rbvote(district,model) {
+	district.stages = {}
+	model.stage = "general"
+	district.stages["general"] = {candidates: district.candidates }
+	model.updateDistrictBallots(district)
 }
 
 Election.plurality = function(district, model, options){
@@ -3288,7 +3307,6 @@ Election.plurality = function(district, model, options){
 	if (model.doTop2) var theTop2 = _sortTally(tally).slice(0,2)
 	if (model.doTop2) result.theTop2 = theTop2
 	if (!options.sidebar) {
-		_endElection(district,model,options)
 		return result
 	}
 
@@ -3349,7 +3367,6 @@ Election.plurality = function(district, model, options){
 	}
 	result.text = text;
 
-	_endElection(district,model,options)
 	return result
 };
 

@@ -2661,17 +2661,26 @@ function VoterSet(model) {
 	self.updatePersonBallot = function(voterPerson) {
 		var voterModel = model.voterGroups[voterPerson.iGroup].voterModel
 		var ballot = voterModel.castBallot(voterPerson)
-		voterPerson.stages[model.stage].ballot = ballot
 		// store ballot for current stage
+		self.loadPersonBallot(voterPerson, ballot)
+	}
+	self.loadDistrictBallotsFromStage = function(district,stage) {
+		for(var voterPerson of district.voterPeople){
+			var ballot = voterPerson.stages[stage].ballot
+			self.loadPersonBallot(voterPerson, ballot)
+		}			
+	}
+	self.copyDistrictBallotsToStage = function(district,stage) {
+		for (let voterPerson of district.voterPeople) {
+			voterPerson.stages[stage] = {ballot: _jcopy(voterPerson.stages[model.stage].ballot)}
+		}
+	}
+	self.loadPersonBallot = function(voterPerson, ballot) {
 		var stageInfo = {}
 		stageInfo[model.stage] = {ballot:ballot}
 		_addAttributes(voterPerson.stages, stageInfo)
 	}
-	self.loadDistrictStageBallots = function(district,stage) {
-		for(var voterPerson of district.voterPeople){
-			voterPerson.stages[model.stage].ballot = voterPerson.stages[stage].ballot
-		}			
-	}
+
 }
 
 function VoterCrowd(model) {
