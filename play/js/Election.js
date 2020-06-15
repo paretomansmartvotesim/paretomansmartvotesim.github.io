@@ -3490,6 +3490,9 @@ function runPoll(district,model,options,electiontype){
 
 	if ( ! model.checkRunPoll() ) return ""
 
+	var candidates = district.stages[model.stage].candidates
+	if ( candidates.length < 3 ) return ""
+
 	polltext = ""
 
 
@@ -3509,12 +3512,12 @@ function runPoll(district,model,options,electiontype){
 	}
 
 	var lastTally = {}
+	var collectTallies = []
 	for (var k=0;k<5;k++) { // do the polling many times
 			
 		// get polling information
 		model.updateDistrictBallots(district);
 
-		var candidates = district.stages[model.stage].candidates
 		
 		// count the votes in the poll
 
@@ -3569,18 +3572,28 @@ function runPoll(district,model,options,electiontype){
 
 		if(options.sidebar) {
 			
-			for(var i=0; i<candidates.length; i++){
-				var c = candidates[i].id;
-				if (electiontype == "irv"){
-					polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally[c]) + ". ") + " "
-				}else {
-					polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
-					//if (tally[c] > threshold) polltext += " &larr;"//" <--"
-					//polltext += "<br>"
+			
+			if (model.stage == "primary") {
+				let ptallies = _tally_primary(district, model, function(tally, ballot){
+					tally[ballot.vote]++;
+				});
+				collectTallies.push(ptallies)
+			} else {
+			
+				for(var i=0; i<candidates.length; i++){
+					var c = candidates[i].id;
+					if (electiontype == "irv"){
+						polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally[c]) + ". ") + " "
+					}else {
+						polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
+						//if (tally[c] > threshold) polltext += " &larr;"//" <--"
+						//polltext += "<br>"
+					}
 				}
+				polltext += "<br>"
 			}
-			polltext += "<br>"
 		}
+				
 		// end of one poll
 
 		// check if the results are the same as the previous poll, then quit if they are the same
@@ -3590,6 +3603,32 @@ function runPoll(district,model,options,electiontype){
 		// update last tally
 		lastTally = _jcopy(tally)
 
+	}
+
+	if (options.sidebar) {
+		if (model.stage == "primary") {
+			for (let i in collectTallies[0]) {	
+				text = ""
+				text += "<span class='small'>";
+				var ip1 = i*1+1
+				text += "<b>group " + ip1 + ":</b><br>";
+				for (var ptallies of collectTallies) {
+					var tally1 = ptallies[i]
+					let totalPeopleInPrimary = district.parties[i].voterPeople.length
+					var pwin = _countWinner(tally1)
+					for(let k=0; k<district.candidates.length; k++){
+						let c = district.candidates[k]
+						let cid = c.id
+						if (district.parties[i].candidates.includes(c)) {
+							
+							text += model.icon(cid)+""+ _padAfter(3,_primaryPercentFormat(tally1[cid]/model.voterGroups[0].voterModel.maxscore, totalPeopleInPrimary) + ".") + " "
+						}
+					}
+					text += "<br>"
+				}
+				polltext += text
+			}
+		}
 	}
 
 	if (options.sidebar){
