@@ -10,6 +10,7 @@ var Election = {};
 
 Election.score = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"score")	
 
 	// Tally the approvals & get winner!
@@ -61,6 +62,7 @@ Election.score = function(district, model, options){
 
 Election.star = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"score")	
 	
 	var maxscore = 5
@@ -141,6 +143,7 @@ Election.star = function(district, model, options){
 
 Election.three21 = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"score")		
 	
 	var ballots = model.voterSet.getBallotsDistrict(district)
@@ -226,6 +229,7 @@ Election.three21 = function(district, model, options){
 
 Election.approval = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"approval")	
 
 	// Tally the approvals & get winner!
@@ -337,6 +341,7 @@ Election.approval = function(district, model, options){
 
 Election.condorcet = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var text = "";
@@ -376,16 +381,17 @@ Election.condorcet = function(district, model, options){
 			// WINNER?
 			var winner = (aWins>bWins) ? a : b;
 			var loser = (aWins<=bWins) ? a : b;
+			var tie = aWins==bWins
 
-			let eventID = 'pair_' + a.id + '_' + b.id + '_' + _rand5()
+			let eventID = 'pair_' + winner.id + '_' + loser.id + '_' + _rand5()
 			let e = {
 				eventID: eventID,
-				f: pairDraw(model,district,a.id,b.id,aWins==bWins)
+				f: pairDraw(model,district,winner.id,loser.id,tie)
 			}
 			eventsToAssign.push(e)
 
 			text += '<div id="' + eventID + '">'
-			if (aWins != bWins) {
+			if ( ! tie ) {
 				tally[winner.id]++;
 				beatsMe[loser.id].push(winner.id)
 				// Text.
@@ -482,6 +488,7 @@ Election.condorcet = function(district, model, options){
 // PairElimination
 Election.schulze = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var reverseExplanation = true
@@ -794,44 +801,15 @@ Election.schulze = function(district, model, options){ // Pairs of candidates ar
 };
 
 
-function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a function is returned, so that i has a new scope
+function pairDraw(model,district,winid,loseid,tie,weightcopy,pastwinnerscopy) { // a function is returned, so that i has a new scope
 	return function() {
-		// make a backup
-		var dBackup = [] // TODO: make a copy instead of a backup
-		for (var i = 0; i < district.candidates.length; i++) {
-			dBackup.push(district.candidates[i])
-		}
-		var mBackup = [] // TODO: make a copy instead of a backup
-		for (var i = 0; i < model.candidates.length; i++) {
-			mBackup.push(model.candidates[i])
-		} // hmm... TODO: is this a mistake?  should we be using model instead of district?
+		// we have a backup in the "general" stage
+		// so we can edit the ballots directly
 
-		// remove all candidates except the pair
-		// start at the end of the list
-		for (var i = district.candidates.length-1; i >= 0; i--) {
-			c = district.candidates[i]
-			if (c.id == aid) {
-				var ai = i
-				continue // skip
-			}
-			if (c.id == bid) {
-				var bi = i
-				continue // skip
-			}
-			district.candidates.splice(i, 1); // remove from candidates...
-		}
-
-		// need to remove the candidates from the model list.
-		for (var i = model.candidates.length-1; i >= 0; i--) {
-			c = model.candidates[i]
-			if (c.id == aid) continue // skip
-			if (c.id == bid) continue // skip
-			model.candidates.splice(i, 1); // remove from candidates...
-		}
-
-		for (var i=0; i < model.voterGroups.length; i++) {
-			v = model.voterGroups[i]
-			v.update() // easy way to only show the two candidates.
+		// leave only the pair in the ballot
+		for (let voterPerson of district.voterPeople) {
+			voterPerson.stages["backup"] = {ballot: _jcopy(voterPerson.ballot)}
+			voterPerson.ballot.rank = voterPerson.ballot.rank.filter(cid => [winid,loseid].includes(cid))
 		}
 
 		if (weightcopy) {
@@ -839,9 +817,6 @@ function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a 
 			for(var j=0; j<district.voterPeople.length; j++){
 				var v = district.voterPeople[j]
 				backupWC[j] = model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight
-			}
-			for(var j=0; j<district.voterPeople.length; j++){
-				var v = district.voterPeople[j]
 				model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = weightcopy[j][ai][bi]
 			}
 		}
@@ -855,17 +830,14 @@ function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a 
 		
 		// restore backups
 		model.dontdrawwinners = false
-		district.candidates = dBackup
-		model.candidates = mBackup
+		
 		if (weightcopy) {
 			for(var j=0; j<district.voterPeople.length; j++){
 				var v = district.voterPeople[j]
 				model.voterGroups[v.iGroup].voterPeople[v.iPoint].weight = backupWC[j]
 			}
 		}
-		for (var i=0; i < model.voterGroups.length; i++) {
-			model.voterGroups[i].update()
-		}
+		model.voterSet.loadDistrictStageBallots(district,"backup")
 
 		// also draw past winners
 		
@@ -878,10 +850,10 @@ function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a 
 		}
 		// draw this pair's better half
 		if (! tie) {
-			district.candidates[ai].drawText("Better",model.arena.ctx,model.arena) 
+			model.candidatesById[winid].drawText("Better",model.arena.ctx,model.arena) 
 		} else {
-			district.candidates[ai].drawText("Tie",model.arena.ctx,model.arena) 
-			district.candidates[bi].drawText("Tie",model.arena.ctx,model.arena) 
+			model.candidatesById[winid].drawText("Tie",model.arena.ctx,model.arena) 
+			model.candidatesById[loseid].drawText("Tie",model.arena.ctx,model.arena) 
 		}
 	}
 }
@@ -889,6 +861,7 @@ function pairDraw(model,district,aid,bid,tie,weightcopy,pastwinnerscopy) { // a 
 // PairElimination
 Election.minimax = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var reverseExplanation = true
@@ -1103,7 +1076,8 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 // PairElimination
 Election.rankedPairs = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
-	_beginElection(district,model,options,"nopoll")	
+	options = _electionDefaults(options)
+	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var reverseExplanation = false
 
@@ -1327,6 +1301,7 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 
 Election.rbvote = function(district, model, options){ // Use the RBVote from Rob Legrand
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	if (model.checkRunTextBallots()) {
@@ -1423,6 +1398,7 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 
 Election.rrv = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var numreps = model.seats
@@ -1568,6 +1544,7 @@ Election.rrv = function(district, model, options){
 
 Election.rav = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 	
 	var numreps = model.seats
@@ -1715,6 +1692,7 @@ Election.rav = function(district, model, options){
 
 Election.borda = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	// Tally the approvals & get winner!
@@ -1760,6 +1738,7 @@ Election.borda = function(district, model, options){
 
 Election.irv = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"irv")	
 
 	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
@@ -1772,6 +1751,7 @@ Election.irv = function(district, model, options){
 		var losers = []
 	}
 	var ballots = model.voterSet.getBallotsDistrict(district)
+	ballots = _jcopy(ballots)
 
 	var text = "";
 	if (options.sidebar) text += "<span class='small'>";
@@ -1993,10 +1973,10 @@ Election.irv = function(district, model, options){
 
 	if(options.sidebar) {
 		
-		for(var i=0; i<model.voterGroups.length; i++){
-			var voter = model.voterGroups[i];
-			voter.update();
-		}
+		// for(var i=0; i<model.voterGroups.length; i++){
+		// 	var voter = model.voterGroups[i];
+		// 	voter.update();
+		// }
 		// for (var i=0; i<model.voterGroups.length; i++) {
 		// 	model.voterGroups[i].ballots = temp[i].ballots // originals
 		// }
@@ -2087,6 +2067,7 @@ Election.irv = function(district, model, options){
 
 Election.stv = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var numreps = model.seats
@@ -2134,7 +2115,8 @@ Election.stv = function(district, model, options){
 	}
 	var loserslist = []
 	var winnerslist = []
-	var ballots = model.voterSet.getBallotsDistrict(district)	
+	var ballots = model.voterSet.getBallotsDistrict(district)
+	ballots = _jcopy(ballots)
 	var ballotweight = []
 	for(var i=0; i<ballots.length; i++){
 		ballotweight[i] = 1
@@ -2542,15 +2524,16 @@ Election.stv = function(district, model, options){
 	}
 
 	// we messed around with the rankings, so lets put them back
-	for(var j=0; j<model.voterGroups.length; j++){
-		model.voterGroups[j].update();
-	}
+	// for(var j=0; j<model.voterGroups.length; j++){
+	// 	model.voterGroups[j].update();
+	// }
 
 	return result;
 };
 
 Election.quotaMinimax = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 
 	var numreps = model.seats
@@ -2583,7 +2566,8 @@ Election.quotaMinimax = function(district, model, options){
 		candidates.push(district.candidates[i].id);
 	}
 	var winnerslist = []
-	var ballots = model.voterSet.getBallotsDistrict(district)	
+	var ballots = model.voterSet.getBallotsDistrict(district)
+	ballots = _jcopy(ballots)	
 	var oldballots = _jcopy(ballots)
 	var ballotweight = []
 	var numcan = district.candidates.length
@@ -2892,15 +2876,16 @@ Election.quotaMinimax = function(district, model, options){
 	}
 
 	// we messed around with the rankings, so lets put them back
-	for(var j=0; j<model.voterGroups.length; j++){
-		model.voterGroups[j].update();
-	}
+	// for(var j=0; j<model.voterGroups.length; j++){
+	// 	model.voterGroups[j].update();
+	// }
 
 	return result;
 };
 
 Election.quotaApproval = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 	
 	var v = model.voterSet.getVoterArray()
@@ -3029,6 +3014,7 @@ Election.quotaApproval = function(district, model, options){
 
 Election.quotaScore = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"nopoll")	
 	
 	var v = model.voterSet.getVoterArray()
@@ -3154,6 +3140,7 @@ Election.quotaScore = function(district, model, options){
 
 Election.toptwo = function(district, model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"plurality")	
 
 	// Tally the approvals & get winner!
@@ -3167,17 +3154,19 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 	var winningscores = toptwo.map(x => tally1[x])
 	toptwo = sortedtally.filter(x => winningscores.includes(tally1[x]))
 	
-
 	// only do 2 candidates
-	var oldcandidates = district.candidates
-	district.candidates = district.candidates.filter( x => toptwo.includes(x.id)) 
-	for(var j=0; j<model.voterGroups.length; j++){
-		model.voterGroups[j].update();
-	}
+	model.stage = "runoff"
+	district.stages["runoff"] = {candidates: district.candidates.filter( x => toptwo.includes(x.id))  }
+	
+	model.updateDistrictBallots(district);
+
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
-	district.candidates = oldcandidates
+
+	model.stage = "general" // set to general for display purposes
+	model.voterSet.loadDistrictStageBallots(district,"general")
+
 
 	var winners = _countWinner(tally);
 	var result = _result(winners,model)
@@ -3276,7 +3265,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 	model.voterSet.loadDistrictStageBallots(district,"primary")
 
 	// cleanup
-	model.stage = "general"
+	model.stage = "general" // for display purposes
 	// clear the old poll results. we're done with casting ballots.
 	district.pollResults = undefined
 	district.primaryPollResults = undefined
@@ -3339,8 +3328,6 @@ Election.pluralityWithPrimary = function(district, model, options){
 }
 
 function _beginElection(district,model,options,polltype) {
-
-	_electionDefaults(options)
 	
 	district.stages = {}
 	district.stages["general"] = {candidates: district.candidates }
@@ -3367,6 +3354,7 @@ function _endElection(district,model,options) {
 
 Election.plurality = function(district, model, options){
 
+	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"plurality")
 	
 
@@ -3456,10 +3444,12 @@ Election.plurality = function(district, model, options){
 // HELPERS:
 
 function _electionDefaults(options) {
+	options = options || {}
 	_fillInDefaults(options, {
 		justCount: false,
 		dontpoll: false,
 	})
+	return options
 }
 
 function head2HeadPoll(model,district,ballots) {

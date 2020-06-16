@@ -2181,7 +2181,8 @@ function DistrictManager(model) {
 			if (model.partyRule == 'leftright') {
 				var numParties = 2
 			} else {
-				var numParties = model.voterGroups.length // for now, the number of votergroups is the number of parties
+				// for now, the number of votergroups is the number of parties
+				var numParties = model.voterGroups.length || 1 // default to 1
 			}
 			for ( var j = 0; j < numParties; j++)  { 
 				model.district[i].parties.push({voterPeople:[],candidates:[]})
