@@ -268,12 +268,15 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 
 	var goodCans = cans
 	
-	if (district.primaryPollResults && model.stage == "primary") { // primary is here for safety 
+	if (district.primaryPollResults && model.stage == "primary") {
 
 		// if we're in a primary 
 		// then consider electability (if there are polls)
 		if (model.doElectabilityPolls) {
 			goodCans = _bestElectable(model, voterPerson)
+		} else {
+			// otherwise, only consider our party's candidates
+			goodCans = district.parties[voterPerson.iParty].candidates
 		}
 	}
 
