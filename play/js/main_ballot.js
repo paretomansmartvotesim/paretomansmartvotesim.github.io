@@ -376,7 +376,7 @@ function bindBallotModel(ui,model,config) {
 		
 		
 		if (model.voterGroups.length == 0) return
-		var ballot = model.voterGroups[0].voterPeople[0].ballot // just pick the first ballot to show
+		var ballot = model.voterGroups[0].voterPeople[0].stages[model.stage].ballot // just pick the first ballot to show
 		if (model.newWay) {
 			// onDraw
 		} else {
