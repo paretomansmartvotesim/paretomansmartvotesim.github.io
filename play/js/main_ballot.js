@@ -170,8 +170,8 @@ function createDOMB(ui,model) {
 			ui.dom.right.appendChild(ui.dom.caption)
 		}
 	} else {
-		ui.dom.ballot = new ui.BallotType(model);
-		ui.dom.right.appendChild(ui.dom.ballot.dom)
+		ui.dom.paperBallot = new ui.BallotType(model);
+		ui.dom.right.appendChild(ui.dom.paperBallot.dom)
 	}
 
 
@@ -380,7 +380,7 @@ function bindBallotModel(ui,model,config) {
 		if (model.newWay) {
 			// onDraw
 		} else {
-			ui.dom.ballot.update(ballot);
+			ui.dom.paperBallot.update(ballot);
 		}
 
 	})
