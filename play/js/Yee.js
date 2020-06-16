@@ -394,8 +394,8 @@ function Yee(model) {
 					colors: []
 				}
 				for (var k = 0; k < model.nDistricts; k++) {
-					if (model.district[k].candidates.length > 0) {
-						result_k = model.election( model.district[k], model, model.optionsForElection );
+					result_k = model.election( model.district[k], model, model.optionsForElection );
+					if (result) {
 						result.colors = [].concat(result.colors , result_k.colors)
 					}
 

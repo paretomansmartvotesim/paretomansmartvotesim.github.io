@@ -400,7 +400,6 @@ function Model(idModel){
 					self.result.text += "<br>"
 					self.result.text += "District " + (i+1)
 					self.result.text += "<br>"
-					if (self.district[i].candidates.length == 0) continue
 					self.result.text += self.district[i].result.text
 					self.result.winners = [].concat(self.result.winners , self.district[i].result.winners)
 					self.result.colors = [].concat(self.result.colors , self.district[i].result.colors)
@@ -411,7 +410,7 @@ function Model(idModel){
 			}
 			// for now, just give the history for the first district with candidates
 			for (var i = 0; i < self.nDistricts; i++) {
-				if (self.district[i].candidates.length > 0) {
+				if (self.result) {
 					self.result.history = self.district[i].result.history
 					break
 				}
