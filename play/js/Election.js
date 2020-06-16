@@ -1721,9 +1721,8 @@ Election.irv = function(district, model, options){
 
 	var candidates = [];
 	var startingCandidates = []
-	var cans0 = district.stages[model.stage].candidates
-	for(var i=0; i< cans0.length; i++){
-		var cid = cans0[i].id
+	for(var i=0; i< cans.length; i++){
+		var cid = cans[i].id
 		candidates.push(cid);
 		startingCandidates.push(cid)
 	}
@@ -3409,15 +3408,15 @@ function _electionDefaults(options) {
 
 function head2HeadPoll(model,district,ballots) {
 
-	var candidates = district.stages[model.stage].candidates
+	var cans = district.stages[model.stage].candidates
 
 	head2head = {}
 	// For each combination... who's the better ranking?
-	for(var i=0; i<candidates.length; i++){
-		var a = candidates[i];
+	for(var i=0; i<cans.length; i++){
+		var a = cans[i];
 		head2head[a.id] = {}
-		for(var j=0; j<candidates.length; j++){
-			var b = candidates[j];
+		for(var j=0; j<cans.length; j++){
+			var b = cans[j];
 			// How many votes did A get?
 			var aWins = 0;
 			for(var m=0; m<ballots.length; m++){
@@ -3438,8 +3437,8 @@ function runPoll(district,model,options,electiontype){
 
 	if ( ! model.checkRunPoll() ) return ""
 
-	var candidates = district.stages[model.stage].candidates
-	if ( candidates.length < 3 ) return ""
+	var cans = district.stages[model.stage].candidates
+	if ( cans.length < 3 ) return ""
 
 	polltext = ""
 
@@ -3528,8 +3527,8 @@ function runPoll(district,model,options,electiontype){
 				collectTallies.push(ptallies)
 			} else {
 			
-				for(var i=0; i<candidates.length; i++){
-					var c = candidates[i].id;
+				for(var i=0; i<cans.length; i++){
+					var c = cans[i].id;
 					if (electiontype == "irv"){
 						polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally[c]) + ". ") + " "
 					}else {
@@ -3745,11 +3744,11 @@ var runPrimaryPoll = function(district,model,options,electiontype){
 
 var _tally = function(district, model, tallyFunc){
 
-	var candidates = district.stages[model.stage].candidates
+	var cans = district.stages[model.stage].candidates
 
 	// Create the tally
 	var tally = {};
-	for (let c of candidates) {
+	for (let c of cans) {
 		tally[c.id] = 0;
 	}
 	
@@ -3787,11 +3786,11 @@ var _tally_primary = function(district, model, tallyFunc){
 
 var _tally_i = function(district, model, tallyFunc){
 
-	var candidates = district.stages[model.stage].candidates
+	var cans = district.stages[model.stage].candidates
 
 	// Create the tally
 	var tally = {};
-	for (let c of candidates) {
+	for (let c of cans) {
 		tally[c.id] = 0;
 	}
 
