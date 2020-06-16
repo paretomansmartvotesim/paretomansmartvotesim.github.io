@@ -123,7 +123,7 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 	} else {
 		viable = model.district[iDistrict].preFrontrunnerIds
 	}
-	var cans = model.district[iDistrict].candidates
+	var cans = model.district[iDistrict].stages[model.stage].candidates
 	var scoresfirstlast = dostrategy(model,x,y,voterModel.minscore,voterModel.maxscore,strategy,viable,cans,voterModel.defaultMax,doStar,model.utility_shape)
 	
 	voterModel.radiusFirst[i] = scoresfirstlast.radiusFirst // this is okay for now but could mess up if one voterModel is shared by more than one voterCrowd
@@ -151,7 +151,7 @@ CastBallot.Approval = function (model,voterModel,voterPerson) {
 	
 	// Anyone close enough. If anyone.
 	var approved = [];
-	var cans = model.district[iDistrict].candidates
+	var cans = model.district[iDistrict].stages[model.stage].candidates
 	for(var j=0;j<cans.length;j++){
 		var c = cans[j];
 		if(scores[c.id] == 1){
@@ -175,7 +175,7 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 
 	// Rank the peeps I'm closest to...
 	var rank = [];
-	var cans = model.district[iDistrict].candidates
+	var cans = model.district[iDistrict].stages[model.stage].candidates
 	for(var j=0;j<cans.length;j++){
 		var c = cans[j];
 		rank.push(c.id);
@@ -266,13 +266,14 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 	// if it's a primary, then only consider our party's candidates
 	var cans = district.stages[model.stage].candidates
 
+	var goodCans = cans
 	
 	if (district.primaryPollResults && model.stage == "primary") { // primary is here for safety 
 
 		// if we're in a primary 
 		// then consider electability (if there are polls)
 		if (model.doElectabilityPolls) {
-			cans = _bestElectable(model, voterPerson)
+			goodCans = _bestElectable(model, voterPerson)
 		}
 	}
 
@@ -282,23 +283,23 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 
 		//   consider only viable candidates (if there are polls, 
 		if (district.pollResults && model.autoPoll == "Auto") { // Auto is here for safety
-			var viable = _findViableFromSet(cans, district, voterModel)
+			var viable = _findViableFromSet(goodCans, district, voterModel)
 
 		} else if (model.autoPoll == "Manual") {  // manually set viable candidates, if we want to
 			var viable = district.preFrontrunnerIds
 
 		} else { // we're the first to take the polls, so any candidate is viable
-			var viable = cans.map(c => c.id)
+			var viable = goodCans.map(c => c.id)
 		}
 
 		// but only if there is more than one viable candidate
 		if (viable.length > 1) {
-			cans = viable.map(cid => model.candidatesById[cid])
+			goodCans = viable.map(cid => model.candidatesById[cid])
 		}
 	}
 
 	// Who am I closest to?
-	var closest = _findClosest(model,cans,x,y)
+	var closest = _findClosest(model,goodCans,x,y)
 
 	// Vote for the CLOSEST
 	return { vote:closest.id };
@@ -1145,20 +1146,20 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 		var regularLine = false
 
 		var rankByCandidate = []
-		var cans = []
+		var sortedCans = []
 		for(var i=0; i<ballot.rank.length; i++){
 			var rank = ballot.rank[i];
 			var c = model.candidatesById[rank];
-			cans.push(c)
+			sortedCans.push(c)
 			rankByCandidate[c.i] = i
 		}
-		for(var i = 0; i < cans.length; i++) {
+		for(var i = 0; i < sortedCans.length; i++) {
 			for (var k = 0; k < i; k++) {
-				var c1 = model.arena.modelToArena(cans[i])
-				c1.fill = cans[i].fill
-				var c2 = model.arena.modelToArena(cans[k])
-				c2.fill = cans[k].fill
-				var win = rankByCandidate[cans[k].i] > rankByCandidate[cans[i].i]
+				var c1 = model.arena.modelToArena(sortedCans[i])
+				c1.fill = sortedCans[i].fill
+				var c2 = model.arena.modelToArena(sortedCans[k])
+				c2.fill = sortedCans[k].fill
+				var win = rankByCandidate[sortedCans[k].i] > rankByCandidate[sortedCans[i].i]
 					
 				if (connectCandidates) {
 					ctx.setLineDash([5, 45]);
@@ -1434,7 +1435,7 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson) {
 		}
 		
 		if (orderByCandidate) {
-			for(var [i,c] of Object.entries(model.district[iDistrict].candidates)){
+			for(var [i,c] of Object.entries(model.district[iDistrict].stages[model.stage].candidates)){
 				slices[i] = slicesById[c.id]
 			}
 		}
@@ -3304,7 +3305,7 @@ function _findClosestCan(x,y,iDistrict,model) {
 	
 	var closest = {id:null};
 	var closestDistance = Infinity;
-	var cans = model.district[iDistrict].candidates
+	var cans = model.district[iDistrict].stages[model.stage].candidates
 	for(var c of cans){
 		var dist = distF2(model,{x:x,y:y},c)
 		if(dist<closestDistance){
