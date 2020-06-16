@@ -379,13 +379,9 @@ function Model(idModel){
 
 		if (self.nDistricts > 1) {
 			for (var i = 0; i < self.nDistricts; i++) {
-				if (self.district[i].candidates.length == 0) {
-					self.district[i].result = undefined
-				} else {
-					self.placeHoldDuringElection = self.doPlaceHoldDuringElection
-					self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
-					self.placeHoldDuringElection = false
-				}
+				self.placeHoldDuringElection = self.doPlaceHoldDuringElection
+				self.district[i].result = self.election(self.district[i], self, self.optionsForElection);
+				self.placeHoldDuringElection = false
 			}
 
 			// put all the results together
@@ -399,17 +395,19 @@ function Model(idModel){
 			}
 			if (self.doTop2) self.result.theTop2 = []
 			for (var i = 0; i < self.nDistricts; i++) {
-				self.result.text += "<br>"
-				self.result.text += "<br>"
-				self.result.text += "District " + (i+1)
-				self.result.text += "<br>"
-				if (self.district[i].candidates.length == 0) continue
-				self.result.text += self.district[i].result.text
-				self.result.winners = [].concat(self.result.winners , self.district[i].result.winners)
-				self.result.colors = [].concat(self.result.colors , self.district[i].result.colors)
-				self.result.color = [].concat(self.result.color , self.district[i].result.color)
-				if (self.district[i].result.eventsToAssign) self.result.eventsToAssign = [].concat(self.result.eventsToAssign , self.district[i].result.eventsToAssign)
-				if (self.doTop2) self.result.theTop2 = [].concat(self.result.theTop2 , self.district[i].result.theTop2)
+				if (self.result) {
+					self.result.text += "<br>"
+					self.result.text += "<br>"
+					self.result.text += "District " + (i+1)
+					self.result.text += "<br>"
+					if (self.district[i].candidates.length == 0) continue
+					self.result.text += self.district[i].result.text
+					self.result.winners = [].concat(self.result.winners , self.district[i].result.winners)
+					self.result.colors = [].concat(self.result.colors , self.district[i].result.colors)
+					self.result.color = [].concat(self.result.color , self.district[i].result.color)
+					if (self.district[i].result.eventsToAssign) self.result.eventsToAssign = [].concat(self.result.eventsToAssign , self.district[i].result.eventsToAssign)
+					if (self.doTop2) self.result.theTop2 = [].concat(self.result.theTop2 , self.district[i].result.theTop2)
+				}
 			}
 			// for now, just give the history for the first district with candidates
 			for (var i = 0; i < self.nDistricts; i++) {
