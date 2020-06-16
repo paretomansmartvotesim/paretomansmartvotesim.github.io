@@ -277,68 +277,6 @@ Election.approval = function(district, model, options){
 	return result;
 };
 
-// Just use pairDraw()
-// function _condorcetPairDraw(model,district,aid,bid,tie) {
-// 	return function() {
-// 		// make a backup
-// 		var dBackup = [] // TODO: make a copy instead of a backup
-// 		for (var i = 0; i < district.candidates.length; i++) {
-// 			dBackup.push(district.candidates[i])
-// 		}
-// 		var mBackup = [] // TODO: make a copy instead of a backup
-// 		for (var i = 0; i < model.candidates.length; i++) {
-// 			mBackup.push(model.candidates[i])
-// 		} // hmm... TODO: is this a mistake?  should we be using model instead of district?
-
-// 		// remove all candidates except the pair
-// 		// start at the end of the list
-// 		for (var i = district.candidates.length-1; i >= 0; i--) {
-// 			c = district.candidates[i]
-// 			if (c.id == aid) {
-// 				var ai = i
-// 				continue // skip
-// 			}
-// 			if (c.id == bid) {
-// 				var bi = i
-// 				continue // skip
-// 			}
-// 			district.candidates.splice(i, 1); // remove from candidates...
-// 		}
-
-// 		// need to remove the candidates from the model list.
-// 		for (var i = model.candidates.length-1; i >= 0; i--) {
-// 			c = model.candidates[i]
-// 			if (c.id == aid) continue // skip
-// 			if (c.id == bid) continue // skip
-// 			model.candidates.splice(i, 1); // remove from candidates...
-// 		}
-
-// 		for (var i=0; i < model.voterGroups.length; i++) {
-// 			v = model.voterGroups[i]
-// 			v.update() // easy way to only show the two candidates.
-// 		}
-
-
-
-// 		model.dontdrawwinners = true
-// 		model.drawArenas()
-// 		model.dontdrawwinners = false
-// 		district.candidates = dBackup
-// 		model.candidates = mBackup
-// 		for (var i=0; i < model.voterGroups.length; i++) {
-// 			model.voterGroups[i].update()
-// 		}
-
-// 		// draw this pair's better half
-// 		if (! tie) {
-// 			district.candidates[ai].drawText("Better",model.arena.ctx,model.arena) 
-// 		} else {
-// 			district.candidates[ai].drawText("Tie",model.arena.ctx,model.arena) 
-// 			district.candidates[bi].drawText("Tie",model.arena.ctx,model.arena) 
-// 		}
-// 	}
-// }
-
 Election.condorcet = function(district, model, options){
 
 	options = _electionDefaults(options)
@@ -1970,20 +1908,6 @@ Election.irv = function(district, model, options){
 	
 	}
 
-
-	if(options.sidebar) {
-		
-		// for(var i=0; i<model.voterGroups.length; i++){
-		// 	var voter = model.voterGroups[i];
-		// 	voter.update();
-		// }
-		// for (var i=0; i<model.voterGroups.length; i++) {
-		// 	model.voterGroups[i].ballots = temp[i].ballots // originals
-		// }
-		// model.voterGroups = temp // restore the original ballots
-		// model.voterGroups = ov
-	}
-
 	if (drawFlows) {
 
 	}
@@ -2523,11 +2447,6 @@ Election.stv = function(district, model, options){
 		}
 	}
 
-	// we messed around with the rankings, so lets put them back
-	// for(var j=0; j<model.voterGroups.length; j++){
-	// 	model.voterGroups[j].update();
-	// }
-
 	return result;
 };
 
@@ -2874,11 +2793,6 @@ Election.quotaMinimax = function(district, model, options){
 			result.eventsToAssign.push(e)
 		}
 	}
-
-	// we messed around with the rankings, so lets put them back
-	// for(var j=0; j<model.voterGroups.length; j++){
-	// 	model.voterGroups[j].update();
-	// }
 
 	return result;
 };

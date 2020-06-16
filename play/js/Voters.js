@@ -2772,16 +2772,6 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.initVoterSet()
 	}
 
-
-	self.update = function(){
-	
-		self.updatePeople()
-
-		self.updateBallots()
-
-	};
-
-	
 	self.updatePeople = function() {
 
 		self.updateVoterSet()
@@ -3191,12 +3181,6 @@ function SingleVoter(model){
 		self.voterPerson = self.voterPeople[0] // shorthand
 		
 	}
-	self.update = function(){
-
-		self.updatePeople()
-
-		self.updateBallots()
-	};
 
 	self.updatePeople = function() {
 
