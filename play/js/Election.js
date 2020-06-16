@@ -3180,12 +3180,15 @@ Election.pluralityWithPrimary = function(district, model, options){
 	model.stage = "general"
 	district.stages["general"] = {candidates: cans.filter( x => pwinners.includes(x.id)) }
 
-	// fresh polls for general election
-	district.pollResults = undefined
-	var generalPollText = runPoll(district,model,options,"plurality")
+	
+	if ( ! options.justCount ) {
+		// fresh polls for general election
+		district.pollResults = undefined
+		var generalPollText = runPoll(district,model,options,"plurality")
 
-	model.updateDistrictBallots(district);
-
+		model.updateDistrictBallots(district);
+	}
+	
 	var tally = _tally(district,model, function(tally, ballot){
 		tally[ballot.vote]++;
 	});
@@ -3288,12 +3291,12 @@ function _beginElection_pluralityWithPrimary(district,model,options) {
 	
 	polltext = ""
 	// Take polls and vote
-	district.primaryPollResults = undefined
-	polltext += runPrimaryPoll(district,model,options,"plurality")
-	district.pollResults = undefined
-	polltext += runPoll(district,model,options,"plurality")
-	
 	if ( ! options.justCount ) {
+		district.primaryPollResults = undefined
+		polltext += runPrimaryPoll(district,model,options,"plurality")
+		district.pollResults = undefined
+		polltext += runPoll(district,model,options,"plurality")
+	
 		model.updateDistrictBallots(district)
 	}
 	return polltext
