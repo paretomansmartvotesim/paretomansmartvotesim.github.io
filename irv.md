@@ -35,7 +35,7 @@ Ranked choice voting asks voters to rank the candidates in order from best to wo
 
 {% include sim.html id="irv_ballot_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8F9cp4md29zMQ3WqLQ1zFCShoEOLfcTy6E-KEUky8Y09mvF_Uadt3lt7Y5Gi7sN5u0UTlOBpx9fDSTGeptPVGRps18rpHNki7O9k7kkm69b8nuSW5u-_FrP8y3OtBnpZmKShhiQ0AUxyAtMDplPM5TUhtbiS97EvqSIIAICOGFq8BgYwMVAuqtQa0l1GeS-EiVGpWFTwMaSrt3BiNAQp6iqhcy7IpN3tsxptxTa4XvVJWc_Zb0qIetYEfA4uGoI6FOew5gjrsOYK6AxDUBzisyxE0OoCrM7D1wLrCK4KmkYBEwEGsBQMOBmYHFjQUgAU9nS6Xt4_Hz_czbfRwen05P9P3D7xkiI6cAgAA)" title = "Ranked Choice Voting Ballot"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8lUO1C0uW7PV-RIqQJuxucSFb5bgLJE0IybdH1nAQOA4XY73GM_I3ZZqXZeqJtW9p4Z6vN89JqduWiEdLl6TTiArNOZHSrIks7tXrkm6O9zav5HRzvDLdrfS7Fc7xHA89IxSEEMQKgCR2TezgAth1sj9XHHoUJYd4YUROIw6gEY1BsRiQimRDNCHqMVByCOWxEjAVMJUCgKDiTAsnRmNFCXwFVjlWpYNu9OiwN-yqXC9OuJRx0ZjT_5QKp9rwLZCoPZKGhZkz0u9Kz_vHup4PD5fDSuRpyDXINRg3A8C4gdWwPoPxmgEcnRW_ULG-amFpiK2gqFBUsfoGRQ0LaxIUrQCwsJfj6XT5fPp631314_H8tr_Szx9OauPpqAIAAA)" title = "Ranked Choice Voting Ballot"
 
 caption = "Your vote counts for your top choice.  It's like a stack of cards.  The top card is who you like best.  Under that is your second choice, and so on."
 
@@ -122,7 +122,7 @@ For new candidates who don't have many supporters yet, the barrier to entry woul
 
 {% include sim.html id="standard_spoiler_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRW24EMQi7S775iHllslcZzUmq3r0Ea6Wqq2qkADE4xvM15njd974Euh-5sVVgXpkqREOfRwZOC9wK6drGa8rwPqPPrA6Vj696VyEFy_z7FXYV9nHfyP4XwewHcTSdUllSEqgJFIVkKAnwivWcVShuyNDiqUstHq2gDKRRZ0v0gJJGF6uL1e4Bmy0UxxQ0YNqzZsQpyIrphoCNSYh8xlXRZnnTnQTvRN-JHYtP4j3nvyk9-1Ff_DGU6Fw0aFhQXnDRoLzgohEMXDQWMdoVXDQnA7oz6XrSroxewUpIkiKpIHeHRQWLs4sGLWM4Bn3_AFcORBuGAgAA)" title = "Accusation of Spoiler"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXOCKwEJCuBRHyL9H1uQg5DgWLMkjjUezX6WVddvGUonHXjda5Ddj8soy9r0Wmi2kgQjPWsraatE8LU-PDq53X_T2QAKu7f8X2BLY3X0i4yFCLR-kqWmWjBKSCJoIosgRQgJpxHhOIgQ31cLBE5ccPByBEUDDihbLAQYNd1QLqpED0lIoTVMoAeGcFQEOQRJMG1VCowMCn2BVSrM06WZCt4RviUyLZ6I5p38p1fNR7fgxkKhY1GCYQZ5hUYM8w6JmCFjUOjDYZVjUGwJlp8N1h11uuYKEEAeFQ4GPDB0KOmY7DOqCAINeTsfxdnm-vp_LWp6Oz4_T8Xq5lu8fubfAvp8CAAA)" title = "Accusation of Spoiler"
 
 caption = "B accuses C of spoiling the election, hoping he’ll get C’s supporters"
 
@@ -131,7 +131,7 @@ comment = "standard spoiler example. Maybe needs a switch between FPTP and IRV."
 
 {% include sim.html id="no_spoilers_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04DQQz8l61drJ-bvc9AdKcrgkhFBBQ0CPHveD2KhIjQFWNn7Nnx5Kv1tu37PBHLPGjnKcRqWYkwictxUOM1wqbJVK9t69SsbUbNq46cELr7cnYkkzT1v19yp-Tufi9m_stwrwd5eVqtoIUlNgBMcQDSAqdTzuc0IbWZmvSyL6kjCQKAjBhGvBYEMjLQndDNWtBeRnmFwkWo1K4qeBjSVNqZGIMBCnqKU7nCspJbBd8KuRW6Il6F1Z79lrSoR23gj4FFw6GOwBz2HIc67DkOdQfgUB_gEJfj0OgArslA6oG4wusETSMBiYCDmAUDDgZ2BwIaCkBAT-fr9e3j8fP90rb2cH59uTy37x_7vX5AnAIAAA)" title = "No More Accusations"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04DQQz8F9dbrJ97d5-B6E5XBJGKCChoEOLf8XoSCRGhK8bO2LPjyRd12vZ9XRrLerSdF71WwtFE1-NoxHOELRmV2SttvZHRZo286sgJaXdfzo5kkm7975fcktzd78Ws_zLc60GenmYraGGJDQBTHIC0wOmU8zlNSG1uJL3sS-pIggAgI4YRrwWBjAx0C7q1FrSXUZ6hcBEqtasKHoY0lXZujMEABT3FqVxhWcnNgm-F3AqdEc_Cas9-S1rUozbwx8Ci4VBHYA57jkMd9hyHugNwqA9wiMtxaHQA12Qg9UBc4XWCppGARMBBrAUDDgZ2BwIaCkBAT6fL5e3j8fP9TBs9nF5fzs_0_QPwcCwonAIAAA)" title = "No More Accusations"
 
 caption = "B is okay with C running because C’s supporters will support B against A."
 

@@ -1554,30 +1554,45 @@ function _drawPairTableByCandidate(model, ctx, x, y, size, ballot, weight) {
 }
 
 function _drawIRVStack(model, ctx, x, y, size, slices, totalSlices) {
+
+
 	x = x * 2
 	y = y * 2
 	size = size * 2
 	var maxscore = model.candidates.length
+	var extraspace = .5 // how much extra space the stack at the bottom should use.  - as a fraction.
 
-	//draw outline
-	_centeredRectStroke(ctx,x,y+size*.25,size,size*1.5)
+	let noLastRank = true
+	if (noLastRank) {
+		slices.pop()
+		maxscore --
+	}
+
+	// special case looks weird
+	if (maxscore == 2) {
+		extraspace = .25
+	}
 
 	// draw top slice
 	_centeredRect(ctx,x,y,size,size,slices[0].fill)
 	slices.shift() // remove top slice
 
-	var yaxis = _lineVertical( slices.length, size * .5 ) 
+	var yaxis = _lineVertical( slices.length, size * extraspace ) 
 
-	var sizeSquare = size/2  / (maxscore-1)
+	var sizeSquare = size * extraspace  / (maxscore-1)
 	for(var i in slices){
 		var point = yaxis[i]
 		var slice = slices[i]
 		var xp = x
-		var yp = y + .75 * size + point[1]
+		var yp = y + .5 * (1+extraspace) * size + point[1]
 		_centeredRect(ctx,xp,yp,size,sizeSquare,slice.fill)
 	}
 	// _centeredRectStroke(ctx,x,y*1.25,size,size*1.5,'#888')
 	// _centeredRectStroke(ctx,x,y,size,size,'#888')
+
+	//draw outline
+	_centeredRectStroke(ctx,x,y+size*(.5*extraspace),size,size*(1+extraspace))
+	_centeredRectStroke(ctx,x,y,size,size)
 
 }
 
