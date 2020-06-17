@@ -13,13 +13,17 @@ title: Home
 
 {% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval_superman.html' img='img/winner-circle.png' %}
 
-{% include card.html title="To Build a Better Ballot" description=" - Nicky Case's Original Sim" url='original.html' img='img/split-vote.png' %}
+{% include card.html title="To Build a Better Ballot" description=" - Nicky Case's original sim" url='original.html' img='img/split-vote.png' %}
 
 {% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer.html' img='img/chicken.png' %}
+
+{% include card.html title="Instant Runoff Voting" description=" - a kinder politics with a kind of Ranked Choice Voting (RCV) for single-winner elections" url='irv.html' img='img/irv.png' %}
 
 {% include card.html title="Condorcet Methods" description=' - draft' url='log.html' img='img/condorcet.png' %}
 
 {% include card.html title="Sandbox" description=' - try everything' url='sandbox/index.html' img='img/sandbox.png' %}
+
+
 
 # Intro
 
