@@ -49,7 +49,7 @@ Here's a sketch that shows everyone connected to their first pick. Colored flow 
 
 {% include sim.html id="irv_second_counts_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA21RMU4EMQz8S2oXsWM7yT4D0a22OMRVnICCBiF4O44H6dCBtphYY4_Hsx-llm3fmY2GHLTzmDR8PWYl4XkcVDg7RiM2XgwLiSyila1S0bIpFcu3R2uwt1_09mCCpnr7BTeCi-EvnuNPQ9Dzh3ar_9FcczUvm6sUlDDHCoA9dkCY4fDMsbgFxAKmIjUPkdCRAAFARhQtlgMCGemoBqqZA62mW17xcBJNcrY18DDUQmlnYjQ6KOg13MsZm17llPO5Tla5PltGng2a8_pbWj2Xa8evglXFwYbgDDYNBxtsGg42A-Bg6-AQm-FgrwDOTkf6jtjc0mcLIw4JhwOfCR0OOmY7guoNgKAeTpfLy9v9--u5bOXu9Px0fiyf32gdSPW2AgAA)" title = "Election with Instant Runoff Voting"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qu4md29zMQ3WqLQ3fVnYCCBiH-HcdTHOKEUkycscdj56v1tu37ErTKQTtHJ5Y-bx7E63Ic1HhmcAixRTKLkvJ817Z1atY2o-Z1j8wUejiZO5LJVtT_nuSW5B7ei1n_ZbhXQ57eZigIYYkNAFMcgLTA6ZSznSakNlOTXvYldSRBAJARQ4pXgUBGBqIF0VoF2ssoz6VwEQpDquChpKm0MzESAxT0FKNyLcvucsZYwbzK_aq16Eqwqrff0hbVzgY-CFYNAzsW57DpGNhh02HTHYCBfYDD2hwDRwdwZQaGDawtvHxqGglIBBzEWjDgYKB2CEAB-LmX0-329vH8-X5pW3s6vV4v5_b9A5Xa76erAgAA)" title = "Election with Instant Runoff Voting"
 
 caption = "Your vote counted for A, your favorite, in the first round.  Not enough people chose A as their favorite, so A was eliminated.  Your vote counted for B over C in the final round, so you didn't spoil the election for B by voting for A."
 
@@ -69,7 +69,7 @@ By being able to express more on a ranked choice ballot, voters no longer face a
 
 {% include sim.html id="irv_not_wasted_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA21RMU4EMQz8S2oXsWM7yT4D0a22OMRVnICCBiF4O44H6dCBtphYY4_Hsx-llm3fmY2GHLTzmDR8PWYl4XkcVDg7RiM2XgwLiSyila1S0bIpFcu3R2uwt1_09mCCpnr7BTeCi-EvnuNPQ9Dzh3ar_9FcczUvm2PVghruWAHwxw4INxymOTa3gNjAVKTmJRJCEiAAyIiixXJAICMd1UA1c6DVtMsrH06iSc62Bh6GWijtTIxGBwW9hoM5c9OrnHI-180q12fLzLNBc15_S6vncu34V7CqONiQnMGm4WCDTcPBZgAcbB0cYjMc7BXA2elI3xGbW_psYcQh4XDgM6HDQcdsR1C9ARDUw-lyeXm7f389l63cnZ6fzo_l8xtp4lfrtwIAAA)" title = "RCV: Less Spoiler Dilemma"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRO05EMQy8S2oX8Td57xiI7mmLRWzFCihoEOLuOJ5iESuUYuKMPR47X623_Thm0CYnOjg6sfR18yDe5ulEjVcGhxBbJDOVlNe7tr1Ts7YbNa97ZKbQ3cnckUy2ov73JDeTu3svZvuX4V4NeXmbKxbE8MQGgCsOQHrgtMrZTxNSnKlJL_-SQpIgAMiIIcWrQCAjA9FEtFWB9nLKaytchMKQKngoaSodTIzEAAU9xaxc27KbnDF2sK5yu2ptuhKs6u23tEW1s4EfglXDwI7NOWw6BnbYdNh0B2BgH-CwNsfA0QFcmYFhA2sLL5-aRgISAQexFQw4GKgdAlAAfu7pfL2-fTx-vl_a3h7Ory-X5_b9A5Rvw6asAgAA)" title = "RCV: Less Spoiler Dilemma"
 
 caption = "Same example as above. You don't have to vote strategically to support B.  You can support A over B and B over C. There is no benefit to switching from O=zero strategy to F=frontrunner strategy."
 
@@ -79,7 +79,7 @@ This dilemma is familiar to anyone who has voted in a single-choice voting eleci
 
 {% include sim.html id="wasted_vote_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRS24FIQy7C-sscH4w7yqjOUnVuzfEi1f1qRoJA06M4_kac7zue6dc-siNFQJ471x07ueRgVOBVIFnMdvEcO5tvKYM7zV6zapU-fiqdhVTtMy_X3G7uI_7Zq5_Gcx-EMfbPmflmZ5AU6ArJKE8wAvrPSsoccjQEqpLLSEtUAJl1FkS3aCU0cXT5unqBpvtFCcVNGHavWbkqWSldEPAwiRFPeOs6LT8LedgBmer76110l3g3e-_pT37OV_8Q7TqHDiYXNBmcOCgzaDNCAIHjkWOsQUHzklAVybTT8aW0T6tjCQlkg7yalh0sNi7GNQywvlz3z8e1Uc2lgIAAA)" title = "The Single-Choice Dilemma"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sVlmTJ3n1FinTLFhe4IrCQEC7FEfL3yJrijhyHwWN7pNFI_im1rNs2nBbZaWOvxFLnyZx4GftOhWcEuxA3D2YoKc93LWul0nK33D0ihR5WxPZgohTV_yu4EdzDezLLU4ZrFuTpbcy74A5PDFMMV-yA8MAtMOppQIgzFQmheJQQkgABQEYaQiwTBDLScRu4LZmgNZ3ynAonoTCkCh5KGkobEyPQQUFP0SvntNpNrjFmMI9yO2pOOgNa5rd76eZZrnX8EKw2NGyYnMGmoWGDTYNNMwAatg4OYzM07BXAGelo1jE2t_SpYcQh4XDgS0KHg47cLgAF4OfeTsfxcXm9fp7LWl6O76_T8X65lt8_CondrK8CAAA)" title = "The Single-Choice Dilemma"
 
 caption = "Do I waste my vote on my favorite A or do I support?  Change from O=zero strategy, to F=frontrunner strategy to get a better result."
 
@@ -91,7 +91,7 @@ Still, there will be tough situations where if there are a large number of candi
 
 {% include sim.html id="tough_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qp4lce-xmIbrXFIa7iBBQ0CPHv2B5tASeUYuwdZzLj_SqtbPu-ZiVeR93JxllNq2tEsfzTkOOohWKWVCoJRy9la7Vo2bQWy7r7BNe747PDGadr-3ucm87dfU9m_ctQywcpPM3oGT08kQLgijrAPZBbpZmOycWpFm7ZsQuxAwMgw4oRlxEHyPBAN9GtvCAtnVJshZIQKIkAYEhcaaeaJ0Y7SCgK0pJvTJzUlIyCzoLPQmLPUWje1N-y2tO2DvwfGFXENezNYNJg0mDSENcMgLg2wM18yRC3NwDlZMfuO5bWLWNEhA6JDgd9JQw4GLg7GCAArOnpcru9fTx-vl_LVh4ury_X5_L9AzYTUNKsAgAA)" title = "A Tough Situation Solved by Strategy"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qp4lce-xmIbrXFIa7iBBQ0CPHv2B5tASeUYsY7zmTs_SqtbPu-ZiVeR93Jxsmm1TWCLP805DhqoegllUrCUUvZWi1aNq3Fknfv4Hp3vHe44o_V9ve4Nl27-57K-lehlg9SZJpRM2pkIgUgFXWAZyCPSjMTk5tTLdyyYjdiBwbAhhUtbiMOsOGBaqJaeUFaJqXYCqUgcBIBIJC40041T7R2iHAUTEu-MXFR0zIInYRPIrHnIJo39bet9oytA_8HQRXjGvZmCGkIaQhpGNcMgHFtQJv5kmHc3gCUnR2771hatxwjRuiw6EjQV8JAgoG7gwECwJqeLrfb28fj5_u1bOXh8vpyfS7fP9OVrU2sAgAA)" title = "A Tough Situation Solved by Strategy"
 
 caption = "Strategic voting can help turn a tough situation into a successful election when there are useful head-to-head polls."
 
@@ -101,7 +101,7 @@ This is an improvement over single-choice voting.  The polls are much more usefu
 
 {% include sim.html id="fptp_bad_polls_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ631FinTLFhdIEVhICJfiCPl7JA1bXI5g8EgeeTySv0sr67bNpRLPvW6k44wWrXNEMP1oyL7XQlFLXSoJRy5lbbX03DV38wquD8trhzNO1_Z3Obc493CezPyXoZYPUnhaImfk8EQwRXBFBnAP1B39vQAXp1q4ZcYuxA4MgAx3lLiMOECGB7IF2cwL0tIpxVQoCYGSCACGxJU2qrmi1EBCUdAt-cTEyZ6SEdAZ8BlIzDmCnjf7vWy3tN0H_gdGO9pVzE1hUmFSYVLRrioA7eoAt-RLinatASgrDbM3DM0024gWDBIGBzYTBhwM3B0MEADG9HI5jvfr8-3jtazl6fj6vBxv11v5-QVIqEK2rwIAAA)" title = "FPTP: Tough to Strategize"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ631FinTLFhdIEVhICJfiCPl7JA1bXI5g8Eg78mik_S6trNs2l0o897qRjjNatM4RwfRPQ_a9Fopa6lJJOHIpa6ul5615m1dwfTheO5zxZrX9Pc4tzj18T2b-y1DLhhSelsgZOTwRTBFckQHcA3VH7xfg4lQLt8zYhdiBAZDhjhKXEQfI8EC2IJv5QFo6pdgKJSFQEgHAkLjSRjVPlBpIKAqmJd-YONlTMgI6Az4DiT1H0PNlv5ftlrb7wP-B0Y5xFXtTmFSYVJhUjKsKwLg6wC3ZSTGuNQBlpWH3hqWZ5hgxgkHC4MBmwoCDgbeDAQLAml4ux_F-fb59vJa1PB1fn5fj7XorP7_wC763rwIAAA)" title = "FPTP: Tough to Strategize"
 
 caption = "C loses even though he's in the middle because he never got good poll numbers inFPTP polls."
 
@@ -122,7 +122,7 @@ For new candidates who don't have many supporters yet, the barrier to entry woul
 
 {% include sim.html id="standard_spoiler_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXOCKwEJCuBRHyL9H1uQg5DgWLMkjjUezX6WVddvGUonHXjda5Ddj8soy9r0Wmi2kgQjPWsraatE8LU-PDq53X_T2QAKu7f8X2BLY3X0i4yFCLR-kqWmWjBKSCJoIosgRQgJpxHhOIgQ31cLBE5ccPByBEUDDihbLAQYNd1QLqpED0lIoTVMoAeGcFQEOQRJMG1VCowMCn2BVSrM06WZCt4RviUyLZ6I5p38p1fNR7fgxkKhY1GCYQZ5hUYM8w6JmCFjUOjDYZVjUGwJlp8N1h11uuYKEEAeFQ4GPDB0KOmY7DOqCAINeTsfxdnm-vp_LWp6Oz4_T8Xq5lu8fubfAvp8CAAA)" title = "Accusation of Spoiler"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXOCKwEJCuBRHyL9H1uQg5DgWPJJHGo-0X6WVddvGUonHXjda5Ddi8soy9r0WmiWkwQjPXMraatE8LU-PCq53X9T2YIKu7f8X3BLc3X0y4yFDLR-k6WmmjBSWCJ4IpsgBYYE0MJ6TgNCmWjh04pJDhwMYABlWlFg2MGS4I1uQjWyQlkZpLoWSEBgSAQ9DEkobVUKhg4KeYFTKZWnKzYBuAd8CmSuegWaf_pVUT8Pa8WNgUTGoYWEGe4ZBDfYMg5oBMKh1cFiXYVBvAMpKx5COdbnlCBJGHBIOBz4SOhx09HYGCAALejkdx9vl-fp-Lmt5Oj4_Tsfr5Vq-fwAajgagnwIAAA)" title = "Accusation of Spoiler"
 
 caption = "B accuses C of spoiling the election, hoping he’ll get C’s supporters"
 
@@ -131,7 +131,7 @@ comment = "standard spoiler example. Maybe needs a switch between FPTP and IRV."
 
 {% include sim.html id="no_spoilers_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04DQQz8F9dbrJ97d5-B6E5XBJGKCChoEOLf8XoSCRGhK8bO2LPjyRd12vZ9XRrLerSdF71WwtFE1-NoxHOELRmV2SttvZHRZo286sgJaXdfzo5kkm7975fcktzd78Ws_zLc60GenmYraGGJDQBTHIC0wOmU8zlNSG1uJL3sS-pIggAgI4YRrwWBjAx0C7q1FrSXUZ6hcBEqtasKHoY0lXZujMEABT3FqVxhWcnNgm-F3AqdEc_Cas9-S1rUozbwx8Ci4VBHYA57jkMd9hyHugNwqA9wiMtxaHQA12Qg9UBc4XWCppGARMBBrAUDDgZ2BwIaCkBAT6fL5e3j8fP9TBs9nF5fzs_0_QPwcCwonAIAAA)" title = "No More Accusations"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qp4meS_QxEt9riEFdxAgoahPh3HM-dhDihFGPvOJMZ71dpZdv3OSrxPOpOQ64Vk1eWeRy10BohDUZ49VK2VouWTWuxrD0muN6dmO3BBF3b3xPcCO7uezLzX4ZaPkjL01g9o4cnUgBckQPCA4VVivckIMSpFm7pn0OIAxgAGVaMWF5gyHBHN9DNvCAtndLaCiUhMCQCHoYklHaqhEEHBT1BVsptacqtgm4F3wpZO16F5j39LamehrXjz8CiIqhhYwZ7hqAGe4agZgAEtQ4O6zIE9QagnHSEdKzLLSNIGHFIOBz4TOhw0HG3M0AAWNDT6XJ5-3j8fD-XrTycXl_Oz-X7B2gMzvadAgAA)" title = "No More Accusations"
 
 caption = "B is okay with C running because C’s supporters will support B against A."
 
