@@ -6,8 +6,8 @@ function _drawStroked(text, x, y, textsize, ctx, textAlign) {
 	_drawStrokedColor(text, x, y, textsize, 4, 'white', ctx, false,textAlign)
 }
 function _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend,textAlign) {
-	textAlign = textAlign || "center"
 	ctx.save()
+	ctx.textAlign = textAlign || "center"
 	ctx.font = textsize + "px Sans-serif"
 	ctx.lineWidth = lw;
 	ctx.shadowColor = "rgba(0,0,0,0.3)";

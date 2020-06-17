@@ -10,6 +10,8 @@
   link: original.html
 - name: An Even Better Ballot
   link: newer.html
+- name: Instant Runoff Voting
+  link: irv.html
 - name: Condorcet Methods
   link: log.html
 - name: Test Runs
