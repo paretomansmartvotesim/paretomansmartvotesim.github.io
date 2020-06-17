@@ -290,17 +290,13 @@ The Primary Does not Eliminate Vote Splitting: Choose Only One Splits Votes in t
 
 <!--Alt title = Primaries only work in the case where there are at most two electable candidates in each primary.-->
 
-Let's finally get back to vote splitting.  I think we've saved the best for last
+Let's finally get back to vote splitting.  I think we've saved the best for last.
 
 So far we have only looked at primaries in which there are at most two electable candidates, but that’s very limited, so I’m going to show you that when there are more than two electable candidates, primaries won’t work.  Primaries don’t work because they don't address the major problem in the way we vote: they still ask you to choose only one, so they still split the vote.
 
 What happens when you do have vote splitting? How do people strategize in that situation? What kind of negative behavior do they show? 
 
-When there are more than two candidates, the voters need to coordinate to put their unified support behind a candidate. This coordination problem might involve some lying.  You might say, “Well, my candidate is doing really well, and yours isn't doing very well. You should back my candidate and your candidate should probably drop out.  You don't want to waste your vote.”
-
-You might think you can look at polls and polls will tell you who can win the nomination (a kind of electability) but there are no head-to-head polls in the primary, so you’re out of luck.  Nearly all the polls I've seen are general election polls with one person from each party.  The only meaningful polls I've seen have been from election reform organizations like Fair Vote and the Center for Election Science. <!--[footnotes](#footnotes)-->  The only polls I have seen on the news are choose only one polls that are trying to break the news earlier about which candidate is going to win. 
-
-What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates E and F.  E and F are just as moderate as B, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  B&F share the same space at the bottom, so  B might say to F, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts F into kind of a bluffing game if he stays in. A bluffing game is a game where you threaten to do something in order to get what you want.  
+What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates E and F.  E and F are just as moderate as B, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  B&F share the same space at the bottom, so  B might say to F, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts F into kind of a bluffing game if he stays in. A bluffing game is a game where you try to get a good outcome by threatening to hurt another candidate, and where if you follow through with the threat then you end up hurting yourself, too.
 
 {% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMW4EMQj8i2sKAwav9xUp0q2uuEgpIq2UKLoUpyh_D2ZyuWJ1cgEYGIbhu9SybpsvxFZPtLFKeBKeaL_9sRFrelKJe3oLZ92JCifA-G-LYuOZ0LJWKq2sTMXS9ygVOryo7ZGpdHiRWR5mxsMM1xzHk9oMBSEIcYMBJXaYIMAtbIzzMCN_JXDiUzh3kICRMIARLCYBo2EAIx3Rgmhkg9YkylMSzoRK9qoiD0IaSFuoenuz3FEAVMXCTEqNLGVrgJ47N767cncVoNNtidKOY5onndZxMJBvA4eDlAbiBgkMxO3vtgYDCawjt-Q0gwReYSCk4x4OId2SrQYRB4SDgeMIHQw6ejukeznv-_vl-frxWtbytH99nve3y7X8_AL0S0pr0AIAAA)'
 
@@ -310,7 +306,11 @@ caption='E gets squeezed out, even though E is the best option'
 
 comment='could be titled vote-splitting.  Maybe just show EBF, not ACD' %}
 
-Now they're going to talk about their poll numbers.  Maybe they'll use that to try to convince people that they might be able to win. The poll numbers are important to voters so they can tell who they should be coordinating with to show their support. The voters are going to go nuts here because if they only had one candidate, they could easily show how large their group is, but because they have two candidates splitting their group’s support, the voters have less of a chance of being considered by the candidates.  Now B&F, they have more supporters than E, and they could win if they decide to work together.  If B&F really feel like they are closer together than E, then they are on the same team.  Voters will also realize if perhaps F is not getting as many votes or maybe B is not getting as many votes by looking at the polls.  Then voters will switch their vote to whichever one, B or F, has a little advantage.  The little advantage now becomes a bigger advantage.  The polls get amplified and locked in.
+When there are more than two candidates, the voters need to coordinate to put their unified support behind a candidate. This coordination problem might involve some lying.  You might say, “Well, my candidate is doing really well, and yours isn't doing very well. You should back my candidate and your candidate should probably drop out.  You don't want to waste your vote.”
+
+You might think you can look at polls and polls will tell you who can win the nomination (a kind of electability) but there are no head-to-head polls in the primary, so you’re out of luck.  Nearly all the polls I've seen are general election polls with one person from each party.  The only meaningful polls I've seen have been from election reform organizations like Fair Vote and the Center for Election Science. <!--[footnotes](#footnotes)-->  The only polls I have seen on the news are choose only one polls that are trying to break the news earlier about which candidate is going to win. 
+
+The poll numbers are important to voters so they can tell who they should be coordinating with to show their support. The voters are going to go nuts here because if they only had one candidate, they could easily show how large their group is, but because they have two candidates splitting their group’s support, the voters have less of a chance of being considered by the candidates.  Now B&F, they have more supporters than E, and they could win if they decide to work together.  If B&F really feel like they are closer together than E, then they are on the same team.  Voters will also realize if perhaps F is not getting as many votes or maybe B is not getting as many votes by looking at the polls.  Then voters will switch their vote to whichever one, B or F, has a little advantage.  The little advantage now becomes a bigger advantage.  The polls get amplified and locked in.
 
 The problem is those polls aren't accurate. If you put B&F head to head, then B would easily win, but in a choose-only-one poll, B can get squeezed out because E&F take votes from both sides.  Even though B is the center candidate, B can lose because B can get squeezed out.
 
@@ -321,6 +321,17 @@ title='Poll Amplification'
 caption='A small advantage in polls becomes a big advantage.'
 
 comment='right now, this isnt implemented' %}
+
+### False Leverage
+
+There is an flawed idea that single-choice voting can give power to a small groups of voters through a mechanism of leverage.  The idea goes that voting for only one makes your vote valuable, and gives your favorite candidate leverage over the others so that your policies can get adopted.  Your candidate would pull some strings to make a deal in exchange for dropping out of the election.  Philosophically, the bad part about this argument is that it gives all the power to the candidate.  Candidates are deciding among themselves who will be elected rather than asking the voter who is best.  Practically, not all voters would be on-board to vote for their favorite if their favorite has no chance of winning.  Without the voters, the candidate will have no leverage.  In the worst case, a corrupt candidate could use their leverage for personal gain, so less power goes to the voter.  
+
+**Decision for Viable Candidate** - Leverage only works if the voters follow through.
+
+| Action | Outcome If  Voters Vote Strategically | Outcome If Voters Follow Through |
+| ------ | ------------------------------------- | -------------------------------- |
+| Reject | win independently                     | lose                             |
+| Adopt  | win                                   | win                              |
 
 Afterword
 ---------
