@@ -71,7 +71,7 @@ function Model(idModel){
 		ballotType: "Plurality",
 		rbelection: rbvote.calctide,
 		opt: {
-			IRV100: true, // show the final transfer to the winner (to reach 100%)
+			irv100: true, // show the final transfer to the winner (to reach 100%)
 			IRVShowdown: false,  // show a reverse-direction transfer to represent the winner
 			showIRVTransfers: true,  // show lines representing transfers between rounds
 			breakWinTiesMultiSeat: true, // break ties for winning candidates in multi-winner methods

@@ -4278,7 +4278,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.update() // must re-run election
         };
         self.configure = function() {
-            model.opt.IRV100 = (config.lastTransfer == "on")
+            model.opt.irv100 = (config.lastTransfer == "on")
         }
         self.choose = new ButtonGroup({
             label: "Show Last Transfer for Transferable Methods?", // Sub Menu

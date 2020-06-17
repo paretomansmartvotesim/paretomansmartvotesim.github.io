@@ -1813,7 +1813,7 @@ Election.irv = function(district, model, options){
 		var winners = _countWinner(tally);
 		var winner = winners[0];
 		var ratio = tally[winner] / district.voterPeople.length;
-		var option100 = model.opt.IRV100
+		var option100 = model.opt.irv100
 		if (option100) {
 			if (candidates.length == 1) {
 				resolved = "done";
@@ -2150,7 +2150,7 @@ Election.stv = function(district, model, options){
 		var ratio = tally[winner]/district.voterPeople.length;
 		
 		// show all the transfers if the 100% option is chosen
-		var option100 = model.opt.IRV100
+		var option100 = model.opt.irv100
 		var lastwin = numreps - winnerslist.length == 1 // this could be the last winner
 		var oneleft = candidates.length == 1 // there is only one candidate left
 		var wait = option100 && lastwin & !oneleft // don't name the last winner unless he's the only one left
