@@ -110,7 +110,7 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 	if (model.autoPoll == "Auto" && district.pollResults) {
 		tally = district.pollResults
 
-		var factor = voterModel.poll_threshold_factor
+		var factor = voterPerson.poll_threshold_factor
 		var max1 = 0
 		for (var can in tally) {
 			if (tally[can] > max1) max1 = tally[can]
@@ -209,9 +209,21 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 
 		// who do we have first?
 		var ourFirst = rank[0]
+
+		
+		var weLostElectability = ! _electable_all(ourFirst,tally.head2head,voterPerson)
+
+		// are they viable?
+		var viable = _findViable(tally.firstpicks,voterPerson)
+		var weLostFirstChoices = ! viable.includes(ourFirst)
+
 		// who was first?
-		var weLost = ! tally.winners.includes(ourFirst)
+		var weLostActually = ! tally.winners.includes(ourFirst)
 		// var weLost = ! model.result.winners.includes(ourFirst)
+
+		// var weLost = weLostElectability || weLostFirstChoices
+
+		var weLost = weLostActually
 
 		if ( weLost ) {
 			// find out if our second choice could win head to head
@@ -246,6 +258,27 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 	// Ballot!
 	return { rank:rank };
 
+}
+
+
+function _electable_all(ourCan,hh,voterPerson) {
+	var cs = Object.keys(hh)
+	var others = cs.filter(x => x !== ourCan)
+
+	var badness = 1/voterPerson.poll_threshold_factor 
+
+	// Which candidates are not defeated badly?
+	let electable = true
+	for (let b of others) {
+		// check how badly we are defeated
+		let howbad = hh[b][ourCan] / hh[ourCan][b]
+
+		if (howbad > badness) {
+			// this parameter can be changed.
+			electable = false
+		}
+	}
+	return electable
 }
 
 CastBallot.Plurality = function (model,voterModel,voterPerson) {
@@ -286,7 +319,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 
 		//   consider only viable candidates (if there are polls, 
 		if (district.pollResults && model.autoPoll == "Auto") { // Auto is here for safety
-			var viable = _findViableFromSet(goodCans, district, voterModel)
+			var viable = _findViableFromSet(goodCans, district, voterPerson)
 
 		} else if (model.autoPoll == "Manual") {  // manually set viable candidates, if we want to
 			var viable = district.preFrontrunnerIds
@@ -406,10 +439,10 @@ function _findClosest(model,electset,x,y) {
 	return closest
 }
 
-function _findViableFromSet(cans, district, voterModel) {
+function _findViableFromSet(cans, district, voterPerson) {
 	let tally = district.pollResults
 	tally = _tallyFromSet(cans, tally)
-	var viable = _findViable(tally,voterModel)
+	var viable = _findViable(tally,voterPerson)
 	return viable
 }
 
@@ -423,8 +456,8 @@ function _tallyFromSet(electset, tally) {
 }
 
 
-function _findViable(tally,voterModel) {
-	var factor = voterModel.poll_threshold_factor
+function _findViable(tally,voterPerson) {
+	var factor = voterPerson.poll_threshold_factor
 	var max1 = 0
 	for (var can in tally) {
 		if (tally[can] > max1) max1 = tally[can]
@@ -2995,7 +3028,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			// choose the threshold of voters for polls
 			var r_11 = Math.random() * 2 - 1 
 			
-			self.voterModel.poll_threshold_factor = _erfinv(r_11) * .2 + .5
+			self.voterPeople[i].poll_threshold_factor = _erfinv(r_11) * .2 + .5
 
 			self.voterPeople[i].strategy = strategy
 		}
@@ -3211,10 +3244,9 @@ function SingleVoter(model){
 
 		self.updateVoterSet()
 
-		self.voterModel.poll_threshold_factor = .6
-
-		
 		var voterPerson = self.voterPeople[0]
+
+		voterPerson.poll_threshold_factor = .6
 
 		voterPerson.strategy = self.firstStrategy
 
