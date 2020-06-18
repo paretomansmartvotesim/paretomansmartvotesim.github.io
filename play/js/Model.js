@@ -1138,6 +1138,7 @@ function Arena(arenaName, model) {
 			} else {
 				self.unInit()
 				self.init()
+				model.arena.initARENA()
 			}
 		}
 
