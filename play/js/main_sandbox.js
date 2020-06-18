@@ -380,6 +380,7 @@ function bindModel(ui,model,config) {
         ui.menu.theme.init_sandbox();
         // UPDATE
         ui.menu_update()
+        ui.showHideSystems()
         
     };
 
@@ -548,6 +549,8 @@ function Config(ui, config, initialConfig) {
         rankedVizBoundary: "atWinner",
         doElectabilityPolls: true,
         partyRule: "crowd",
+        doFilterSystems: false,
+        filterSystems: [],
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -1027,6 +1030,8 @@ function Cypher(ui) {
         72:"rankedVizBoundary",
         73:"doElectabilityPolls",
         74:"partyRule",
+        75:"doFilterSystems",
+        76:"filterSystems",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -1531,7 +1536,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"STV", value:"STV", ballotType:"Ranked", election:Election.stv, margin:4},
             {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",ballotType:"Ranked", election:Election.quotaMinimax}
         ];
-        self.codebook = [
+        self.systemsCodebook = [
             {
                 field: "system",
                 decode: {
@@ -1558,6 +1563,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 }
             }
         ]
+        self.codebook = self.systemsCodebook
         self.listByName = function() {
             var votingSystem = self.list.filter(function(system){
                 return(system.value==config.system);
@@ -3046,6 +3052,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     57: "showDescription",
                     58: "doElectabilityPolls",
                     59: "partyRule",
+                    60: "doFilterSystems",
+                    61: "filterSystems",
                 },
             }
         ]
@@ -4860,6 +4868,83 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.doFilterSystems = new function () {
+        // where to put the boundary for a candidate's region
+        var self = this
+        self.list = [
+            {name:"Yes",value:true,margin:4},
+            {name:"No",value:false}
+        ]
+        self.codebook = [ {
+            field: "doFilterSystems",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.doFilterSystems = data.value
+            // CONFIGURE
+            self.configure()
+            ui.showHideSystems()
+        };
+        self.configure = function() {
+            return
+        }
+        self.choose = new ButtonGroup({
+            label: "Filter Voting Systems?", // Sub Menu
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.doFilterSystems);
+        }
+    }
+    
+    ui.menu.filterSystems = new function() { 	
+        var self = this
+        self.list = ui.menu.systems.list
+        for (var entry of self.list) entry.margin = 2
+
+        self.codebook = ui.menu.systems.systemsCodebook
+        self.onChoose = function(data){
+            // LOAD CONFIG //
+            modifyConfigFilterSystems(config,data.isOn, [data.value])
+            // CONFIGURE
+            self.configure()
+            ui.showHideSystems()
+        };
+        self.configure = function() {
+            return
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.filterSystems);
+        }
+        self.choose = new ButtonGroup({
+            label: "Systems to Keep:",
+            width: bw(2),
+            data: self.list,
+            onChoose: self.onChoose,
+            isCheckbox: true
+        });
+    }
+
+    ui.showHideSystems = function() {
+
+        for (var entry of ui.menu.filterSystems.list) {
+            var dom = ui.menu.systems.choose.buttonDOMByValue[entry.value]
+            var show = !config.doFilterSystems || config.filterSystems.includes(entry.value)
+            if( show) {
+                dom.hidden = false
+            } else {
+                dom.hidden = true
+            }
+        }
+
+    }
+
     // helper
     showMenuItemsIf = function(name,condition) {
         if (condition) {
@@ -4945,6 +5030,8 @@ function createMenu(ui) {
             "showDescription",
             "switcher",
             "gearoff",
+            "doFilterSystems",
+            "filterSystems" ,
         ]],
         [ "main", [
             "systems", // start of normal list
@@ -5122,6 +5209,8 @@ function createMenu(ui) {
                     "showToolbar",
                     "gearconfig", 
                     "presetconfig",
+                    "doFilterSystems",
+                    "filterSystems" ,
                 ]],
             ]],
             ["dev", [
@@ -5509,6 +5598,20 @@ function modifyConfigFeaturelist(config, condition, xlist) {
         }
     }
     config.featurelist = Array.from(featureset)
+}    
+
+function modifyConfigFilterSystems(config, condition, xlist) {
+    // e.g. var xlist = ["FPTP","IRV"]
+    var filterSet = new Set(config.filterSystems)
+    for (var i in xlist){
+        var xi = xlist[i]
+        if (condition) {
+            filterSet.add(xi)
+        } else {
+            filterSet.delete(xi)
+        }
+    }
+    config.filterSystems = Array.from(filterSet)
 }    
 
 function _simpleMakeEncode(decode) {
