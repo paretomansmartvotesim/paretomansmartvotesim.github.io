@@ -93,6 +93,7 @@ function _lookupPreset(ui) {
 			yeeon: false,
 			rankedVizBoundary: "atMidpoint",
 			stepMenu: "vote",
+			doFilterStrategy: true,
 			// configversion: 2.5, // should stay at latest version
 		}
 	} else if (ui.presetName == "sandbox_original") {

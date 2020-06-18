@@ -381,6 +381,7 @@ function bindModel(ui,model,config) {
         // UPDATE
         ui.menu_update()
         ui.showHideSystems()
+        ui.showHideStrategy()
         
     };
 
@@ -551,6 +552,7 @@ function Config(ui, config, initialConfig) {
         partyRule: "crowd",
         doFilterSystems: false,
         filterSystems: [],
+        doFilterStrategy: false,
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -1032,6 +1034,7 @@ function Cypher(ui) {
         74:"partyRule",
         75:"doFilterSystems",
         76:"filterSystems",
+        77:"doFilterStrategy",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -1589,6 +1592,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.dm.redistrict()
             model.update();
             ui.menu_update()
+            ui.showHideStrategy()
         };
         self.choose = new ButtonGroup({
             label: "what voting system?",
@@ -3054,6 +3058,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     59: "partyRule",
                     60: "doFilterSystems",
                     61: "filterSystems",
+                    62: "doFilterStrategy",
                 },
             }
         ]
@@ -4945,6 +4950,86 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     }
 
+    ui.menu.doFilterStrategy = new function () {
+        // where to put the boundary for a candidate's region
+        var self = this
+        self.list = [
+            {name:"Yes",value:true,margin:4},
+            {name:"No",value:false}
+        ]
+        self.codebook = [ {
+            field: "doFilterStrategy",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.doFilterStrategy = data.value
+            // CONFIGURE
+            self.configure()
+            ui.showHideStrategy()
+        };
+        self.configure = function() {
+            return
+        }
+        self.choose = new ButtonGroup({
+            label: "Filter Voting Strategies by System?", // Sub Menu
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.doFilterStrategy);
+        }
+    }
+    
+    ui.showHideStrategy = function() {
+
+        var all = ["zero strategy. judge on an absolute scale.","normalize","normalize frontrunners only","best frontrunner","not the worst frontrunner"]
+        var oorf = [all[0],all[2]]
+        var z = [all[0]]
+        var stratBySys = {
+            "FPTP": oorf,
+            "+Primary": oorf,
+            "Top Two": oorf,
+            "RBVote": z,
+            "IRV": oorf, 
+            "Borda": z,
+            "Minimax": z,
+            "Schulze": z,
+            "RankedPair": z,
+            "Condorcet": z,
+            "Approval": all,
+            "Score": all,
+            "STAR": all,
+            "3-2-1": all,
+            "RRV": all, 
+            "RAV": all,
+            "STV": oorf,
+            "QuotaApproval": all,
+            "QuotaMinimax": z,
+            "QuotaScore": all,
+        }
+        var sys = config.system
+
+        for (var entry of ui.menu.firstStrategy.list) {
+            var strat = entry.value
+            var dom = ui.menu.firstStrategy.choose.buttonDOMByValue[strat]
+            var dom2 = ui.menu.secondStrategy.choose.buttonDOMByValue[strat]
+            var show = ( ! config.doFilterStrategy ) || stratBySys[sys].includes(strat)
+            if( show) {
+                dom.hidden = false
+                dom2.hidden = false
+            } else {
+                dom.hidden = true
+                dom2.hidden = true
+            }
+        }
+
+    }
+
     // helper
     showMenuItemsIf = function(name,condition) {
         if (condition) {
@@ -5032,6 +5117,7 @@ function createMenu(ui) {
             "gearoff",
             "doFilterSystems",
             "filterSystems" ,
+            "doFilterStrategy",
         ]],
         [ "main", [
             "systems", // start of normal list
@@ -5211,6 +5297,7 @@ function createMenu(ui) {
                     "presetconfig",
                     "doFilterSystems",
                     "filterSystems" ,
+                    "doFilterStrategy",
                 ]],
             ]],
             ["dev", [
