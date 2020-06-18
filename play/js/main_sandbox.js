@@ -552,7 +552,7 @@ function Config(ui, config, initialConfig) {
         partyRule: "crowd",
         doFilterSystems: false,
         filterSystems: [],
-        doFilterStrategy: false,
+        doFilterStrategy: true,
     }
     // HOWTO: add to the end here (or anywhere inside)
 
