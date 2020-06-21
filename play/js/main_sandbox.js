@@ -2593,7 +2593,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.strategyOrganizer.onChoose()
         };
         self.choose = new ButtonGroup({
-            label: "what's score voters' strategy?",
+            label: "strategy for score-type voter:",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
@@ -2623,7 +2623,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.strategyOrganizer.onChoose()
         };
         self.choose = new ButtonGroup({
-            label: "what's choice voters' strategy?",
+            label: "strategy for choice-type voter:",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
@@ -2652,7 +2652,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.strategyOrganizer.onChoose()
         };
         self.choose = new ButtonGroup({
-            label: "what's pair voters' strategy?",
+            label: "strategy for pair-type voter:",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
@@ -2757,7 +2757,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.strategyOrganizer.onChoose()
         };
         self.choose = new ButtonGroup({
-            label: "what's score voters' 2nd strategy?",
+            label: "2nd strategy for score-type voter:",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
@@ -2787,7 +2787,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.strategyOrganizer.onChoose()
         };
         self.choose = new ButtonGroup({
-            label: "what's choice voters' 2nd strategy?",
+            label: "2nd strategy for choice-type voter:",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
@@ -2816,7 +2816,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.strategyOrganizer.onChoose()
         };
         self.choose = new ButtonGroup({
-            label: "what's pair voters' 2nd strategy?",
+            label: "2nd strategy for pair-type voter:",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
