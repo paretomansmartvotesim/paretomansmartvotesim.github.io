@@ -1867,6 +1867,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 7:7,
                 8:8,
                 9:9,
+                10:10,
             }
         } ]
         self.onChoose = function(data){
