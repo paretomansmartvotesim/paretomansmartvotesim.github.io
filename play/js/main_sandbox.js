@@ -858,20 +858,11 @@ function Config(ui, config, initialConfig) {
 
 
         // VOTER DEFAULTS
-        // we want individual strategies to be loaded in, if they are there
-        // if we have a blank slate, then we want to fill in with the variable "secondStrategy"
-        if (config.secondStrategy && config.secondStrategies === undefined) {
-            config.secondStrategies = []
-            for (var i = 0; i < ui.maxVoters; i++) {
-                config.secondStrategies[i] = config.secondStrategy
-            }	
-        }
-        config.secondStrategies = config.secondStrategies || []
+        // we want individual percent strategies to be loaded in, if they are there
         config.percentSecondStrategy = config.percentSecondStrategy || []
         config.voter_group_count = config.voter_group_count || []
         config.voter_group_spread = config.voter_group_spread || []
         for (var i = 0; i < ui.maxVoters; i++) {
-            config.secondStrategies[i] = config.secondStrategies[i] || "zero strategy. judge on an absolute scale."
             if(config.percentSecondStrategy[i] == undefined) config.percentSecondStrategy[i] = 0
             config.voter_group_count[i] = config.voter_group_count[i] || 50
             config.voter_group_spread[i] = config.voter_group_spread[i] || 190
@@ -2620,10 +2611,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
         var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
         var turnOffFrontrunnerControls =  not_f.includes(config.firstStrategy)
         if (config.doTwoStrategies) {
-            for(var i=0;i<config.secondStrategies.length;i++){
-                if (! not_f.includes(config.secondStrategies[i])){
-                    turnOffFrontrunnerControls = false
-                }
+            if (! not_f.includes(config.secondStrategy) ) {
+                turnOffFrontrunnerControls = false
             }
         }
         showMenuItemsIf("divPoll", ! turnOffFrontrunnerControls)
@@ -2695,7 +2684,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.codebook = [
             {
                 decode: decodeList,
-                field: "secondStrategies"
+                field: "secondStrategies" // old. not used anymore, but kept
             },
             {
                 decode: decodeList,
@@ -2721,9 +2710,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.onChoose = function(data){
             // LOAD INPUT
             config.secondStrategy = data.value
-            for (var i = 0; i < ui.maxVoters; i++) {
-                config.secondStrategies[i] = data.value
-            }
             // CONFIGURE
             self.configure()
             // UPDATE
@@ -2734,14 +2720,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
             _showOrHideMenuForStrategy(config)
             model.secondStrategy = config.secondStrategy
             for (var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].secondStrategy = config.secondStrategies[i]
+                model.voterGroups[i].secondStrategy = model.secondStrategy
             }
         }
         self.select = function() {
             self.choose.highlight("value", config.value);
-            // if (config.secondStrategies[0] != "starnormfrontrunners") { // kind of a hack for now, but I don't really want another button
-            // 	self.choose.highlight("realname", config.secondStrategies[0]);
-            // }
         }
         self.choose = new ButtonGroup({
             label: "what's voters' 2nd strategy?",

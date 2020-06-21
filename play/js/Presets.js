@@ -252,19 +252,6 @@ function _lookupPreset(ui) {
 		uiType = "election"
 		config = {
 
-			/*
-			features:3,
-			system: "Score",
-
-			candidates: 3,
-			candidatePositions: [[100,150],[150,150+100],[300-100,150]],
-	
-			voters: 2,
-			voterPositions: [[100,150],[300-100,150]],
-			secondStrategies: ["normalize","zero strategy. judge on an absolute scale."],
-			preFrontrunnerIds: ["square","hexagon"]
-			*/
-
 			candidatePositions: [
 				[100, 150],
 				[200, 150],
@@ -277,7 +264,6 @@ function _lookupPreset(ui) {
 			system: "Score",
 			candidates: 2,
 			voters: 2,
-			secondStrategies: ["normalize", "normalize", "zero strategy. judge on an absolute scale."],
 			preFrontrunnerIds: ["square", "hexagon"],
 			featurelist: ["percentSecondStrategy"],
 			sandboxsave: false,
@@ -286,6 +272,7 @@ function _lookupPreset(ui) {
 			percentSecondStrategy: ["70", "49", 0],
 			snowman: false,
 			firstStrategy: "zero strategy. judge on an absolute scale.",
+			secondStrategy: "normalize",
 			keyyee: "off",
 			features: undefined,
 			doPercentFirst: undefined,
@@ -449,8 +436,6 @@ function _lookupPreset(ui) {
 			system: "IRV",
 			candidates: 3,
 			voters: 1,
-			secondStrategies: ["zero strategy. judge on an absolute scale.", "normalize frontrunners only", "normalize frontrunners only"],
-			percentSecondStrategy: ["100", 100, 100],
 			preFrontrunnerIds: ["square", "triangle", "hexagon"],
 			featurelist: ["systems"],
 			sandboxsave: false,
