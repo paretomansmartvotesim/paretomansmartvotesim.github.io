@@ -560,6 +560,9 @@ function Config(ui, config, initialConfig) {
         scoreFirstStrategy: "zero strategy. judge on an absolute scale.",
         choiceFirstStrategy: "zero strategy. judge on an absolute scale.",
         pairFirstStrategy: "zero strategy. judge on an absolute scale.",
+        scoreSecondStrategy: "zero strategy. judge on an absolute scale.",
+        choiceSecondStrategy: "zero strategy. judge on an absolute scale.",
+        pairSecondStrategy: "zero strategy. judge on an absolute scale.",
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -850,6 +853,18 @@ function Config(ui, config, initialConfig) {
                 config.pairFirstStrategy = config.firstStrategy
             }
 
+            if (config.scoreSecondStrategy == undefined) {
+                config.scoreSecondStrategy = config.secondStrategy
+            }
+
+            if (config.choiceSecondStrategy == undefined) {
+                config.choiceSecondStrategy = config.secondStrategy
+            }
+
+            if (config.pairSecondStrategy == undefined) {
+                config.pairSecondStrategy = config.secondStrategy
+            }
+
             // there's no incompatibility problems yet, so no need to increment
             // code below this if {} statement are still needed in future versions
         }
@@ -1051,6 +1066,9 @@ function Cypher(ui) {
         81:"scoreFirstStrategy",
         82:"choiceFirstStrategy",
         83:"pairFirstStrategy",
+        84:"scoreSecondStrategy",
+        85:"choiceSecondStrategy",
+        86:"pairSecondStrategy",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -2483,10 +2501,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "QuotaMinimax": pairType,
             "QuotaScore": scoreType,
         }
-        self.menuName = {
+        self.menuNameFirst = {
             "choice":"choiceFirstStrategy",
             "pair":"pairFirstStrategy",
             "score":"scoreFirstStrategy",
+        }
+        self.menuNameSecond = {
+            "choice":"choiceSecondStrategy",
+            "pair":"pairSecondStrategy",
+            "score":"scoreSecondStrategy",
         }
         self.onChoose = function(data){
             // CONFIGURE
@@ -2498,26 +2521,39 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.configure = function() {
             // take on the strategy of the relevant system type
             var theType = self.stratBySys[model.system]
-            var theConfig = self.menuName[theType]
-            config.firstStrategy = config[theConfig]
+            var theConfigFirst = self.menuNameFirst[theType]
+            config.firstStrategy = config[theConfigFirst]
+            var theConfigSecond = self.menuNameSecond[theType]
+            config.secondStrategy = config[theConfigSecond]
 
             _showOrHideMenuForStrategy(config)
             model.firstStrategy = config.firstStrategy
             for (var i=0; i<model.voterGroups.length; i++) {
                 model.voterGroups[i].firstStrategy = config.firstStrategy
             }
+            model.secondStrategy = config.secondStrategy
+            for (var i=0; i<model.voterGroups.length; i++) {
+                model.voterGroups[i].secondStrategy = config.secondStrategy
+            }
         }
 
         self.showOnlyStrategyForTypeOfSystem = function() {
 
             var theType = self.stratBySys[model.system]
-            var menuName = self.menuName
+            var menuNameFirst = self.menuNameFirst
+            var menuNameSecond = self.menuNameSecond
     
             var types = self.types
     
             // show only the one that applies
             for (var t of types) {
-                m = menuName[t]
+                m = menuNameFirst[t]
+                if (t == theType) {
+                    ui.menu[m].choose.dom.hidden = false
+                } else {   
+                    ui.menu[m].choose.dom.hidden = true
+                }
+                m = menuNameSecond[t]
                 if (t == theType) {
                     ui.menu[m].choose.dom.hidden = false
                 } else {   
@@ -2624,13 +2660,58 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [
             {realname: "opton for 2nd strategy", name:"2", value:"2"}
         ];
-        self.codebook = [ {
-            field: "doTwoStrategies",
-            decode: {
-                0:false,
-                1:true,
-            }
-        } ]
+        var decodeList = {
+            0:"zero strategy. judge on an absolute scale.",
+            1:"normalize",
+            2:"normalize frontrunners only",
+            3:"best frontrunner",
+            4:"not the worst frontrunner",
+        }
+        self.codebook = [
+            {
+                decode: decodeList,
+                field: "secondStrategies" // old. not used anymore, but kept
+            },
+            {
+                decode: decodeList,
+                field: "secondStrategy"
+            },
+            {
+                decode: decodeList,
+                field: "firstStrategy"
+            },
+            {
+                decode: decodeList,
+                field: "scoreFirstStrategy"
+            },
+            {
+                decode: decodeList,
+                field: "choiceFirstStrategy"
+            },
+            {
+                decode: decodeList,
+                field: "pairFirstStrategy"
+            },
+            {
+                decode: decodeList,
+                field: "scoreSecondStrategy"
+            },
+            {
+                decode: decodeList,
+                field: "choiceSecondStrategy"
+            },
+            {
+                decode: decodeList,
+                field: "pairSecondStrategy"
+            },
+            {
+                field: "doTwoStrategies",
+                decode: {
+                    0:false,
+                    1:true,
+                },
+            },
+        ]
         self.onChoose = function(data){
             // LOAD INPUT
             config.doTwoStrategies = data.isOn
@@ -2665,7 +2746,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         });			
     }
 
-    ui.menu.secondStrategy = new function() { // strategy 2 AKA strategic voters' strategy
+    ui.menu.scoreSecondStrategy = new function() { // just filling in secondStrategy with a limited set
         var self = this
         self.list = [
             {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
@@ -2674,64 +2755,72 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:4},
             {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
         ];
-        var decodeList = {
-            0:"zero strategy. judge on an absolute scale.",
-            1:"normalize",
-            2:"normalize frontrunners only",
-            3:"best frontrunner",
-            4:"not the worst frontrunner",
-        }
-        self.codebook = [
-            {
-                decode: decodeList,
-                field: "secondStrategies" // old. not used anymore, but kept
-            },
-            {
-                decode: decodeList,
-                field: "secondStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "firstStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "scoreFirstStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "choiceFirstStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "pairFirstStrategy"
-            },
-        ]
+        // self.codebook was done below in ui.menu.secondStrategy
         self.onChoose = function(data){
-            // LOAD INPUT
-            config.secondStrategy = data.value
-            // CONFIGURE
-            self.configure()
-            // UPDATE
-            model.update();
-            ui.menu_update()
+            config.scoreSecondStrategy = data.value;
+            ui.strategyOrganizer.onChoose()
         };
-        self.configure = function() {
-            _showOrHideMenuForStrategy(config)
-            model.secondStrategy = config.secondStrategy
-            for (var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].secondStrategy = model.secondStrategy
-            }
-        }
-        self.select = function() {
-            self.choose.highlight("value", config.value);
-        }
         self.choose = new ButtonGroup({
-            label: "what's voters' 2nd strategy?",
+            label: "what's score voters' 2nd strategy?",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
         });
+        self.configure = function() {
+            return
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.scoreSecondStrategy);
+        }
+    }
+
+    ui.menu.choiceSecondStrategy = new function() { // just filling in secondStrategy with a limited set
+        var self = this
+        self.list = [
+            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
+            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
+        ];
+        // self.codebook was done below in ui.menu.secondStrategy
+        self.onChoose = function(data){
+            config.choiceSecondStrategy = data.value;
+            ui.strategyOrganizer.onChoose()
+        };
+        self.choose = new ButtonGroup({
+            label: "what's choice voters' 2nd strategy?",
+            width: bw(5),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.configure = function() {
+            return
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.choiceSecondStrategy);
+        }
+    }
+
+    ui.menu.pairSecondStrategy = new function() { // just filling in secondStrategy with a limited set
+        var self = this
+        self.list = [
+            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
+        ];
+        // self.codebook was done below in ui.menu.secondStrategy
+        self.onChoose = function(data){
+            config.pairSecondStrategy = data.value;
+            ui.strategyOrganizer.onChoose()
+        };
+        self.choose = new ButtonGroup({
+            label: "what's pair voters' 2nd strategy?",
+            width: bw(5),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.configure = function() {
+            return
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.pairSecondStrategy);
+        }
     }
 
     ui.menu.percentSecondStrategy = new function() {  // group count
@@ -3195,6 +3284,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     66: "scoreFirstStrategy",
                     67: "choiceFirstStrategy",
                     68: "pairFirstStrategy",
+                    69: "scoreSecondStrategy",
+                    70: "choiceSecondStrategy",
+                    71: "pairSecondStrategy",
                 },
             }
         ]
@@ -3328,6 +3420,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         scoreFirstStrategy: "zero strategy. judge on an absolute scale.",
                         choiceFirstStrategy: "zero strategy. judge on an absolute scale.",
                         pairFirstStrategy: "zero strategy. judge on an absolute scale.",
+                        secondStrategy: "zero strategy. judge on an absolute scale.",
+                        scoreSecondStrategy: "zero strategy. judge on an absolute scale.",
+                        choiceSecondStrategy: "zero strategy. judge on an absolute scale.",
+                        pairSecondStrategy: "zero strategy. judge on an absolute scale.",
                         preFrontrunnerIds: ["square","triangle"],
                         showChoiceOfStrategy: false,
                         showChoiceOfFrontrunners: false,
@@ -3346,6 +3442,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         scoreFirstStrategy: ballotconfig.scoreFirstStrategy,
                         choiceFirstStrategy: ballotconfig.choiceFirstStrategy,
                         pairFirstStrategy: ballotconfig.pairFirstStrategy,
+                        secondStrategy: ballotconfig.secondStrategy,
+                        scoreSecondStrategy: ballotconfig.scoreSecondStrategy,
+                        choiceSecondStrategy: ballotconfig.choiceSecondStrategy,
+                        pairSecondStrategy: ballotconfig.pairSecondStrategy,
                         preFrontrunnerIds: ballotconfig.preFrontrunnerIds,
                         // these are not based on the ballot config
                         oneVoter: true,
@@ -3356,6 +3456,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("scoreFirstStrategy")}
                     if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("choiceFirstStrategy")}
                     if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("pairFirstStrategy")}
+                    if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("scoreSecondStrategy")}
+                    if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("choiceSecondStrategy")}
+                    if (ballotconfig.showChoiceOfStrategy) {config.featurelist.push("pairSecondStrategy")}
                 }
                 // CONFIGURE MAIN
                 cConfig.cleanConfig(config)
@@ -5510,7 +5613,9 @@ function createMenu(ui) {
             "scoreFirstStrategy",
             "doTwoStrategies",
             [ "divSecondStrategy", [
-                "secondStrategy",
+                "choiceSecondStrategy",
+                "pairSecondStrategy",
+                "scoreSecondStrategy",
                 "percentSecondStrategy",
             ]],
             // "primaries", // not doing this one, comment out
@@ -5608,7 +5713,9 @@ function createMenu(ui) {
                     "scoreFirstStrategy",
                     "doTwoStrategies",
                     [ "divSecondStrategy", [
-                        "secondStrategy",
+                        "choiceSecondStrategy",
+                        "pairSecondStrategy",
+                        "scoreSecondStrategy",
                         "percentSecondStrategy",
                     ]],
                     [ "divPoll", [
