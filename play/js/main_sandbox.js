@@ -5697,7 +5697,7 @@ function createMenu(ui) {
     // ]
 
 
-    ui.m1 = new menuTree(ui)
+    ui.m1 = new MenuTree(ui)
     ui.m1.assignMenu( menu1 , ui.dom.left, "basediv" )
     // detail: seems harmless, but the basediv gets reattached.
     
@@ -5707,7 +5707,7 @@ function createMenu(ui) {
     ui.m1.buildSubMenus()
     
 
-    ui.m2 = new menuTree(ui)
+    ui.m2 = new MenuTree(ui)
     ui.m2.assignMenu( menu2 , ui.dom.left, "basediv" )
 
     ui.m2.menuNameDivs["hidden"][0].hidden = true
@@ -5716,7 +5716,7 @@ function createMenu(ui) {
 
 }
 
-function menuTree(ui) {
+function MenuTree(ui) {
     var self = this
 
     // Loop through and collect nodes with the same name into a list
