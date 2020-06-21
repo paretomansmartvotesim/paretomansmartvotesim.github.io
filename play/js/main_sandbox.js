@@ -1419,14 +1419,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.menu.group_spread.choose.sliders[i].setAttribute("style",style)
         }
         
-
-        // todo: move to config for menu item
-        var multiWinnerSystem = ( config.system == "QuotaApproval"  || config.system == "QuotaScore" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" || config.system == "QuotaMinimax")
-        if (multiWinnerSystem) {
-            ui.menu.seats.choose.dom.hidden = false
-        } else {
-            ui.menu.seats.choose.dom.hidden = true
-        }
     }
 
     
@@ -3089,6 +3081,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     function _hideOrShowFeatures() {
+        
         var noneShow = true
         for (i in ui.menu) {
             // go through all the menu items
@@ -3102,6 +3095,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 ui.menu[i].choose.dom.hidden = true
             }
         }
+
+        // special config for "seats"
+        var notMultiWinnerSystem = ! ( config.system == "QuotaApproval"  || config.system == "QuotaScore" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" || config.system == "QuotaMinimax")
+        if (notMultiWinnerSystem) {
+            ui.menu.seats.choose.dom.hidden = true
+        }
+
         if (noneShow) {
             ui.dom.left.id = "noClass"
         } else {
