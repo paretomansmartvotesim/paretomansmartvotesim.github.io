@@ -4294,9 +4294,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.configure = function() {
             model.optionsForElection.sidebar = (config.sidebarOn == "on")
             if (config.sidebarOn == "on") {
+                ui.dom.right.id = "right"
                 model.caption.hidden = false
             } else {
                 model.caption.hidden = true
+                ui.dom.right.id = "noClass"
             }
         }
         self.choose = new ButtonGroup({
