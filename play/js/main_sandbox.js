@@ -555,6 +555,7 @@ function Config(ui, config, initialConfig) {
         doFilterStrategy: true,
         includeSystems: ["choice","pair","score","multi","dev"],
         showPowerChart: true,
+        putMenuAbove: false,
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -1039,6 +1040,7 @@ function Cypher(ui) {
         77:"doFilterStrategy",
         78:"includeSystems",
         79:"showPowerChart",
+        80:"putMenuAbove",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3065,6 +3067,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     62: "doFilterStrategy",
                     63: "includeSystems",
                     64: "showPowerChart",
+                    65: "putMenuAbove",
                 },
             }
         ]
@@ -5230,6 +5233,45 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.putMenuAbove = new function () {
+        // where to put the boundary for a candidate's region
+        var self = this
+        self.list = [
+            {name:"Yes",value:true,margin:4},
+            {name:"No",value:false}
+        ]
+        self.codebook = [ {
+            field: "putMenuAbove",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.putMenuAbove = data.value
+            // CONFIGURE
+            self.configure()
+        };
+        self.configure = function() {
+            if (config.putMenuAbove) {
+                ui.dom.left.style.display = "block"
+            } else {
+                ui.dom.left.style.display = "inline-block"
+            }
+            return
+        }
+        self.choose = new ButtonGroup({
+            label: "Put menu above arena?", // Sub Menu
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.putMenuAbove);
+        }
+    }
+    
     // helper
     showMenuItemsIf = function(name,condition) {
         if (condition) {
@@ -5318,6 +5360,7 @@ function createMenu(ui) {
             "doFilterSystems",
             "filterSystems" ,
             "doFilterStrategy",
+            "putMenuAbove",
         ]],
         [ "main", [
             "includeSystems",
@@ -5502,6 +5545,7 @@ function createMenu(ui) {
                     "doFilterSystems",
                     "filterSystems" ,
                     "doFilterStrategy",
+                    "putMenuAbove",
                 ]],
             ]],
             ["dev", [
