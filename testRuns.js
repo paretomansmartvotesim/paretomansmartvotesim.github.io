@@ -5,7 +5,7 @@ var e = [
         ["index","index.html"],
         ["sandbox","sandbox"],
         ["original","original.html"],
-        ["approval_superman","approval_superman.html"],
+        ["approval","approval.html"],
         ["newer","newer.html"],
         ["condorcet methods","log.html"],
         ["primaries","primaries.html"],

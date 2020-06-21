@@ -11,7 +11,7 @@ twuser: paretoman1
 
 {% include card.html title='Primaries' description=" - #2 we don't need them" url='primaries' img='img/primary-strategy.png' %}
 
-{% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval_superman' img='img/winner-circle.png' %}
+{% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval' img='img/winner-circle.png' %}
 
 {% include card.html title="To Build a Better Ballot" description=" - Nicky Case's original sim" url='original' img='img/split-vote.png' %}
 

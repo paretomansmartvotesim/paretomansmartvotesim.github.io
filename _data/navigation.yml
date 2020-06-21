@@ -5,7 +5,7 @@
 - name: Primaries
   link: primaries
 - name: Approval Voting
-  link: approval_superman
+  link: approval
 - name: Original
   link: original
 - name: An Even Better Ballot

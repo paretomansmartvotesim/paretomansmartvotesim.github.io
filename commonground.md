@@ -180,7 +180,7 @@ Want more of a narrative?  Then choose your path.  Either read about Primaries
 
 -   [Primaries](primaries)
 
--   [Approval Voting](approval_superman)
+-   [Approval Voting](approval)
 
 -   [An Even Better Ballot by Jameson Quinn](newer)
 

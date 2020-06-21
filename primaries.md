@@ -92,7 +92,7 @@ Read more about:
 
 * [RCV, IRV, and STV](./rcv).
 
-* [Approval Voting](approval_superman)
+* [Approval Voting](approval)
 
 * [Score Voting](newer)
 
