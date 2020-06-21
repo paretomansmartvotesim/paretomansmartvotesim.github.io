@@ -3104,9 +3104,16 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
         if (noneShow) {
             ui.dom.left.id = "noClass"
+            ui.dom.left.style.display = "none"
         } else {
             ui.dom.left.id = "left"
+            if (config.putMenuAbove) {
+                ui.dom.left.style.display = "block"
+            } else {
+                ui.dom.left.style.display = "inline-block"
+            }
         }
+        return
     }
 
     ui.menu.presetconfig = new function() { // pick a preset
@@ -5255,12 +5262,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.configure()
         };
         self.configure = function() {
-            if (config.putMenuAbove) {
-                ui.dom.left.style.display = "block"
-            } else {
-                ui.dom.left.style.display = "inline-block"
-            }
-            return
+            _hideOrShowFeatures()
         }
         self.choose = new ButtonGroup({
             label: "Put menu above arena?", // Sub Menu
@@ -5272,6 +5274,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.choose.highlight("value", config.putMenuAbove);
         }
     }
+
     
     // helper
     showMenuItemsIf = function(name,condition) {

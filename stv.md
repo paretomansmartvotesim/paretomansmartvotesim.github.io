@@ -24,7 +24,7 @@ Representation is a very fundamental concept to government. The idea of a body o
 
 Voting districts are used to give representation to voters that live in a geographical area. For example, you could have each state elect representatives to a national body. Here’s an interactive simulation of districts: (as a side point, candidates from different districts don’t have to fight each other. At least, not until they get elected and start arguing about legislation.)
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSW24EMQi7S7754Bkye5XRnqRqz17AlVbVapUPQ5wxBuZr8Xrct4jS4SfdcvIvECHlM1c20ZOWzFs_pOrNuNGxJmw9mJavx_rhRSsm3fVa6e3U8yyG6e0Ucz4y10dGeMpJu0tyJutLxSWciQNgTDagbIgXVtGGqqC0lCfTUrMCxSVktGSkIMBBRhPZQQYV47ErPRsZwnS-NQMPQ1ZKt9CcfrpBQtHQcu1hOnJIdscur1BfoUGsQx8F_y_vkPfEtmDYr_EVGGLAbKDtgNlA2xEAtB0J7kylQNubAVDZ2MHG8HaM025lQ2LDwb4GEg5SpkpiXGkAjCuxv-w_q3-jXuD3LxX5UCvDAgAAnk)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRS25EMQi7S9Yswj8zV3mak1Tt2Qu40lM1GmVhiBNj4Gvt9bwuZqGzX3Txyb-AmWSfudKJXrR43tohEWvGlI42oeu5adl6rp-9aPmkUa-F3k49z2I2vZ1izkfm8ZHhPeW43XUqSOGJDQBLHIAywFZY5RpKW2jJnkxKRwsEl5CRkuECBwcZSWQHGVR0j1HuqfAQKvNXFTwMaSldTHP6aYCEoqLZ2gBpkQbJ7tX4DuUOFWId2ijYf3mDvCX2BMP2GF-O8TnMOtp2mHW07Q5A257gzlRytB0bAJXADgLDCx-n3UpAIuAgHgMJB8lTJTGuVADGldhfBnacCfLccyLre7R0WvD7F50SWj_cAgAA)"
 title = "District Representation"
 caption = "Each district gets a representative, and we use choose-only-one voting within each district."
 comment = "just show some districts. It would be good to have a uniform distribution."
@@ -32,7 +32,7 @@ id = "district_sim" %}
 
 In the same way, representation can be given to voters that are from different political spaces. This idea is called proportional representation because the number of representatives is proportional to how many voters are in a political space. It’s more representative than districts for reasons we will go over later on this page.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4vi1u5-B6FZXHOIqTkBBgxB8-zke0AmdTinGzjiTsZOv1tu278yDln6gnSN-A2YafZnRIhUdqHHVqvwx6rM4CWlbp6Ztaz_sjZpV7lk-6GZlfSTT6WYls9xl1rsM97qOpz2hIK3NgU1YYwXAWHosSBusiXnphLxhUBu9spFqkjCwCZmRMpxg4CAzAtmCDCrSyy7P4XARMuqsCHgYklTamWrNUgcJRUHL-RAkSSokZ3PK13BcQ4HYDLWE9L-8elnQwHPBsK61aRiiwayhbYNZQ9tmALRtAW4pr4a2HSoOFccbOIbnVk5nKw4JhwNfCwJng-uWwLhCABhX4P1i_qz5jaLIp-P5_Pbx-Pl-yg_4cHx9OT237wvLeGhh2gIAAA)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvU6DMQx8l8wZ4v-0j4HYPnUoohMVMLAgBM9exweqUFVlODvn73K2v6822n7biLjPcegbRfwGRJ3HXNGUig69UdWq_DHqqzgJafvRm7Z9-yFvvVnlnuXcb07WRzKj35xk5l1md5ehUc_RsrdSRgpTpABYSncFaYA0MZ9bkNrcG4_KOHUkgXEJGU4ZSjBwkOFANpFBRUYZpTUWKkK4vhUBD0OSShv1OqvUQUJR0GyuoEuSCsnVq9I15GsoEFuhlpD-l1cvCxpYFAzrri4N4zOYNbRtMGto2wyAti3AzfJqaNuh4lBx7MAxPLdyulpxSDgc-K4g8G1QvRIYVwgA4wrsLxw7jgA5r3Pquu7R0oTg0_F8fvt4_Hw_5Z_5cHx9OT237ws0clXs8wIAAA)"
 title = "Proportional Representation"
 caption = "Each center of political thought gets a representative. We use two-winner Ranked Choice Voting."
 comment = "not sure whether to have two side by side or top-bottom. Same winners as district representation. don’t show power chart."
@@ -40,7 +40,7 @@ id = "prop_sim" %}
 
 The key advantage of STV is that districts do not need to be drawn around political minority groups in order to give them representation.  Just look at how in a complex opinion-space, there is an evenly distributed selection of winning candidates:
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Sy2pdMQz8F6-1sB6W7fsZpbvLXSQkq4a2i25Kab69Y82FJoRCOXAk6zEej_Sr9Xa5XueSXDe5mnVZoxwVXQ5Px75720VjVchETY_XXXY_zkR9L293JON46vdOQ0NadYasWfiBqroyupid2HBJv92k6aFkMchpdMm6Kxbut2pJMc1T6u3SpUW7tFfNJm3UOQFg8uFD_USmy4cPmYUMQDpAXi3rbw052N7eVe6qNH8bfpMGxOGg5xUuU6KCxiD5atCQLYiXATcNWDDRAbsrjNsviBrgFAY4BkMcCwaB4zDEscnT4mlXg_d6uB7JtBJu1evOPBk5kK6Y5L-_A5Bs4T2-iQyBXUIwNLx5CZYGQTRgVc7eoC_6X_HPUe93kVbY-6yXfGgVP0fwgybxP_wi62UxuRvUIXYFB4czqMGgmoMaDKo5Bg3VHJO5VY8dVDOJkkRJzjaJkqOW75BOQiQZJOc52Ts5z8kpTKfhFCb3Yp41Pjs7K_n48PLy7cfnn9-fse2fHr5-eX5qv_8A11WG58ADAAA)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41TS2pcQQy8S6-1aH1a3W-OEbJ7zMLGXsUkWWQTQnz2VKsGMsYYzIPRv1Qtaf603i7nOZfkuspp1mWNUlR0OTQdx007XDRWuUzUdGvd5ehbmcjvpR0dwdia-q3SUJBWlSFrFn4gq1pGF7PtGy7p16s03ZQsBjmNLlm9YqG_VUmKae5Ub5cuLdqlvWo2aaPsBIDJuw_5E5Eu7z5EFiIA6QB5taxfa4hB9vYm86hM83v3XRgQm4PuV2zTaJKpBgV5gnIJsNKABAcdkEe50fcCrwFIIYBjEMSxoBM4DkEcm7QWraMKvNeTdQ9LK-BWte6Mk5ED6cQOP_42QLKEffwgMkbrEoJ1yZQlOBc4UYAj2ReDuuj_x75NvfUirbC3UfA6HZAqvk3ww0ziM_wi62UxeRWcQxzlHFzL4AwGpzk4g8FpjkHBaY7J2KrHDk4ziZJESe42iZKjzm6TTkIkGST3OVk7uc_JLUyn4BYm72Imb2dOBtf9oLefT1oEfHx4efnx6-vvn8_4G3x5-P7t-an9_Qc4HPJW2QMAAA)"
 title = "Evenly Distributed Representation"
 caption = "With five representatives, STV can spread them out to be closer to the voters.  (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
 comment = "to show how STV can prevent factions from fighting each other."
@@ -113,7 +113,7 @@ This counting method is important because it is what allows small groups to come
 
 See the example chart below for a visual of the process of elimination.  It starts at the top and each row tracks who the **voter's** top pick is.  Each column is a voter.  Transparency is used to represent the excess vote that remains after a quota is filled. As candidates are eliminated, the groups of voters become visually apparent.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxd-8zEN1qi0NcxQkoaBCCb8f2cNKJ0ynFxI-MJ5N8td4O26ZOvuy0sXRyic0QEl3_MjJyJ8LE3nO39NjJvlPjPO0azXncjcyzYRixLdmg7dCpjXZoP2yN2qzY4lhM-L-i36PS6WZFZblbWe9WuNc4TplKTqOSgiSk8QBAWGgsCBk8AmOoBcQEoSbBFkkJNg0QJEEjQcMBEzXQiCNaEIFFe8nlNIeroFJnVVGHIA2mLRy_rGw3NIBVcW0O45QGzWgY_eJEBnwdyHWgF-oMRrGN23HDStZwPCEuMdZKThg7cYEJKyYuMGHFnABYMR21paZNWGEdwNVpeBeDoTZLsYYQA4VBga0FDgWOsw4LXQGw0PGmnr8tv5ajuFz7lnkQPh3P57ePx8_3U3zWh-Pry-m5ff8C1KfX4SADAAA)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxs_sZiG61xSGu4gQUNAjBt-N4OGnF6bTFxK_xZLJfpZZ129TJx04bSyWXODQh0eUvI22eRJjY6zyNGifZdyo8p12jeY67kflsaEZsYzZoWSuVVtbyw1ao9IwtxmLD_y_6PSqVbr6ojLuV5W6Fa67jKXOGghCiuAEgKdQlhABugbHOAoJbqEjwRFKCRwMESdBI0HBARw004ogGIrBoTaE8beEsqOSsKuoQpMG0hdfXb7YbGsCquDCHZUqNejS0evVgBnwM5BjolXoGLdna7bpmKas5Hg-XaEsmOyztuECHFR0X6LCidwCs6I7ayG0dVlgFcHYa3sVgqPVUrCHEQGFQYEuCQ4Fj1mGhKwAWOt7UDe_ujuI4-jbzIBwgfDpdLm8fj5_v5_hbH06vL-fn8v0LhmM1_yEDAAA)"
 title = "Voter Chart By Round"
 caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory.  Mouse over the rounds to see how the chart progresses through the rounds. "
 comment = "voter chart time"
@@ -125,7 +125,7 @@ In the background is a dark bar that shows what total equality would look like. 
 
 (The voters and candidates are arranged in a line by using an algorithm that solves the traveling salesman problem to keep voters together who are near each other in 2D space.  Specifically, the ballots are used as coordinates or feature vectors since this 2D space isn't something you'd be able to see in an election.  You can wiggle around the candidates in this chart to see them take the traveling salesman's route to visit all the voters.)
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DMRD8F9dbeB_evctnILrTFUGkIgIKGoTg21nvECkiilyM9-HZ8dhfrbfDtmlQLDttLJ1CcmNCoutfRmzuRJg4-twtPXey79R4ng7N5nk8nDxmgzmxL7NB26FTs3ZoP-yN2qjY81hO-L-yP7LS6WZlZblbWe9WuNc4njKVgqySgiSksQEgLDUWpAy2xBzqCTlBqEmyZVKSTRMESdBI0nDCQA00EogWRGDRXnJ5msNVUKmzqqhDkCbTlo5f1mx3NIBVcW1O45SMRjZYvzgxA74O5DrQC_UMrNjsdpx5ybLAE-IStlZywNiBCwxYMXCBASvGAMCKEagtNW3ACu8Ark7HuzgM9VGKNYU4KBwKfC0IKAicDVgYCoCFgTeN-dvm14oqPh3P57ePx8_3U37Kh-Pry-m5ff8C6DPT3QgDAAA)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxs_sZiG61xSGu4gQUNAjBt-N4OGnF6bTFxK_xZLJfpZZ129TJx04bSyWXODQh0eUvI22eRJjY6zyNGifZdyo8p12jeY67kflsaEZsYzZoWSuVVtbyw1ao9IwtxmLD_y_6PSqVbr6ojLuV5W6Fa67jKXOGghCiuAEgKdQlhABugbHOAoJbqEjwRFKCRwMESdBI0HBARw004ogGIrBoTaE8beEsqOSsKuoQpMG0hdfXb7YbGsCquDCHZUqNejS0evVgBnwM5BjolXoGLdna7bpmKas5Hg-XaEsmOyztuECHFR0X6LCidwCs6I7ayG0dVlgFcHYa3sVgqPVUrCHEQGFQYEuCQ4Fj1mGhKwAWOt7UDe_ujuI4-jbzuNIA4dPpcnn7ePx8P8ff-nB6fTk_l-9fV4vS8SEDAAA)"
 title = "Power Chart"
 caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory.  Mouse over the rounds to see how the chart progresses through the rounds. "
 comment = "power chart time"
@@ -150,7 +150,7 @@ After you're done with this page, [read this page (currently a draft) about all 
 
 Let's get back to the idea of proportionality.  You can see that in STV, a voter group with two times as many voters gets two times as many representatives.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Ty05cMQz9l6y9iJ3Ezp1dP6ALHmIzmsWlnQXqlBkhQCBEv722DxWVKNVd-PgR--Q496XUstlueyUedUdbZkddHfVOUpcIVSXh5mhWkszZQizsQMSINarEuiMJpJGtGRt-cgRq7Gi-IRbd7ahwTDafp1kyBrFZJFrZVCq9bMov1kJlpK9eLvTh83rzTKUPn2fmp5nl0wzXHMdBr5FRaDMjLoiDHXcYcHOaaZwJd7c-l8WtT2Eq4h09Kt7RgyIw6CMdJd6nuUEfMXgT3pIHWk3KHAJxJprk2daQB6Pmnbau8b--OKooxoQGGXw51KjTIPULT_IFejDKO4aGLp3fobzDlmvJ2p49-_8JdE3S3bBkXLFDqAHpB643INTA9QaEGgMGQg1DbubkAaG0wqCLYm2KLjpyq_FqFC0UDHRJY2BgnFMMAluDgcAGBhbvsZw9HO_Xi2_Hu72_03S-nE53x8f18Mf_enN783N9cvfi8qrEazWcn39LH3FoMMHgej0cjveXz6e9_wbn6-2P_ffy-hsvPz-YrgMAAA)" 
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Ty05cMQz9l6y9iJ3Ezp1dP6ALHmIzmsWlnQXqlBkhQCBEv722DxWVKNVdHL9inxznvpRaNtttr8Sj7mjL7FZXt3onqUuEqpJwc2tWkszZQizshogRa1SJdbckLI1szdjwkyOsxm7NN4tFdzsqHJPN52mWjEFsFolWNpVKL5vyi7VQGemrlwt9-LzePFPpw-eZ-Wlm-TTDNcdx0GtkFNrMiAviYMcdAG5OM8GZcHf0uSyOPoWpiHf0qHhHD4oA0Ec6SrxPc0AfMXgT3pIHWk3KHAJxJprk2daQB6Pmnbau8b--OKooxoQGGXw51KjTIPULT_IFejDKO4aGLp3fTXk3W64la3v27P8n0DVJd8OSccUOoQakH7jegFAD1xsQagwAhBqG3MzJA0JpBaCLYm2KLjpyq_FqFC0UDHRJMDAwzikGga0BILCBgcV7LGcPx_v14tvxbu_vNJ0vp9Pd8XE9_PG_3tze_Fyf3L24vCrxWg3n59_SRxwazJpwvR4Ox_vL59Pef4Pz9fbH_nt5_Q0IWhoZrgMAAA)" 
 title = "Quotas Give Proportional Results"
 caption = "Here's two groups with a 1:2 ratio (really 4:7).  The winners are also in the same ratio."
 comment = "Maybe choose a more interesting example."
