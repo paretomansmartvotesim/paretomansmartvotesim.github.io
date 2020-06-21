@@ -91,7 +91,7 @@ We can extend this logic to quotas for multi-winner Ranked Choice Voting. You wo
 | 5                 | 17 %    | \> 83 %            |
 | n                 | 1/(n+1) | \> n/(n+1)         |
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4kfs3fsMRLfa4hBXcQIKGoTg23E8nHTidErh-DUeT_LVejtsmwbFstPG0ikkLyYkuv5FxOZNhImjz9vS8yb7To1nd2gWz_Zw8pgF5sS-zAJth07N2qH9sDdqo3zPtpzw_2R9ZKbTzcnMcjez3s1wr3E8aSoFWQUFQVBjgwGx5FgmabClzaGeJicINUm0DEqiaRpBEDCSMJxmIAcYCXgLPKBoL7o8xeFKqFSvKvIgpIm0peKXM8sdBUBVrM0pnJLRyALrFyWmw9eOXDt6gZ6OFZrdjjMvWhZ4QixhawUHhB1YYECKgQUGpBgDBlKMQG6paQNSOFCcq9LxLg5BfRRjTSIOCAcDX8sEegO9AQlDYSBh4E1j_rb5taKST8fz-e3j8fP9lJ_y4fj6cnpu37-F24fyCAMAAA)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvU6DMQx8l8weYjux0z4GYvvUoYhOVMDAghA8O7aPShVVlcHx3_l8yVfrbb9t6uTrQBtLJ5e4DCHR3V9ERt5EmNh73laPmxwO1Di7XaM4293IPAuGEdvKAm37Tm20fftha9Rm-RZtMeH_iXqPTKebE5l1N7O7m-Fe4zhpKjmNCgqCoMYDBsSCY5mgwSNsDLUwMUGoSaBFUAJNwwiCgJGA4TATOcCIw1vwgKK96HKKw5VQqV5V5EFIA2kLxS8nyw0FQFWszSGc0qAZBaNflEiHrx25dvQCnc4otHE7bljRGo4nxBJjV8EJYScWmJBiYoEJKeaEgRTTkVs1bUIKA4pxVRrexSCozWKsQcQAYWBguzKOXkevQ0JXGEjoeFPP35Zfy5Fc17plHCutXubpeD6_fTx-vp_izz4cX19Oz-37FzeE5I4nAwAA)"
 title = "Three Winners"
 caption = "Each of three groups is able to be represented."
 comment = "three parties is a cognitive achievement. don't show power chart."
@@ -150,16 +150,16 @@ After you're done with this page, [read this page (currently a draft) about all 
 
 Let's get back to the idea of proportionality.  You can see that in STV, a voter group with two times as many voters gets two times as many representatives.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Su25UMRD9F9dTeMbzuHc7PoACEqVZbXGBLSKW7CoKCBTBt2c8JyhFCHIxZ97Hx35sve32e-3E1g-0Z06knkiVpK8z1J2ER6Klk1QuVmLhBCJB7LNKQhPJRD6zvWKWnTbR4ETLM2Lxw4Eaz82R-7xKzIgjZmK0Xaembdf-sDdqVr5nudCrk_WRmU6vTmaWNzPrmxnutY4nvUFBWkFBENRYYUAsOZZJGqxpcylL2lzB1CTHZVRyXAZFYDBHFCU5Z6TBHAl4C7y1GkYvvjzV4UoMqd4xkAejkZP2KfC_zmx1FGPDgAb5MjRIycjztgvl62VwliuWzvsrv0B5gaPepGq1Zur_CagXaQ28MK6oEMqgu-F6BqEM1zMIZQYDoSyQW2qzQSjvMFyVjmdzyO1WzPMrN8cIBwNfywQYBHoDAseAgcABBjE_Y_vw_fywXX0-3x_zk5bz7nK5P__YTn_997d3t9-2n-leXd-0-VWj-j9tp9P54frX5Zif_ON29_X4pf1-ArGk_O2MAwAA)" 
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Ty05cMQz9l6y9iJ3Ezp1dP6ALHmIzmsWlnQXqlBkhQCBEv722DxWVKNVd-PgR--Q496XUstlueyUedUdbZkddHfVOUpcIVSXh5mhWkszZQizsQMSINarEuiMJpJGtGRt-cgRq7Gi-IRbd7ahwTDafp1kyBrFZJFrZVCq9bMov1kJlpK9eLvTh83rzTKUPn2fmp5nl0wzXHMdBr5FRaDMjLoiDHXcYcHOaaZwJd7c-l8WtT2Eq4h09Kt7RgyIw6CMdJd6nuUEfMXgT3pIHWk3KHAJxJprk2daQB6Pmnbau8b--OKooxoQGGXw51KjTIPULT_IFejDKO4aGLp3fobzDlmvJ2p49-_8JdE3S3bBkXLFDqAHpB643INTA9QaEGgMGQg1DbubkAaG0wqCLYm2KLjpyq_FqFC0UDHRJY2BgnFMMAluDgcAGBhbvsZw9HO_Xi2_Hu72_03S-nE53x8f18Mf_enN783N9cvfi8qrEazWcn39LH3FoMMHgej0cjveXz6e9_wbn6-2P_ffy-hsvPz-YrgMAAA)" 
 title = "Quotas Give Proportional Results"
 caption = "Here's two groups with a 1:2 ratio (really 4:7).  The winners are also in the same ratio."
-comment = "Maybe choose a more interesting example. altlink is [link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31SvW6UMRB8F9dbeNf27vddxwNQQCKa0xUfcEXEkTtFAYEQPDuznpwUKQS5mP3f8di_Si27_b5X0VEPsleF1R1W72J1zVB1MW2wzFQ0sswWlIXBiiHWMxnIWdabr7BmVSZ1pNUU1vJkqfnhIEVzczTRJfuXgKFZ0V3Ul6xoZVel9LIrf9SLlDF9R5_Ji4P6QKbKi4PM8mpmfTWjda7T5NkkpD-FjWGS004gNbCcACLagVirBsQSgGEgooaBDWAMco5hjgIGc5xjQW-hxymtTsaa-uhMNJu9rTFPRg2T9tD6XydbncXc0KgCHkmadBniuO8ieEgEs7zXq0zp6HPHnjvtujSdPmf3_xPpPsn34Fvzqn2dwcEXGLzmoGCD1xwUbAwCBRvB3DI3DwrmlaCz0vl8Ttl9TPb4gMU5wsnA1wlBBsHeoNDRCBQ6yCDyW5Z3386P282n88MR33U6by6Xh_P37XT1397d333dfsC9uf1Q8tPG7P-4nU7nx9uflyO--_vt_svxc_n9Fwg5q72fAwAA)"
+comment = "Maybe choose a more interesting example."
 id = "proportional_two_to_one_sim" %}
 
 This proportionality applies even when there aren't distinct groups.  Let's look again at the example we saw ealier, but now using the additional charts.  
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41SyWpcQQz8lz7r0Np6mc8IuQ1zsLFPMUkOuYQQf3uqVQOxMYHQ8LSX6kn61Xq7XK9zyVg3uZp1WVmKii6Hprnv2nbROFkaCLodrbvsfpRlsk-h7i5qcTT1e6Glyaj0DFmz4ANZ1TG6mB1fugy_3aTpYWSRpJRdhlbThfZWJUNMx0n1dunSol3aq44mLcseADD58JA_Eeny4SGyEAFIB8irjfpaQwyyt3eZuzLN37rfhAFxOKhWK5cpUW6jm4w1KMgX1EuAnQYkuGhC7nKj_wVeA6BCAMcgiGNBJ3Acgjg2aS1auwq8Fx89Q9MKuFWtO-Nk5EC6Yrv_fgdgsIR9fBMZI3YJwdrwz0twNXCiwOQcAi6iRf87_mPqvRdphb2PgtfVAanixwQ_zCT-h1-M-rOYvA7OIXY5k-tJziA5zeQMktNMbiU5zZyMrfrZ5DRHp-BOBnc7iDKyzu-QHoQYZDC4z0kGk7WTW5hOwS1MMpjnkM_Vzgo-Pry8fPvx-ef3Z9z7p4evX56f2u8_e1HuzMEDAAA)"
-title = "Evenly Distributed Representation"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41TzYqUQQx8lz7n0Ek6_TOPId6GOay4Jxf14EXEfXYrqQFnWQT5YNKdn-pKJfOr9Xa5XteWuW9yNeuyow4quh0njXM_HRcdmaUDQbc8dZfT87BNThbq6aI28qR-L7QwmZUeQ_Yq-IGsenF0MUtfuEy_3aRpMrIRpBRdptajG89blUwxnZnq7dKljXZprzqbtKj7BIDJuw_5C5Eu7z5ENiIA6QB5tVm_1hCD7e1N5qlM80f3QxgQyUGzC5cl6E93-o1-UtZBQ8LgXgb0dMCCjAbsKTcIXOA1ICoMcAyGODboBI7DEMcWb5u3UwXeq3dN1bQCblXrzjgZOZCuGO-_vwSYLOE7fogMjV2GYG5oewvWBk4UmOQmYCXa6H_1z6ve3yKtYW-jXgqiVDyv4AdNxv_wG7M6G4vrQR3GKWdwPkENgmoGNQiqGUFDNWMxtqvZoJqz0xBlcraTKDNq_5L0JMQkg8l5LjJYnOfiFJbTcAqLe7Fyk3NtF4P7Uej0s6Xdy3x6enn59uPjz-_P-D98ePr65flz-_0HKwv-beEDAAA)"
+title = "Evenly Distributed Representation - Again - With Charts"
 caption = "With five representatives, STV can spread them out to be closer to the voters.  (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
 comment = "to show how STV can prevent factions from fighting each other."
 id = "even_2_sim" %}
