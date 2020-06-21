@@ -4026,24 +4026,27 @@ function _drawBars(iDistrict, arena, model, round) {
 	heightRectangle = 100
 
 
-	// draw background for quota and build
-	var base = 600
-	var left = 0
-	var right = width
-	var top = base - heightRectangle
-	var bottom = base
-	if (0) {
-		var color = "#492"
-		arena.ctx.fillStyle = color
-	} else {
-		var g = arena.ctx.createLinearGradient(0,top,0,bottom)
-		g.addColorStop(0,"#ccc")
-		g.addColorStop(1,"black")
-		arena.ctx.fillStyle = g
+	
+	if (model.showPowerChart) {
+			
+		// draw background for quota and build
+		var base = 600
+		var left = 0
+		var right = width
+		var top = base - heightRectangle
+		var bottom = base
+		if (0) {
+			var color = "#492"
+			arena.ctx.fillStyle = color
+		} else {
+			var g = arena.ctx.createLinearGradient(0,top,0,bottom)
+			g.addColorStop(0,"#ccc")
+			g.addColorStop(1,"black")
+			arena.ctx.fillStyle = g
+		}
+		arena.ctx.fillRect(left,top,right-left,bottom-top)
+		//arena.ctx.fill()
 	}
-	arena.ctx.fillRect(left,top,right-left,bottom-top)
-	//arena.ctx.fill()
-
 
 	
 	// calculate quota and build
@@ -4107,40 +4110,44 @@ function _drawBars(iDistrict, arena, model, round) {
 				if (support > 0) {
 					// draw the build
 
-					var left = Math.round(k * widthRectangle)
-					var right = Math.round((k+1) * widthRectangle)
-					var top = Math.round(base-(build[k] + rep*support) * heightRectangle)
-					var bottom = Math.round(base-build[k] * heightRectangle)
-					var bucket = Math.round(base- heightRectangle) // where the shadows start
+					
+					if (model.showPowerChart) {
+			
+						var left = Math.round(k * widthRectangle)
+						var right = Math.round((k+1) * widthRectangle)
+						var top = Math.round(base-(build[k] + rep*support) * heightRectangle)
+						var bottom = Math.round(base-build[k] * heightRectangle)
+						var bucket = Math.round(base- heightRectangle) // where the shadows start
 
-					// white background for bar
-					arena.ctx.globalAlpha = 1
-					arena.ctx.fillStyle = "white"
-					arena.ctx.fillRect(left,top,right-left,bottom-top)
-					arena.ctx.fill()
-					arena.ctx.globalAlpha = baralpha
+						// white background for bar
+						arena.ctx.globalAlpha = 1
+						arena.ctx.fillStyle = "white"
+						arena.ctx.fillRect(left,top,right-left,bottom-top)
+						arena.ctx.fill()
+						arena.ctx.globalAlpha = baralpha
 
-					var color = model.candidates[winnerIndex].fill
-					arena.ctx.fillStyle = color
+						var color = model.candidates[winnerIndex].fill
+						arena.ctx.fillStyle = color
 
-					var greyedout = .2
-					if (bottom > bucket) { // bottom is in bucket
-						if (top < bucket) { // top is out of bucket
-							arena.ctx.fillRect(left,bucket,right-left,bottom-bucket)
-							arena.ctx.fill()
+						var greyedout = .2
+						if (bottom > bucket) { // bottom is in bucket
+							if (top < bucket) { // top is out of bucket
+								arena.ctx.fillRect(left,bucket,right-left,bottom-bucket)
+								arena.ctx.fill()
+								arena.ctx.globalAlpha = greyedout
+								arena.ctx.fillRect(left,top,right-left,bucket-top)
+								arena.ctx.fill()
+							} else { // entirely in bucket
+								arena.ctx.fillRect(left,top,right-left,bottom-top)
+								arena.ctx.fill()
+							}
+						} else { // entirely out of bucket
 							arena.ctx.globalAlpha = greyedout
-							arena.ctx.fillRect(left,top,right-left,bucket-top)
-							arena.ctx.fill()
-						} else { // entirely in bucket
 							arena.ctx.fillRect(left,top,right-left,bottom-top)
 							arena.ctx.fill()
 						}
-					} else { // entirely out of bucket
-						arena.ctx.globalAlpha = greyedout
-						arena.ctx.fillRect(left,top,right-left,bottom-top)
-						arena.ctx.fill()
+						arena.ctx.globalAlpha = baralpha
 					}
-					arena.ctx.globalAlpha = baralpha
 
 					// calculate the next step
 					q[k] -= rep*support
@@ -4184,8 +4191,20 @@ function _drawBars(iDistrict, arena, model, round) {
 	
 			_drawStroked("Weight",70,400,40,arena.ctx)
 		}
+		
+	}
+	
+	if (model.showPowerChart) {
+	
+		_drawStroked("Power",10,480,40,arena.ctx,"start")
+
 	}
 
+
+
+
+
+	
 	// draw votes for each candidate in this round
 	var pos = 170
 	heightRectangle = 30	
@@ -4464,7 +4483,6 @@ function _drawBars(iDistrict, arena, model, round) {
 	} else {
 		_drawStroked("Votes",10,150,40,arena.ctx,"start")
 	}
-	_drawStroked("Power",10,480,40,arena.ctx,"start")
 	
 }
 

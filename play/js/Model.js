@@ -83,7 +83,7 @@ function Model(idModel){
         keyyee: "newcan",
         kindayee: "newcan",
         ballotConcept: "auto",
-        powerChart: "auto",
+        roundChart: "auto",
 		voterIcons: "circle",
 		candidateIconsSet: ["image","note"],
 		placeHoldDuringElection: false,
@@ -104,6 +104,7 @@ function Model(idModel){
 		doElectabilityPolls: true,
 		partyRule: 'crowd',
 		stage: "general",
+		showPowerChart: true,
 	})
 	
 	self.viz = new Viz(self);
@@ -373,7 +374,7 @@ function Model(idModel){
 	self.doTheElection = function() {
 		
 
-		// for the moment, this works, but ideally there would be separate components of the STV, RRV etc elections for the powerCharts
+		// for the moment, this works, but ideally there would be separate components of the STV, RRV etc elections for the roundCharts
 		// we make sure that we generate the data now so we have it later.
 		self.optionsForElection.sidebar = self.optionsForElection.sidebar || self.checkGotoTarena()
 
@@ -676,7 +677,7 @@ function Model(idModel){
 	self.checkGotoTarena = function() { 
 		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
 		// right now, we don't have a good visual of these for multiple districts, just one
-		return (self.nDistricts < 2) && (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.powerChart == "off")
+		return (self.nDistricts < 2) && (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.roundChart == "off")
 	}
 
 	self.checkDoBeatMap = function() {

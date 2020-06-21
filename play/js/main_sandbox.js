@@ -537,7 +537,7 @@ function Config(ui, config, initialConfig) {
         beatMap: "auto",
         kindayee: "newcan",
         ballotConcept: "auto",
-        powerChart: "auto",
+        roundChart: "auto",
         sidebarOn: "on",
         lastTransfer: "off",
         voterIcons: "circle",
@@ -554,6 +554,7 @@ function Config(ui, config, initialConfig) {
         filterSystems: [],
         doFilterStrategy: true,
         includeSystems: ["choice","pair","score","multi","dev"],
+        showPowerChart: true,
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -1018,7 +1019,7 @@ function Cypher(ui) {
         57:"beatMap",
         58:"kindayee",
         59:"ballotConcept",
-        60:"powerChart",
+        60:"roundChart",
         61:"sidebarOn",
         62:"lastTransfer",
         63:"voterIcons",
@@ -1037,6 +1038,7 @@ function Cypher(ui) {
         76:"filterSystems",
         77:"doFilterStrategy",
         78:"includeSystems",
+        79:"showPowerChart",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3043,7 +3045,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     42: "yeeon",
                     43: "beatMap",
                     44: "ballotConcept",
-                    45: "powerChart",
+                    45: "roundChart",
                     46: "sidebarOn",
                     47: "lastTransfer",
                     48: "voterIcons",
@@ -3062,6 +3064,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     61: "filterSystems",
                     62: "doFilterStrategy",
                     63: "includeSystems",
+                    64: "showPowerChart",
                 },
             }
         ]
@@ -3688,9 +3691,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
             if ( model.doTextBallots) return // text ballots are not relevant here
             // virtually press some buttons
             // pretend we did onChoose and select for the following options to make things run more smoothly
-            config.powerChart = "off"
-            ui.menu.powerChart.configure()
-            ui.menu.powerChart.select()
+            config.roundChart = "off"
+            ui.menu.roundChart.configure()
+            ui.menu.roundChart.select()
             config.sidebarOn = "off"
             ui.menu.sidebarOn.configure()
             ui.menu.sidebarOn.select()
@@ -4182,7 +4185,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
 
-    ui.menu.powerChart = new function () {
+    ui.menu.roundChart = new function () {
         var self = this
         self.list = [
             {name:"auto",value:"auto",margin:4},
@@ -4190,7 +4193,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"off",value:"off"},
         ]
         self.codebook = [ {
-            field: "powerChart",
+            field: "roundChart",
             decode: {
                 0:"off",
                 1:"on",
@@ -4199,16 +4202,16 @@ function menu(ui,model,config,initialConfig, cConfig) {
         } ]
         self.onChoose = function(data){
             // LOAD
-            config.powerChart = data.value
+            config.roundChart = data.value
             // CONFIGURE
             self.configure()
             // INIT
-            if (config.sidebarOn == "auto") {
+            if (config.sidebarOn == "on") {
                 model.update()
             }
         };
         self.configure = function() {
-            model.powerChart = config.powerChart
+            model.roundChart = config.roundChart
             if (model.checkGotoTarena()) { // TODO: make a visualization for more than 1 district
                 model.tarena.canvas.hidden = false
             } else {
@@ -4222,7 +4225,44 @@ function menu(ui,model,config,initialConfig, cConfig) {
             onChoose: self.onChoose
         });
         self.select = function() {
-            self.choose.highlight("value", config.powerChart);
+            self.choose.highlight("value", config.roundChart);
+        }
+    }
+
+    ui.menu.showPowerChart = new function () {
+        var self = this
+        self.list = [
+            {name:"yes",value:true,margin:4},
+            {name:"no",value:false},
+        ]
+        self.codebook = [ {
+            field: "showPowerChart",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.showPowerChart = data.value
+            // CONFIGURE
+            self.configure()
+            // INIT
+            if (config.sidebarOn = "on") {
+                model.update()
+            }
+        };
+        self.configure = function() {
+            model.showPowerChart = config.showPowerChart
+        }
+        self.choose = new ButtonGroup({
+            label: "Show Power Chart:", // Sub Menu
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.showPowerChart);
         }
     }
 
@@ -5323,7 +5363,8 @@ function createMenu(ui) {
             ]],
             "beatMap",
             "ballotConcept",
-            "powerChart",
+            "roundChart",
+            "showPowerChart",
             "behavior",
             "doTextBallots",
             ["divDoTextBallots", [
@@ -5438,7 +5479,8 @@ function createMenu(ui) {
                     ]],
                 ]],
                 ["advanced", [
-                    "powerChart",
+                    "roundChart",
+                    "showPowerChart",
                     "sidebarOn",
                     "ballotVis",
                     "visSingleBallotsOnly",

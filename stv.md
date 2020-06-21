@@ -113,7 +113,7 @@ This counting method is important because it is what allows small groups to come
 
 See the example chart below for a visual of the process of elimination.  It starts at the top and each row tracks who the **voter's** top pick is.  Each column is a voter.  Transparency is used to represent the excess vote that remains after a quota is filled. As candidates are eliminated, the groups of voters become visually apparent.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DMRD8F9dbeB_evctnILrTFUGkIgIKGoTg21nvECkiilyM9-HZ8dhfrbfDtmlQLDttLJ1CcmNCoutfRmzuRJg4-twtPXey79R4ng7N5nk8nDxmgzmxL7NB26FTs3ZoP-yN2qjY81hO-L-yP7LS6WZlZblbWe9WuNc4njKVgqySgiSksQEgLDUWpAy2xBzqCTlBqEmyZVKSTRMESdBI0nDCQA00EogWRGDRXnJ5msNVUKmzqqhDkCbTlo5f1mx3NIBVcW1O45SMRjZYvzgxA74O5DrQC_UMrNjsdpx5ybLAE-IStlZywNiBCwxYMXCBASvGAMCKEagtNW3ACu8Ark7HuzgM9VGKNYU4KBwKfC0IKAicDVgYCoCFgTeN-dvm14oqPh3P57ePx8_3U37Kh-Pry-m5ff8C6DPT3QgDAAA)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxd-8zEN1qi0NcxQkoaBCCb8f2cNKJ0ynFxI-MJ5N8td4O26ZOvuy0sXRyic0QEl3_MjJyJ8LE3nO39NjJvlPjPO0azXncjcyzYRixLdmg7dCpjXZoP2yN2qzY4lhM-L-i36PS6WZFZblbWe9WuNc4TplKTqOSgiSk8QBAWGgsCBk8AmOoBcQEoSbBFkkJNg0QJEEjQcMBEzXQiCNaEIFFe8nlNIeroFJnVVGHIA2mLRy_rGw3NIBVcW0O45QGzWgY_eJEBnwdyHWgF-oMRrGN23HDStZwPCEuMdZKThg7cYEJKyYuMGHFnABYMR21paZNWGEdwNVpeBeDoTZLsYYQA4VBga0FDgWOsw4LXQGw0PGmnr8tv5ajuFz7lnkQPh3P57ePx8_3U3zWh-Pry-m5ff8C1KfX4SADAAA)"
 title = "Voter Chart By Round"
 caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory.  Mouse over the rounds to see how the chart progresses through the rounds. "
 comment = "voter chart time"
@@ -139,10 +139,10 @@ What happens if a candidate gets more votes than just a quota?  The rule is that
 
 The concept of a quota extends to multiple ballot counting methods:
 
-1. Single-Top Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
+1. Top-choice-counts Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
 2. Scoring methods (including Approval Voting and STAR voting): Monroe voting and a few methods I'm working on
 3. Pairwise ballot methods (I'm working on a version of minimax)
-4. Choose only one methods: Single Non-Transferable Vote (SNTV).  An obvious Improvement would be to have a Single Transferable Vote.
+4. Choose-only-one methods: Single Non-Transferable Vote (SNTV).  An obvious Improvement would be to have a Single Transferable Vote.
 
 After you're done with this page, [read this page (currently a draft) about all the different kinds of proportional voting methods.](proportional)
 
