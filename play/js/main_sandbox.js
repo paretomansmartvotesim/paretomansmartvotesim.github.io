@@ -2511,6 +2511,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "pair":"pairSecondStrategy",
             "score":"scoreSecondStrategy",
         }
+        self.decodeList = {
+            0:"zero strategy. judge on an absolute scale.",
+            1:"normalize",
+            2:"normalize frontrunners only",
+            3:"best frontrunner",
+            4:"not the worst frontrunner",
+        }
         self.onChoose = function(data){
             // CONFIGURE
             self.configure()
@@ -2575,7 +2582,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:4},
             {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
         ];
-        // self.codebook was done below in ui.menu.secondStrategy
+        self.codebook = [
+            {
+                decode: ui.strategyOrganizer.decodeList,
+                field: "scoreFirstStrategy"
+            },
+        ]        
         self.onChoose = function(data){
             config.scoreFirstStrategy = data.value;
             ui.strategyOrganizer.onChoose()
@@ -2600,7 +2612,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
             {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
         ];
-        // self.codebook was done below in ui.menu.secondStrategy
+        self.codebook = [
+            {
+                decode: ui.strategyOrganizer.decodeList,
+                field: "choiceFirstStrategy"
+            },
+        ]
         self.onChoose = function(data){
             config.choiceFirstStrategy = data.value;
             ui.strategyOrganizer.onChoose()
@@ -2624,7 +2641,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [
             {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
         ];
-        // self.codebook was done below in ui.menu.secondStrategy
+        self.codebook = [
+            {
+                decode: ui.strategyOrganizer.decodeList,
+                field: "pairFirstStrategy"
+            },
+        ]
         self.onChoose = function(data){
             config.pairFirstStrategy = data.value;
             ui.strategyOrganizer.onChoose()
@@ -2660,49 +2682,18 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [
             {realname: "opton for 2nd strategy", name:"2", value:"2"}
         ];
-        var decodeList = {
-            0:"zero strategy. judge on an absolute scale.",
-            1:"normalize",
-            2:"normalize frontrunners only",
-            3:"best frontrunner",
-            4:"not the worst frontrunner",
-        }
         self.codebook = [
             {
-                decode: decodeList,
+                decode: ui.strategyOrganizer.decodeList,
                 field: "secondStrategies" // old. not used anymore, but kept
             },
             {
-                decode: decodeList,
+                decode: ui.strategyOrganizer.decodeList,
                 field: "secondStrategy"
             },
             {
-                decode: decodeList,
+                decode: ui.strategyOrganizer.decodeList,
                 field: "firstStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "scoreFirstStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "choiceFirstStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "pairFirstStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "scoreSecondStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "choiceSecondStrategy"
-            },
-            {
-                decode: decodeList,
-                field: "pairSecondStrategy"
             },
             {
                 field: "doTwoStrategies",
@@ -2755,7 +2746,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:4},
             {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
         ];
-        // self.codebook was done below in ui.menu.secondStrategy
+        self.codebook = [
+            {
+                decode: ui.strategyOrganizer.decodeList,
+                field: "scoreSecondStrategy"
+            },
+        ]
         self.onChoose = function(data){
             config.scoreSecondStrategy = data.value;
             ui.strategyOrganizer.onChoose()
@@ -2780,7 +2776,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
             {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
         ];
-        // self.codebook was done below in ui.menu.secondStrategy
+        self.codebook = [
+            {
+                decode: ui.strategyOrganizer.decodeList,
+                field: "choiceSecondStrategy"
+            },
+        ]
         self.onChoose = function(data){
             config.choiceSecondStrategy = data.value;
             ui.strategyOrganizer.onChoose()
@@ -2804,7 +2805,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [
             {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
         ];
-        // self.codebook was done below in ui.menu.secondStrategy
+        self.codebook = [
+            {
+                decode: ui.strategyOrganizer.decodeList,
+                field: "pairSecondStrategy"
+            },
+        ]
         self.onChoose = function(data){
             config.pairSecondStrategy = data.value;
             ui.strategyOrganizer.onChoose()
