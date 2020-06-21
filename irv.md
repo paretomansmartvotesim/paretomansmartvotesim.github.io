@@ -1,27 +1,27 @@
 ---
 layout: page-3
 title: Instant Runoff Voting
-description: An Interactive Guide to IRV (a kind of Ranked Choice Voting RCV)
+description: An Interactive Guide to IRV (the Single-Winner kind of Ranked Choice Voting RCV)
 byline: 'by Paretoman, June 2020'
 ---
 
-I'd like to describe an ideal of cooperative politics and how it is better achieved with **instant runoff voting (a kind of ranked choice voting)**, where (in most situations)
+I'd like to describe an ideal of cooperative politics and how it is better achieved with **instant runoff voting (the single-winner form of Ranked Choice Voting)**, where (in most situations)
 
 * candidates that are on the same side can support each other, and
 * voters can vote for their favorite candidate.
 
 This is in contrast to what we have now with **single choice voting**, where
 
-* candidates are forced into opposition with each other just by the way we vote, and end up using terms like spoiler to intimidate each other, and
+* candidates are forced into opposition with each other just by the way we vote and end up using terms like spoiler to intimidate each other, and
 * voters face a dilemma when they have to decide whether to betray their fellow supporters and support a candidate who is more viable but not their favorite.
 
 ## Spirit of Cooperation
 
 In an ideal world, like-minded people would gather together to work as a group to accomplish goals that are larger than themselves.  The higher the goal, the bigger and broader the group needs to be.
 
-We can get closer to this ideal if we use ranked choice voting because this voting method allows candidates to ally and work together as a team.  This happened in an actual election for mayor in 2018 where two candidates came together to support each other against a third.  The campaign not only got the strength of both candidates, but because the ballots were ranked choice ballots, it got the strength of all their combined voters.  This happens in any system which avoids vote-splitting.  In ranked-choice voting, in approval voting, in STAR voting, in score voting, and in pairwise ranked condorcet voting, there is a spirit of cooperation.  Candidates see each other as assets to help reach out to new voters rather than liabilities that take their voters away.
+We can get closer to this ideal if we use Ranked Choice Voting because this voting method allows candidates to ally and work together as a team.  This happened in an actual election for mayor in 2018 where two candidates came together to support each other against a third.  The campaign not only got the strength of both candidates, but because the ballots were Ranked Choice ballots, it got the strength of all their combined voters.  This happens in any system which avoids vote-splitting.  In ranked-choice voting, in approval voting, in STAR voting, in score voting, and in pairwise ranked condorcet voting, there is a spirit of cooperation.  Candidates see each other as assets to help reach out to new voters rather than liabilities that take their voters away.
 
-So.. what is ranked choice voting and how does it work?
+So.. what is Ranked Choice Voting and how does it work?
 
 <!--comment: "It would be good to have a turnout switch. Then the presence of a candidate near you could increase your chance of turnout."--> 
 
@@ -55,9 +55,9 @@ caption = "Your vote counted for A, your favorite, in the first round.  Not enou
 
 comment = "do a transfer, you still win" %}
 
-**Instant Runoff Voting (IRV)** is the formal name for this counting procedure.  It refers to ranked choice voting when there is only one candidate being elected. 
+**Instant Runoff Voting (IRV)** is the formal name for this counting procedure.  It refers to Ranked Choice Voting when there is only one candidate being elected. 
 
-**The Single Transferable Vote (STV)** is the formal name for a similar procedure with an extra step.  It refers to ranked choice voting when there's more than one winner.  You could call it multi-winner RCV.  The "Single" in the name comes from the fact that your vote counts for a single candidate, your top choice.  The "Transferable" part refers to when if, in an elimination round, your top choice gets eliminated, then your vote transfers to your new top choice for the next round of counting.  There is much more to say about the procedure of STV, but that will be all we mention it on this page. 
+**The Single Transferable Vote (STV)** is the formal name for a similar procedure with an extra step.  It refers to Ranked Choice Voting when there's more than one winner.  You could call it multi-winner RCV.  The "Single" in the name comes from the fact that your vote counts for a single candidate, your top choice.  The "Transferable" part refers to when if, in an elimination round, your top choice gets eliminated, then your vote transfers to your new top choice for the next round of counting.  There is much more to say about the procedure of STV, but that will be all we mention it on this page. 
 
 Around the world, IRV has been called by various names: the Alternative Vote (UK referendum 2011) and preferential voting (Canada 2015).  STV is also known as the Hare-Clark system in Australia.  IRV and STV are used nationally in Ireland, Australia, and India, and for cities and states in the US.
 
@@ -65,7 +65,7 @@ Around the world, IRV has been called by various names: the Alternative Vote (UK
 
 ## Less Strategy, More Honesty
 
-By being able to express more on a ranked choice ballot, voters no longer face a common dilemma.  The dilemma happens when you have to decide, "Am I going to vote for my favorite?" or "Am I going to show support where it would count in determining the winner of the election?" Honestly, the voter would like to support their favorite candidate and send a message of strength with all the other supporters that "this candidate represents us the best and deserves recognition".
+By being able to express more on a Ranked Choice ballot, voters no longer face a common dilemma.  The dilemma happens when you have to decide, "Am I going to vote for my favorite?" or "Am I going to show support where it would count in determining the winner of the election?" Honestly, the voter would like to support their favorite candidate and send a message of strength with all the other supporters that "this candidate represents us the best and deserves recognition".
 
 {% include sim.html id="irv_not_wasted_sim"
 
@@ -113,7 +113,7 @@ Only one faces the final round.
 
 ## Sp***er
 
-The worst part of single-choice voting is the term spoiler.  It sounds bad. and there's a reason it sounds bad, because that's how people intend to use it.  The hope is that the accuser will get the spoiler's votes by intimidating their voters.  This insult would no longer work in a ranked choice election.  It would only be accurate when the spoiler is getting more first-choice votes than the accuser.  And then it would not be effective because voters behind that large a candidate would not be intimidated.  
+The worst part of single-choice voting is the term spoiler.  It sounds bad. and there's a reason it sounds bad, because that's how people intend to use it.  The hope is that the accuser will get the spoiler's votes by intimidating their voters.  This insult would no longer work in a Ranked Choice election.  It would only be accurate when the spoiler is getting more first-choice votes than the accuser.  And then it would not be effective because voters behind that large a candidate would not be intimidated.  
 
 For new candidates who don't have many supporters yet, the barrier to entry would be lowered.  Hopefully, this would create competitive pressure to bring out the best candidates.  
 

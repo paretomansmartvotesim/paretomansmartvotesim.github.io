@@ -1,27 +1,31 @@
 ---
-twuser: paretoman1
-byline: 'By Paretoman and Contributors, May 2020'
-description: An Explorable Guide to Group Decision Making
-banner: Smart Voting Simulator
 layout: page-2
 title: Home
+banner: Smart Voting Simulator
+description: An Explorable Guide to Group Decision Making
+byline: 'By Paretoman and Contributors, May 2020'
+twuser: paretoman1
 ---
 
-{% include card.html title='Finding Common Ground' description=' - #1 Start here. Jump right in.' url='commonground.html' img='img/venn-diagram.png' %}
+{% include card.html title='Finding Common Ground' description=' - #1 Start here. Jump right in.' url='commonground' img='img/venn-diagram.png' %}
 
-{% include card.html title='Primaries' description=" - #2 we don't need them" url='primaries.html' img='img/primary-strategy.png' %}
+{% include card.html title='Primaries' description=" - #2 we don't need them" url='primaries' img='img/primary-strategy.png' %}
 
-{% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval_superman.html' img='img/winner-circle.png' %}
+{% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval_superman' img='img/winner-circle.png' %}
 
-{% include card.html title="To Build a Better Ballot" description=" - Nicky Case's original sim" url='original.html' img='img/split-vote.png' %}
+{% include card.html title="To Build a Better Ballot" description=" - Nicky Case's original sim" url='original' img='img/split-vote.png' %}
 
-{% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer.html' img='img/chicken.png' %}
+{% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer' img='img/chicken.png' %}
 
-{% include card.html title="Instant Runoff Voting" description=" - a kinder politics with a kind of Ranked Choice Voting (RCV) for single-winner elections" url='irv.html' img='img/irv.png' %}
+{% include card.html title="Instant Runoff Voting" description=" - a kinder politics with a kind of Ranked Choice Voting (RCV) for single-winner elections" url='irv' img='img/irv.png' %}
 
-{% include card.html title="Condorcet Methods" description=' - draft' url='log.html' img='img/condorcet.png' %}
+{% include card.html title="The Single Transferable Vote" description=" - an introduction to proportional representation with STV, the multi-winner form of Ranked Choice Voting RCV." url='stv' img='img/stv.png' %}
 
-{% include card.html title="Sandbox" description=' - try everything' url='sandbox/index.html' img='img/sandbox.png' %}
+{% include card.html title="Proportional Representation" description=" - continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods" url='proportional' img='img/proportional.png' %}
+
+{% include card.html title="Condorcet Methods" description=' - draft' url='log' img='img/condorcet.png' %}
+
+{% include card.html title="Sandbox" description=' - try everything' url='sandbox/' img='img/sandbox.png' %}
 
 
 
@@ -39,4 +43,4 @@ In this kind of voting, you get a single choice for who you want to win. The bal
 
 {% include sim-ballot.html title='SINGLE CHOICE VOTING' caption='Also called First Past the Post.' id='ballotSingle' link='[link](http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQWrEMAz8i84-RLZkJzn3AT30FnLYdlMaCNllN0tZSvv2Sp4WCiUEIsmSxjPjD2qoH4aSA0sZw8DKlollkT3TcQzEPsKlDdy2Xifqm0BS_0o9B8o20YR_n82W3U672-l2O9zUS9kZeRlRghCDEStCrszYCLBYtOuSha42o-HYYeQ6EyMCYKKg0roQMw4LqhaVoUTzoalE2S0BUgJSAlICUjKkwczEYMYq8BKkcojWEofzGXF5Llfib2KAQ_JE6p78hRQolYJnAUXp6qHCMGUE0FPQ058XxBMqhGqp_BR2KYTmBgEiM1zPQMlaJTi5DIgMBhlWFzAo2C2xIj0fluW0Pd3PE_X0uNwuh2Xe7hTo-nZ6f5iuL5f5vM2n1bpft_U4vc7rdKTPbxSiHLmuAgAA)' %}
 
-What could we do differently?  That's what this site's all about.  [Go up to the top menu to start exploring.](index.html#content)
+What could we do differently?  That's what this site's all about.  [Go up to the top menu to start exploring.](index#content)

@@ -1,22 +1,26 @@
 - name: Home
   link: .
 - name: Common Ground
-  link: commonground.html
+  link: commonground
 - name: Primaries
-  link: primaries.html
+  link: primaries
 - name: Approval Voting
-  link: approval_superman.html
+  link: approval_superman
 - name: Original
-  link: original.html
+  link: original
 - name: An Even Better Ballot
-  link: newer.html
+  link: newer
 - name: Instant Runoff Voting
-  link: irv.html
+  link: irv
+- name: Single Transferable Vote
+  link: stv
+- name: Proportional Representation
+  link: proportional
 - name: Condorcet Methods
-  link: log.html
+  link: log
 - name: Test Runs
-  link: testRuns.html
+  link: testRuns
 - name: Blog
-  link: blog.html
+  link: blog
 - name: Sandbox
   link: sandbox/

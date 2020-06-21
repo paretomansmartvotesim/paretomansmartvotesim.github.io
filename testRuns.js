@@ -12,6 +12,7 @@ var e = [
         ["common ground","commonground.html"],
         ["modify","modify.html"],
         ["blog","blog.html"],
+        ["irv","irv"]
     ]],
     ["drafts", [ 
         ["quotaApproval","quotaApproval.html"],

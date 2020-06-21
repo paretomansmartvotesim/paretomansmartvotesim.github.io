@@ -178,11 +178,11 @@ Still want more? Try the sandbox below, where I've added a ton more voting metho
 
 Want more of a narrative?  Then choose your path.  Either read about Primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Soon, I'll have an essay about RCV, IRV, STV, and multi-winner methods.  It's a work in progress.
 
--   [Primaries](primaries.html)
+-   [Primaries](primaries)
 
--   [Approval Voting](approval_superman.html)
+-   [Approval Voting](approval_superman)
 
--   [An Even Better Ballot by Jameson Quinn](newer.html)
+-   [An Even Better Ballot by Jameson Quinn](newer)
 
 -   Todo: RCV, IRV, STV, and Multi-winner methods
 
