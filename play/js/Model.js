@@ -714,7 +714,10 @@ function Model(idModel){
 		}   //not_f.includes(config.firstStrategy) && not_f.includes(config.secondStrategy)
 		return ! skipthis
 	}
-		
+	
+	self.checkMultiWinner = function() {
+		return (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV" || self.system == "QuotaMinimax") 
+	}
 
 	self.updateVC = function() {
 		
@@ -2120,6 +2123,12 @@ function Arena(arenaName, model) {
 			if (!model.dontdrawwinners) {
 				// draw text next to the winners
 
+				// check how many winners there should be
+				let winnersAllowed = 1
+				if (model.checkMultiWinner()) {
+					winnersAllowed = model.seats
+				}
+
 				for (var k = 0; k < model.district.length; k++) {
 					var district = model.district[k]
 					var result = district.result
@@ -2127,7 +2136,7 @@ function Arena(arenaName, model) {
 					if(result && result.winners) {
 						for (let wid of result.winners) {
 							let c = model.candidatesById[wid]
-							if (result.winners.length > model.seats) {
+							if (result.winners.length > winnersAllowed) {
 								c.drawTie(self.ctx,self)
 							} else {
 								c.drawWin(self.ctx,self)
