@@ -170,7 +170,12 @@ function Button(buttonConfig, onChoose){
 	self.name = buttonConfig.name
 	self.dom = document.createElement("div");
 	self.dom.setAttribute("class", "button");
-	self.dom.style.marginRight = buttonConfig.margin+"px";
+
+	// overwrite margins.  The old way was not working.
+	var fixMargin = buttonConfig.margin
+	fixMargin = fixMargin || 0
+	fixMargin = Math.max(fixMargin,4)
+	self.dom.style.marginRight = fixMargin+"px";
 
 	// Click!
 	self.draw = function() {
