@@ -841,6 +841,21 @@ function Config(ui, config, initialConfig) {
                 config.behavior = "bounce"
             }
 
+
+            // strategies section //
+
+            // translate old strategies
+            var tr = ui.strategyOrganizer.translate
+            var sys = config.system
+            var s1 = config.firstStrategy
+            var s2 = config.secondStrategy
+            if (s1 !== undefined) {
+                config.firstStrategy = tr(s1,sys)
+            }
+            if (s2 !== undefined) {
+                config.secondStrategy = tr(s2,sys)
+            }
+            
             if (config.scoreFirstStrategy == undefined) {
                 config.scoreFirstStrategy = config.firstStrategy
             }
@@ -864,6 +879,9 @@ function Config(ui, config, initialConfig) {
             if (config.pairSecondStrategy == undefined) {
                 config.pairSecondStrategy = config.secondStrategy
             }
+
+            // end strategies section //
+
 
             // there's no incompatibility problems yet, so no need to increment
             // code below this if {} statement are still needed in future versions
@@ -2517,6 +2535,28 @@ function menu(ui,model,config,initialConfig, cConfig) {
             2:"normalize frontrunners only",
             3:"best frontrunner",
             4:"not the worst frontrunner",
+        }
+        self.translate = function(strat,sys) {
+            // type	    O	N	F	F+	F-
+            // score	O	N	F	F+	F-
+            // choice	O	O	F	F	F
+            // pair	    O	O	O	O	O
+            var zero = "zero strategy. judge on an absolute scale."
+            var theType = self.stratBySys[sys]
+            if (theType == "choice") {
+                var not_f = [zero,"normalize"]
+                if (not_f.includes(strat)) {
+                    return zero
+                } else {
+                    return "normalize frontrunners only"
+                }
+            } else if (theType == "pair") {
+                return zero
+            } else if (theType == "score") {
+                return strat
+            } else {
+                return strat
+            }
         }
         self.onChoose = function(data){
             // CONFIGURE
