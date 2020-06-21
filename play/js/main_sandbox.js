@@ -553,6 +553,7 @@ function Config(ui, config, initialConfig) {
         doFilterSystems: false,
         filterSystems: [],
         doFilterStrategy: true,
+        includeSystems: ["choice","pair","score","multi","dev"],
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -1035,6 +1036,7 @@ function Cypher(ui) {
         75:"doFilterSystems",
         76:"filterSystems",
         77:"doFilterStrategy",
+        78:"includeSystems",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3059,6 +3061,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     60: "doFilterSystems",
                     61: "filterSystems",
                     62: "doFilterStrategy",
+                    63: "includeSystems",
                 },
             }
         ]
@@ -4938,15 +4941,128 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.showHideSystems = function() {
 
+        // categories for systems
+        
+        includeIf = {
+            choice: [
+                "FPTP",
+                "+Primary",
+                "Top Two",
+                "IRV",
+                "STV",
+            ],
+            pair: [
+                "Minimax",
+                "Schulze",
+                "RankedPair",
+                "Condorcet",
+                "STAR",
+                "3-2-1",
+                "RBVote",
+                "QuotaMinimax",
+            ],
+            score: [
+                "Approval",
+                "Score",
+                "Borda",
+                "STAR",
+                "3-2-1",
+                "RRV",
+                "RAV",
+                "QuotaApproval",
+                "QuotaScore",
+            ]
+        }
+        includeOnlyIf = {
+            multi: [
+                "RRV",
+                "RAV",
+                "STV",
+                "QuotaApproval",
+                "QuotaMinimax",
+                "QuotaScore",
+            ],
+            dev: [
+                "QuotaApproval",
+                "QuotaMinimax",
+                "QuotaScore",
+            ]
+        }
+
+        // just for reference
+        all = [
+            "FPTP",
+            "+Primary",
+            "Top Two",
+            "RBVote",
+            "IRV",
+            "Borda",
+            "Minimax",
+            "Schulze",
+            "RankedPair",
+            "Condorcet",
+            "STAR",
+            "3-2-1",
+            "Approval",
+            "Score",
+            "STAR",
+            "3-2-1",
+            "RRV",
+            "RAV",
+            "STV",
+            "QuotaApproval",
+            "QuotaMinimax",
+            "QuotaScore",
+        ]
+        
+        // helper
+        var getDom = x => ui.menu.systems.choose.buttonDOMByValue[x]
+
+        // default: hide all
         for (var entry of ui.menu.filterSystems.list) {
-            var dom = ui.menu.systems.choose.buttonDOMByValue[entry.value]
+            var dom = getDom(entry.value)
+            dom.hidden = true
+        }
+
+        // show if
+        for (let catName in includeIf) {
+            // is the button selected?
+            if (config.includeSystems.includes(catName)) {
+                // show all systems in category
+                let systems = includeIf[catName]
+                for(let sys of systems) {
+                    let dom = getDom(sys)
+                    dom.hidden = false
+                }
+            }
+        }
+
+        // show only if
+        for (let catName in includeOnlyIf) {
+            // is the button NOT selecte?
+            if (! config.includeSystems.includes(catName)) {
+                // hide all systems in category
+                let systems = includeOnlyIf[catName]
+                for(let sys of systems) {
+                    let dom = getDom(sys)
+                    dom.hidden = true
+                }
+            }
+        }
+
+        // PART 2
+
+        // hide individual systems
+        for (var entry of ui.menu.filterSystems.list) {
+            var dom = getDom(entry.value)
             var show = !config.doFilterSystems || config.filterSystems.includes(entry.value)
             if( show) {
-                dom.hidden = false
+                continue
             } else {
                 dom.hidden = true
             }
         }
+
 
     }
 
@@ -5028,6 +5144,48 @@ function menu(ui,model,config,initialConfig, cConfig) {
             }
         }
 
+    }
+
+    
+    ui.menu.includeSystems = new function () {
+        var self = this
+        self.list = [
+            {name:'<span style="font-size: 80%;">choice</span>',value:"choice",realname:"choice",margin:4},
+            {name:"pair",value:"pair",margin:4},
+            {name:"score",value:"score",margin:4},
+            {name:"multi",value:"multi",margin:4},
+            {name:"dev",value:"dev"}
+        ]
+        self.codebook = [ {
+            field: "includeSystems",
+            decode: {
+                0:"choice",
+                1:"pair",
+                2:"score",
+                3:"multi",
+                4:"dev",
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD CONFIG //
+            config.includeSystems = modifyArrayAsSet(config.includeSystems,data.isOn, [data.value])
+            // CONFIGURE
+            self.configure()
+            ui.showHideSystems()
+        };
+        self.configure = function() {
+            return
+        }
+        self.choose = new ButtonGroup({
+            label: "Voting systems by type:", // Sub Menu
+            width: bw(5),
+            data: self.list,
+            onChoose: self.onChoose,
+            isCheckbox: true
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.includeSystems);
+        }
     }
 
     // helper
@@ -5120,6 +5278,7 @@ function createMenu(ui) {
             "doFilterStrategy",
         ]],
         [ "main", [
+            "includeSystems",
             "systems", // start of normal list
             [ "divRBVote", [
                 "rbSystems",
@@ -5228,6 +5387,7 @@ function createMenu(ui) {
             ]],
             ["vote", [
                 ["normal", [
+                    "includeSystems",
                     "systems",
                     [ "divRBVote", [
                         "rbSystems",
@@ -5699,6 +5859,20 @@ function modifyConfigFilterSystems(config, condition, xlist) {
         }
     }
     config.filterSystems = Array.from(filterSet)
+}    
+
+function modifyArrayAsSet(a, condition, xlist) {
+    // e.g. var xlist = ["FPTP","IRV"]
+    var s = new Set(a)
+    for (var i in xlist){
+        var xi = xlist[i]
+        if (condition) {
+            s.add(xi)
+        } else {
+            s.delete(xi)
+        }
+    }
+    return Array.from(s)
 }    
 
 function _simpleMakeEncode(decode) {
