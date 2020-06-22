@@ -203,7 +203,6 @@ function bindBallotMenu(ui,model,config) {
 	var onChooseVoterStrategyOn = function(data){
 		config.firstStrategy = data.realname;
 		model.firstStrategy = config.firstStrategy
-		model.voterGroups[0].firstStrategy = config.firstStrategy;
 		model.update();
 
 	};
@@ -345,7 +344,6 @@ function bindBallotModel(ui,model,config) {
 		Object.assign( model.candidates[1],{x:153, y: 95, icon:"triangle"} )
 		Object.assign( model.candidates[2],{x:216, y:216, icon:"hexagon"} )
 		Object.assign( model.voterGroups[0],    {x: 81, y: 92, typeVoterModel: model.ballotType,
-			firstStrategy: config.firstStrategy,
 			preFrontrunnerIds: config.preFrontrunnerIds} )
 		model.preFrontrunnerIds = config.preFrontrunnerIds;
 		model.firstStrategy = config.firstStrategy

@@ -2803,7 +2803,6 @@ function _fillVoterDefaults(self) {
 		x_voters: false,
 		// SECOND group in "exp_addVoters"
 		// same for all voter groups in model
-		firstStrategy:"zero strategy. judge on an absolute scale.",
 		preFrontrunnerIds:["square","triangle"],
 		doTwoStrategies: false,
 		spread_factor_voters: 1,
@@ -3020,9 +3019,9 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				}
 			}	
 			if (r1 < self.percentSecondStrategy && self.doTwoStrategies) { 
-				var strategy = self.secondStrategy // yes
+				var strategy = model.secondStrategy // yes
 			} else {
-				var strategy = self.firstStrategy; // no e.g. 
+				var strategy = model.firstStrategy; // no e.g. 
 			}
 			
 			// choose the threshold of voters for polls
@@ -3248,7 +3247,7 @@ function SingleVoter(model){
 
 		voterPerson.poll_threshold_factor = .6
 
-		voterPerson.strategy = self.firstStrategy
+		voterPerson.strategy = model.firstStrategy
 
 	}
 

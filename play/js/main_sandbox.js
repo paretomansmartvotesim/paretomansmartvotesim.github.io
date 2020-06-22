@@ -880,6 +880,8 @@ function Config(ui, config, initialConfig) {
                 config.pairSecondStrategy = config.secondStrategy
             }
 
+            config.secondStrategies = []  // no longer using this
+
             // end strategies section //
 
 
@@ -2575,13 +2577,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
             _showOrHideMenuForStrategy(config)
             model.firstStrategy = config.firstStrategy
-            for (var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].firstStrategy = config.firstStrategy
-            }
             model.secondStrategy = config.secondStrategy
-            for (var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].secondStrategy = config.secondStrategy
-            }
         }
 
         self.showOnlyStrategyForTypeOfSystem = function() {
