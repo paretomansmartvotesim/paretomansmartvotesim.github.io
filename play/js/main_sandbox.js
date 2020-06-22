@@ -2616,11 +2616,11 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.scoreFirstStrategy = new function() { // just filling in firstStrategy with a limited set
         var self = this
         self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
-            {name:"N", value:"normalize", realname:"normalize", margin:4},
-            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
-            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:4},
-            {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
+            {name:"J", value:"zero strategy. judge on an absolute scale.", realname:"Judge: Every voter judges the candidates on the same absolute scale of distance.", margin:4},
+            {name:"N", value:"normalize", realname:"Normalize all: Highest score for closest, lowest for farthest.  Somewhere in the middle for everyone else.", margin:4},
+            {name:"F", value:"normalize frontrunners only", realname:"Frontrunners: Normalize only for the set of frontrunners.  Highest score for all better.  Lowest score for all worse.", margin:4},
+            {name:"F+", value:"best frontrunner", realname:"Best frontrunner: Highest score for best frontrunner and all better.  Lowest score for all others.", margin:4},
+            {name:"F-", value:"not the worst frontrunner", realname:"Not the worst frontrunner: Lowest score for worst frontrunner and all worse.  Highest score for all others."}
         ];
         self.codebook = [
             {
@@ -2649,8 +2649,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.choiceFirstStrategy = new function() { // just filling in firstStrategy with a limited set
         var self = this
         self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
-            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
+            {name:"H", value:"zero strategy. judge on an absolute scale.", realname:"Honesty", margin:4},
+            {name:"F", value:"normalize frontrunners only", realname:"Pick the Best Frontrunner", margin:4},
         ];
         self.codebook = [
             {
@@ -2679,7 +2679,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.pairFirstStrategy = new function() { // just filling in firstStrategy with a limited set
         var self = this
         self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
+            {name:"H", value:"zero strategy. judge on an absolute scale.", realname:"Honesty", margin:4},
         ];
         self.codebook = [
             {
@@ -2779,13 +2779,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.menu.scoreSecondStrategy = new function() { // just filling in secondStrategy with a limited set
         var self = this
-        self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
-            {name:"N", value:"normalize", realname:"normalize", margin:4},
-            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
-            {name:"F+", value:"best frontrunner", realname:"best frontrunner", margin:4},
-            {name:"F-", value:"not the worst frontrunner", realname:"not the worst frontrunner"}
-        ];
+        self.list = ui.menu.scoreFirstStrategy.list
         self.codebook = [
             {
                 decode: ui.strategyOrganizer.decodeList,
@@ -2812,10 +2806,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.menu.choiceSecondStrategy = new function() { // just filling in secondStrategy with a limited set
         var self = this
-        self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
-            {name:"F", value:"normalize frontrunners only", realname:"normalize frontrunners only", margin:4},
-        ];
+        self.list = ui.menu.choiceFirstStrategy.list
         self.codebook = [
             {
                 decode: ui.strategyOrganizer.decodeList,
@@ -2842,9 +2833,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     ui.menu.pairSecondStrategy = new function() { // just filling in secondStrategy with a limited set
         var self = this
-        self.list = [
-            {name:"O", value:"zero strategy. judge on an absolute scale.", realname:"zero strategy. judge on an absolute scale.", margin:4},
-        ];
+        self.list = ui.menu.pairFirstStrategy.list
         self.codebook = [
             {
                 decode: ui.strategyOrganizer.decodeList,
