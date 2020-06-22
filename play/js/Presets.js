@@ -888,7 +888,7 @@ function _lookupPreset(ui) {
 			// x_voters: false,
 			// median_mean: 1,
 			// oneVoter: false,
-			featurelist: ["systems", "voters", "firstStrategy", "autoPoll"],
+			featurelist: ["systems", "voters", "firstStrategy", "autoPoll","frontrunners","poll"],
 			// sandboxsave: true,
 			hidegearconfig: false,
 			preFrontrunnerIds: ["square", "hexagon"],
