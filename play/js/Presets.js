@@ -244,7 +244,7 @@ function _lookupPreset(ui) {
 			voterPositions: [
 				[150, 150]
 			],
-			secondStrategies: ["normalize"],
+			secondStrategy: "normalize",
 			firstStrategy: "zero strategy. judge on an absolute scale."
 
 		}
@@ -294,7 +294,7 @@ function _lookupPreset(ui) {
 				[200, 160],
 				[100, 160]
 			],
-			secondStrategies: ["normalize", "normalize"],
+			secondStrategy: "normalize",
 			percentSecondStrategy: [50, 50],
 			doFullStrategyConfig: true
 
@@ -335,7 +335,7 @@ function _lookupPreset(ui) {
 			system: "Approval",
 			candidates: 3,
 			voters: 3,
-			secondStrategies: ["best frontrunner", "best frontrunner", "best frontrunner"],
+			secondStrategy: "best frontrunner",
 			percentSecondStrategy: [18, 22, 92],
 			preFrontrunnerIds: ["square", "triangle", "hexagon"],
 			featurelist: ["percentSecondStrategy"],
@@ -387,7 +387,7 @@ function _lookupPreset(ui) {
 			system: "Approval",
 			candidates: 3,
 			voters: 3,
-			secondStrategies: ["best frontrunner", "best frontrunner", "best frontrunner"],
+			secondStrategy: "best frontrunner",
 			percentSecondStrategy: [18, 22, 92],
 			preFrontrunnerIds: ["square", "triangle", "hexagon"],
 			featurelist: ["percentSecondStrategy", "systems"],
@@ -483,7 +483,7 @@ function _lookupPreset(ui) {
 			system: "STAR",
 			candidates: 3,
 			voters: 3,
-			secondStrategies: ["best frontrunner", "best frontrunner", "best frontrunner"],
+			secondStrategy: "best frontrunner",
 			percentSecondStrategy: [18, 22, 92],
 			preFrontrunnerIds: ["square", "triangle", "hexagon"],
 			featurelist: ["percentSecondStrategy"],
@@ -533,7 +533,7 @@ function _lookupPreset(ui) {
 			system: "3-2-1",
 			candidates: 3,
 			voters: 3,
-			secondStrategies: ["best frontrunner", "best frontrunner", "best frontrunner"],
+			secondStrategy: "best frontrunner",
 			percentSecondStrategy: [18, 22, 92],
 			preFrontrunnerIds: ["square", "triangle", "hexagon"],
 			featurelist: ["percentSecondStrategy"],
@@ -572,7 +572,7 @@ function _lookupPreset(ui) {
 			sandboxsave: true,
 			hidegearconfig: false,
 			preFrontrunnerIds: ["square"],
-			secondStrategies: ["zero strategy. judge on an absolute scale.", "zero strategy. judge on an absolute scale.", "zero strategy. judge on an absolute scale."],
+			secondStrategy: "zero strategy. judge on an absolute scale.",
 			percentSecondStrategy: [0, 0, 0],
 			snowman: false,
 			firstStrategy: "zero strategy. judge on an absolute scale.",
