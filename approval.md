@@ -121,7 +121,7 @@ Nice candidates dropping out is very common in the primaries.  With the way we v
 title = "Primary Vote-Splitting"
 caption = ""
 id = "primary_sim"
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRyY3EMAzrxW89dNtOK0EqGWzvK4uPAXYRBAh1UpT8GTyu-15JEvzQLXuSrF2W6q6YHouZhPNkp5J4PA8NOW0p7VaJSRdXwsbFNHxcQiP6n1XK9O-r2vmaWa-Z_ZoR7tFypHkHFAFIEgcEIAElQbywBkbBbsVaTBVUgVc0WgAaxWoKGgWNFo0VLHi7G4xbqp6jgMkUACYDkxXTXefDd4oT7eA0LCykZOSVdtCeBV2-pn7Nor-157o3h_8d4dmjfeKxINuxfOCMIQBIDkgO3DDwsIHlY7beWD0rsHwyAIsnXiLBktFarYQkKBIKcjdMKJjonTj_NHhHwc8v1_aNjbcCAAA)"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSS24EMQhE7-I1C4P5ua_S6pNEydmDKUUjTTTqRRljPwrcX2OO677TiW0-dPMO4ty1Etm1J2c1J_H0kw0hVnseGnyuOXdYRxb34UqscU0aOq7xw4OGjYtpeJ2uXJRM-vdVJj9m9scMzy7FDDgLQhhghRjEIWWAtbTKWcluc1Kc2hRGVBgpAUYUm8AIMFKYVZKIdl9Ys43KGQFIC4YWSAukVaS7hoXvHHZcB3OhXSahRVppBfb0q_xaymtZ-Fu6rmoz9L2EepfWwNPAtqJ5wxCNIYJNWDbM0PCGhuYt2q9l1zI07xOCxh2NOyhu7XWVEQfC4cB3S8BB4G5g_LEQwUFg_PH3GwWS-TarQEsJYKKlhJmEmQQwAczj5_sXibjE8gQDAAA)"
 %}
 
 **Final Recap:**
