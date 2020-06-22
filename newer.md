@@ -13,8 +13,7 @@ You read/played Nicky Case's great [explainer on voting methods](original). And 
 
 Never fear. I have two more voting methods to teach you about, and I hope I can convince you that they're the best yet.
 
-Who's "me"? I'm Jameson Quinn, a statistics student at Harvard and a board member of the Center for Election Science. I'm not as good a designer or interactive programmer
-as Nicky, as you can see from the title above. But I have spent a lot of time thinking about voting methods.
+Who's "me"? I'm Jameson Quinn, a statistics student at Harvard and a board member of the Center for Election Science. I'm not as good a designer or interactive programmer as Nicky, as you can see from the title above. But I have spent a lot of time thinking about voting methods.
 
 I'm also not as cool as Nicky, but I'm going to pretend to be. If my pale imitation of their chatty tone puts you off, then... well, I guess you can wait for my peer-reviewed paper.
 
