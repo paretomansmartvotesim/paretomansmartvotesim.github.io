@@ -652,6 +652,7 @@ function _lookupPreset(ui) {
 			// median_mean: 1,
 			oneVoter: true,
 			featurelist: ["frontrunners"],
+			putMenuAbove: true,
 			// sandboxsave: true,
 			hidegearconfig: true,
 			preFrontrunnerIds: ["triangle", "hexagon"]
@@ -839,6 +840,7 @@ function _lookupPreset(ui) {
 			// median_mean: 1,
 			// oneVoter: false,
 			featurelist: ["frontrunners"],
+			putMenuAbove: true,
 			// sandboxsave: true,
 			hidegearconfig: true,
 			preFrontrunnerIds: ["square", "hexagon"],
