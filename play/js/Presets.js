@@ -1420,13 +1420,13 @@ function _lookupPreset(ui) {
 		}
 
 	} else if (ui.presetName == "ballot4") {
-		uiType = "ballot"
+		uiType = "ballot-election"
 		config = {
 			ballotType: "Score"
 		}
 
 	} else if (ui.presetName == "ballot5") {
-		uiType = "ballot"
+		uiType = "ballot-election"
 		config = {
 			ballotType: "Score",
 			firstStrategy: "normalize"
