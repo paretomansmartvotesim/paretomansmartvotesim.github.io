@@ -7,7 +7,7 @@ var e = [
         ["original","original.html"],
         ["approval","approval.html"],
         ["newer","newer.html"],
-        ["condorcet methods","log.html"],
+        ["condorcet methods","condorcet.html"],
         ["primaries","primaries.html"],
         ["common ground","commonground.html"],
         ["modify","modify.html"],

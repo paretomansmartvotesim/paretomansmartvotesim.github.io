@@ -23,7 +23,7 @@ twuser: paretoman1
 
 {% include card.html title="Proportional Representation" description=" - continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods" url='proportional' img='img/proportional.png' %}
 
-{% include card.html title="Condorcet Methods" description=' - draft' url='log' img='img/condorcet.png' %}
+{% include card.html title="Condorcet Methods" description=' - draft' url='condorcet' img='img/condorcet.png' %}
 
 {% include card.html title="Sandbox" description=' - try everything' url='sandbox/' img='img/sandbox.png' %}
 
