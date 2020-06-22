@@ -781,36 +781,49 @@ function Config(ui, config, initialConfig) {
         // add in features that were not included with the old version
         if (config.configversion == 2.4) { 
                 
-            // There is a problem in going from an old featureset to a new one.
-            // The new features are not included in the set.
-            // So we add an opton to choose whether to filter features.
-            // By default the filter is on.
-            // The default in the sandbox preset is off.
-            // In this way, it is easy to switch the filter off and update the features.
-            // The filter switch is inside the config menu.
 
-            // if this is a save from before version 2.5
-            // then the featurelist is on and it didn't include the menu items that are hidden in menuVersion 1
-            // so, allow the user to remove the filter
+            
+            // ctrl-reset solves this problem
 
-            // so, if the featurelist is set then we want to turn on the filter
-            // if the featurelist is not set, then we don't do the filter
+            // // There is a problem in going from an old featureset to a new one.
+            // // The new features are not included in the set.
+            // // So we add an opton to choose whether to filter features.
+            // // By default the filter is on.
+            // // The default in the sandbox preset is off.
+            // // In this way, it is easy to switch the filter off and update the features.
+            // // The filter switch is inside the config menu.
+
+            // // if this is a save from before version 2.5
+            // // then the featurelist is on and it didn't include the menu items that are hidden in menuVersion 1
+            // // so, allow the user to remove the filter
+
+            // // so, if the featurelist is set then we want to turn on the filter
+            // // if the featurelist is not set, then we don't do the filter
+            // if ( config.featurelist == undefined) {
+            //     config.doFeatureFilter = false
+            // } else {
+            //     modifyConfigFeaturelist(config,true, ["doFeatureFilter"]) 
+            // }
+
+            // // Hmm. on the one hand, I want to load an example where I have purposely set the filter
+            // // and that example is indistinguishable from an example where I want to see the new features
+            // // because I can't tell the difference (in the old version) between manual and automatic hiding
+            // // So maybe I should have an upgrade button, to allow the user to decide what to do.
+            // // or maybe the user could manually change the 2.4 to 2.5 in the URL.
+            // // 2.4 would not have the upgrade button
+            // // 2.5 
+            // // Oh
+            // // The difference between the locked down version and the updating version is the "config" menu
+            // // So I put the "Disable filters" button in the config menu,
+            
             if ( config.featurelist == undefined) {
                 config.doFeatureFilter = false
             } else {
-                modifyConfigFeaturelist(config,true, ["doFeatureFilter"]) 
+                config.doFeatureFilter = true
+                // modifyConfigFeaturelist(config,true, ["doFeatureFilter"]) 
             }
 
-            // Hmm. on the one hand, I want to load an example where I have purposely set the filter
-            // and that example is indistinguishable from an example where I want to see the new features
-            // because I can't tell the difference (in the old version) between manual and automatic hiding
-            // So maybe I should have an upgrade button, to allow the user to decide what to do.
-            // or maybe the user could manually change the 2.4 to 2.5 in the URL.
-            // 2.4 would not have the upgrade button
-            // 2.5 
-            // Oh
-            // The difference between the locked down version and the updating version is the "config" menu
-            // So I put the "Disable filters" button in the config menu,
+
 
             // one more thing
             // switch the name for this setting:
