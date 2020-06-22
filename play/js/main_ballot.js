@@ -364,7 +364,7 @@ function bindBallotModel(ui,model,config) {
 
 	model.onInitModel = function() {
 		
-		if(ui.showChoiceOfStrategy) {
+		if(ui.showChoiceOfStrategy || ui.showChoiceOfFrontrunners) {
 			ui.menu.frun.chooseFrun.init()
 			ui.selectMENU()
 		}
