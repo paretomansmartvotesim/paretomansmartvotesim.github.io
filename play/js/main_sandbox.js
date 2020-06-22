@@ -5543,7 +5543,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     
     // helper
-    showMenuItemsIf = function(name,condition) {
+    function showMenuItemsIf(name,condition) {
         if (condition) {
             ui.m1.menuNameDivs[name][0].hidden = false
             ui.m2.menuNameDivs[name][0].hidden = false
