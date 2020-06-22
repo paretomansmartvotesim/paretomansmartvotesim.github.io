@@ -2722,8 +2722,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 turnOffFrontrunnerControls = false
             }
         }
-        showMenuItemsIf("divPoll", ! turnOffFrontrunnerControls)
-        showMenuItemsIf("divManualPoll", ! config.autoPoll == "Auto")
+        var onFront = ! turnOffFrontrunnerControls
+        showMenuItemsIf("divPoll", onFront)
+        var doManual = config.autoPoll == "Manual"
+        showMenuItemsIf("divManualPoll", doManual)
     }
 
     ui.menu.doTwoStrategies = new function() { // Is there a 2nd strategy?
