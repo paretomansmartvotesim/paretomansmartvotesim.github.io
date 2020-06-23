@@ -1661,7 +1661,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             
             showMenuItemsIf("divRBVote", config.system === "RBVote")
             showMenuItemsIf("divLastTransfer", config.system === "IRV" || config.system === "STV")
-            // showMenuItemsIf("doElectabilityPolls", config.system == "+Primary")
+            showMenuItemsIf("divDoElectabilityPolls", config.system == "+Primary")
             
             model.system = config.system;
 
@@ -5650,7 +5650,9 @@ function createMenu(ui) {
             ["divCustomNames", [
                 "namelist",
             ]],
-            "doElectabilityPolls",
+            ["divDoElectabilityPolls", [
+                "doElectabilityPolls",
+            ]],
             "choiceFirstStrategy",
             "pairFirstStrategy",
             "scoreFirstStrategy",
@@ -5750,7 +5752,9 @@ function createMenu(ui) {
                         "rbSystems",
                     ]],
                     "seats",
-                    "doElectabilityPolls",
+                    ["divDoElectabilityPolls", [
+                        "doElectabilityPolls",
+                    ]],
                     "choiceFirstStrategy",
                     "pairFirstStrategy",
                     "scoreFirstStrategy",
