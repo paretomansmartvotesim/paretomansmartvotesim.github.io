@@ -4,6 +4,7 @@ title: Instant Runoff Voting
 description: An Interactive Guide to IRV (the Single-Winner kind of Ranked Choice Voting RCV)
 byline: 'by Paretoman, June 2020'
 ---
+{% include letters.html %}
 
 I'd like to describe an ideal of cooperative politics and how it is better achieved with **instant runoff voting (the single-winner form of Ranked Choice Voting)**, where (in most situations)
 
@@ -47,11 +48,13 @@ This is pretty similar to what we do now, eliminating candidates in the run up t
 
 Here's a sketch that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated.
 
+{% capture cap5 %}Your vote counted for {{ A }}, your favorite, in the first round.  Not enough people chose {{ A }} as their favorite, so {{ A }} was eliminated.  Your vote counted for {{ B }} over {{ C }} in the final round, so you didn't spoil the election for {{ B }} by voting for {{ A }}.{% endcapture %}
+
 {% include sim.html id="irv_second_counts_sim"
 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qu4md29zMQ3WqLQ3fVnYCCBiH-HcdTHOKEUkycscdj56v1tu37ErTKQTtHJ5Y-bx7E63Ic1HhmcAixRTKLkvJ817Z1atY2o-Z1j8wUejiZO5LJVtT_nuSW5B7ei1n_ZbhXQ57eZigIYYkNAFMcgLTA6ZSznSakNlOTXvYldSRBAJARQ4pXgUBGBqIF0VoF2ssoz6VwEQpDquChpKm0MzESAxT0FKNyLcvucsZYwbzK_aq16Eqwqrff0hbVzgY-CFYNAzsW57DpGNhh02HTHYCBfYDD2hwDRwdwZQaGDawtvHxqGglIBBzEWjDgYKB2CEAB-LmX0-329vH8-X5pW3s6vV4v5_b9A5Xa76erAgAA)" title = "Election with Instant Runoff Voting"
 
-caption = "Your vote counted for A, your favorite, in the first round.  Not enough people chose A as their favorite, so A was eliminated.  Your vote counted for B over C in the final round, so you didn't spoil the election for B by voting for A."
+caption = cap5
 
 comment = "do a transfer, you still win" %}
 
@@ -67,21 +70,25 @@ Around the world, IRV has been called by various names: the Alternative Vote (UK
 
 By being able to express more on a Ranked Choice ballot, voters no longer face a common dilemma.  The dilemma happens when you have to decide, "Am I going to vote for my favorite?" or "Am I going to show support where it would count in determining the winner of the election?" Honestly, the voter would like to support their favorite candidate and send a message of strength with all the other supporters that "this candidate represents us the best and deserves recognition".
 
+{% capture cap6 %}Same example as above. You don't have to vote strategically to support {{ B }}.  You can support {{ A }} over {{ B }} and {{ B }} over {{ C }}. There is no benefit to switching from O=zero strategy to F=frontrunner strategy.{% endcapture %}
+
 {% include sim.html id="irv_not_wasted_sim"
 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRO05EMQy8S2oX8Td57xiI7mmLRWzFCihoEOLuOJ5iESuUYuKMPR47X623_Thm0CYnOjg6sfR18yDe5ulEjVcGhxBbJDOVlNe7tr1Ts7YbNa97ZKbQ3cnckUy2ov73JDeTu3svZvuX4V4NeXmbKxbE8MQGgCsOQHrgtMrZTxNSnKlJL_-SQpIgAMiIIcWrQCAjA9FEtFWB9nLKaytchMKQKngoaSodTIzEAAU9xaxc27KbnDF2sK5yu2ptuhKs6u23tEW1s4EfglXDwI7NOWw6BnbYdNh0B2BgH-CwNsfA0QFcmYFhA2sLL5-aRgISAQexFQw4GKgdAlAAfu7pfL2-fTx-vl_a3h7Ory-X5_b9A5Rvw6asAgAA)" title = "RCV: Less Spoiler Dilemma"
 
-caption = "Same example as above. You don't have to vote strategically to support B.  You can support A over B and B over C. There is no benefit to switching from O=zero strategy to F=frontrunner strategy."
+caption = cap6
 
 comment = "slider showing strategy of voters. show a single voter, too.  Show choice between systems FPTP and IRV." %}
 
 This dilemma is familiar to anyone who has voted in a single-choice voting eleciton.  (More formally, this kind of choose-only-one voting is called plurality or First Past the Post, FPTP).
 
+{% capture cap9 %}Do I waste my vote on my favorite {{ A }} or do I support the more viable {{ B }}?  Change from O=zero strategy, to F=frontrunner strategy to get a better result.{% endcapture %}
+
 {% include sim.html id="wasted_vote_sim"
 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sVlmTJ3n1FinTLFhe4IrCQEC7FEfL3yJrijhyHwWN7pNFI_im1rNs2nBbZaWOvxFLnyZx4GftOhWcEuxA3D2YoKc93LWul0nK33D0ihR5WxPZgohTV_yu4EdzDezLLU4ZrFuTpbcy74A5PDFMMV-yA8MAtMOppQIgzFQmheJQQkgABQEYaQiwTBDLScRu4LZmgNZ3ynAonoTCkCh5KGkobEyPQQUFP0SvntNpNrjFmMI9yO2pOOgNa5rd76eZZrnX8EKw2NGyYnMGmoWGDTYNNMwAatg4OYzM07BXAGelo1jE2t_SpYcQh4XDgS0KHg47cLgAF4OfeTsfxcXm9fp7LWl6O76_T8X65lt8_CondrK8CAAA)" title = "The Single-Choice Dilemma"
 
-caption = "Do I waste my vote on my favorite A or do I support?  Change from O=zero strategy, to F=frontrunner strategy to get a better result."
+caption = cap9
 
 comment = "slider showing strategy of voters. Maybe show a single voter, too.  Show choice between systems FPTP and IRV." %}
 
@@ -99,11 +106,13 @@ comment = "Silver lining.  So, maybe show an option button to turn on or off str
 
 This is an improvement over single-choice voting.  The polls are much more useful since rankings are given and any pair of candidates can be compared head-to-head, so voters are able to strategize better.  Attempting the same strategy with FPTP can turn a small lead in the polls to a big lead at the ballot box.
 
+{% capture cap18 %}{{ C }} loses even though he's in the middle because he never got good poll numbers in FPTP polls.{% endcapture %}
+
 {% include sim.html id="fptp_bad_polls_sim"
 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ631FinTLFhdIEVhICJfiCPl7JA1bXI5g8Eg78mik_S6trNs2l0o897qRjjNatM4RwfRPQ_a9Fopa6lJJOHIpa6ul5615m1dwfTheO5zxZrX9Pc4tzj18T2b-y1DLhhSelsgZOTwRTBFckQHcA3VH7xfg4lQLt8zYhdiBAZDhjhKXEQfI8EC2IJv5QFo6pdgKJSFQEgHAkLjSRjVPlBpIKAqmJd-YONlTMgI6Az4DiT1H0PNlv5ftlrb7wP-B0Y5xFXtTmFSYVJhUjKsKwLg6wC3ZSTGuNQBlpWH3hqWZ5hgxgkHC4MBmwoCDgbeDAQLAml4ux_F-fb59vJa1PB1fn5fj7XorP7_wC763rwIAAA)" title = "FPTP: Tough to Strategize"
 
-caption = "C loses even though he's in the middle because he never got good poll numbers inFPTP polls."
+caption = cap18
 
 comment = "C loses in the middle" %}
 
@@ -119,21 +128,23 @@ For new candidates who don't have many supporters yet, the barrier to entry woul
 
 (The technical definition of a spoiler is a candidate with a small enough level of support that they cannot win themselves, but that can change who wins merely by being in the election.  You would think that the only way to change who wins is to be the winner, and that can be true for some really great voting systems. For instant runoff voting, it's true if the candidate is small enough to be called a spoiler. )
 
+{% capture cap7 %}{{ B }} accuses {{ C }} of spoiling the election, hoping he’ll get C’s supporters{% endcapture %}
 
 {% include sim.html id="standard_spoiler_sim"
 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXOCKwEJCuBRHyL9H1uQg5DgWPJJHGo-0X6WVddvGUonHXjda5Ddi8soy9r0WmiWkwQjPXMraatE8LU-PCq53X9T2YIKu7f8X3BLc3X0y4yFDLR-k6WmmjBSWCJ4IpsgBYYE0MJ6TgNCmWjh04pJDhwMYABlWlFg2MGS4I1uQjWyQlkZpLoWSEBgSAQ9DEkobVUKhg4KeYFTKZWnKzYBuAd8CmSuegWaf_pVUT8Pa8WNgUTGoYWEGe4ZBDfYMg5oBMKh1cFiXYVBvAMpKx5COdbnlCBJGHBIOBz4SOhx09HYGCAALejkdx9vl-fp-Lmt5Oj4_Tsfr5Vq-fwAajgagnwIAAA)" title = "Accusation of Spoiler"
 
-caption = "B accuses C of spoiling the election, hoping he’ll get C’s supporters"
+caption = cap7
 
 comment = "standard spoiler example. Maybe needs a switch between FPTP and IRV." %}
 
+{% capture cap8 %}{{ B }} is okay with {{ C }} running because C’s supporters will support {{ B }} against {{ A }}.{% endcapture %}
 
 {% include sim.html id="no_spoilers_sim"
 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qp4meS_QxEt9riEFdxAgoahPh3HM-dhDihFGPvOJMZ71dpZdv3OSrxPOpOQ64Vk1eWeRy10BohDUZ49VK2VouWTWuxrD0muN6dmO3BBF3b3xPcCO7uezLzX4ZaPkjL01g9o4cnUgBckQPCA4VVivckIMSpFm7pn0OIAxgAGVaMWF5gyHBHN9DNvCAtndLaCiUhMCQCHoYklHaqhEEHBT1BVsptacqtgm4F3wpZO16F5j39LamehrXjz8CiIqhhYwZ7hqAGe4agZgAEtQ4O6zIE9QagnHSEdKzLLSNIGHFIOBz4TOhw0HG3M0AAWNDT6XJ5-3j8fD-XrTycXl_Oz-X7B2gMzvadAgAA)" title = "No More Accusations"
 
-caption = "B is okay with C running because C’s supporters will support B against A."
+caption = cap8
 
 comment = "no spoilers" %}
 

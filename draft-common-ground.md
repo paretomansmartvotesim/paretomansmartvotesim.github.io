@@ -6,6 +6,7 @@ banner: Smart Voting Simulator
 layout: page-3
 title: Home
 ---
+{% include letters.html %}
 
 Let's start off by explaining what we want from a group decision. I explain in this video:
 
@@ -13,7 +14,7 @@ Let's start off by explaining what we want from a group decision. I explain in t
 
 To find common ground, you have to allow people to vote with more than one candidate.
 
-Now that we talked about what we want, let's talk about how we can build something and get there. Take a look at this great interactive sketch that Nicky Case made. You have two candidates {% include str.html str='`<span class="letterBig" style="color:hsl(240,80%,70%);"><b>A</b></span> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> and you have a voter <img src="play/img/voter.png" />`' %} . Just move the voter and you'll see that he is just gonna vote for whoever he's closest to.
+Now that we talked about what we want, let's talk about how we can build something and get there. Take a look at this great interactive sketch that Nicky Case made. You have two candidates {{ A }} {{ B }} and you have a voter <img src="play/img/voter.png" /> . Just move the voter and you'll see that he is just gonna vote for whoever he's closest to.
 
 {% include sim-intro.html id='model1' caption='`<b><span style="font-size:2.5em;">click &amp; drag</span><br>the candidates and the voter:</b>`' %}
 
@@ -39,9 +40,11 @@ And if you want to see, here's score voting. It's just kind of a more specific f
 
 And those are the basic vote-tallying methods. You just need to add the rule that the person with the highest tally wins. And now you've got a basic voting method that solves a lot of problems.
 
-The spoiler effect is one of those problems. Even though {% include str.html str='`<span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span>`' %} should win, the election system is spoiling this. But if you use approval or condorcet or score, then it'll work out.
+The spoiler effect is one of those problems. Even though {{ B }} should win, the election system is spoiling this. But if you use approval or condorcet or score, then it'll work out.
 
-{% include sim-test.html title='' caption='`drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>C</b></span> to <em>just under</em> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> to create a spoiler effect.<br> then compare these four different voting methods:`' id='election31' %}
+{% capture cap2 %}drag {{ C }} to <em>just under</em> {{ B }} to create a spoiler effect.<br> then compare these four different voting methods:{% endcapture %}
+
+{% include sim-test.html title='' caption=cap2 id='election31' %}
 
 There's a lot of details, but that's the gist of it.
 

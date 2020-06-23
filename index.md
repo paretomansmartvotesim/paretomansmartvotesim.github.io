@@ -6,6 +6,7 @@ description: An Explorable Guide to Group Decision Making
 byline: 'By Paretoman and Contributors, May 2020'
 twuser: paretoman1
 ---
+{% include letters.html %}
 
 {% include card.html title='Finding Common Ground' description=' - #1 Start here. Jump right in.' url='commonground' img='img/venn-diagram.png' %}
 
@@ -31,7 +32,7 @@ twuser: paretoman1
 
 # Intro
 
-Take a look at this great interactive sketch that Nicky Case made. You have two candidates {% include str.html str='`<span class="letterBig" style="color:hsl(240,80%,70%);"><b>A</b></span> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> and you have a voter <img src="play/img/voter.png" />`' %} . Just move the voter and you'll see that he is just gonna vote for whoever he's closest to.
+Take a look at this great interactive sketch that Nicky Case made. You have two candidates  {{ A }} {{ B }} and you have a voter <img src="play/img/voter.png" />  . Just move the voter and you'll see that he is just gonna vote for whoever he's closest to.
 
 {% include sim-intro.html id='model1' caption='`<b><span style="font-size:2.5em;">click &amp; drag</span><br>the candidates and the voter:</b>`' %}
 

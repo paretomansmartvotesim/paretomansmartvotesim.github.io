@@ -6,6 +6,7 @@ description: An Explorable Guide to Group Decision Making
 byline: 'By Paretoman and Contributors, June 2020'
 twuser: paretoman1
 ---
+{% include letters.html %}
 
 Hello, I'm going to show you how to find common ground as a group.   We'll go over the following:
 
@@ -31,11 +32,12 @@ caption='x-axis is Meat-Veggie axis.  y-axis is $-$$$ axis'  comment='show a gro
 
 Really, this is about politics, and as a group you want to make a decision for everyone in the group.  You'd like it to be so that people would say they don't regret making that decision.  One way you will find out  if people regret this decision is if most people say they would rather do something else.  So that's why you might want to pick something in the middle because no matter what you pick in the middle, if you compared to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
 
+{% capture cap1 %}Move {{ B }} anywhere. A line forms between that and the middle option, and you will see most people are on the side of the middle option.{% endcapture %}
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsWoDMQz9F80eLMmSz_cVHbodN6TQIXCQUtIhlP57ZT3SDiEYLMlPenrS3TdVWreNjQub7mXjsRSRuu-FGIgkErHSWgu1vC1vjwwpDydyeyC1PJxAlqfIeIpwzXY8Fc1QEEIQQxFDEjtMCOAWNtpJmODmQhI88SicjyIwoJGGlKDRMKCRjmhBNLJAawrluRJOQCVrVYFDkAbTxkhzAGDT8Vffkmo6fHfk7uhc7nRaVrV_uubZrnV8EIhrGNGwKoMww4iGEQ0jmsFgRAOLLdnFMKJXGM5Mx74dLG4pP34WclA4FPhI06Ggo7ZjNW-n47hcX28f77TSy_H1eTrO1xv9_AKWPS3kgAIAAA)"
 
 title="The middle is the common ground." 
 
-caption="Move B anywhere. A line forms between that and the middle option, and you will see most people are on the side of the middle option."
+caption=cap1
 
 comment="allow adding candidates with + and use condorcet rule, maybe make a custom pairwise comparison between the middle option, which cant be moved, and any other option.  And you cant move the voters either" id="middle_sim" %}
 
@@ -51,11 +53,13 @@ comment='crowded election, winner gets less than 25%.  Everybody is an individu
 
 A great simple example of this problem is the spoiler effect, which you get if you have three candidates in an election.  A small candidate can change the outcome of the race even if they don't win.  And they spoil the election for whichever side they're on.
 
+{% capture cap16 %}drag {{ C }} left and right to spoil the election for either major candidate.{% endcapture %}
+
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRTWvDMAz9K8FnHyx_pekxh90GXVt6SXrwRmizZclI20MZ22-frEdhUErA0ouk56fnb2XUsmmISJOr9rqhMnC2yFmM2lq332tF0uOdJm8ydmpptPJyBjkjd1h993FvyRWj7z6uLB5WqocVMnIdZUUZWkAIIigiSKKIwALIc-TrHAfmJq0s8_BPyzyWg0UAjfVoCTJgQWNLoAVQJQPOiFDKlpAUnJVZ51CHIMdMDRuMxogS-BxWJbHKC11O6JbYW-KywTnxMuf_U_ool_oSzwKJHosGGBaYUf22aj1d01Cs03vbjvVlPnRzUad5ZPTcpXOxOaa3Dwa77nDou2LXD0NiuJr7z6mo6xfOt8eueJouc7Hp0mkaT61STA8DgxNXAwwMAQEGBqgLeIYAA6NBIOmMeM2IZ4hBrHG8YARFxGaxklBisxKzJYx_TcMwnbfXr473XQ2XOQ39-ap-_gBhAcnr6AIAAA)'
 
 title='The Spoiler Effect'
 
-caption='`drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>C</b></span> left and right to spoil the election for either major candidate.`' id='spoiler_sim' %}
+caption=cap16 id='spoiler_sim' %}
 
 ## Simple Comparisons
 
@@ -71,15 +75,17 @@ comment='two candidates with a circle.' id='by_pairs_sim' %}
 
 And you can do this for all the options.  And you can see that the middle option would beat any other option.  This is called a round robin.  Ping pong tournaments work like this.
 
+{% capture cap12 %}Matching up all the pairs is called a round robin. {{ A }} wins all their matches. Mouse over the results to see each match.{% endcapture %}
+
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRPW_CQAz9K9HNN8Tn-0gYGbpVagGxJAzXNgJKmlQBBlS1v72-e2UpQjc8O7Zfnp-_VKlmTUNcabJhoxvyrCsjgTGsKdj0iYM2VEvknXTRZqMV5SkrLbZMOatZqZVVs1orl2MvHUbfPOkNUin1zZNKdbdS361QmX9HSVFKDVIIIguAJPIAEUBWUH7nBISbtDLCIx-N8BgBAwCNsWgRGhYAjQnIKmR1HuAyC6VkCeUCmzzLjDoEsTA1pP9eavYog5OxLolhrOUEymbaFNA1MNeAk9EpsHnW_qe2PguwASeCXIulHcxzwqp-WrUYL7EvFvG9bYf5edp2UzGP0yDZYxdPxXIXXw-SrLvtdt8V633fR0mfpv3HWMznzxKvdl3xMJ6nYtnF4zgcW6WEHmY6zg47mOkcAGY6qHNV3sHBTF8CKHd6XNbjJN5li1gW9KDw2MzXGQI2C5gNOMJL7PvxtLp8drLvIg6H7k19_wJC4-xxAwMAAA)' title='Count By Pairs for Everyone' 
 
-caption='Matching up all the pairs is called a round robin. A wins all their matches. Mouse over the results to see each match.' 
+caption=cap12 
 
 comment='two candidates with a circle. Maybe I could use names for ping pong.' id='by_pairs2_sim' %}
 
-So what would that look like? (in an actual election). That would basically be looking at every possible pair of options.  So say there's options A B C D E, and you like them in that order.  That means you like A over B, and A over C, and B over C, and so on. You have a choice for every pair.  And you could write that on a ballot.  But really, you have a single ranking, which is easier to write.  
+So what would that look like? (in an actual election). That would basically be looking at every possible pair of options.  So say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot.  But really, you have a single ranking, which is easier to write.  
 
-You would get a ballot with the names A B C D E written on it. And because you like them in that order, you'd write 1 2 3 4 5 on the ballot; you like \#1 A, then \#2 B, and so on.  From your ranking you can tell, for example, that for A versus E, you like A better, and so on for every pair.
+You would get a ballot with the names {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} written on it. And because you like them in that order, you'd write 1 2 3 4 5 on the ballot; you like \#1 {{ A }}, then \#2 {{ B }}, and so on.  From your ranking you can tell, for example, that for {{ A }} versus {{ E }}, you like {{ A }} better, and so on for every pair.
 
 So everybody writes their rankings on the ballot, and then we count all the ballots one pair at a time.  If we find that one candidate was able to win all their matches, then we've found the middle.
 
@@ -93,13 +99,15 @@ comment='ranked ballot with pairs' id='pair_ballot_sim' %}
 
 So what else is there?  You can also just allow people to vote for more than just one candidate.  This will be really easy to explain with a common kind of diagram, a Venn diagram.
 
+{% capture cap17 %}The voters vote for everyone in their circle.  Both like {{ C }}.{% endcapture %}
+
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu24CMRD8lZNrF16_jqMLRbpICSAaoHCiE5BcOHRAJBQl356xp0AKQlfMrmc93p29b2XUeLmMUYt1a70UMVrqmCNf46xEowZnHpF1gjOzXmsl-Zo1qAkCpgERXCacGhutvBpDSYWSRNRaffOhuAZj9M0HZnSXae4yYspzknvLqWXKjsQT2JJEAhoQD8RzAQBt0cpCB4cWOhZgCZSxniWQcQDK2JrZiFlTLjhTGpXsiRTC2XLXOfJsyEFpCff45eJImpqO4woMcxo7UN6wPodCK3Jor6G7Fvii4f8_4WNpxNfcFdv2HD7QxABt9btS0_6Sumqa3ler_eQ8bNqhmqRhj-ypTadqtk1vH0gW7Waza6vFrusS0udh99lXk8kL4vm2rR7781DN2nTs98eVUpCnqcEVpwNNDYFAUwO7C6MyQ6Cp0RCkVEZuOHI1MRQP8BurSInIyWJToOZkNe_WXMZr6rr-NL8cWsz7cDgM_Vfq1M8fSXNUexgDAAA)' title='Venn Diagram' 
 
-caption='The voters vote for everyone in their circle.  Both like C.' 
+caption=cap17 
 
 comment='too simple?' id='approval2_sim' %}
 
-So what does that actually look like on a ballot? Well, it's pretty simple. You have A B C D E and you have a checkbox next to each one. If you like A and B, check both boxes.  If you like D and E, check those.  If you like every candidate but A, then there you go.  This is approval voting, where you vote for those you approve of. 
+So what does that actually look like on a ballot? Well, it's pretty simple. You have {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} and you have a checkbox next to each one. If you like {{ A }} and {{ B }}, check both boxes.  If you like {{ D }} and {{ E }}, check those.  If you like every candidate but {{ A }}, then there you go.  This is approval voting, where you vote for those you approve of. 
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRTU_DMAz9LznnEDuO0_WGxE_gVvUwWBGTprXaBggh-O3YeeUCqnJ4_nx-dj5DCv0wVI0kdYwDURepU7eKWcJudXWNMZuV6zjGQN5Gyfwk7ufQpxgk9GRQDGJQK0nx37PiupnpNjO7zQylNptckrsMF4pIAAWgTRmZABJDG1cMdi3JxmNBplbDDAANCzyjyQaKYIXXwTMWtkOkJpT8JmDKYMpgymDKxjRQXJ8XK9rBmbEuRY45iqXFab1OfE1fW_jXMOIhuyGtV_5SC7aWij-CXNm1YMHxCgG4iSi5XaJAasF3FixdKkq6NqtgaU0ALKz4AcXCWladCgLFfMXRK-ZXdFbMf9yfTvPt4WOZQh_uluUyv-1PIYbry_x-P12fLsfldpzPlvx-PR-m5-N5OoSvH3JCY-bMAgAA)' title='Approval Voting' 
 
@@ -115,7 +123,7 @@ caption='Voters on both sides vote for candidates in the middle.'
 
 comment='lots of voters' id='election_approval_sim' %}
 
-Here's another example for a small group.  B on the left gets half the vote.  D on the right gets half the vote.  C in the middle gets all the vote.  C is the common ground.
+Here's another example for a small group.  {{ B }} on the left gets half the vote.  {{ D }} on the right gets half the vote.  {{ C }} in the middle gets all the vote.  {{ C }} is the common ground.
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DMRD8lZNrF14_79KRgg4JSESTpDDolASOXHQ8JITg2xl7EEJByMV4X-PdWb8ro2arlY9arGz0quu0tAYX8fLtktZpSR43a4vPbDZaSamykrS4mm1a5HS4RQOXK64U4Io_VG0pc2pmtPJqJoBQjQgmq_8cJCdEjP5zEGn_jXT_RsTU56R0XkxLkx2JJ7AliQQ0IB6I5wIA3KKVBQ-cFjwWYAmksZ4poHEA0thEq6XV1QJnaqNSNJEacLbWOsc4G3JgWkE9npIcGSan47gCwZzGhpQ3J_lefgtSHPbU4U5LfOX2p0_7WBv0iTvkOJ6iBIob8Jr6XKvr8S0PzXW-X68P85dp20_NPE8HWBd9fm4Wu3z3AOOm3273fXOzH4YM83LaP47NfH6F-3LXN-fjy9Qs-vw0Hp7WSoGeYgdXNxAodggEih3YXWjrDIFiR0OQmhm5-ciVxVD1wI9VkRSRk8WuQuJkibWJS7rNwzA-L9-OPeY9Ox6n8TUP6uMLKwtR8k0DAAA)' alt2link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTU_CQBD9K82e97Czn5SbPXgzUSBcWg6raQCtlBQwIUZ_u9N5MUoI6WH27bx5M_umn8qoaV2nUlOIK12TN5q8G09l4ruwWmlFI8UScYbGDDEnlXyKfHBCToGv4kh2amq08mrKLBUERK63-upjcuKM0VcfZyY3M-XNDBlpR-O8I7SAmIg8AkaiiMADkOfI7RwH1iatLOvwpWUdy8EiQMZ6UIIUWMjYBDQBKqXAGRmURk9IEs5KrXPIYyDHSjVbC2JECnoOTyWxyptfnjA9_dkwQnsJ3SXZi57_38pHGcYn7AujexgQYGTgHuq7UbP-nLtill-bZledhnU7FFUedowe2nws5pv88sZg2a7X27ZYbrsuM3wctu99UVVPfF5s2uK-Pw3FvM2HfndolGJ5GBucuB1gbAgIMDZguoD1BBgbDQIJM2LLEeuJQXzgf1JFSES8LJYSEl6WUJuwkOfcdf1xcd63_N67_X7oP3Knvn4ApcfzpRwDAAA)' altlink='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTU_DMAz9K1XOOcTOV7sbO3BDgoG4bDsEVI1BWacykBCC347jBwJpoB6enec82y99M87MlsvcWYppbZcU3HfUZYniem0N1RLmYClXhjlZYq1x0RJ1Gkl1GySKQrb5K2CuXFXnoFErpK-a3sycNcHMSCBqkqQN26NPirMwzh59wrT_Mt2_DMnKJFDXqilrd8JEFAAYiRJABqAgKO28QKcCLDpyyKLDAgyADAeURL3AkOGMrEXW6QXvdFCqnpASnvWu9-AxkBelJVlCYQIFPY9VSa0K7rvu56vHdGxHPea_j_3fIkH7hd-jhKTDhoz3xGoBBkWnWZTe5mNlFuNrGZpFuV-tdvPnadNPzbxMO8nO-nJoLu_K7YMk1_1ms-2b6-0wFEnPp-3j2MznFxJf3fXN6fg8NZd9eRp3TytjRB7GR9gVYXyMABgfMV3E80UYnxyAtDLhL0h4vhTVFy8LJkgkbJY6hYzNMu5mPNhNGYbxcPW672Xfk_1-Gl_KYN4_AZvC0nJjAwAA)' 
 

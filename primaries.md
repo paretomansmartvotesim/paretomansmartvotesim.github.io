@@ -4,9 +4,11 @@ title: Primaries
 description: An Interactive Guide to Voting
 byline: 'by Paretoman, May 2018'
 ---
+{% include letters.html %}
 
 We Don’t Need Primaries
 =======================
+
 
 I’m going to talk about what we're trying to achieve when we vote.  And I'd like to talk about how using primaries and choosing only one candidate on our ballots will only achieve accurate representation in the best case scenario. In many cases, a lot of votes are wasted, and a lot of voters receive no consideration.
 
@@ -38,11 +40,15 @@ And lets see a whole group of people.
 
 For an election, the hard part happens in the primary.  The general election is easy: there's two choices (at least in the United States, where I'm from, there's two choices). There's not a lot to think about. Each party has put up their nominee, and you pick the one closest to you. 
 
-{% include sim.html title="General Election" caption="A or B?" id="ab_sim_general" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXCDFwcKFcCmOkH-PrOGS4jgWPJJHGo-036WVddusVzLe68bqlXTZ91poEqQc-Zi5lLXVonlanh4VXB--qO3BtPrwBbM8ZcZThlo-R9PRTBkpDBEcESyRA8IAaWA8xwEjbzl04pJDhwI4OYYMKy5DRgIgwx3Zgmxkg7Q0SnMllITAkAh4GJJQ2ghlDgJqMv76NaVmQPeA74HM9hlodum_nHpa1Y4fAnM68tKwKoMxw4gmObdhRDMARrSOkiVfMYzoDYBFOcZzLMot7UsYcUg4HDiW3OGgo7dzwtvpOC7X19vHe1nLy_H1eTrO11v5-QXpTWN6fwIAAA)" %}
+{% capture cap3 %}{{ A }} or {{ B }}?{% endcapture %}
+
+{% include sim.html title="General Election" caption=cap3 id="ab_sim_general" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXCDFwcKFcCmOkH-PrOGS4jgWPJJHGo-036WVddusVzLe68bqlXTZ91poEqQc-Zi5lLXVonlanh4VXB--qO3BtPrwBbM8ZcZThlo-R9PRTBkpDBEcESyRA8IAaWA8xwEjbzl04pJDhwI4OYYMKy5DRgIgwx3Zgmxkg7Q0SnMllITAkAh4GJJQ2ghlDgJqMv76NaVmQPeA74HM9hlodum_nHpa1Y4fAnM68tKwKoMxw4gmObdhRDMARrSOkiVfMYzoDYBFOcZzLMot7UsYcUg4HDiW3OGgo7dzwtvpOC7X19vHe1nLy_H1eTrO11v5-QXpTWN6fwIAAA)" %}
 
 The hard part happens in the primary.  That's where you have many more competitors. There are two primaries going on at the same time, and in each one there is the same decision process, where one party wants to put up a candidate that can beat the other party. 
 
-{% include sim.html title="Primary Election" caption="A or B? Which would beat the other party?" id="ab_sim_primary" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)" %}
+{% capture cap4 %}{{ A }} or {{ B }}? Which would beat the other party?{% endcapture %}
+
+{% include sim.html title="Primary Election" caption=cap4 id="ab_sim_primary" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)" %}
 
 ### Pairwise Ranking
 
@@ -84,7 +90,9 @@ Also, up to now, we haven't called our voting system by it's proper English name
 
 {% comment %} Todo: Need to add +Primaries {% endcomment %}
 
-{% include sim-test.html title='More Voting Methods' caption='`drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>C</b></span> to <em>just under</em> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>B</b></span> to create a spoiler effect.<br> then compare these four different voting methods:`' id='election31' %}
+{% capture cap10 %}drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>{{ C }}</b></span> to <em>just under</em> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>{{ B }}</b></span> to create a spoiler effect.<br> then compare these four different voting methods:{% endcapture %}
+
+{% include sim-test.html title='More Voting Methods' caption=cap10 id='election31' %}
 
 Another method you've likely heard of if you are reading this page is Ranked Choice Voting (RCV), which is a new name (as of the past 20 years) for Instant Runoff Voting (IRV).  It is also a name that is used for Single Transferable Voting (STV), which is different than IRV, and so you have to tell from the context which method people are talking about. IRV avoids some vote splitting by using a process of elimination.  It's worth getting into on its own page.
 
@@ -105,113 +113,119 @@ Primaries rely on competitive pressure to get good results for the voters.  If 
 
 ### Game Rules
 
-Say we have a set of candidates in two primaries, ABCD, arranged in a line, like in the drawing below.  There are some candidates more towards the middle that would better represent all the voters: that’s B and C.  Ideally, in the best case scenario, B or C would win.   That's what we want the voting system to do.  We also want B&C to actually run.  We want them to not think that they will cause any problems for their party by splitting votes or in any other way. 
+Say we have a set of candidates in two primaries, {{ A }}{{ B }}{{ C }}{{ D }}, arranged in a line, like in the drawing below.  There are some candidates more towards the middle that would better represent all the voters: that’s {{ B }} and {{ C }}.  Ideally, in the best case scenario, {{ B }} or {{ C }} would win.   That's what we want the voting system to do.  We also want {{ B }}&{{ C }} to actually run.  We want them to not think that they will cause any problems for their party by splitting votes or in any other way. 
 
-This is kind of a game.  There's two players: the AB party and the CD party. A party takes an action by nominating a candidate.  The party is happier when their candidate wins.   They are the least happy when an extreme candidate of the other party wins.  This defines what is known in game theory as a normal form game.
+This is kind of a game.  There's two players: the {{ A }}{{ B }} party and the {{ C }}{{ D }} party. A party takes an action by nominating a candidate.  The party is happier when their candidate wins.   They are the least happy when an extreme candidate of the other party wins.  This defines what is known in game theory as a normal form game.
+
+{% capture cap20 %}'The {{ A }}{{ B }} party and the {{ C }}{{ D }} party are the players.  The action is nominating a candidate in the primary.  The outcome is who wins the general election.'{% endcapture %}
 
 {% include sim.html id='game_setup_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)'
 
 title='Game with Two Players'
 
-caption='The AB party and the CD party are the players.  The action is nominating a candidate in the primary.  The outcome is who wins the general election.'
+caption=cap20
 
 comment='basically, four candidates, ABCD, in a line with +Primaries as the voting system. A is center. D is center. B and C are moderates' %}
 
 ### Strategy
 
-Let's focus on the AB party.  Let's draw a table that shows how happy the AB party is with each outcome.  These numbers are called the payoff or the utility. For this example, we have assigned these numbers for the AB party: A B C D -\> 4 3 2 1.   We're assuming that all these candidates are considered based on their position rather than any other qualities that would make them appeal to a broader base.  
+Let's focus on the {{ A }}{{ B }} party.  Let's draw a table that shows how happy the {{ A }}{{ B }} party is with each outcome.  These numbers are called the payoff or the utility. For this example, we have assigned these numbers for the {{ A }}{{ B }} party: {{ A }} {{ B }} {{ C }} {{ D }} -\> 4 3 2 1.   We're assuming that all these candidates are considered based on their position rather than any other qualities that would make them appeal to a broader base.  
 
 The payoffs only exist in the way that they affect the decisions each group makes.  It would be easy to add these numbers up, but it’s hard to make sense of them.  To really get into this idea, you’d have to think about things like how society should work, and that you’d like all voters to be treated equally. It’s an idea worth getting back to.  For now, you can just understand that a voter would like the outcome to be a bigger number.  
 
-**AB Party's Utility (or Happiness) for Each Outcome**
+**{{ A }}{{ B }} Party's Utility (or Happiness) for Each Outcome**
 
 | Outcome **→** Utility |
 | --------------------- |
-| A **→** 4             |
-| B **→** 3             |
-| C **→** 2             |
-| D **→** 1             |
+| {{ A }} **→** 4             |
+| {{ B }} **→** 3             |
+| {{ C }} **→** 2             |
+| {{ D }} **→** 1             |
 
-Now, let's take an action (in the language of game theory).  Let's have each party pick a nominee.  What happens if the parties pick A and C as the nominees?  C is closer to the middle so C wins in the general election.  
+Now, let's take an action (in the language of game theory).  Let's have each party pick a nominee.  What happens if the parties pick {{ A }} and {{ C }} as the nominees?  {{ C }} is closer to the middle so {{ C }} wins in the general election.  
+
+{% capture cap13 %}The {{ A }}{{ B }} party nominates {{ A }}.  The {{ C }}{{ D }} party nominates {{ C }}.  {{ C }} wins the general election.{% endcapture %}
 
 {% include sim.html id='action_1_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ3n1FinTLFhe44sAkIdwVR0jeHlkT2OI4XIykkccj-TuVtG6btkzKe96ok0d933OiSfQaad6Y2SOahKS15FTTSjlpxOatnB-O9zZnSn44zvSnzPKUoRLP0bQ2U0YKQ1QBsEQGcANUHf05dliiyq7jRaaYgTk4hgxjMHYZcYAMN2Qd2RIXZK5u2hKKssCOCFjYEdfZXO_3_TZGyjTbDQ3QFIw7l1ULJp8hHSEfoYTYFKk1blc9KhbGa8P3wGpd8E1YnMKoYmCV2IL-_6QCMLA2tPR4RTGwFQDWZhjXsDbTcCluxCBhcGBYeYODhruNA95OY3xcX--f57Sml3H7Oo3L9Z5-_gBbft_olgIAAA)'
 
 title='Action Example'
 
-caption='The AB party nominates A.  The CD party nominates C.  C wins the general election.'
+caption=cap13
 
 comment='not sure if I need this' %}
 
-Let’s look at another example: what happens if the parties pick A and D as the nominees?  It could be a tie. 
+Let’s look at another example: what happens if the parties pick {{ A }} and {{ D }} as the nominees?  It could be a tie. 
+
+{% capture cap14 %}The {{ A }}{{ B }} party nominates {{ A }}.  The {{ C }}{{ D }} party nominates {{ D }}.  There is a tie in the general election.{% endcapture %}
 
 {% include sim.html id='action_2_tie_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8S-oUsR072X0FBd1qi0OiQIoAobvihODtOB50W5xOKcbOJJMZ5zuVtG5b40xqe964zqrve040iV6inQR5pZOQtJacalopJ43a_Cjnu-VnmzMl3y1n-kNmechQiedoWpsto4UhqgBYIgO4AaqO_hw7LLHLruObTJGBOTiGDCMYu4w4QIYbuo5uiQsyRzdtCcW2wI4IWNgR19lc7_f9Mka6Ic1rhoPQFsQWJ2rBBGZJR8lHKSE6RWqN21WPHYsAteGbYLku-C4MUGFYEVwlpqH_P6oABNeGIz1eUQS3AsD4DLEN4zO9xTBIGBwYRt_goOFu44CX0xgf5-fr52ta09O4fJ3G2_mafv4AxW1RZ54CAAA)'
 
 title='Tie Example'
 
-caption='The AB party nominates A.  The CD party nominates D.  There is a tie in the general election.'
+caption=cap14
 
 comment='not sure if I need this' %}
 
-In a real election with millions of voters, there won't be a tie, so let's model this tie as a probability: there's a 50/50 chance between A and D.  How do we compute the utility?  We could average the two utilities of the two outcomes.  But we wouldn't get the full picture.  We want to know what our risks are, so we consider both possibilities.  There is another variable.  It's kind of like another player.  We're treating chance as another player in the game.
+In a real election with millions of voters, there won't be a tie, so let's model this tie as a probability: there's a 50/50 chance between {{ A }} and {{ D }}.  How do we compute the utility?  We could average the two utilities of the two outcomes.  But we wouldn't get the full picture.  We want to know what our risks are, so we consider both possibilities.  There is another variable.  It's kind of like another player.  We're treating chance as another player in the game.
 
-I'm going to use a table to show these actions and the utility of the outcome.  The table below shows the utility for the AB party when the AB party nominates A.  In each column is a different set of actions that are outside the control of the AB party.  I used a +/- sign to represent chance. D+ means chance favors us, and D- means we had a negative outcome.  The entries in the table show the outcome and the utility of that outcome.
+I'm going to use a table to show these actions and the utility of the outcome.  The table below shows the utility for the {{ A }}{{ B }} party when the {{ A }}{{ B }} party nominates {{ A }}.  In each column is a different set of actions that are outside the control of the {{ A }}{{ B }} party.  I used a +/- sign to represent chance. {{ D }}+ means chance favors us, and {{ D }}- means we had a negative outcome.  The entries in the table show the outcome and the utility of that outcome.
 
-**Outcomes When AB party nominates A** - Columns are CD party and chance.
+**Outcomes When {{ A }}{{ B }} party nominates {{ A }}** - Columns are {{ C }}{{ D }} party and chance.
 
-| D+   | D-   | C    |
+| {{ D }}+   | {{ D }}-   | {{ C }}    |
 | ---- | ---- | ---- |
-| A **→** 4 | D **→** 1 | C **→** 2 |
+| {{ A }} **→** 4 | {{ D }} **→** 1 | {{ C }} **→** 2 |
 
-We can extend this table to consider when the AB party nominates B.  We add rows for each action the AB party can take.  
+We can extend this table to consider when the {{ A }}{{ B }} party nominates {{ B }}.  We add rows for each action the {{ A }}{{ B }} party can take.  
 
-**Strategy Table for AB** - Row is AB party, columns are CD party and chance.
+**Strategy Table for {{ A }}{{ B }}** - Row is {{ A }}{{ B }} party, columns are {{ C }}{{ D }} party and chance.
 
-| AB's Nominee | D+         | D-         | C+         | C-        |
+| {{ A }}{{ B }}'s Nominee | {{ D }}+         | {{ D }}-         | {{ C }}+         | {{ C }}-        |
 | ---- | ---------- | ---------- | ---------- | --------- |
-| A    | A **→** 4 | D **→** 1  | C **→** 2  | C **→** 2 |
-| B    | B **→** 3 | B **→** 3 | B **→** 3 | C **→** 2 |
+| {{ A }}    | {{ A }} **→** 4 | {{ D }} **→** 1  | {{ C }} **→** 2  | {{ C }} **→** 2 |
+| {{ B }}    | {{ B }} **→** 3 | {{ B }} **→** 3 | {{ B }} **→** 3 | {{ C }} **→** 2 |
 
 ### Playing the Game
 
-Say you’re the AB party.  Let’s look at your strategy table. You have several outcomes that you can’t control on the columns. and the row is your choice.  
+Say you’re the {{ A }}{{ B }} party.  Let’s look at your strategy table. You have several outcomes that you can’t control on the columns. and the row is your choice.  
 
-Which candidate should you choose?  If you choose A, then you'll either lose to the more moderate C or you’ll have a toss-up between your most favorite and your least favorite, A and D.  If you choose B you’ll probably come out on top with a more moderate candidate.  So you probably should choose B.  If you really don’t know what the other side is going to do, you could just add up your scores for each case.
+Which candidate should you choose?  If you choose {{ A }}, then you'll either lose to the more moderate {{ C }} or you’ll have a toss-up between your most favorite and your least favorite, {{ A }} and {{ D }}.  If you choose {{ B }} you’ll probably come out on top with a more moderate candidate.  So you probably should choose {{ B }}.  If you really don’t know what the other side is going to do, you could just add up your scores for each case.
 
-**Utility Table for AB - Averaging out Chance**
+**Utility Table for {{ A }}{{ B }} - Averaging out Chance**
 
-| AB's Nominee | C +/- | D +/- |
+| {{ A }}{{ B }}'s Nominee | {{ C }} +/- | {{ D }} +/- |
 | ------------ | ----- | ----- |
-| A            | 2.5   | 2     |
-| B            | 3     | 2.5   |
+| {{ A }}            | 2.5   | 2     |
+| {{ B }}            | 3     | 2.5   |
 
-**Strategy Table for AB - Averaging out Chance and the CD Party's Choice**
+**Strategy Table for {{ A }}{{ B }} - Averaging out Chance and the {{ C }}{{ D }} Party's Choice**
 
-| AB's Nominee | C/D +/- |
+| {{ A }}{{ B }}'s Nominee | {{ C }}/{{ D }} +/- |
 | ------------ | ------- |
-| A            | 2.25    |
-| B            | 2.75    |
+| {{ A }}            | 2.25    |
+| {{ B }}            | 2.75    |
 
 The same strategy works for both sides, which means that there is a competitive pressure.  Both sides should choose a more moderate candidate.  And knowing what the other side is going to do affects your strategy.  You’re even more convinced that your only chance to win is to pick a moderate.  Both parties are concerned with picking someone electable.  We talked about this earlier: electability is a consideration of whether the candidate you choose will win the general election.
 
-We can make the same table for the CD party.  D is the party center candidate and C is the moderate. You can be lucky (+),  or you could be unlucky (-).  And you can even use the same values in reverse.  You have D C B A in order from best to worst and I used the numbers 4 3 2 1 again.  
+We can make the same table for the {{ C }}{{ D }} party.  {{ D }} is the party center candidate and {{ C }} is the moderate. You can be lucky (+),  or you could be unlucky (-).  And you can even use the same values in reverse.  You have {{ D }} {{ C }} {{ B }} {{ A }} in order from best to worst and I used the numbers 4 3 2 1 again.  
 
 Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.  By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly-wrong technical sense, no candidate is better than any other candidate.  I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game.   The numbers are really just here as useful tools for making comparisons for a single player.  Maybe you could extend the idea if you had two outcomes being decided.
 
-**CD Party's Utility (or Happiness) for Each Outcome**
+**{{ C }}{{ D }} Party's Utility (or Happiness) for Each Outcome**
 
 | Outcome **→** Utility |
 | --------------------- |
-| A **→** 1             |
-| B **→** 2             |
-| C **→** 3             |
-| D **→** 4             |
+| {{ A }} **→** 1             |
+| {{ B }} **→** 2             |
+| {{ C }} **→** 3             |
+| {{ D }} **→** 4             |
 
-**Strategy Table for CD** - Row is CD party, columns are AB party and chance.
+**Strategy Table for {{ C }}{{ D }}** - Row is {{ C }}{{ D }} party, columns are {{ A }}{{ B }} party and chance.
 
-| AB's Nominee | A+         | A-         | B+         | B-        |
+| {{ A }}{{ B }}'s Nominee | {{ A }}+         | {{ A }}-         | {{ B }}+         | {{ B }}-        |
 | ------------ | ---------- | ---------- | ---------- | --------- |
-| D            | D **→** 4  | A **→** 1  | B **→** 2  | B **→** 2 |
-| C            | C **→** 3  | C **→** 3  | C **→** 3  | B **→** 2 |
+| {{ D }}            | {{ D }} **→** 4  | {{ A }} **→** 1  | {{ B }} **→** 2  | {{ B }} **→** 2 |
+| {{ C }}            | {{ C }} **→** 3  | {{ C }} **→** 3  | {{ C }} **→** 3  | {{ B }} **→** 2 |
 
 <!--Repeating, maybe take out-->
 
@@ -253,21 +267,23 @@ comment='example here with honest voters, just like the two player game example,
 
 Additionally there's another concern in this strategic scenario. If one party knows the other party's choice, then they can adjust their strategy. In particular, if one party knows the other party chose a party center candidate, then suddenly a lot of candidates become electable that are not moderates but closer to their own party’s center. 
 
-Here's an example. You have ABCD.   Now say D is the CD party’s choice.   Then the game table gets cut in half.  Which candidate should the AB party put forward?  Say there's a candidate between A and B: call them E.  Say E has a 3.5 utility for that party; that's better than B at 3.  The AB party would choose E because E and B are both electable and they might as well get something more.  So E is chosen, and E wins the general election even though they are not the best candidate for everyone; B is a better candidate for everyone; more people prefer B over E. That's a problem: competitive pressure can go away when a candidate is chosen by the other party. You end up with a candidate that is not good for everybody but just good for one party.
+Here's an example. You have {{ A }}{{ B }}{{ C }}{{ D }}.   Now say {{ D }} is the {{ C }}{{ D }} party’s choice.   Then the game table gets cut in half.  Which candidate should the {{ A }}{{ B }} party put forward?  Say there's a candidate between {{ A }} and {{ B }}: call them {{ E }}.  Say {{ E }} has a 3.5 utility for that party; that's better than {{ B }} at 3.  The {{ A }}{{ B }} party would choose {{ E }} because {{ E }} and {{ B }} are both electable and they might as well get something more.  So {{ E }} is chosen, and {{ E }} wins the general election even though they are not the best candidate for everyone; {{ B }} is a better candidate for everyone; more people prefer {{ B }} over {{ E }}. That's a problem: competitive pressure can go away when a candidate is chosen by the other party. You end up with a candidate that is not good for everybody but just good for one party.
 
-**AB Strategy Table When D is Certain**
+**{{ A }}{{ B }} Strategy Table When {{ D }} is Certain**
 
-| AB's Nominee | D+          | D-          |
+| {{ A }}{{ B }}'s Nominee | {{ D }}+          | {{ D }}-          |
 | ------------ | ----------- | ----------- |
-| A            | A **→** 4   | D **→** 1   |
-| E            | E **→** 3.5 | E **→** 3.5 |
-| B            | B **→** 3   | B **→** 3   |
+| {{ A }}            | {{ A }} **→** 4   | {{ D }} **→** 1   |
+| {{ E }}            | {{ E }} **→** 3.5 | {{ E }} **→** 3.5 |
+| {{ B }}            | {{ B }} **→** 3   | {{ B }} **→** 3   |
+
+{% capture cap11 %}{{ D }} is certain, so {{ E }} is chosen even though more people would prefer the moderate {{ B }}.{% endcapture %}
 
 {% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu24DQQj8F-otlseyd_cVKdKdrnCkFJFOSRTZhRXF3x6WseXCsrYAdmAY4JcqLevatbD1rays4bUanlQLj8df9UCnbSvEt-QEhJESgNJSCxktXKil75Eq5eFFbg-klocXyPQUmZ8iXLMdD2kjFIQQxAYDSewwISCUE0e7Yeb8lZqRcM4gQSNhQCMYTIJGw4BGOqIJ0ZwFWlMoj5VwAipZqwocgjSYVi7xf_k87TuFlyWOJDArhuaixQI0UI-Zje-u3F0F6XAtGezW5vrrKcU6jgXhNuNoWGOD6IbxG0S3610bDMZvHdiUnRrG9wqDJTpu4Viit1SqIcRB4VDgOECHgo7ajrW9Hfb96_h6_n6nhV72089h_zie6e8fixjlGbgCAAA)'
 
 title='Information Failure'
 
-caption='D is certain, so E is chosen even though more people would prefer the moderate B.'
+caption=cap11
 
 comment='remove C, add E between A and B.  In reference to ABCD in a line.' %}
 
@@ -296,13 +312,15 @@ So far we have only looked at primaries in which there are at most two electable
 
 What happens when you do have vote splitting? How do people strategize in that situation? What kind of negative behavior do they show? 
 
-What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates E and F.  E and F are just as moderate as B, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  B&F share the same space at the bottom, so  B might say to F, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts F into kind of a bluffing game if he stays in. A bluffing game is a game where you try to get a good outcome by threatening to hurt another candidate, and where if you follow through with the threat then you end up hurting yourself, too.
+What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates {{ E }} and {{ F }}.  {{ E }} and {{ F }} are just as moderate as {{ B }}, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  {{ B }}&{{ F }} share the same space at the bottom, so  {{ B }} might say to {{ F }}, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts {{ F }} into kind of a bluffing game if he stays in. A bluffing game is a game where you try to get a good outcome by threatening to hurt another candidate, and where if you follow through with the threat then you end up hurting yourself, too.
+
+{% capture cap19 %}{{ E }} gets squeezed out, even though {{ E }} is the best option{% endcapture %}
 
 {% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMW4EMQj8i2sKAwav9xUp0q2uuEgpIq2UKLoUpyh_D2ZyuWJ1cgEYGIbhu9SybpsvxFZPtLFKeBKeaL_9sRFrelKJe3oLZ92JCifA-G-LYuOZ0LJWKq2sTMXS9ygVOryo7ZGpdHiRWR5mxsMM1xzHk9oMBSEIcYMBJXaYIMAtbIzzMCN_JXDiUzh3kICRMIARLCYBo2EAIx3Rgmhkg9YkylMSzoRK9qoiD0IaSFuoenuz3FEAVMXCTEqNLGVrgJ47N767cncVoNNtidKOY5onndZxMJBvA4eDlAbiBgkMxO3vtgYDCawjt-Q0gwReYSCk4x4OId2SrQYRB4SDgeMIHQw6ejukeznv-_vl-frxWtbytH99nve3y7X8_AL0S0pr0AIAAA)'
 
 title='Center Squeeze'
 
-caption='E gets squeezed out, even though E is the best option'
+caption=cap19
 
 comment='could be titled vote-splitting.  Maybe just show EBF, not ACD' %}
 
@@ -310,15 +328,17 @@ When there are more than two candidates, the voters need to coordinate to put th
 
 You might think you can look at polls and polls will tell you who can win the nomination (a kind of electability) but there are no head-to-head polls in the primary, so you’re out of luck.  Nearly all the polls I've seen are general election polls with one person from each party.  The only meaningful polls I've seen have been from election reform organizations like Fair Vote and the Center for Election Science. <!--[footnotes](#footnotes)-->  The only polls I have seen on the news are choose only one polls that are trying to break the news earlier about which candidate is going to win. 
 
-The poll numbers are important to voters so they can tell who they should be coordinating with to show their support. The voters are going to go nuts here because if they only had one candidate, they could easily show how large their group is, but because they have two candidates splitting their group’s support, the voters have less of a chance of being considered by the candidates.  Now B&F, they have more supporters than E, and they could win if they decide to work together.  If B&F really feel like they are closer together than E, then they are on the same team.  Voters will also realize if perhaps F is not getting as many votes or maybe B is not getting as many votes by looking at the polls.  Then voters will switch their vote to whichever one, B or F, has a little advantage.  The little advantage now becomes a bigger advantage.  The polls get amplified and locked in.
+The poll numbers are important to voters so they can tell who they should be coordinating with to show their support. The voters are going to go nuts here because if they only had one candidate, they could easily show how large their group is, but because they have two candidates splitting their group’s support, the voters have less of a chance of being considered by the candidates.  Now {{ B }}&{{ F }}, they have more supporters than {{ E }}, and they could win if they decide to work together.  If {{ B }}&{{ F }} really feel like they are closer together than {{ E }}, then they are on the same team.  Voters will also realize if perhaps {{ F }} is not getting as many votes or maybe {{ B }} is not getting as many votes by looking at the polls.  Then voters will switch their vote to whichever one, {{ B }} or {{ F }}, has a little advantage.  The little advantage now becomes a bigger advantage.  The polls get amplified and locked in.
 
-The problem is those polls aren't accurate. If you put B&F head to head, then B would easily win, but in a choose-only-one poll, B can get squeezed out because E&F take votes from both sides.  Even though B is the center candidate, B can lose because B can get squeezed out.
+The problem is those polls aren't accurate. If you put {{ B }}&{{ F }} head to head, then {{ B }} would easily win, but in a choose-only-one poll, {{ B }} can get squeezed out because {{ E }}&{{ F }} take votes from both sides.  Even though {{ B }} is the center candidate, {{ B }} can lose because {{ B }} can get squeezed out.
+
+{% capture cap15 %}{{ A }} small advantage in polls becomes a big advantage.{% endcapture %}
 
 {% include sim.html id='amplify_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDQQz8F9VbrF67d_6KFOmOKxxIEViSEOzChOTbo9XYpDDm4EaP1WgkfVOlw7axSmGXvYTFhdnTqoVX2fdCPN8sGk_6dJUOtZDl3_Pf4oGUuy_e9sjUcvdFZnmYWR9muGY7noKmK3AhiKGIIYkbIASwBUY7DVgzKsETQQkeDggaCQCNGIKeBQIa6fAWeGsW6Nwdz4VwhhU8qgDI0eDZ6Pf9PAaV4L1a_5EkaChBF50L4GIlzkA2m8zZjW-G3Ay99jfLOvOsA6W1HMM6jgXhtmbQsUaHbIdsh2zH-O4AjO8dOSzRMX6rACyx4RYNS2yeN9QQ0kDRoKDhAB0KOmq7JLwcx_g4PV8-X-lAT-P8dRxvpwv9_AFQpOx0pQIAAA)'
 
 title='Poll Amplification'
 
-caption='A small advantage in polls becomes a big advantage.'
+caption=cap15
 
 comment='right now, this isnt implemented' %}
 
@@ -353,7 +373,7 @@ We said we could use utilities because it would help us put the candidates in or
 
 ### Chicken Dilemma
 
-Even in some better voting methods, there can be a game of chicken.  The game of chicken is weird.  Let's consider the center squeeze example with B E F again.  F voters can pull back their support from B if they think F can win against E. And some of the B supporters can pull away from F. But if the F supporters are overconfident, they can lose to B. 
+Even in some better voting methods, there can be a game of chicken.  The game of chicken is weird.  Let's consider the center squeeze example with {{ B }} {{ E }} {{ F }} again.  {{ F }} voters can pull back their support from {{ B }} if they think {{ F }} can win against {{ E }}. And some of the {{ B }} supporters can pull away from {{ F }}. But if the {{ F }} supporters are overconfident, they can lose to {{ B }}. 
 
 [The page on scored systems](newer) has a more thorough chicken dilemma explanation.  Personally, I have a hard time trying to think of the chicken dilemma for pairwise voting, so I don't think it would affect voters.
 
