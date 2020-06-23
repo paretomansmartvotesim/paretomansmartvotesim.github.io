@@ -818,10 +818,7 @@ function Config(ui, config, initialConfig) {
             
             if ( config.featurelist == undefined) {
                 config.doFeatureFilter = false
-            } else {
-                config.doFeatureFilter = true
-                // modifyConfigFeaturelist(config,true, ["doFeatureFilter"]) 
-            }
+            } 
 
 
 
