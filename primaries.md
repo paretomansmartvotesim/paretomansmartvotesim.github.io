@@ -90,7 +90,7 @@ Also, up to now, we haven't called our voting system by it's proper English name
 
 {% comment %} Todo: Need to add +Primaries {% endcomment %}
 
-{% capture cap10 %}drag <span class="letterBig" style="color:hsl(0,80%,70%);"><b>{{ C }}</b></span> to <em>just under</em> <span class="letterBig" style="color:hsl(45,80%,70%);"><b>{{ B }}</b></span> to create a spoiler effect.<br> then compare these four different voting methods:{% endcapture %}
+{% capture cap10 %}drag {{ C }} to <em>just under</em> {{ B }} to create a spoiler effect.<br> then compare these four different voting methods:{% endcapture %}
 
 {% include sim-test.html title='More Voting Methods' caption=cap10 id='election31' %}
 
@@ -117,7 +117,7 @@ Say we have a set of candidates in two primaries, {{ A }}{{ B }}{{ C }}{{ D }}, 
 
 This is kind of a game.  There's two players: the {{ A }}{{ B }} party and the {{ C }}{{ D }} party. A party takes an action by nominating a candidate.  The party is happier when their candidate wins.   They are the least happy when an extreme candidate of the other party wins.  This defines what is known in game theory as a normal form game.
 
-{% capture cap20 %}'The {{ A }}{{ B }} party and the {{ C }}{{ D }} party are the players.  The action is nominating a candidate in the primary.  The outcome is who wins the general election.'{% endcapture %}
+{% capture cap20 %}The {{ A }}{{ B }} party and the {{ C }}{{ D }} party are the players.  The action is nominating a candidate in the primary.  The outcome is who wins the general election.{% endcapture %}
 
 {% include sim.html id='game_setup_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)'
 
