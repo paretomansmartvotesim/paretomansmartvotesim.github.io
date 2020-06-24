@@ -184,17 +184,17 @@ To wrap things up, there's a lot of ways you could deal with voting (casting a b
 
 Still want more? Try the sandbox below, where I've added a ton more voting methods and configuration options.  
 
-Want more of a narrative?  Then choose your path.  Either read about Primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Soon, I'll have an essay about RCV, IRV, STV, and multi-winner methods.  It's a work in progress.
+Want more of a narrative?  Then choose your path.  Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV).  I also have a draft of a page about proportional representation using more methods than just STV.  It's a work in progress. Just be sure you get to read more about Condorcet methods.  I like them best.
 
 -   [Primaries](primaries)
-
 -   [Approval Voting](approval)
-
 -   [An Even Better Ballot by Jameson Quinn](newer)
-
--   Todo: RCV, IRV, STV, and Multi-winner methods
+-   [Instant Runoff Voting (Single-Winner Ranked Choice Voting)](irv)
+-   [The Single Transferable Vote (Multi-Winner Ranked Choice Voting)](stv)
+-   [Proportional Representation](proportional) - draft
+-   [Condorcet Methods Count by Pairs](condorcet)
 
 External Links
 
-* Okay, I have to mention [CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe), since I do in every discussion I have ever had about voting methods with new people.  He made a series of youtube videos at the time that the UK was considering using IRV, which the UK called the Alternative Vote.  
-* [The EndFPTP Wiki](https://www.reddit.com/r/EndFPTP/wiki/index) and [Sidebar](https://www.reddit.com/r/EndFPTP/wiki/sidebar) have more links.
+* Okay, I have to mention this set of [videos by CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe), since I do in every discussion I have ever had about voting methods with new people.  He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote.  
+* Also, the [EndFPTP Wiki](https://www.reddit.com/r/EndFPTP/wiki/index) has more links. 
