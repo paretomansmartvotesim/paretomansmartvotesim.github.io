@@ -416,3 +416,16 @@ ul.share-buttons .sr-only {
 
 
 /* end card stuff */
+
+#content img.picture {
+	display: inline-block;
+	width: 290px;
+	height: unset;
+	vertical-align: top;
+}
+#content img.picture100 {
+	display: inline-block;
+	width: 100%;
+	height: unset;
+	vertical-align: top;
+}
