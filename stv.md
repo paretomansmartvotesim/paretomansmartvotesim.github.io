@@ -91,7 +91,7 @@ We can extend this logic to quotas for multi-winner Ranked Choice Voting. You wo
 | 5                 | 17 %    | \> 83 %            |
 | n                 | 1/(n+1) | \> n/(n+1)         |
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvU6DMQx8l8weYjux0z4GYvvUoYhOVMDAghA8O7aPShVVlcHx3_l8yVfrbb9t6uTrQBtLJ5e4DCHR3V9ERt5EmNh73laPmxwO1Di7XaM4293IPAuGEdvKAm37Tm20fftha9Rm-RZtMeH_iXqPTKebE5l1N7O7m-Fe4zhpKjmNCgqCoMYDBsSCY5mgwSNsDLUwMUGoSaBFUAJNwwiCgJGA4TATOcCIw1vwgKK96HKKw5VQqV5V5EFIA2kLxS8nyw0FQFWszSGc0qAZBaNflEiHrx25dvQCnc4otHE7bljRGo4nxBJjV8EJYScWmJBiYoEJKeaEgRTTkVs1bUIKA4pxVRrexSCozWKsQcQAYWBguzKOXkevQ0JXGEjoeFPP35Zfy5Fc17plHCutXubpeD6_fTx-vp_izz4cX19Oz-37FzeE5I4nAwAA)"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DMRD8F9dbeN9OPgPRnVIEkYoIKGgQgm9n7eGkSCi6Yryv8ez4vlpvx23TpBwn2lg6pdTBhEQPfxmxeRJh4uzzNHqd5HSixnM6tZrneAZFzgYL4hizQduxU7N2bD8cjZqvOGqsilnQ6d9XlXG3crhb4b64mUHOghAK2AC4v6QsKAFshXVdFBS3UJPiqaQUjxYIkqCRouECRw00kogGIrBoX0J5esCroBCkijoEaTFtZez-zfZAA1gVCzMJKRl5NVjfPZgB3wZyG-hOPQNbbPb_Oou1kiVeCkvYYSUdljoWcFjhWMBhhTsAVniiNtZtDisCLMGrM2BDwNDwpVhLSIAioCAOCxKzidkUgAJgYeJNc_-pEsVx69vMY6XRAVhpQMyAmGFL73AA3uHpfL2-fTx-vl_qJ344v75cntv3LyTk-II4AwAA)"
 title = "Three Winners"
 caption = "Each of three groups is able to be represented."
 comment = "three parties is a cognitive achievement. don't show power chart."
