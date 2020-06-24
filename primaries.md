@@ -98,11 +98,11 @@ Another method you've likely heard of if you are reading this page is Ranked Cho
 
 Read more about:
 
-* [RCV, IRV, and STV](./rcv).
-
 * [Approval Voting](approval)
-
-* [Score Voting](newer)
+* [Score Voting, STAR voting, and 3-2-1](newer)
+* [Instant Runoff Voting, IRV (Single-Winner RCV)](irv)
+* [The Single Transferable Vote, STV (Multi-Winner RCV)](stv)
+* [Condorcet Methods](condorcet)
 
 This is just a brief introduction to the world of voting methods.  After you're finished with this page, see the other pages on this site for more explorable explanations of voting methods.
 
@@ -314,7 +314,7 @@ What happens when you do have vote splitting? How do people strategize in that s
 
 What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates {{ E }} and {{ F }}.  {{ E }} and {{ F }} are just as moderate as {{ B }}, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  {{ B }}&{{ F }} share the same space at the bottom, so  {{ B }} might say to {{ F }}, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts {{ F }} into kind of a bluffing game if he stays in. A bluffing game is a game where you try to get a good outcome by threatening to hurt another candidate, and where if you follow through with the threat then you end up hurting yourself, too.
 
-{% capture cap19 %}{{ E }} gets squeezed out, even though {{ E }} is the best option{% endcapture %}
+{% capture cap19 %}{{ B }} gets squeezed out, even though {{ B }} is the best option{% endcapture %}
 
 {% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMW4EMQj8i2sKAwav9xUp0q2uuEgpIq2UKLoUpyh_D2ZyuWJ1cgEYGIbhu9SybpsvxFZPtLFKeBKeaL_9sRFrelKJe3oLZ92JCifA-G-LYuOZ0LJWKq2sTMXS9ygVOryo7ZGpdHiRWR5mxsMM1xzHk9oMBSEIcYMBJXaYIMAtbIzzMCN_JXDiUzh3kICRMIARLCYBo2EAIx3Rgmhkg9YkylMSzoRK9qoiD0IaSFuoenuz3FEAVMXCTEqNLGVrgJ47N767cncVoNNtidKOY5onndZxMJBvA4eDlAbiBgkMxO3vtgYDCawjt-Q0gwReYSCk4x4OId2SrQYRB4SDgeMIHQw6ejukeznv-_vl-frxWtbytH99nve3y7X8_AL0S0pr0AIAAA)'
 
