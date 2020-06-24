@@ -295,11 +295,18 @@ Election.condorcet = function(district, model, options){
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
 	// Create the WIN tally
-	var tally = {};
-	for(var candidateID in model.candidatesById) tally[candidateID] = 0;
-
+	var tallyWins = {}
+	var tallyWinsOrTies = {}
+	var tallyLosses = {}
 	var beatsMe = {}
-	for(var candidateID in model.candidatesById) beatsMe[candidateID] = []
+	var beatsOrTiesMe = {}
+	for(var candidateID in model.candidatesById) {
+		tallyWins[candidateID] = 0
+		tallyWinsOrTies[candidateID] = 0
+		tallyLosses[candidateID] = 0
+		beatsMe[candidateID] = []
+		beatsOrTiesMe[candidateID] = []
+	}		
 
 	// make a list of mouseover events
 	let eventsToAssign = []
@@ -336,8 +343,11 @@ Election.condorcet = function(district, model, options){
 
 			text += '<div id="' + eventID + '">'
 			if ( ! tie ) {
-				tally[winner.id]++;
+				tallyWins[winner.id]++;
+				tallyWinsOrTies[winner.id]++;
+				tallyLosses[loser.id]++;
 				beatsMe[loser.id].push(winner.id)
+				beatsOrTiesMe[loser.id].push(winner.id)
 				// Text.
 				var by,to;
 				if(winner==a){
@@ -347,13 +357,15 @@ Election.condorcet = function(district, model, options){
 					by = bWins;
 					to = aWins;
 				}
-				text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+model.icon(winner.id)+" wins, "+_percentFormat(district, by)+" to "+_percentFormat(district, to)+"<br>";
+				text += model.icon(winner.id) + " beats " + model.icon(loser.id) + ", "+_percentFormat(district, by)+" to "+_percentFormat(district, to)+"<br>";
+				// text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+model.icon(winner.id)+" wins, "+_percentFormat(district, by)+" to "+_percentFormat(district, to)+"<br>";
 			} else { //tie
-				beatsMe[a.id].push(b.id)
-				beatsMe[b.id].push(a.id)
-				tally[a.id]++;
-				tally[b.id]++;
-				text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
+				tallyWinsOrTies[a.id]++;
+				tallyWinsOrTies[b.id]++;
+				beatsOrTiesMe[a.id].push(b.id)
+				beatsOrTiesMe[b.id].push(a.id)
+				text += " TIE between " + model.icon(a.id)+" "+model.icon(b.id) + "<br>";
+				// text += model.icon(a.id)+" vs "+model.icon(b.id)+": "+"TIE"+"<br>";
 			}
 			text += '</div>'
 
@@ -361,20 +373,32 @@ Election.condorcet = function(district, model, options){
 		}
 	}
 
-	// Was there one who won all????
+	// Was there one who won all?
 	var topWinners = [];
-	
-	for(var id in tally){
-		if(tally[id]==cans.length-1){
+	for(var id in tallyWins){
+		if(tallyWins[id]==cans.length-1){
 			topWinners.push(id);
 		}
 	}
 
-	if (topWinners.length != 1) {
+	// was there one who lost none?
+	if (topWinners.length === 0) {
+		for(var id in tallyLosses){
+			if(tallyLosses[id]==0){
+				topWinners.push(id);
+			}
+		}
+	}
+
+	// if there are multiple, then they tied each other
+	
+	// if there are none, then there's a cycle
+	// find the Schwartz set = nobody beats the set
+	if (topWinners.length == 0) {
 		// ties
 
 		// sort list
-		var idSorted = Object.keys(tally).sort(function(x,y) {return -tally[x]+tally[y]}) // reverse?
+		var idSorted = Object.keys(tallyWins).sort(function(x,y) {return -tallyWins[x]+tallyWins[y]}) // reverse?
 		var indexOfId = {}
 		for (var i = 0; i < idSorted.length; i++) indexOfId[idSorted[i]] = i
 		var divider = 1
@@ -385,15 +409,12 @@ Election.condorcet = function(district, model, options){
 			}
 		}
 		topWinners = idSorted.slice(0,divider)
+		var usedSchwartz = true
 	}
-	// probably it would be better to find the smith set but this is okay for now
-	// topWinners = _countWinner(tally);
-	
-	
 
 	var result = _result(topWinners,model)
     var color = result.color
-	if (model.doTop2) var theTop2 = _sortTally(tally).slice(0,2)
+	if (model.doTop2) var theTop2 = _sortTally(tallyWins).slice(0,2)
 	if (model.doTop2) result.theTop2 = theTop2
 	if (!options.sidebar) return result
 	
@@ -401,7 +422,11 @@ Election.condorcet = function(district, model, options){
 	// Winner... or NOT!!!!
 	text += "<br>";
 	if (topWinners.length == 1) {
-		text += model.icon(topWinner)+" beats all other candidates in one-on-one races.<br>";
+		if (usedSchwartz) {
+			text += model.icon(topWinner)+" beats or ties all other candidates in one-on-one races.<br>";
+		} else {
+			text += model.icon(topWinner)+" beats all other candidates in one-on-one races.<br>";
+		}
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS";
@@ -409,7 +434,7 @@ Election.condorcet = function(district, model, options){
 	}else if (topWinners.length >= 2) {
 		for(var i=0; i<cans.length; i++){
 			var c = cans[i].id;
-			text += model.icon(c)+" got "+tally[c]+" wins<br>";
+			text += model.icon(c)+" got "+tallyWins[c]+" wins<br>";
 		}
 		text += _tietext(model,topWinners);
 		// text = "<b>TIE</b> <br> <br>" + text;
