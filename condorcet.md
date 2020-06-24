@@ -210,7 +210,7 @@ id = "ranked_pairs_sim" %}
 Rob LeGrand's site has a lot more voting methods, so try them out in the simulation below.  The explanations in the sidebar are very thorough and explain the way in which the winner was selected. One detail is that he uses a tie-breaking ballot whenever he runs into a regular tie (not a cycle) 
 
 {% include sim.html 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSvU5DMQyF3yWzh9iOE-c-BmK76lBEJypgYEEInh3Hh0pVUXWHE__k5Itzv0ot275PoT4PtAtXGnUtmhG7xIrbJLGVi5SIHg5UeO3hytEys8Vp8lrMaKmyWrRslUorW_nRQsXKxlR67IvaCKn074uK363MuxWueRQvKF6xIAYBN4hBOiQIuIXGeRYS5kJFwiiSwskqAoGNNERhoyGwkYHIEc0UrUm6SBROCiCFk8JJbeHS37eae0IoPBX3ZRJSalFu9TKAFfB1INeBXmxX0NKr3R7VeiK0gTcCfpuZNEzTGCIJZQoBuuExDUOwgZrnWYYh9JrJjgF0DKBjAN2SVwOkw6KDoGPvAMHA3gGCoYjwmgOvOS7_00DRb2Y2cCWHoeNKDhgHjMPQYejgeTqez28fj5_vp_h9H46vL6fn8v0Lqgq8QSoDAAA)" 
+link = "[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4EMQxE_yW1i9iOE2c_A9GtrjjEVZyAggYh-HYcDyedDp22mEycTF6c_Sq1bPs-hfo80C5cadQ1aEbsEiNuk8TWnGlM8eFAhdcerhx-5hKnyWswjaTKWqJlq1Ra2cqPFipWNqbSY1_URkilf19U_G5l3q1wzaN4QfHyAg8CbhCDdEgQcPBwnGchES5UJIJaCCerCAQx0uAiRkMQIwPO4WaK1iRdJIokBZAiSZGktnDp71uLe0IoMhX3ZRJSalFu9dKAZfjayLXRS-wyLbPa7VGtJ0IbeCPgt5mThm4aQyShTCFANzymoQk2UPM8y9CEXnOyowEdDehoQLfk1QDpiOgg6Ng7QDCwd4BgKBxec-A1x-V_Gij6Tc8GruQIdFzJAeOAcQQ6Ah08T8fz-e3j8fP9FL_vw_H15fRcvn8Bl3tygyoDAAA)" 
 title = "More Methods"
 caption = "Rob LeGrand did a lot of work to include all these Condorcet methods, and some that aren't."
 comment = ""
