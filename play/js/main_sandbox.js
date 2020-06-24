@@ -1635,6 +1635,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             config.ballotType = data.ballotType
             // CONFIGURE
             self.configure()
+            ui.strategyOrganizer.configure()
             // UPDATE
             
             // TODO: work this out so that the voters get re initialized in the correct place
@@ -1648,7 +1649,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
             model.dm.redistrict()
             model.update();
             ui.menu_update()
-            ui.strategyOrganizer.configure()
             ui.strategyOrganizer.showOnlyStrategyForTypeOfSystem()
         };
         self.choose = new ButtonGroup({
@@ -2579,7 +2579,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.configure = function() {
             // take on the strategy of the relevant system type
-            var theType = self.stratBySys[model.system]
+            var theType = self.stratBySys[config.system]
             var theConfigFirst = self.menuNameFirst[theType]
             config.firstStrategy = config[theConfigFirst]
             var theConfigSecond = self.menuNameSecond[theType]
