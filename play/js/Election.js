@@ -16,11 +16,13 @@ Election.score = function(district, model, options){
 
 	// Tally the approvals & get winner!
 	var ballots = model.voterSet.getBallotsDistrict(district)
-	var tally = _tallyBC(ballots,cans, function(tally, ballot){
+
+	var tally = _zeroTally(cans)
+	for(var ballot of ballots){
 		for(var candidate in ballot){
 			tally[candidate] += ballot[candidate];
 		}
-	});
+	}
 
 
 	var maxscore = 5
@@ -72,11 +74,13 @@ Election.star = function(district, model, options){
 
 	// Tally the approvals & get winner!
 	var ballots = model.voterSet.getBallotsDistrict(district)
-	var tally = _tallyBC(ballots,cans, function(tally, ballot){
+	var tally = _zeroTally(cans)
+	for(var ballot of ballots){
 		for(var candidate in ballot){
 			tally[candidate] += ballot[candidate];
 		}
-	});
+	}
+	
 	var frontrunners = [];
 
 	for (var i in tally) {
@@ -152,13 +156,25 @@ Election.three21 = function(district, model, options){
 	
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
-	// Tally the approvals & get winner!
-	var tallies = _tallies(district, model, 3);
+	// Create the tally
+	var tallies = [];
+	for (var level=0; level < 3; level++) {
+		var tally = _zeroTally(cans);
+		tallies.push(tally)
+	}
+
+	// Count 'em up
+	for(var i=0; i<ballots.length; i++){
+		var ballot = ballots[i]
+		for(var candidate in ballot){
+			tallies[ballot[candidate]][candidate] += 1;
+		}
+	}
 
 	var semifinalists = [];
 
-	for (var i in model.candidatesById) {
-	   semifinalists.push(i);
+	for (var c of cans) {
+	   semifinalists.push(c.id);
 	}
 	semifinalists.sort(function(a,b){return tallies[2][b]-tallies[2][a]})
 
@@ -238,10 +254,11 @@ Election.approval = function(district, model, options){
 
 	// Tally the approvals & get winner!
 	var ballots = model.voterSet.getBallotsDistrict(district)
-	var tally = _tallyBC(ballots,cans, function(tally, ballot){
+	var tally = _zeroTally(cans)
+	for(var ballot of ballots){
 		var approved = ballot.approved;
 		for(var i=0; i<approved.length; i++) tally[approved[i]]++;
-	});
+	}
 
 	var winners = _countWinner(tally);
 
@@ -1418,12 +1435,14 @@ Election.rrv = function(district, model, options){
 	
 	for(var j=0; j<numreps;j++) {
 		// Tally the approvals & get winner!
-		var tally = _tallyBC_i( ballots, cans, function(tally, ballot, i){
+		var tally = _zeroTally(cans)
+		for(var i=0; i<ballots.length; i++){
+			var ballot = ballots[i]
 			for(var k=0; k<candidates.length; k++){
 				var candidate = candidates[k];
 				tally[candidate] += ballot[candidate] * ballotweight[i]
 			}
-		})
+		}
 		tallies.push(tally)
 		
 		var winners = _countWinner(tally);
@@ -1565,14 +1584,16 @@ Election.rav = function(district, model, options){
 	
 	for(var j=0; j<numreps;j++) {
 		// Tally the approvals & get winner!
-		var tally = _tallyBC_i( ballots, cans, function(tally, ballot, i){
+		var tally = _zeroTally(cans)
+		for(var i=0; i<ballots.length; i++){
+			var ballot = ballots[i]
 			var approved = ballot.approved;
 			for(var k=0; k<approved.length; k++) {
 				if (candidates.includes(approved[k])) {
 					tally[approved[k]] += ballotweight[i];
 				}
 			}
-		})
+		}
 		tallies.push(tally)
 		
 		var winners = _countWinner(tally);
@@ -1684,12 +1705,13 @@ Election.borda = function(district, model, options){
 	// Tally the approvals & get winner!
 	var numcan = cans.length
 	var ballots = model.voterSet.getBallotsDistrict(district)
-	var tally = _tallyBC(ballots,cans, function(tally, ballot){
+	var tally = _zeroTally(cans)
+	for(var ballot of ballots){
 		for(var i=0; i<numcan; i++){
 			var candidate = ballot.rank[i];
 			tally[candidate] += numcan - i - 1; // reverse the rank and subtract 1 because nobody's going to rank their least favorite.
 		}
-	});
+	}
 	var winners = _countWinner(tally);
 	var result = _result(winners,model)
 	var color = result.color
@@ -1781,10 +1803,11 @@ Election.irv = function(district, model, options){
 		// 1. Tally
 
 		// Tally first choices
-		var pre_tally = _tallyBC(cBallots,cans, function(tally, ballot){
+		var pre_tally = _zeroTally(cans)
+		for(var ballot of cBallots){
 			var top = ballot.rank[0]; // just count #1
-			tally[top]++;
-		});
+			pre_tally[top]++;
+		}
 
 		// Filter
 		// ONLY list the remaining candidates
@@ -2113,10 +2136,12 @@ Election.stv = function(district, model, options){
 			text += "who's voters' #1 choice?<br>";
 		}
 
-		var pre_tally = _tallyBC_i( cBallots, cans, function(tally, ballot, i){
+		var pre_tally = _zeroTally(cans)
+		for(var i=0; i<cBallots.length; i++){
+			var ballot = cBallots[i]
 			var first = ballot.rank[0]; // just count #1
-			tally[first] += ballotweight[i];
-		});
+			pre_tally[first] += ballotweight[i];
+		}
 
 		// ONLY tally the remaining candidates...
 		var tally = {};
@@ -2366,10 +2391,12 @@ Election.stv = function(district, model, options){
 				stillin: stillin
 			}
 
-			var pre_tally = _tallyBC_i( cBallots, cans, function(tally, ballot, i){
-				var first = ballot.rank[0]; // just count #1
-				tally[first] += ballotweight[i];
-			});
+			var pre_tally = _zeroTally(cans)
+			for(var i=0; i<cBallots.length; i++){
+				var ballot = cBallots[i]
+				var f1 = ballot.rank[0]; // just count #1
+				pre_tally[f1] += ballotweight[i];
+			}
 	
 			// ONLY tally the remaining candidates...
 			var tally = {};
@@ -2759,11 +2786,13 @@ Election.quotaMinimax = function(district, model, options){
 				stillin: stillin
 			}
 
-			var pre_tally = _tallyBC_i( cBallots, cans, function(tally, ballot, i){
-				var first = ballot.rank[0]; // just count #1
-				tally[first] += ballotweight[i];
-			});
-	
+			var pre_tally = _zeroTally(cans)
+			for(var i=0; i<cBallots.length; i++){
+				var ballot = cBallots[i]
+				var f1 = ballot.rank[0]; // just count #1
+				pre_tally[f1] += ballotweight[i];
+			}
+			
 			// ONLY tally the remaining candidates...
 			var tally = {};
 			for(var i=0; i<candidates.length; i++){
@@ -3115,9 +3144,10 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 
 	// Tally the approvals & get winner!
 	var ballots = model.voterSet.getBallotsDistrict(district)
-	var tally1 = _tallyBC(ballots,cans, function(tally, ballot){
-		tally[ballot.vote]++;
-	});
+	var tally1 = _zeroTally(cans)
+	for(var ballot of ballots){
+		tally1[ballot.vote]++;
+	}
 	var sortedtally = _sortTally(tally1)
 	var toptwo = sortedtally.slice(0,2)
 	
@@ -3132,9 +3162,10 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 	model.updateDistrictBallots(district);
 
 	var ballots2 = model.voterSet.getBallotsDistrict(district)
-	var tally = _tallyBC(ballots2,cans, function(tally, ballot){
+	var tally = _zeroTally(cans)
+	for(var ballot of ballots2){
 		tally[ballot.vote]++;
-	});
+	}
 
 	model.stage = "general" // set to general for display purposes
 	model.voterSet.loadDistrictBallotsFromStage(district,"general")
@@ -3219,9 +3250,10 @@ Election.pluralityWithPrimary = function(district, model, options){
 	}
 	
 	var ballots2 = model.voterSet.getBallotsDistrict(district)
-	var tally = _tallyBC(ballots2,cans2, function(tally, ballot){
+	var tally = _zeroTally(cans2)
+	for(var ballot of ballots2){
 		tally[ballot.vote]++;
-	});
+	}
 	// return original candidates and update voters' ballots 
 	// So we can see who they voted for in the primary.
 	// TODO: make this better.
@@ -3355,9 +3387,10 @@ Election.plurality = function(district, model, options){
 	
 	// Tally the approvals & get winner!
 	var ballots = model.voterSet.getBallotsDistrict(district)
-	var tally = _tallyBC(ballots,cans, function(tally, ballot){
+	var tally = _zeroTally(cans)
+	for(var ballot of ballots){
 		tally[ballot.vote]++;
-	});
+	}
 	var winners = _countWinner(tally);
 	var result = _result(winners,model)
     var color = result.color
@@ -3505,28 +3538,32 @@ function runPoll(district,model,options,electiontype){
 
 		if (electiontype == "score") {
 			// Tally
-			var tally = _tallyBC(ballots,cans, function(tally, ballot){
+			var tally = _zeroTally(cans)
+			for(var ballot of ballots){
 				for(var candidate in ballot){
 					tally[candidate] += ballot[candidate];
 				}
-			});
+			}
 		} else if (electiontype=="approval"){ 
 			// Tally the approvals & get winner!
-			var tally = _tallyBC(ballots,cans, function(tally, ballot){
+			var tally = _zeroTally(cans)
+			for(var ballot of ballots){
 				var approved = ballot.approved;
 				for(var i=0; i<approved.length; i++) tally[approved[i]]++;
-			});
+			}
 		} else if (electiontype=="plurality"){
-			var tally = _tallyBC(ballots,cans, function(tally, ballot){
+			var tally = _zeroTally(cans)
+			for(var ballot of ballots){
 				tally[ballot.vote]++;
-			});
+			}
 		} else if (electiontype=="irv"){
 
 			// for the report, get the first preferences
-			var tally = _tallyBC(ballots,cans, function(tally, ballot){
+			var tally = _zeroTally(cans)
+			for(var ballot of ballots){
 				var first = ballot.rank[0]; // just count #1
 				tally[first]++;
-			});
+			}
 
 			var options2 = {dontpoll:true, sidebar:true, justCount:true}
 			var result = Election.irv(district,model,options2) // do an IRV election to find out who wins
@@ -3776,20 +3813,12 @@ var runPrimaryPoll = function(district,model,options,electiontype){
 	return polltext
 }
 
-function _tallyBC(ballots,cans,tallyFunc){
-	
+function _zeroTally(cans) {
 	// Create the tally
-	var tally = {}
+	var tally = {};
 	for (let c of cans) {
 		tally[c.id] = 0
 	}
-	
-	// Count 'em up
-	for(var i=0; i<ballots.length; i++){
-		tallyFunc(tally, ballots[i])
-	}
-
-	// Return it.
 	return tally
 }
 
@@ -3812,47 +3841,6 @@ var _getBallotsAndTallyPrimary = function(district, model, tallyFunc){
 		primaries_tallies.push(tally)
 	}
 	return primaries_tallies
-}
-
-function _tallyBC_i(ballots,cans,tallyFunc){
-	
-	// Create the tally
-	var tally = {};
-	for (let c of cans) {
-		tally[c.id] = 0
-	}
-	
-	// Count 'em up
-	for(var i=0; i<ballots.length; i++){
-		tallyFunc(tally, ballots[i], i)
-	}
-
-	// Return it.
-	return tally
-}
-
-var _tallies = function(district, model, levels){
-
-	// Create the tally
-	var tallies = [];
-	for (var level=0; level<levels; level++) {
-		var tally = {};
-		for(var candidateID in model.candidatesById) tally[candidateID] = 0;
-		tallies.push(tally)
-	}
-
-	// Count 'em up
-	var ballots = model.voterSet.getBallotsDistrict(district)
-	for(var i=0; i<ballots.length; i++){
-		var ballot = ballots[i]
-		for(var candidate in ballot){
-			tallies[ballot[candidate]][candidate] += 1;
-		}
-	}
-
-	// Return it.
-	return tallies;
-
 }
 
 var _countWinner = function(tally){
