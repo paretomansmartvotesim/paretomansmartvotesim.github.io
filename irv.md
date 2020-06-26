@@ -1,7 +1,7 @@
 ---
 layout: page-3
 title: Instant Runoff Voting
-description: An Interactive Guide to IRV (the Single-Winner kind of Ranked Choice Voting RCV)
+description: An Interactive Guide to IRV (the Single-Winner form of Ranked Choice Voting RCV)
 byline: 'by Paretoman, June 2020'
 ---
 {% include letters.html %}
@@ -20,7 +20,7 @@ This is in contrast to what we have now with **single choice voting**, where
 
 In an ideal world, like-minded people would gather together to work as a group to accomplish goals that are larger than themselves.  The higher the goal, the bigger and broader the group needs to be.
 
-We can get closer to this ideal if we use Ranked Choice Voting because this voting method allows candidates to ally and work together as a team.  This happened in an actual election for mayor in 2018 where two candidates came together to support each other against a third.  The campaign not only got the strength of both candidates, but because the ballots were Ranked Choice ballots, it got the strength of all their combined voters.  This happens in any system which avoids vote-splitting.  In ranked-choice voting, in approval voting, in STAR voting, in score voting, and in pairwise ranked condorcet voting, there is a spirit of cooperation.  Candidates see each other as assets to help reach out to new voters rather than liabilities that take their voters away.
+We can get closer to this ideal if we use Ranked Choice Voting because this voting method allows candidates to ally and work together as a team.  This happened in an actual election for mayor in 2018 where two candidates came together to support each other against a third.  The campaign not only got the strength of both candidates, but because the ballots were Ranked Choice ballots, it got the strength of all their combined voters.  This happens in any system which avoids vote-splitting.  In Ranked Choice Voting, in approval voting, in STAR voting, in score voting, and in pairwise ranked condorcet voting, there is a spirit of cooperation.  Candidates see each other as assets to help reach out to new voters rather than liabilities that take their voters away.
 
 So.. what is Ranked Choice Voting and how does it work?
 
@@ -70,11 +70,11 @@ Around the world, IRV has been called by various names: the Alternative Vote (UK
 
 By being able to express more on a Ranked Choice ballot, voters no longer face a common dilemma.  The dilemma happens when you have to decide, "Am I going to vote for my favorite?" or "Am I going to show support where it would count in determining the winner of the election?" Honestly, the voter would like to support their favorite candidate and send a message of strength with all the other supporters that "this candidate represents us the best and deserves recognition".
 
-{% capture cap6 %}Same example as above. You don't have to vote strategically to support {{ B }}.  You can support {{ A }} over {{ B }} and {{ B }} over {{ C }}. There is no benefit to switching from O=zero strategy to F=frontrunner strategy.{% endcapture %}
+{% capture cap6 %}Same example as above. You don't have to vote strategically to support {{ B }}.  You can support {{ A }} over {{ B }} and {{ B }} over {{ C }}. There is no benefit to switching from H=honesty to F=frontrunner strategy.{% endcapture %}
 
 {% include sim.html id="irv_not_wasted_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRO05EMQy8S2oX8Td57xiI7mmLRWzFCihoEOLuOJ5iESuUYuKMPR47X623_Thm0CYnOjg6sfR18yDe5ulEjVcGhxBbJDOVlNe7tr1Ts7YbNa97ZKbQ3cnckUy2ov73JDeTu3svZvuX4V4NeXmbKxbE8MQGgCsOQHrgtMrZTxNSnKlJL_-SQpIgAMiIIcWrQCAjA9FEtFWB9nLKaytchMKQKngoaSodTIzEAAU9xaxc27KbnDF2sK5yu2ptuhKs6u23tEW1s4EfglXDwI7NOWw6BnbYdNh0B2BgH-CwNsfA0QFcmYFhA2sLL5-aRgISAQexFQw4GKgdAlAAfu7pfL2-fTx-vl_a3h7Ory-X5_b9A5Rvw6asAgAA)" title = "RCV: Less Spoiler Dilemma"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DMRD8F9dbeJ_25TMQ3SlFEKmIgIIGIfh21juKgkDoirF31uOZ9X203g77PoM2OdLO0Ymlr5UH8TaPR2q8OjiE2CKZqaS86toOnZq1Q_uyRs1rG9mc3EhIaeq_v-Rmcn_qxWz_MtxLnZeXSTFWSVCCDTYAXHAA0gZbYl6pCanP1CS1siipJQkCgIwYWrwOCGRkYDex2-qA9jLLaxBchMKQKngoaSrtTIzGAAU9RVymnHyzm5wxxrCWclum7C5osDpvP6Ut6jobeBRYNQR2DM9h0xHYYdNh0x2AwD7AYWyOwNEBXJ2BsIGxhZdPTSMBiYCD2AoGHAycHQJQAF5u4OXG9QcaIOd1RqRkq45IswMQacLMhJlpZXQ6ADN_OF0uL2_376_n_F_vTs9P58f2-Q3G8My5_gIAAA)" title = "RCV: Less Spoiler Dilemma"
 
 caption = cap6
 
@@ -82,11 +82,11 @@ comment = "slider showing strategy of voters. show a single voter, too.  Show ch
 
 This dilemma is familiar to anyone who has voted in a single-choice voting eleciton.  (More formally, this kind of choose-only-one voting is called plurality or First Past the Post, FPTP).
 
-{% capture cap9 %}Do I waste my vote on my favorite {{ A }} or do I support the more viable {{ B }}?  Change from O=zero strategy, to F=frontrunner strategy to get a better result.{% endcapture %}
+{% capture cap9 %}Do I waste my vote on my favorite {{ A }} or do I support the more viable {{ B }}?  Change from H=honesty, to F=frontrunner strategy to get a better result.{% endcapture %}
 
 {% include sim.html id="wasted_vote_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sVlmTJ3n1FinTLFhe4IrCQEC7FEfL3yJrijhyHwWN7pNFI_im1rNs2nBbZaWOvxFLnyZx4GftOhWcEuxA3D2YoKc93LWul0nK33D0ihR5WxPZgohTV_yu4EdzDezLLU4ZrFuTpbcy74A5PDFMMV-yA8MAtMOppQIgzFQmheJQQkgABQEYaQiwTBDLScRu4LZmgNZ3ynAonoTCkCh5KGkobEyPQQUFP0SvntNpNrjFmMI9yO2pOOgNa5rd76eZZrnX8EKw2NGyYnMGmoWGDTYNNMwAatg4OYzM07BXAGelo1jE2t_SpYcQh4XDgS0KHg47cLgAF4OfeTsfxcXm9fp7LWl6O76_T8X65lt8_CondrK8CAAA)" title = "The Single-Choice Dilemma"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy0oEMRD8l5z7kH4mM1_hwdswhxU8CAOKrIdF9Nu3k2JZUWQOlXR1KlWd-Sy1rNvWgxbZaeOoxFLHyoN46ftOhUcHhxBbJNOVlEddy1qpWFnLdy1UfG4jm5NrCSlN9feXXE_uT30yy78M16nOw0unaKMkKMEGGwAuOABpgy0xr9SE1GcqklpZlNSSBAFARgwtPg8IZKRh17Fb5gGt0yyPQfAkFIZUwUNJU2ljYjQGKOgp4jLl5Ivd5YwxhrGU-zJlN0GDzfP2U9piXmcNjwKrhsCO4TlsOgI7bDpsugMQ2Bs4jM0ROCqAZ2cgbGBs4dOnppGARMBBLBMaHDScbQJQAF6u4eXa7QdqIPttRqRko45IvQIQqcNMh5lu02h3AGb-dDqO1_Pj5e05_9eH4-P9dLycL-XrCt84MXMBAwAA)" title = "The Single-Choice Dilemma"
 
 caption = cap9
 
@@ -94,31 +94,29 @@ comment = "slider showing strategy of voters. Maybe show a single voter, too.  S
 
 ## Electability Polling
 
-Still, there will be tough situations where if there are a large number of candidates that are all doing well, then it may be up to the voter to vote strategically and vote for a more electable candidate.  The voter should rely on head-to-head polling information to see who would win the final round.  This is the same kind of problem that is faced in the primaries.  The nice part is that this is handled in a single stage of voting. There are other ways to handle this electability problem.  Some voting systems can even handle it without voters having to rely on polls and you can read about that on the page about [finding common ground](http://./commonground.html).
+Still, there will be tough situations where if there are a large number of candidates that are all doing well.  Then it may be up to the voter to vote strategically and vote for a more electable candidate.  The voter should rely on head-to-head polling information to see who would win the final round.  This is the same kind of problem that is faced in the primaries.  The nice part is that this is handled in a single stage of voting. There are other ways to handle this electability problem.  Some voting systems can even handle it without voters having to rely on polls and you can read about that on the page about [finding common ground](http://./commonground.html).
 
 {% include sim.html id="tough_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qp4lce-xmIbrXFIa7iBBQ0CPHv2B5tASeUYsY7zmTs_SqtbPu-ZiVeR93Jxsmm1TWCLP805DhqoegllUrCUUvZWi1aNq3Fknfv4Hp3vHe44o_V9ve4Nl27-57K-lehlg9SZJpRM2pkIgUgFXWAZyCPSjMTk5tTLdyyYjdiBwbAhhUtbiMOsOGBaqJaeUFaJqXYCqUgcBIBIJC40041T7R2iHAUTEu-MXFR0zIInYRPIrHnIJo39bet9oytA_8HQRXjGvZmCGkIaQhpGNcMgHFtQJv5kmHc3gCUnR2771hatxwjRuiw6EjQV8JAgoG7gwECwJqeLrfb28fj5_u1bOXh8vpyfS7fP9OVrU2sAgAA)" title = "A Tough Situation Solved by Strategy"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4tiOk_sMRLfa4hBXcQIKGoTg28_xaIUAoS3Gr0xmnP0otZy2bQ7iNnfa2PyIhtH0Fcwouew7FV6zrEIsbeVSTpWKllP50kLFMu0xFD0PCHKqv7_ojej9qWdn_tvhmuy8NAzqvkoNJchgBUAFd0DIYA2MKxcEP1NpNbMWXC2gAUDTFCNBIwGgaY5sIJt5QGqK5bUIzoaASQQAQRJMG1N-a7SjCUaBYaZGEk1NyhXwEbQjCNKtrUDzpP6k1Z6y1fEkEKqwa1idQaRBpEnuwGDXDAC75hgZeZPBbq8AzsmO3XcsrVvaWBY6KDoU9JngUOA46w0gAKzJ8W5-_D6O5vjeD-mqw9KoALzggKWBvQ8FGAD7fjhfry9v9--vl_hb787PT5fH8nkDZGJzDf4CAAA)" title = "A Tough Situation Solved by Strategy"
 
 caption = "Strategic voting can help turn a tough situation into a successful election when there are useful head-to-head polls."
 
 comment = "Silver lining.  So, maybe show an option button to turn on or off strategic voting." %}
 
-This is an improvement over single-choice voting.  The polls are much more useful since rankings are given and any pair of candidates can be compared head-to-head, so voters are able to strategize better.  Attempting the same strategy with FPTP can turn a small lead in the polls to a big lead at the ballot box.
+This is an improvement over single-choice voting.  The polls are much more useful since rankings are given and any pair of candidates can be compared head-to-head, so voters are able to strategize better.  Attempting the same strategy with FPTP and FPTP polls can turn a small lead in the polls to a big lead at the ballot box.
 
 {% capture cap18 %}{{ C }} loses even though he's in the middle because he never got good poll numbers in FPTP polls.{% endcapture %}
 
 {% include sim.html id="fptp_bad_polls_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ631FinTLFhdIEVhICJfiCPl7JA1bXI5g8Eg78mik_S6trNs2l0o897qRjjNatM4RwfRPQ_a9Fopa6lJJOHIpa6ul5615m1dwfTheO5zxZrX9Pc4tzj18T2b-y1DLhhSelsgZOTwRTBFckQHcA3VH7xfg4lQLt8zYhdiBAZDhjhKXEQfI8EC2IJv5QFo6pdgKJSFQEgHAkLjSRjVPlBpIKAqmJd-YONlTMgI6Az4DiT1H0PNlv5ftlrb7wP-B0Y5xFXtTmFSYVJhUjKsKwLg6wC3ZSTGuNQBlpWH3hqWZ5hgxgkHC4MBmwoCDgbeDAQLAml4ux_F-fb59vJa1PB1fn5fj7XorP7_wC763rwIAAA)" title = "FPTP: Tough to Strategize"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuOk_sKCrrVFYdEgbQSCB3FCcG343i0QoDQFuNXJjPOvpdaTts2B7HMM21sfkTDaPoKZpRcz2cqvGa5KbHKyrWcKpVWTuWzFiqWaY-h6HlAkFP9_UVvRO9PPTvz3w7XZOelYVD3VRKUIIMbACq4A0IGt8C4ckHwMxWpmUlwSYAAQCMNI0GjAaARRzaQzTygNcXyWgRnQ8GkCoAgDaaNKb812tEEo8Iwk5BGsyXlCvgI5AiCdJMVtDzZftK2nrKb40kgtMGuYXUGkQaRBpEGu2YA2DVHb-RNBru9AjgnO3bfsbRuaWNZ6KDoUNBngkOB46wLQAFYk-Pd_Ph9HM3xvR9qqw5LowLwggOWBiyNBjAA9v1w2ffn6_3t5TH-1rv97fWyP11v5eMLMekMPQEDAAA)" title = "FPTP: Tough to Strategize"
 
 caption = cap18
 
 comment = "C loses in the middle" %}
 
-It is very important that head-to-head polling is reported, since the information is available in a ranked poll, and without it, the polls are not that much better than FPTP polls.
-
-Only one faces the final round.
+It is very important that head-to-head polling is reported because the final round is a head-to-head match.  This information is available in a ranked poll, but without it, the polls are not that much better than FPTP polls.
 
 ## Sp***er
 
@@ -132,7 +130,7 @@ For new candidates who don't have many supporters yet, the barrier to entry woul
 
 {% include sim.html id="standard_spoiler_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXOCKwEJCuBRHyL9H1uQg5DgWPJJHGo-0X6WVddvGUonHXjda5Ddi8soy9r0WmiWkwQjPXMraatE8LU-PCq53X9T2YIKu7f8X3BLc3X0y4yFDLR-k6WmmjBSWCJ4IpsgBYYE0MJ6TgNCmWjh04pJDhwMYABlWlFg2MGS4I1uQjWyQlkZpLoWSEBgSAQ9DEkobVUKhg4KeYFTKZWnKzYBuAd8CmSuegWaf_pVUT8Pa8WNgUTGoYWEGe4ZBDfYMg5oBMKh1cFiXYVBvAMpKx5COdbnlCBJGHBIOBz4SOhx09HYGCAALejkdx9vl-fp-Lmt5Oj4_Tsfr5Vq-fwAajgagnwIAAA)" title = "Accusation of Spoiler"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvUrGQBB8l6uvuP29S57Cwi6k-AQLIaDIZ_Eh-uzu7RgQRVLM3s7eZGaT99LKum3LqMTLXjca8l0xeWVZ9r0WmiOkwQjPs5S11aJlLZ-t1GJ59BgKrgdEXdvvJ7gR3J9-Msu_DLVUp-nB-2wwGjBBCoAHckCYIA2MF0pAqFMtHErR5FDiAAZAhhUjlhcYMtxxGjgteUFaWqW5BkpCYEgEPAxJKG1UCYMOCnqCsFQ5KE25WdBZ8FmE4JYzmvf0p6R6GtaOTwGLiqCGlRnsGYIa7BmCmgEQ1Do4rMsQ1BuActIR0rEut4wgYcQh4XDgS0KHg467nQECwII6vlg_f5sOcpy7qVJ19hFpNAAiDZgZMDM0jQ4DYNcPl-N4vt7fXh7jL7073l4vx9P1Vj6-AIMFl_nwAgAA)" title = "Accusation of Spoiler"
 
 caption = cap7
 
