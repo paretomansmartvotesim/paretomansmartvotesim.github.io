@@ -2292,6 +2292,8 @@ function DistrictManager(model) {
 		// put candidate into correct party
 		if (model.partyRule == 'leftright') {
 			c.iParty = ( c.x > model.size * .5 ) ? 1 : 0
+		} else if (model.district[c.iDistrict].parties.length == 1){
+			c.iParty = 0
 		} else {
 			var min = Infinity
 			for ( var j = 0; j < model.voterGroups.length; j++){
