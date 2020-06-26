@@ -3218,52 +3218,65 @@ function _solvePhragmenMax(b,seats) {
 	var con = {}
 	var va = {}
 	var ints = {}
-	
+
+	var kset = []
 	for (var k = 0; k < nk; k++) {
-		con['xby' + k] = {"equal": 0}
-		con['x' + k] = {"max": 1}
+		kset.push(k)
+	}
+	var iset = []
+	for (var i = 0; i < ni; i++) {
+		iset.push(i)
+	}
+
+	// variables x for selection of candidates
+	for (var k of kset) {
 		va['x' + k] = {}
-		va['x' + k]["xby" + k] = 1
+	}
+
+	// candidate is either selected or not, 1 or 0
+	for (var k of kset) {
+		con['x' + k] = {"max": 1}
 		va['x' + k]['x' + k] = 1
-		va['x' + k]['winners'] = 1
 		ints['x' + k] = 1
 	}
-	for (var k = 0; k < nk; k++) {
-		for (var i = 0; i < ni ; i++) {
-			// con["y" + i + "_" + k] =  {"min": 0}
+
+	// n winners
+	con["winners"] = {"equal": nw}
+	for (var k of kset) {
+		va['x' + k]['winners'] = 1
+	}
+	
+	// variables for representation assignment
+	for (var k of kset) {
+		for (var i of iset) {
 			va["y" + i + "_" + k] = {}
-
-			va["y" + i + "_" + k]["zoy" + i] = -1
-			if (lb) va["y" + i + "_" + k]["woy" + i] = -1
-			va["y" + i + "_" + k]["xby" + k] = -b[i][k] * .2
-			
-			// va["y" + i + "_" + k]["zoy" + i] = -b[i][k]
-			// va["y" + i + "_" + k]["xby" + k] = -1
-
-			
-			// va["y" + i + "_" + k]["y" + i + "_" + k] = 1
+			// con["y" + i + "_" + k] =  {"min": 0} 		// no negative assignment allowed
+			// va["y" + i + "_" + k]["y" + i + "_" + k] = 1 // no negative assignment allowed
 		}
 	}
+
+	// support must be the same for all winning candidates
+	for (var k of kset) {
+		con['xby' + k] = {"equal": 0}
+		va['x' + k]["xby" + k] = 1
+		for (var i of iset) {
+			va["y" + i + "_" + k]["xby" + k] = -b[i][k] * .2
+			// va["y" + i + "_" + k]["xby" + k] = -1 // or.. same assignment level for all winning candidates
+		}
+	}
+
+	// find upper bound of assignment level for voters
 	va["z"] = {}
-	for (var i = 0; i < ni ; i++) {
+	for (var i of iset) {
 		con["zoy" + i] = {"min": 0},
 		va["z"]["zoy" + i] = 1
-	}
-	if (lb) {
-		va["w"] = {}
-		for (var i = 0; i < ni ; i++) {
-			con["woy" + i] = {"max": 0},
-			va["w"]["woy" + i] = 1
+		for (var k of kset) {
+			va["y" + i + "_" + k]["zoy" + i] = -1
+			// va["y" + i + "_" + k]["zoy" + i] = -b[i][k] // or.. find ub of support level
 		}
-		va["d"] = {}
-		con["dzw"] = {"equal": 0}
-		va["z"]["dzw"] = 1
-		va["d"]["dzw"] = -1
-		va["w"]["dzw"] = -1
 	}
-	con["winners"] = {"equal": nw}
 
-
+	// minimize highest assignment level
 	var solver = window.solver,
 	results,
 	model = {
@@ -3277,7 +3290,26 @@ function _solvePhragmenMax(b,seats) {
 		}
 	};
 
-	if (lb) model.optimize = "d"
+	// put lower bound on assignment level
+	if (lb) {
+		va["w"] = {}
+		for (var i of iset) {
+			con["woy" + i] = {"max": 0},
+			va["w"]["woy" + i] = 1
+			for (var k of kset) {
+				va["y" + i + "_" + k]["woy" + i] = -1
+			}
+		}
+
+		// minimize difference between upper and lower bounds
+		va["d"] = {}
+		con["dzw"] = {"equal": 0}
+		va["z"]["dzw"] = 1
+		va["d"]["dzw"] = -1
+		va["w"]["dzw"] = -1
+		
+		model.optimize = "d"
+	}
 
 	console.log(model)
 	results = solver.Solve(model);
