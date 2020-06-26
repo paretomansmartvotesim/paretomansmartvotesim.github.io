@@ -3136,6 +3136,202 @@ Election.quotaScore = function(district, model, options){
 	return result
 }
 
+
+Election.phragmenMax = function(district, model, options){
+
+	options = _electionDefaults(options)
+	var polltext = _beginElection(district,model,options,"score")
+	let cans = district.stages[model.stage].candidates
+
+	// Tally the approvals & get winner!
+	var ballots = model.voterSet.getBallotsDistrict(district)
+
+	var b = _getBallotsAsB(ballots, cans)
+
+	var phragmenResult = _solvePhragmenMax(b,model.seats)
+
+	var winners = _getWinnersFromPhragmenResult(phragmenResult,cans)
+
+	var maxscore = 5
+
+	// var winners = _countWinner(tally);
+	var result = _result(winners,model)
+	var color = result.color
+
+	if (0 && options.sidebar) {
+
+		// Caption
+		var winner = winners[0];
+		var text = "";
+		text += "<span class='small'>";
+		if ("Auto" == model.autoPoll) text += polltext;
+		text += "<b>score as % of max possible: </b><br>";
+		for(var i=0; i<cans.length; i++){
+			var c = cans[i].id;
+			text += model.icon(c)+"'s score: "+_percentFormat(district, tally[c] / maxscore)+"<br>";
+		}
+		if(!winner | winners.length>=2){
+			// NO WINNER?! OR TIE?!?!
+			text += _tietext(model,winners);
+			// text = "<b>TIE</b> <br> <br>" + text;
+		} else {
+			text += "<br>";
+			text += model.icon(winner)+" has the highest score, so...<br>";
+			text += "</span>";
+			text += "<br>";
+			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;
+		}
+
+		result.text = text;
+	}
+	
+	if (model.doTop2) var theTop2 = _sortTally(tally).slice(0,2)
+	if (model.doTop2) result.theTop2 = theTop2
+	return result;
+};
+
+
+function _getBallotsAsB(ballots,cans) {
+	var b = []
+	for(var i = 0; i < ballots.length; i++ ){
+		var ballot = ballots[i]
+		b[i] = []
+		for(var k = 0; k < cans.length; k++){
+			var cid = cans[k].id
+			b[i][k] = ballot[cid]
+		}
+	}
+	return b
+}
+
+function _solvePhragmenMax(b,seats) {
+
+	var lb = true
+
+	var nk = b[0].length
+	var ni = b.length
+	var nw = seats
+
+	var con = {}
+	var va = {}
+	var ints = {}
+	
+	for (var k = 0; k < nk; k++) {
+		con['xby' + k] = {"equal": 0}
+		con['x' + k] = {"max": 1}
+		va['x' + k] = {}
+		va['x' + k]["xby" + k] = 1
+		va['x' + k]['x' + k] = 1
+		va['x' + k]['winners'] = 1
+		ints['x' + k] = 1
+	}
+	for (var k = 0; k < nk; k++) {
+		for (var i = 0; i < ni ; i++) {
+			// con["y" + i + "_" + k] =  {"min": 0}
+			va["y" + i + "_" + k] = {}
+
+			va["y" + i + "_" + k]["zoy" + i] = -1
+			if (lb) va["y" + i + "_" + k]["woy" + i] = -1
+			va["y" + i + "_" + k]["xby" + k] = -b[i][k] * .2
+			
+			// va["y" + i + "_" + k]["zoy" + i] = -b[i][k]
+			// va["y" + i + "_" + k]["xby" + k] = -1
+
+			
+			// va["y" + i + "_" + k]["y" + i + "_" + k] = 1
+		}
+	}
+	va["z"] = {}
+	for (var i = 0; i < ni ; i++) {
+		con["zoy" + i] = {"min": 0},
+		va["z"]["zoy" + i] = 1
+	}
+	if (lb) {
+		va["w"] = {}
+		for (var i = 0; i < ni ; i++) {
+			con["woy" + i] = {"max": 0},
+			va["w"]["woy" + i] = 1
+		}
+		va["d"] = {}
+		con["dzw"] = {"equal": 0}
+		va["z"]["dzw"] = 1
+		va["d"]["dzw"] = -1
+		va["w"]["dzw"] = -1
+	}
+	con["winners"] = {"equal": nw}
+
+
+	var solver = window.solver,
+	results,
+	model = {
+		"optimize": "z",
+		"opType": "min",
+		"constraints": con,
+		"variables": va,
+		"ints": ints,
+		"options": {
+			"tolerance": 0.05
+		}
+	};
+
+	if (lb) model.optimize = "d"
+
+	console.log(model)
+	results = solver.Solve(model);
+	console.log(results)
+	var canResult = []
+	for (var k = 0; k < nk; k++) {
+		canResult[k] = results['x' + k]
+	}
+
+	var phragmenResult = { results:results, canResult:canResult}
+
+	return phragmenResult
+}
+
+// for reference regarding above
+// model = {
+//   "optimize": "z",
+//   "opType": "min",
+//   "constraints": {
+// 	  "zoyI": {"min": 0},
+// 	  "xbyK": {"equal": 0},
+// 	  "winners": {"equal": 1},
+// 	  "xK": {"max": 1},
+// 	  // "yIK": {"max": 1},
+// 	  "yIK": {"min": 0},
+//   },
+//   "variables": {
+// 	  "z": {
+// 		  "zoyI": 1,
+// 	  },
+// 	  "yIK": {
+// 		  "zoyI": -1,
+// 		  "xbyK": -b11,
+// 	  },
+// 	  "xK": {
+// 		  "xbyK": 1,
+// 		  // "xI": 1,
+// 		  "winners":1,
+// 	  },
+//   },
+//   "ints": {
+// 	  "xK": 1,
+//   }
+// };
+
+
+function _getWinnersFromPhragmenResult(phragmenResult,cans) {
+	var winners = []
+	for (var k = 0; k < cans.length; k++) {
+		if (phragmenResult.canResult[k] == 1) {
+			winners.push(cans[k].id)
+		}
+	}
+	return winners
+} 
+
 Election.toptwo = function(district, model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 
 	options = _electionDefaults(options)
