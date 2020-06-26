@@ -3146,6 +3146,8 @@ Election.phragmenMax = function(district, model, options){
 	// Tally the approvals & get winner!
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
+	if (cans.length == 0 || ballots.length == 0) return _result([],model)
+
 	var b = _getBallotsAsB(ballots, cans)
 
 	var phragmenResult = _solvePhragmenMax(b,model.seats)
