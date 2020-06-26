@@ -2621,7 +2621,9 @@ function VoterSet(model) {
 		return vs
 	}
 	
-	self.getVoterArray = function() {
+	self.getDistrictVoterArray = function(district) {
+		// only for voters of a district
+
 		// returns an array of all the voters and their distinguishing info
 	
 		var vs = []
@@ -2641,7 +2643,12 @@ function VoterSet(model) {
 				for (var m = 0; m < model.candidates.length; m++) {
 					v.b[m] = 0 // zero out all the counts
 				}
-				
+
+				if (v.iDistrict !== district.i) { // the only difference from the regular function
+					// vs.push(v)
+					continue
+				}
+
 				if (model.ballotType == "Approval") { // not yet fully functional TODO
 					
 					var ballot = ballots[k].approved
@@ -2674,6 +2681,17 @@ function VoterSet(model) {
 			}
 		}
 		return vs
+	}
+
+	self.getVoterArray = function() {
+		// returns an array of all the voters and their distinguishing info
+		
+		var all = []
+		for (var district of model.district) {
+			var some = self.getDistrictVoterArray(district)
+			all = all.concat(some)
+		}
+		return all
 	}
 
 	self.getArrayAttr = function(a) {
