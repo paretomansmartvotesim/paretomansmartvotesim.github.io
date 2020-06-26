@@ -2057,7 +2057,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.configure()
             //_objF(ui.menu,"configure")  // TODO: do I need this?
             ui.strategyOrganizer.configure()
-            ui.menu.secondStrategy.configure()
             ui.menu.spread_factor_voters.configure()
             // INIT
             model.initMODEL()
@@ -2190,7 +2189,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             ui.menu.nVoterGroups.configure() // same settings in this other button
             ui.strategyOrganizer.configure()
-            ui.menu.secondStrategy.configure()
             ui.menu.spread_factor_voters.configure()
             // INIT
             model.initMODEL()
