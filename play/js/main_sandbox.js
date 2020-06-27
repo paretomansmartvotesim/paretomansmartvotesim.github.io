@@ -4889,7 +4889,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.configure = function() {
             showMenuItemsIf("divDoTextBallots", config.doTextBallots)
             model.doTextBallots = config.doTextBallots
-            ui.menu.textBallotInput.choose.dom.hidden = ( ! model.doTextBallots )
         }
         self.select = function() {
             self.choose.highlight("value", config.doTextBallots);
