@@ -4310,10 +4310,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
         };
         self.configure = function() {
             for (var e of self.list) {
-                ui.m2.menuNameDivs[e.value][0].hidden = true
+                var name = e.value
+                showMenuItemsIf( name, name == config.stepMenu)
             }
-            // one on
-            ui.m2.menuNameDivs[config.stepMenu][0].hidden = false
         }
         self.choose = new ButtonGroup({
             label: "Steps:", // Sub Menu
