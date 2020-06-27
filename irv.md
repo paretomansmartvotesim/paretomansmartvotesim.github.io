@@ -130,7 +130,7 @@ For new candidates who don't have many supporters yet, the barrier to entry woul
 
 {% include sim.html id="standard_spoiler_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvUrGQBB8l6uvuP29S57Cwi6k-AQLIaDIZ_Eh-uzu7RgQRVLM3s7eZGaT99LKum3LqMTLXjca8l0xeWVZ9r0WmiOkwQjPs5S11aJlLZ-t1GJ59BgKrgdEXdvvJ7gR3J9-Msu_DLVUp-nB-2wwGjBBCoAHckCYIA2MF0pAqFMtHErR5FDiAAZAhhUjlhcYMtxxGjgteUFaWqW5BkpCYEgEPAxJKG1UCYMOCnqCsFQ5KE25WdBZ8FmE4JYzmvf0p6R6GtaOTwGLiqCGlRnsGYIa7BmCmgEQ1Do4rMsQ1BuActIR0rEut4wgYcQh4XDgS0KHg467nQECwII6vlg_f5sOcpy7qVJ19hFpNAAiDZgZMDM0jQ4DYNcPl-N4vt7fXh7jL7073l4vx9P1Vj6-AIMFl_nwAgAA)" title = "Accusation of Spoiler"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvUoGMRB8l9Qpsr_J3VNY2B1XfIKFcKDIZ_Eh-uxudjwQRa6YZGczN7PJe2ll3bZlVOJlrxsN-V4xeWVZ9r0Wmi2kwQjPvZS11aJlLZ-t1GK59WgKrgeEZm2_v-BGcH_qySz_MtRSnaYH77PAKMAEKQAeyAFhgjQwfigBoU61cChFkUOJAxgAGVa0WB5gyHDHbmC35AFpaZXmGCgJgSER8DAkobRRJTQ6KOgJwlLloDTl5oLOBZ-LENyyR_Oc_pRUT8PacRWwqAhqGJnBniGowZ4hqBkAQa2Dw7gMQb0BKDsdIR3jcssIEkYcEg4HviR0OOg42xkgAAyo48b6-Ww6yHHOpkrVWUek0QCINGBmwMzQNDoMgFk_XI7j-Xp_e3mMV3p3vL1ejqfrrXx8AQl2JQHwAgAA)" title = "Accusation of Spoiler"
 
 caption = cap7
 
