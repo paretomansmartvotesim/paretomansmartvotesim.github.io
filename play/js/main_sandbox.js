@@ -5084,7 +5084,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     ui.menu.rankedVizBoundary = new function () {
-        // where to put the boundary for a candidate's region
         var self = this
         self.list = [
             {name:"atWinner",value:"atWinner",margin:4},
@@ -5160,7 +5159,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     ui.menu.doElectabilityPolls = new function () {
-        // where to put the boundary for a candidate's region
         var self = this
         self.list = [
             {name:"Yes",value:true,margin:4},
@@ -5196,7 +5194,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     ui.menu.partyRule = new function () {
-        // where to put the boundary for a candidate's region
         var self = this
         self.list = [
             {name:"crowd",value:"crowd",margin:4},
@@ -5233,7 +5230,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     ui.menu.doFilterSystems = new function () {
-        // where to put the boundary for a candidate's region
         var self = this
         self.list = [
             {name:"Yes",value:true,margin:4},
@@ -5426,8 +5422,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
     }
 
-    ui.menu.doFilterStrategy = new function () {
-        // where to put the boundary for a candidate's region
+    ui.menu.doFilterStrategy = new function () { // this is actually the old way of doing things... it doesn't do anything anymore
         var self = this
         self.list = [
             {name:"Yes",value:true,margin:4},
@@ -5505,7 +5500,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
     }
 
     ui.menu.putMenuAbove = new function () {
-        // where to put the boundary for a candidate's region
         var self = this
         self.list = [
             {name:"Yes",value:true,margin:4},
@@ -5626,7 +5620,6 @@ function createMenu(ui) {
             "gearoff",
             "doFilterSystems",
             "filterSystems" ,
-            "doFilterStrategy",
             "putMenuAbove",
         ]],
         [ "main", [
@@ -5708,6 +5701,9 @@ function createMenu(ui) {
             "stepMenu",
             "menuLevel",
             "spacer",
+        ]],
+        ["obsolete", [
+            "doFilterStrategy",
         ]],
     ]
 
@@ -5851,7 +5847,6 @@ function createMenu(ui) {
                     "presetconfig",
                     "doFilterSystems",
                     "filterSystems" ,
-                    "doFilterStrategy",
                     "putMenuAbove",
                 ]],
             ]],
@@ -5869,6 +5864,9 @@ function createMenu(ui) {
             "gearoff",
             "gearicon",
         ]],
+        ["obsolete", [
+            "doFilterStrategy",
+        ]],
     ]
 
     // TODO
@@ -5885,6 +5883,7 @@ function createMenu(ui) {
     
     ui.m1.menuNameDivs["gearList"][0].hidden = true
     ui.m1.menuNameDivs["hidden"][0].hidden = true
+    ui.m1.menuNameDivs["obsolete"][0].hidden = true
 
     ui.m1.buildSubMenus()
     
@@ -5893,6 +5892,7 @@ function createMenu(ui) {
     ui.m2.assignMenu( menu2 , ui.dom.left, "basediv" )
 
     ui.m2.menuNameDivs["hidden"][0].hidden = true
+    ui.m2.menuNameDivs["obsolete"][0].hidden = true
 
     
 
