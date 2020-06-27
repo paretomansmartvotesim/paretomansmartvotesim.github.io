@@ -1664,6 +1664,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
             showMenuItemsIf("divRBVote", config.system === "RBVote")
             showMenuItemsIf("divLastTransfer", config.system === "IRV" || config.system === "STV")
             showMenuItemsIf("divDoElectabilityPolls", config.system == "+Primary")
+            showMenuItemsIf("divSeats", model.checkMultiWinner(config.system))
+
             
             model.system = config.system;
 
@@ -3353,12 +3355,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
         
         var noneShow = _showFeatures()
         _hideFeatures()
-
-        // special config for "seats"
-        var notMultiWinnerSystem = ! ( config.system == "QuotaApproval"  || config.system == "QuotaScore" || config.system == "RRV" ||  config.system == "RAV" ||  config.system == "STV" || config.system == "QuotaMinimax")
-        if (notMultiWinnerSystem) {
-            ui.menu.seats.choose.dom.hidden = true
-        }
 
         if (noneShow) {
             ui.dom.left.id = "noClass"
@@ -5641,7 +5637,9 @@ function createMenu(ui) {
             ]],
             "dimensions",
             "nDistricts",
-            "seats",
+            ["divSeats", [
+                "seats",
+            ]],
             "nVoterGroups",
             [ "divXVoterGroups", [
                 "xVoterGroups",
@@ -5767,7 +5765,9 @@ function createMenu(ui) {
                     [ "divRBVote", [
                         "rbSystems",
                     ]],
-                    "seats",
+                    ["divSeats", [
+                        "seats",
+                    ]],
                     ["divDoElectabilityPolls", [
                         "doElectabilityPolls",
                     ]],

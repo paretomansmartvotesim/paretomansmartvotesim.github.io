@@ -715,8 +715,8 @@ function Model(idModel){
 		return ! skipthis
 	}
 	
-	self.checkMultiWinner = function() {
-		return (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV" || self.system == "QuotaMinimax" || self.system == "PhragmenMax") 
+	self.checkMultiWinner = function(system) {
+		return (system == "QuotaApproval"  || system == "QuotaScore" || system == "RRV" ||  system == "RAV" ||  system == "STV" || system == "QuotaMinimax" || system == "PhragmenMax") 
 	}
 
 	self.updateVC = function() {
@@ -2125,7 +2125,7 @@ function Arena(arenaName, model) {
 
 				// check how many winners there should be
 				let winnersAllowed = 1
-				if (model.checkMultiWinner()) {
+				if (model.checkMultiWinner(model.system)) {
 					winnersAllowed = model.seats
 				}
 
