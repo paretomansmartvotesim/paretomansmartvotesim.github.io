@@ -2542,6 +2542,16 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "pair":"pairSecondStrategy",
             "score":"scoreSecondStrategy",
         }
+        self.divMenuNameFirst = {
+            "choice":"divChoiceFirstStrategy",
+            "pair":"divPairFirstStrategy",
+            "score":"divScoreFirstStrategy",
+        }
+        self.divMenuNameSecond = {
+            "choice":"divChoiceSecondStrategy",
+            "pair":"divPairSecondStrategy",
+            "score":"divScoreSecondStrategy",
+        }
         self.decodeList = {
             0:"zero strategy. judge on an absolute scale.",
             1:"normalize",
@@ -2594,25 +2604,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.showOnlyStrategyForTypeOfSystem = function() {
 
             var theType = self.stratBySys[model.system]
-            var menuNameFirst = self.menuNameFirst
-            var menuNameSecond = self.menuNameSecond
-    
             var types = self.types
     
             // show only the one that applies
             for (var t of types) {
-                m = menuNameFirst[t]
-                if (t == theType) {
-                    ui.menu[m].choose.dom.hidden = false
-                } else {   
-                    ui.menu[m].choose.dom.hidden = true
-                }
-                m = menuNameSecond[t]
-                if (t == theType) {
-                    ui.menu[m].choose.dom.hidden = false
-                } else {   
-                    ui.menu[m].choose.dom.hidden = true
-                }
+                df = self.divMenuNameFirst[t]
+                ds = self.divMenuNameSecond[t]
+                showMenuItemsIf(df, t == theType )
+                showMenuItemsIf(ds, t == theType )
             }
     
             // hide features if they are filtered out
@@ -5658,14 +5657,26 @@ function createMenu(ui) {
             ["divDoElectabilityPolls", [
                 "doElectabilityPolls",
             ]],
-            "choiceFirstStrategy",
-            "pairFirstStrategy",
-            "scoreFirstStrategy",
+            [ "divChoiceFirstStrategy", [
+                "choiceFirstStrategy",
+            ]],
+            [ "divPairFirstStrategy", [
+                "pairFirstStrategy",
+            ]],
+                [ "divScoreFirstStrategy", [
+                "scoreFirstStrategy",
+            ]],
             "doTwoStrategies",
             [ "divSecondStrategy", [
-                "choiceSecondStrategy",
-                "pairSecondStrategy",
-                "scoreSecondStrategy",
+                [ "divChoiceSecondStrategy", [
+                    "choiceSecondStrategy",
+                ]],
+                [ "divPairSecondStrategy", [
+                    "pairSecondStrategy",
+                ]],
+                    [ "divScoreSecondStrategy", [
+                    "scoreSecondStrategy",
+                ]],
                 "percentSecondStrategy",
             ]],
             // "primaries", // not doing this one, comment out
@@ -5760,14 +5771,26 @@ function createMenu(ui) {
                     ["divDoElectabilityPolls", [
                         "doElectabilityPolls",
                     ]],
-                    "choiceFirstStrategy",
-                    "pairFirstStrategy",
-                    "scoreFirstStrategy",
+                    [ "divChoiceFirstStrategy", [
+                        "choiceFirstStrategy",
+                    ]],
+                    [ "divPairFirstStrategy", [
+                        "pairFirstStrategy",
+                    ]],
+                        [ "divScoreFirstStrategy", [
+                        "scoreFirstStrategy",
+                    ]],
                     "doTwoStrategies",
                     [ "divSecondStrategy", [
-                        "choiceSecondStrategy",
-                        "pairSecondStrategy",
-                        "scoreSecondStrategy",
+                        [ "divChoiceSecondStrategy", [
+                            "choiceSecondStrategy",
+                        ]],
+                        [ "divPairSecondStrategy", [
+                            "pairSecondStrategy",
+                        ]],
+                            [ "divScoreSecondStrategy", [
+                            "scoreSecondStrategy",
+                        ]],
                         "percentSecondStrategy",
                     ]],
                     [ "divPoll", [
