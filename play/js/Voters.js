@@ -1592,11 +1592,11 @@ function _drawIRVStack(model, ctx, x, y, size, slices, totalSlices) {
 	x = x * 2
 	y = y * 2
 	size = size * 2
-	var maxscore = model.candidates.length
+	var maxscore = slices.length
 	var extraspace = .5 // how much extra space the stack at the bottom should use.  - as a fraction.
 
 	let noLastRank = true
-	if (noLastRank) {
+	if (noLastRank && slices.length !== 1) {
 		slices.pop()
 		maxscore --
 	}
@@ -1604,6 +1604,9 @@ function _drawIRVStack(model, ctx, x, y, size, slices, totalSlices) {
 	// special case looks weird
 	if (maxscore == 2) {
 		extraspace = .25
+	}
+	if (maxscore == 1) {
+		extraspace = 0
 	}
 
 	// draw top slice
@@ -2515,7 +2518,6 @@ function VoterPerson(model,voterModel) {
 		iAll: undefined,
 		iDistrict: undefined,
 		iParty: undefined,
-		ballot: undefined,
 		weight: undefined,
 		// ballotType: voterModel.type,
 		// voterModel: voterModel,
