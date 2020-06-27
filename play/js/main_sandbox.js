@@ -867,27 +867,27 @@ function Config(ui, config, initialConfig) {
             }
             
             if (config.scoreFirstStrategy == undefined) {
-                config.scoreFirstStrategy = config.firstStrategy
+                config.scoreFirstStrategy = tr(s1,"Score")
             }
 
             if (config.choiceFirstStrategy == undefined) {
-                config.choiceFirstStrategy = config.firstStrategy
+                config.choiceFirstStrategy = tr(s1,"FPTP")
             }
 
             if (config.pairFirstStrategy == undefined) {
-                config.pairFirstStrategy = config.firstStrategy
+                config.pairFirstStrategy = tr(s1,"Condorcet")
             }
 
             if (config.scoreSecondStrategy == undefined) {
-                config.scoreSecondStrategy = config.secondStrategy
+                config.scoreSecondStrategy = tr(s2,"Score")
             }
 
             if (config.choiceSecondStrategy == undefined) {
-                config.choiceSecondStrategy = config.secondStrategy
+                config.choiceSecondStrategy = tr(s2,"FPTP")
             }
 
             if (config.pairSecondStrategy == undefined) {
-                config.pairSecondStrategy = config.secondStrategy
+                config.pairSecondStrategy = tr(s2,"Condorcet")
             }
 
             config.secondStrategies = []  // no longer using this
