@@ -2616,8 +2616,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 showMenuItemsIf(ds, t == theType )
             }
     
-            // hide features if they are filtered out
-            _hideFeatures()
         }
     }
     
@@ -4257,18 +4255,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
             self.configure()
         };
         self.configure = function() {
+
+            showMenuItemsIf( "advanced", config.menuLevel === "advanced" )
+
             var hideButton = ui.menu.stepMenu.choose.buttonHidden // stepMenu options
 
             if (config.menuLevel === "normal") { // hide advanced features
-                for( var dom of ui.m2.menuNameDivs["advanced"]) {
-                    dom.hidden = true
-                }
                 hideButton["ui"] = true
                 hideButton["dev"] = true // these options only have advanced features
             } else if (config.menuLevel === "advanced") {
-                for( var dom of ui.m2.menuNameDivs["advanced"]) {
-                    dom.hidden = false
-                }
                 hideButton["ui"] = false
                 hideButton["dev"] = false 
             }
@@ -5440,7 +5435,6 @@ function menu(ui,model,config,initialConfig, cConfig) {
             config.doFilterStrategy = data.value
             // CONFIGURE
             self.configure()
-            // ui.showHideStrategy()
         };
         self.configure = function() {
             return
@@ -5535,16 +5529,18 @@ function menu(ui,model,config,initialConfig, cConfig) {
     
     // helper
     function showMenuItemsIf(name,condition) {
-        if (condition) {
-            ui.m1.menuNameDivs[name][0].hidden = false
-            ui.m2.menuNameDivs[name][0].hidden = false
-        } else {
-            ui.m1.menuNameDivs[name][0].hidden = true
-            ui.m2.menuNameDivs[name][0].hidden = true
+        // show or hide all menu items with the given name
+
+        var hideIt = ! (condition === true)
+
+        for (var m of [ ui.m1, ui.m2 ]) { // both menus
+            var divs = m.menuNameDivs[name]
+            if (divs == undefined) continue
+            for (var div of divs) { // all divs
+                div.hidden = hideIt
+            }
         }
     }
-
-
 }
 
 function createMenu(ui) {
