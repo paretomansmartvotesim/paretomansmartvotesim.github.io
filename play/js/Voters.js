@@ -1478,7 +1478,7 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson) {
 	}
 	if (model.drawSliceMethod == "barChart") {
 		if (model.system == "Borda") {
-			_drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices,n);
+			_drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices, slices.length);
 		} else if (model.system == "IRV" || model.system == "STV") {
 			if (model.squareFirstChoice) {
 				_drawIRVStack(model, ctx, x, y, size, slices, totalSlices * 1/Math.max(weight,.000001));
@@ -1697,9 +1697,9 @@ function _drawVoterBarChart(model, ctx, x, y, size, slices, totalSlices, maxscor
 
 		var xaxis = _lineHorizontal(slices.length, size) // points of main spiral
 	} else {
-		var xaxis = _lineHorizontal(model.candidates.length, size) // points of main spiral
+		var xaxis = _lineHorizontal(slices.length, size) // points of main spiral
 	}
-	var sizex = size / model.candidates.length
+	var sizex = size / slices.length
 	var sizey = size / maxscore
 	var subRects = false
 	_centeredRectStroke(ctx,x,y,size,size)
