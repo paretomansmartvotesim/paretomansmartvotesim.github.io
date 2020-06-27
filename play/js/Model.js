@@ -303,7 +303,7 @@ function Model(idModel){
 	self.textBallotUpdate = function() {
 		// run an election with RBVote
 		if (self.system === "RBVote") {
-			self.result = self.election("",self,self.optionsForElection)
+			self.result = self.election(self.district[0] ,self,self.optionsForElection)
 			self.district[0].result = self.result
 			self.drawSidebar()
 		}
