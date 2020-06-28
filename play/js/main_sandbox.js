@@ -3607,10 +3607,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.colorChooser = new function () {
         var self = this
         self.list = [
-            {name:"pick and repeat", value:"pick and repeat",margin:4},
-            {name:"pick and repeat w/ offset", value:"pick and repeat w/ offset",margin:4},
-            {name:"generate all", value:"generate all",margin:4},
-            {name:"pick and generate", value:"pick and generate"}
+            {name: "pr", realname:"pick and repeat", value:"pick and repeat",margin:4},
+            {name: "pro", realname:"pick and repeat w/ offset", value:"pick and repeat w/ offset",margin:4},
+            {name: "g", realname:"generate all", value:"generate all",margin:4},
+            {name: "pg", realname:"pick and generate", value:"pick and generate"}
         ]
         self.codebook = [
             {
@@ -3643,7 +3643,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
         self.choose = new ButtonGroup({
             label: "Method of Choosing Colors:",
-            width: bw(1),
+            width: bw(4),
             data: self.list,
             onChoose: self.onChoose
         });
