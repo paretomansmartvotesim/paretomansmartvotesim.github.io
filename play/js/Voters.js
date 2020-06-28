@@ -3076,7 +3076,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		}
 	}
 	self.draw2 = function(ctx){
-		if ( model.theme != "Nicky") {
+		if ( model.voterCenterIcons == "on") {
 			_drawCenter(ctx)
 		}
 	}

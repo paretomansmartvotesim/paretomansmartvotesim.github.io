@@ -85,6 +85,7 @@ function Model(idModel){
         ballotConcept: "auto",
         roundChart: "auto",
 		voterIcons: "circle",
+		voterCenterIcons: "on",
 		candidateIconsSet: ["image","note"],
 		placeHoldDuringElection: false,
 		doPlaceHoldDuringElection: true,

@@ -84,6 +84,7 @@ function sandbox(ui){
 		model.allCan = false
 		model.doOriginal = true
 		model.ballotConcept = "off"
+		model.voterCenterIcons = "off"
 
 		// INIT
 		ui.model = model

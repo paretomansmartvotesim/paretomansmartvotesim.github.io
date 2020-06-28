@@ -542,6 +542,7 @@ function Config(ui, config, initialConfig) {
         sidebarOn: "on",
         lastTransfer: "off",
         voterIcons: "circle",
+        voterCenterIcons: "on",
         candidateIconsSet: ["image","note"],
         pairwiseMinimaps: "off",
         doTextBallots: false,
@@ -1099,6 +1100,7 @@ function Cypher(ui) {
         84:"scoreSecondStrategy",
         85:"choiceSecondStrategy",
         86:"pairSecondStrategy",
+        87:"voterCenterIcons",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3330,6 +3332,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     69: "scoreSecondStrategy",
                     70: "choiceSecondStrategy",
                     71: "pairSecondStrategy",
+                    72: "voterIcons",
                 },
             }
         ]
@@ -3902,10 +3905,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 model.useBorderColor = true
                 model.drawSliceMethod = "circlesNicky"
                 model.allCan = false
+                model.voterCenterIcons = "off"
             } else {
                 model.useBorderColor = false
                 model.drawSliceMethod = "barChart"
                 model.allCan = true
+                model.voterCenterIcons = "on"
             }
         }
         self.init_sandbox = function() {
@@ -4693,6 +4698,40 @@ function menu(ui,model,config,initialConfig, cConfig) {
         });
         self.select = function() {
             self.choose.highlight("value", config.voterIcons);
+        }
+    }
+
+    ui.menu.voterCenterIcons = new function () {
+        var self = this
+        self.list = [
+            {name:"on",value:"on",realname:"on",margin:4},
+            {name:"off",value:"off",realname:"off"},
+        ]
+        self.codebook = [ {
+            field: "voterCenterIcons",
+            decode: {
+                0:"off",
+                1:"on",
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.voterCenterIcons = data.value
+            // CONFIGURE
+            self.configure()
+            model.draw()
+        };
+        self.configure = function() {
+            model.voterCenterIcons = config.voterCenterIcons
+        }
+        self.choose = new ButtonGroup({
+            label: "Voter Center Icons:", // Sub Menu
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.voterCenterIcons);
         }
     }
 
@@ -5607,6 +5646,7 @@ function createMenu(ui) {
                 "pairwiseMinimaps",
             ]],
             "voterIcons",
+            "voterCenterIcons",
             "candidateIcons",
             "showToolbar",
             "showDescription",
@@ -5743,6 +5783,7 @@ function createMenu(ui) {
                     "voterIcons",
                 ]],
                 ["advanced", [
+                    "voterCenterIcons",
                     "colorChooser",
                     "colorSpace",
                     "behavior",
