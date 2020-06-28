@@ -45,13 +45,14 @@ How does this work? We have this information about each pair of candidates, so t
 
 The name Condorcet comes from the guy that thought it up, the Marquis de Condorcet, whose actual name is Nicholas Caritat and who is actually just from the town of Condorcet, so really it gets its name from a town in France. And actually, it maybe should be called Llull because Ramon Llull thought it up 500 years before Condorcet.
 
-**Statues of Concorcet and Llull**
+<p style="text-align: center;" ><strong>Statues of Concorcet and Llull</strong></p>
 
+<div class="picture-container">
  <img src="img\condorcet.jpg" alt="condorcet" class="picture" /> <img src="img\llull.jpg" alt="llull" class="picture" />
+</div>
+Also, when there is a Condorcet winner, I would say this is the perfect voting system because we get around Arrow’s Impossibility Theorem.  Arrow's theorem requires a set of good principles for a voting system, and when there is a Condorcet winner, all those principles are met.  The only problem is that there could be a Condorcet cycle, which we'll talk about next.
 
-Also, when there is a Condorcet winner, Arrow’s Impossibility Theorem does not apply. So I would say this is the perfect voting system.  
-
-<!--Maybe more here about Arrow's theorem-->
+<!--Maybe more here about Arrow's theorem, or link at bottom-->
 
 ## Visualizing Cycles
 

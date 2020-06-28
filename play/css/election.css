@@ -122,6 +122,10 @@ Election/Sandbox design:
     transition: all 0.1s;
 }
 
+.div-election .button-group .smaller{
+    font-size: 80%;
+}
+
 .div-election .button svg{
     font-size: 20px;
 }

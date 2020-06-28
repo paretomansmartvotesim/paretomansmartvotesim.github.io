@@ -37,7 +37,7 @@ caption = ""
 id = "election18"
 %}
 
-Compared approval to the way we vote now. Right now, you can only choose one candidate when you go to vote, and that limits you. You can only say which candidate you like best. **Try it out below.** See that your opinion is limited to one candidate.
+Compare approval to the way we vote now. Right now, you can only choose one candidate when you go to vote, and that limits you. You can only say which candidate you like best. **Try it out below.** See that your opinion is limited to one candidate.
 
 {% include sim-test.html
 title = "Choose One"
@@ -115,7 +115,7 @@ caption = ""
 id = "election25"
 %}
 
-Nice candidates dropping out is very common in the primaries.  With the way we vote now, primaries are necessary to prevent the vote-splitting we see with yellow and red. The important choices are made in the primary, and in the general, we are left with only two. A primary will pick the candidates in a complicated kind of way involving considerations of electability. **Try it out below.** The yellow candidate wins the primary vote because primary voters saw that red would lose the general election against the light (moderate) blue and orange and green split their vote. For more explanation, see the [Page on Primaries](primaries).
+Nice candidates dropping out is very common in the primaries.  With the way we vote now, primaries are necessary to prevent the vote-splitting we see with yellow and red. The important choices are made in the primary, and in the general, we are left with only two. A primary will pick the candidates in a complicated kind of way involving considerations of electability. **Try it out below.** The yellow candidate wins the primary vote because primary voters saw that red would lose the general election against the light (moderate) blue, and orange and green split their vote. For more explanation, see the [Page on Primaries](primaries).
 
 {% include sim.html
 title = "Primary Vote-Splitting"

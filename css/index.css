@@ -417,6 +417,10 @@ ul.share-buttons .sr-only {
 
 /* end card stuff */
 
+#content div.picture-container {
+	text-align: center;
+}
+
 #content img.picture {
 	display: inline-block;
 	width: 290px;
