@@ -3914,7 +3914,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.menu.colorChooser.configure()
 
             if (config.theme == "Bees") {
-                config.behavior == "bounce"
+                config.behavior = "bounce"
+                ui.menu.behavior.configure()
+            } else {
+                config.behavior = "stand"
                 ui.menu.behavior.configure()
             }
         }
