@@ -2669,7 +2669,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.strategyOrganizer.onChoose()
         };
         self.choose = new ButtonGroup({
-            label: "strategy for choice-type voter:",
+            label: "Voter Strategy <span class='smaller'>(choice-type)</span>:",
             width: bw(5),
             data: self.list,
             onChoose: self.onChoose
@@ -5453,7 +5453,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
     ui.menu.includeSystems = new function () {
         var self = this
         self.list = [
-            {name:'<span style="font-size: 80%;">choice</span>',value:"choice",realname:"choice",margin:4},
+            {name:'<span class="smaller">choice</span>',value:"choice",realname:"choice",margin:4},
             {name:"pair",value:"pair",margin:4},
             {name:"score",value:"score",margin:4},
             {name:"multi",value:"multi",margin:4},

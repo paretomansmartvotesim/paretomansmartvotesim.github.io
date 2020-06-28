@@ -1726,7 +1726,7 @@ Election.borda = function(district, model, options){
 	text += "<b>higher score is better</b><br>";
 	for(var i=0; i<cans.length; i++){
 		var c = cans[i].id;
-		text += model.icon(c)+"'s total score: "+tally[c]+" = "+_percentFormat(district, tally[c] / (numcan-1))+"%<br>";
+		text += model.icon(c)+"'s total score: "+tally[c]+" = "+_percentFormat(district, tally[c] / (numcan-1))+"<br>";
 	}
 	if(winners.length>=2){
 		// NO WINNER?! OR TIE?!?!
@@ -4178,24 +4178,24 @@ function _tietext(model,winners) {
 }
 
 function _percentFormat(district,count) {
-	var a = "" + (100*count/(district.voterPeople.length)).toFixed(0)
-	var dopadding = false
-	if (dopadding) {
-		for (var i = a.length; i < 2; i ++) {
-			a = "&nbsp;&nbsp;" + a
-		}	
-	}
-	return a
+	var f = count/(district.voterPeople.length)
+	return _textPercent(f)
 }
 
 function _primaryPercentFormat(count,total) {
-	var a = "" + (100*count/total).toFixed(0)
+	var f = count/total
+	return _textPercent(f)
+}
+
+function _textPercent(f) {
+	var a = "" + (100 * f).toFixed(0)
 	var dopadding = false
 	if (dopadding) {
 		for (var i = a.length; i < 2; i ++) {
 			a = "&nbsp;&nbsp;" + a
 		}	
 	}
+	a += "<span class='percent'>%</span>"
 	return a
 }
 
