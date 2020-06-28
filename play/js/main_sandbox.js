@@ -3867,20 +3867,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
             config.theme = data.value
             // CONFIGURE
             self.configure()
-
-            if (config.theme == "Nicky" || config.theme == "Bees") {
-                config.colorChooser = "pick and repeat"
-            } else {
-                config.colorChooser = "pick and generate"
-            }
-            ui.menu.colorChooser.configure()
+            
+            // some configurations might have updated, so update the ui selections
             ui.menu.colorChooser.select()
-
-            if (config.theme == "Bees") {
-                config.behavior == "bounce"
-                ui.menu.behavior.configure()
-                ui.menu.behavior.select()
-            }
+            ui.menu.behavior.select()
 
             // INIT MODEL
 		    model.arena.initARENA()
@@ -3903,14 +3893,29 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
 		    if (config.theme == "Nicky") {
                 model.useBorderColor = true
-                model.drawSliceMethod = "circlesNicky"
+                model.drawSliceMethod = "circleNicky"
                 model.allCan = false
                 model.voterCenterIcons = "off"
+                model.showToolbar = "off"
             } else {
                 model.useBorderColor = false
                 model.drawSliceMethod = "barChart"
                 model.allCan = true
                 model.voterCenterIcons = "on"
+                model.showToolbar = "on"
+            }
+            
+            if (config.theme == "Nicky" || config.theme == "Bees") {
+                config.colorChooser = "pick and repeat"
+            } else {
+                config.colorChooser = "pick and generate"
+            }
+
+            ui.menu.colorChooser.configure()
+
+            if (config.theme == "Bees") {
+                config.behavior == "bounce"
+                ui.menu.behavior.configure()
             }
         }
         self.init_sandbox = function() {

@@ -85,7 +85,7 @@ function Model(idModel){
         ballotConcept: "auto",
         roundChart: "auto",
 		voterIcons: "circle",
-		voterCenterIcons: "on",
+		voterCenterIcons: "off",
 		candidateIconsSet: ["image","note"],
 		placeHoldDuringElection: false,
 		doPlaceHoldDuringElection: true,
@@ -93,7 +93,7 @@ function Model(idModel){
 		doTextBallots: false,
 		behavior:"stand",
 		showVoters:true,
-		showToolbar: "on",
+		showToolbar: "off",
 		rankedVizBoundary: "atWinner",
 		drawSliceMethod: "circleNicky", // "circleBunch" or "old"
 		allCan: false,
@@ -208,7 +208,7 @@ function Model(idModel){
 		return x
 	}
 	self.onDrop = function() {
-		if (self.theme != "Nicky" && self.showToolbar == "on") {
+		if (self.showToolbar == "on") {
 			if (self.arena.trashes.overTrash) {
 				self.arena.trashes.tossInTrash()
 			}
@@ -664,7 +664,7 @@ function Model(idModel){
 			self.placeHolding = true
 			return "^PlaceholderNameUpper{" + id + "}"
 			
-		} else if (self.candidateIconsSet.includes("name") && self.theme != "Nicky") {
+		} else if (self.candidateIconsSet.includes("name")) {
 			var c = self.candidatesById[id]
 			// return "<span class='letterBig' style='color:"+c.fill+";'>"+c.name.toUpperCase()+"</span>"
 			return "<span class='letterBig'>"+c.name.toUpperCase()+"</span>"
@@ -1332,7 +1332,7 @@ function Arena(arenaName, model) {
 		var doVoters = true
 		var doCandidates = true
 		
-		if (self.id == "arena" && model.theme != "Nicky" && model.showToolbar == "on") {
+		if (self.id == "arena" && model.showToolbar == "on") {
 			doControls = true
 		}
 
@@ -1692,7 +1692,7 @@ function Arena(arenaName, model) {
 		}
 
 		function drawToolbar() {
-			if (model.theme != "Nicky" && model.showToolbar == "on") {
+			if (model.showToolbar == "on") {
 				self.plusCandidate.draw(self.ctx,self)
 				self.plusOneVoter.draw(self.ctx,self)
 				self.plusVoterGroup.draw(self.ctx,self)
@@ -1875,7 +1875,7 @@ function Arena(arenaName, model) {
 
 
 		function drawExtraTrash() {
-			if (model.theme != "Nicky" && model.dimensions != "2D" && model.showToolbar == "on") {
+			if (model.dimensions != "2D" && model.showToolbar == "on") {
 				self.trashes.t[1].draw(self.ctx,self)
 			}
 		}
@@ -2107,7 +2107,7 @@ function Arena(arenaName, model) {
 		}
 			
 		function drawModify() {
-			if (model.theme != "Nicky" && model.showToolbar == "on") {
+			if (model.showToolbar == "on") {
 				self.modify.draw(self.ctx,self)
 				
 				if (self.modify.active) {

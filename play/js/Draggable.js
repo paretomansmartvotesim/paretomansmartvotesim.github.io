@@ -117,7 +117,7 @@ function DraggableManager(arena,model){
 			// open the trash can
 			if (arena.mouse.dragging) {
 				if (model.arena.mouse.dragging) {
-					if (model.theme != "Nicky") {
+					if (model.showToolbar == "on") {
 						// if we are in the main arena, then do the trash test
 						model.arena.trashes.test();
 					}

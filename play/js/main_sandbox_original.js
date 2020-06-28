@@ -80,11 +80,8 @@ function sandbox(ui){
 		model.optionsForElection = {sidebar:true}
 		model.HACK_BIG_RANGE = true;
 		model.theme = "Nicky"
-		model.drawSliceMethod = "circlesNicky"
-		model.allCan = false
 		model.doOriginal = true
 		model.ballotConcept = "off"
-		model.voterCenterIcons = "off"
 
 		// INIT
 		ui.model = model
