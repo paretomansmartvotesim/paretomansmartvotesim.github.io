@@ -126,7 +126,7 @@ function _lookupPreset(ui) {
 				customNames: "No",
 				namelist: "",
 				menuVersion: "2",
-				stepMenu: "geom",
+				stepMenu: "vote",
 				menuLevel: "normal",
 				doFeatureFilter: false,
 				yeeon: false,
