@@ -6,18 +6,16 @@
   link: primaries
 - name: Approval Voting
   link: approval
-- name: Original
-  link: original
-- name: An Even Better Ballot
-  link: newer
+- name: Condorcet Methods
+  link: condorcet
 - name: Instant Runoff Voting
   link: irv
 - name: Single Transferable Vote
   link: stv
-- name: Proportional Representation
-  link: proportional
-- name: Condorcet Methods
-  link: condorcet
+- name: Original
+  link: original
+- name: An Even Better Ballot
+  link: newer
 - name: Test Runs
   link: testRuns
 - name: Blog

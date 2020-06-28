@@ -14,19 +14,20 @@ twuser: paretoman1
 
 {% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval' img='img/winner-circle.png' %}
 
-{% include card.html title="To Build a Better Ballot" description=" - Nicky Case's original sim" url='original' img='img/split-vote.png' %}
-
-{% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer' img='img/chicken.png' %}
+{% include card.html title="Condorcet Methods" description=' - the best way to find common ground.' url='condorcet' img='img/condorcet.png' %}
 
 {% include card.html title="Instant Runoff Voting" description=" - a kinder politics with a kind of Ranked Choice Voting (RCV) for single-winner elections" url='irv' img='img/irv.png' %}
 
 {% include card.html title="The Single Transferable Vote" description=" - an introduction to proportional representation with STV, the multi-winner form of Ranked Choice Voting RCV." url='stv' img='img/stv.png' %}
 
-{% include card.html title="Proportional Representation" description=" - continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods" url='proportional' img='img/proportional.png' %}
+{% include card.html title="To Build a Better Ballot" description=" - Nicky Case's original sim" url='original' img='img/split-vote.png' %}
 
-{% include card.html title="Condorcet Methods" description=' - the best way to find common ground.' url='condorcet' img='img/condorcet.png' %}
+{% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer' img='img/chicken.png' %}
 
 {% include card.html title="Sandbox" description=' - try everything' url='sandbox/' img='img/sandbox.png' %}
+
+
+<!-- {% include card.html title="Proportional Representation" description=" - continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods" url='proportional' img='img/proportional.png' %} -->
 
 
 
