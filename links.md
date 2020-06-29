@@ -32,6 +32,7 @@ Here's some great resources for expanding your voting knowledge.  Some were refe
 
 - [Gaming the Vote](https://books.google.com/books/about/Gaming_the_Vote.html?id=_24bJHyBV6sC) - by William Poundstone 
 - [Mathematics and Democracy](https://books.google.com/books?id=SA3NqUzlZZIC) - by Steven Brams
+- [Accurate Democracy](https://accuratedemocracy.com/) - by Rob Loring - see the eBook.pdf link
 
 **Community**
 
