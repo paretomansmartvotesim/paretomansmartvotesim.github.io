@@ -28,6 +28,11 @@ Here's some great resources for expanding your voting knowledge.  Some were refe
 * [Five General Voting Pathologies: Lesser Names of Moloch](https://www.lesswrong.com/posts/4vEFX6EPpdQZfqnnS/5-general-voting-pathologies-lesser-names-of-moloch)
 * [VSE Study on Strategies](http://electionscience.github.io/vse-sim/VSE/)
 
+**Books**
+
+- [Gaming the Vote](https://books.google.com/books/about/Gaming_the_Vote.html?id=_24bJHyBV6sC) - by William Poundstone 
+- [Mathematics and Democracy](https://books.google.com/books?id=SA3NqUzlZZIC) - by Steven Brams
+
 **Community**
 
 * [EndFPTP Subreddit](https://www.reddit.com/r/EndFPTP/) - for newcomers
