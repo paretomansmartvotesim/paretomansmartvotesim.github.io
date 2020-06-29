@@ -20,5 +20,7 @@
   link: testRuns
 - name: Blog
   link: blog
+- name: Links
+  link: links
 - name: Sandbox
   link: sandbox/
