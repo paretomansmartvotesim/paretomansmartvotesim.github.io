@@ -7,14 +7,13 @@ Here's some great resources for expanding your voting knowledge.  Some were refe
 
 **Simulators**
 
+* [District](http://polytrope.com/district/) - a game about representation and redistricting.
+* [To Build a Better Ballot](https://ncase.me/ballot) - by Nicky Case - The original sim this sim is based on.
 * [Voteline](http://zesty.ca/voting/voteline/) - by Ka-Ping Yee - uses Flash.
 * [Political Sim](https://www.accuratedemocracy.com/s_sim.htm) - by [Accurate Democracy](https://www.accuratedemocracy.com/) - the earliest interactive voting simulator.  It requires some technical know-how to get going.
-* [To Build a Better Ballot](https://ncase.me/ballot) - by Nicky Case - The original sim this sim is based on.
 * [Median Voter](https://pianop.ly/voting/median) - a simple conceptual experiment with discussion of strategy and median and mean.
-
-**Calculators**
-
 * [RBVote Calculator](http://www.cs.angelo.edu/~rlegrand/rbvote/calc.html) - I copied all of his methods into this simulator under "RBVote"
+* [More Software on ElectoWiki](https://electowiki.org/wiki/Voting_links#Software)
 
 **Videos**
 
@@ -38,6 +37,7 @@ Here's some great resources for expanding your voting knowledge.  Some were refe
 
 * [EndFPTP Subreddit](https://www.reddit.com/r/EndFPTP/) - for newcomers
 * [Election Methods Mailing List](https://electorama.com/em/) - for discussion of the nitty-gritty details.
+* [Archive of EM Mailing List](http://election-methods.5485.n7.nabble.com/)
 * [ElectoWiki](https://electowiki.org/) - a wiki for election methods to accompany the EM mailing list.
 * [ElectoRama](https://wiki.electorama.com/wiki/Main_Page) - the predecessor of ElectoWiki
 
@@ -55,5 +55,7 @@ Here's some great resources for expanding your voting knowledge.  Some were refe
 
 * [Colorado Approves](https://coloradoapproves.org/) - The inspiration for the page on finding common ground came from a discussion with these guys.
 * [CES](https://www.electionscience.org/) - Center for Election Science - likes approval voting.
+* [Equal Vote](http://www.equal.vote/) - likes STAR voting.
 * [FairVote](https://www.fairvote.org/) - likes RCV, both single- and multi-winner versions.
 * [FairVote Canada](https://www.fairvote.ca/) - likes proportional representation.
+* [Electoral Reform Society](https://www.electoral-reform.org.uk/) - UK - likes proportional representation with STV.
