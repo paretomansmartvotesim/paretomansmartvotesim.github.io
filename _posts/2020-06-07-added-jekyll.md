@@ -17,6 +17,6 @@ You probably could find another tool other than jekyll that uses the liquid synt
 Now I need to know Ruby. I guess the only reason I need a Gemfile is to make sure I have the correct version of jekyll and the jekyll github plugin so that my local server will exactly show what github shows.
 
 *Links*
-[github pages on jekyll's website](https://jekyllrb.com/docs/github-pages/).  The jekyll documentation is very good.
+[github pages on jekyll's website](https://jekyllrb.com/docs/github-pages/). The jekyll documentation is very good.
 
  

@@ -30,7 +30,7 @@ There are ways to vote that beat primaries at their own game.  Specifically the
 
 Let’s back up a little here and ask what the purpose of voting systems is.  You use voting systems when you have a large group of people and have to come to a decision. This can be a referendum or a ballot initiative, or you could elect a representative to make the decision for you. 
 
-A referendum is actually pretty simple; you just say yes or no. Really, the *hard *part of the referendum is to decide what the wording is going to be for the question.  The wording is not up to you; that's up to the group that puts the initiative together or the legislators that wrote the referendum.  This group tries to consider what the voters want, and that is the hard part.  It’s part of the mechanism for the idea that you are represented.
+A referendum is actually pretty simple; you just say yes or no. Really, the *hard *part of the referendum is to decide what the wording is going to be for the question.  The wording is not up to you; that's up to the group that puts the initiative together or the legislators that wrote the referendum. This group tries to consider what the voters want, and that is the hard part. It’s part of the mechanism for the idea that you are represented.
 
 {% include sim.html title="Referendum - Your Ballot" caption="Yes or No?" id="yesno_sim" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy04DMQz8lVXOOcSPOLv9CMSBC9rdQ5F6QFpRBOVQofbbcTwCDlUVKY4z9ngm-U4l7ea5tkyV1zyzWiYd1zUn6gDJmMm455J2JSeNvcZuXsH5Znltc6Tkm-XIeBeZ7iJUYhx1RT1lpBBEUESQRK6JPLgAUo8-jj1MAbLz-CUTMg6MQcMajew04sFw2ZCNyKZokBJCqT8JmARMIggQJM40E8oMANhk-uvXThWHbq1bVf49ONks_aDRpf90Co_a8CEQp1Nc1oLgfOm6pOH58Dksy9vwcByWlByA1CrxEhWma0WA6dpQMsbcCtNWEGDY8AOGp7MahrpYA4VBk-HZG76vobdxDHvZb9vx9HR-P7jSx-3rY7-9ns7p8gN-hdYHkQIAAA)" %}
 
@@ -70,11 +70,11 @@ caption='Each candidate gets the full weight of their side against the other par
 
 comment='mouse over pairs to see support' id='pairwise_election' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8ysl1ijiOk80-ggLRoN0tDrEVpzskaBCCt2N7ihM6nVKMnbEnY-ebMs3Lojmxji0tzD1xE48GJ-5sUelqbNm2ROzFk1iJOiEabUYIzTlRpXkk0oiblZZ0c6y2G5PTzTFmusuMuwzneI7dmqcFKQxxBcASmyc2MANcDe05hxFkyZEVRmYyxQAypUZjMRkxaLjsyCZkIxokh1H2lUBJoCQCgCExpcX268dLG0goCoZlW5d9BFVI-qyVr2G5hgIxD2so1P_yFXPXjk-C4TriUrE-NWX6Xel5_1jX8-HhcliJ7BrmVVCLNagCsAaFqk7xsmINLQM4Khv-pGGZTcO5j9Yg0eCo4SM6HHX09hLwcjydLp9PX--7-Xw8nt_2V_r5A7EXqU-9AgAA)' %}
 
-So, this solves the problem of splitting votes, which is caused by limiting your vote to choose only one candidate.  The head-to-head pairwise ranked ballot achieves the goal of the primary in a better way than the primary could. It does better because each voter knows for themself, who is better for themself.  The voter knows their own preferences better than they can guess the preferences of the entire population (or watch polls).  There is no more hard part of guessing what nominees to put forward.  You're asking more from the voter, and it's information that the voter has: what their own preferences are.  
+So, this solves the problem of splitting votes, which is caused by limiting your vote to choose only one candidate. The head-to-head pairwise ranked ballot achieves the goal of the primary in a better way than the primary could. It does better because each voter knows for themself, who is better for themself.  The voter knows their own preferences better than they can guess the preferences of the entire population (or watch polls).  There is no more hard part of guessing what nominees to put forward.  You're asking more from the voter, and it's information that the voter has: what their own preferences are.  
 
 If, in a primary, the voters are not engaged and not paying attention to the head-to-head polls, then their vote can be manipulated by whatever media they are consuming. The polling data itself could even be inaccurate.  A better voting system wouldn’t ask you to find the middle from the polling data.  It would find the middle for you.
 
-Now, the voting system is smarter, and the voter also needs to get smarter.  The voter needs to do more work because now they have to consider every candidate.  With primaries, we got away with doing our civic duty pretty easily: we voted for one candidate and said, “Well I voted for that guy, that's all I need to do.”  Now it’s your duty to consider all the candidates.
+Now, the voting system is smarter, and the voter also needs to get smarter. The voter needs to do more work because now they have to consider every candidate. With primaries, we got away with doing our civic duty pretty easily: we voted for one candidate and said, “Well I voted for that guy, that's all I need to do.”  Now it’s your duty to consider all the candidates.
 
 ### A Brief Intro to the World of Voting Methods
 
@@ -82,9 +82,9 @@ Now, the voting system is smarter, and the voter also needs to get smarter.  The
 
 There are also other ways to count ranked ballots and there are other kinds of ballots that avoid vote-splitting.  Scored ballots avoid vote splitting.  A scored ballot allows you to give a rating from 0 to 5 on a candidate. A specific kind of scored ballot is an approval ballot, which allows you to rate on a very simple scale: do you approve or not?  And simply because you are no longer limited to vote for a single candidate, you can vote for that candidate without feeling like you’re splitting with other groups of voters that support other candidates.  Why would you split if you are not forced into the dilemma of choosing one?
 
-I think scored ballots aren't quite as good as pairwise because the voter has to watch the polls to decide which candidates need their vote.  This is a little more work for the voter, but in the end, it works out pretty much the same as counting by pairs.
+I think scored ballots aren't quite as good as pairwise because the voter has to watch the polls to decide which candidates need their vote. This is a little more work for the voter, but in the end, it works out pretty much the same as counting by pairs.
 
-Also, up to now, we haven't called our voting system by it's proper English name: First Past the Post (FPTP). FPTP is another name for our choose only one voting method.  Let's compare these methods in the simulation below.
+Also, up to now, we haven't called our voting system by it's proper English name: First Past the Post (FPTP). FPTP is another name for our choose only one voting method. Let's compare these methods in the simulation below.
 
 {% comment %} How do I actually show vote splitting? {% endcomment %}
 
@@ -94,7 +94,7 @@ Also, up to now, we haven't called our voting system by it's proper English name
 
 {% include sim-test.html title='More Voting Methods' caption=cap10 id='election31' %}
 
-Another method you've likely heard of if you are reading this page is Ranked Choice Voting (RCV), which is a new name (as of the past 20 years) for Instant Runoff Voting (IRV).  It is also a name that is used for Single Transferable Voting (STV), which is different than IRV, and so you have to tell from the context which method people are talking about. IRV avoids some vote splitting by using a process of elimination.  It's worth getting into on its own page.
+Another method you've likely heard of if you are reading this page is Ranked Choice Voting (RCV), which is a new name (as of the past 20 years) for Instant Runoff Voting (IRV). It is also a name that is used for Single Transferable Voting (STV), which is different than IRV, and so you have to tell from the context which method people are talking about. IRV avoids some vote splitting by using a process of elimination. It's worth getting into on its own page.
 
 Read more about:
 
@@ -104,7 +104,7 @@ Read more about:
 * [The Single Transferable Vote, STV (Multi-Winner RCV)](stv)
 * [Condorcet Methods](condorcet)
 
-This is just a brief introduction to the world of voting methods.  After you're finished with this page, see the other pages on this site for more explorable explanations of voting methods.
+This is just a brief introduction to the world of voting methods. After you're finished with this page, see the other pages on this site for more explorable explanations of voting methods.
 
 Game Theory: The Competitive Pressure that the Primary Relies on has a Flaw and Only Works in the Best Case Scenario
 --------------------------------------------------------------------------------------------------------------------
@@ -115,9 +115,9 @@ Primaries rely on competitive pressure to get good results for the voters.  If 
 
 Say we have a set of candidates in two primaries, {{ A }}{{ B }}{{ C }}{{ D }}, arranged in a line, like in the drawing below.  There are some candidates more towards the middle that would better represent all the voters: that’s {{ B }} and {{ C }}.  Ideally, in the best case scenario, {{ B }} or {{ C }} would win.   That's what we want the voting system to do.  We also want {{ B }}&{{ C }} to actually run.  We want them to not think that they will cause any problems for their party by splitting votes or in any other way. 
 
-This is kind of a game.  There's two players: the {{ A }}{{ B }} party and the {{ C }}{{ D }} party. A party takes an action by nominating a candidate.  The party is happier when their candidate wins.   They are the least happy when an extreme candidate of the other party wins.  This defines what is known in game theory as a normal form game.
+This is kind of a game. There's two players: the {{ A }}{{ B }} party and the {{ C }}{{ D }} party. A party takes an action by nominating a candidate. The party is happier when their candidate wins . They are the least happy when an extreme candidate of the other party wins. This defines what is known in game theory as a normal form game.
 
-{% capture cap20 %}The {{ A }}{{ B }} party and the {{ C }}{{ D }} party are the players.  The action is nominating a candidate in the primary.  The outcome is who wins the general election.{% endcapture %}
+{% capture cap20 %}The {{ A }}{{ B }} party and the {{ C }}{{ D }} party are the players. The action is nominating a candidate in the primary. The outcome is who wins the general election.{% endcapture %}
 
 {% include sim.html id='game_setup_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)'
 
@@ -129,9 +129,9 @@ comment='basically, four candidates, ABCD, in a line with +Primaries as the voti
 
 ### Strategy
 
-Let's focus on the {{ A }}{{ B }} party.  Let's draw a table that shows how happy the {{ A }}{{ B }} party is with each outcome.  These numbers are called the payoff or the utility. For this example, we have assigned these numbers for the {{ A }}{{ B }} party: {{ A }} {{ B }} {{ C }} {{ D }} -\> 4 3 2 1.   We're assuming that all these candidates are considered based on their position rather than any other qualities that would make them appeal to a broader base.  
+Let's focus on the {{ A }}{{ B }} party. Let's draw a table that shows how happy the {{ A }}{{ B }} party is with each outcome.  These numbers are called the payoff or the utility. For this example, we have assigned these numbers for the {{ A }}{{ B }} party: {{ A }} {{ B }} {{ C }} {{ D }} -\> 4 3 2 1 . We're assuming that all these candidates are considered based on their position rather than any other qualities that would make them appeal to a broader base.  
 
-The payoffs only exist in the way that they affect the decisions each group makes.  It would be easy to add these numbers up, but it’s hard to make sense of them.  To really get into this idea, you’d have to think about things like how society should work, and that you’d like all voters to be treated equally. It’s an idea worth getting back to.  For now, you can just understand that a voter would like the outcome to be a bigger number.  
+The payoffs only exist in the way that they affect the decisions each group makes.  It would be easy to add these numbers up, but it’s hard to make sense of them.  To really get into this idea, you’d have to think about things like how society should work, and that you’d like all voters to be treated equally. It’s an idea worth getting back to.  For now, you can just understand that a voter would like the outcome to be a bigger number. 
 
 **{{ A }}{{ B }} Party's Utility (or Happiness) for Each Outcome**
 
@@ -142,9 +142,9 @@ The payoffs only exist in the way that they affect the decisions each group make
 | {{ C }} **→** 2             |
 | {{ D }} **→** 1             |
 
-Now, let's take an action (in the language of game theory).  Let's have each party pick a nominee.  What happens if the parties pick {{ A }} and {{ C }} as the nominees?  {{ C }} is closer to the middle so {{ C }} wins in the general election.  
+Now, let's take an action (in the language of game theory). Let's have each party pick a nominee. What happens if the parties pick {{ A }} and {{ C }} as the nominees?  {{ C }} is closer to the middle so {{ C }} wins in the general election.  
 
-{% capture cap13 %}The {{ A }}{{ B }} party nominates {{ A }}.  The {{ C }}{{ D }} party nominates {{ C }}.  {{ C }} wins the general election.{% endcapture %}
+{% capture cap13 %}The {{ A }}{{ B }} party nominates {{ A }}. The {{ C }}{{ D }} party nominates {{ C }}. {{ C }} wins the general election.{% endcapture %}
 
 {% include sim.html id='action_1_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ3n1FinTLFhe44sAkIdwVR0jeHlkT2OI4XIykkccj-TuVtG6btkzKe96ok0d933OiSfQaad6Y2SOahKS15FTTSjlpxOatnB-O9zZnSn44zvSnzPKUoRLP0bQ2U0YKQ1QBsEQGcANUHf05dliiyq7jRaaYgTk4hgxjMHYZcYAMN2Qd2RIXZK5u2hKKssCOCFjYEdfZXO_3_TZGyjTbDQ3QFIw7l1ULJp8hHSEfoYTYFKk1blc9KhbGa8P3wGpd8E1YnMKoYmCV2IL-_6QCMLA2tPR4RTGwFQDWZhjXsDbTcCluxCBhcGBYeYODhruNA95OY3xcX--f57Sml3H7Oo3L9Z5-_gBbft_olgIAAA)'
 
@@ -156,7 +156,7 @@ comment='not sure if I need this' %}
 
 Let’s look at another example: what happens if the parties pick {{ A }} and {{ D }} as the nominees?  It could be a tie. 
 
-{% capture cap14 %}The {{ A }}{{ B }} party nominates {{ A }}.  The {{ C }}{{ D }} party nominates {{ D }}.  There is a tie in the general election.{% endcapture %}
+{% capture cap14 %}The {{ A }}{{ B }} party nominates {{ A }}. The {{ C }}{{ D }} party nominates {{ D }}. There is a tie in the general election.{% endcapture %}
 
 {% include sim.html id='action_2_tie_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8S-oUsR072X0FBd1qi0OiQIoAobvihODtOB50W5xOKcbOJJMZ5zuVtG5b40xqe964zqrve040iV6inQR5pZOQtJacalopJ43a_Cjnu-VnmzMl3y1n-kNmechQiedoWpsto4UhqgBYIgO4AaqO_hw7LLHLruObTJGBOTiGDCMYu4w4QIYbuo5uiQsyRzdtCcW2wI4IWNgR19lc7_f9Mka6Ic1rhoPQFsQWJ2rBBGZJR8lHKSE6RWqN21WPHYsAteGbYLku-C4MUGFYEVwlpqH_P6oABNeGIz1eUQS3AsD4DLEN4zO9xTBIGBwYRt_goOFu44CX0xgf5-fr52ta09O4fJ3G2_mafv4AxW1RZ54CAAA)'
 
@@ -166,9 +166,9 @@ caption=cap14
 
 comment='not sure if I need this' %}
 
-In a real election with millions of voters, there won't be a tie, so let's model this tie as a probability: there's a 50/50 chance between {{ A }} and {{ D }}.  How do we compute the utility?  We could average the two utilities of the two outcomes.  But we wouldn't get the full picture.  We want to know what our risks are, so we consider both possibilities.  There is another variable.  It's kind of like another player.  We're treating chance as another player in the game.
+In a real election with millions of voters, there won't be a tie, so let's model this tie as a probability: there's a 50/50 chance between {{ A }} and {{ D }}.  How do we compute the utility? We could average the two utilities of the two outcomes. But we wouldn't get the full picture. We want to know what our risks are, so we consider both possibilities. There is another variable. It's kind of like another player. We're treating chance as another player in the game.
 
-I'm going to use a table to show these actions and the utility of the outcome.  The table below shows the utility for the {{ A }}{{ B }} party when the {{ A }}{{ B }} party nominates {{ A }}.  In each column is a different set of actions that are outside the control of the {{ A }}{{ B }} party.  I used a +/- sign to represent chance. {{ D }}+ means chance favors us, and {{ D }}- means we had a negative outcome.  The entries in the table show the outcome and the utility of that outcome.
+I'm going to use a table to show these actions and the utility of the outcome. The table below shows the utility for the {{ A }}{{ B }} party when the {{ A }}{{ B }} party nominates {{ A }}. In each column is a different set of actions that are outside the control of the {{ A }}{{ B }} party. I used a +/- sign to represent chance. {{ D }}+ means chance favors us, and {{ D }}- means we had a negative outcome. The entries in the table show the outcome and the utility of that outcome.
 
 **Outcomes When {{ A }}{{ B }} party nominates {{ A }}** - Columns are {{ C }}{{ D }} party and chance.
 
@@ -176,7 +176,7 @@ I'm going to use a table to show these actions and the utility of the outcome.  
 | ---- | ---- | ---- |
 | {{ A }} **→** 4 | {{ D }} **→** 1 | {{ C }} **→** 2 |
 
-We can extend this table to consider when the {{ A }}{{ B }} party nominates {{ B }}.  We add rows for each action the {{ A }}{{ B }} party can take.  
+We can extend this table to consider when the {{ A }}{{ B }} party nominates {{ B }}. We add rows for each action the {{ A }}{{ B }} party can take. 
 
 **Strategy Table for {{ A }}{{ B }}** - Row is {{ A }}{{ B }} party, columns are {{ C }}{{ D }} party and chance.
 
@@ -209,7 +209,7 @@ The same strategy works for both sides, which means that there is a competitive 
 
 We can make the same table for the {{ C }}{{ D }} party.  {{ D }} is the party center candidate and {{ C }} is the moderate. You can be lucky (+),  or you could be unlucky (-).  And you can even use the same values in reverse.  You have {{ D }} {{ C }} {{ B }} {{ A }} in order from best to worst and I used the numbers 4 3 2 1 again.  
 
-Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.  By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly-wrong technical sense, no candidate is better than any other candidate.  I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game.   The numbers are really just here as useful tools for making comparisons for a single player.  Maybe you could extend the idea if you had two outcomes being decided.
+Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.  By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly-wrong technical sense, no candidate is better than any other candidate. I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game . The numbers are really just here as useful tools for making comparisons for a single player. Maybe you could extend the idea if you had two outcomes being decided.
 
 **{{ C }}{{ D }} Party's Utility (or Happiness) for Each Outcome**
 
@@ -233,17 +233,17 @@ Will the parties actually behave strategically like this?  Well that would be t
 
 Voters can try to find out what's best for everybody by looking at the polls.  Specifically, there are head-to-head polls done each election that put one candidate from one side against one candidate from the other side.  If a voter sees that the candidate they like best would lose to a candidate from the other side then rationally, if they want to have an effect on the results of the election, they need to support someone else.  They need to support a candidate that can win: a candidate that is electable.  <!--\<third time mentioning electable\> \<maybe take out whole paragraph\>-->
 
-Let's show this competitive pressure with a map.  If a candidate enters the race in the right position, they can win.  The map below shows those positions in grey.  This win region is only on the side with the losing party because the winning party doesn't need a new candidate and won't vote for them.  All the pressure is on the losing party, which is kind of common sense.  If you're losing, you need to try harder.  Even existing candidates will feel this pressure to move toward the middle.  
+Let's show this competitive pressure with a map. If a candidate enters the race in the right position, they can win. The map below shows those positions in grey. This win region is only on the side with the losing party because the winning party doesn't need a new candidate and won't vote for them. All the pressure is on the losing party, which is kind of common sense. If you're losing, you need to try harder. Even existing candidates will feel this pressure to move toward the middle. 
 
 {% include sim.html id='new_can_win_circle_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8SuVzDrHjOLv7CMSBC9rdQ5F6QFpRBOVQIXg7jgdUoarKwXbGmYzHn5RpmmeVxFXXNA-jJ-KJZE2sY8_MQW3rmoh77_DXK1I84w4UmnIipYkT1cjNWyVdHe9tjuR0dRwZbiLjTYRzfMddWi8FJQSxIkASW-hjF8Dq0b_rYQxQclTCqJxGPIBGMJg4TfFguGyoBlRjPCg5hHK3BExF4m0pwCGoONPMKU5vNYBgLBiW3a7ioIKyz6p8SeWSFpD1VINB_9Mr5taGJUGwjlgW7KvOTN8LPR7el-Vld3fcLUR-DRsqxNff_VYEsFaw1iF-rrDBMgJHi2EnBjOthvI-msFJgyLDIhoUNbxtsO9pv23H08P59eA677ePt_32fDrT1w_cKFitvwIAAA)'
 
 title='Candidate Pressure'
 
-caption="A new candidate can enter the contest if they're in the center.  (when there is competitive pressure)"
+caption="A new candidate can enter the contest if they're in the center. (when there is competitive pressure)"
 
 comment='FPTP+primary with win map for new can, same setup as before' %}
 
-(That's all the game theory you need for this article.  Later, you can see more [game theory through this class on youtube](https://www.youtube.com/user/gametheoryonline). There are some quiz questions that are only on the Coursera site.)
+(That's all the game theory you need for this article. Later, you can see more [game theory through this class on youtube](https://www.youtube.com/user/gametheoryonline). There are some quiz questions that are only on the Coursera site.)
 
 ### Problems with this Game Model
 
@@ -259,7 +259,7 @@ Or you may feel that you can't betray your favorite. Emotionally it is hard to v
 
 title='Honest Voters'
 
-caption='Honesty is not the best policy.  Strategy would have helped elect the best candidate.'
+caption='Honesty is not the best policy. Strategy would have helped elect the best candidate.'
 
 comment='example here with honest voters, just like the two player game example, but people voting honestly and losing for their party' %}
 
@@ -267,7 +267,7 @@ comment='example here with honest voters, just like the two player game example,
 
 Additionally there's another concern in this strategic scenario. If one party knows the other party's choice, then they can adjust their strategy. In particular, if one party knows the other party chose a party center candidate, then suddenly a lot of candidates become electable that are not moderates but closer to their own party’s center. 
 
-Here's an example. You have {{ A }}{{ B }}{{ C }}{{ D }}.   Now say {{ D }} is the {{ C }}{{ D }} party’s choice.   Then the game table gets cut in half.  Which candidate should the {{ A }}{{ B }} party put forward?  Say there's a candidate between {{ A }} and {{ B }}: call them {{ E }}.  Say {{ E }} has a 3.5 utility for that party; that's better than {{ B }} at 3.  The {{ A }}{{ B }} party would choose {{ E }} because {{ E }} and {{ B }} are both electable and they might as well get something more.  So {{ E }} is chosen, and {{ E }} wins the general election even though they are not the best candidate for everyone; {{ B }} is a better candidate for everyone; more people prefer {{ B }} over {{ E }}. That's a problem: competitive pressure can go away when a candidate is chosen by the other party. You end up with a candidate that is not good for everybody but just good for one party.
+Here's an example. You have {{ A }}{{ B }}{{ C }}{{ D }}.   Now say {{ D }} is the {{ C }}{{ D }} party’s choice.   Then the game table gets cut in half.  Which candidate should the {{ A }}{{ B }} party put forward?  Say there's a candidate between {{ A }} and {{ B }}: call them {{ E }}.  Say {{ E }} has a 3.5 utility for that party; that's better than {{ B }} at 3.  The {{ A }}{{ B }} party would choose {{ E }} because {{ E }} and {{ B }} are both electable and they might as well get something more. So {{ E }} is chosen, and {{ E }} wins the general election even though they are not the best candidate for everyone; {{ B }} is a better candidate for everyone; more people prefer {{ B }} over {{ E }}. That's a problem: competitive pressure can go away when a candidate is chosen by the other party. You end up with a candidate that is not good for everybody but just good for one party.
 
 **{{ A }}{{ B }} Strategy Table When {{ D }} is Certain**
 
@@ -285,11 +285,11 @@ title='Information Failure'
 
 caption=cap11
 
-comment='remove C, add E between A and B.  In reference to ABCD in a line.' %}
+comment='remove C, add E between A and B. In reference to ABCD in a line.' %}
 
 #### Lopsided Districts
 
-The same scenario plays out when one party is dominant: when we don't have a 50-50 split between parties. There is no reason for a party to back down from nominating somebody who they think they would be best for their party without thinking about what's best for everyone.  And if nobody is considering you then you don't have any representation, because choices are made without you.  And in this scenario where there is a “safe seat”, the losing side doesn't get any representation. 
+The same scenario plays out when one party is dominant: when we don't have a 50-50 split between parties. There is no reason for a party to back down from nominating somebody who they think they would be best for their party without thinking about what's best for everyone.  And if nobody is considering you then you don't have any representation, because choices are made without you. And in this scenario where there is a “safe seat”, the losing side doesn't get any representation. 
 
 {% include sim.html id='party_dominance_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itcpDtcOJAicBBjnMIE_3tWOwQTjFExuzer0czeT2ll3TZfKlk71o2Eo-KoWPrftyFZHWuhOZyMjmB85HAQUtZWi5aVarGsPUa5Pp2Y7cG0-nSCWV4y4yVDLZ-jaW22jBaGSAGwRA4IA6SB8dyEka65ZcehwwEMgAwjGIeMBECGO7oF3cgL0tIozZVQEsJ5VwQ8DEkobVTzzFEHCUVBWKqS61JIzqxKj5IfpeSqp5BqKuh_efW0oB0_CYYVsQ3rM5g1xDaYNZg1wyRiWwe35EuG2N4AlJOOf-BYnls6lTDikHA48JHQ4aDjbse63k_7_nV9u50_yloO-_fltH9eb-X-C08n7YKwAgAA)'
 
@@ -322,7 +322,7 @@ title='Center Squeeze'
 
 caption=cap19
 
-comment='could be titled vote-splitting.  Maybe just show EBF, not ACD' %}
+comment='could be titled vote-splitting. Maybe just show EBF, not ACD' %}
 
 When there are more than two candidates, the voters need to coordinate to put their unified support behind a candidate. This coordination problem might involve some lying.  You might say, “Well, my candidate is doing really well, and yours isn't doing very well. You should back my candidate and your candidate should probably drop out.  You don't want to waste your vote.”
 
@@ -344,7 +344,7 @@ comment='right now, this isnt implemented' %}
 
 ### False Leverage
 
-There is an flawed idea that single-choice voting can give power to a small groups of voters through a mechanism of leverage.  The idea goes that voting for only one makes your vote valuable, and gives your favorite candidate leverage over the others so that your policies can get adopted.  Your candidate would pull some strings to make a deal in exchange for dropping out of the election.  Philosophically, the bad part about this argument is that it gives all the power to the candidate.  Candidates are deciding among themselves who will be elected rather than asking the voter who is best.  Practically, not all voters would be on-board to vote for their favorite if their favorite has no chance of winning.  Without the voters, the candidate will have no leverage.  In the worst case, a corrupt candidate could use their leverage for personal gain, so less power goes to the voter.  
+There is an flawed idea that single-choice voting can give power to a small groups of voters through a mechanism of leverage. The idea goes that voting for only one makes your vote valuable, and gives your favorite candidate leverage over the others so that your policies can get adopted. Your candidate would pull some strings to make a deal in exchange for dropping out of the election. Philosophically, the bad part about this argument is that it gives all the power to the candidate. Candidates are deciding among themselves who will be elected rather than asking the voter who is best. Practically, not all voters would be on-board to vote for their favorite if their favorite has no chance of winning. Without the voters, the candidate will have no leverage. In the worst case, a corrupt candidate could use their leverage for personal gain, so less power goes to the voter. 
 
 **Decision for Viable Candidate** - Leverage only works if the voters follow through.
 
@@ -369,13 +369,13 @@ Finally, we can think about some other ideas that we touched on.  Can the numbe
 
 ### Rankings
 
-We said we could use utilities because it would help us put the candidates in order.   But we couldn't make sense of adding utilities from different people, so we don't need to add.  Grades have an order and can't be added, so maybe we could use those.  But grades imply comparisons between different people, and that doesn't make sense either.  Really, the most accurate notation we could use would be rankings.  Rankings only have an order.  That's it.  No adding, no comparisons between different people.  Exactly what we need.
+We said we could use utilities because it would help us put the candidates in order . But we couldn't make sense of adding utilities from different people, so we don't need to add. Grades have an order and can't be added, so maybe we could use those. But grades imply comparisons between different people, and that doesn't make sense either. Really, the most accurate notation we could use would be rankings. Rankings only have an order. That's it. No adding, no comparisons between different people. Exactly what we need.
 
 ### Chicken Dilemma
 
-Even in some better voting methods, there can be a game of chicken.  The game of chicken is weird.  Let's consider the center squeeze example with {{ B }} {{ E }} {{ F }} again.  {{ F }} voters can pull back their support from {{ B }} if they think {{ F }} can win against {{ E }}. And some of the {{ B }} supporters can pull away from {{ F }}. But if the {{ F }} supporters are overconfident, they can lose to {{ B }}. 
+Even in some better voting methods, there can be a game of chicken. The game of chicken is weird. Let's consider the center squeeze example with {{ B }} {{ E }} {{ F }} again. {{ F }} voters can pull back their support from {{ B }} if they think {{ F }} can win against {{ E }}. And some of the {{ B }} supporters can pull away from {{ F }}. But if the {{ F }} supporters are overconfident, they can lose to {{ B }}. 
 
-[The page on scored systems](newer) has a more thorough chicken dilemma explanation.  Personally, I have a hard time trying to think of the chicken dilemma for pairwise voting, so I don't think it would affect voters.
+[The page on scored systems](newer) has a more thorough chicken dilemma explanation. Personally, I have a hard time trying to think of the chicken dilemma for pairwise voting, so I don't think it would affect voters.
 
 {% include sim.html id='chicken_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwUoEMQz9l5xzaJIm3Zmb_-Bt2cMK3gZ3ERVE9NtN8xQHFilMmvTl9eV1PqjRejzKWFjcTnyUNlhi1C5YTE8nJpmYEF4060NZJXKjE9r7BBitjanTKhm8ksge45uV4JEnFEbZJvkZjbjtV0IOCWl8s_Jk-fdEWt0rU6zILCgKECdTXQaok0BILdIz5oWWIdmVSZMpiyoIiiJoFDTq1aCg0YHsgAwsNp2dOnLKWTatTrPCGnjMpxlfT6_bRpz5z-6vUgQBQtxi0wLhzp5Hvf36MRPZJ1owMHTbJ714uu9rUXL6wENikL5U0WGsYwzHGG5ljmMMdwTY4aP0Okx12BENQQoZeJuAqeElfP4cAYqAglgqDCgY6B1Q8HDetsvL_fv1kVa6u16fL2_njT6_Ab_6IUHSAgAA)'
 

@@ -8,7 +8,7 @@ twuser: paretoman1
 ---
 {% include letters.html %}
 
-Hello, I'm going to show you how to find common ground as a group.   We'll go over the following:
+Hello, I'm going to show you how to find common ground as a group . We'll go over the following:
 
 * what we mean by the middle, 
 
@@ -22,15 +22,15 @@ Let's jump right in with an example and some diagrams.
 
 ## The Middle
 
-Now in a group you may have to come to a decision, and there's going to be a lot of different people in this group. So each one is going to have a different opinion, and they're going to be spaced out in different dimensions of how they feel about a topic: maybe what pizza to get as a group order for pizza,  or where you are going to go out to eat, or something like that.   So some people would be vegetarian or like meat.   And some people like to spend a lot of money and some a little money.  So whatever dimensions there are, you're going to have differing opinions on dining or whatever. 
+Now in a group you may have to come to a decision, and there's going to be a lot of different people in this group. So each one is going to have a different opinion, and they're going to be spaced out in different dimensions of how they feel about a topic: maybe what pizza to get as a group order for pizza,  or where you are going to go out to eat, or something like that.   So some people would be vegetarian or like meat.   And some people like to spend a lot of money and some a little money. So whatever dimensions there are, you're going to have differing opinions on dining or whatever. 
 
 {% include sim.html  link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSPW_CMBD9K5FnDz5_nAMjQ7dKFBBLYHCrCNKmpAowoKr97T37wVKELOXd5e5e3j3nWxk1bRrraj3hrW7IR22ZJGKrrXESWBevEZMmsqVLinG71YryNHmnyZucOzU1WvnyDOXJ0iHd_4_0RqkYfXekUj-sTB5WyJTPUVaUU4sUggiKCJKIASKAvKB8jgWEm7SywiMvrfBYAQsAjfVoERonABobkdXIJmXAmSKUsiVUCs6WWedQhyAnTI24eju5ndEAVoeFSSxz2usgDb5Q54Bugb0FLpudA1-m_T295yLDR1wURHusHgxAeNXvRi2GS-qrRXrfbA6z87hrx2qWxoNkz206Vct9evuQZN3udl1brbu-T5LOx-5zqGazF4lX-7Z6Gs5jtWzTcTgcN0oJPSwNrvgcYGkIAFgaoC7UZYsAS9kAqHQy7pdxMRyuDjAIGHvxpEDErxExGXERr6nvh9Pq8tXKtvP-PKa-O13Uzx9ViSYoEgMAAA)' 
 
 title='Where to go eat?' 
 
-caption='x-axis is Meat-Veggie axis.  y-axis is $-$$$ axis'  comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
+caption='x-axis is Meat-Veggie axis. y-axis is $-$$$ axis'  comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
 
-Really, this is about politics, and as a group you want to make a decision for everyone in the group.  You'd like it to be so that people would say they don't regret making that decision.  One way you will find out  if people regret this decision is if most people say they would rather do something else.  So that's why you might want to pick something in the middle because no matter what you pick in the middle, if you compared to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
+Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like it to be so that people would say they don't regret making that decision. One way you will find out if people regret this decision is if most people say they would rather do something else. So that's why you might want to pick something in the middle because no matter what you pick in the middle, if you compared to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
 
 {% capture cap1 %}Move {{ B }} anywhere. A line forms between that and the middle option, and you will see most people are on the side of the middle option.{% endcapture %}
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsWoDMQz9F80eLMmSz_cVHbodN6TQIXCQUtIhlP57ZT3SDiEYLMlPenrS3TdVWreNjQub7mXjsRSRuu-FGIgkErHSWgu1vC1vjwwpDydyeyC1PJxAlqfIeIpwzXY8Fc1QEEIQQxFDEjtMCOAWNtpJmODmQhI88SicjyIwoJGGlKDRMKCRjmhBNLJAawrluRJOQCVrVYFDkAbTxkhzAGDT8Vffkmo6fHfk7uhc7nRaVrV_uubZrnV8EIhrGNGwKoMww4iGEQ0jmsFgRAOLLdnFMKJXGM5Mx74dLG4pP34WclA4FPhI06Ggo7ZjNW-n47hcX28f77TSy_H1eTrO1xv9_AKWPS3kgAIAAA)"
@@ -51,7 +51,7 @@ caption='If you only say, "pick only one", then the winner can win with only a s
 
 comment='crowded election, winner gets less than 25%.  Everybody is an individual.  Everybody has an option' id='crowded_sim' %}
 
-A great simple example of this problem is the spoiler effect, which you get if you have three candidates in an election.  A small candidate can change the outcome of the race even if they don't win.  And they spoil the election for whichever side they're on.
+A great simple example of this problem is the spoiler effect, which you get if you have three candidates in an election. A small candidate can change the outcome of the race even if they don't win. And they spoil the election for whichever side they're on.
 
 {% capture cap16 %}drag {{ C }} left and right to spoil the election for either major candidate.{% endcapture %}
 
@@ -83,15 +83,15 @@ caption=cap12
 
 comment='two candidates with a circle. Maybe I could use names for ping pong.' id='by_pairs2_sim' %}
 
-So what would that look like? (in an actual election). That would basically be looking at every possible pair of options.  So say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot.  But really, you have a single ranking, which is easier to write.  
+So what would that look like? (in an actual election). That would basically be looking at every possible pair of options.  So say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot. But really, you have a single ranking, which is easier to write.  
 
 You would get a ballot with the names {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} written on it. And because you like them in that order, you'd write 1 2 3 4 5 on the ballot; you like \#1 {{ A }}, then \#2 {{ B }}, and so on.  From your ranking you can tell, for example, that for {{ A }} versus {{ E }}, you like {{ A }} better, and so on for every pair.
 
-So everybody writes their rankings on the ballot, and then we count all the ballots one pair at a time.  If we find that one candidate was able to win all their matches, then we've found the middle.
+So everybody writes their rankings on the ballot, and then we count all the ballots one pair at a time. If we find that one candidate was able to win all their matches, then we've found the middle.
 
 {% include sim-ballot.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8i88-xImdbPbMCxC31R4KXURFta3aIoQQvB0nQy-gag8Te-zJ2NlPCjROU0kssc48iRjLkNrJgueGdqqeK42NsXrO5plJWltS9rIWJhoDk9JYmYxGYcpeEPjf57XlJjPcZOpNRkK_WpqhFkaEMCQKMEDuzsQNiDr6deZQOxldx5NRek2MAMhEReQyySEjWRANiFwl-h5CNyptJVBKUEpQSlBKrjQJ_36tOKMdmgnjCkdOrE5rk2112sZsY2u8HtKV0t6rf6UVU2vBE8Gu1p40LM8EAKsGq4bdGZ7TMLRBxYZ-l2HoHAAYOOMFMlSy9VH8j6IMiQwHGWsvcFDQW-DgcbPfHy4PH8eFRrrfrK_LlpjOL4f3u-X8dNodL7vD6tT327pdnner018_VpCSNcoCAAA)' title='Rankings' 
 
-caption='You are saying something about each pair of options.  Mouse over each pair in the tally to see how each pair is represented in your ranking.' 
+caption='You are saying something about each pair of options. Mouse over each pair in the tally to see how each pair is represented in your ranking.' 
 
 comment='ranked ballot with pairs' id='pair_ballot_sim' %}
 
@@ -146,11 +146,11 @@ caption='Give as many as you like a score from 0 to 5.'
 
 comment='simple,lots of candidates, one voter' id='score_sim' %}
 
-Another great voting method combines score voting with counting by pairs.  This is called STAR voting, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff.  The runoff uses the same scores but counts them by pairs, like we did before.
+Another great voting method combines score voting with counting by pairs.  This is called STAR voting, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before.
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu27DMAz8F80cxKds_0a7GR7aIluAFEWXoui_l-IlHRoEGo7Ukacj7e_W27bvHsRdD9qZO_FYZ-QLLZ6B_F2JWZb146DGs4tdiU1nrm3r1KxtLNS8ksgSobuTxSOZTncnmeUhsz5kuNdzPC3NVJDCERsAljgAaYAtMZ_zhNRmapI6eSmpkzOIACAjhpKU0QTIyEC2IFurQXsZ5bkTLkKlelXBw5Cm0s50PbM4QENTMS7nwpQsaSvZGfAtkFugc9EzsOq1_9IWZcAGvhHsGoZ2LM9h1TG0a23CMbQ7AEP7QMlSbzmGjg7gqgx8gcDqwmuU_LlaQCLgINaCAQcDvQPLen05ny-fz1_vp7a1p7fLx6n9_ALa2ClbqwIAAA)' title='STAR Voting' 
 
-caption='Same ballot as above for score.  Score from 0-5, and add up scores.  BUT THEN take the top two and count by pairs' 
+caption='Same ballot as above for score. Score from 0-5, and add up scores. BUT THEN take the top two and count by pairs' 
 
 comment='same as above but star' id='star_sim' %}
 
@@ -174,7 +174,7 @@ And of course, there's primaries, which is the way we do things now, and can wor
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)' title='Primaries' 
 
-caption="Here's a best-case scenario.  In reality, they don't always work so nice." 
+caption="Here's a best-case scenario. In reality, they don't always work so nice." 
 
 comment='an best case example of primaries ABCD two groups' id='primaries_sim' %}
 
@@ -184,7 +184,7 @@ To wrap things up, there's a lot of ways you could deal with voting (casting a b
 
 Still want more? Try the sandbox below, where I've added a ton more voting methods and configuration options.  
 
-Want more of a narrative?  Then choose your path.  Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV).  I also have a draft of a page about proportional representation using more methods than just STV.  It's a work in progress. Just be sure you get to read more about Condorcet methods.  I like them best.
+Want more of a narrative?  Then choose your path.  Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV). I also have a draft of a page about proportional representation using more methods than just STV. It's a work in progress. Just be sure you get to read more about Condorcet methods. I like them best.
 
 -   [Primaries](primaries)
 -   [Approval Voting](approval)
@@ -196,5 +196,5 @@ Want more of a narrative?  Then choose your path.  Either read about primaries
 
 External Links
 
-* Okay, I have to mention this set of [videos by CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe), since I do in every discussion I have ever had about voting methods with new people.  He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote.  
+* Okay, I have to mention this set of [videos by CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe), since I do in every discussion I have ever had about voting methods with new people. He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote. 
 * Also, the [EndFPTP Wiki](https://www.reddit.com/r/EndFPTP/wiki/index) has more links. 

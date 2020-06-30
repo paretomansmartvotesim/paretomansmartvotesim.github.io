@@ -8,7 +8,7 @@ twuser: paretoman1
 ---
 {% include letters.html %}
 
-I'd like to talk about gerrymandering.  Districts are not very good.  Drawing districts is bad.
+I'd like to talk about gerrymandering. Districts are not very good. Drawing districts is bad.
 
 ## Intro to Condorcet
 

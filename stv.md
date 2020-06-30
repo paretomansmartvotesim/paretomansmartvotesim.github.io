@@ -38,17 +38,17 @@ caption = "Each center of political thought gets a representative. We use two-wi
 comment = "not sure whether to have two side by side or top-bottom. Same winners as district representation. don’t show power chart."
 id = "prop_sim" %}
 
-The key advantage of STV is that districts do not need to be drawn around political minority groups in order to give them representation.  Just look at how in a complex opinion-space, there is an evenly distributed selection of winning candidates:
+The key advantage of STV is that districts do not need to be drawn around political minority groups in order to give them representation. Just look at how in a complex opinion-space, there is an evenly distributed selection of winning candidates:
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41TS2pcQQy8S6-1aH1a3W-OEbJ7zMLGXsUkWWQTQnz2VKsGMsYYzIPRv1Qtaf603i7nOZfkuspp1mWNUlR0OTQdx007XDRWuUzUdGvd5ehbmcjvpR0dwdia-q3SUJBWlSFrFn4gq1pGF7PtGy7p16s03ZQsBjmNLlm9YqG_VUmKae5Ub5cuLdqlvWo2aaPsBIDJuw_5E5Eu7z5EFiIA6QB5taxfa4hB9vYm86hM83v3XRgQm4PuV2zTaJKpBgV5gnIJsNKABAcdkEe50fcCrwFIIYBjEMSxoBM4DkEcm7QWraMKvNeTdQ9LK-BWte6Mk5ED6cQOP_42QLKEffwgMkbrEoJ1yZQlOBc4UYAj2ReDuuj_x75NvfUirbC3UfA6HZAqvk3ww0ziM_wi62UxeRWcQxzlHFzL4AwGpzk4g8FpjkHBaY7J2KrHDk4ziZJESe42iZKjzm6TTkIkGST3OVk7uc_JLUyn4BYm72Imb2dOBtf9oLefT1oEfHx4efnx6-vvn8_4G3x5-P7t-an9_Qc4HPJW2QMAAA)"
 title = "Evenly Distributed Representation"
-caption = "With five representatives, STV can spread them out to be closer to the voters.  (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
+caption = "With five representatives, STV can spread them out to be closer to the voters. (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
 comment = "to show how STV can prevent factions from fighting each other."
 id = "even_distribution_sim" %}
 
 ## Kinder Political Culture
 
-STV allows multiple factions within a party to be represented, so these factions don’t have to feel threatened by each other, which would allow them to work better together.  Small groups can form to support an idea, and supporters don't have to face a dilemma of whether they're going to support an idea that they like best or support an idea that is more likely to be accepted by many other people.  This is easier for the voters because the voters can use the voting method to find common ground rather than trying to use polls to figure out which candidate to unite behind. The voters can be more honest and the campaigns can be more honest. 
+STV allows multiple factions within a party to be represented, so these factions don’t have to feel threatened by each other, which would allow them to work better together. Small groups can form to support an idea, and supporters don't have to face a dilemma of whether they're going to support an idea that they like best or support an idea that is more likely to be accepted by many other people. This is easier for the voters because the voters can use the voting method to find common ground rather than trying to use polls to figure out which candidate to unite behind. The voters can be more honest and the campaigns can be more honest. 
 
 Still, some things won’t change. There will still be disagreements in the legislature once candidates are seated. I think it's more acceptable to expect compromises and cooperative trading of policy favors in a legislature rather than at the time of an election where voters would have to sift through any misinformative campaign techniques. Legislators are more able to form cooperative relationships than groups of voters, so we are designing a system that works better for representing people, and it should lift a lot of burden off the voters’ shoulders.
 
@@ -66,7 +66,7 @@ caption='If you only say, "pick only one", then the winner can win with only a s
 comment='crowded election, winner gets less than 25%.  Everybody is an individual.  Everybody has an option' 
 id='crowded_sim' %}
 
-If you use single-winner Ranked Choice Voting, then the quota is 50%. The ballot counts for the top choice, so there is no way that there is another candidate with more than 50% of ballots who could win. So, more than 50% of people are represented.  More than 50% had their votes matter in the election (unless they didn't use all their rankings).
+If you use single-winner Ranked Choice Voting, then the quota is 50%. The ballot counts for the top choice, so there is no way that there is another candidate with more than 50% of ballots who could win. So, more than 50% of people are represented. More than 50% had their votes matter in the election (unless they didn't use all their rankings).
 
 **Refresher on RCV:** Ranked choice voting asks voters to rank the candidates in order from best to worst. During counting, your vote counts for your top candidate. One-by-one, the candidate with the least number of votes is eliminated and taken out of the running. **Check out the sketch below** that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated.
 
@@ -103,7 +103,7 @@ Ranked-Choice Voting is better (more representative) when it allows smaller grou
 
 The fundamental part of what makes STV work is that it counts quotas exactly once.
 
-Once a candidate has been elected by a quota of voters, the voters have successfully used their ballot to get representation, so it is not counted again for a second candidate.  
+Once a candidate has been elected by a quota of voters, the voters have successfully used their ballot to get representation, so it is not counted again for a second candidate. 
 
 This is kind of like how in districts, you only vote in one district.
 
@@ -111,29 +111,29 @@ This counting method is important because it is what allows small groups to come
 
 ### Visualization
 
-See the example chart below for a visual of the process of elimination.  It starts at the top and each row tracks who the **voter's** top pick is.  Each column is a voter.  Transparency is used to represent the excess vote that remains after a quota is filled. As candidates are eliminated, the groups of voters become visually apparent.
+See the example chart below for a visual of the process of elimination. It starts at the top and each row tracks who the **voter's** top pick is. Each column is a voter. Transparency is used to represent the excess vote that remains after a quota is filled. As candidates are eliminated, the groups of voters become visually apparent.
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxs_sZiG61xSGu4gQUNAjBt-N4OGnF6bTFxK_xZLJfpZZ129TJx04bSyWXODQh0eUvI22eRJjY6zyNGifZdyo8p12jeY67kflsaEZsYzZoWSuVVtbyw1ao9IwtxmLD_y_6PSqVbr6ojLuV5W6Fa67jKXOGghCiuAEgKdQlhABugbHOAoJbqEjwRFKCRwMESdBI0HBARw004ogGIrBoTaE8beEsqOSsKuoQpMG0hdfXb7YbGsCquDCHZUqNejS0evVgBnwM5BjolXoGLdna7bpmKas5Hg-XaEsmOyztuECHFR0X6LCidwCs6I7ayG0dVlgFcHYa3sVgqPVUrCHEQGFQYEuCQ4Fj1mGhKwAWOt7UDe_ujuI4-jbzIBwgfDpdLm8fj5_v5_hbH06vL-fn8v0LhmM1_yEDAAA)"
 title = "Voter Chart By Round"
-caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory.  Mouse over the rounds to see how the chart progresses through the rounds. "
+caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory. Mouse over the rounds to see how the chart progresses through the rounds. "
 comment = "voter chart time"
 id = "voter_chart_sim" %}
 
-Below this chart is another chart which I called a **power** chart.  When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the power chart.  The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power.   (This is best viewed on a bigger screen. there's a lot of bookkeeping to do between rounds.) 
+Below this chart is another chart which I called a **power** chart. When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the power chart. The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power . (This is best viewed on a bigger screen. there's a lot of bookkeeping to do between rounds.) 
 
-In the background is a dark bar that shows what total equality would look like.  The height of this bar is each voter's ideal share of representation.  As candidates get elected, the bar is covered, showing that voters got represented.  Any part of the bar that is still showing after all candidates are elected shows that some voters are underrepresented.
+In the background is a dark bar that shows what total equality would look like. The height of this bar is each voter's ideal share of representation. As candidates get elected, the bar is covered, showing that voters got represented. Any part of the bar that is still showing after all candidates are elected shows that some voters are underrepresented.
 
-(The voters and candidates are arranged in a line by using an algorithm that solves the traveling salesman problem to keep voters together who are near each other in 2D space.  Specifically, the ballots are used as coordinates or feature vectors since this 2D space isn't something you'd be able to see in an election.  You can wiggle around the candidates in this chart to see them take the traveling salesman's route to visit all the voters.)
+(The voters and candidates are arranged in a line by using an algorithm that solves the traveling salesman problem to keep voters together who are near each other in 2D space. Specifically, the ballots are used as coordinates or feature vectors since this 2D space isn't something you'd be able to see in an election. You can wiggle around the candidates in this chart to see them take the traveling salesman's route to visit all the voters.)
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxs_sZiG61xSGu4gQUNAjBt-N4OGnF6bTFxK_xZLJfpZZ129TJx04bSyWXODQh0eUvI22eRJjY6zyNGifZdyo8p12jeY67kflsaEZsYzZoWSuVVtbyw1ao9IwtxmLD_y_6PSqVbr6ojLuV5W6Fa67jKXOGghCiuAEgKdQlhABugbHOAoJbqEjwRFKCRwMESdBI0HBARw004ogGIrBoTaE8beEsqOSsKuoQpMG0hdfXb7YbGsCquDCHZUqNejS0evVgBnwM5BjolXoGLdna7bpmKas5Hg-XaEsmOyztuECHFR0X6LCidwCs6I7ayG0dVlgFcHYa3sVgqPVUrCHEQGFQYEuCQ4Fj1mGhKwAWOt7UDe_ujuI4-jbzuNIA4dPpcnn7ePx8P8ff-nB6fTk_l-9fV4vS8SEDAAA)"
 title = "Power Chart"
-caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory.  Mouse over the rounds to see how the chart progresses through the rounds. "
+caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory. Mouse over the rounds to see how the chart progresses through the rounds. "
 comment = "power chart time"
 id = "power_sim" %}
 
 ### Quota Excess
 
-What happens if a candidate gets more votes than just a quota?  The rule is that exactly a quota of votes is used up by the winner, which means the excess number of votes above the quota remains in the count.  These votes will count in proportion to that excess amount.  It's a calculation of dividing the excess by the quota to find the new weight for the vote.  This bookkeeping makes sure that the power each voter gets from their vote is the same.  It makes sure that all voters are as equal as possible.
+What happens if a candidate gets more votes than just a quota? The rule is that exactly a quota of votes is used up by the winner, which means the excess number of votes above the quota remains in the count. These votes will count in proportion to that excess amount. It's a calculation of dividing the excess by the quota to find the new weight for the vote. This bookkeeping makes sure that the power each voter gets from their vote is the same. It makes sure that all voters are as equal as possible.
 
 ### Quota with Other Ballots
 
@@ -142,25 +142,25 @@ The concept of a quota extends to multiple ballot counting methods:
 1. Top-choice-counts Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
 2. Scoring methods (including Approval Voting and STAR voting): Monroe voting and a few methods I'm working on
 3. Pairwise ballot methods (I'm working on a version of minimax)
-4. Choose-only-one methods: Single Non-Transferable Vote (SNTV).  An obvious Improvement would be to have a Single Transferable Vote.
+4. Choose-only-one methods: Single Non-Transferable Vote (SNTV). An obvious Improvement would be to have a Single Transferable Vote.
 
 After you're done with this page, [read this page (currently a draft) about all the different kinds of proportional voting methods.](proportional)
 
 ## Proportionality
 
-Let's get back to the idea of proportionality.  You can see that in STV, a voter group with two times as many voters gets two times as many representatives.
+Let's get back to the idea of proportionality. You can see that in STV, a voter group with two times as many voters gets two times as many representatives.
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Ty05cMQz9l6y9iJ3Ezp1dP6ALHmIzmsWlnQXqlBkhQCBEv722DxWVKNVdHL9inxznvpRaNtttr8Sj7mjL7FZXt3onqUuEqpJwc2tWkszZQizshogRa1SJdbckLI1szdjwkyOsxm7NN4tFdzsqHJPN52mWjEFsFolWNpVKL5vyi7VQGemrlwt9-LzePFPpw-eZ-Wlm-TTDNcdx0GtkFNrMiAviYMcdAG5OM8GZcHf0uSyOPoWpiHf0qHhHD4oA0Ec6SrxPc0AfMXgT3pIHWk3KHAJxJprk2daQB6Pmnbau8b--OKooxoQGGXw51KjTIPULT_IFejDKO4aGLp3fTXk3W64la3v27P8n0DVJd8OSccUOoQakH7jegFAD1xsQagwAhBqG3MzJA0JpBaCLYm2KLjpyq_FqFC0UDHRJMDAwzikGga0BILCBgcV7LGcPx_v14tvxbu_vNJ0vp9Pd8XE9_PG_3tze_Fyf3L24vCrxWg3n59_SRxwazJpwvR4Ox_vL59Pef4Pz9fbH_nt5_Q0IWhoZrgMAAA)" 
 title = "Quotas Give Proportional Results"
-caption = "Here's two groups with a 1:2 ratio (really 4:7).  The winners are also in the same ratio."
+caption = "Here's two groups with a 1:2 ratio (really 4:7). The winners are also in the same ratio."
 comment = "Maybe choose a more interesting example."
 id = "proportional_two_to_one_sim" %}
 
-This proportionality applies even when there aren't distinct groups.  Let's look again at the example we saw ealier, but now using the additional charts.  
+This proportionality applies even when there aren't distinct groups. Let's look again at the example we saw ealier, but now using the additional charts. 
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41TzYqUQQx8lz7n0Ek6_TOPId6GOay4Jxf14EXEfXYrqQFnWQT5YNKdn-pKJfOr9Xa5XteWuW9yNeuyow4quh0njXM_HRcdmaUDQbc8dZfT87BNThbq6aI28qR-L7QwmZUeQ_Yq-IGsenF0MUtfuEy_3aRpMrIRpBRdptajG89blUwxnZnq7dKljXZprzqbtKj7BIDJuw_5C5Eu7z5ENiIA6QB5tVm_1hCD7e1N5qlM80f3QxgQyUGzC5cl6E93-o1-UtZBQ8LgXgb0dMCCjAbsKTcIXOA1ICoMcAyGODboBI7DEMcWb5u3UwXeq3dN1bQCblXrzjgZOZCuGO-_vwSYLOE7fogMjV2GYG5oewvWBk4UmOQmYCXa6H_1z6ve3yKtYW-jXgqiVDyv4AdNxv_wG7M6G4vrQR3GKWdwPkENgmoGNQiqGUFDNWMxtqvZoJqz0xBlcraTKDNq_5L0JMQkg8l5LjJYnOfiFJbTcAqLe7Fyk3NtF4P7Uej0s6Xdy3x6enn59uPjz-_P-D98ePr65flz-_0HKwv-beEDAAA)"
 title = "Evenly Distributed Representation - Again - With Charts"
-caption = "With five representatives, STV can spread them out to be closer to the voters.  (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
+caption = "With five representatives, STV can spread them out to be closer to the voters. (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
 comment = "to show how STV can prevent factions from fighting each other."
 id = "even_2_sim" %}
 
@@ -174,9 +174,9 @@ Additionally, there are ways to have proportionality by using a party system, bu
 
 ### Strategies
 
-I still need to work out what the strategies would be for voters and candidates.  So far, in the above examples, I've been using the honest strategy for ranking.
+I still need to work out what the strategies would be for voters and candidates. So far, in the above examples, I've been using the honest strategy for ranking.
 
 ## Afterward
 
-The main drive for STV is to have representation of all diverse groups and to include minorities. Group bargaining in this representative group would ideally be able to offer a policy package that includes a little bit from everyone at the table.  This is also a vision of a more responsive politics.  We don't have to wait until the election.  We can represent each sector of the population today, so that when an event occurs, action can be taken.  Also, proportional representation is a further way to avoid antagonistic campaigns.  It won't get rid of partisanship, but it might prevent it from being broadcast to the voters.   We can change the political culture and have campaigns that are capable of bringing groups together to achieve a greater goal.
+The main drive for STV is to have representation of all diverse groups and to include minorities. Group bargaining in this representative group would ideally be able to offer a policy package that includes a little bit from everyone at the table. This is also a vision of a more responsive politics. We don't have to wait until the election. We can represent each sector of the population today, so that when an event occurs, action can be taken. Also, proportional representation is a further way to avoid antagonistic campaigns. It won't get rid of partisanship, but it might prevent it from being broadcast to the voters . We can change the political culture and have campaigns that are capable of bringing groups together to achieve a greater goal.
 

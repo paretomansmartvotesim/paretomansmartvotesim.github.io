@@ -3,7 +3,7 @@ layout: page-2
 title: Links
 ---
 
-Here's some great resources for expanding your voting knowledge.  Some were referenced in the pages on this site.
+Here's some great resources for expanding your voting knowledge. Some were referenced in the pages on this site.
 
 #### Community
 
@@ -16,7 +16,7 @@ Here's some great resources for expanding your voting knowledge.  Some were refe
 #### Organizations
 
 - [Colorado Approves](https://coloradoapproves.org/) - The inspiration for the page on finding common ground came from a discussion with Blake.
-- [Unsplit the Vote](https://unsplitthevote.org/) - End vote-splitting.  (Thanks for the feedback.)
+- [Unsplit the Vote](https://unsplitthevote.org/) - End vote-splitting. (Thanks for the feedback.)
 - [Center for Election Science ](https://www.electionscience.org/) - likes approval voting
 - [Equal Vote](http://www.equal.vote/) - likes STAR voting
 - [FairVote](https://www.fairvote.org/) - likes RCV, both single- and multi-winner versions
@@ -28,14 +28,14 @@ Here's some great resources for expanding your voting knowledge.  Some were refe
 - [District](http://polytrope.com/district/) - a game about representation and redistricting
 - [To Build a Better Ballot](https://ncase.me/ballot) - by Nicky Case - the original sim this sim is based on
 - [Voteline](http://zesty.ca/voting/voteline/) - by Ka-Ping Yee, who is the originator of win maps AKA Yee diagrams
-- [Political Sim](https://www.accuratedemocracy.com/s_sim.htm) - by [Accurate Democracy](https://www.accuratedemocracy.com/) - the earliest interactive voting simulator -  It requires some technical know-how to get going.
+- [Political Sim](https://www.accuratedemocracy.com/s_sim.htm) - by [Accurate Democracy](https://www.accuratedemocracy.com/) - the earliest interactive voting simulator - It requires some technical know-how to get going.
 - [Median Voter](https://pianop.ly/voting/median) - a simple conceptual experiment with discussion of strategy and median and mean
 - [RBVote Calculator](http://www.cs.angelo.edu/~rlegrand/rbvote/calc.html) - I copied all of his methods into this simulator under "RBVote".
 - [More Software on ElectoWiki](https://electowiki.org/wiki/Voting_links#Software)
 
 #### Polling Sites
 
-- Use your new knowledge of voting systems in your next group decision.  [Or just raise your hands.](https://www.youtube.com/watch?v=orybDrUj4vA) 
+- Use your new knowledge of voting systems in your next group decision. [Or just raise your hands.](https://www.youtube.com/watch?v=orybDrUj4vA) 
 - [ElectoWiki's List of Polling Sites](https://electowiki.org/wiki/Voting_links#Polling_sites) - Many are on the list, but the ones below stand out to me.
 - [★.vote](https://star.vote) - STAR - used by STARvoting.us
 - [Condorcet Internet Voting Service](https://civs.cs.cornell.edu/civs_create.html) - Condorcet - many kinds
