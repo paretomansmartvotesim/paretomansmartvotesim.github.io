@@ -125,13 +125,13 @@ id = "election25"
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSW27EMAhF9-JvfxiMDZmtRLOSql17MUeRqlZVPi6vnLmQ-Wijve7bV5ewd791W5ehJ5Ira-P97k3OiFjmbief7TV6s_ZqX6P1ttpLets5lD1Paeqtj99PNiObf-rVuf7tyKhfE4EvSpoeZoqRLWQj6UEsNZi5qqrJyaJKudXEaAqrqFEEo2ByifO6BhmUOcqonitAmpAmpAlpJumWns8Z3Ew4LVaVYljhTiBPoE-QwHuewMqH_UTaLpY5XwKLdlVxcbAliFLE3uJei0-2oCwvfyuQq2QPhCU3V99Q9qoVjrnNrTYONkdyHDjvOgfySYYD59T-_Gu4jcdzmz67nTorBcCQIgXAwEwADICBnzi8z28NsY3s3QIAAA)"
 %}
 
-Nice candidates dropping out is very common in the primaries. With the way we vote now, primaries are necessary to prevent the vote-splitting we see with yellow and red. The important choices are made in the primary, and in the general, we are left with only two. A primary will pick the candidates in a complicated kind of way involving considerations of electability. **Try it out below.** The yellow candidate wins the primary vote because primary voters saw that red would lose the general election against the light (moderate) blue, and orange and green split their vote. For more explanation, see the [Page on Primaries](primaries).
+Nice candidates dropping out is very common in the primaries. With the way we vote now, primaries are necessary to prevent the vote-splitting we see with yellow and red. The important choices are made in the primary, and in the general, we are left with only two. A primary will pick the candidates in a complicated kind of way involving considerations of electability. **Try it out below.** The orange candidate wins the primary vote because primary voters saw that red would lose the general election against the more moderate blue, and yellow and green split their vote. For more explanation, see the [Page on Primaries](primaries).
 
 {% include sim.html
 title = "Primary Vote-Splitting"
 caption = ""
 id = "primary_sim"
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSS24EMQhE7-I1C4P5ua_S6pNEydmDKUUjTTTqRRljPwrcX2OO677TiW0-dPMO4ty1Etm1J2c1J_H0kw0hVnseGnyuOXdYRxb34UqscU0aOq7xw4OGjYtpeJ2uXJRM-vdVJj9m9scMzy7FDDgLQhhghRjEIWWAtbTKWcluc1Kc2hRGVBgpAUYUm8AIMFKYVZKIdl9Ys43KGQFIC4YWSAukVaS7hoXvHHZcB3OhXSahRVppBfb0q_xaymtZ-Fu6rmoz9L2EepfWwNPAtqJ5wxCNIYJNWDbM0PCGhuYt2q9l1zI07xOCxh2NOyhu7XWVEQfC4cB3S8BB4G5g_LEQwUFg_PH3GwWS-TarQEsJYKKlhJmEmQQwAczj5_sXibjE8gQDAAA)"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQY4EIQhF7-LahSAo1lUqdZLJzNkHfZl00pNOL74CPj5Uf5VWrvuOUcXbU2-ZXsUiT6orY7pjK2Mi55R1qz9PLbKfDcli38VdTnEmerlaLVau8iOlFi-X1DKyOnMzpdV_v8zEx8z6mJF2WokAF-WKATHEkYGkAbHUbOcp65jT5GRQhVtiNAWMGkEwCkYT01OC2zoPejtGda8AUsdQh9Qh9STduSx-u3jwHGZnXKlae7VMG9g9r8nrqK9j4m89fc0Ow95b2DitbfJpsG0M7yzRBVGCWHZ26HxDZ3ifx6_H6eUMPxrC4IPBB5Thx2tPIwPEwMFYRyYOJm8n65-dGw4m659_f6NJMt52NRkpAAYjBWYCMwEwAAZ-YvO-fwGmgQqoCwMAAA)"
 %}
 
 **Final Recap:**
