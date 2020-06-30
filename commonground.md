@@ -186,13 +186,14 @@ Still want more? Try the sandbox below, where I've added a ton more voting metho
 
 Want more of a narrative?  Then choose your path.  Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV). I also have a draft of a page about proportional representation using more methods than just STV. It's a work in progress. Just be sure you get to read more about Condorcet methods. I like them best.
 
--   [Primaries](primaries)
--   [Approval Voting](approval)
--   [An Even Better Ballot by Jameson Quinn](newer)
--   [Instant Runoff Voting (Single-Winner Ranked Choice Voting)](irv)
+-   [Primaries](primaries) and electability polls
+-   [Approval Voting](approval) and strategy based on polling
+-   [Condorcet Methods Count by Pairs](condorcet) and I like them best
+-   [Instant Runoff Voting (Single-Winner Ranked Choice Voting)](irv) 
 -   [The Single Transferable Vote (Multi-Winner Ranked Choice Voting)](stv)
 -   [Proportional Representation](proportional) - draft
--   [Condorcet Methods Count by Pairs](condorcet)
+-   [To Build a Better Ballot](original) - Nicky's original sim that this sim was based on
+-   [An Even Better Ballot by Jameson Quinn](newer) on types of strategy with score voting and resistance to it with STAR voting and 3-2-1 voting
 
 External Links
 
