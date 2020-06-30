@@ -197,5 +197,5 @@ Want more of a narrative?  Then choose your path.  Either read about primaries
 
 External Links
 
-* Okay, I have to mention this set of [videos by CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe), since I do in every discussion I have ever had about voting methods with new people. He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote. 
-* Also, I have a big list of [links](links) to communities, organizations, simulators, polling sites, videos, essays, books, references, and bibliographies.
+* [Videos by CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe) - I have to mention this set of videos by CGP Grey, since I do in every discussion I have ever had about voting methods with new people. He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote. 
+* [Link List](links) - I have a big list of  to communities, organizations, simulators, polling sites, videos, essays, books, references, and bibliographies.
