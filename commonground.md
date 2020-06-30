@@ -186,16 +186,16 @@ Still want more? Try the sandbox below, where I've added a ton more voting metho
 
 Want more of a narrative?  Then choose your path.  Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV). I also have a draft of a page about proportional representation using more methods than just STV. It's a work in progress. Just be sure you get to read more about Condorcet methods. I like them best.
 
--   [Primaries](primaries) and electability polls
--   [Approval Voting](approval) and strategy based on polling
--   [Condorcet Methods Count by Pairs](condorcet) and I like them best
--   [Instant Runoff Voting (Single-Winner Ranked Choice Voting)](irv) 
--   [The Single Transferable Vote (Multi-Winner Ranked Choice Voting)](stv)
+-   [Primaries](primaries) - and electability polls
+-   [Approval Voting](approval) - and strategy based on polling
+-   [Condorcet Methods](condorcet) - I like them best because they count by pairs.
+-   [Instant Runoff Voting](irv) - AKA Single-Winner Ranked Choice Voting
+-   [The Single Transferable Vote](stv) - AKA Multi-Winner Ranked Choice Voting
 -   [Proportional Representation](proportional) - draft
 -   [To Build a Better Ballot](original) - Nicky's original sim that this sim was based on
--   [An Even Better Ballot by Jameson Quinn](newer) on types of strategy with score voting and resistance to it with STAR voting and 3-2-1 voting
+-   [An Even Better Ballot](newer) - by Jameson Quinn - on types of strategy with score voting and resistance to it with STAR voting and 3-2-1 voting
 
 External Links
 
 * Okay, I have to mention this set of [videos by CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe), since I do in every discussion I have ever had about voting methods with new people. He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote. 
-* Also, the [EndFPTP Wiki](https://www.reddit.com/r/EndFPTP/wiki/index) has more links. 
+* Also, I have a big list of [links](links) to communities, organizations, simulators, polling sites, videos, essays, books, references, and bibliographies.
