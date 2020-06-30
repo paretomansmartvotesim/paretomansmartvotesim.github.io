@@ -192,10 +192,10 @@ Want more of a narrative?  Then choose your path.  Either read about primaries
 -   [Instant Runoff Voting](irv) - AKA Single-Winner Ranked Choice Voting
 -   [The Single Transferable Vote](stv) - AKA Multi-Winner Ranked Choice Voting
 -   [Proportional Representation](proportional) - draft
--   [To Build a Better Ballot](original) - Nicky's original sim that this sim was based on
+-   [To Build a Better Ballot](original) - by Nicky Case - the original sim that this sim was based on
 -   [An Even Better Ballot](newer) - by Jameson Quinn - on types of strategy with score voting and resistance to it with STAR voting and 3-2-1 voting
 
 **External Links**
 
 * [Videos by CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe) - I have to mention this set of videos by CGP Grey, since I do in every discussion I have ever had about voting methods with new people. He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote. 
-* [Link List](links) - I have a big list of links to communities, organizations, simulators, polling sites, videos, essays, books, references, and bibliographies.
+* [Link List](links) - I have a big list of links to communities, organizations, simulators, polling sites, courses, videos, essays, books, references, and bibliographies.

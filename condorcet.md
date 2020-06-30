@@ -191,7 +191,7 @@ There's another definition of median you could think of. You could project to on
 
 I used these projected medians to make the beat maps. The median isn't a single position. There’s a projection for every angle, so you have a median associated with each angle. Just choose an origin, and you can make a plot. So I used each candidate as an origin and found where the median voter was. Then I doubled that distance to see a position that would tie with the candidate. That made the beat map. 
 
-By the way, there’s also something called a windmill problem that 3Blue1Brown made a video about, and this is actually a really good visual for a two-dimensional median.
+By the way, there’s also something called a windmill problem that 3Blue1Brown made a video about, and this is actually a really good visual for a two-dimensional median.  Another interesting way to find a median is Tukey's half-space depth.
 
 To restate the main point of this section, the reason we have Condorcet cycles is because there's no one single position in two dimensions that would beat all the other positions head-to-head. 
 

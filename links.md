@@ -48,6 +48,11 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 - [CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe) - This set of videos are excellent intro to voting methods, ready to share. He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote for historical reasons. 
 - [Tactical Voting](https://www.youtube.com/watch?v=tE-ktIxN-6Q) - a good overview of what strategy means in voting
 
+#### Courses
+
+- [Making Better Group Decisions: Voting, Judgement Aggregation, and Fair Division](https://www.youtube.com/watch?v=w3Szol8KLEE&list=PLBmjSBnW7zFm9rutlKI0nm9dQDZfnSo_g) - formal logic and math perspective - on my Youtube playlist - by Eric Pacuit - [Syllabus](http://ai.stanford.edu/~epacuit/classes/voting-fall2012.html) from a previous year - and it looks like he has a new method he invented with Wes Holliday called [Split Cycle](https://arxiv.org/pdf/2004.02350.pdf)
+- [Game Theory](http://www.game-theory-class.org/) - on Coursera and Youtube - from Stanford and UBC - by Matthew O. Jackson, Kevin Leyton-Brown, and Yoav Shoham
+
 #### Essays
 
 - Check out more of Jameson Quinn's excellent explanations of voting theory:
