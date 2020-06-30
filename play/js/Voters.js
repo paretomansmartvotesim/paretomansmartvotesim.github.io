@@ -1533,7 +1533,7 @@ DrawMe.Plurality = function (ctx, model,voterModel,voterPerson) {
 	ctx.beginPath();
 	ctx.arc(x, y, size, 0, Math.TAU, true);
 	ctx.fill();
-	if (model.yeeon) {ctx.stroke();}
+	if (model.checkDrawCircle()) {ctx.stroke();}
 
 
 }
@@ -1883,7 +1883,7 @@ function _drawSlices(model, ctx, x, y, size, slices, totalSlices){
 
 	}
 	
-	if (model.yeeon) {
+	if (model.checkDrawCircle()) {
 		// Just draw a circle.	
 		_drawRing(ctx,x/2,y/2,size)	
 	}
@@ -3395,7 +3395,7 @@ function _drawCircleFill(x,y,size,fill,ctx,model) {
 	ctx.beginPath()
 	ctx.arc(x, y, size, 0, Math.TAU, true)
 	ctx.fill()
-	if (model.yeeon) ctx.stroke()
+	if (model.checkDrawCircle()) ctx.stroke()
 }
 
 function VoterCenter(model){

@@ -688,6 +688,9 @@ function Model(idModel){
 		var doBeatMap = on && ( ! self.doTextBallots)
 		return doBeatMap
 	}
+	self.checkDrawCircle = function() {
+		return self.yeeon || self.checkDoBeatMap()
+	}
 	self.checkDoBallotConcept = function() {
 		// ranked voter and not (original or IRV or Borda)
 		var p1 = ! self.doOriginal
