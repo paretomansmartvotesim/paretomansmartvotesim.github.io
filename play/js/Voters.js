@@ -927,6 +927,8 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 			}
 			ctx.setLineDash([]);				
 		}	
+	} else if (model.useBeatMapForRankedBallotViz && model.system != "Borda") {
+		// do nothing .. kind of a temporary bandage while I work out the visualization
 	} else if (1) {
 		
 		if (model.system == "Borda") {

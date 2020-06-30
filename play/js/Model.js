@@ -95,6 +95,7 @@ function Model(idModel){
 		showVoters:true,
 		showToolbar: "off",
 		rankedVizBoundary: "atWinner",
+		useBeatMapForRankedBallotViz: false,
 		drawSliceMethod: "circleNicky", // "circleBunch" or "old"
 		allCan: false,
 		useBorderColor: true,

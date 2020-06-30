@@ -561,6 +561,7 @@ function Config(ui, config, initialConfig) {
         behavior: "stand",
         showToolbar: "on",
         rankedVizBoundary: "atWinner",
+        useBeatMapForRankedBallotViz: false,
         doElectabilityPolls: true,
         partyRule: "crowd",
         doFilterSystems: false,
@@ -1112,6 +1113,7 @@ function Cypher(ui) {
         85:"choiceSecondStrategy",
         86:"pairSecondStrategy",
         87:"voterCenterIcons",
+        88:"useBeatMapForRankedBallotViz",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3344,6 +3346,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     70: "choiceSecondStrategy",
                     71: "pairSecondStrategy",
                     72: "voterIcons",
+                    74: "useBeatMapForRankedBallotViz",
                 },
             }
         ]
@@ -5177,6 +5180,41 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.useBeatMapForRankedBallotViz = new function () {
+        var self = this
+        self.list = [
+            {name:"Yes",value:true,margin:4},
+            {name:"No",value:false,margin:4},
+        ]
+        self.codebook = [ {
+            field: "useBeatMapForRankedBallotViz",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.useBeatMapForRankedBallotViz = data.value
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.draw()
+        };
+        self.configure = function() {
+            model.useBeatMapForRankedBallotViz = config.useBeatMapForRankedBallotViz
+        }
+        self.choose = new ButtonGroup({
+            label: "Use Beat Map for Ranked Viz", // Sub Menu
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.useBeatMapForRankedBallotViz);
+        }
+    }
+
     ui.menu.showDescription = new function () {
         var self = this
         self.list = [
@@ -5657,6 +5695,7 @@ function createMenu(ui) {
             "ballotVis",
             "visSingleBallotsOnly",
             "rankedVizBoundary",
+            "useBeatMapForRankedBallotViz",
             "sidebarOn",
             ["divLastTransfer", [
                 "lastTransfer",
@@ -5887,6 +5926,7 @@ function createMenu(ui) {
                     "ballotVis",
                     "visSingleBallotsOnly",
                     "rankedVizBoundary",
+                    "useBeatMapForRankedBallotViz",
                 ]],
             ]],
             ["ui", [
