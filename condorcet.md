@@ -139,7 +139,7 @@ caption = "Only candidates more near the middle can win.  Move A, C, and D to ma
 comment = ""
 id = "election_beat_map_middle_sim" %}
 
-Let's look at all the candidate's beat maps to show that there is a cycle between A, C, and D, but B beats them all.  Also, the white spot in the middle is where a new candidate could win.
+Let's look at all the candidates' beat maps to show that there is a cycle between {{ A }}, {{ C }}, and {{ D }}, but {{ B }} beats them all.  Also, the white spot in the middle is where a new candidate could win.
 
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTQW4DIQz8C2cO2AYDeUbV2yaHRNlD1ait0vRQRcnbaxix0aqKVlqPjT0Mw-7VBbeZphI8Ee38xJw9cTFkb8-iDdXkqdTdzjtqzRTZU062oq0ltzFRK9XWbEhz6xW3Cd5Ft3H36rxLPVUjsLVsIfh_j62Upyv16QqFzk1NnbtvXdg629AADcADyABxgDSADpAHKAPUhfBBvXDTQk4LOy30tPBT26CpZag1f8RCRAZ7SBHMH4oWzY0Waq9y6BnbMcmC0bAF2MwRxdRJGTSckRVktQ9Iu_DmmlAvC-QIeARyxHgm8v1prYrR3DcR47u677fjfNif3eZy_plvVsX9sJc-EsPjulpK65TXqay2i7HrjmsRUfvuMeO7wqFi7cWELyDhSAnWJEGANSkhwJqEo6SCFhisoWcKgxXGKFg0dcViQhQUCgWK2QwFGbOZEQQBpmbccR7_ACRkfPHUnYutjiMVEBYcqUBMwS0VEBYQFug57E-nz8vr79dsv9zL_uN9PrrbH9CaVlbgAwAA)" 
@@ -150,9 +150,54 @@ id = "all_election_beat_map_middle_sim" %}
 
 These examples are made to show particular concepts, and a real election would have a wider spread of voters and candidates.
 
+### Median Math - How to Make a Beat Map
+
+To get a more fundamental understanding of Condorcet cycles, let's talk about how this beat map is related to the median.  In this section, I'll show that the reason we have Condorcet cycles is because there's no one single position in two dimensions that would beat all the other positions head-to-head.
+
+The median works in one dimension just like the Condorcet winner.  If you compare the median to any other position, then, in a vote, it would beat the other position.   
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA21SMU4EMQz8i-sUsWPHyb6Cgm51xSFRIK0EQkdxQvB2HI8OCk5bzNqOxzNOPqnStu-ss_R5KjtPL15Pp0J8y7PZihttUkhpo-9KhYy2WqjHoah5QC3_vqiMqNA3a6e75ZllaXa_zDWnMGMMC8IGUACUcAeEFNbAkXI5BnAhCZ5ICmdSBAAaURwJmhYAGnFEA9HMhlbTJq9lcBYaBDXspkFQmNl2xrGOAtja_O3XpFo_y1pm5JYJsr2tH80u_aOLLS6p6jlHIU5h0bAqgzCDRWtJYbBoBoBFA4sNHJm4z5p9HSwd9joW1S3lL2kdFB0KOnodChy9LjnMGwCrcdyV356NoziwlyIrBzsDZIMRQciAkKEpchgAWga4ns7H8Xp5vL49x0N9OD7ez8fL5UpfPzIyeM7oAgAA)"
+title = "Median Beats All in 1D"
+caption = "Candidate A takes the position at the median of the position of voters and wins.  Move B to show there's no other position that beats A."
+comment = "maybe continue using candidate B for the middle"
+id = "median_1d_sim" %}
+
+In two dimensions, the median doesn’t work this way.  Finding the median in two dimensions actually has many definitions. 
+
+One definition is called the geometric median.  It minimizes the distance between itself and all the points. More precisely, it minimizes the sum of these distances.  A more familiar concept is the mean, which minimizes the sum of the squares of these distances.
+
+The geometric median works in this simple symmetric case:
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA22SsW7DMAxE_0WzBpESJdlf0aGbkSEFOhQw0KJIh6Bovr00H9KlgWGc6BNPd5S_U0nrtomV7O8pb1KXrMVOp5wkmLY4o0dd01pyamlNt5Jysii7b3JuOJT873FmOpNu0np6SC9Ba7XHtJQ4RYRjRCmxIg3AiXTArUhz9IPVwQ-QnNR1_KNKfFQFkNHGFpepDsjooJpUSzTUEjHlGIYEUTFUKzyGPMy6SfivHQK1uvz1t5A6FnJf6H3hYpseixZdDbno6mG1Da4Cc42IxqgMY0ZEqyFhRDQDiGiDarJl4T5L9HVUOvE6g-oW9qsb6Uh0HHR6Bw4GvUNDflSA0Qzuatx_GyyMyVzykXoQZyI2hQojEyOzhclpAF4mWi_nfX-_PF8_Xv1Hfdq_Ps_72-Wafn4BRE0OAuoCAAA)"
+title = "Median Beats All in 2D"
+caption = "In this circular distribution of voters, the candidate that positions themselves at the geometric median beats all other candidates."
+comment = ""
+id = "median_2d_sim" %}
+
+The geometric median doesn't work in the multi-modal distributions we've been looking at that have Condorcet cycles.
+
+You can see that the zone of positions that could beat this median is pretty small compared to other ideas for where the median would be. Maybe that's a good figure of merit, but it doesn't quite describe the idea of a single median.
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTu27DMAz8F80aTFKiZH9G0c3JkCAeigZtkaZDESTfXooHOQiKwANf0vF4lC9hCNM8Uxojad7GmUqOPOh2GwOhwtFyVtEaWYo5LGqpsR02T0s7K2EaYkhhCrcxxJA9VAOwWjEzxH-fVerTyvi0QoNjU2MXbpswbII1NIe6w92R7qTu5O5od0p3anfGFfAOvWLTCk4rOq3wtOJTa9DYMtiaPmImIYI8pDCmDyWzpgabGT3LNqYl2cYkM-w1hsyckMwOyoDhgqgiGv2CtO021YQ8LaAjwBHQEcOZycUVxbXiDcSwLuH77bDsd6cwnU8_y9Wy2A3Z8TTc19RCegz5MRRv418Lk_NNaO4Z9a6p4C1hkDR6MmPrGWNkyJGhaoYcOcNAjowRMkTNEFUHjxQoCjFUkMzOVoyIAkLBQHG3gEHB3cIOXwQGQhbstfR3DwoFr5wiR4mp5TFSBWAFYAWZis1UAFYAVvCpwNvvjsfP8-vv12J_28vu4305hOsfg2mgwsgDAAA)"
+title = "Median Doesn't Quite Beat All in a Multi-Modal Distribution"
+caption = "In this triangular distribution of voters, there is a small white region near the center where a candidate can  take a position to beat the candidate positioned at the median."
+comment = ""
+id = "median_2d_multimodal_sim" %}
+
+There's another definition of median you could think of. You could project to one dimension and find the median as usual.
+
+I used these projected medians to make the beat maps.  The median isn't a single position.  There’s a projection for every angle, so you have a median associated with each angle. Just choose an origin, and you can make a plot.  So I used each candidate as an origin and found where the median voter was.  Then I doubled that distance to see a position that would tie with the candidate.  That made the beat map. 
+
+By the way, there’s also something called a windmill problem that 3Blue1Brown made a video about, and this is actually a really good visual for a two-dimensional median.
+
+To restate the main point of this section, the reason we have Condorcet cycles is because there's no one single position in two dimensions that would beat all the other positions head-to-head.  
+
 In the voting systems to follow, I added the beat maps to try to make voting more visually understandable.
 
-I’d also like to point out that, in a case where you have to resolve a tie, really any of the candidates would be an okay choice. The differences between Condorcet methods are just in how they go about doing a tiebreaker. 
+I’d also like to point out that, in a case where you have to resolve a cycle, really any of the candidates would be an okay choice. The differences between Condorcet methods are just in how they go about resolving the cycle.
 
 ## Specific Condorcet Methods
 
@@ -168,8 +213,6 @@ title = "Minimax"
 caption = ""
 comment = ""
 id = "minimax_sim" %}
-
-
 
 ### Schulze
 
@@ -219,7 +262,7 @@ id = "robla_sim" %}
 
 ## Strategy
 
-In each of these Condorcet methods, voters would have a hard time trying to use a strategy. What I mean by strategy is that you might say you like someone less than you actually do. Like you might put a viable competitor low on your ballot below people you actually don’t like as much in the hope that the tiebreaker would work in your favor. However, these strategies are hard to think about because they can backfire.  
+In each of these Condorcet methods, voters would have a hard time trying to use a strategy. What I mean by strategy is that you might say you like someone less than you actually do. You might put a viable competitor low on your ballot below people you actually don’t like as much in the hope that the tiebreaker would work in your favor. However, these strategies are hard to think about because they can backfire.  
 
 **Backfiring** - Jameson Quinn's study of how often strategies backfire versus work.  The Condorcet methods Schulze and Ranked Pairs (Rp) have a high likelihood of backfiring and a small likelihood of working.
 
