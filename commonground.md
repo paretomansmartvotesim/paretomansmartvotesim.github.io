@@ -51,9 +51,9 @@ caption='If you only say, "pick only one", then the winner can win with only a s
 
 comment='crowded election, winner gets less than 25%.  Everybody is an individual.  Everybody has an option' id='crowded_sim' %}
 
-A great simple example of this problem is the spoiler effect, which you get if you have three candidates in an election. A small candidate can change the outcome of the race even if they don't win. And they spoil the election for whichever side they're on.
+A great simple example of this problem is vote-splitting, which you get if you have three candidates in an election. A candidate can change the outcome of the race even if they don't win. If this is a small candidate, then we call this the spoiler effect because they spoil the election for whichever side they're on.
 
-{% capture cap16 %}drag {{ C }} left and right to spoil the election for either major candidate.{% endcapture %}
+{% capture cap16 %}Drag {{ C }} left and right to spoil the election for either major candidate.{% endcapture %}
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRTWvDMAz9K8FnHyx_pekxh90GXVt6SXrwRmizZclI20MZ22-frEdhUErA0ouk56fnb2XUsmmISJOr9rqhMnC2yFmM2lq332tF0uOdJm8ydmpptPJyBjkjd1h993FvyRWj7z6uLB5WqocVMnIdZUUZWkAIIigiSKKIwALIc-TrHAfmJq0s8_BPyzyWg0UAjfVoCTJgQWNLoAVQJQPOiFDKlpAUnJVZ51CHIMdMDRuMxogS-BxWJbHKC11O6JbYW-KywTnxMuf_U_ool_oSzwKJHosGGBaYUf22aj1d01Cs03vbjvVlPnRzUad5ZPTcpXOxOaa3Dwa77nDou2LXD0NiuJr7z6mo6xfOt8eueJouc7Hp0mkaT61STA8DgxNXAwwMAQEGBqgLeIYAA6NBIOmMeM2IZ4hBrHG8YARFxGaxklBisxKzJYx_TcMwnbfXr473XQ2XOQ39-ap-_gBhAcnr6AIAAA)'
 
