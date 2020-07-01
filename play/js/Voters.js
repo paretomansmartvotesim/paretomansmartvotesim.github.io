@@ -2402,11 +2402,13 @@ function GeneralVoterModel(voterModel) {
 		<table class="main2" border="1">
 		<tbody>
 		<tr>
-		<th>Tally<br>
-		<em><span class="small">(how your vote counts)</span></em></th>
-		</tr>
-		<tr>
-		<td class="tallyText">#2</td>
+		<td class="tallyText">
+		<span class="small">
+		This is how your vote counts:
+		</span>
+		<br> <br>
+		#2
+		</td>
 		</tr>
 		</tbody>
 		</table>`.replace("#2",voterModel.drawTally(voterPerson))
@@ -2456,7 +2458,7 @@ function htmlBallot(model,rTitle,textByCandidate) {
 	</tr>
 	<tr>
 	<td class="main">
-	<table border="0">
+	<table class="canList" border="0">
 	<tbody>
 	`
 	text += tTitle.replace("#title",rTitle)
