@@ -125,6 +125,7 @@ BALLOT DESIGN
 }
 .div-ballot #paper table.num{
     border: 2px solid #ccc;
+    min-width: 25px;
 }
 /* .div-ballot #paper table{
 	min-width: unset;
