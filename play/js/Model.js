@@ -785,6 +785,7 @@ function Arena(arenaName, model) {
 		self.plusXVoterGroup.isPlusXVoterGroup = true
 		self.trashes = new Trashes(model)
 		self.modify = new Modify(model)
+		self.viewMan = new ViewMan(model)
 	}
 	self.initDOM = function() {
 		// RETINA canvas, whatever.
@@ -799,6 +800,7 @@ function Arena(arenaName, model) {
 		self.plusXVoterGroup.init()
 		self.trashes.init()
 		self.modify.init()
+		self.viewMan.init()
 	}
 
 
@@ -1077,6 +1079,7 @@ function Arena(arenaName, model) {
 		var self = this;
 		Draggable.call(self);
 		self.isModify = true // might help later
+		self.isGear = true
 		self.isArenaObject = true
 		
 		// CONFIGURE DEFAULTS
@@ -1109,13 +1112,16 @@ function Arena(arenaName, model) {
 		self.draw = function(ctx,arena){
 			// if it is near a candidate, then draw it on that candidate
 			// when the mouse is let go, the coordinates will snap to the candidate
-
-
+			
+			if (self.active) {
+				var f = model.arena.modelToArena(self.focus)
+				self.x = f.x
+				self.y = f.y
+			}
 
 			// RETINA
-			var p = self
-			var x = p.x*2;
-			var y = p.y*2;
+			var x = self.x*2;
+			var y = self.y*2;
 			var size = self.size*2;
 	
 			if(self.highlight) {
@@ -1155,6 +1161,99 @@ function Arena(arenaName, model) {
 			self.focus = null
 			model.arena.up = null
 			model.arena.right = null
+		}
+	}
+	function ViewMan(model) {
+		var self = this;
+		Draggable.call(self);
+		self.isModify = true // might help later
+		self.isViewMan = true // might help later
+		self.isArenaObject = true
+		
+		// CONFIGURE DEFAULTS
+		self.size = 20;
+		self.sizey = 60;
+		
+		self.init = function() {
+			var srcMod = "play/img/viewMan.png"
+			// if (Loader) {
+			// 	if (Loader.assets[srcMod]) {
+			// 		self.img = Loader.assets[srcMod]
+			// 	}
+			// }
+			self.img = new Image();
+			self.img.src = srcMod
+			model.nLoading++
+			self.img.onload = onLoadTool
+			self.configure()
+		}
+		self.configure = function() {
+			if (self.active) {
+				var f = model.arena.modelToArena(self.focus)
+				self.x = f.x
+				self.y = f.y
+			} else {
+				self.y = model.size - 20
+				var between = 40
+				self.x = model.size - between * 6.5
+			}
+		}
+		self.draw = function(ctx,arena){
+			// if it is near a candidate, then draw it on that candidate
+			// when the mouse is let go, the coordinates will snap to the candidate
+
+
+			if (self.active) {
+				var f = model.arena.modelToArena(self.focus)
+				self.x = f.x
+				self.y = f.y
+			}
+
+			// RETINA
+			var x = self.x*2;
+			var y = self.y*2;
+			var size = self.size*2;
+			var sizey = self.sizey*2;
+	
+			var doDoubleSize = self.highlight || self.active || model.arena.mouse.dragging == self
+			if(doDoubleSize) {
+				var temp = ctx.globalAlpha
+				ctx.globalAlpha = 0.8
+				size *= 2
+				sizey *= 2
+				// y -= size/4
+			}
+			ctx.drawImage(self.img, x-size/2, y-sizey/2, size, sizey);
+			if(doDoubleSize) {
+				ctx.globalAlpha = temp
+			}
+		};
+
+		self.snap = function() {
+			
+			if (self.focus) {
+				
+				// check for snap
+				var hit = self.objectMouseHitTest(25, self.focus, model.arena)
+				if (hit) {
+					self.active = true
+					self.configure()
+					return true
+				}
+				// model.arena.initARENA() // add the controls to the arena
+			}
+			self.active = false
+			return false
+		}
+
+		self.drop = function() {
+			self.configure()
+			// model.arena.initARENA()
+		}
+
+		self.unInit = function() {
+			self.active = false
+			self.focus = null
 		}
 	}
 
@@ -1366,6 +1465,7 @@ function Arena(arenaName, model) {
 				}
 				self.draggables.push(self.right)
 			}
+			self.draggables.push(self.viewMan)
 		}
 	}
 
@@ -1548,6 +1648,9 @@ function Arena(arenaName, model) {
 			if (self.modify.focus.group_spread) { // this value might have changed
 				self.up.configure()	
 			} 
+		}
+		if (self.viewMan && self.viewMan.active) { // update the viewMan value
+			self.viewMan.configure()
 		}
 	}
 
@@ -2119,6 +2222,8 @@ function Arena(arenaName, model) {
 					}
 					self.right.draw(self.ctx,self)
 				}
+
+				self.viewMan.draw(self.ctx,self)
 			}
 
 		}

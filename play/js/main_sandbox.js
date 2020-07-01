@@ -392,46 +392,57 @@ function bindModel(ui,model,config) {
         ui.redrawButtons() // make sure the icons show up
         
         // CREATE A BALLOT
-        _removeSubnodes(ui.dom.right)  // remove old one, if there was one
-        // ui.dom.basediv.querySelector("#ballot").remove()
+        if (ui.dom.rightBallot) ui.dom.rightBallot.remove() // remove old one, if there was one
 
-        var doOldBallot = false
-        if (config.oneVoter) {
+        // decide whether to draw a ballot
+        var hideSidebar = false
+        var dragging = model.arena.mouse.dragging
+        if (model.arena.viewMan.active || dragging && dragging.isViewMan) {
+            var doDrawBallot = true
+            var voterPerson = model.arena.viewMan.focus
+            if (voterPerson == null) doDrawBallot = false
+        } else if (config.oneVoter && model.voterGroups[0].voterGroupType == "SingleVoter") {
+            var hideSidebar = true
+            var doDrawBallot = true
+            var voterPerson = model.voterGroups[0].voterPeople[0]
+        } 
+
+        if (hideSidebar) {
+            _addClass(model.caption,"displayNoneClass")
+        } else {
+            _removeClass(model.caption,"displayNoneClass")
+        }
+
+
+        if (doDrawBallot) {
+
+            var doOldBallot = false
+            
+            // attach the ballot
             if (doOldBallot) {
                 var BallotType = model.BallotType
                 var ballot = new BallotType(model);
-                ui.dom.right.appendChild(ballot.dom);
+                ui.dom.rightBallot = ballot.dom
             } else {
                 var divBallot = document.createElement("div")
-                ui.dom.right.appendChild(divBallot);
+                ui.dom.rightBallot = divBallot
             }
-        }
-        ui.dom.right.appendChild(model.caption);
-        
-        if (config.oneVoter) {
-            if (model.voterGroups[0].voterGroupType == "SingleVoter") {
-                var text = ""
-                if (doOldBallot) ballot.update(model.voterGroups[0].voterPeople[0].stages[model.stage].ballot);
-                if (doOldBallot) text += "<br />"
-                text += '<div class="div-ballot">'
-                // text += model.voterGroups[0].voterModel.toTextV(model.voterGroups[0].voterPeople[0].stages[model.stage].ballot);
-                text += model.voterGroups[0].voterModel.toTextV(model.voterGroups[0].voterPeople[0]);
-                text += '</div>'
-                if (0) {
-                    text += "<br /><br />"
-                    text += model.result.text
-                }
-                if (doOldBallot) {
-                    _removeClass(model.caption,"displayNoneClass")
-                    model.caption.innerHTML = text
-                    var target = model.caption
-                } else {
-                    model.caption.innerHTML = ""
-                    _addClass(model.caption,"displayNoneClass")
-                    // model.caption.style.display = "none"
-                    divBallot.innerHTML = text
-                    var target = divBallot
-                }
+            ui.dom.right.prepend(ui.dom.rightBallot)
+
+
+            var text = ""
+            if (doOldBallot) {
+                ballot.update(voterPerson.stages[model.stage].ballot);
+                text += "<br />"
+            }
+            text += '<div class="div-ballot">'
+            // text += model.voterGroups[0].voterModel.toTextV(voterPerson.stages[model.stage].ballot);
+            text += model.voterGroups[0].voterModel.toTextV(voterPerson);
+            text += '</div>'
+
+            if (! doOldBallot) {
+                divBallot.innerHTML = text
+                var target = divBallot
                 if (model.tallyEventsToAssign) {
                     for (let e of model.tallyEventsToAssign) {
                         target.querySelector("#" + e.eventID).addEventListener("mouseover", e.f)
@@ -440,8 +451,8 @@ function bindModel(ui,model,config) {
                     model.tallyEventsToAssign = undefined
                 }
             }
-            
         }
+           
     };
 
     model.updateFromModel = function() {
