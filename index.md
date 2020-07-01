@@ -10,9 +10,9 @@ twuser: paretoman1
 
 {% include card.html title='Finding Common Ground' description=' - #1 Start here. Jump right in.' url='commonground' img='img/venn-diagram.png' %}
 
-{% include card.html title='Primaries' description=" - #2 we don't need them" url='primaries' img='img/primary-strategy.png' %}
+{% include card.html title='Primaries' description=" - #2 We don't need them." url='primaries' img='img/primary-strategy.png' %}
 
-{% include card.html title='Approval Voting' description=' - #3 a practical improvement - and it works with strategy' url='approval' img='img/winner-circle.png' %}
+{% include card.html title='Approval Voting' description=' - #3 a practical improvement - And it works with strategy.' url='approval' img='img/winner-circle.png' %}
 
 {% include card.html title="Condorcet Methods" description=' - the best way to find common ground.' url='condorcet' img='img/condorcet.png' %}
 
@@ -24,7 +24,7 @@ twuser: paretoman1
 
 {% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer' img='img/chicken.png' %}
 
-{% include card.html title="Sandbox" description=' - try everything' url='sandbox/' img='img/sandbox.png' %}
+{% include card.html title="Sandbox" description=' - Try everything.  Share your creations.' url='sandbox/' img='img/sandbox.png' %}
 
 
 <!-- {% include card.html title="Proportional Representation" description=" - continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods" url='proportional' img='img/proportional.png' %} -->
