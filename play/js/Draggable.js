@@ -144,19 +144,7 @@ function DraggableManager(arena,model){
 	subscribe(model.id + "-" + arena.id+"-mousemove", function(){
 		var dragging = arena.mouse.dragging
 		if(dragging && dragging.isViewMan) {
-			arena.update() // update position of dragga
-
-			// focus on closest voter
-			var closest = self.nearestVoterToMouse()
-			if (closest) {
-				dragging.focus = closest
-				
-				// check for snap
-				dragging.snap()
-			}
-
-			model.drawArenas() // draw everything inside the arenas
-			if (closest) model.onDraw() // draw ballot for closest voter
+			dragging.drag(arena)
 		} else if(arena.mouse.pressed && ! (dragging && dragging.isModify)){
 			// open the trash can
 			if (dragging) {
@@ -217,6 +205,8 @@ function DraggableManager(arena,model){
 				d.selected = ! d.selected
 			}
 			model.update();
+
+			if(d.isViewMan) d.drag(arena) // act as if we are already dragging viewMan
 
 			// GrabBING cursor!
 			arena.canvas.setAttribute("cursor", "grabbing");

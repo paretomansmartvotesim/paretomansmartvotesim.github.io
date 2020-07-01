@@ -1228,7 +1228,23 @@ function Arena(arenaName, model) {
 				ctx.globalAlpha = temp
 			}
 		};
+		self.drag = function(arena) {
 
+			arena.update() // update position of draggable
+
+			// focus on closest voter
+			var closest = arena.draggableManager.nearestVoterToMouse()
+			if (closest) {
+				self.focus = closest
+				
+				// check for snap
+				self.snap()
+			}
+
+			model.drawArenas() // draw everything inside the arenas
+			if (closest) model.onDraw() // draw ballot for closest voter
+
+		}
 		self.snap = function() {
 			
 			if (self.focus) {
