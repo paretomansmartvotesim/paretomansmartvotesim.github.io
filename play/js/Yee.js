@@ -439,10 +439,7 @@ function Yee(model) {
 
 				model.dm.redistrict()
 				model.yeeobject = undefined
-				for(var voterGroup of model.voterGroups){
-					voterGroup.updatePeople()
-				}
-			
+							
 			} else {
 
 				model.dm.redistrict()
@@ -450,6 +447,9 @@ function Yee(model) {
 				// model.update()
 	
 			}
+		}
+		for(var voterGroup of model.voterGroups){
+			voterGroup.updatePeople()
 		}
 	}
 	
