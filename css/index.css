@@ -228,6 +228,10 @@ li{
 #sandbox-index-section{
 	overflow:hidden;
 	border-bottom: 5px solid rgba(0,0,0,0.2);
+}
+#sandbox-section,
+#sandbox-index-section,
+#sandbox-embed-section{
 	padding: 30px 0;
 }
 .sim-sandbox .div-sandbox{
