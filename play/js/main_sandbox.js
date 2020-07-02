@@ -984,7 +984,7 @@ function Config(ui, config, initialConfig) {
             var link = baseUrl + relativePath + uri;
         }
         if (ui.embed) {            
-		    var linkText = '<iframe src="' + link + '" scrolling="yes" width="1000" height="600"></iframe>'
+		    var linkText = '<iframe src="' + link + '" scrolling="yes" width="100%" height="600"></iframe>'
         } else {
             var linkText = link
         }

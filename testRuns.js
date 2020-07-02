@@ -123,7 +123,7 @@ for (var [d,a] of e) {
     c += "<ul>"
     for (var [i,b] of a) {
         c += "<li>"
-        // embed = '<iframe src="' + b + '" scrolling="yes" width="1000" height="600"></iframe>'
+        // embed = '<iframe src="' + b + '" scrolling="yes" width="100%" height="600"></iframe>'
         var f = b.replace("http://127.0.0.1:8000/","")
         c += '<a href="' + f + '"> ' + i + '</a>, '
         c += "</li>"
