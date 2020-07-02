@@ -11,11 +11,8 @@ twuser: paretoman1
 Hello, I'm going to show you how to find common ground as a group . We'll go over the following:
 
 * what we mean by the middle, 
-
 * how we can use votes to find the middle by simple comparisons, 
-
 * the simplest voting method that finds the middle, and
-
 * the world of voting methods.
 
 Let's jump right in with an example and some diagrams.
@@ -24,11 +21,11 @@ Let's jump right in with an example and some diagrams.
 
 Now in a group you may have to come to a decision, and there's going to be a lot of different people in this group. So each one is going to have a different opinion, and they're going to be spaced out in different dimensions of how they feel about a topic: maybe what pizza to get as a group order for pizza,  or where you are going to go out to eat, or something like that.   So some people would be vegetarian or like meat.   And some people like to spend a lot of money and some a little money. So whatever dimensions there are, you're going to have differing opinions on dining or whatever. 
 
-{% include sim.html  link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSPW_CMBD9K5FnDz5_nAMjQ7dKFBBLYHCrCNKmpAowoKr97T37wVKELOXd5e5e3j3nWxk1bRrraj3hrW7IR22ZJGKrrXESWBevEZMmsqVLinG71YryNHmnyZucOzU1WvnyDOXJ0iHd_4_0RqkYfXekUj-sTB5WyJTPUVaUU4sUggiKCJKIASKAvKB8jgWEm7SywiMvrfBYAQsAjfVoERonABobkdXIJmXAmSKUsiVUCs6WWedQhyAnTI24eju5ndEAVoeFSSxz2usgDb5Q54Bugb0FLpudA1-m_T295yLDR1wURHusHgxAeNXvRi2GS-qrRXrfbA6z87hrx2qWxoNkz206Vct9evuQZN3udl1brbu-T5LOx-5zqGazF4lX-7Z6Gs5jtWzTcTgcN0oJPSwNrvgcYGkIAFgaoC7UZYsAS9kAqHQy7pdxMRyuDjAIGHvxpEDErxExGXERr6nvh9Pq8tXKtvP-PKa-O13Uzx9ViSYoEgMAAA)' 
+{% include sim.html  link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu24CMRD8lZNrF971E0qK1CREaQ4KJzrBhQsXXaBAUfLtWXtAioSQi9n1rsezY38ro-ZtyzbpWdjollzUHEiiwJqNlYBtvESBNBHXLinGzUYrKqfJWU3OlNyqudHKqbn6NUorX9MgTVKLAkbfLKmku5XZ3QqZyk0EcmKkEEAOgPspAEQAOUG5LggIN2nFwiObLDwswADQsEOL0FgB0HBElpDN6gFrqlAqFlAtWAiyFnUIssLUiovXVdoDGsBqMTBp1lY77aXBVeoS0DXgayDkLZfA1dPult6FOoKLeBiIdhjdGwCV51qrp_Gch-Ypv6_Xh8Vp2nZTs8jTQbLVscv7ZrXLb3vJXrrttu-al34YsqTLqf8Ym8XiUeLnXdc8jKepWXX5azx8rVX5BPDUwwkPT70HwFMPeT7VMTw8DQZAtTPAz4CXCf5iQQBBwGBhViHib0ScjAywALxExNeI178ZUUz_7S_7cCqBMIEwQUqClOSqzOQB0JPAlyDrNQ_DeHw-f3bi9HI4TXnoj2f18wcgESI7fgMAAA)"
 
 title='Where to go eat?' 
 
-caption='x-axis is Meat-Veggie axis. y-axis is $-$$$ axis'  comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
+caption='Horizontal Meat-Veggie axis. Vertical $-$$$ axis'  comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
 
 Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like it to be so that people would say they don't regret making that decision. One way you will find out if people regret this decision is if most people say they would rather do something else. So that's why you might want to pick something in the middle because no matter what you pick in the middle, if you compared to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
 
@@ -164,7 +161,7 @@ comment='same example' id='rcv_sim' %}
 
 And you can also have a multi-winner system where maybe you have two candidates getting elected<!--link to multiwinner-->.  For example, maybe you're picking a pizza and you can have meat lovers pizza and you can also have a vegetarian pizza. You don't have to all eat the same pizza.  
 
-{% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy0oDQRD8lWXOfZie526OevGgICJednMYyaDBuAlJEET02-3pIgiGMIfqSvXUdtfky1izGMehp4GXNLpgydksFXMk7rXqMzE3lSMTR7dckuF2i6MnDr5xbxaWTDALTmSikiQtjs6ONGdRLJ0dUfqLynBRYauf4zZSow4UE3EAYCROABmAg6B8LgqIN5Nx4iM_OvFxAg4AGxfQIjZeADYug_Vgg17wVgfllgmr4J3e9R46BvLiNEqaOK05QYanx7osgXkKIge1bQWfCncqfAu6FUEtwn_rkHSAkPFGGDdg6WgB4mp-JnNT3rsyr7r79VzLbrep0zRfv9Z6qN3VvpaV0Ltajt3t9qPuD8Ke6svLuv5xNEsxGSO2CDF6TTYixBgBCDFmtPS6d0SIyQJYOxNeNOEpUtRovCyWYJGwURoUMv4OGXczwn8um832-Pi5q7LnQ5nf6sp8_wIoed6o_AIAAA)' title='Pick a Pizza' 
+{% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTUsDMRD9K0vOc8jkc7ZHvXhQEBEvuz2sNGixbktbBBH97U7yKEKl7OHN7Ju8vLzky1izGIZeqOclDS5YcjZrxRyJpVWSibmyHJk4uuWSDNdVHD1x8LX3ZmHJBLMwP5wMmdj6pFNKZgVL_z5l5CLTX2TYNm1miLNDCwccANhfrTRQAxwUdbuooNpMxqmO_nSq4xQcADIuYERlvAJkXEYn6Pq2wNtmlGsG3AgPQ96DhyGvSoOmh68OJ9DQ9DgukyNPQenQZGvBp8KdChUeXC1Ckwjn0iE18yHjTmA34NDRArje1Ghupvdumlfd_Xou0263KeM4X7-Wcijd1b5MK23vynTsbrcfZX_Q7qm8vKzLX49hLUZTbx0hRt8OFRFijACEGDNGBCMIMVkAt8mEABOuIsUWjdeDJUgknCj1DTKeQ8ba7AAegPAzXkM-PccMUs4yzxAUCAoEBWYEZgSRSwTAj0BPYOt52my2x8fPXdGIH6b5razM9y_xYZA_ZwMAAA)" title='Pick a Pizza' 
 
 caption='We can order two.' 
 

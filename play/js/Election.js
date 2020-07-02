@@ -220,7 +220,7 @@ Election.three21 = function(district, model, options){
 		var text = "";
 		text += "<span class='small'>";
 		if ("Auto" == model.autoPoll) text += polltext;
-		text += "<b>Semifinalists: 3 most good. Finalists: 2 least bad. Winner: more preferred.</b><br>";
+		text += "Semifinalists: 3 most good. <br>Finalists: 2 least bad. <br>Winner: more preferred.<br><br>";
 		text += "<b>Semifinalists:</b><br>";
 		for(var i=0; i<semifinalists.length; i++){
 			var c = semifinalists[i];
@@ -2157,7 +2157,7 @@ Election.stv = function(district, model, options){
 				// text += model.icon(c)+":"+Math.round(tally[c]);
 				text += model.icon(c)+":"+_percentFormat(district,tally[c]);
 				
-				if(i<candidates.length-1) text+=", ";
+				if(i<candidates.length-1) text+=",<br>";
 			}
 			text += "<br>";
 		}

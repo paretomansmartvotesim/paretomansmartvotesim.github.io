@@ -2212,7 +2212,7 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 	if (pick.doChain || pick.doPairs) {
 		text += "<span class='small' style> Preferences: </span> <br />" 
 		for(var i=0; i<ballot.rank.length; i++){
-			if (i>0) text += ">"
+			if (i>0) text += " > "
 			var candidate = ballot.rank[i];
 			text += model.icon(candidate)
 		}
