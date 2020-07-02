@@ -27,7 +27,7 @@ title='Where to go eat?'
 
 caption='Horizontal Meat-Veggie axis. Vertical $-$$$ axis'  comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
 
-Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like it to be so that people would say they don't regret making that decision. One way you will find out if people regret this decision is if most people say they would rather do something else. So that's why you might want to pick something in the middle because no matter what you pick in the middle, if you compared to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
+Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like to make a decision that other people will accept and won't regret.  One way you will find out if people regret this decision is if most people say they would rather do something else. That's why you might want to pick something in the middle.  No matter what you pick in the middle, if you compare the middle option to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
 
 {% capture cap1 %}Move {{ B }} anywhere. A line forms between that and the middle option, and you will see most people are on the side of the middle option.{% endcapture %}
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsWoDMQz9F80eLMmSz_cVHbodN6TQIXCQUtIhlP57ZT3SDiEYLMlPenrS3TdVWreNjQub7mXjsRSRuu-FGIgkErHSWgu1vC1vjwwpDydyeyC1PJxAlqfIeIpwzXY8Fc1QEEIQQxFDEjtMCOAWNtpJmODmQhI88SicjyIwoJGGlKDRMKCRjmhBNLJAawrluRJOQCVrVYFDkAbTxkhzAGDT8Vffkmo6fHfk7uhc7nRaVrV_uubZrnV8EIhrGNGwKoMww4iGEQ0jmsFgRAOLLdnFMKJXGM5Mx74dLG4pP34WclA4FPhI06Ggo7ZjNW-n47hcX28f77TSy_H1eTrO1xv9_AKWPS3kgAIAAA)"
@@ -38,7 +38,7 @@ caption=cap1
 
 comment="allow adding candidates with + and use condorcet rule, maybe make a custom pairwise comparison between the middle option, which cant be moved, and any other option.  And you cant move the voters either" id="middle_sim" %}
 
-So how do you find the middle option?  Well, you could hold a vote.   And you have all the options in this vote.  And what happens is that you'll find out that people will pick a side, and you end up dividing people into these little groups.  It's common sense.  If you only say pick one, then they pick their side and they vote for it.  And it's kind of random which side wins.  And that's a win with maybe with less than 25% of people… so what's going on here… well, people split into little groups, and that's the problem. 
+So how do you find the middle option?  Well, you could hold a vote and ask everyone to pick one option out of all the options.  What happens is that people will pick a side, and you end up dividing people into little groups.  It's kind of random which side wins, and that's a win with maybe with less than 25% of people. That hardly seems like a win. 
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSPW_CQAz9K9HNN8T3mXTM0K0SBcSSMFyrCNKmpAowoKr97fX5laUInXS2z_bL83O-VKke2pas1RTsVrd868qwYww_RZefbNSGavaC1-Rou9WKpMtxiStzbNVDqZWT28sduMLom8O1kTOlvjmcqe5m6rsZKuVzlBnl0CAEIQIjAiUKMEyAHFv-nGfD2KSVYRx-NIxj2BgYwBiHEoaxbABjIqIKUS0NthSilCUhSVgjvdYiD0KWkVrSfycXB6SBaTEusWBW8wqUE9js0NUxV8dmobPjpNf9h3ZBCLiIFYGuw9Ae4nlGVT-dWk6XNBbL9NZ1h-Y87_q5aNJ84OipT6ditU-v7xxs-t1u6IvNMI6Jw8U8fExF0zyzv973xeN0notVn47T4dgpxfAQ00MCDzG9h4GYHux8JTN4iBlKGJLKgM0GrCR4kYh_WRUAETBZqMVETBbRG7GElzSO02l9-ex53sV4ntM4nC7q-xe0u0DUBgMAAA)'
 
@@ -48,7 +48,7 @@ caption='If you only say, "pick only one", then the winner can win with only a s
 
 comment='crowded election, winner gets less than 25%.  Everybody is an individual.  Everybody has an option' id='crowded_sim' %}
 
-A great simple example of this problem is vote-splitting, which you get if you have three candidates in an election. A candidate can change the outcome of the race even if they don't win. If this is a small candidate, then we call this the spoiler effect because they spoil the election for whichever side they're on.
+This problem is called vote-splitting, which you get if you have three candidates in an election. Notice that a candidate can change the outcome of the race even if they don't win. If this is a small candidate, then we call this the spoiler effect because they spoil the election for whichever side they're on.
 
 {% capture cap16 %}Drag {{ C }} left and right to spoil the election for either major candidate.{% endcapture %}
 
@@ -60,7 +60,7 @@ caption=cap16 id='spoiler_sim' %}
 
 ## Simple Comparisons
 
-So how do you solve that problem? So instead of dividing everybody up all at once, just consider each alternative one at a time (I guess that's two at a time).  So just between the two options below, you can tell which one's better.
+So how do you solve that problem? Instead of dividing everybody up all at once, just consider each alternative one at a time (I guess that's two at a time).  Just between the two options below, you can tell which one's better.
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRPW_CMBD9K5FnDz5_hTBm6FapBcSSMLitBZQ0qQIMqGp_ey_3RDsg5OHu_O6e3z1_KaPmTUPeavJ-oxuqnLYmbjZaERDHiJlqp-ZGK6_mlVZB8sgdVt8c7i0ZMfrmMDK7i1R3ETLyHE2KptKihCDyCJBEEYEFkOfIz1kOzE1aWebhS0tyaS0CaKxHC9M4DqCxJaoZqkoGnBGhNFlCAjgrs84BhyDHTA2hLQIAm6v-5r1QTQldE3tN3GTulHiZ8v90PspzvsSHQJzHigFWBeZTP61aDJfUFYv03rZ9fR63eSzqNPZcPeZ0Kpa79HrgYp23230u1vuuS1w-jfuPoajrZ85Xu1w8DOexWOZ0HPpjqxTTw7rgxM8A60JAgHUB6sJM1AdYFw0CSWfEP0Z8QAxii-MFIygiNouVhBKblZgtYflL6rrhtLp8Zt53kfpDflPfvwTcre3VAgAA)' 
 
@@ -80,11 +80,11 @@ caption=cap12
 
 comment='two candidates with a circle. Maybe I could use names for ping pong.' id='by_pairs2_sim' %}
 
-So what would that look like? (in an actual election). That would basically be looking at every possible pair of options.  So say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot. But really, you have a single ranking, which is easier to write.  
+So what would that look like in an actual election?. That would basically be counting the votes for every possible pair of options.  Say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot. But really, you have a single ranking, which is easier to write.  
 
 You would get a ballot with the names {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} written on it. And because you like them in that order, you'd write 1 2 3 4 5 on the ballot; you like \#1 {{ A }}, then \#2 {{ B }}, and so on.  From your ranking you can tell, for example, that for {{ A }} versus {{ E }}, you like {{ A }} better, and so on for every pair.
 
-So everybody writes their rankings on the ballot, and then we count all the ballots one pair at a time. If we find that one candidate was able to win all their matches, then we've found the middle.
+Everybody writes their rankings on the ballot, and then we count all the ballots one pair at a time. If we find that one candidate was able to win all their matches, then we've found the middle.
 
 {% include sim-ballot.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8i88-xImdbPbMCxC31R4KXURFta3aIoQQvB0nQy-gag8Te-zJ2NlPCjROU0kssc48iRjLkNrJgueGdqqeK42NsXrO5plJWltS9rIWJhoDk9JYmYxGYcpeEPjf57XlJjPcZOpNRkK_WpqhFkaEMCQKMEDuzsQNiDr6deZQOxldx5NRek2MAMhEReQyySEjWRANiFwl-h5CNyptJVBKUEpQSlBKrjQJ_36tOKMdmgnjCkdOrE5rk2112sZsY2u8HtKV0t6rf6UVU2vBE8Gu1p40LM8EAKsGq4bdGZ7TMLRBxYZ-l2HoHAAYOOMFMlSy9VH8j6IMiQwHGWsvcFDQW-DgcbPfHy4PH8eFRrrfrK_LlpjOL4f3u-X8dNodL7vD6tT327pdnner018_VpCSNcoCAAA)' title='Rankings' 
 
@@ -94,7 +94,7 @@ comment='ranked ballot with pairs' id='pair_ballot_sim' %}
 
 ## The Simplest Ballot
 
-So what else is there?  You can also just allow people to vote for more than just one candidate.  This will be really easy to explain with a common kind of diagram, a Venn diagram.
+So what else is there?  You can also just allow people to vote for more than just one candidate.  This will be really easy to explain with a Venn diagram.
 
 {% capture cap17 %}The voters vote for everyone in their circle.  Both like {{ C }}.{% endcapture %}
 
@@ -112,7 +112,7 @@ caption='Vote for as many as you like.'
 
 comment='simple,lots of candidates, one voter' id='approval_sim' %}
 
-So say there's two populations of people and they like candidates in their little circle. If you allow them to vote for everybody in their circle, then the people in the middle get more votes than the people on either side.  
+Say there's two populations of people and they like candidates in their little circle. If you allow them to vote for everybody in their circle, then the people in the middle get more votes than people on either side.  
 
 {% include sim.html altlink='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu27CQBD8FevqK27vieniIl2kBBCNTXGJLEPiYGQgEoqSb896pyASQi5mx7M7t49vZdS8rlOpyfmNrskHjixH1jiOaLPRiqaUmdEUShE4JaRJcGputPJqTgxBSORcq28-Tk6sGH3zsTK7q5R3FTLyHE29TdSCoiPyALREEcANkGfk5xwDe5NWln34p2Ufy2ABsLEeKUEKLGxsApuBlVLgjDRK005IBGel1jnoaMixU02akBghwc9hVJJVedhNc3q6hvYaOhhNoZd6_9_aR3ncJ9wHrXoMHLC4wL7qt1GL4ZL7YpHfm2ZfnceuHYsqj3tmT20-Fcttfvtgsm67btcW613fZ6bP4-5zKKrqhePVti0eh_NYLNt8HPbHRim2xyKDk-0GLDIEABYZ0F3AOQIWGQ2AJDPiqhHniEHmdzxghEXEZLEUSJgsoTbhAK-574fT6nJoed6Hw2EcvnKvfv4AJutP2_gCAAA)' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSPW_CMBT8K5FnD3n-CmFrhm6VWkAsgcGtIqBNCQpQCVXtb-_ZNyAVIQ_3Ps_vnf2tSjVt2xC0GLvWrUippQrJchVi2ZrUiDlYxgpi5XqtlaS2Gq7PidTmJSWsmpZaOTVFSPnsBNQafXNQXCFT6puDzORupr6bkTJfJ2m25Bq6nEgcgSNJIGAAcUBc5wHgFq0MeBA04DEAQyCNcSwBjQWQxlT0JvTq3GDLPKgkTSQnrMm91jLPgSyYWujIk4oD0-S0XFcgmNWQWjnSpn2dXE1zNS0Jk-kyh_t_hQt5EFfxrTi24_KeInpwq9-Vmg2X2Bez-L5a7ZvzuOnGoonjHt5TF0_FfBvfPuAsu81m1xXLXd9HuM_j7nMomuYF9mLbFY_DeSzmXTwO--NKKdBTVG-z0p6iek-gqJ7T-UnewVPUUBIkVwa-cODTBJ81wDdWgRSBm4U6Q8XNKvZWfIzX2PfDaXE5dNj34XAYh6_Yq58_R9yyZRgDAAA)' title='Approval Election' 
 
@@ -135,7 +135,7 @@ comment='less voters' id='small_group_approval_sim' %}
 
 ## The World of Voting Methods
 
-There's also other voting methods where you can judge on a scale from 1 to 10 like you do for a diving contest or figure skating.  And you can get very fine-grained with that. That's called score voting, where you get them a score.   
+There's also other voting methods where you can judge on a scale from 0 to 10 like you do for a diving contest or figure skating.  You can get very fine-grained with that. That's called score voting, where you get them a score.   
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8i885xI6dbPfMD-ht1QO0i6hUdau2CCEEb8fOlAuoymHs2J7MOJ-UaZymVhNr26SJeUg81IjMI5WIhna7E_GotM0mEccYZ8-zRl5ozImURuZE5pCoektO_443t7uV4W5ldbfCub_NISlSQQpFrAAD1K6MXQCroz9nDqteFOfxS-HeIwIAjSgypykOFZcN2YDMWcQXkbtQjp2AqYCpgKmAqTjTxOl2orliHJwFdjlJKkm9rEEbfRo2w7bKb-DEU4lA-6z-pVa41oY_glxd9UvD8owBkGqQatid4TsNpq11nTb0twymawbAcMUPVLBU61ZCYAVFhYKKtTcoaJht0pmenw6H5br-OM000uN2Oc-U6PK6vD_Ml-15f7rul6NXvt-Ou_llf5x39PUDc7xiOMsCAAA)' title='Score Voting' 
 
@@ -151,7 +151,7 @@ caption='Same ballot as above for score. Score from 0-5, and add up scores. BUT 
 
 comment='same as above but star' id='star_sim' %}
 
-You could involve some conditionals. Like you could eliminate candidates that aren't doing well. That way they don't interfere with the main candidates.  This method is called RCV and is getting more popular in the US <!--link to RCV-->.  
+You could involve some conditionals. Like you could eliminate candidates that aren't doing well. That way they don't interfere with the main candidates.  This method is called RCV and is getting more popular in the US.  
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4md29zMQ3WqLQ1zFCShoEOLfcTwcBadTirF37MnY2a_W27bvHsRdD9qZO_FYZ-QLLZ6B_H0Ssyzrx0GNZxe7EpvOXNvWqVnbjJpXHFkhdHOydiTT6eYks9xl1rsM97qOp6OZClIYYgPAEgcgDXD65LzOE1KbqUkv85I6kiAAyIihJGU0ATIykC3I1mrQXkZ5roSLUKleVfAwpKm0M_2eWRygoakYl3NhSpa0lewM-BrINdC56BlY9dp_aYsyYANPBLuGoR3Lc1h1DO2KZ8TQ7gAM7QMlS93lGDo6gKsy8AKB1YXXKPlvtYBEwEGsBQMOBnoHlvV0ulzePh4_389taw-n15fzc_v-AdZjYJarAgAA)' title='Ranked Choice Voting' 
 
@@ -159,7 +159,7 @@ caption='Your vote counts for your top choice.  Then, do a process of eliminati
 
 comment='same example' id='rcv_sim' %}
 
-And you can also have a multi-winner system where maybe you have two candidates getting elected<!--link to multiwinner-->.  For example, maybe you're picking a pizza and you can have meat lovers pizza and you can also have a vegetarian pizza. You don't have to all eat the same pizza.  
+Also, you can have a multi-winner system where you have maybe two candidates getting elected.  For example, you're picking two pizzas to order, so you can have meat lover's pizza and you can also have a vegetarian pizza. You don't have to all eat the same pizza.  
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTUsDMRD9K0vOc8jkc7ZHvXhQEBEvuz2sNGixbktbBBH97U7yKEKl7OHN7Ju8vLzky1izGIZeqOclDS5YcjZrxRyJpVWSibmyHJk4uuWSDNdVHD1x8LX3ZmHJBLMwP5wMmdj6pFNKZgVL_z5l5CLTX2TYNm1miLNDCwccANhfrTRQAxwUdbuooNpMxqmO_nSq4xQcADIuYERlvAJkXEYn6Pq2wNtmlGsG3AgPQ96DhyGvSoOmh68OJ9DQ9DgukyNPQenQZGvBp8KdChUeXC1Ckwjn0iE18yHjTmA34NDRArje1Ghupvdumlfd_Xou0263KeM4X7-Wcijd1b5MK23vynTsbrcfZX_Q7qm8vKzLX49hLUZTbx0hRt8OFRFijACEGDNGBCMIMVkAt8mEABOuIsUWjdeDJUgknCj1DTKeQ8ba7AAegPAzXkM-PccMUs4yzxAUCAoEBWYEZgSRSwTAj0BPYOt52my2x8fPXdGIH6b5razM9y_xYZA_ZwMAAA)" title='Pick a Pizza' 
 
@@ -167,7 +167,7 @@ caption='We can order two.'
 
 comment='meat lovers and veggie lovers win' id='stv_sim' %}
 
-And of course, there's primaries, which is the way we do things now, and can work in the best case scenario, but can also malfunction.
+And of course, there's primaries, which is the way we do things now, and can work in the best case scenario.  But they can also malfunction when there's a crowded field or when one party has many more voters than the other party, or when there's more than two parties.
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)' title='Primaries' 
 
@@ -177,11 +177,13 @@ comment='an best case example of primaries ABCD two groups' id='primaries_sim' %
 
 ## Afterword
 
-To wrap things up, there's a lot of ways you could deal with voting (casting a ballot), and there's actually even more ways you can count ballots (tallying).  As far as casting a ballot goes, picking one person does not find common ground in a group.  But picking multiple people… that allows you to find common ground.  And that's the point of this explanation. You have to allow people to vote for more than one person in order to find common ground.
+To wrap things up, there's a lot of ways you could deal with voting (casting a ballot), and there's actually even more ways you can count ballots (tallying).  As far as casting a ballot goes, picking only one person does not find common ground in a group.  But picking multiple people… that allows you to find common ground.  And that's the point of this explanation. You have to allow people to vote for more than one person in order to find common ground.
 
 Still want more? Try the sandbox below, where I've added a ton more voting methods and configuration options.  
 
-Want more of a narrative?  Then choose your path.  Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV). I also have a draft of a page about proportional representation using more methods than just STV. It's a work in progress. Just be sure you get to read more about Condorcet methods. I like them best.
+Want more of a narrative?  Then choose your path.  I go into depth on all the examples above.  This page was just an overview.
+
+Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV). I also have a draft of a page about proportional representation using more methods than just STV. It's a work in progress. Just be sure you get to read more about Condorcet methods. I like them best.
 
 -   [Primaries](primaries) - and electability polls
 -   [Approval Voting](approval) - and strategy based on polling
