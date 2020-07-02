@@ -35,7 +35,7 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 
 #### Polling Sites
 
-- [Just raise your hands](https://www.youtube.com/watch?v=orybDrUj4vA) or use your new knowledge of voting systems in your next group decision. with these helpful polling sites:
+- [Just raise your hands](https://www.youtube.com/watch?v=orybDrUj4vA) or use your new knowledge of voting systems in your next group decision with these helpful polling sites:
 - [ElectoWiki's List of Polling Sites](https://electowiki.org/wiki/Voting_links#Polling_sites) - Many are on the list, but the ones below stand out to me.
 - [★.vote](https://star.vote) - STAR - used by STARvoting.us
 - [Condorcet Internet Voting Service](https://civs.cs.cornell.edu/civs_create.html) - Condorcet - many kinds
