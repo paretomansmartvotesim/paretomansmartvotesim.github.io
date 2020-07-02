@@ -1513,7 +1513,7 @@ function Arena(arenaName, model) {
 			if (model.dimensions == "1D+B") {
 				if (d.isCandidate) {
 					y = self.yFromB(d.b)
-				} else if (d.isVoter || d.isVoterCenter) {
+				} else if (d.isVoter || d.isVoterCenter || d.isVoterPerson) {
 					y = self.yDimOne
 				} else {
 					y = d.y
@@ -1521,7 +1521,7 @@ function Arena(arenaName, model) {
 			} else if (model.dimensions == "1D" ) {
 				if (d.isCandidate) {
 					y = model.size - self.yDimOne
-				} else if (d.isVoter || d.isVoterCenter) {
+				} else if (d.isVoter || d.isVoterCenter || d.isVoterPerson) {
 					y = self.yDimOne
 				} else {
 					y = d.y

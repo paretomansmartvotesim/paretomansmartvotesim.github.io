@@ -2512,6 +2512,7 @@ function VoterPerson(model,voterModel) {
 
 	var self = this
 	_addAttributes(self,{
+		isVoterPerson: true,
 		x: undefined,
 		y: undefined,
 		xArena: undefined,
