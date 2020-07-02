@@ -1247,19 +1247,19 @@ function Arena(arenaName, model) {
 				self.focus = closest
 				
 				// check for snap
-				self.snap()
+				self.snap(arena)
 			}
 
 			model.drawArenas() // draw everything inside the arenas
 			if (closest) model.onDraw() // draw ballot for closest voter
 
 		}
-		self.snap = function() {
+		self.snap = function(arena) {
 			
 			if (self.focus) {
 				
 				// check for snap
-				var hit = self.objectMouseHitTest(25, self.focus, model.arena)
+				var hit = self.objectMouseHitTest(25, self.focus, arena)
 				if (hit) {
 					self.active = true
 					self.configure()
