@@ -1042,6 +1042,14 @@ function Arena(arenaName, model) {
 					model.voterGroups.splice(i,1)
 					// need to init voterSet
 					model.voterSet.init()
+
+					// also, check if the viewMan was on a voter in the group
+					var viewMan = model.arena.viewMan
+					if (viewMan.active && i == viewMan.focus.iGroup) {
+						viewMan.unInit()
+						viewMan.configure()
+					}
+
 					break
 				}
 			}
