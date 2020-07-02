@@ -16,10 +16,10 @@ We're going to go over each aspect of voting and see how other methods of voting
 
 Primaries were created to allow a party to deal with vote splitting, but there are other ways to vote that beat primaries on this original design point.  Additionally, better systems can have better competition which produces better candidates.  They also can encourage voters to vote honestly without having to watch the polls to help them vote strategically.  Most fundamentally, they avoid splitting the vote so voters don't have to coordinate on who they should support and who they will encourage to drop out.
 
-| Method of Voting                                | Lots of Scenarios | Best Case Scenario |
-| ----------------------------------------------- | ----------------- | ------------------ |
-| Primaries with Choose Only One Plurality Voting | Bad               | Good               |
-| Alternative Voting Methods without Primaries    | Good              | Good               |
+| Method of Voting                                | Outcome in Lots of Scenarios | Outcome in Best Case Scenario |
+| ----------------------------------------------- | ---------------------------- | ----------------------------- |
+| Primaries with Choose Only One Plurality Voting | Bad                          | Good                          |
+| Alternative Voting Methods without Primaries    | Good                         | Good                          |
 
 The Original Design of a Primary is to Deal with Vote Splitting
 ---------------------------------------------------------------

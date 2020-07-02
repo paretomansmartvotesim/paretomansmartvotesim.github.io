@@ -35,7 +35,7 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 
 #### Polling Sites
 
-- Use your new knowledge of voting systems in your next group decision. [Or just raise your hands.](https://www.youtube.com/watch?v=orybDrUj4vA) 
+- [Just raise your hands](https://www.youtube.com/watch?v=orybDrUj4vA) or use your new knowledge of voting systems in your next group decision. with these helpful polling sites:
 - [ElectoWiki's List of Polling Sites](https://electowiki.org/wiki/Voting_links#Polling_sites) - Many are on the list, but the ones below stand out to me.
 - [★.vote](https://star.vote) - STAR - used by STARvoting.us
 - [Condorcet Internet Voting Service](https://civs.cs.cornell.edu/civs_create.html) - Condorcet - many kinds
@@ -50,7 +50,9 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 
 #### Courses
 
-- [Making Better Group Decisions: Voting, Judgement Aggregation, and Fair Division](https://www.youtube.com/watch?v=w3Szol8KLEE&list=PLBmjSBnW7zFm9rutlKI0nm9dQDZfnSo_g) - formal logic and math perspective - on my Youtube playlist - by Eric Pacuit - [Syllabus](http://ai.stanford.edu/~epacuit/classes/voting-fall2012.html) from a previous year - and it looks like he has a new method he invented with Wes Holliday called [Split Cycle](https://arxiv.org/pdf/2004.02350.pdf)
+- [Making Better Group Decisions: Voting, Judgement Aggregation, and Fair Division](https://www.youtube.com/watch?v=w3Szol8KLEE&list=PLBmjSBnW7zFm9rutlKI0nm9dQDZfnSo_g)  - by Eric Pacuit - formal logic and math perspective - on my Youtube playlist
+  - [Syllabus](http://ai.stanford.edu/~epacuit/classes/voting-fall2012.html) from a previous year
+  - [Split Cycle](https://arxiv.org/pdf/2004.02350.pdf) - a new method he invented with Wes Holliday
 - [Game Theory](http://www.game-theory-class.org/) - on Coursera and Youtube - from Stanford and UBC - by Matthew O. Jackson, Kevin Leyton-Brown, and Yoav Shoham
 
 #### Essays
