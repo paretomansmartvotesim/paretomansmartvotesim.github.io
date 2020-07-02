@@ -28,7 +28,8 @@ a:hover{ color: hsl(240,80%,80%); }
 }
 
 #sandbox-section,
-#sandbox-index-section{
+#sandbox-index-section,
+#sandbox-embed-section{
 	/* background: #EFE9D5; */
 	background-color: #bed7dbd2;
 }
