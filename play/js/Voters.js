@@ -1934,18 +1934,20 @@ var DrawBallot = {}
 
 DrawBallot.Score = function (model,voterModel,voterPerson) {
 	var ballot = voterPerson.stages[model.stage].ballot
+	var district = model.district[voterPerson.iDistrict]
+	var cans = district.stages[model.stage].candidates
 
 	var text = ""
 	var scoreByCandidate = []
-	for(var i = 0; i < model.candidates.length; i++) {
-		scoreByCandidate[i] = ballot[model.candidates[i].id]
+	for(var i = 0; i < cans.length; i++) {
+		scoreByCandidate[i] = ballot[cans[i].id]
 	}
 
 	var rTitle = `
 	Give EACH candidate a score<br>
 	<em><span class="small">from 0 (hate 'em) to 5 (love 'em)</span></em>
 	`
-	text += htmlBallot(model,rTitle,scoreByCandidate)
+	text += htmlBallot(model,rTitle,scoreByCandidate,cans)
 	return text
 
 
@@ -1960,24 +1962,32 @@ DrawBallot.Three = function (model,voterModel,voterPerson) {
 
 DrawBallot.Approval = function (model,voterModel,voterPerson) {
 	var ballot = voterPerson.stages[model.stage].ballot
+	var district = model.district[voterPerson.iDistrict]
+	var cans = district.stages[model.stage].candidates
 	
-	var text = ""
+	var spotsById = []
+	for ( var i = 0; i < cans.length; i++) {
+		var cid = cans[i].id
+		spotsById[cid] = i
+	}
+	
 
 	var approvedByCandidate = []
-	for(var i = 0; i < model.candidates.length; i++) {
+	for(var i = 0; i < cans.length; i++) {
 		approvedByCandidate.push("&#x2800;")
 	}
 	for(var i=0; i<ballot.approved.length; i++){
 		var approved = ballot.approved[i];
-		var c = model.candidatesById[approved];
-		approvedByCandidate[c.i] = "&#x2714;"
+		var spot = spotsById[approved]
+		approvedByCandidate[spot] = "&#x2714;"
 	}
 
+	var text = ""
 	var rTitle = `
 	Who do you approve of?<br>
 	<em><span class="small">(pick as MANY as you like)</span></em>
 	`
-	text += htmlBallot(model,rTitle,approvedByCandidate)
+	text += htmlBallot(model,rTitle,approvedByCandidate,cans)
 	return text
 	
 
@@ -1985,41 +1995,54 @@ DrawBallot.Approval = function (model,voterModel,voterPerson) {
 
 DrawBallot.Ranked = function (model,voterModel,voterPerson) {
 	var ballot = voterPerson.stages[model.stage].ballot
+	var district = model.district[voterPerson.iDistrict]
+	var cans = district.stages[model.stage].candidates
 
 	var text = ""
+
+	var spotsById = []
+	for ( var i = 0; i < cans.length; i++) {
+		var cid = cans[i].id
+		spotsById[cid] = i
+	}
 
 	var rankByCandidate = []
 	for(var i=0; i<ballot.rank.length; i++){
 		var rank = ballot.rank[i];
-		var c = model.candidatesById[rank];
-		rankByCandidate[c.i] = i + 1
+		var spot = spotsById[rank]
+		rankByCandidate[spot] = i + 1
 	}
 
 	var rTitle = `
 	Rank in order of your choice:<br>
 	<em><span class="small">(1=1st choice, 2=2nd choice, etc...)</span></em>
 	`
-	text += htmlBallot(model,rTitle,rankByCandidate)
+	text += htmlBallot(model,rTitle,rankByCandidate,cans)
 	return text
 
 }
 
 DrawBallot.Plurality = function (model,voterModel,voterPerson) {
 	var ballot = voterPerson.stages[model.stage].ballot
+	var district = model.district[voterPerson.iDistrict]
+	var cans = district.stages[model.stage].candidates
 
 	var text = ""
 	var onePickByCandidate = []
-	for(var i = 0; i < model.candidates.length; i++) {
-		onePickByCandidate.push("&#x2800;")
+	for(var i = 0; i < cans.length; i++) {
+		var cid = cans[i].id
+		if (cid == ballot.vote) {
+			onePickByCandidate.push("&#x2714;")
+		} else {
+			onePickByCandidate.push("&#x2800;")
+		}
 	}
-	var c = model.candidatesById[ballot.vote];
-	onePickByCandidate[c.i] = "&#x2714;"
 
 	var rTitle = `
 	Who's your favorite candidate?<br>
 	<em><span class="small">(pick ONLY one)</span></em>
 	`
-	text += htmlBallot(model,rTitle,onePickByCandidate)
+	text += htmlBallot(model,rTitle,onePickByCandidate,cans)
 	return text
 
 }
@@ -2028,11 +2051,15 @@ var DrawTally = {}
 
 DrawTally.Score = function (model,voterModel,voterPerson) {
 	var ballot = voterPerson.stages[model.stage].ballot
+	var district = model.district[voterPerson.iDistrict]
+	var cans = district.stages[model.stage].candidates
 	
 	var system = model.system
 	
 	// todo: star preferences
 	var text = ""
+
+	if(cans.length == 0) return text
 
 	if (voterModel.say) text += "<span class='small' style> Vote: </span> <br />" 
 	cIDs = Object.keys(ballot).sort(function(a,b){return -(ballot[a]-ballot[b])}) // sort descending
@@ -2376,11 +2403,11 @@ function _pickRankedDescription(model) {
 
 DrawTally.Plurality = function (model,voterModel,voterPerson) {
 	var ballot = voterPerson.stages[model.stage].ballot
-	{
-		var text = ""
-		if (voterModel.say) text += "<span class='small' style> One vote for </span> " 
-		return text + model.icon(ballot.vote)
-	}
+
+	var text = ""
+	if (voterModel.say) text += "<span class='small' style> One vote for </span> " 
+	if (ballot.vote) text += model.icon(ballot.vote)
+	return text
 }
 
 function GeneralVoterModel(voterModel) {
@@ -2448,7 +2475,7 @@ function GeneralVoterModel(voterModel) {
 	}
 }
 
-function htmlBallot(model,rTitle,textByCandidate) {
+function htmlBallot(model,rTitle,textByCandidate,cans) {
 	var text = ""
 	var tTitle = `
 	<table class="main" border="1">
@@ -2479,8 +2506,8 @@ function htmlBallot(model,rTitle,textByCandidate) {
 	<td class="nameLabel">#name</td>
 	</tr>
 	`		
-	for(var i=0; i < model.candidates.length; i++) {
-		var c = model.candidates[i]
+	for(var i=0; i < cans.length; i++) {
+		var c = cans[i]
 		var num = textByCandidate[i]
 		if (model.theme == "Letters") {
 			// icon is same as name
