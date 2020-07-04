@@ -2498,6 +2498,9 @@ function GeneralVoterModel(model,voterModel) {
 
 		}
 		distList.sort(function(a,b) {return a.dist - b.dist})
+		for (var i = 0; i < distList.length; i++) {
+			distList[i].iSort = i // we might want to show these by the sorted order
+		}
 
 		if (model.ballotType == "Score") {
 			text3 += `
@@ -2538,8 +2541,9 @@ function GeneralVoterModel(model,voterModel) {
 		text3 += `<br>`
 		
 		
-		function dotPlot(measure,differentDisplay) {
+		function dotPlot(measure,differentDisplay,sortOrder) {
 
+			// sortOrder = true
 			if (differentDisplay) {
 				var mult = 1
 				var display = measure + "Display"
@@ -2561,8 +2565,11 @@ function GeneralVoterModel(model,voterModel) {
 			`
 			distList.reverse()
 			for (var d of distList) {
+				var iV = (sortOrder) ? d.iSort : d.i
 				text3 += `
-				<div style=' position: absolute; top: ${d.i*vertdim}em; left: ${Math.round(d[measure]*w1)}px; margin-left: -.5em; white-space: nowrap;'">
+				<div style=' position: absolute; top: ${iV*vertdim}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
+				</div>
+				<div style=' position: absolute; top: ${iV*vertdim}em; left: ${Math.round(d[measure]*w1)}px; margin-left: -.5em; white-space: nowrap;'>
 				${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
 				</div>
 				`
