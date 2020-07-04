@@ -2477,61 +2477,99 @@ function GeneralVoterModel(model,voterModel) {
 		var cans = model.district[voterPerson.iDistrict].stages[model.stage].candidates
 		var distList = []
 		var uf = utility_function(model.utility_shape)
-		for (var c of cans) {
+		for (var i = 0; i < cans.length; i++) {
+			var c = cans[i]
 			var dist = distF(model,{x:voterPerson.x, y:voterPerson.y}, c)
-			distList.push( {
+			var distSet =  {
+				i:i,
 				c:c,
 				dist: dist,
 				dNorm: dist / model.size,
-				utility: uf(dist),
-				uNorm: uf(dist) / uf(model.size)
-			})
+				nUtility: uf(dist),
+				nUNorm: uf(dist) / uf(model.size),
+				uNorm: 1-uf(dist) / uf(model.size),
+			}
+			if (model.ballotType == "Score") {
+				var maxscore = model.voterGroups[0].voterModel.maxscore
+				distSet.score = voterAtStage.ballot[c.id] / maxscore
+				distSet.scoreDisplay = voterAtStage.ballot[c.id]
+			}
+			distList.push(distSet)
+
 		}
 		distList.sort(function(a,b) {return a.dist - b.dist})
+
+		if (model.ballotType == "Score") {
+			text3 += `
+			You gave the following scores: <br>
+			`
+			dotPlot("score",true)
+			text3 += `<br>`
+		}
 
 		if (model.utility_shape !== "linear") {
 			text3 += `
 			This is your perceived distance from each candidate using a <b>${model.utility_shape}</b> utility function: <span class="percent">(as % of your perceived distance of the arena width)</span><br>
 			`
-			dotPlot("uNorm")
-			for (var d of distList) {
-				text3 += `
-				${makeIconsCan([d.c])}: <b>${Math.round(d.uNorm*100)}</b> <br>
-				`
-			}
+			dotPlot("nUNorm")
+			// for (var d of distList) {
+			// 	text3 += `
+			// 	${makeIconsCan([d.c])}: <b>${Math.round(d.uNorm*100)}</b> <br>
+			// 	`
+			// }
 			text3 += `<br>`
 		}
 
+		text3 += `
+		This is your percieved utility for each candidate: <span class="percent">(100% minus perceived distance)</span> <br>`
+		dotPlot("uNorm")
+		text3 += `
+		<br>`
 
 		text3 += `
 		This is your distance from each candidate: <span class="percent">(as % of arena width)</span> <br>
 		`
 		dotPlot("dNorm")
-		for (var d of distList) {
-			text3 += `
-			${makeIconsCan([d.c])}: <b>${Math.round(d.dist/model.size*100)}</b> <br>
-			`
-		}
+		// for (var d of distList) {
+		// 	text3 += `
+		// 	${makeIconsCan([d.c])}: <b>${Math.round(d.dist/model.size*100)}</b> <br>
+		// 	`
+		// }
 		text3 += `<br>`
 		
 		
-		function dotPlot(measure) {
+		function dotPlot(measure,differentDisplay) {
+
+			if (differentDisplay) {
+				var mult = 1
+				var display = measure + "Display"
+			} else {
+				var mult = 100
+				var display = measure // default display to measurement
+			}
 			
+			// option for vertical dimenison.. 0 to turn off.
+			vertdim = 1;
+
 			// dot plot from 0 to 150
 			// border at 100 * 220 / 141 = 156 
+			// also the .5 em margins and padding help center the icons.
+			var w1 = 156
 			text3 += `
-			<div style=' position: relative; width: 152px; height: 1em; border: 2px solid #ccc; '>
+			<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 2px solid #ccc; padding: 0 .5em;'>
+			<div style=' position: relative; '>
 			`
 			distList.reverse()
 			for (var d of distList) {
 				text3 += `
-				<div style=' position: absolute; top: 0px; left: ${Math.round(d[measure]*100 * 220/141)}px;'">
-				${makeIconsCan([d.c])}
+				<div style=' position: absolute; top: ${d.i*vertdim}em; left: ${Math.round(d[measure]*w1)}px; margin-left: -.5em; white-space: nowrap;'">
+				${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
 				</div>
 				`
 			}
 			distList.reverse()
 			text3 += `
+			</div>
 			</div>
 			`
 		}
