@@ -2473,6 +2473,69 @@ function GeneralVoterModel(model,voterModel) {
 		<br>
 		`
 
+		// distances //
+		var cans = model.district[voterPerson.iDistrict].stages[model.stage].candidates
+		var distList = []
+		var uf = utility_function(model.utility_shape)
+		for (var c of cans) {
+			var dist = distF(model,{x:voterPerson.x, y:voterPerson.y}, c)
+			distList.push( {
+				c:c,
+				dist: dist,
+				dNorm: dist / model.size,
+				utility: uf(dist),
+				uNorm: uf(dist) / uf(model.size)
+			})
+		}
+		distList.sort(function(a,b) {return a.dist - b.dist})
+
+		if (model.utility_shape !== "linear") {
+			text3 += `
+			This is your perceived distance from each candidate using a <b>${model.utility_shape}</b> utility function: <span class="percent">(as % of your perceived distance of the arena width)</span><br>
+			`
+			dotPlot("uNorm")
+			for (var d of distList) {
+				text3 += `
+				${makeIconsCan([d.c])}: <b>${Math.round(d.uNorm*100)}</b> <br>
+				`
+			}
+			text3 += `<br>`
+		}
+
+
+		text3 += `
+		This is your distance from each candidate: <span class="percent">(as % of arena width)</span> <br>
+		`
+		dotPlot("dNorm")
+		for (var d of distList) {
+			text3 += `
+			${makeIconsCan([d.c])}: <b>${Math.round(d.dist/model.size*100)}</b> <br>
+			`
+		}
+		text3 += `<br>`
+		
+		
+		function dotPlot(measure) {
+			
+			// dot plot from 0 to 150
+			// border at 100 * 220 / 141 = 156 
+			text3 += `
+			<div style=' position: relative; width: 152px; height: 1em; border: 2px solid #ccc; '>
+			`
+			distList.reverse()
+			for (var d of distList) {
+				text3 += `
+				<div style=' position: absolute; top: 0px; left: ${Math.round(d[measure]*100 * 220/141)}px;'">
+				${makeIconsCan([d.c])}
+				</div>
+				`
+			}
+			distList.reverse()
+			text3 += `
+			</div>
+			`
+		}
+
 		
         var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 		var f_strategy = ! not_f.includes(voterPerson.strategy)
