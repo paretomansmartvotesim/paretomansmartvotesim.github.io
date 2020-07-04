@@ -3484,14 +3484,11 @@ Election.pluralityWithPrimary = function(district, model, options){
 	for(var ballot of ballots2){
 		tally[ballot.vote]++;
 	}
+	
 	// return original candidates and update voters' ballots 
-	// So we can see who they voted for in the primary.
-	// TODO: make this better.
-	// cans = district.stages["primary"].candidates
-	model.voterSet.loadDistrictBallotsFromStage(district,"primary")
+	model.stage = "primary" // for display purposes
 
 	// cleanup
-	model.stage = "general" // for display purposes
 	// clear the old poll results. we're done with casting ballots.
 	district.pollResults = undefined
 	district.primaryPollResults = undefined
@@ -3735,7 +3732,6 @@ function runPoll(district,model,options,electiontype){
 	if ( ! model.checkRunPoll() ) return ""
 
 	var cans = district.stages[model.stage].candidates
-	if ( cans.length < 3 ) return ""
 
 	polltext = ""
 
@@ -3799,15 +3795,19 @@ function runPoll(district,model,options,electiontype){
 			var result = Election.irv(district,model,options2) // do an IRV election to find out who wins
 			var winners = result.winners
 
-			/// Get really good polling results.
-			temp1 = district.pollResults // doing a poll without strategy.  not sure if this would work
-			district.pollResults = undefined
-			
-			model.updateDistrictBallots(district);
-			
-			var ballots2 = model.voterSet.getBallotsDistrict(district)
-			let head2head = head2HeadPoll(model, district,ballots2)
-			district.pollResults = temp1
+			if (1) {
+				/// Get really good polling results.
+				temp1 = district.pollResults // doing a poll without strategy.  not sure if this would work
+				district.pollResults = undefined
+				
+				model.updateDistrictBallots(district);
+				
+				var ballots2 = model.voterSet.getBallotsDistrict(district)
+				let head2head = head2HeadPoll(model, district,ballots2)
+				district.pollResults = temp1
+			} else {
+				let head2head = head2HeadPoll(model, district,ballots)
+			}
 			
 			var results = {head2head:head2head, firstpicks:tally, winners:winners}
 
@@ -3887,6 +3887,10 @@ function runPoll(district,model,options,electiontype){
 		polltext += "</span><br>"
 		// model.draw() // not sure why this was here
 	}
+
+	
+	if ( cans.length < 3 ) return "" // don't show poll text if the poll was not interesting
+
 	return polltext
 }
 

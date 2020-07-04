@@ -418,39 +418,43 @@ function bindModel(ui,model,config) {
 
             var doOldBallot = false
             
-            // attach the ballot
             if (doOldBallot) {
+
                 var BallotType = model.BallotType
                 var ballot = new BallotType(model);
                 ui.dom.rightBallot = ballot.dom
+                ballot.update(voterPerson.stages[model.stage].ballot);
+
             } else {
+
                 var divBallot = document.createElement("div")
                 ui.dom.rightBallot = divBallot
+
+                divBallot.innerHTML = ""
+
+                var currentStage = model.stage
+                for (var stage of Object.keys(voterPerson.stages)) {
+                    model.stage = stage
+
+                    var text = ""                    
+                    text += '<div class="div-ballot">'
+                    // text += model.voterGroups[0].voterModel.toTextV(voterPerson.stages[model.stage].ballot);
+                    text += model.voterGroups[0].voterModel.toTextV(voterPerson);
+                    text += '</div>'
+                    
+                    divBallot.innerHTML += text
+                    var target = divBallot
+                    if (model.tallyEventsToAssign) {
+                        for (let e of model.tallyEventsToAssign) {
+                            target.querySelector("#" + e.eventID).addEventListener("mouseover", e.f)
+                            target.querySelector("#" + e.eventID).addEventListener("mouseleave", ()=>model.draw())
+                        }
+                        model.tallyEventsToAssign = undefined
+                    }
+                }
+                model.stage = currentStage
             }
             ui.dom.right.prepend(ui.dom.rightBallot)
-
-
-            var text = ""
-            if (doOldBallot) {
-                ballot.update(voterPerson.stages[model.stage].ballot);
-                text += "<br />"
-            }
-            text += '<div class="div-ballot">'
-            // text += model.voterGroups[0].voterModel.toTextV(voterPerson.stages[model.stage].ballot);
-            text += model.voterGroups[0].voterModel.toTextV(voterPerson);
-            text += '</div>'
-
-            if (! doOldBallot) {
-                divBallot.innerHTML = text
-                var target = divBallot
-                if (model.tallyEventsToAssign) {
-                    for (let e of model.tallyEventsToAssign) {
-                        target.querySelector("#" + e.eventID).addEventListener("mouseover", e.f)
-                        target.querySelector("#" + e.eventID).addEventListener("mouseleave", ()=>model.draw())
-                    }
-                    model.tallyEventsToAssign = undefined
-                }
-            }
         }
            
     };
@@ -540,6 +544,7 @@ function Config(ui, config, initialConfig) {
         firstStrategy: "zero strategy. judge on an absolute scale.",
         secondStrategy: "zero strategy. judge on an absolute scale.",
         doTwoStrategies: true,
+        centerPollThreshold: .5,
         yeefilter: yes_all_candidates,
         computeMethod: "ez",
         pixelsize: 60,
@@ -903,6 +908,14 @@ function Config(ui, config, initialConfig) {
                 config.pairSecondStrategy = tr(s2,"Condorcet")
             }
 
+            // double check to correct some weird errors
+            config.scoreFirstStrategy = tr(config.scoreFirstStrategy, "Score")
+            config.choiceFirstStrategy = tr(config.choiceFirstStrategy, "FPTP")
+            config.pairFirstStrategy = tr(config.pairFirstStrategy, "Condorcet")
+            config.scoreSecondStrategy = tr(config.scoreSecondStrategy, "Score")
+            config.choiceSecondStrategy = tr(config.choiceSecondStrategy, "FPTP")
+            config.pairSecondStrategy = tr(config.pairSecondStrategy, "Condorcet")
+
             config.secondStrategies = []  // no longer using this
 
             // end strategies section //
@@ -1114,6 +1127,7 @@ function Cypher(ui) {
         86:"pairSecondStrategy",
         87:"voterCenterIcons",
         88:"useBeatMapForRankedBallotViz",
+        89:"centerPollThreshold",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -2616,6 +2630,13 @@ function menu(ui,model,config,initialConfig, cConfig) {
             _showOrHideMenuForStrategy(config)
             model.firstStrategy = config.firstStrategy
             model.secondStrategy = config.secondStrategy
+
+            var listMenuFirst = ui.menu[theConfigFirst].list
+            var itemFirst = listMenuFirst.filter(x => x.value == config.firstStrategy)
+            model.realNameFirstStrategy = itemFirst[0].realname
+            var listMenuSecond = ui.menu[theConfigSecond].list
+            var itemSecond = listMenuSecond.filter(x => x.value == config.secondStrategy)
+            model.realNameSecondStrategy = itemSecond[0].realname
         }
 
         self.showOnlyStrategyForTypeOfSystem = function() {
@@ -3089,6 +3110,47 @@ function menu(ui,model,config,initialConfig, cConfig) {
         });
     }
 
+
+    ui.menu.centerPollThreshold = new function() { // do a poll to find frontrunner
+        var self = this
+        self.list = [
+            {name:".5", value:.5, margin:4},
+            {name:".7", value:.7, margin:4},
+            {name:".9", value:.9,}
+        ];
+        // self.codebook = [
+        //     {
+        //         field: "centerPollThreshold",
+        //         decode: {
+        //             0:.5,
+        //             1:.7,
+        //             2:.9,
+        //         }
+        //     }
+        // ]
+        self.onChoose = function(data){
+            // LOAD INPUT
+            config.centerPollThreshold = data.value
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.update()
+        };
+        self.configure = function() {
+            model.centerPollThreshold = config.centerPollThreshold
+        }
+        self.select = function() {
+            self.choose.highlight("value", config.centerPollThreshold)
+        }
+        self.choose = new ButtonGroup({
+            label: "What fraction of leading frontrunner's votes is viable?",
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+    }
+
+
     ui.menu.yee = new function() { // yee
         var self = this
         self.list = undefined
@@ -3347,6 +3409,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     71: "pairSecondStrategy",
                     72: "voterIcons",
                     74: "useBeatMapForRankedBallotViz",
+                    75: "centerPollThreshold",
                 },
             }
         ]
@@ -5713,6 +5776,7 @@ function createMenu(ui) {
             "doFilterSystems",
             "filterSystems" ,
             "putMenuAbove",
+            "centerPollThreshold",
         ]],
         [ "main", [
             "includeSystems",
@@ -5892,6 +5956,7 @@ function createMenu(ui) {
                     // "primaries", // not doing this one, comment out               
                 ]],
                 ["advanced", [
+                    "centerPollThreshold",
                     "doTextBallots",
                     ["divDoTextBallots", [
                         "textBallotInput",

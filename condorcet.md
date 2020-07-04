@@ -28,14 +28,14 @@ id = "1" %}
 We're going to use that background map for ballot visualization in the two elections below. We'll overlay the ballots for all the voters to try to make it more clear how everybody's ballots get added together.
 
 {% include sim.html 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy07DMBD8lchnH7z2-tEei9QbUoGKS9qDKVFbCA0K7aFC8O2sPVRCQlUO48muJ7Oz-VRGTduWiDS5yVq3FL2cUjmR15b9eq0V1R52mtgU7tTUaMVqqr6N0spXGqRJalHA6H-PVNLVyuRqhUzVpuKgcgsOB8QAGKAAEAfEgvI9JyDipJUVIXlpRcgKWABkLKPF1wsWMjaCJbBJveBMdUolA6oFB0POoQ5DTpRaSRSNASXoOcxK2kqJze9YfJmP7eUggm3t4XqP_0pyqIY5Yg-wyBjUIzFPZTsrdT-cc9_c55fV6jA7jdtubGZ5PAi77fKxedjlzauQx2673XfN477vs9DFuH8bmtnsTs7LXdfMh9PYPHT5Yzh8rFRZOQL0GNsjQO8BCNDDnccaPAIMBkC1MyC8gDUEX6NxMmCARMBkYVIhYrKIu9ECHADBRziI5V9U88VyIVZvhsPzMG66oyp_Z0RDumxBO83lPcJLBoDdJthLsJe4Wk8egK0-5b4fjsvzeydxL_rTmPv98ay-fgBXNw8TWAMAAA)" 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSMWsDMQyF_4tmUyxbsnVZC50zZDtuSNsMhaMpIR1CaX97Zb0GAiVkeFYkv3xP8Rdl2swzF0usuqSZTfxUxilbKpWXJRHHjGbv5FFX2uREQhv6yZRIo2w-5L3uktO_j3fsbme62-Ec3jwIoi6oQcACAQA3iBOwuPrvVRc350TFjfzL4kbFpUBgUwQjGhcKbEpHZaimuFBzkPLYAUejAqhW9AFU3WnmxBhsaMGvIisnXzFJ_osl13xSrgc3nGNG4p7cWkoLYOn4H4AoCKrYmAJPEVSBpwiqCkFQ7ehhXYqgLUM4JhtCNqyraUSoDtJg0UDQppAOgo67vUAqBAvqIOjjzdDTdrf1V_R4fH89nl4OZxqvqGPAbrbVEdAyBPYGNAOaSWCbQkBn8DKDDMiHnuh5v67H8-7ycfB3vF0_T_v17Xyh718YJyuqEwMAAA)" 
 title = "FPTP Spoilers, Condorcet None"
 caption = "Switch between FTPTP and Condorcet"
 comment = "Example of no spoiler effect - basic spoiler intro stuff."
 id = "2" %}
 
 {% include sim.html 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy24bMQz8lQXPOogS9bCPLpBbADcxcln7oCQL283WW2zsg1Ek315Kk1xSBAt4SJEaD4f6S5aWfc_eG45-Z3r9Ndlp4JweJalHPhnHC41iMCy82xnidku0RWzNPS2tIaElvVsyFFoatUlrScGa_z6t5G8ri28rbBs3VwUtd8ihgAUAARwBqoBFUf8vKCg5G3JKpIdOiZyCA4DGCVqUxiuAxiVkGdmiXfC2KeXqAbeChyDvUYcgr0w9m4-vNkeUwekxLxtnvFHPSezHePI5p7jPQIl7VwNpd-UrtcQmXhJ2ArmCoQPcC1w3taW76VrG7q782m5Pq8u8H-ZuVeaTZrdDOXf3h_L0osnDsN8fh-7hOI5F0_V8_D11q9VPjTeHobuZLnN3P5TX6fS6pbp-mBlgQYCZIQBgZoC6kNsMAWZGC-DWGWFkxEpiaBbpG6UIiojJ4qJBwmQJd5MDeACWkKAg1XdJN-vNWqX-mE7P0_w0nKm-1ISG_GUbCeZlC8CeM-RlyMvSpOcAwHYfyzhO5831z6B2r8fLXMbj-Upv_wDlHFtGdgMAAA)" 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsU5DMQz8F88Wih07SbsiMXfo9tShQAekiiJUhgrBt-P46AKq3nB2bF_u_PJJhdbLItVYXHe8yBCWUiNSrSxjRmLOahKRexyV3Y5JcsxLjGVeaV2YjNb0XYjJM23RFLUeUPjfF5Vxs7K6WZGS3DIVZK7IoUAMAAHSAKFALDDu84AgFyYNojjUINIABYBGDS1BUwNAox3ZQLbKgVpSqcwdSBYqBNWKOgTVYFpitfhmc0MZnBV-hZUrW5St_Nqzq0_TaxDEi87Actb-UltL8dbxTyDXYNqxPYdUh2mHVIdpdwBMe0dt5F0O060AJDsbDDesrnlaiYdDDRQNCtoqoUNBx2xXQAVgWR0K-nw_9LDZbuJF3Z9en0_vT4czzRfV0TCuW5tnMDgKAPQD0gakDUvZwwFQN8A1BmCKvOtMj_vj8XTeXt4O8aY3x4_3_fHlfKGvHw30UswyAwAA)" 
 title = "Condorcet: No Vote Splitting"
 caption = "Switch between FTPTP and Condorcet"
 comment = "Example of no vote splitting. - even with that crowded example the IRV had a hard time with."

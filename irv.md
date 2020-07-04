@@ -98,7 +98,7 @@ Still, there will be tough situations where if there are a large number of candi
 
 {% include sim.html id="tough_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4tiOk_sMRLfa4hBXcQIKGoTg28_xaIUAoS3Gr0xmnP0otZy2bQ7iNnfa2PyIhtH0Fcwouew7FV6zrEIsbeVSTpWKllP50kLFMu0xFD0PCHKqv7_ojej9qWdn_tvhmuy8NAzqvkoNJchgBUAFd0DIYA2MKxcEP1NpNbMWXC2gAUDTFCNBIwGgaY5sIJt5QGqK5bUIzoaASQQAQRJMG1N-a7SjCUaBYaZGEk1NyhXwEbQjCNKtrUDzpP6k1Z6y1fEkEKqwa1idQaRBpEnuwGDXDAC75hgZeZPBbq8AzsmO3XcsrVvaWBY6KDoU9JngUOA46w0gAKzJ8W5-_D6O5vjeD-mqw9KoALzggKWBvQ8FGAD7fjhfry9v9--vl_hb787PT5fH8nkDZGJzDf4CAAA)" title = "A Tough Situation Solved by Strategy"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QWihM7du4zEN1qi0NcxQkoaBCCb8fxaIUAoS3Gr0xmnH0vtZy2bTpxmzttrHZErjRtBTNK1vedCq9Zlk7c28p7OVUqUk7lUwoVzXTEUPQsIMip_v6i59H7U8_O_LfDNdl5aXAatkoNJchgAUAFD0DIYAmMKxcEP1NpNbMWXC2gAUDTBCNB0wNA0wyZI5t5oNcUy2sRnI0Opt4BENSDaWPKb40ONMHYYZipUY-mJOUK-AjaEQTp1lYgeVJ-0spI2WJ4EggV2FWsTiFSIVIhUmFXFQC7auh53qSwOyqAc3Jg9wNLG5o2loUBigEFYyYYFBjOWgN0ANZkeDc7fh9D07_3Q7LqsOQVgBd0WHJYcgEoAPt28Dlk-ZJ1Y1Tuz9fr8-vd28slfuLb89Pj5aF8fAFAn7oMFQMAAA)" title = "A Tough Situation Solved by Strategy"
 
 caption = "Strategic voting can help turn a tough situation into a successful election when there are useful head-to-head polls."
 
@@ -106,7 +106,7 @@ comment = "Silver lining. So, maybe show an option button to turn on or off stra
 
 This is an improvement over single-choice voting. The polls are much more useful since rankings are given and any pair of candidates can be compared head-to-head, so voters are able to strategize better. Attempting the same strategy with FPTP and FPTP polls can turn a small lead in the polls to a big lead at the ballot box.
 
-{% capture cap18 %}{{ C }} loses even though he's in the middle because he never got good poll numbers in FPTP polls.{% endcapture %}
+{% capture cap18 %}{{ B }} loses even though he's in the middle because he never got good poll numbers in FPTP polls.{% endcapture %}
 
 {% include sim.html id="fptp_bad_polls_sim"
 
@@ -140,7 +140,7 @@ comment = "standard spoiler example. Maybe needs a switch between FPTP and IRV."
 
 {% include sim.html id="no_spoilers_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu04EMQz8l9Qp4meS_QxEt9riEFdxAgoahPh3HM-dhDihFGPvOJMZ71dpZdv3OSrxPOpOQ64Vk1eWeRy10BohDUZ49VK2VouWTWuxrD0muN6dmO3BBF3b3xPcCO7uezLzX4ZaPkjL01g9o4cnUgBckQPCA4VVivckIMSpFm7pn0OIAxgAGVaMWF5gyHBHN9DNvCAtndLaCiUhMCQCHoYklHaqhEEHBT1BVsptacqtgm4F3wpZO16F5j39LamehrXjz8CiIqhhYwZ7hqAGe4agZgAEtQ4O6zIE9QagnHSEdKzLLSNIGHFIOBz4TOhw0HG3M0AAWNDT6XJ5-3j8fD-XrTycXl_Oz-X7B2gMzvadAgAA)" title = "No More Accusations"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu07EQAz8l60tFL92nfsMRBelOMRVnICCBiH4drweIiEQSjH2jncy4-S9Le20bWsQy7rTxqHflXAn0XXfqfEcYUtGZfbaTgs1a6f2aY2aV9tzKLmRkDUtv5_kIrk_58Ws_zK8lDpPDzF7QQ8PbABY4A5ID2yJ-T5NSHGmJimUh5JCkiAAyIhhxOuCQEYGukC31gVdyinPLXARCkOq4GFIU2ljYgx2UNBTZGWSpKzkZsFHIUeRglvNWN2zn5LWy7ANfAlYNAR1bMxhzxHUYc8R1B2AoD7AYV2OoH0BcE12hOxYV_eKoGmkQ6LDQV8LBhwM3B0CUAAWNPDFxvHXDJBx7IaUbJ4jUkAwEClgJmAmrIyGA-AnoBewFdPWzaB2f75en1_v3l4u-e_enp8eLw_t4wsWUHUZAwMAAA)" title = "No More Accusations"
 
 caption = cap8
 

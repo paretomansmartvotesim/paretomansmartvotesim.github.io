@@ -13,7 +13,7 @@ function VoterModel(model,type) {
 	type = type || 'Plurality'
 	self.type = type
 
-	GeneralVoterModel(self)
+	GeneralVoterModel(model,self)
 	InitVoterModel[type](model,self)
 
 	self.castBallot = (voterPerson) => CastBallot[type](model, self, voterPerson)
@@ -85,7 +85,7 @@ InitVoterModel.Approval = function (model,voterModel) {
 }
 
 InitVoterModel.Ranked = function (model,voterModel) {
-	// nothing to do
+	voterModel.maxscore = 1; // borda may be different
 }
 
 InitVoterModel.Plurality = function (model,voterModel) {
@@ -116,10 +116,14 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 			if (tally[can] > max1) max1 = tally[can]
 		}
 		var threshold = max1 * factor
+		var voterAtStage = voterPerson.stages[model.stage]
+		voterAtStage.maxPoll = max1
+		voterAtStage.threshold = threshold // record keeping for later display
 		var viable = []
 		for (var can in tally) {
 			if (tally[can] > threshold) viable.push(can)
 		}
+		voterAtStage.viable = _jcopy(viable) // record keeping for later display
 	} else {
 		viable = model.district[iDistrict].preFrontrunnerIds
 	}
@@ -202,6 +206,8 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 	if (considerFrontrunners && model.election == Election.irv && model.autoPoll == "Auto" && district.pollResults) {
 		// we can do an irv strategy here
 
+		voterPerson.truePreferences = _jcopy(rank)
+
 		// so first figure out if our candidate is winning
 		// should figure out how close we are to winning
 		
@@ -214,7 +220,7 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 		var weLostElectability = ! _electable_all(ourFirst,tally.head2head,voterPerson)
 
 		// are they viable?
-		var viable = _findViable(tally.firstpicks,voterPerson)
+		var viable = _findViable(model,tally.firstpicks,voterPerson)
 		var weLostFirstChoices = ! viable.includes(ourFirst)
 
 		// who was first?
@@ -223,7 +229,7 @@ CastBallot.Ranked = function (model,voterModel,voterPerson) {
 
 		// var weLost = weLostElectability || weLostFirstChoices
 
-		var weLost = weLostActually
+		var weLost = weLostFirstChoices
 
 		if ( weLost ) {
 			// find out if our second choice could win head to head
@@ -319,7 +325,7 @@ CastBallot.Plurality = function (model,voterModel,voterPerson) {
 
 		//   consider only viable candidates (if there are polls, 
 		if (district.pollResults && model.autoPoll == "Auto") { // Auto is here for safety
-			var viable = _findViableFromSet(goodCans, district, voterPerson)
+			var viable = _findViableFromSet(model, goodCans, district, voterPerson)
 
 		} else if (model.autoPoll == "Manual") {  // manually set viable candidates, if we want to
 			var viable = district.preFrontrunnerIds
@@ -355,19 +361,25 @@ function _bestElectable(model, voterPerson) {
 	var parties = district.parties
 
 	// Which candidates not defeated badly?
-	var electset = _electable(iMyParty,parties,hh)
+	var electset = _electable(model,iMyParty,parties,hh)
+
+	var voterAtStage = voterPerson.stages[model.stage]
+	voterAtStage.electable = electset
 
 	// if no candidates are electable
 	if (electset.length == 0) {
 		// find the most electable candidate
 		// the one with the best "worst defeat"
 		var electset = _mostElectable(iMyParty,parties,hh)
+		
+		voterAtStage.mostElectable = electset
 	}
+
 	return electset
 }
 
 
-function _electable(iMyParty,parties,hh) {
+function _electable(model,iMyParty,parties,hh) {
 	// Which candidates are not defeated badly?
 	var myParty = parties[iMyParty]
 	var electset = []
@@ -380,7 +392,7 @@ function _electable(iMyParty,parties,hh) {
 					// check how badly we are defeated
 					let howbad = hh[b.id][a.id] / hh[a.id][b.id]
 
-					if (howbad > 1.1) {
+					if (howbad > model.howBadlyDefeatedThreshold) { // 1.1 is default
 						// this parameter can be changed.
 						electable = false
 					}
@@ -439,10 +451,10 @@ function _findClosest(model,electset,x,y) {
 	return closest
 }
 
-function _findViableFromSet(cans, district, voterPerson) {
+function _findViableFromSet(model,cans, district, voterPerson) {
 	let tally = district.pollResults
 	tally = _tallyFromSet(cans, tally)
-	var viable = _findViable(tally,voterPerson)
+	var viable = _findViable(model,tally,voterPerson)
 	return viable
 }
 
@@ -456,17 +468,22 @@ function _tallyFromSet(electset, tally) {
 }
 
 
-function _findViable(tally,voterPerson) {
+function _findViable(model,tally,voterPerson) {
 	var factor = voterPerson.poll_threshold_factor
 	var max1 = 0
 	for (var can in tally) {
 		if (tally[can] > max1) max1 = tally[can]
 	}
 	var threshold = max1 * factor
+	
+	var voterAtStage = voterPerson.stages[model.stage]
+	voterAtStage.maxPoll = max1
+	voterAtStage.threshold = threshold // record keeping for later display
 	var viable = []
 	for (var can in tally) {
 		if (tally[can] > threshold) viable.push(can)
 	}
+	voterAtStage.viable = _jcopy(viable) // record keeping for later display
 	return viable
 }
 
@@ -2027,6 +2044,10 @@ DrawBallot.Plurality = function (model,voterModel,voterPerson) {
 	var district = model.district[voterPerson.iDistrict]
 	var cans = district.stages[model.stage].candidates
 
+	if (model.stage == "primary") {
+		cans = district.parties[voterPerson.iParty].candidates
+	}
+
 	var text = ""
 	var onePickByCandidate = []
 	for(var i = 0; i < cans.length; i++) {
@@ -2410,7 +2431,7 @@ DrawTally.Plurality = function (model,voterModel,voterPerson) {
 	return text
 }
 
-function GeneralVoterModel(voterModel) {
+function GeneralVoterModel(model,voterModel) {
 	voterModel.say = false
 	voterModel.toTextV = function(voterPerson) {
 		if (0) {
@@ -2442,6 +2463,132 @@ function GeneralVoterModel(voterModel) {
 		</tbody>
 		</table>`.replace("#2",voterModel.drawTally(voterPerson))
 
+		var makeIcons = x => x ? x.map(a => model.icon(a)) : ""
+		var makeIconsCan = x => x ? x.map(a => model.icon(a.id)) : ""
+
+		var voterAtStage = voterPerson.stages[model.stage]
+
+		var text3 = `
+		Why did you vote this way? <br>
+		<br>
+		`
+
+		
+        var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
+		var f_strategy = ! not_f.includes(voterPerson.strategy)
+		var showPollExplanation = f_strategy
+
+		if (model.stage == "primary") {
+			if (model.doElectabilityPolls) {
+				if (voterAtStage.electable && voterAtStage.electable.length > 0) {
+					text3 += `
+					In the primary, you picked from the candidates that you considered electable: <br>
+					${makeIconsCan(voterAtStage.electable)} <br>
+					<br>
+					`
+					showPollExplanation = false
+					if (voterAtStage.electable.length > 2) {
+						if ( voterAtStage.viable) {
+							text3 += `
+							Also, you considered who among these electable candidates was viable. <br>
+							<br>
+							`
+							// text3 += `
+							// Also, you considered who among these electable candidates was viable: <br>
+							// ${makeIcons(voterAtStage.viable)} <br>
+							// <br>
+							// `
+							text3 += `
+							Your strategy was: <br>
+							<b>${voterPerson.realNameStrategy}</b> <br>
+							<br>
+							`
+							showPollExplanation = true
+						} else {
+										
+							text3 += `
+							Among these, your strategy was: <br>
+							<b>${voterPerson.realNameStrategy}</b> <br>
+							<br>
+							`
+						}
+					}
+				} else {
+					text3 += `
+					In the primary, no candidates seemed electable, so you picked the one that was most electable: <br>
+					${makeIconsCan(voterAtStage.mostElectable)} <br>
+					<br>
+					`
+					showPollExplanation = false
+				}
+				text3 += `
+				(Candidates were considered electable in head-to-head polls if they won or if the other candidate didn't get 
+				<b>${_textPercent(model.howBadlyDefeatedThreshold - 1)}</b>
+				more votes.) <br>
+				<br>
+				`
+			}
+		} else {
+
+			text3 += `
+			Your strategy was: <br>
+			<b>${voterPerson.realNameStrategy}</b> <br>
+			<br>
+			`
+		}
+
+		
+		var district = model.district[voterPerson.iDistrict]
+		var maxscore = model.voterGroups[0].voterModel.maxscore
+
+		if ( showPollExplanation ) {
+			text3 += `
+			and you saw these candidates as frontrunners: <br>
+			${makeIcons(voterAtStage.viable)} <br>
+			<br>
+			`
+			if (model.system == "IRV") {
+				var tp = voterPerson.truePreferences 
+				var rank = voterAtStage.ballot.rank
+				var didCompromise = rank[0] != tp[0]
+				if (didCompromise) {
+					text3 += `
+					Your didn't feel your favorite was viable, so you looked at head-to-head polls and picked someone who could beat the winner.  Your true preferences were:  <br>
+					${makeIcons(tp).join(' > ')} <br>
+					<br>
+					so you compromised and went with: <br>
+					${makeIcons(rank).join(' > ')} <br>
+					<br>
+					`
+				}
+			}
+			text3 += `
+			You based your list of viable candidates on your personal feeling that a candidate needed this fraction of the leading frontrunner's votes to be viable: <br>
+			<b>${_textPercent(voterPerson.poll_threshold_factor)}</b> <br>
+			<br>
+			and you saw that the leading frontrunner had <br>
+			<b>${_percentFormat(district,voterAtStage.maxPoll / maxscore)}</b> <br>
+			<br>
+			so, you only saw candidates with votes above this threshold as viable: <br>
+			<b>${_percentFormat(district,voterAtStage.threshold / maxscore)}</b> <br>
+			<br>
+			`
+		}
+		
+		var part3 = `
+		<table class="main2" border="1">
+		<tbody>
+		<tr>
+		<td class="tallyText">
+		<span class="small">
+		#3
+		</span>
+		</td>
+		</tr>
+		</tbody>
+		</table>`.replace("#3",text3)
+
+
 		if (tablewrap) {
 			text += `<table id="paper">
 			<tbody>
@@ -2468,6 +2615,9 @@ function GeneralVoterModel(voterModel) {
 			</div>
 			<div>
 			` + part2 + `
+			</div>
+			<div>
+			` + part3 + `
 			</div>
 			</div>`
 		}
@@ -2763,6 +2913,7 @@ function VoterSet(model) {
 	}
 	self.updatePersonBallot = function(voterPerson) {
 		var voterModel = model.voterGroups[voterPerson.iGroup].voterModel
+		voterPerson.stages[model.stage] = {}
 		var ballot = voterModel.castBallot(voterPerson)
 		// store ballot for current stage
 		self.loadPersonBallot(voterPerson, ballot)
@@ -2779,9 +2930,14 @@ function VoterSet(model) {
 		}
 	}
 	self.loadPersonBallot = function(voterPerson, ballot) {
-		var stageInfo = {}
-		stageInfo[model.stage] = {ballot:ballot}
-		_addAttributes(voterPerson.stages, stageInfo)
+
+		if (voterPerson.stages[model.stage] == undefined) {
+			var stageInfo = {}
+			stageInfo[model.stage] = {ballot:ballot}
+			_addAttributes(voterPerson.stages, stageInfo)
+		} else {
+			_addAttributes(voterPerson.stages[model.stage], {ballot:ballot})
+		}
 	}
 
 }
@@ -3072,16 +3228,21 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			}	
 			if (r1 < self.percentSecondStrategy && self.doTwoStrategies) { 
 				var strategy = model.secondStrategy // yes
+				var realNameStrategy = model.realNameSecondStrategy
 			} else {
 				var strategy = model.firstStrategy; // no e.g. 
+				var realNameStrategy = model.realNameFirstStrategy
 			}
 			
 			// choose the threshold of voters for polls
 			var r_11 = Math.random() * 2 - 1 
 			
-			self.voterPeople[i].poll_threshold_factor = _erfinv(r_11) * .2 + .5
+			var voterPerson = self.voterPeople[i]
+			var gauss = _erfinv(r_11) * .2 + model.centerPollThreshold // was .5
+			voterPerson.poll_threshold_factor = Math.min(1, gauss)
 
-			self.voterPeople[i].strategy = strategy
+			voterPerson.strategy = strategy
+			voterPerson.realNameStrategy = realNameStrategy
 		}
 	}
 
@@ -3300,6 +3461,7 @@ function SingleVoter(model){
 		voterPerson.poll_threshold_factor = .6
 
 		voterPerson.strategy = model.firstStrategy
+		voterPerson.realNameStrategy = model.realNameFirstStrategy
 
 	}
 

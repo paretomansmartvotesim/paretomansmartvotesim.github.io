@@ -32,7 +32,7 @@ Let’s back up a little here and ask what the purpose of voting systems is.  Y
 
 A referendum is actually pretty simple; you just say yes or no. Really, the *hard *part of the referendum is to decide what the wording is going to be for the question.  The wording is not up to you; that's up to the group that puts the initiative together or the legislators that wrote the referendum. This group tries to consider what the voters want, and that is the hard part. It’s part of the mechanism for the idea that you are represented.
 
-{% include sim.html title="Referendum - Your Ballot" caption="Yes or No?" id="yesno_sim" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRy04DMQz8lVXOOcSPOLv9CMSBC9rdQ5F6QFpRBOVQofbbcTwCDlUVKY4z9ngm-U4l7ea5tkyV1zyzWiYd1zUn6gDJmMm455J2JSeNvcZuXsH5Znltc6Tkm-XIeBeZ7iJUYhx1RT1lpBBEUESQRK6JPLgAUo8-jj1MAbLz-CUTMg6MQcMajew04sFw2ZCNyKZokBJCqT8JmARMIggQJM40E8oMANhk-uvXThWHbq1bVf49ONks_aDRpf90Co_a8CEQp1Nc1oLgfOm6pOH58Dksy9vwcByWlByA1CrxEhWma0WA6dpQMsbcCtNWEGDY8AOGp7MahrpYA4VBk-HZG76vobdxDHvZb9vx9HR-P7jSx-3rY7-9ns7p8gN-hdYHkQIAAA)" %}
+{% include sim.html title="Referendum - Your Ballot" caption="Yes or No?" id="yesno_sim" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DQQz8lZPrFVo_9nH5CERBg-5SBCkF0gkQhCJC8O14PQoUKLpi1h7v7Ni-T8q0W5bSEhfZp0WsJra-3yfiQbD2xFVGrLTLiYx29J0pUYmwepFzzSGnf58z_SozX2U4hzYzxFkQwgAbAO-zG2AHN8Dm6M-JwxykuI4nhRFJcAIZsbgoLqMOFcmGqCOa44LmMMpjBFBSGFIFD0PqSgujrIKAms6_921IxWG0Nlo1uRxcbNFxsLhlf3KGHq1hATBncyRLBvBYy0rTw_F9Wtfn6fZlWmlsCU0XDdGCpksBoOnSUNJRgqZrBnBUVjRcMbpaoqFhtkKiwlPF2BvW1zCsJiHRFIBhNWyvXX6fBhI_CydJmmzk0WSHYOfw1GGmw0w3JAsAfjr0Omz1YeumJHo8bNvL6f78evRp3W0fb4ft6XSmrx9CIcEjBQMAAA)" %}
 
 And lets see a whole group of people.
 
@@ -90,9 +90,9 @@ Also, up to now, we haven't called our voting system by it's proper English name
 
 {% comment %} Todo: Need to add +Primaries {% endcomment %}
 
-{% capture cap10 %}drag {{ C }} to <em>just under</em> {{ B }} to create a spoiler effect.<br> then compare these four different voting methods:{% endcapture %}
+{% capture cap10 %}drag {{ C }} under {{ A }} to create a spoiler effect.<br> then compare these four different voting methods:{% endcapture %}
 
-{% include sim-test.html title='More Voting Methods' caption=cap10 id='election31' %}
+{% include sim.html title='More Voting Methods' caption=cap10 id='election31' link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSXWsbMRD8K4eelaLVt_0WFwJ5KDi28cvZD6orHCcXy1zsgCntb-9KU0OhBINHe7uam5m9n0KJad8TkSQz2cqeguNTrCftpTa03UpBbcYaSVbV2oipksKKqfithBSulZ6HuBcYlPzvx534aWfyaYdU46aqoNUaNRSQBUAAeQArIMvI7zMMTE5SaCbih5qJNIMGgEZbjLh2QYNGB1QR1aRdMKoppZoBtYaBIGPQhyDDTD0nikGPFvgMvJLU3LLqry1782f17cCEfZux7br9l9L6JtgG7AESLYw6JOaobmcjFuWahm6RXjab4-wy7vPYzdJ45OpbTudu-Zx2r1ys835_yN36MAyJy_l4eCvdbPbE59Vz7h7KZeyWOb2X4_tG1JUjQAfbDgE6B0CADuoc1uAQoFcAapMe4XmswbsWjWGDHhQezvykQYCzgLtBAwwAwQcoCPVbFF_L8UcZd_nMeh_mqznD42LN__en01g-0sBHc6fviHG5ul80qP3lroxZ1G85gC7ediaNtPU5oo4KgG8qwkyEmYi1RQeAnwi-CFux2voSpPiehqGcV9dT5p3Nh8uYhsP5Kn79ARKuovWdAwAA)" %}
 
 Another method you've likely heard of if you are reading this page is Ranked Choice Voting (RCV), which is a new name (as of the past 20 years) for Instant Runoff Voting (IRV). It is also a name that is used for Single Transferable Voting (STV), which is different than IRV, and so you have to tell from the context which method people are talking about. IRV avoids some vote splitting by using a process of elimination. It's worth getting into on its own page.
 
@@ -332,13 +332,11 @@ The poll numbers are important to voters so they can tell who they should be coo
 
 The problem is those polls aren't accurate. If you put {{ B }}&{{ F }} head to head, then {{ B }} would easily win, but in a choose-only-one poll, {{ B }} can get squeezed out because {{ E }}&{{ F }} take votes from both sides.  Even though {{ B }} is the center candidate, {{ B }} can lose because {{ B }} can get squeezed out.
 
-{% capture cap15 %}{{ A }} small advantage in polls becomes a big advantage.{% endcapture %}
-
 {% include sim.html id='amplify_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDQQz8F9VbrF67d_6KFOmOKxxIEViSEOzChOTbo9XYpDDm4EaP1WgkfVOlw7axSmGXvYTFhdnTqoVX2fdCPN8sGk_6dJUOtZDl3_Pf4oGUuy_e9sjUcvdFZnmYWR9muGY7noKmK3AhiKGIIYkbIASwBUY7DVgzKsETQQkeDggaCQCNGIKeBQIa6fAWeGsW6Nwdz4VwhhU8qgDI0eDZ6Pf9PAaV4L1a_5EkaChBF50L4GIlzkA2m8zZjW-G3Ay99jfLOvOsA6W1HMM6jgXhtmbQsUaHbIdsh2zH-O4AjO8dOSzRMX6rACyx4RYNS2yeN9QQ0kDRoKDhAB0KOmq7JLwcx_g4PV8-X-lAT-P8dRxvpwv9_AFQpOx0pQIAAA)'
 
 title='Poll Amplification'
 
-caption=cap15
+caption='A small advantage in polls becomes a big advantage.'
 
 comment='right now, this isnt implemented' %}
 

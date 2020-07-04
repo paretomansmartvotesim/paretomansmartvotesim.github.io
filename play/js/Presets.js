@@ -159,6 +159,7 @@ function _lookupPreset(ui) {
 				choiceSecondStrategy: "normalize frontrunners only",
 				pairSecondStrategy: "zero strategy. judge on an absolute scale.",
 				useBeatMapForRankedBallotViz: true,
+				centerPollThreshold: .7,
 			}
 		} else {
 			config = {

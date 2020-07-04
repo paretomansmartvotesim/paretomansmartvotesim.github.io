@@ -107,6 +107,8 @@ function Model(idModel){
 		partyRule: 'crowd',
 		stage: "general",
 		showPowerChart: true,
+		centerPollThreshold: .5,
+		howBadlyDefeatedThreshold: 1.1,
 	})
 	
 	self.viz = new Viz(self);
