@@ -567,6 +567,7 @@ function Config(ui, config, initialConfig) {
         showToolbar: "on",
         rankedVizBoundary: "atWinner",
         useBeatMapForRankedBallotViz: false,
+		doMedianDistViz: false,
         doElectabilityPolls: true,
         partyRule: "crowd",
         doFilterSystems: false,
@@ -1128,6 +1129,7 @@ function Cypher(ui) {
         87:"voterCenterIcons",
         88:"useBeatMapForRankedBallotViz",
         89:"centerPollThreshold",
+        90:"doMedianDistViz",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3410,6 +3412,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     72: "voterIcons",
                     74: "useBeatMapForRankedBallotViz",
                     75: "centerPollThreshold",
+                    76: "doMedianDistViz",
                 },
             }
         ]
@@ -5278,6 +5281,41 @@ function menu(ui,model,config,initialConfig, cConfig) {
         }
     }
 
+    ui.menu.doMedianDistViz = new function () {
+        var self = this
+        self.list = [
+            {name:"Yes",value:true,margin:4},
+            {name:"No",value:false,margin:4},
+        ]
+        self.codebook = [ {
+            field: "doMedianDistViz",
+            decode: {
+                0:false,
+                1:true,
+            }
+        } ]
+        self.onChoose = function(data){
+            // LOAD
+            config.doMedianDistViz = data.value
+            // CONFIGURE
+            self.configure()
+            // UPDATE
+            model.draw()
+        };
+        self.configure = function() {
+            model.doMedianDistViz = config.doMedianDistViz
+        }
+        self.choose = new ButtonGroup({
+            label: "Show Special Median Viz",
+            width: bw(4),
+            data: self.list,
+            onChoose: self.onChoose
+        });
+        self.select = function() {
+            self.choose.highlight("value", config.doMedianDistViz);
+        }
+    }
+
     ui.menu.showDescription = new function () {
         var self = this
         self.list = [
@@ -5759,6 +5797,7 @@ function createMenu(ui) {
             "visSingleBallotsOnly",
             "rankedVizBoundary",
             "useBeatMapForRankedBallotViz",
+            "doMedianDistViz",
             "sidebarOn",
             ["divLastTransfer", [
                 "lastTransfer",
@@ -5992,6 +6031,7 @@ function createMenu(ui) {
                     "visSingleBallotsOnly",
                     "rankedVizBoundary",
                     "useBeatMapForRankedBallotViz",
+                    "doMedianDistViz",
                 ]],
             ]],
             ["ui", [

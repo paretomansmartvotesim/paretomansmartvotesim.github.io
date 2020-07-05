@@ -15,6 +15,7 @@ function Viz(model) {
 	voterMapGPU.init()
 	self.yee = yee
 	self.beatMap = beatMap
+	self.medianDistViz = new MedianDistViz(model)
 
 	self.calculateBeforeElection = function() {
 		
@@ -43,6 +44,7 @@ function Viz(model) {
 		if (model.doVoterMapGPU) {
 			voterMapGPU.calculateVoterMapGPU()
 		}
+
 	}
 
 	self.drawBackground = function() {
@@ -57,6 +59,10 @@ function Viz(model) {
 
 		if (model.doVoterMapGPU) {
 			voterMapGPU.drawVoterMapGPU()
+		}
+		
+		if (model.doMedianDistViz) {
+			self.medianDistViz.drawMedianDistViz()
 		}
 	}
 
@@ -1100,4 +1106,62 @@ VoterMapGPU = function(model) {
 		// return contextColorScale.getImageData(0, 0, colors.length-1, 1).data;
 	}
 
+}
+
+function MedianDistViz(model) {
+	var self = this
+	self.drawMedianDistViz = function() {
+
+		var median = function(values) {
+
+			values.sort( function(a,b) {return a - b;} );
+		
+			var half = Math.floor(values.length/2);
+		
+			if(values.length % 2)
+				return values[half];
+			else
+				return (values[half-1] + values[half]) / 2.0;
+		}
+
+		for (var district of model.district) {
+				
+			let cans = district.stages[model.stage].candidates
+			if (model.stage == "primary") {
+				cans = district.parties[voterPerson.iParty].candidates
+			}
+
+			xvals = []
+			for (var voterPerson of district.voterPeople) {
+
+				xvals.push(voterPerson.x)
+			}
+			var xmed = median(xvals)
+			var scaley = 100 / xvals.length
+			var widthy = 100 / xvals.length
+			var ctx = model.arena.ctx
+			ctx.save()
+			ctx.globalAlpha = .5
+			ctx.globalCompositeOperation = "multiply"
+			for (var c of cans) {
+				doDraw(c)
+			}
+			ctx.globalAlpha = 1
+			doDraw({x:xmed,fill:"#ccc"})
+			ctx.restore();
+
+			function doDraw(c) {
+				for (var i = 0; i < xvals.length; i++) {
+					var x = xvals[i]
+					var y = i * scaley + 150
+					ctx.beginPath();
+					ctx.moveTo(x*2,y*2)
+					ctx.lineTo(c.x*2,y*2)
+					ctx.lineWidth = widthy
+					ctx.strokeStyle = c.fill;
+					ctx.stroke();
+				}
+			}
+		}
+	}
 }

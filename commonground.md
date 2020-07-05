@@ -145,10 +145,10 @@ A median finds the middle of a list of numbers by putting half above it and half
 In a way, all numbers are treated equally. It doesn't matter how far a number is from the median. Each number is pulling the median to one side, just like all the others.
 
 {% include sim.html 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA21SwUoFMQz8l5yLNG2SZvfmP3hb9vAEbwvvISKI6LebZlg9-NjDbJJmMpP2kyqt28ayFFv2srF7GXXfC_GZZ9UZd1pbIaGVvrlSIaW1FrI4FcURUMu_LyoelegQo7vlJcut6_1yTJpTmDGGG8IOEACUsAFCCkugp16OAVyoBU8kG2eyNQBomuBI0PQA0LSByBEt2dBr2uS5Dc5Cb9nbsZwOQWFm3RjHDAWw9eW3X5Jq_kxrmWlnJsi2Pn8ku-SPLrY4x8nIOQJxAouKVSmEKSxqT98Ki6oAWFSwqOcUXXCfNfsMLIZ9GxZlmvKnNAOFQYGhd0DBQO_AakYHYDUDdzXOZzNQdOyltJmDHQeZMyIIcQhxSZGuAGhxcDkk-ZT0oIWeL8dxfXv6uL3Ey3283V6v75eDvn4Ao5x-RvgCAAA)"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTu04EMQz8l9QRih9JvPsVFHSnKw6JAmklEDoKhLhvx-tJruHQaYtxHHsynk2-U0nr4ZgTORyoUmYrx3xYZkBLHRFzmTnqM9JrrsmMuo6ot9kqNiKdqbbMvQYK1yBp5Zw0relSUk41rSWnBn3doeQ_n--Y76QL7R0X5nSjYokK5holUm7VeP9-GtGwg7EUgAKgiBrAJZE6GpZ-CuXEzuNJppjF9QSAhhUlTiMOoOGOFVh4iQYZf0UosgI1AoMEaqSOmoYseGRBVncGyv98ewHddvTqiPK9Arl3hIYkHUK1xfjaQ75iYIVtFfZXzFthW5Xor7CtVgBsqx0lhpIFd6VEsoGlwbUG81uNccSFNFA0KGjo7VDQKU7pDBAAHO_4_31eyY5NC2J_MHsO4xjIDGQGIQYhpiHSKgBaDFxmgF3SQ_ebW2L9fNq2t_PT1_uLv43H7fPjtL2ev9LPL23Jkue-AwAA)"
 title = "Median in 1D"
-caption = "Candidate A takes the position at the median and wins."
-comment = "This isn't exactly what I'm looking for."
+caption = "<b>Try moving some voters.  Add a candidate. </b> The total area of the bars below is the sum of all the distances.  Notice that moving the median left or right would not decrease this sum because the same number of people are on each side (same number of bars are growing/shrinking)."
+comment = "Maybe it would be good to try to move the median itself?"
 id = "median_1d_sim" %}
 
 How does approval voting use a median?
@@ -171,7 +171,11 @@ comment='simple,lots of candidates, one voter' id='score_sim' %}
 
 In practice, voters can adjust their self-reported distances, which is called using a strategy.  Jameson Quinn has a good discussion of strategies in the links at the end of this page.  Basically, using strategies means score voting looks a lot like approval voting.
 
-In the example below, the J=Judge strategy measures distance well and would best find the median.  <br>The N=Normalize strategy is basically using the full power of your vote.  <br>The F="frontrunner" strategy considers polling data and makes score voting very similar to approval voting.
+In the example below, 
+
+- the J=Judge strategy measures distance well and would best find the median,
+- the N=Normalize strategy is basically using the full power of your vote, and
+- the F=Frontrunner strategy considers polling data and makes score voting very similar to approval voting.
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8l5wjFCdO7O6ZP4Dbag_QLqJS1a3aIoQQfDt2pr0UVTmMX5mMHX-HFIZxlBaJZYojkUbS5lY1i7NbKpdYzmYVmaYYyK9RMj-x-yUMKQYOQ_glCjHUMFAMzaosKQYp_juW0buZ1d0Mpf4WuYRmwkuk7OGMMJQQAyqgdTlkQogN7dlqsOrJbHwWzNRrcgaAJjM8oykGDUGBp_CMJdsAfJAmJbqWAq6SkQJXAVcxrpHi5XhxQxVYCxo3nlgiW5qd2OvYG_YBcL4axd90g_tdvqVm9M2C34FgXvVgxRgrASC1FgCkVvxiRdtVkNP-VkXbLQHQcMMfNDTcam_FBTZQNChoGLxAgeCuQIEUePg_wf_JdZEESb2ZkaAlBaFSZ1KIUYhRECoIFXoUfApZ6rIebDFeX3a75fz8dZhtn5_Wy3G2jT69L5-P82l93B7O22Xvm_6x38xv2_28CT9_6sQykEkDAAA)" 
 
