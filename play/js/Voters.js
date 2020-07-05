@@ -2155,6 +2155,15 @@ DrawTally.Three = function (model,voterModel,voterPerson) {
 			text += "<br />"
 		}
 	}
+	if (1) {
+		var distList = voterPerson.distList
+		text += `
+		<span class='small'>You gave the following scores: </span> <br>
+		`
+		text += dotPlot("score",distList,model,{differentDisplay: true})
+		text += `<br>`
+		
+	}
 	groups = [[],[],[]]
 	for (cID in ballot) {
 		var score = ballot[cID]
@@ -2725,7 +2734,7 @@ function makeDistList(model,voterPerson,voterAtStage,cans) {
 			nUNorm: uf(dist) / uf(model.size),
 			uNorm: 1-uf(dist) / uf(model.size),
 		}
-		if (model.ballotType == "Score") {
+		if (model.ballotType == "Score" || model.ballotType == "Three") {
 			var maxscore = model.voterGroups[0].voterModel.maxscore
 			distSet.score = voterAtStage.ballot[c.id] / maxscore
 			distSet.scoreDisplay = voterAtStage.ballot[c.id]
