@@ -2093,7 +2093,7 @@ DrawTally.Score = function (model,voterModel,voterPerson) {
 			text += "<br />"
 		}
 	}
-	if (1){
+	if (0){
 		for(var i=0; i < cIDs.length; i++){
 			cID = cIDs[i]
 			var score = ballot[cID]
@@ -2102,6 +2102,15 @@ DrawTally.Score = function (model,voterModel,voterPerson) {
 			}
 			text += "<br />"
 		}
+	}
+	if (1) {
+		var distList = voterPerson.distList
+		text += `
+		<span class='small'>You gave the following scores: </span> <br>
+		`
+		text += dotPlot("score",distList,model,{differentDisplay: true})
+		text += `<br>`
+		
 	}
 	if (system == "STAR") {
 		
@@ -2209,11 +2218,22 @@ DrawTally.Approval = function (model,voterModel,voterPerson) {
 	var text = ""
 	if (voterModel.say) text += "<span class='small' style> Approved </span> <br />" 
 	
-	for(var i=0; i<ballot.approved.length; i++){
-		// if (i>0) text += ">"
-		var candidate = ballot.approved[i];
-		text += model.icon(candidate)
-		text += "<br />"
+	if (0) {
+		for(var i=0; i<ballot.approved.length; i++){
+			// if (i>0) text += ">"
+			var candidate = ballot.approved[i];
+			text += model.icon(candidate)
+			text += "<br />"
+		}
+	}
+	if (1) {
+		var distList = voterPerson.distList
+		text += `
+		<span class='small' style> You gave the following approvals: <br>
+		`
+		text += dotPlot("score",distList,model,{differentDisplay: true})
+		text += `</span><br>`
+		
 	}
 	return text
 	
@@ -2445,6 +2465,30 @@ function GeneralVoterModel(model,voterModel) {
 		return voterModel.toText(voterPerson,"H")
 	}
 	voterModel.toText = function(voterPerson,direction) {
+
+
+		// setup //
+
+		var makeIcons = x => x ? x.map(a => model.icon(a)) : ""
+		var makeIconsCan = x => x ? x.map(a => model.icon(a.id)) : ""
+
+		// voters
+		var voterAtStage = voterPerson.stages[model.stage]
+
+		// candidates
+		var cans = model.district[voterPerson.iDistrict].stages[model.stage].candidates
+		if (model.stage == "primary") {
+			var district = model.district[voterPerson.iDistrict]
+			cans = district.parties[voterPerson.iParty].candidates
+		}
+
+		// distances
+		var distList = makeDistList(model,voterPerson,voterAtStage,cans)
+		voterPerson.distList = distList // just pass it along.. maybe do this part better
+
+
+		// writing //
+		
 		var tablewrap = false
 		var text = ''
 		var part1 = voterModel.drawBallot(voterPerson)
@@ -2463,69 +2507,24 @@ function GeneralVoterModel(model,voterModel) {
 		</tbody>
 		</table>`.replace("#2",voterModel.drawTally(voterPerson))
 
-		var makeIcons = x => x ? x.map(a => model.icon(a)) : ""
-		var makeIconsCan = x => x ? x.map(a => model.icon(a.id)) : ""
-
-		var voterAtStage = voterPerson.stages[model.stage]
-
 		var text3 = `
 		Why did you vote this way? <br>
 		<br>
 		`
 
-		// candidates //
-		var cans = model.district[voterPerson.iDistrict].stages[model.stage].candidates
-		if (model.stage == "primary") {
-			var district = model.district[voterPerson.iDistrict]
-			cans = district.parties[voterPerson.iParty].candidates
-		}
-
-		// distances //
-		
-		var distList = []
-		var uf = utility_function(model.utility_shape)
-		for (var i = 0; i < cans.length; i++) {
-			var c = cans[i]
-			var dist = distF(model,{x:voterPerson.x, y:voterPerson.y}, c)
-			var distSet =  {
-				i:i,
-				c:c,
-				dist: dist,
-				dNorm: dist / model.size,
-				nUtility: uf(dist),
-				nUNorm: uf(dist) / uf(model.size),
-				uNorm: 1-uf(dist) / uf(model.size),
-			}
-			if (model.ballotType == "Score") {
-				var maxscore = model.voterGroups[0].voterModel.maxscore
-				distSet.score = voterAtStage.ballot[c.id] / maxscore
-				distSet.scoreDisplay = voterAtStage.ballot[c.id]
-			}
-			if (model.ballotType == "Approval") {
-				distSet.score = voterAtStage.ballot.approved.includes(c.id) ? 1 : 0
-				distSet.scoreDisplay = distSet.score
-			}
-			distList.push(distSet)
-
-		}
-		distList.sort(function(a,b) {return a.dist - b.dist})
-		for (var i = 0; i < distList.length; i++) {
-			distList[i].iSort = i // we might want to show these by the sorted order
-		}
-
-		if (model.ballotType == "Score" || model.ballotType == "Approval") {
-			text3 += `
-			You gave the following scores: <br>
-			`
-			dotPlot("score",{differentDisplay: true})
-			text3 += `<br>`
-		}
+		// if (model.ballotType == "Score" || model.ballotType == "Approval") {
+		// 	text3 += `
+		// 	You gave the following scores: <br>
+		// 	`
+		// 	text3 += dotPlot("score",distList,model,{differentDisplay: true})
+		// 	text3 += `<br>`
+		// }
 
 		if (model.utility_shape !== "linear") {
 			text3 += `
 			This is your perceived distance from each candidate using a <b>${model.utility_shape}</b> utility function: <span class="percent">(as % of your perceived distance of the arena width)</span><br>
 			`
-			dotPlot("nUNorm",{distLine:true})
+			text3 += dotPlot("nUNorm",distList,model,{distLine:true})
 			// for (var d of distList) {
 			// 	text3 += `
 			// 	${makeIconsCan([d.c])}: <b>${Math.round(d.uNorm*100)}</b> <br>
@@ -2536,76 +2535,20 @@ function GeneralVoterModel(model,voterModel) {
 
 		text3 += `
 		This is your percieved utility for each candidate: <span class="percent">(100% minus perceived distance)</span> <br>`
-		dotPlot("uNorm")
+		text3 += dotPlot("uNorm",distList,model)
 		text3 += `
 		<br>`
 
 		text3 += `
 		This is your distance from each candidate: <span class="percent">(as % of arena width)</span> <br>
 		`
-		dotPlot("dNorm",{distLine:true})
+		text3 += dotPlot("dNorm",distList,model,{distLine:true})
 		// for (var d of distList) {
 		// 	text3 += `
 		// 	${makeIconsCan([d.c])}: <b>${Math.round(d.dist/model.size*100)}</b> <br>
 		// 	`
 		// }
 		text3 += `<br>`
-		
-		
-		function dotPlot(measure,opt) {
-			opt = opt || {}
-			opt.differentDisplay = opt.differentDisplay || false
-			opt.sortOrder = opt.sortOrder || false
-			opt.distLine = opt.distLine || false
-
-			// sortOrder = true
-			if (opt.differentDisplay) {
-				var mult = 1
-				var display = measure + "Display"
-			} else {
-				var mult = 100
-				var display = measure // default display to measurement
-			}
-			
-			// option for vertical dimenison.. 0 to turn off.
-			vertdim = 1;
-
-			// dot plot from 0 to 150
-			// border at 100 * 220 / 141 = 156 
-			// also the .5 em margins and padding help center the icons.
-			var w1 = 156
-			text3 += `
-			<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 2px solid #ccc; padding: 0 .5em;'>
-			<div style=' position: relative; '>
-			`
-			distList.reverse()
-			for (var d of distList) {
-				var iV = (opt.sortOrder) ? d.iSort : d.i
-				if (opt.distLine) {
-					text3 += `
-					<div style=' position: absolute; top: ${iV*vertdim + .5}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: #ccc; height: 2px; '>
-					</div>
-					<img src="play/img/voter.png" style=' position: absolute; top: ${iV*vertdim}em; left:-.5em; '/>
-					`
-				} else {
-					text3 += `
-					<div style=' position: absolute; top: ${iV*vertdim}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
-					</div>
-					`
-				}
-				text3 += `
-				<div style=' position: absolute; top: ${iV*vertdim}em; left: ${Math.round(d[measure]*w1)}px; margin-left: -.5em; white-space: nowrap;'>
-				${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
-				</div>
-				`
-			}
-			distList.reverse()
-			text3 += `
-			</div>
-			</div>
-			`
-		}
-
 		
         var not_f = ["zero strategy. judge on an absolute scale.","normalize"]
 		var f_strategy = ! not_f.includes(voterPerson.strategy)
@@ -2765,6 +2708,104 @@ function GeneralVoterModel(model,voterModel) {
 		return text
 	}
 }
+
+
+function makeDistList(model,voterPerson,voterAtStage,cans) {
+	var distList = []
+	var uf = utility_function(model.utility_shape)
+	for (var i = 0; i < cans.length; i++) {
+		var c = cans[i]
+		var dist = distF(model,{x:voterPerson.x, y:voterPerson.y}, c)
+		var distSet =  {
+			i:i,
+			c:c,
+			dist: dist,
+			dNorm: dist / model.size,
+			nUtility: uf(dist),
+			nUNorm: uf(dist) / uf(model.size),
+			uNorm: 1-uf(dist) / uf(model.size),
+		}
+		if (model.ballotType == "Score") {
+			var maxscore = model.voterGroups[0].voterModel.maxscore
+			distSet.score = voterAtStage.ballot[c.id] / maxscore
+			distSet.scoreDisplay = voterAtStage.ballot[c.id]
+		}
+		if (model.ballotType == "Approval") {
+			distSet.score = voterAtStage.ballot.approved.includes(c.id) ? 1 : 0
+			distSet.scoreDisplay = distSet.score
+		}
+		distList.push(distSet)
+	
+	}
+	
+	distList.sort(function(a,b) {return a.dist - b.dist})
+	for (var i = 0; i < distList.length; i++) {
+		distList[i].iSort = i // we might want to show these by the sorted order
+	}
+
+	return distList
+}
+
+function dotPlot(measure,distList,model,opt) {
+	opt = opt || {}
+	opt.differentDisplay = opt.differentDisplay || false
+	opt.sortOrder = opt.sortOrder || false
+	opt.distLine = opt.distLine || false
+
+	var text = ""
+
+	// helper
+	var makeIconsCan = x => x ? x.map(a => model.icon(a.id)) : ""
+
+	// sortOrder = true
+	if (opt.differentDisplay) {
+		var mult = 1
+		var display = measure + "Display"
+	} else {
+		var mult = 100
+		var display = measure // default display to measurement
+	}
+	
+	// option for vertical dimenison.. 0 to turn off.
+	vertdim = 1;
+
+	// dot plot from 0 to 150
+	// border at 100 * 220 / 141 = 156 
+	// also the .5 em margins and padding help center the icons.
+	var w1 = 156
+	text += `
+	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 2px solid #ccc; padding: 0 .5em;'>
+	<div style=' position: relative; '>
+	`
+	distList.reverse()
+	for (var d of distList) {
+		var iV = (opt.sortOrder) ? d.iSort : d.i
+		if (opt.distLine) {
+			text += `
+			<div style=' position: absolute; top: ${iV*vertdim + .5}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: #ccc; height: 2px; '>
+			</div>
+			<img src="play/img/voter.png" style=' position: absolute; top: ${iV*vertdim}em; left:-.5em; '/>
+			`
+		} else {
+			text += `
+			<div style=' position: absolute; top: ${iV*vertdim}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
+			</div>
+			`
+		}
+		text += `
+		<div style=' position: absolute; top: ${iV*vertdim}em; left: ${Math.round(d[measure]*w1)}px; margin-left: -.5em; white-space: nowrap;'>
+		${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
+		</div>
+		`
+	}
+	distList.reverse()
+	text += `
+	</div>
+	</div>
+	`
+	return text
+}
+
 
 function htmlBallot(model,rTitle,textByCandidate,cans) {
 	var text = ""
