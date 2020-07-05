@@ -2585,6 +2585,7 @@ function GeneralVoterModel(model,voterModel) {
 					text3 += `
 					<div style=' position: absolute; top: ${iV*vertdim + .5}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: #ccc; height: 2px; '>
 					</div>
+					<img src="play/img/voter.png" style=' position: absolute; top: ${iV*vertdim}em; left:-.5em; '/>
 					`
 				} else {
 					text3 += `
