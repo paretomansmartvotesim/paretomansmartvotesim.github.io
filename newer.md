@@ -17,7 +17,7 @@ Who's "me"? I'm Jameson Quinn, a statistics student at Harvard and a board membe
 
 I'm also not as cool as Nicky, but I'm going to pretend to be. If my pale imitation of their chatty tone puts you off, then... well, I guess you can wait for my peer-reviewed paper.
 
-So, the story so far: FPTP voting is horrible. There's all kinds of other voting methods that would be better. We're looking for the one that's best. Some activists think that's Instant Runoff Voting (IRV), but Nicky and I both disagree; it can prematurely eliminate centrists, and requires centralized counting. Nicky says they lean towards score voting, and I can see why: it's easy to understand, and in all the simulations Nicky built, it does a great job of satisfying all the little dot-on-screen voters.
+So, the story so far: FPTP voting is horrible. There's all kinds of other voting methods that would be better. We're looking for the one that's best. Some activists think that's Instant Runoff Voting (IRV), but Nicky and I both disagree; it can prematurely eliminate centrists, and requires centralized counting. Nicky leans towards score voting, and I can see why: it's easy to understand, and in all the simulations Nicky built, it does a great job of satisfying all the little dot-on-screen voters.
 
 By the end of this interactive, you're going to understand the three methods I consider the best. One of them Nicky already showed you: approval voting, which is great because it's so simple and because it has absolutely no downsides versus FPTP. The other two are newer, but they use similar basic ideas to what you've already seen. I hope you like all three methods.
 
@@ -36,26 +36,6 @@ comment = "Description: this should just be an unstrategic score voter, as in nc
 %}
 
 But notice something about that ballot? For many positions of the voter and candidate, the ballot doesn't include a score of 5 or a score of 0. If you actually voted like that, you'd be giving up on some of your voting power. Say Triangle is your favorite, and you give them a score of 3, which also happens to be their average score. If Square wins with a score of 3.2, you're going to feel very silly for not giving a triangle a 5, in order to pull their average up as high as you can.
-
-## Digression: median systems
-
-[skip this digression](newer#lightly-strategic-voting-normalization)
-
-Ever watched the Olympics? In events like figure skating, there are a number of Olympic judges from different countries. In order to prevent any one judge from having too much influence, they use a "trimmed mean": they throw away the highest and lowest scores before they take the average. 
-
-Olympic judges are supposedly supposed to be unbiased. But for voters, there's nothing wrong with having political opinions. (I mean, obviously your opinions, dear reader, are the best, and everybody else should just listen to you. But much as I'd like to, I can't force them to.) So let's imagine voting used the olympic system.
-
-Throwing away just one highest and lowest score, with thousands or millions of voters, obviously wouldn't make an appreciable difference. So we'd have to throw away some more scores. And, why not? Let's throw away a few more while we're at it.
-
-When should we stop? When there's just 1 or 2 scores left to take the average. But if you do that, most people wouldn't called that a "trimmed mean" anymore; they'd just call it the median, the middle number.
-
-There are several voting methods that use the median to find the winner. (It turns out that can lead to a lot of ties, so you need a tiebreaker system to avoid that.) In the 1910s, over a dozen US cities, starting with Grand Junction, CO, used "Bucklin voting", a median-based system using a hybrid ranked/rated ballot. More recently, voting theorists Balinski and Laraki have proposed Majority Judgment, a median-based method using a rated ballot that's now been used in a number of competitions.
-
-Using the median reduces the incentives for a single voter to strategize. After all, unless you happen to be the exact median rating for a candidate, the only thing that matters about the rating you gave them is whether it's above or below the median.
-
-Still, large groups of voters can still get a strategic advantage. The larger the voting bloc, the greater the chance is that the median rating for a given candidate happens to be a voter in that bloc.
-
-I used to think that median voting methods were the best. But then I did the simulations I'll talk about below, and they were merely OK; not much better outcomes than approval voting, but without the simplicity. I still think they're hugely better than FPTP and a bit better than IRV, but I'm not sold enough on them for it to be worth my time programming them in to Nicky's simulator.
 
 ## Lightly-strategic voting: "normalization"
 
@@ -120,7 +100,7 @@ These two strategies are really just different extremes of the strong strategic 
 
 Is approval voting immune to this kind of voting strategy? No; in fact, in the early seventies, mathematicians Gibbard and Satterthwaite both independently proved the theorem which bears their names, showing that no non-dictatorial voting method with more than 2 options is entirely immune to strategy. Unlike Arrow's theorem, which Nicky discussed, this one goes for any kind of voting method — ranked, rated, or whatever. So yes, approval voting is more resistant to strategy than score; but not immune.
 
-(Note: advocates for IRV sometimes garble this point by saying that in approval voting the best strategy is to "bullet vote" for only your favorite candidate, and that this would lead it to devolve back to FPTP. That's just wrong; if voters are strategically voting for somebody other than their favorite in FPTP, then there's no way it would make sense for them to bullet vote in approval. Approval voting isn't perfect, but it simply does <strong>not</strong> break down to FPTP.)
+Note: in FPTP, you would have to strategically vote for somebody other than their favorite, and approval voting allows you to support both your favorite and your strategic pick.
 
 One scenario where approval becomes a factor is called the "chicken dilemma". Imagine 3 groups of voters, with 25%, 30%, and 45% of the vote respectively. Say that the first two groups both prefer each other over the third, so that either of them could beat that third opponent by 55% to 45%. Whichever of the first two groups strategically gives fewer approvals to its rival will win... unless neither of them gives enough, in which case the opponent will win. This is called a "chicken dilemma" because it's like a game of chicken between the voters for the two similar rivals: they can "swerve" and let their second-favorite win, or they can "drive straight" and either win (if the other side swerves) or crash (if the other side doesn't).
 
