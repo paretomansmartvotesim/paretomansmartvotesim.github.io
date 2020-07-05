@@ -2473,8 +2473,15 @@ function GeneralVoterModel(model,voterModel) {
 		<br>
 		`
 
-		// distances //
+		// candidates //
 		var cans = model.district[voterPerson.iDistrict].stages[model.stage].candidates
+		if (model.stage == "primary") {
+			var district = model.district[voterPerson.iDistrict]
+			cans = district.parties[voterPerson.iParty].candidates
+		}
+
+		// distances //
+		
 		var distList = []
 		var uf = utility_function(model.utility_shape)
 		for (var i = 0; i < cans.length; i++) {
@@ -2494,6 +2501,10 @@ function GeneralVoterModel(model,voterModel) {
 				distSet.score = voterAtStage.ballot[c.id] / maxscore
 				distSet.scoreDisplay = voterAtStage.ballot[c.id]
 			}
+			if (model.ballotType == "Approval") {
+				distSet.score = voterAtStage.ballot.approved.includes(c.id) ? 1 : 0
+				distSet.scoreDisplay = distSet.score
+			}
 			distList.push(distSet)
 
 		}
@@ -2502,11 +2513,11 @@ function GeneralVoterModel(model,voterModel) {
 			distList[i].iSort = i // we might want to show these by the sorted order
 		}
 
-		if (model.ballotType == "Score") {
+		if (model.ballotType == "Score" || model.ballotType == "Approval") {
 			text3 += `
 			You gave the following scores: <br>
 			`
-			dotPlot("score",true)
+			dotPlot("score",{differentDisplay: true})
 			text3 += `<br>`
 		}
 
@@ -2514,7 +2525,7 @@ function GeneralVoterModel(model,voterModel) {
 			text3 += `
 			This is your perceived distance from each candidate using a <b>${model.utility_shape}</b> utility function: <span class="percent">(as % of your perceived distance of the arena width)</span><br>
 			`
-			dotPlot("nUNorm")
+			dotPlot("nUNorm",{distLine:true})
 			// for (var d of distList) {
 			// 	text3 += `
 			// 	${makeIconsCan([d.c])}: <b>${Math.round(d.uNorm*100)}</b> <br>
@@ -2532,7 +2543,7 @@ function GeneralVoterModel(model,voterModel) {
 		text3 += `
 		This is your distance from each candidate: <span class="percent">(as % of arena width)</span> <br>
 		`
-		dotPlot("dNorm")
+		dotPlot("dNorm",{distLine:true})
 		// for (var d of distList) {
 		// 	text3 += `
 		// 	${makeIconsCan([d.c])}: <b>${Math.round(d.dist/model.size*100)}</b> <br>
@@ -2541,10 +2552,14 @@ function GeneralVoterModel(model,voterModel) {
 		text3 += `<br>`
 		
 		
-		function dotPlot(measure,differentDisplay,sortOrder) {
+		function dotPlot(measure,opt) {
+			opt = opt || {}
+			opt.differentDisplay = opt.differentDisplay || false
+			opt.sortOrder = opt.sortOrder || false
+			opt.distLine = opt.distLine || false
 
 			// sortOrder = true
-			if (differentDisplay) {
+			if (opt.differentDisplay) {
 				var mult = 1
 				var display = measure + "Display"
 			} else {
@@ -2565,10 +2580,19 @@ function GeneralVoterModel(model,voterModel) {
 			`
 			distList.reverse()
 			for (var d of distList) {
-				var iV = (sortOrder) ? d.iSort : d.i
+				var iV = (opt.sortOrder) ? d.iSort : d.i
+				if (opt.distLine) {
+					text3 += `
+					<div style=' position: absolute; top: ${iV*vertdim + .5}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: #ccc; height: 2px; '>
+					</div>
+					`
+				} else {
+					text3 += `
+					<div style=' position: absolute; top: ${iV*vertdim}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
+					</div>
+					`
+				}
 				text3 += `
-				<div style=' position: absolute; top: ${iV*vertdim}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
-				</div>
 				<div style=' position: absolute; top: ${iV*vertdim}em; left: ${Math.round(d[measure]*w1)}px; margin-left: -.5em; white-space: nowrap;'>
 				${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
 				</div>
@@ -2650,37 +2674,45 @@ function GeneralVoterModel(model,voterModel) {
 		var maxscore = model.voterGroups[0].voterModel.maxscore
 
 		if ( showPollExplanation ) {
-			text3 += `
-			and you saw these candidates as frontrunners: <br>
-			${makeIcons(voterAtStage.viable)} <br>
-			<br>
-			`
-			if (model.system == "IRV") {
-				var tp = voterPerson.truePreferences 
-				var rank = voterAtStage.ballot.rank
-				var didCompromise = rank[0] != tp[0]
-				if (didCompromise) {
-					text3 += `
-					Your didn't feel your favorite was viable, so you looked at head-to-head polls and picked someone who could beat the winner.  Your true preferences were:  <br>
-					${makeIcons(tp).join(' > ')} <br>
-					<br>
-					so you compromised and went with: <br>
-					${makeIcons(rank).join(' > ')} <br>
-					<br>
-					`
+			if (model.autoPoll == "Manual") {
+				text3 += `
+				and these candidates were manually selected as frontrunners: <br>
+				${makeIcons(model.preFrontrunnerIds)} <br>
+				<br>
+				`
+			} else {
+				text3 += `
+				and you saw these candidates as frontrunners: <br>
+				${makeIcons(voterAtStage.viable)} <br>
+				<br>
+				`
+				if (model.system == "IRV") {
+					var tp = voterPerson.truePreferences 
+					var rank = voterAtStage.ballot.rank
+					var didCompromise = rank[0] != tp[0]
+					if (didCompromise) {
+						text3 += `
+						Your didn't feel your favorite was viable, so you looked at head-to-head polls and picked someone who could beat the winner.  Your true preferences were:  <br>
+						${makeIcons(tp).join(' > ')} <br>
+						<br>
+						so you compromised and went with: <br>
+						${makeIcons(rank).join(' > ')} <br>
+						<br>
+						`
+					}
 				}
+				text3 += `
+				You based your list of viable candidates on your personal feeling that a candidate needed this fraction of the leading frontrunner's votes to be viable: <br>
+				<b>${_textPercent(voterPerson.poll_threshold_factor)}</b> <br>
+				<br>
+				and you saw that the leading frontrunner had <br>
+				<b>${_percentFormat(district,voterAtStage.maxPoll / maxscore)}</b> <br>
+				<br>
+				so, you only saw candidates with votes above this threshold as viable: <br>
+				<b>${_percentFormat(district,voterAtStage.threshold / maxscore)}</b> <br>
+				<br>
+				`
 			}
-			text3 += `
-			You based your list of viable candidates on your personal feeling that a candidate needed this fraction of the leading frontrunner's votes to be viable: <br>
-			<b>${_textPercent(voterPerson.poll_threshold_factor)}</b> <br>
-			<br>
-			and you saw that the leading frontrunner had <br>
-			<b>${_percentFormat(district,voterAtStage.maxPoll / maxscore)}</b> <br>
-			<br>
-			so, you only saw candidates with votes above this threshold as viable: <br>
-			<b>${_percentFormat(district,voterAtStage.threshold / maxscore)}</b> <br>
-			<br>
-			`
 		}
 		
 		var part3 = `
