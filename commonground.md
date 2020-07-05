@@ -12,8 +12,9 @@ Hello, I'm going to show you how to find common ground as a group . We'll go ove
 
 * what we mean by the middle, 
 * how we can use votes to find the middle by simple comparisons, 
-* the simplest voting method that finds the middle, and
-* the world of voting methods.
+* the simplest voting method that finds the middle,
+* what a median really is, and
+* how to bring groups together.
 
 Let's jump right in with an example and some diagrams.
 
@@ -133,9 +134,34 @@ comment='less voters' id='small_group_approval_sim' %}
 
 <!--This solved a big problem.  Usually, the way we do things is to only allow one choice.  If you only allow these voters to vote for one person, then they're going to vote for the person in the center of their circle. You can imagine this like a primary. So each group has their own primary.  And each one picks their own candidate, and they run against each other in the general And nobody is running in the middle.   Why? Because people are only going to vote for their own nominees. And even if they do vote for the middle guy,  it's going to be a small amount of people. the rest of the people are closer to one or the other Party candidate.-->
 
-## The World of Voting Methods
+## The Median
 
-There's also other voting methods where you can judge on a scale from 0 to 10 like you do for a diving contest or figure skating.  You can get very fine-grained with that. That's called score voting, where you get them a score.   
+Why does approval voting work? It uses a median.
+
+A median finds the middle of a list of numbers by putting half above it and half below it.  
+
+*More* *importantly*, this minimizes the sum of the distances to all those numbers.
+
+In a way, all numbers are treated equally. It doesn't matter how far a number is from the median. Each number is pulling the median to one side, just like all the others.
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA21SwUoFMQz8l5yLNG2SZvfmP3hb9vAEbwvvISKI6LebZlg9-NjDbJJmMpP2kyqt28ayFFv2srF7GXXfC_GZZ9UZd1pbIaGVvrlSIaW1FrI4FcURUMu_LyoelegQo7vlJcut6_1yTJpTmDGGG8IOEACUsAFCCkugp16OAVyoBU8kG2eyNQBomuBI0PQA0LSByBEt2dBr2uS5Dc5Cb9nbsZwOQWFm3RjHDAWw9eW3X5Jq_kxrmWlnJsi2Pn8ku-SPLrY4x8nIOQJxAouKVSmEKSxqT98Ki6oAWFSwqOcUXXCfNfsMLIZ9GxZlmvKnNAOFQYGhd0DBQO_AakYHYDUDdzXOZzNQdOyltJmDHQeZMyIIcQhxSZGuAGhxcDkk-ZT0oIWeL8dxfXv6uL3Ey3283V6v75eDvn4Ao5x-RvgCAAA)"
+title = "Median in 1D"
+caption = "Candidate A takes the position at the median and wins."
+comment = "This isn't exactly what I'm looking for."
+id = "median_1d_sim" %}
+
+How does approval voting use a median?
+
+In a way, approval voting is asking you whether each candidate is close to you or far from you, so you're measuring distance and writing it on your ballot.
+
+<!--This is different than finding the median of the distances.  We're finding the median position.-->
+
+Score voting can give a more precise measurement of this distance.  In score voting, you give every candidate a score from 0 to 5.  Add up the scores, and the winner has the highest score, just like usual.  You could even say that approval voting is score voting with only two levels of support.
+
+Distance is measured on your ballot.  When you find the highest score, you're also finding the smallest distance.  So you're finding the median.
+
+That's the motivation for score voting.
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8i885xI6dbPfMD-ht1QO0i6hUdau2CCEEb8fOlAuoymHs2J7MOJ-UaZymVhNr26SJeUg81IjMI5WIhna7E_GotM0mEccYZ8-zRl5ozImURuZE5pCoektO_443t7uV4W5ldbfCub_NISlSQQpFrAAD1K6MXQCroz9nDqteFOfxS-HeIwIAjSgypykOFZcN2YDMWcQXkbtQjp2AqYCpgKmAqTjTxOl2orliHJwFdjlJKkm9rEEbfRo2w7bKb-DEU4lA-6z-pVa41oY_glxd9UvD8owBkGqQatid4TsNpq11nTb0twymawbAcMUPVLBU61ZCYAVFhYKKtTcoaJht0pmenw6H5br-OM000uN2Oc-U6PK6vD_Ml-15f7rul6NXvt-Ou_llf5x39PUDc7xiOMsCAAA)' title='Score Voting' 
 
@@ -143,7 +169,21 @@ caption='Give as many as you like a score from 0 to 5.'
 
 comment='simple,lots of candidates, one voter' id='score_sim' %}
 
-Another great voting method combines score voting with counting by pairs.  This is called STAR voting, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before.
+In practice, voters can adjust their self-reported distances, which is called using a strategy.  Jameson Quinn has a good discussion of strategies in the links at the end of this page.  Basically, using strategies means score voting looks a lot like approval voting.
+
+In the example below, the J=Judge strategy measures distance well and would best find the median.  <br>The N=Normalize strategy is basically using the full power of your vote.  <br>The F="frontrunner" strategy considers polling data and makes score voting very similar to approval voting.
+
+{% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8l5wjFCdO7O6ZP4Dbag_QLqJS1a3aIoQQfDt2pr0UVTmMX5mMHX-HFIZxlBaJZYojkUbS5lY1i7NbKpdYzmYVmaYYyK9RMj-x-yUMKQYOQ_glCjHUMFAMzaosKQYp_juW0buZ1d0Mpf4WuYRmwkuk7OGMMJQQAyqgdTlkQogN7dlqsOrJbHwWzNRrcgaAJjM8oykGDUGBp_CMJdsAfJAmJbqWAq6SkQJXAVcxrpHi5XhxQxVYCxo3nlgiW5qd2OvYG_YBcL4axd90g_tdvqVm9M2C34FgXvVgxRgrASC1FgCkVvxiRdtVkNP-VkXbLQHQcMMfNDTcam_FBTZQNChoGLxAgeCuQIEUePg_wf_JdZEESb2ZkaAlBaFSZ1KIUYhRECoIFXoUfApZ6rIebDFeX3a75fz8dZhtn5_Wy3G2jT69L5-P82l93B7O22Xvm_6x38xv2_28CT9_6sQykEkDAAA)" 
+
+title='Practical Score Voting' 
+
+caption='Try the different strategies.' 
+
+comment='score can look like approval voting' id='score_strategy_sim' %}
+
+STAR voting was created to counteract this strategizing.  It combine the two ways of finding the middle, scoring and counting by pairs.  
+
+It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before. (Also, I don't have a great model of strategy for STAR voting yet.)
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu27DMAz8F80cxKds_0a7GR7aIluAFEWXoui_l-IlHRoEGo7Ukacj7e_W27bvHsRdD9qZO_FYZ-QLLZ6B_F2JWZb146DGs4tdiU1nrm3r1KxtLNS8ksgSobuTxSOZTncnmeUhsz5kuNdzPC3NVJDCERsAljgAaYAtMZ_zhNRmapI6eSmpkzOIACAjhpKU0QTIyEC2IFurQXsZ5bkTLkKlelXBw5Cm0s50PbM4QENTMS7nwpQsaSvZGfAtkFugc9EzsOq1_9IWZcAGvhHsGoZ2LM9h1TG0a23CMbQ7AEP7QMlSbzmGjg7gqgx8gcDqwmuU_LlaQCLgINaCAQcDvQPLen05ny-fz1_vp7a1p7fLx6n9_ALa2ClbqwIAAA)' title='STAR Voting' 
 
@@ -151,9 +191,13 @@ caption='Same ballot as above for score. Score from 0-5, and add up scores. BUT 
 
 comment='same as above but star' id='star_sim' %}
 
-You could involve some conditionals. Like you could eliminate candidates that aren't doing well. That way they don't interfere with the main candidates.  This method is called RCV and is getting more popular in the US.  
+## Bringing Groups Together
 
-{% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4md29zMQ3WqLQ1zFCShoEOLfcTwcBadTirF37MnY2a_W27bvHsRdD9qZO_FYZ-QLLZ6B_H0Ssyzrx0GNZxe7EpvOXNvWqVnbjJpXHFkhdHOydiTT6eYks9xl1rsM97qOp6OZClIYYgPAEgcgDXD65LzOE1KbqUkv85I6kiAAyIihJGU0ATIykC3I1mrQXkZ5roSLUKleVfAwpKm0M_2eWRygoakYl3NhSpa0lewM-BrINdC56BlY9dp_aYsyYANPBLuGoR3Lc1h1DO2KZ8TQ7gAM7QMlS93lGDo6gKsy8AKB1YXXKPlvtYBEwEGsBQMOBnoHlvV0ulzePh4_389taw-n15fzc_v-AdZjYJarAgAA)' title='Ranked Choice Voting' 
+Part of finding common ground is finding allies.  Any voting system that avoids vote-splitting will also allow allies to come together as a team.  The scoring and pairwise systems mentioned above do this, and so do the methods in this section.
+
+To avoid vote-splitting, you could eliminate candidates that aren't doing well. That way they don't interfere with the main candidates.  The main candidates won't see the smaller candidates and spoilers and can ally with them.  This method is called RCV and is getting more popular in the US.
+
+{% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4md29zMQ3WqLQ1zFCShoEOLfcTwcBadTirF37MnY2a_W27bvHsRdD9qZO_FYZ-QLLZ6B_H0Ssyzrx0GNZxe7EpvOXNvWqVnbjJpXHFkhdHOydiTT6eYks9xl1rsM97qOp6OZClIYYgPAEgcgDXD65LzOE1KbqUkv85I6kiAAyIihJGU0ATIykC3I1mrQXkZ5roSLUKleVfAwpKm0M_2eWRygoakYl3NhSpa0lewM-BrINdC56BlY9dp_aYsyYANPBLuGoR3Lc1h1DO2KZ8TQ7gAM7QMlS93lGDo6gKsy8AKB1YXXKPlvtYBEwEGsBQMOBnoHlvV0ulzePh4_389taw-n15fzc_v-AdZjYJarAgAA)' title='Single-Winner Ranked Choice Voting' 
 
 caption='Your vote counts for your top choice.  Then, do a process of elimination of the candidate in last place and repeat.' 
 
@@ -167,7 +211,7 @@ caption='We can order two.'
 
 comment='meat lovers and veggie lovers win' id='stv_sim' %}
 
-And of course, there's primaries, which is the way we do things now, and can work in the best case scenario.  But they can also malfunction when there's a crowded field or when one party has many more voters than the other party, or when there's more than two parties.
+And of course, there's primaries, which is the way we do things now. Basically, a whole party gets behind one candidate. This can work in the best case scenario.  But primaries can malfunction when there's a crowded field, or when one party has many more voters than the other party, or when there's more than two parties.
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)' title='Primaries' 
 
@@ -181,7 +225,7 @@ To wrap things up, there's a lot of ways you could deal with voting (casting a b
 
 Still want more? Try the sandbox below, where I've added a ton more voting methods and configuration options.  
 
-Want more of a narrative?  Then choose your path.  I go into depth on all the examples above.  This page was just an overview.
+Want more of a narrative?  Then choose your path.  I go into depth on all the voting methods above.  This page was just an overview.
 
 Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV). I also have a draft of a page about proportional representation using more methods than just STV. It's a work in progress. Just be sure you get to read more about Condorcet methods. I like them best.
 
