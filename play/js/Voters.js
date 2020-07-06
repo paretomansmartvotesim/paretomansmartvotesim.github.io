@@ -2783,8 +2783,8 @@ function dotPlot(measure,distList,model,opt) {
 	// also the .5 em margins and padding help center the icons.
 	var w1 = 156
 	text += `
-	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 2px solid #ccc; padding: 0 .5em;'>
-	<div style=' position: relative; '>
+	<div style=' position: relative; width: 100%${220-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 2px solid #ccc; padding: .25em .75em;'>
+	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 0px solid #ccc; border-right: 1px dashed #ccc; padding: 0 .5em;'>
 	`
 	distList.reverse()
 	for (var d of distList) {
@@ -2802,7 +2802,7 @@ function dotPlot(measure,distList,model,opt) {
 			`
 		}
 		text += `
-		<div style=' position: absolute; top: ${iV*vertdim}em; left: ${Math.round(d[measure]*w1)}px; margin-left: -.5em; white-space: nowrap;'>
+		<div style=' position: absolute; top: ${iV*vertdim}em; left: ${Math.round(d[measure]*w1)+2}px; margin-left: -.5em; white-space: nowrap;'>
 		${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
 		</div>
 		`
