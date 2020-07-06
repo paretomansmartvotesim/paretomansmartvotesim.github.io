@@ -2495,12 +2495,25 @@ function GeneralVoterModel(model,voterModel) {
 		var distList = makeDistList(model,voterPerson,voterAtStage,cans)
 		voterPerson.distList = distList // just pass it along.. maybe do this part better
 
-
+		var tableHead = `
+			<table class="main2" border="1">
+			<tbody>
+			<tr>
+			<td class="tallyText">
+			`
+		var tableFoot = `
+			</td>
+			</tr>
+			</tbody>
+			</table>
+			`
 		// writing //
 		
 		var tablewrap = false
 		var text = ''
 		var part1 = voterModel.drawBallot(voterPerson)
+
+
 		var part2 = `
 		<table class="main2" border="1">
 		<tbody>
@@ -2681,6 +2694,34 @@ function GeneralVoterModel(model,voterModel) {
 		</tbody>
 		</table>`.replace("#3",text3)
 
+		
+		var part4 = ''
+		
+	// alternative form of ballot
+
+		if (model.ballotType == "Ranked" || model.ballotType == "Score" || model.ballotType == "Approval" || model.ballotType == "Three") {
+			part4 += tableHead
+			part4 += `
+			<span class="small">
+			Alternative form of ballot:
+			</span>
+			`
+			part4 += dotPlot("score",distList,model,{differentDisplay: true,bubbles:true})
+			part4 += `<br>`
+			part4 += tableFoot
+		}
+		if (model.ballotType == "Ranked") {
+			part4 += tableHead
+			part4 += `
+			<span class="small">
+			Visualization of ballot:
+			</span>
+			`
+			part4 += dotPlot("score",distList,model,{differentDisplay: true,distLine:true})
+			part4 += `<br>`
+			part4 += tableFoot
+		}
+
 
 		if (tablewrap) {
 			text += `<table id="paper">
@@ -2712,6 +2753,9 @@ function GeneralVoterModel(model,voterModel) {
 			<div>
 			` + part3 + `
 			</div>
+			<div>
+			` + part4 + `
+			</div>
 			</div>`
 		}
 		return text
@@ -2736,12 +2780,18 @@ function makeDistList(model,voterPerson,voterAtStage,cans) {
 		}
 		if (model.ballotType == "Score" || model.ballotType == "Three") {
 			var maxscore = model.voterGroups[0].voterModel.maxscore
+			distSet.maxscore = maxscore
 			distSet.score = voterAtStage.ballot[c.id] / maxscore
 			distSet.scoreDisplay = voterAtStage.ballot[c.id]
 		}
 		if (model.ballotType == "Approval") {
+			distSet.maxscore = 1
 			distSet.score = voterAtStage.ballot.approved.includes(c.id) ? 1 : 0
 			distSet.scoreDisplay = distSet.score
+		}
+		if (model.ballotType == "Ranked") {
+			distSet.scoreDisplay = (voterAtStage.ballot.rank.indexOf(c.id) + 1)
+			distSet.score = distSet.scoreDisplay / voterAtStage.ballot.rank.length
 		}
 		distList.push(distSet)
 	
@@ -2760,6 +2810,7 @@ function dotPlot(measure,distList,model,opt) {
 	opt.differentDisplay = opt.differentDisplay || false
 	opt.sortOrder = opt.sortOrder || false
 	opt.distLine = opt.distLine || false
+	opt.bubbles = opt.bubbles || false
 
 	var text = ""
 
@@ -2782,27 +2833,55 @@ function dotPlot(measure,distList,model,opt) {
 	// border at 100 * 220 / 141 = 156 
 	// also the .5 em margins and padding help center the icons.
 	var w1 = 156
+	var w2 = 200
+	var ncans = distList.length
 	text += `
-	<div style=' position: relative; width: 100%${220-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 2px solid #ccc; padding: .25em .75em;'>
-	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * distList.length )}em; border: 0px solid #ccc; border-right: 1px dashed #ccc; padding: 0 .5em;'>
+	<div style=' position: relative; width: ${w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 2px solid #ccc; padding: .25em .75em;'>
+	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: 1px dashed #ccc; padding: 0 .5em;'>
 	`
 	distList.reverse()
 	for (var d of distList) {
 		var iV = (opt.sortOrder) ? d.iSort : d.i
+		var y = iV*vertdim
+		var x = Math.round(d[measure]*w1)
 		if (opt.distLine) {
 			text += `
-			<div style=' position: absolute; top: ${iV*vertdim + .5}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: #ccc; height: 2px; '>
+			<div style=' position: absolute; top: ${y + .5}em; width: ${x}px; left: -.5em; background-color: #ccc; height: 2px; '>
 			</div>
-			<img src="play/img/voter.png" style=' position: absolute; top: ${iV*vertdim}em; left:-.5em; '/>
+			<img src="play/img/voter.png" style=' position: absolute; top: ${y}em; left:-.5em; '/>
 			`
+		} else if (opt.bubbles) {
+			text += `
+			<div style=' position: absolute; top: ${y}em; left: ${0+2}px; margin-left: -.5em; white-space: nowrap;'>
+			${makeIconsCan([d.c])} <br>
+			</div>
+			`
+			var nbubbles = (model.ballotType == "Ranked") ? ncans : d.maxscore+1
+			for (var k=0; k < nbubbles; k++) {
+				var km = k
+				if (model.ballotType == "Ranked") {
+					km ++
+				}
+				var kx = (k+1) * Math.min( (w2-4-13)/ncans, 20 ) - 5
+				var back = (d[display] == km) ? "#555" : "white"
+				text += `<div class="circle" style=' position: absolute; top: ${y}em; left: ${kx}px; background-color:${back};'>
+				</div>
+				<div style=' position: absolute; top: ${y-.05}em; left: ${kx+3}px; color: #ccc; '>
+				<span style=' font-size:${(km > 9 ) ? 50 : 80}%; vertical-align: middle;' >
+				${km}
+				</span>
+				</div>
+				`
+			}
+			continue
 		} else {
 			text += `
-			<div style=' position: absolute; top: ${iV*vertdim}em; width: ${Math.round(d[measure]*w1)}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
+			<div style=' position: absolute; top: ${y}em; width: ${x}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
 			</div>
 			`
 		}
 		text += `
-		<div style=' position: absolute; top: ${iV*vertdim}em; left: ${Math.round(d[measure]*w1)+2}px; margin-left: -.5em; white-space: nowrap;'>
+		<div style=' position: absolute; top: ${y}em; left: ${x+2}px; margin-left: -.5em; white-space: nowrap;'>
 		${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
 		</div>
 		`

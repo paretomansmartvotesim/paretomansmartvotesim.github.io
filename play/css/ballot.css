@@ -194,6 +194,15 @@ BALLOT DESIGN
 	font-weight: normal;
 }
 
+div.circle {
+	width: .7em;
+	height: .7em;
+	-webkit-border-radius: .35em;
+	-moz-border-radius: .35em;
+	border-radius: .35em;
+	background: white;
+	border: .1em solid #ccc;
+}
 
 .div-sandbox .div-ballot {
 	/* transform: scale(.5); */
