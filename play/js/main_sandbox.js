@@ -3442,7 +3442,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.dom.left.style.display = "none"
         } else {
             ui.dom.left.id = "left"
-            if (config.putMenuAbove) {
+            if (config.putMenuAbove  && ! model.devOverrideShowAllFeatures) {
                 ui.dom.left.style.display = "block"
             } else {
                 ui.dom.left.style.display = "inline-block"
