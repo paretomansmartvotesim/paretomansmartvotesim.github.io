@@ -87,7 +87,7 @@ You would get a ballot with the names {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} wr
 
 Everybody writes their rankings on the ballot, and then we count all the ballots one pair at a time. If we find that one candidate was able to win all their matches, then we've found the middle.
 
-{% include sim-ballot.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8i88-xImdbPbMCxC31R4KXURFta3aIoQQvB0nQy-gag8Te-zJ2NlPCjROU0kssc48iRjLkNrJgueGdqqeK42NsXrO5plJWltS9rIWJhoDk9JYmYxGYcpeEPjf57XlJjPcZOpNRkK_WpqhFkaEMCQKMEDuzsQNiDr6deZQOxldx5NRek2MAMhEReQyySEjWRANiFwl-h5CNyptJVBKUEpQSlBKrjQJ_36tOKMdmgnjCkdOrE5rk2112sZsY2u8HtKV0t6rf6UVU2vBE8Gu1p40LM8EAKsGq4bdGZ7TMLRBxYZ-l2HoHAAYOOMFMlSy9VH8j6IMiQwHGWsvcFDQW-DgcbPfHy4PH8eFRrrfrK_LlpjOL4f3u-X8dNodL7vD6tT327pdnner018_VpCSNcoCAAA)' title='Rankings' 
+{% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8i88-xImdbPbMCxC31R4KXURFta3aIoQQvB0nQy-gag8Te-zJ2NlPCjROU0kssc48iRjLkNrJgueGdqqeK42NsXrO5plJWltS9rIWJhoDk9JYmYxGYcpeEPjf57XlJjPcZOpNRkK_WpqhFkaEMCQKMEDuzsQNiDr6deZQOxldx5NRek2MAMhEReQyySEjWRANiFwl-h5CNyptJVBKUEpQSlBKrjQJ_36tOKMdmgnjCkdOrE5rk2112sZsY2u8HtKV0t6rf6UVU2vBE8Gu1p40LM8EAKsGq4bdGZ7TMLRBxYZ-l2HoHAAYOOMFMlSy9VH8j6IMiQwHGWsvcFDQW-DgcbPfHy4PH8eFRrrfrK_LlpjOL4f3u-X8dNodL7vD6tT327pdnner018_VpCSNcoCAAA)' title='Rankings' 
 
 caption='You are saying something about each pair of options. Mouse over each pair in the tally to see how each pair is represented in your ranking.' 
 
