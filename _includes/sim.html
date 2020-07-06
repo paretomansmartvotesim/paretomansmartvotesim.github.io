@@ -2,7 +2,11 @@
 <div class="sim-ballot">
     <div class="sim-container">
         <h2 class="ballot_title" style="margin-bottom: 0.15em;">{{ include.title }}</h2>
-        <p class="ballot_caption">{{ include.caption | replace: "`", "" }}</p>
+        <p class="ballot_caption">{{ include.caption | replace: "`", "" }}
+        {% if include.hint %}
+        <span class="hint_button" title="{{ include.hint }}">Hint</span>
+        {% endif %}
+        </p>
         {% if include.url %}
         <script id="{{ include.id }}">
             sandbox({idScript:"{{ include.id }}",url:"{{ include.url }}"})
