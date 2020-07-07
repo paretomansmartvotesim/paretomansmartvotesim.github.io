@@ -18,7 +18,8 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 - [Colorado Approves](https://coloradoapproves.org/) - The inspiration for the page on finding common ground came from a discussion with Blake.
 - [Unsplit the Vote](https://unsplitthevote.org/) - End vote-splitting. (Thanks for the feedback.)
 - [Center for Election Science ](https://www.electionscience.org/) - likes approval voting
-- [Equal Vote](http://www.equal.vote/) - likes STAR voting
+
+- [STAR Voting](https://www.starvoting.us/) - likes STAR voting.  Related: [Equal Vote](http://www.equal.vote/) 
 - [FairVote](https://www.fairvote.org/) - likes RCV, both single- and multi-winner versions
 - [FairVote Canada](https://www.fairvote.ca/) - likes proportional representation
 - [Electoral Reform Society](https://www.electoral-reform.org.uk/) - UK - likes proportional representation with STV
@@ -50,7 +51,7 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 
 #### Courses
 
-- [Making Better Group Decisions: Voting, Judgement Aggregation, and Fair Division](https://www.youtube.com/watch?v=w3Szol8KLEE&list=PLBmjSBnW7zFm9rutlKI0nm9dQDZfnSo_g)  - by Eric Pacuit - formal logic and math perspective - on my Youtube playlist
+- Making Better Group Decisions: [Voting](https://www.youtube.com/watch?v=EYJ3ta080bI&list=PLBmjSBnW7zFm9rutlKI0nm9dQDZfnSo_g&index=3), Judgement Aggregation, and Fair Division  - by Eric Pacuit - formal logic and math perspective - on my Youtube playlist
   - [Syllabus](http://ai.stanford.edu/~epacuit/classes/voting-fall2012.html) from a previous year
   - [Split Cycle](https://arxiv.org/pdf/2004.02350.pdf) - a new method he invented with Wes Holliday
 - [Game Theory](http://www.game-theory-class.org/) - on Coursera and Youtube - from Stanford and UBC - by Matthew O. Jackson, Kevin Leyton-Brown, and Yoav Shoham
