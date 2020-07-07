@@ -16,6 +16,7 @@ function Viz(model) {
 	self.yee = yee
 	self.beatMap = beatMap
 	self.medianDistViz = new MedianDistViz(model)
+	self.lpAssignmentsViz = new LpAssignmentsViz(model)
 
 	self.calculateBeforeElection = function() {
 		
@@ -63,6 +64,11 @@ function Viz(model) {
 		
 		if (model.doMedianDistViz) {
 			self.medianDistViz.drawMedianDistViz()
+		}
+
+		model.doLpAssignmentsViz = model.system == "PhragmenMax" || model.system == "equalFacilityLocation"
+		if (model.doLpAssignmentsViz) {
+			self.lpAssignmentsViz.drawLpAssignmentsViz()
 		}
 	}
 
@@ -1164,4 +1170,65 @@ function MedianDistViz(model) {
 			}
 		}
 	}
+}
+
+
+function LpAssignmentsViz(model) {
+	var self = this
+	self.drawLpAssignmentsViz = function() {
+		for (var district of model.district) {
+
+			var a = LpGetA(district)
+			
+			drawA(a,district)
+
+		}
+	}
+
+	function LpGetA(district) {
+		var r = district.stages[model.stage].lpResult
+		console.log(r)
+		var cans = district.stages[model.stage].candidates
+		var nk = cans.length
+		var ni = district.voterPeople.length
+	
+		var a = []
+		for(var i = 0; i < ni; i++ ){
+			a[i] = []
+			for(var k = 0; k < nk; k++){
+				a[i][k] = r["y" + i + "_" + k]
+			}
+		}
+		return a
+	}
+
+	function drawA(a,district) {
+		var ctx = model.arena.ctx
+		ctx.save()
+		var cans = district.stages[model.stage].candidates
+		for (var i = 0; i < a.length; i++) {
+			var x = district.voterPeople[i].x
+			var y = district.voterPeople[i].y
+			for (var k = 0; k < a[0].length; k++) {
+				var assign = a[i][k]
+
+				if (assign) {
+					// if we draw it
+					ctx.globalAlpha = assign
+
+					var c = cans[k]
+					
+					ctx.beginPath();
+					ctx.moveTo(x*2,y*2)
+					ctx.lineTo(c.x*2,c.y*2)
+					ctx.lineWidth = 4
+					ctx.strokeStyle = c.fill;
+					ctx.stroke();
+				}
+			}
+
+		}
+		ctx.restore()
+	}
+
 }

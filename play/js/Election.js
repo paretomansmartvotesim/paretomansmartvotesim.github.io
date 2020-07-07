@@ -3139,6 +3139,12 @@ Election.quotaScore = function(district, model, options){
 
 Election.phragmenMax = function(district, model, options){
 
+	return lpGeneral(_solvePhragmenMax,district,model,options)
+
+}
+
+function lpGeneral(_solver,district,model,options) {
+
 	options = _electionDefaults(options)
 	var polltext = _beginElection(district,model,options,"score")
 	let cans = district.stages[model.stage].candidates
@@ -3150,7 +3156,8 @@ Election.phragmenMax = function(district, model, options){
 
 	var b = _getBallotsAsB(ballots, cans)
 
-	var phragmenResult = _solvePhragmenMax(b,model.seats)
+	var phragmenResult = _solver(b,model.seats)
+	district.stages[model.stage].lpResult = phragmenResult.results
 
 	var winners = _getWinnersFromPhragmenResult(phragmenResult,cans)
 
@@ -3209,6 +3216,8 @@ function _getBallotsAsB(ballots,cans) {
 
 function _solvePhragmenMax(b,seats) {
 
+	// doesn't work right now due to limitations of the solver.
+
 	var lb = true
 
 	var nk = b[0].length
@@ -3258,7 +3267,7 @@ function _solvePhragmenMax(b,seats) {
 	// support must be the same for all winning candidates
 	for (var k of kset) {
 		con['xby' + k] = {"equal": 0}
-		va['x' + k]["xby" + k] = 1
+		va['x' + k]["xby" + k] = ni / seats // 1
 		for (var i of iset) {
 			va["y" + i + "_" + k]["xby" + k] = -b[i][k] * .2
 			// va["y" + i + "_" + k]["xby" + k] = -1 // or.. same assignment level for all winning candidates
@@ -3365,6 +3374,146 @@ function _getWinnersFromPhragmenResult(phragmenResult,cans) {
 	}
 	return winners
 } 
+
+Election.equalFacilityLocation = function(district, model, options){
+
+	return lpGeneral(_solveEqualFacilityLocation,district,model,options)
+
+}
+
+function _solveEqualFacilityLocation(b,seats) {
+
+	var nk = b[0].length
+	var ni = b.length
+	var nw = seats
+
+	var con = {}
+	var va = {}
+	var ints = {}
+
+	var kset = []
+	for (var k = 0; k < nk; k++) {
+		kset.push(k)
+	}
+	var iset = []
+	for (var i = 0; i < ni; i++) {
+		iset.push(i)
+	}
+
+	// variables x for selection of candidates
+	for (var k of kset) {
+		va['x' + k] = {}
+	}
+
+	// candidate is either selected or not, 1 or 0
+	for (var k of kset) {
+		con['x' + k] = {"max": 1}
+		va['x' + k]['x' + k] = 1
+		ints['x' + k] = 1
+	}
+	
+
+	// n winners
+	con["winners"] = {"equal": nw}
+	for (var k of kset) {
+		va['x' + k]['winners'] = 1
+	}
+	
+	// variables for representation assignment
+	for (var k of kset) {
+		for (var i of iset) {
+			va["y" + i + "_" + k] = {}
+			// con["y" + i + "_" + k] =  {"min": 0} 		// no negative assignment allowed
+			// va["y" + i + "_" + k]["y" + i + "_" + k] = 1 // no negative assignment allowed
+		}
+	}
+
+	// voter is either assigned to a candidate or not, 1 or 0
+	for (var k of kset) {
+		for (var i of iset) {
+			con["y" + i + "_" + k] = {"max": 1}
+			va["y" + i + "_" + k]["y" + i + "_" + k] = 1
+			ints["y" + i + "_" + k] = 1
+		}
+	}
+
+	// voters are assigned exactly once
+	for (var i of iset) {
+		con["y" + i] = {"equal":1}
+		for (var k of kset) {
+			va["y" + i + "_" + k]["y" + i] = 1
+		}
+	}
+
+
+
+
+
+	// assignments must be the same for all winning candidates
+	// within rounding error
+	lbSumY = Math.floor( ni / seats )
+	ubSumY = Math.ceil( ni / seats )
+	for (var k of kset) {
+		con['lyx' + k] = {"min": 0} // lower bound
+		con['uyx' + k] = {"max": 0} // upper bound
+		va['x' + k]["lyx" + k] = -lbSumY
+		va['x' + k]["uyx" + k] = -ubSumY
+		for (var i of iset) {
+			va["y" + i + "_" + k]["lyx" + k] = 1 // -b[i][k] * .2
+			va["y" + i + "_" + k]["uyx" + k] = 1
+			// va["y" + i + "_" + k]["xby" + k] = -1 // or.. same assignment level for all winning candidates
+		}
+	}
+
+
+	if (1) {
+		va["z"] = {}
+		for (var i of iset) {
+			for (var k of kset) {
+				va["y" + i + "_" + k]["z"] = b[i][k]
+			}
+		}
+	} else {
+		// this doesn't work, we have to set variables to contribute directly to the objective.  It's a limitation of the solver, it seems.
+		// find upper bound of assignment level for voters
+		con["zby"] = {"equal": 0},
+		va["z"] = {}
+		va["z"]["zby"] = -1
+		for (var i of iset) {
+			for (var k of kset) {
+				va["y" + i + "_" + k]["zby"] = 6-b[i][k]
+				// va["y" + i + "_" + k]["zby" + i] = -b[i][k] // or.. find ub of support level
+			}
+		}
+	}
+
+
+	// minimize highest assignment level
+	var solver = window.solver,
+	results,
+	model = {
+		"optimize": "z",
+		"opType": "max",
+		"constraints": con,
+		"variables": va,
+		"ints": ints,
+		"options": {
+			"tolerance": 0.05
+		}
+	};
+
+	console.log(model)
+	results = solver.Solve(model);
+	console.log(results)
+	var canResult = []
+	for (var k = 0; k < nk; k++) {
+		canResult[k] = results['x' + k]
+	}
+
+	var phragmenResult = { results:results, canResult:canResult}
+
+	return phragmenResult
+}
 
 Election.toptwo = function(district, model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 

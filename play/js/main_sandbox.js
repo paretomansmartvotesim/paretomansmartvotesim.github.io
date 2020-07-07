@@ -1593,6 +1593,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
     // BUTTONS - WHAT VOTING SYSTEM //
     //////////////////////////////////
 
+    function _smaller(x) { return `<span class="smaller">${x}</span>`}
 
     ui.menu.systems = new function() { // Which voting system?
         // "new function () {code}" means make an object "this", and run "code" in a new scope
@@ -1626,6 +1627,8 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"STV", value:"STV", ballotType:"Ranked", election:Election.stv, margin:4},
             {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",ballotType:"Ranked", election:Election.quotaMinimax},
             {name:"Test LP", value:"PhragmenMax", realname:"Phragmen's method of minimizing the maximum representation with assignments.",ballotType:"Score", election:Election.phragmenMax},
+            {name:_smaller("Equal Facility"), value:"equalFacilityLocation", realname:"Facility location problem with equal assignments.",ballotType:"Score", election:Election.equalFacilityLocation},
+            
         ];
         self.systemsCodebook = [
             {
@@ -1652,6 +1655,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     18:"QuotaMinimax",
                     19:"QuotaScore",
                     20:"PhragmenMax",
+                    21:"equalFacilityLocation",
                 }
             }
         ]
@@ -2564,6 +2568,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "QuotaMinimax": pairType,
             "QuotaScore": scoreType,
             "PhragmenMax": scoreType,
+            "equalFacilityLocation": scoreType,
         }
         self.menuNameFirst = {
             "choice":"choiceFirstStrategy",
@@ -5514,6 +5519,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "QuotaApproval",
                 "QuotaScore",
                 "PhragmenMax",
+                "equalFacilityLocation",
             ]
         }
         includeOnlyIf = {
@@ -5525,12 +5531,14 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "QuotaMinimax",
                 "QuotaScore",
                 "PhragmenMax",
+                "equalFacilityLocation",
             ],
             dev: [
                 "QuotaApproval",
                 "QuotaMinimax",
                 "QuotaScore",
                 "PhragmenMax",
+                "equalFacilityLocation",
             ]
         }
 
@@ -5559,6 +5567,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "QuotaMinimax",
             "QuotaScore",
             "PhragmenMax",
+            "equalFacilityLocation",
         ]
         
         // helper

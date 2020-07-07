@@ -724,7 +724,7 @@ function Model(idModel){
 	}
 	
 	self.checkMultiWinner = function(system) {
-		return (system == "QuotaApproval"  || system == "QuotaScore" || system == "RRV" ||  system == "RAV" ||  system == "STV" || system == "QuotaMinimax" || system == "PhragmenMax") 
+		return (system == "QuotaApproval"  || system == "QuotaScore" || system == "RRV" ||  system == "RAV" ||  system == "STV" || system == "QuotaMinimax" || system == "PhragmenMax" || system == "equalFacilityLocation") 
 	}
 
 	self.updateVC = function() {
