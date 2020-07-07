@@ -3377,7 +3377,21 @@ function _getWinnersFromPhragmenResult(phragmenResult,cans) {
 
 Election.equalFacilityLocation = function(district, model, options){
 
-	return lpGeneral(_solveEqualFacilityLocation,district,model,options)
+	var result = lpGeneral(_solveEqualFacilityLocation,district,model,options)
+
+	var lpr = district.stages[model.stage].lpResult
+	var maxscore = model.voterGroups[0].voterModel.maxscore
+	var numvoters = district.voterPeople.length
+	var comboScore = lpr.result / maxscore / numvoters
+	
+	var makeIcons = x => x ? x.map(a => model.icon(a)) : ""
+
+	result.text = `
+	The computer has determined that with a total combined score of 
+	<b>${_textPercent(comboScore)}</b>, the winners are 
+	${makeIcons(result.winners)}
+	`
+	return result
 
 }
 
