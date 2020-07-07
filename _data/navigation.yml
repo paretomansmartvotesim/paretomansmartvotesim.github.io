@@ -12,6 +12,8 @@
   link: irv
 - name: Single Transferable Vote
   link: stv
+- name: Proportional Methods
+  link: proportional
 - name: Original
   link: original
 - name: An Even Better Ballot

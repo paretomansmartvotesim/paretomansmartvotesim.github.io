@@ -24,10 +24,9 @@ twuser: paretoman1
 
 {% include card.html title="An Even Better Ballot" description=" - Jameson Quinn's extension of Nicky's sim to show strategies for score voting, introduce STAR, and play the game of chicken" url='newer' img='img/chicken.png' %}
 
+{% include card.html title="Proportional Representation" description=" - Bring the candidates closer to the voters. Continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods." url='proportional' img='img/proportional2.png' %}
+
 {% include card.html title="Sandbox" description=' - Try everything.  Share your creations.' url='sandbox/' img='img/sandbox.png' %}
-
-
-<!-- {% include card.html title="Proportional Representation" description=" - continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods" url='proportional' img='img/proportional.png' %} -->
 
 
 
