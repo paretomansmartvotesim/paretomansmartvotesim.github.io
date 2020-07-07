@@ -83,7 +83,7 @@ comment='two candidates with a circle. Maybe I could use names for ping pong.' i
 
 So what would that look like in an actual election?. That would basically be counting the votes for every possible pair of options.  Say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot. But really, you have a single ranking, which is easier to write.  
 
-You would get a ballot with the names {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} written on it. And because you like them in that order, you'd write 1 2 3 4 5 on the ballot; you like \#1 {{ A }}, then \#2 {{ B }}, and so on.  From your ranking you can tell, for example, that for {{ A }} versus {{ E }}, you like {{ A }} better, and so on for every pair.
+You would get a ballot with the names {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} written on it. And because you like them in that order, you'd write 1 2 3 4 5 on the ballot. 
 
 Everybody writes their rankings on the ballot, and then we count all the ballots one pair at a time. If we find that one candidate was able to win all their matches, then we've found the middle.
 
@@ -93,9 +93,20 @@ caption='You are saying something about each pair of options. Mouse over each pa
 
 comment='ranked ballot with pairs' id='pair_ballot_sim' %}
 
+You can also use a tier list, because ties are okay, too.  You can have multiple top-tier candidates if you really can't decide.  Voters who aren't sure can use tiers and still say something about top-tier versus bottom-tier, and every tier in between.
+
+<p style="text-align: center;" ><strong>Tier List for Candy</strong></p>
+<div class="picture-container">
+ <img src="https://cdn.kapwing.com/final_5dc9d759968f590014bbe8ce_848166.jpg" alt="tier list for candy" class="picture" />
+</div>
+
+Pairwise rankings really give you a lot of power.  
+
+Next, let's talk about an even simpler way to find the middle.
+
 ## The Simplest Ballot
 
-So what else is there?  You can also just allow people to vote for more than just one candidate.  This will be really easy to explain with a Venn diagram.
+The simplest way to find the middle is to just allow people to vote for more than just one candidate.  This will be really easy to explain with a Venn diagram.
 
 {% capture cap17 %}The voters vote for everyone in their circle.  Both like {{ C }}.{% endcapture %}
 
@@ -105,7 +116,7 @@ caption=cap17
 
 comment='too simple?' id='approval2_sim' %}
 
-So what does that actually look like on a ballot? Well, it's pretty simple. You have {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} and you have a checkbox next to each one. If you like {{ A }} and {{ B }}, check both boxes.  If you like {{ D }} and {{ E }}, check those.  If you like every candidate but {{ A }}, then there you go.  This is approval voting, where you vote for those you approve of. 
+On the ballot you have {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} and you have a checkbox next to each one. If you like {{ A }} and {{ B }}, check both boxes.  If you like {{ D }} and {{ E }}, check those.  If you like every candidate but {{ A }}, then there you go.  This is approval voting, where you vote for those you approve of. 
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRTU_DMAz9LznnEDuO0_WGxE_gVvUwWBGTprXaBggh-O3YeeUCqnJ4_nx-dj5DCv0wVI0kdYwDURepU7eKWcJudXWNMZuV6zjGQN5Gyfwk7ufQpxgk9GRQDGJQK0nx37PiupnpNjO7zQylNptckrsMF4pIAAWgTRmZABJDG1cMdi3JxmNBplbDDAANCzyjyQaKYIXXwTMWtkOkJpT8JmDKYMpgymDKxjRQXJ8XK9rBmbEuRY45iqXFab1OfE1fW_jXMOIhuyGtV_5SC7aWij-CXNm1YMHxCgG4iSi5XaJAasF3FixdKkq6NqtgaU0ALKz4AcXCWladCgLFfMXRK-ZXdFbMf9yfTvPt4WOZQh_uluUyv-1PIYbry_x-P12fLsfldpzPlvx-PR-m5-N5OoSvH3JCY-bMAgAA)' title='Approval Voting' 
 
@@ -113,7 +124,7 @@ caption='Vote for as many as you like.'
 
 comment='simple,lots of candidates, one voter' id='approval_sim' %}
 
-Say there's two populations of people and they like candidates in their little circle. If you allow them to vote for everybody in their circle, then the people in the middle get more votes than people on either side.  
+Say there's two populations of voters and they each like candidates in their little circle. If you allow them to vote for everybody in their circle, then the candidates in the middle get more votes than the candidates on either side.  
 
 {% include sim.html altlink='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu27CQBD8FevqK27vieniIl2kBBCNTXGJLEPiYGQgEoqSb896pyASQi5mx7M7t49vZdS8rlOpyfmNrskHjixH1jiOaLPRiqaUmdEUShE4JaRJcGputPJqTgxBSORcq28-Tk6sGH3zsTK7q5R3FTLyHE29TdSCoiPyALREEcANkGfk5xwDe5NWln34p2Ufy2ABsLEeKUEKLGxsApuBlVLgjDRK005IBGel1jnoaMixU02akBghwc9hVJJVedhNc3q6hvYaOhhNoZd6_9_aR3ncJ9wHrXoMHLC4wL7qt1GL4ZL7YpHfm2ZfnceuHYsqj3tmT20-Fcttfvtgsm67btcW613fZ6bP4-5zKKrqhePVti0eh_NYLNt8HPbHRim2xyKDk-0GLDIEABYZ0F3AOQIWGQ2AJDPiqhHniEHmdzxghEXEZLEUSJgsoTbhAK-574fT6nJoed6Hw2EcvnKvfv4AJutP2_gCAAA)' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSPW_CMBT8K5FnD3n-CmFrhm6VWkAsgcGtIqBNCQpQCVXtb-_ZNyAVIQ_3Ps_vnf2tSjVt2xC0GLvWrUippQrJchVi2ZrUiDlYxgpi5XqtlaS2Gq7PidTmJSWsmpZaOTVFSPnsBNQafXNQXCFT6puDzORupr6bkTJfJ2m25Bq6nEgcgSNJIGAAcUBc5wHgFq0MeBA04DEAQyCNcSwBjQWQxlT0JvTq3GDLPKgkTSQnrMm91jLPgSyYWujIk4oD0-S0XFcgmNWQWjnSpn2dXE1zNS0Jk-kyh_t_hQt5EFfxrTi24_KeInpwq9-Vmg2X2Bez-L5a7ZvzuOnGoonjHt5TF0_FfBvfPuAsu81m1xXLXd9HuM_j7nMomuYF9mLbFY_DeSzmXTwO--NKKdBTVG-z0p6iek-gqJ7T-UnewVPUUBIkVwa-cODTBJ81wDdWgRSBm4U6Q8XNKvZWfIzX2PfDaXE5dNj34XAYh6_Yq58_R9yyZRgDAAA)' title='Approval Election' 
 
@@ -132,7 +143,7 @@ caption='You can move individual voters.'
 
 comment='less voters' id='small_group_approval_sim' %}
 
-<!--This solved a big problem.  Usually, the way we do things is to only allow one choice.  If you only allow these voters to vote for one person, then they're going to vote for the person in the center of their circle. You can imagine this like a primary. So each group has their own primary.  And each one picks their own candidate, and they run against each other in the general And nobody is running in the middle.   Why? Because people are only going to vote for their own nominees. And even if they do vote for the middle guy,  it's going to be a small amount of people. the rest of the people are closer to one or the other Party candidate.-->
+Approval voting is simple to use.  It's also a huge improvement in finding the middle.
 
 ## The Median
 
@@ -150,6 +161,15 @@ title = "Median in 1D"
 caption = "<b>Try moving some voters.  Add a candidate. </b> The total area of the bars below is the sum of all the distances.  Notice that moving the median left or right would not decrease this sum because the same number of people are on each side (same number of bars are growing/shrinking)."
 comment = "Maybe it would be good to try to move the median itself?"
 id = "median_1d_sim" %}
+
+A median can also be found in two dimensions by using the same idea of minimizing distance.
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTwUpEMQz8l56DNGmS5u1XePC27GEFD8KCInoQcb_dpLOC4Iq8wzTJdDpN8z5ab7v9gRon7FmERMeB9hHEvOWCw4i9V0ppFk4mtuIMTQ4Xp3fizWuluS9qZZIpq5QbudaiNnLUSiatmrCTcGmJZFH5kE5G23Vq2nbt3Bs1W6HD5Uzo9OvLSmSlnbl2nEXaFca2GCK2KKNf4-T-Oo350hRBCEusADhiB6Ql1sRAmKcwNUmdTErqSIIAICOKKGVGAmRkIoKKbIsyLm8zeGUH3IyBItwMu3AcWeiMDVkthezsX19R-HpPf3RF5X_K-P8gXdb0Ylh9dUonnhsXV7TP8AyGexvaZ2P11BQUA6B9NkGJdYRtmJm-kg4VR_ccj-C2rpSj1xwSDgeOvRMOJq9TpgAGAJ2fmIP5PZoTxVjCTFI5XCcgFhALGAkYCUxDGABeAloRgLJ0M3OC-4rvj6fT0-vd-_ND_iO3p7eX4-nx9b19fgGnVnGdzAMAAA)"
+title = "Median in 2D"
+caption = "<b>Move some voters.  Add a candidate (+). </b> Just like for the 1D case, the total area or length of the lines below is the sum of all the distances between the voters and the candidate or median.  The median we chose here minimizes this sum.  A winning candidate should also minimize this sum."
+comment = ""
+id = "median_2d_sim" %}
 
 How does approval voting use a median?
 
@@ -185,11 +205,13 @@ caption='Try the different strategies.'
 
 comment='score can look like approval voting' id='score_strategy_sim' %}
 
-STAR voting was created to counteract this strategizing.  It combine the two ways of finding the middle, scoring and counting by pairs.  
+STAR voting was created to counteract this strategizing.  The hope is that voters will use the less aggressive Normalize strategy rather than the Frontrunner strategy.
 
-It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before. (Also, I don't have a great model of strategy for STAR voting yet.)
+STAR combines the two ways of finding the middle, scoring and counting by pairs.  It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before.
 
-{% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu27DMAz8F80cxKds_0a7GR7aIluAFEWXoui_l-IlHRoEGo7Ukacj7e_W27bvHsRdD9qZO_FYZ-QLLZ6B_F2JWZb146DGs4tdiU1nrm3r1KxtLNS8ksgSobuTxSOZTncnmeUhsz5kuNdzPC3NVJDCERsAljgAaYAtMZ_zhNRmapI6eSmpkzOIACAjhpKU0QTIyEC2IFurQXsZ5bkTLkKlelXBw5Cm0s50PbM4QENTMS7nwpQsaSvZGfAtkFugc9EzsOq1_9IWZcAGvhHsGoZ2LM9h1TG0a23CMbQ7AEP7QMlSbzmGjg7gqgx8gcDqwmuU_LlaQCLgINaCAQcDvQPLen05ny-fz1_vp7a1p7fLx6n9_ALa2ClbqwIAAA)' title='STAR Voting' 
+STAR also counteracts the distortion caused by the Normalize strategy because it has a final runoff where strategy has no influence.
+
+{% include sim.html [link='link](http://www.howtofixtheelection.com/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsU5DMQz8l8wWih3b8etvwPbUAVC3SiDEghB8O46PMhRVGc7J2Zezk8_W22HfzYn7ONLO3InntiILCstA_o5ENdP68UiNVxXbINax9qMdOjVth_bN0qhZ7T2zkpwJnf6tZOIms91kuJc2Lwvu60BwAA-sADhgB6QF1sS80BJSnalJKuWhpJIkCAAyokhJmZEAGZnYBXZbFYxeVnlNgYsYUrVjgIehkUo70-9ayQ4amgMNMwkN0qS1ZFfAl0AuQQrvsgKtWr2WVi8DOvEqsKto2jA-g1VD0warhqbNAGjaJriouwxNewdwZTpewDE6t2olv1NzSDgc-FYw4WCidmJYcwAwrInXm5cPNEHG1YwmWooOgGDATMBMaBkNA8BPQC9gK5atu_wWG4w9PZ7PL-8PH6-n_M73zy9vp_b1A0ecBUwoAwAA)' title='STAR Voting' 
 
 caption='Same ballot as above for score. Score from 0-5, and add up scores. BUT THEN take the top two and count by pairs' 
 
