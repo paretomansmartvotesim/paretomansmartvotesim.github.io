@@ -3451,16 +3451,17 @@ function menu(ui,model,config,initialConfig, cConfig) {
         _hideFeatures()
 
         if (noneShow) {
-            // ui.dom.left.id = "noClass"
-            ui.dom.left.style.display = "none"
+            _addClass(ui.dom.left,"displayNoneClass")
         } else {
-            ui.dom.left.id = "left"
-            if (config.putMenuAbove  && ! model.devOverrideShowAllFeatures) {
-                ui.dom.left.style.display = "block"
-            } else {
-                ui.dom.left.style.display = "inline-block"
-            }
+            _removeClass(ui.dom.left,"displayNoneClass")
         }
+
+        if ( !noneShow && config.putMenuAbove  && ! model.devOverrideShowAllFeatures) {
+            _addClass(ui.dom.left,"displayAboveClass")
+        } else {
+            _removeClass(ui.dom.left,"displayAboveClass")
+        }
+        
         return
     }
 

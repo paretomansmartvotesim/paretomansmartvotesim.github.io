@@ -303,6 +303,10 @@ svg {
     display:none !important;
 }
 
+.displayAboveClass {
+    display:block !important;
+}
+
 .strategyTable {
     background-color: #222;
 }
