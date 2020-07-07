@@ -1137,41 +1137,87 @@ function MedianDistViz(model) {
 				cans = district.parties[voterPerson.iParty].candidates
 			}
 
-			xvals = []
-			for (var voterPerson of district.voterPeople) {
+			if ( model.dimensions == "2D") {
+				var voterPeople = district.voterPeople
+				var distancemeasure = (xd,yd) => Math.sqrt(xd*xd+yd*yd)
+				var guess = meanPeople(voterPeople)
+				var median = numericApproxGeometricMedian(voterPeople, guess, distancemeasure)
 
-				xvals.push(voterPerson.x)
-			}
-			var xmed = median(xvals)
-			var scaley = 100 / xvals.length
-			var widthy = 100 / xvals.length
-			var ctx = model.arena.ctx
-			ctx.save()
-			ctx.globalAlpha = .5
-			ctx.globalCompositeOperation = "multiply"
-			for (var c of cans) {
-				doDraw(c)
-			}
-			ctx.globalAlpha = 1
-			doDraw({x:xmed,fill:"#ccc"})
-			ctx.restore();
-
-			function doDraw(c) {
-				for (var i = 0; i < xvals.length; i++) {
-					var x = xvals[i]
-					var y = i * scaley + 150
-					ctx.beginPath();
-					ctx.moveTo(x*2,y*2)
-					ctx.lineTo(c.x*2,y*2)
-					ctx.lineWidth = widthy
-					ctx.strokeStyle = c.fill;
-					ctx.stroke();
+				var ctx = model.arena.ctx
+				ctx.save()
+				ctx.globalAlpha = .5
+				ctx.globalCompositeOperation = "multiply"
+				for (var c of cans) {
+					doDraw2(c)
 				}
+				ctx.globalAlpha = 1
+				median.fill = "#ccc"
+				doDraw2(median)
+				ctx.restore()
+	
+				function doDraw2(c) {
+					for (var voterPerson of voterPeople) {
+						ctx.beginPath();
+						ctx.moveTo(voterPerson.x*2,voterPerson.y*2)
+						ctx.lineTo(c.x*2,c.y*2)
+						ctx.lineWidth = 10
+						ctx.strokeStyle = c.fill;
+						ctx.stroke();
+					}
+				}
+
+
+			} else if( model.dimensions == "1D") {
+				xvals = []
+				for (var voterPerson of district.voterPeople) {
+	
+					xvals.push(voterPerson.x)
+				}
+				var xmed = median(xvals)
+				var scaley = 100 / xvals.length
+				var widthy = 100 / xvals.length
+				var ctx = model.arena.ctx
+				ctx.save()
+				ctx.globalAlpha = .5
+				ctx.globalCompositeOperation = "multiply"
+				for (var c of cans) {
+					doDraw(c)
+				}
+				ctx.globalAlpha = 1
+				doDraw({x:xmed,fill:"#ccc"})
+				ctx.restore();
+	
+				function doDraw(c) {
+					for (var i = 0; i < xvals.length; i++) {
+						var x = xvals[i]
+						var y = i * scaley + 150
+						ctx.beginPath();
+						ctx.moveTo(x*2,y*2)
+						ctx.lineTo(c.x*2,y*2)
+						ctx.lineWidth = widthy
+						ctx.strokeStyle = c.fill;
+						ctx.stroke();
+					}
+				}
+				
 			}
 		}
 	}
 }
 
+
+function meanPeople(voterPeople) {
+	var x = 0
+	var y = 0
+	for(var voterPerson of voterPeople){
+		x += voterPerson.x
+		y += voterPerson.y
+	}
+	var totalnumbervoters = voterPeople.length
+	x/=totalnumbervoters
+	y/=totalnumbervoters
+	return {x:x, y:y}
+}
 
 function LpAssignmentsViz(model) {
 	var self = this

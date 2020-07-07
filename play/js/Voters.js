@@ -4012,48 +4012,6 @@ function VoterCenter(model){
 		return numericApproxGeometricMedian(voterPeople, guess, distancemeasure)
 	}
 
-	function numericApproxGeometricMedian(voterPeople, guess, distancemeasure) {
-		var x = guess.x
-		var y = guess.y
-
-		d=0
-
-		for (var voterPerson of voterPeople) {
-			xv = voterPerson.x
-			yv = voterPerson.y
-			xd = xv - x
-			yd = yv - y
-			d += distancemeasure(xd,yd)
-		}
-
-		for (var a = 200; a > .1; ) {
-			xt = [x-a,x+a,x-a,x+a] // try these points
-			yt = [y-a,y-a,y+a,y+a]
-			moved = false
-			for (j in xt) {
-				xg = xt[j] // the guess
-				yg = yt[j]
-				// calculate distance
-				dg=0
-				for (var voterPerson of voterPeople) {
-					xv = voterPerson.x
-					yv = voterPerson.y
-					xd = xv - xg
-					yd = yv - yg
-					dg += distancemeasure(xd,yd)
-				}
-				if (dg < d) { // we found a better point
-					d=dg * 1
-					x=xg * 1
-					y=yg * 1
-					moved = true
-				}
-			}
-			if(!moved) a*=.5
-		}
-		return {x:x, y:y}
-	}
-
 
 	self.update = function() {// do the center voter thing
 		// UPDATE
@@ -4113,3 +4071,44 @@ function VoterCenter(model){
 
 }
 
+function numericApproxGeometricMedian(voterPeople, guess, distancemeasure) {
+	var x = guess.x
+	var y = guess.y
+
+	d=0
+
+	for (var voterPerson of voterPeople) {
+		xv = voterPerson.x
+		yv = voterPerson.y
+		xd = xv - x
+		yd = yv - y
+		d += distancemeasure(xd,yd)
+	}
+
+	for (var a = 200; a > .1; ) {
+		xt = [x-a,x+a,x-a,x+a] // try these points
+		yt = [y-a,y-a,y+a,y+a]
+		moved = false
+		for (j in xt) {
+			xg = xt[j] // the guess
+			yg = yt[j]
+			// calculate distance
+			dg=0
+			for (var voterPerson of voterPeople) {
+				xv = voterPerson.x
+				yv = voterPerson.y
+				xd = xv - xg
+				yd = yv - yg
+				dg += distancemeasure(xd,yd)
+			}
+			if (dg < d) { // we found a better point
+				d=dg * 1
+				x=xg * 1
+				y=yg * 1
+				moved = true
+			}
+		}
+		if(!moved) a*=.5
+	}
+	return {x:x, y:y}
+}
