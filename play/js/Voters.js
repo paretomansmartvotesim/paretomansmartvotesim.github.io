@@ -3881,19 +3881,7 @@ function VoterCenter(model){
 	}
 	self.findVoterCenter = function(){ // calculate the center of the voter groups
 		// UPDATE
-		var x = 0
-		var y = 0
-		var totalnumbervoters = 0
-		for(var i=0; i<model.voterGroups.length; i++){
-			var voter = model.voterGroups[i]
-			var numbervoters = voter.points.length
-			x += voter.x * numbervoters
-			y += voter.y * numbervoters
-			totalnumbervoters += numbervoters
-		}
-		x/=totalnumbervoters
-		y/=totalnumbervoters
-		
+		var mean = findMean()
 
 		var method = model.median_mean // 1,2,3
 		// 1 is the mean
@@ -3902,34 +3890,13 @@ function VoterCenter(model){
 		// 4 is a 1-d median along 2 projections
 		// 5 is 2 medians using the usual median method
 
-		if (method == 5) {
-			var median = function(values) {
-
-				values.sort( function(a,b) {return a - b;} );
-			
-				var half = Math.floor(values.length/2);
-			
-				if(values.length % 2)
-					return values[half];
-				else
-					return (values[half-1] + values[half]) / 2.0;
-			}
-			xvals = []
-			yvals = []
-			for(i=0; i<model.voterGroups.length; i++){
-				voter = model.voterGroups[i]
-				for(m=0; m<voter.points.length; m++) {
-					point = voter.points[m]
-					xvals.push(point[0]+voter.x)
-					yvals.push(point[1]+voter.y)
-				}
-			}
-			x = median(xvals)
-			y = median(yvals)
-		} else if (method != 1) { // try to find geometric median ... still thinking about whether this is a good idea.
-			// first for centers
-			var d, voter, yv,xv,xd,yd,itnv,moved,xt,yt,j,i,dg,m,point
-			
+		if (method == 1) {
+			return mean
+		} else if (method == 5) {
+			var median = findMedianOrthogonal()
+			return median
+		} else { // try to find geometric median ... still thinking about whether this is a good idea.
+				
 			if (method == 2) {
 				var distancemeasure = function(xd,yd) {
 					return Math.sqrt(xd*xd+yd*yd)
@@ -3944,58 +3911,73 @@ function VoterCenter(model){
 				}
 			}
 
-			d = 0
-			for(i=0; i<model.voterGroups.length; i++){
-				voter = model.voterGroups[i]
-				xv = voter.x
-				yv = voter.y
-				xd = xv - x
-				yd = yv - y
-				d += distancemeasure(xd,yd) * voter.voterPeople.length // d is total distance, not average
+			var median = geometricMedian(mean,distancemeasure)
+			return median
+
+		} 
+	}
+	function findMean() {
+		var x = 0
+		var y = 0
+		var totalnumbervoters = 0
+		for(var i=0; i<model.voterGroups.length; i++){
+			var voterGroup = model.voterGroups[i]
+			var numbervoters = voterGroup.points.length
+			x += voterGroup.x * numbervoters
+			y += voterGroup.y * numbervoters
+			totalnumbervoters += numbervoters
+		}
+		x/=totalnumbervoters
+		y/=totalnumbervoters
+		return {x:x, y:y}
+	}
+	
+	function findMedianOrthogonal() {
+		xvals = []
+		yvals = []
+		for(i=0; i<model.voterGroups.length; i++){
+			voterGroup = model.voterGroups[i]
+			for(m=0; m<voterGroup.points.length; m++) {
+				point = voterGroup.points[m]
+				xvals.push(point[0]+voterGroup.x)
+				yvals.push(point[1]+voterGroup.y)
 			}
-			if (1) {
-				for (var a = 200; a > .1; ) {
-					xt = [x-a,x+a,x-a,x+a] // try these points
-					yt = [y-a,y-a,y+a,y+a]
-					moved = false
-					for (j in xt) {
-						xg = xt[j] // the guess
-						yg = yt[j]
-						// calculate distance
-						dg=0
-						for(i=0; i<model.voterGroups.length; i++){
-							voter = model.voterGroups[i]
-							xv = voter.x
-							yv = voter.y
-							xd = xv - xg
-							yd = yv - yg
-							dg += distancemeasure(xd,yd) * voter.voterPeople.length
-						}
-						if (dg < d) { // we found a better point
-							d=dg * 1
-							x=xg * 1
-							y=yg * 1
-							moved = true
-						}
-					}
-					if(!moved) a*=.5
-				}
-			}
-			// now we do it again for all the individual points within the voter group
-			
-			d=0
-			for(i=0; i<model.voterGroups.length; i++){
-				
-				voter = model.voterGroups[i]
-				for(m=0; m<voter.points.length; m++) {
-					point = voter.points[m]
-					xv = point[0]+voter.x
-					yv = point[1]+voter.y
-					xd = xv - x
-					yd = yv - y
-					d += distancemeasure(xd,yd)
-				}
-			}
+		}
+		x = median(xvals)
+		y = median(yvals)
+		return {x:x, y:y}
+	}
+
+	var median = function(values) {
+
+		values.sort( function(a,b) {return a - b;} );
+
+		var half = Math.floor(values.length/2);
+
+		if(values.length % 2)
+			return values[half];
+		else
+			return (values[half-1] + values[half]) / 2.0;
+	}
+
+	function geometricMedian(mean, distancemeasure) {
+
+		var x = mean.x
+		var y = mean.y
+
+		// first for centers
+		var d, voterGroup, yv,xv,xd,yd,itnv,moved,xt,yt,j,i,dg,m,point
+		
+		d = 0
+		for(i=0; i<model.voterGroups.length; i++){
+			voterGroup = model.voterGroups[i]
+			xv = voterGroup.x
+			yv = voterGroup.y
+			xd = xv - x
+			yd = yv - y
+			d += distancemeasure(xd,yd) * voterGroup.voterPeople.length // d is total distance, not average
+		}
+		if (1) {
 			for (var a = 200; a > .1; ) {
 				xt = [x-a,x+a,x-a,x+a] // try these points
 				yt = [y-a,y-a,y+a,y+a]
@@ -4006,15 +3988,12 @@ function VoterCenter(model){
 					// calculate distance
 					dg=0
 					for(i=0; i<model.voterGroups.length; i++){
-						voter = model.voterGroups[i]
-						for(m=0; m<voter.points.length; m++) {
-							point = voter.points[m]
-							xv = point[0]+voter.x
-							yv = point[1]+voter.y
-							xd = xv - xg
-							yd = yv - yg
-							dg += distancemeasure(xd,yd)
-						}
+						voterGroup = model.voterGroups[i]
+						xv = voterGroup.x
+						yv = voterGroup.y
+						xd = xv - xg
+						yd = yv - yg
+						dg += distancemeasure(xd,yd) * voterGroup.voterPeople.length
 					}
 					if (dg < d) { // we found a better point
 						d=dg * 1
@@ -4025,9 +4004,55 @@ function VoterCenter(model){
 				}
 				if(!moved) a*=.5
 			}
-		} 
-		return {x:x,y:y}
+		}
+		// now we do it again for all the individual points within the voter group
+		
+		d=0
+		for(i=0; i<model.voterGroups.length; i++){
+			
+			voterGroup = model.voterGroups[i]
+			for(m=0; m<voterGroup.points.length; m++) {
+				point = voterGroup.points[m]
+				xv = point[0]+voterGroup.x
+				yv = point[1]+voterGroup.y
+				xd = xv - x
+				yd = yv - y
+				d += distancemeasure(xd,yd)
+			}
+		}
+		for (var a = 200; a > .1; ) {
+			xt = [x-a,x+a,x-a,x+a] // try these points
+			yt = [y-a,y-a,y+a,y+a]
+			moved = false
+			for (j in xt) {
+				xg = xt[j] // the guess
+				yg = yt[j]
+				// calculate distance
+				dg=0
+				for(i=0; i<model.voterGroups.length; i++){
+					voterGroup = model.voterGroups[i]
+					for(m=0; m<voterGroup.points.length; m++) {
+						point = voterGroup.points[m]
+						xv = point[0]+voterGroup.x
+						yv = point[1]+voterGroup.y
+						xd = xv - xg
+						yd = yv - yg
+						dg += distancemeasure(xd,yd)
+					}
+				}
+				if (dg < d) { // we found a better point
+					d=dg * 1
+					x=xg * 1
+					y=yg * 1
+					moved = true
+				}
+			}
+			if(!moved) a*=.5
+		}
+		return {x:x, y:y}
 	}
+
+
 	self.update = function() {// do the center voter thing
 		// UPDATE
 		var recenter = self.findVoterCenter()
