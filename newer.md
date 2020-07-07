@@ -48,7 +48,7 @@ Here's an example of a "normalizing" voter for you to play with:
 {% include sim.html
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQWoDMQz8i8-mrGRL1u65P2hvSw5tsqWBkC1JSimlfXslD4FCCT6MLMnjGdlfaUjTPOuYyWSTZxL1iD1i4R5tcqJoaS0TldiWNA051TSlH6KUk6SJclJv8mJzGPK_5RW7WRlvVmjod1EoUFdWIsfIQQZVgAC0ayFXQdXR7ywOYy-yk3mSqfcwA0DDFTvQsAJaP86GnbOwu4-BUeYYBJgKmAqYCpiK9DZf0ag4Cr4Cv-ConS6C8BieK18DJ5zDca39XP1LWeG0NjwGJNaxJwVTEwJwv1wKAPIEjyYwKg01jEtgVAcATCqmrjCp0i2EOAWFQoFi1A0KGs42KGgFO7xYw6jb9d80FO06m1xyjTws2QAAoUGMQYyB0EBo0GPgM8iykHUn_tUg7PnpcFgvj59vi__ih-16Wvwfn1_Xj_vlvD3t3y779Rj_-_24W172x2WXvn8BRLz1zCoDAAA)"
 title = "Normalizing Voter"
-caption = "Best is 5. Worst is 1."
+caption = "Best is 5. Worst is 0."
 id = "ballot5"
 comment = "Description: this should be like ncase's 'drag the voter' examples, with a normalizing score voter. This voter should have a series of circles, where the closest one intersects the closest candidate and the farthest one the farthest candidate. Thus, as you moved the voter or candidates the circles would change size."
 %}
