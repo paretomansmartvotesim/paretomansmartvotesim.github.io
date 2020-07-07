@@ -2105,9 +2105,6 @@ DrawTally.Score = function (model,voterModel,voterPerson) {
 	}
 	if (1) {
 		var distList = voterPerson.distList
-		text += `
-		<span class='small'>You gave the following scores: </span> <br>
-		`
 		text += dotPlot("score",distList,model,{differentDisplay: true})
 		text += `<br>`
 		
@@ -2157,9 +2154,6 @@ DrawTally.Three = function (model,voterModel,voterPerson) {
 	}
 	if (1) {
 		var distList = voterPerson.distList
-		text += `
-		<span class='small'>You gave the following scores: </span> <br>
-		`
 		text += dotPlot("score",distList,model,{differentDisplay: true})
 		text += `<br>`
 		
@@ -2237,9 +2231,6 @@ DrawTally.Approval = function (model,voterModel,voterPerson) {
 	}
 	if (1) {
 		var distList = voterPerson.distList
-		text += `
-		<span class='small' style> You gave the following approvals: <br>
-		`
 		text += dotPlot("score",distList,model,{differentDisplay: true})
 		text += `</span><br>`
 		
@@ -2534,6 +2525,22 @@ function GeneralVoterModel(model,voterModel) {
 		<br>
 		`
 
+		text3 += `
+		Your strategy was: <br>
+		<b>${voterPerson.realNameStrategy}</b> <br>
+		<br>
+		`
+		
+		var consideredElectability = model.stage == "primary" && model.doElectabilityPolls
+		if (consideredElectability) {
+			text3 += `
+			You also considered <b>electability</b>. <br>
+			<br>
+			`
+		}
+
+
+
 		// if (model.ballotType == "Score" || model.ballotType == "Approval") {
 		// 	text3 += `
 		// 	You gave the following scores: <br>
@@ -2576,61 +2583,40 @@ function GeneralVoterModel(model,voterModel) {
 		var f_strategy = ! not_f.includes(voterPerson.strategy)
 		var showPollExplanation = f_strategy
 
-		if (model.stage == "primary") {
-			if (model.doElectabilityPolls) {
-				if (voterAtStage.electable && voterAtStage.electable.length > 0) {
-					text3 += `
-					In the primary, you picked from the candidates that you considered electable: <br>
-					${makeIconsCan(voterAtStage.electable)} <br>
-					<br>
-					`
-					showPollExplanation = false
-					if (voterAtStage.electable.length > 2) {
-						if ( voterAtStage.viable) {
-							text3 += `
-							Also, you considered who among these electable candidates was viable. <br>
-							<br>
-							`
-							// text3 += `
-							// Also, you considered who among these electable candidates was viable: <br>
-							// ${makeIcons(voterAtStage.viable)} <br>
-							// <br>
-							// `
-							text3 += `
-							Your strategy was: <br>
-							<b>${voterPerson.realNameStrategy}</b> <br>
-							<br>
-							`
-							showPollExplanation = true
-						} else {
-										
-							text3 += `
-							Among these, your strategy was: <br>
-							<b>${voterPerson.realNameStrategy}</b> <br>
-							<br>
-							`
-						}
-					}
-				} else {
-					text3 += `
-					In the primary, no candidates seemed electable, so you picked the one that was most electable: <br>
-					${makeIconsCan(voterAtStage.mostElectable)} <br>
-					<br>
-					`
-					showPollExplanation = false
-				}
+		if (consideredElectability) {
+			if (voterAtStage.electable && voterAtStage.electable.length > 0) {
 				text3 += `
-				(Candidates were considered electable in head-to-head polls if they won or if the other candidate didn't get 
-				<b>${_textPercent(model.howBadlyDefeatedThreshold - 1)}</b>
-				more votes.) <br>
+				In the primary, you picked from the candidates that you considered electable: <br>
+				${makeIconsCan(voterAtStage.electable)} <br>
 				<br>
 				`
+				showPollExplanation = false
+				if (voterAtStage.electable.length > 2) {
+					if ( voterAtStage.viable) {
+						text3 += `
+						Also, you considered who among these electable candidates was viable. <br>
+						<br>
+						`
+						// text3 += `
+						// Also, you considered who among these electable candidates was viable: <br>
+						// ${makeIcons(voterAtStage.viable)} <br>
+						// <br>
+						// `
+						showPollExplanation = true
+					}
+				}
+			} else {
+				text3 += `
+				In the primary, no candidates seemed electable, so you picked the one that was most electable: <br>
+				${makeIconsCan(voterAtStage.mostElectable)} <br>
+				<br>
+				`
+				showPollExplanation = false
 			}
-		} else {
-
 			text3 += `
-			Your strategy was: <br>
-			<b>${voterPerson.realNameStrategy}</b> <br>
+			(Candidates were considered electable in head-to-head polls if they won or if the other candidate didn't get 
+			<b>${_textPercent(model.howBadlyDefeatedThreshold - 1)}</b>
+			more votes.) <br>
 			<br>
 			`
 		}
@@ -2837,7 +2823,7 @@ function dotPlot(measure,distList,model,opt) {
 	var ncans = distList.length
 	text += `
 	<div style=' position: relative; width: ${w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 2px solid #ccc; padding: .25em .75em;'>
-	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: 1px dashed #ccc; padding: 0 .5em;'>
+	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: ${(opt.bubbles) ? 0 : 1}px dashed #ccc; padding: 0 .5em;'>
 	`
 	distList.reverse()
 	for (var d of distList) {
