@@ -3977,7 +3977,7 @@ function VoterCenter(model){
 			yd = yv - y
 			d += distancemeasure(xd,yd) * voterGroup.voterPeople.length // d is total distance, not average
 		}
-		if (1) {
+		if (0) {
 			for (var a = 200; a > .1; ) {
 				xt = [x-a,x+a,x-a,x+a] // try these points
 				yt = [y-a,y-a,y+a,y+a]
@@ -4007,19 +4007,25 @@ function VoterCenter(model){
 		}
 		// now we do it again for all the individual points within the voter group
 		
+		var voterPeople = model.voterSet.allVoters
+		var guess = {x:x, y:y}
+		return numericApproxGeometricMedian(voterPeople, guess, distancemeasure)
+	}
+
+	function numericApproxGeometricMedian(voterPeople, guess, distancemeasure) {
+		var x = guess.x
+		var y = guess.y
+
 		d=0
-		for(i=0; i<model.voterGroups.length; i++){
-			
-			voterGroup = model.voterGroups[i]
-			for(m=0; m<voterGroup.points.length; m++) {
-				point = voterGroup.points[m]
-				xv = point[0]+voterGroup.x
-				yv = point[1]+voterGroup.y
-				xd = xv - x
-				yd = yv - y
-				d += distancemeasure(xd,yd)
-			}
+
+		for (var voterPerson of voterPeople) {
+			xv = voterPerson.x
+			yv = voterPerson.y
+			xd = xv - x
+			yd = yv - y
+			d += distancemeasure(xd,yd)
 		}
+
 		for (var a = 200; a > .1; ) {
 			xt = [x-a,x+a,x-a,x+a] // try these points
 			yt = [y-a,y-a,y+a,y+a]
@@ -4029,16 +4035,12 @@ function VoterCenter(model){
 				yg = yt[j]
 				// calculate distance
 				dg=0
-				for(i=0; i<model.voterGroups.length; i++){
-					voterGroup = model.voterGroups[i]
-					for(m=0; m<voterGroup.points.length; m++) {
-						point = voterGroup.points[m]
-						xv = point[0]+voterGroup.x
-						yv = point[1]+voterGroup.y
-						xd = xv - xg
-						yd = yv - yg
-						dg += distancemeasure(xd,yd)
-					}
+				for (var voterPerson of voterPeople) {
+					xv = voterPerson.x
+					yv = voterPerson.y
+					xd = xv - xg
+					yd = yv - yg
+					dg += distancemeasure(xd,yd)
 				}
 				if (dg < d) { // we found a better point
 					d=dg * 1
