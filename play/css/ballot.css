@@ -174,9 +174,8 @@ BALLOT DESIGN
 }
 .div-ballot #paper table.main,
 .div-ballot #paper table.main2{
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-bottom: 10px;
+	margin: 10px auto;
+	margin-top: 0px;
 }
 
 .div-ballot #paper table.main2 th{
@@ -212,7 +211,7 @@ div.circle {
 
 
 /* Extra Small Devices, Phones */ 
-@media (max-width : 650px) {
+@media (max-width : 656px) {
 	.div-ballot #b-right{
 		margin-left: 10px;
 	}
