@@ -394,15 +394,17 @@ function bindModel(ui,model,config) {
         // CREATE A BALLOT
         if (ui.dom.rightBallot) ui.dom.rightBallot.remove() // remove old one, if there was one
 
+        // decide whether to draw the election explanation
+        var hideSidebar = ! model.optionsForElection.sidebar
+
         // decide whether to draw a ballot
-        var hideSidebar = false
         var dragging = model.arena.mouse.dragging
         if (model.arena.viewMan.active || dragging && dragging.isViewMan) {
             var doDrawBallot = true
             var voterPerson = model.arena.viewMan.focus
             if (voterPerson == null) doDrawBallot = false
         } else if (config.oneVoter && model.voterGroups[0].voterGroupType == "SingleVoter") {
-            var hideSidebar = true
+            hideSidebar = true
             var doDrawBallot = true
             var voterPerson = model.voterGroups[0].voterPeople[0]
         } 
@@ -411,6 +413,12 @@ function bindModel(ui,model,config) {
             _addClass(model.caption,"displayNoneClass")
         } else {
             _removeClass(model.caption,"displayNoneClass")
+        }
+
+        if (hideSidebar && ! doDrawBallot) {
+            _addClass(ui.dom.right,"displayNoneClass")
+        } else {
+            _removeClass(ui.dom.right,"displayNoneClass")
         }
 
 
@@ -3443,7 +3451,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
         _hideFeatures()
 
         if (noneShow) {
-            ui.dom.left.id = "noClass"
+            // ui.dom.left.id = "noClass"
             ui.dom.left.style.display = "none"
         } else {
             ui.dom.left.id = "left"
@@ -4695,17 +4703,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // UPDATE
             if (config.sidebarOn == "on") {
                 model.update()
+            } else {
+                model.onDraw()
             }
         };
         self.configure = function() {
             model.optionsForElection.sidebar = (config.sidebarOn == "on")
-            if (config.sidebarOn == "on") {
-                ui.dom.right.id = "right"
-                model.caption.hidden = false
-            } else {
-                model.caption.hidden = true
-                ui.dom.right.id = "noClass"
-            }
         }
         self.choose = new ButtonGroup({
             label: "Written Results:", // Sub Menu
