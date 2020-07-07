@@ -205,13 +205,15 @@ caption='Try the different strategies.'
 
 comment='score can look like approval voting' id='score_strategy_sim' %}
 
-STAR voting was created to counteract this strategizing.  The hope is that voters will use the less aggressive Normalize strategy rather than the Frontrunner strategy.
+STAR voting was created to counteract this strategizing. 
 
 STAR combines the two ways of finding the middle, scoring and counting by pairs.  It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before.
 
-STAR also counteracts the distortion caused by the Normalize strategy because it has a final runoff where strategy has no influence.
+Voters will use a less aggressive strategy than the Frontrunner strategy because they'll want to put all the frontrunners at different levels for the runoff.
 
-{% include sim.html [link='link](http://www.howtofixtheelection.com/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsU5DMQz8l8wWih3b8etvwPbUAVC3SiDEghB8O46PMhRVGc7J2Zezk8_W22HfzYn7ONLO3InntiILCstA_o5ENdP68UiNVxXbINax9qMdOjVth_bN0qhZ7T2zkpwJnf6tZOIms91kuJc2Lwvu60BwAA-sADhgB6QF1sS80BJSnalJKuWhpJIkCAAyokhJmZEAGZnYBXZbFYxeVnlNgYsYUrVjgIehkUo70-9ayQ4amgMNMwkN0qS1ZFfAl0AuQQrvsgKtWr2WVi8DOvEqsKto2jA-g1VD0warhqbNAGjaJriouwxNewdwZTpewDE6t2olv1NzSDgc-FYw4WCidmJYcwAwrInXm5cPNEHG1YwmWooOgGDATMBMaBkNA8BPQC9gK5atu_wWG4w9PZ7PL-8PH6-n_M73zy9vp_b1A0ecBUwoAwAA)' title='STAR Voting' 
+STAR also counteracts any distortion caused by a strategy by using a final runoff where strategy has no influence.
+
+{% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsU5DMQz8l8wWih3b8etvwPbUAVC3SiDEghB8O46PMhRVGc7J2Zezk8_W22HfzYn7ONLO3InntiILCstA_o5ENdP68UiNVxXbINax9qMdOjVth_bN0qhZ7T2zkpwJnf6tZOIms91kuJc2Lwvu60BwAA-sADhgB6QF1sS80BJSnalJKuWhpJIkCAAyokhJmZEAGZnYBXZbFYxeVnlNgYsYUrVjgIehkUo70-9ayQ4amgMNMwkN0qS1ZFfAl0AuQQrvsgKtWr2WVi8DOvEqsKto2jA-g1VD0warhqbNAGjaJriouwxNewdwZTpewDE6t2olv1NzSDgc-FYw4WCidmJYcwAwrInXm5cPNEHG1YwmWooOgGDATMBMaBkNA8BPQC9gK5atu_wWG4w9PZ7PL-8PH6-n_M73zy9vp_b1A0ecBUwoAwAA)" title='STAR Voting' 
 
 caption='Same ballot as above for score. Score from 0-5, and add up scores. BUT THEN take the top two and count by pairs' 
 
