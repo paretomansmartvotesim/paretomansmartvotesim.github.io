@@ -5,10 +5,6 @@ description: An Interactive Guide to Proportional Voting Methods
 byline: 'by Paretoman, June 2020'
 ---
 
-***Draft*** - the first part is nice. The second part is a draft.
-
-------
-
 I'm going to describe how we can motivate proportional voting from a mathematical perspective, and we'll look at simpler methods that keep the same motivation.
 
 [You may first like to read this page on STV to see the political motivation for proportional methods](stv).
@@ -23,7 +19,9 @@ Proportional representation is similar to a well-known problem called the facili
 
 <img src="img/facility location.png" alt="facility location" class="picture100" />
 
-Let's apply this idea to voting.  We already used the idea of minimizing distance to find a candidate that is in the middle of the voters (on the common ground page). Now we’re thinking of electing multiple candidates to multiple seats in a legislature for the same voter population. 
+Let's apply this idea to voting.  Above, we're selecting multiple facilities to serve a larger set of stores.  Now we’re thinking of electing multiple candidates to multiple seats in a legislature for the same voter population. 
+
+We already used the idea of minimizing distance to find a candidate that is in the middle of the voters (on the common ground page). This is what the median does.
 
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTu04EMQz8l9QRih9JvPsVFHSnKw6JAmklEDoKhLhvx-tJruHQaYtxHHsynk2-U0nr4ZgTORyoUmYrx3xYZkBLHRFzmTnqM9JrrsmMuo6ot9kqNiKdqbbMvQYK1yBp5Zw0relSUk41rSWnBn3doeQ_n--Y76QL7R0X5nSjYokK5holUm7VeP9-GtGwg7EUgAKgiBrAJZE6GpZ-CuXEzuNJppjF9QSAhhUlTiMOoOGOFVh4iQYZf0UosgI1AoMEaqSOmoYseGRBVncGyv98ewHddvTqiPK9Arl3hIYkHUK1xfjaQ75iYIVtFfZXzFthW5Xor7CtVgBsqx0lhpIFd6VEsoGlwbUG81uNccSFNFA0KGjo7VDQKU7pDBAAHO_4_31eyY5NC2J_MHsO4xjIDGQGIQYhpiHSKgBaDFxmgF3SQ_ebW2L9fNq2t_PT1_uLv43H7fPjtL2ev9LPL23Jkue-AwAA)"
@@ -32,6 +30,8 @@ caption = "Recall this example of finding the median.  <b>Try moving some voters
 comment = ""
 id = "median_1d_sim" %}
 
+A median can also be found in two dimensions by using the same idea of minimizing distance.
+
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTwUpEMQz8l56DNGmS5u1XePC27GEFD8KCInoQcb_dpLOC4Iq8wzTJdDpN8z5ab7v9gRon7FmERMeB9hHEvOWCw4i9V0ppFk4mtuIMTQ4Xp3fizWuluS9qZZIpq5QbudaiNnLUSiatmrCTcGmJZFH5kE5G23Vq2nbt3Bs1W6HD5Uzo9OvLSmSlnbl2nEXaFca2GCK2KKNf4-T-Oo350hRBCEusADhiB6Ql1sRAmKcwNUmdTErqSIIAICOKKGVGAmRkIoKKbIsyLm8zeGUH3IyBItwMu3AcWeiMDVkthezsX19R-HpPf3RF5X_K-P8gXdb0Ylh9dUonnhsXV7TP8AyGexvaZ2P11BQUA6B9NkGJdYRtmJm-kg4VR_ccj-C2rpSj1xwSDgeOvRMOJq9TpgAGAJ2fmIP5PZoTxVjCTFI5XCcgFhALGAkYCUxDGABeAloRgLJ0M3OC-4rvj6fT0-vd-_ND_iO3p7eX4-nx9b19fgGnVnGdzAMAAA)"
 title = "Median in 2D"
@@ -39,13 +39,13 @@ caption = "<b>Move some voters.  Add a candidate (+). </b> Just like for the 1D 
 comment = ""
 id = "median_2d_sim" %}
 
-We can get distances from score voting, or approval voting, or star voting. We can just use the ballot scores and try to find the candidates with the highest scores. This is the same as finding the candidates with the shortest distance to the voters.
+We can get distances from score voting, or approval voting, or star voting. We can just use the ballot scores and try to find the candidates with the highest scores. This is the same as finding the candidates with the shortest distance to the voters.  You've seen this before on the common ground page.
 
-{% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8i885xI6dbPfMD-ht1QO0i6hUdau2CCEEb8fOlAuoymHs2J7MOJ-UaZymVhNr26SJeUg81IjMI5WIhna7E_GotM0mEccYZ8-zRl5ozImURuZE5pCoektO_443t7uV4W5ldbfCub_NISlSQQpFrAAD1K6MXQCroz9nDqteFOfxS-HeIwIAjSgypykOFZcN2YDMWcQXkbtQjp2AqYCpgKmAqTjTxOl2orliHJwFdjlJKkm9rEEbfRo2w7bKb-DEU4lA-6z-pVa41oY_glxd9UvD8owBkGqQatid4TsNpq11nTb0twymawbAcMUPVLBU61ZCYAVFhYKKtTcoaJht0pmenw6H5br-OM000uN2Oc-U6PK6vD_Ml-15f7rul6NXvt-Ou_llf5x39PUDc7xiOMsCAAA)' title='Score Voting' 
-caption='Give as many as you like a score from 0 to 5.  Basically, is the candidate close to you?' 
+{% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8i885xI6dbPfMD-ht1QO0i6hUdau2CCEEb8fOlAuoymHs2J7MOJ-UaZymVhNr26SJeUg81IjMI5WIhna7E_GotM0mEccYZ8-zRl5ozImURuZE5pCoektO_443t7uV4W5ldbfCub_NISlSQQpFrAAD1K6MXQCroz9nDqteFOfxS-HeIwIAjSgypykOFZcN2YDMWcQXkbtQjp2AqYCpgKmAqTjTxOl2orliHJwFdjlJKkm9rEEbfRo2w7bKb-DEU4lA-6z-pVa41oY_glxd9UvD8owBkGqQatid4TsNpq11nTb0twymawbAcMUPVLBU61ZCYAVFhYKKtTcoaJht0pmenw6H5br-OM000uN2Oc-U6PK6vD_Ml-15f7rul6NXvt-Ou_llf5x39PUDc7xiOMsCAAA)' title='Scoring Measures Distance' 
+caption='Basically, scoring asks, "Is the candidate close to you?"' 
 comment='simple,lots of candidates, one voter' id='score_sim' %}
 
-We also have to make assignments. Each voter will be assigned to exactly one candidate out of the set of elected winners. Only the scores they gave to that candidate will matter for the optimization. You maximize the scores that each candidate gets from only their assigned voters. That means a candidate can get closer to their assigned voters. This is very similar to districts except the voting system is doing the hard part of dividing the voters into groups.
+Let's introduce now a new idea that we are also going to make assignments. Each voter will be assigned to exactly one candidate out of the set of elected winners. Only the scores they gave to that candidate will matter for the optimization. You maximize the scores that each candidate gets from only their assigned voters. That means a candidate can get closer to their assigned voters. This is very similar to districts except the voting system is doing the hard part of dividing the voters into groups.
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTsU4DMQz9l8wWih07zvUDmNhasZw6HFWHSicKqAwVgm_HyRuKBCjDc2L7-eVd7iPltJlnzcSW9zQ3IWGLgDMTlxFZJsnSo2ki1haRqJJIPxP3aOX9nhJ3Jg-m2tvEjNi9J0raZEqaNulLOFGysa9RHkkPyPRrRab9m5n-zXAe3Ny1FHLSnuDWM4IMxLACIIUrILSwBsZkD4gxTEmCMg5D-UYCBAAaUZQETQkAjTh2DbtpNJQ8NHO3g0eiyOgtBXkIKsE0h_O31RsqSsBbcHsmoUJKRjVKFPTdAuVbKLcwxswy6FQHj_41SusQpY5PhisojDB4a5BvMMIg32CEGQBGmCPXxjyDETUDeFRWfJUKO6sNvSWEVFBUKKjTAIcCR6_DQC8AGOhQ4P11pe3uMZ7b8fV9We-Xw2k9Xa4P58NyOZ2fU396jtr209B-jvu2DMC0BqUNSpuOWzQDQGwDX4Pm1jXfWbxWqH5a1vV82V1fjvEjbA_nt2P6_AbVg3LOfwMAAA)"
 title = "Equal Facility Location Problem"
@@ -59,9 +59,31 @@ If you would like to know more about branch and bound and Simplex, they are part
 
 This is a good method to inspire other methods like the Single Transferable Vote, STV.  Voters might be more willing to accept STV because they can see the calculations being done.  Also, STV gets pretty close to the motivating idea of the facility location problem, and if you compare their visualizations they look very similar. There are more methods like the Monroe method that are also very close to this motivating idea of optimizing assignments of voters to the candidates they scored highest.
 
-## Using STV's Quota with Other Ballots
+## STV's Quota
 
-STV uses a quota to assign voters to candidates.
+STV uses a quota to assign voters to candidates in a similar way to the facility location problem.
+
+Once a candidate has been elected by a quota of voters, the voters have successfully used their ballot to get representation, so it is not counted again for a second candidate.
+
+**Refresher:** STV asks voters to rank the candidates in order from best to worst. During counting, your vote counts for your top candidate. One-by-one, the candidate with the least number of votes is eliminated and taken out of the running. **Check out the sketch below** that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated. 
+
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Ty05cMQz9l6y9iJ3Ezp1dP6ALHmIzmsWlnQXqlBkhQCBEv722DxWVKNVdHL9inxznvpRaNtttr8Sj7mjL7FZXt3onqUuEqpJwc2tWkszZQizshogRa1SJdbckLI1szdjwkyOsxm7NN4tFdzsqHJPN52mWjEFsFolWNpVKL5vyi7VQGemrlwt9-LzePFPpw-eZ-Wlm-TTDNcdx0GtkFNrMiAviYMcdAG5OM8GZcHf0uSyOPoWpiHf0qHhHD4oA0Ec6SrxPc0AfMXgT3pIHWk3KHAJxJprk2daQB6Pmnbau8b--OKooxoQGGXw51KjTIPULT_IFejDKO4aGLp3fTXk3W64la3v27P8n0DVJd8OSccUOoQakH7jegFAD1xsQagwAhBqG3MzJA0JpBaCLYm2KLjpyq_FqFC0UDHRJMDAwzikGga0BILCBgcV7LGcPx_v14tvxbu_vNJ0vp9Pd8XE9_PG_3tze_Fyf3L24vCrxWg3n59_SRxwazJpwvR4Ox_vL59Pef4Pz9fbH_nt5_Q0IWhoZrgMAAA)" 
+title = "Quotas Give Proportional Results"
+caption = "Here's two groups with a 1:2 ratio (really 4:7). The winners are also in the same ratio."
+comment = "Maybe choose a more interesting example."
+id = "proportional_two_to_one_sim" %}
+
+Notice the chart that shows a visual of the process of elimination. It starts at the top and each row tracks who the **voter's** top pick is. Each column is a voter. Transparency is used to represent the excess vote that remains after a quota is filled. As candidates are eliminated, the groups of voters become visually apparent.
+
+Below this chart is another chart which I called a **power** chart. When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the power chart. The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power . (This is best viewed on a bigger screen. there's a lot of bookkeeping to do between rounds.) 
+
+------
+
+***Draft*** - the first part above is nice. The second part below is a draft and includes voting methods that are in development.
+
+------
+
+## Using STV's Quota with Other Ballots
 
 The concept of a quota extends to multiple ballot counting methods:
 
@@ -90,7 +112,7 @@ caption = "Under active development. Mouse over the pairs."
 comment = "Maybe choose a more interesting example."
 id = "pair_quota_sim" %}
 
-**Proportionality**
+## Proportionality
 
 Let's get back to the idea of proportionality. You can see that in these proportional methods, a voter group with two times as many voters gets two times as many representatives.
 
@@ -108,7 +130,7 @@ caption = "STV picks a broader set of candidates to match the voters, but other 
 comment = "The explanation is going to be tricky"
 id = "distribution_matching_sim" %}
 
-**Semi-Proportional Multi-Winner Methods**
+### Semi-Proportional Multi-Winner Methods
 
 There are more methods that only provide proportionality to distinct groups, and don't provide the kind of distribution matching that STV does to cover an area of voters with evenly-spaced candidates. They are mechanically-different. They apply a method of counting votes that is used for apportionment. Apportionment means you have separate groups like different states, and you want to find out how many representatives to give to each state. Two examples are given below: reweighted range voting and reweighted approval voting. 
 
@@ -118,11 +140,11 @@ caption = "STV picks a broader set of candidates to match the voters, but other 
 comment = "The explanation is going to be tricky"
 id = "semi_proportional_sim" %}
 
-**Party Proportional Methods**
+### Party Proportional Methods
 
 Additionally, there are ways to have proportionality by using a party system, but that is a mechanically-different method that I haven't added to the simulator yet, so we'll discuss it on another page to come in the near future.
 
-**Future Work**
+## Future Work
 
 I still need to work out what the strategies would be for voters and candidates. So far, in the above examples, I've been using the honest strategy for ranking and the normalization strategy for scoring.
 
