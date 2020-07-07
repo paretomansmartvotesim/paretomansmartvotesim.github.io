@@ -88,3 +88,4 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 
 #### Tangents
 - [3Blue1Brown Windmill Problem](https://www.youtube.com/watch?v=M64HUIJFTZM)
+- [Facility Location Problem](https://en.wikipedia.org/wiki/Facility_location_problem) - on Wikipedia

@@ -9,11 +9,54 @@ byline: 'by Paretoman, June 2020'
 
 ------
 
-[First, read this page on STV to see the motivation for proportional methods](stv)
+I'm going to describe how we can motivate proportional voting from a mathematical perspective, and we'll look at simpler methods that keep the same motivation.
+
+[You may first like to read this page on STV to see the political motivation for proportional methods](stv).
 
 Then continue on to read about proportional voting methods other than STV and how they compare.
 
-**Quota with Other Ballots**
+## A Closer Candidate
+
+Proportional representation is similar to a well-known problem called the facility location problem. Say you’re in the grocery supply business. You want to save on gas, so you want to minimize the distance between the distribution facility and the grocery stores. So you want to minimize the sum of the distances between each store and its assigned facility.  
+
+**Facility Location Problem** - Colors indicate facility-store assignments.  Blank facilities were proposed and rejected.  Northern England is pictured.
+
+<img src="img/facility location.png" alt="facility location" class="picture100" />
+
+Let's apply this idea to voting.  We already used the idea of minimizing distance to find a candidate that is in the middle of the voters (on the common ground page). Now we’re thinking of electing multiple candidates to multiple seats in a legislature for the same voter population. 
+
+<!--try for 2D median-->
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTu04EMQz8l9QRih9JvPsVFHSnKw6JAmklEDoKhLhvx-tJruHQaYtxHHsynk2-U0nr4ZgTORyoUmYrx3xYZkBLHRFzmTnqM9JrrsmMuo6ot9kqNiKdqbbMvQYK1yBp5Zw0relSUk41rSWnBn3doeQ_n--Y76QL7R0X5nSjYokK5holUm7VeP9-GtGwg7EUgAKgiBrAJZE6GpZ-CuXEzuNJppjF9QSAhhUlTiMOoOGOFVh4iQYZf0UosgI1AoMEaqSOmoYseGRBVncGyv98ewHddvTqiPK9Arl3hIYkHUK1xfjaQ75iYIVtFfZXzFthW5Xor7CtVgBsqx0lhpIFd6VEsoGlwbUG81uNccSFNFA0KGjo7VDQKU7pDBAAHO_4_31eyY5NC2J_MHsO4xjIDGQGIQYhpiHSKgBaDFxmgF3SQ_ebW2L9fNq2t_PT1_uLv43H7fPjtL2ev9LPL23Jkue-AwAA)"
+title = "Median in 1D"
+caption = "Recall this example of finding the median.  <b>Try moving some voters.  Add a candidate (+). </b> The total area of the bars below is the sum of all the distances between the voters and the candidate or median.  The median minimizes this sum.  A winning candidate should also minimize this sum."
+comment = "Maybe it would be good to try to move the median itself?"
+id = "median_1d_sim" %}
+
+We can get distances from score voting, or approval voting, or star voting. We can just use the ballot scores and try to find the candidates with the highest scores. This is the same as finding the candidates with the shortest distance to the voters.
+
+{% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8i885xI6dbPfMD-ht1QO0i6hUdau2CCEEb8fOlAuoymHs2J7MOJ-UaZymVhNr26SJeUg81IjMI5WIhna7E_GotM0mEccYZ8-zRl5ozImURuZE5pCoektO_443t7uV4W5ldbfCub_NISlSQQpFrAAD1K6MXQCroz9nDqteFOfxS-HeIwIAjSgypykOFZcN2YDMWcQXkbtQjp2AqYCpgKmAqTjTxOl2orliHJwFdjlJKkm9rEEbfRo2w7bKb-DEU4lA-6z-pVa41oY_glxd9UvD8owBkGqQatid4TsNpq11nTb0twymawbAcMUPVLBU61ZCYAVFhYKKtTcoaJht0pmenw6H5br-OM000uN2Oc-U6PK6vD_Ml-15f7rul6NXvt-Ou_llf5x39PUDc7xiOMsCAAA)' title='Score Voting' 
+caption='Give as many as you like a score from 0 to 5.  Basically, is the candidate close to you?' 
+comment='simple,lots of candidates, one voter' id='score_sim' %}
+
+We also have to make assignments. Each voter will be assigned to exactly one candidate out of the set of elected winners. Only the scores they gave to that candidate will matter for the optimization. You maximize the scores that each candidate gets from only their assigned voters. That means a candidate can get closer to their assigned voters. This is very similar to districts except the voting system is doing the hard part of dividing the voters into groups.
+
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTsU4DMQz9l8wWih07zvUDmNhasZw6HFWHSicKqAwVgm_HyRuKBCjDc2L7-eVd7iPltJlnzcSW9zQ3IWGLgDMTlxFZJsnSo2ki1haRqJJIPxP3aOX9nhJ3Jg-m2tvEjNi9J0raZEqaNulLOFGysa9RHkkPyPRrRab9m5n-zXAe3Ny1FHLSnuDWM4IMxLACIIUrILSwBsZkD4gxTEmCMg5D-UYCBAAaUZQETQkAjTh2DbtpNJQ8NHO3g0eiyOgtBXkIKsE0h_O31RsqSsBbcHsmoUJKRjVKFPTdAuVbKLcwxswy6FQHj_41SusQpY5PhisojDB4a5BvMMIg32CEGQBGmCPXxjyDETUDeFRWfJUKO6sNvSWEVFBUKKjTAIcCR6_DQC8AGOhQ4P11pe3uMZ7b8fV9We-Xw2k9Xa4P58NyOZ2fU396jtr209B-jvu2DMC0BqUNSpuOWzQDQGwDX4Pm1jXfWbxWqH5a1vV82V1fjvEjbA_nt2P6_AbVg3LOfwMAAA)"
+title = "Equal Facility Location Problem"
+caption = "Similar results to STV in broadness of support."
+comment = "Maybe choose a more interesting example."
+id = "facility_sim" %}
+
+That was actually a lot of computation, but the good thing is that this problem is already solved. There are techniques called the branch and bound method and the Simplex method that are used together to solve this problem. Basically, branch and bound means you can look at all the possibilities without calculating every one. You put them into groups called branches, and the best case scenario for that branch is bound by some value. Then you can cut branches off and simplify the problem.  
+
+If you would like to know more about branch and bound and Simplex, they are part of a more general set of algorithms called mixed integer linear programming. These tools are used in the business world in what is known as the field of operations research. They deal with logistics - physically moving around things, like groceries.  They also apply to our case of electing representatives to serve voters.
+
+This is a good method to inspire other methods like the Single Transferable Vote, STV.  Voters might be more willing to accept STV because they can see the calculations being done.  Also, STV gets pretty close to the motivating idea of the facility location problem, and if you compare their visualizations they look very similar. There are more methods like the Monroe method that are also very close to this motivating idea of optimizing assignments of voters to the candidates they scored highest.
+
+## Using STV's Quota with Other Ballots
+
+STV uses a quota to assign voters to candidates.
 
 The concept of a quota extends to multiple ballot counting methods:
 
@@ -46,7 +89,7 @@ id = "pair_quota_sim" %}
 
 Let's get back to the idea of proportionality. You can see that in these proportional methods, a voter group with two times as many voters gets two times as many representatives.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Tu24cMQz8F9UsRIqktNf5A1wkNtIsrlgnVxg--w6GEyQIkm8PxYnhALGNLYYvkcOR9mepZbeuWomt7mllDks9LFWSusxQdRJuYY1Kkrm-EAuHIdKJfVZJ17BkWj6zNWMWJ21ajcMafy0W3--p8JzcY55niRlx7zPRyq5S0bIrv9kLFUvfozySPaDSf19kxpuZ5c0M1-zNk0ujTjoTk2hhQQZkWAGgEqwSggtrYExmCYw5TEWiZ0QlekZQBIA-oiiJPi0AfaTDG_CWPNBqkuapB2eigVFryINRi05rSPraN486ijGhQYi4C2qkZOSx8qC4rwjOcsXQqYzyiykvZgxfJVurZk99n4B6Lqwdd4oVFUIZxDesZxDKsJ5BKDMAhLKO3MjJBqG8AjgrHSI55HZL5vF4i6OFg4EvCR0MOs52ATQABO5g0OfzKx--np62q8-nx0M8y3QuzufH07ft-Oxf3j7c3m_fw726_lTme-04P_6VfsahwagAaDDAfoD90NxsGABXebMdj6en6x_nQ_wfH7eHu8OX8usP0POY5scDAAA)" 
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31TTY8TMQz9LzlbKHbsJNMbF05wgF1xGfUwlB6qHTpl1UWsEPx27DzQIsGikfr8Ffv5Jf2WctrNs2Ziy3uamd3S6pYqSZ4ilCsJF7d6Jhm5NhELuyHSiGtUSVO3JKwa2Txi5ictrMJu9V8WS93vKXFMbj6vjhIz4tYiUdIuU9K0Sz-4Jko2_OrlnmwOmf76PNOfzUzPZjiP3hxcCjXSSATRxIIMyLACQMVZDXAurI4-mcXR5zAl8Z4eFe_pQREA-oiixPsUB_SRBq_Dm8aBkgdpDj14JAoYlYI8GBXvNLuk__riaEUxJhQI4XdBhZSMqq_cye_Lg1GuGBrKKD-Z8mT68FlGa9XRU_9PQOtYWBvuFCsqhDKIb1jPIJRhPYNQZgAIZQ25PiYbhKoZwKOyQqQKuasN5v54U0WLCgZ1GtDAoOFsE0ABQOAGBi2eX3r7sF2Xm8N2f_RnOZyXl8v99mVZf_tvTufTp-Wruze37_33-PlhWV8th9N6uj6-3g7L9bSdU7zjhr79zyuJOLTpGQBtOrbq2Krr2LgbAIt19OvYr8d-L8yfPjb8sKzrdr19vBz9X_VuOd8dP6bvPwEoyRya_QMAAA)" 
 title = "Quotas Give Proportional Results"
 caption = "Try all the voting systems. They each give a 1:2 ratio of voters between the groups. Also try a larger number of seats. The large group is 63% of voters, so it's a 4:7 ratio."
 comment = "Maybe choose a more interesting example. altlink is [link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31SvW6UMRB8F9dbeNf27vddxwNQQCKa0xUfcEXEkTtFAYEQPDuznpwUKQS5mP3f8di_Si27_b5X0VEPsleF1R1W72J1zVB1MW2wzFQ0sswWlIXBiiHWMxnIWdabr7BmVSZ1pNUU1vJkqfnhIEVzczTRJfuXgKFZ0V3Ul6xoZVel9LIrf9SLlDF9R5_Ji4P6QKbKi4PM8mpmfTWjda7T5NkkpD-FjWGS004gNbCcACLagVirBsQSgGEgooaBDWAMco5hjgIGc5xjQW-hxymtTsaa-uhMNJu9rTFPRg2T9tD6XydbncXc0KgCHkmadBniuO8ieEgEs7zXq0zp6HPHnjvtujSdPmf3_xPpPsn34Fvzqn2dwcEXGLzmoGCD1xwUbAwCBRvB3DI3DwrmlaCz0vl8Ttl9TPb4gMU5wsnA1wlBBsHeoNDRCBQ6yCDyW5Z3386P282n88MR33U6by6Xh_P37XT1397d333dfsC9uf1Q8tPG7P-4nU7nx9uflyO--_vt_svxc_n9Fwg5q72fAwAA)"
@@ -54,8 +97,8 @@ id = "proportional_two_to_one_sim" %}
 
 This proportionality applies even when there aren't distinct groups. In the example below, there is a difference between STV and the other methods. STV picks a set of candidates that is spaced more widely to cover a larger area of voters. The other methods tend to pick candidates more toward the center. This is probably because STV considers the first choices above others, while the other systems consider all the options at the same time.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Ty25TQQz9l1l7Mfb4MTe7fgAL2qqbKIuAuqgUSFQVRFXBt-PxARUJiiLd49fYx2cmL6233X6vndj6gfbMaamnpUrStxXqTsIjrdlJKhcbsXAaIkHsq0pC05Jl-cr2ilmetGUNTmv-slj8cKDGa3LkPK8SM-KIlRht16lp27UfrI2ale9ZnslI6PTXLzPzzcz2ZoZ79ebFZVCQrsQi2liQAZnkUQAq7IDkwpqYk1kScw5Tk-yZUcmeGRQBoI8oSrLPSEAfCXgT3lYHRi_SvPTgSgyps2MgD0YjO-1T0n_91lFHMSYMCJF3QYOUjDxXnpT3lcFVrhi6lFF-NeXVzOF7qdaqtab-n4B6kdbAnWJFhVAG8Q3rGYQyrGcQygwAoSyQm7WNQSjvAK5Kx7U55HYr5vl4m6OFg4FvBQEGgbMBgWMAIHCAQazn195_OT8dbz6eH-_zWZZzdbk8nr8eT7_9dw-fHz4dv6V7c3uX3-vr-l7dtfV2A73mn9ew4tBjdgDYTLCZYDO1tpwGwLV-OJ5O56fb58t9_ldA6_tPpHa3y9IDAAA)" 
-title = "Differences Between Proportional Methods"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41Ty24TQRD8lzm30EzPq9c3LpzgEBJxsXxYjA9WjNeJHESEyLdT02WEI4SELG2_pqurH_4RYlit192k2UbWqlGsupIkWYaW6nTRpiypmLtUkqahxSxTHErH--jaFBEsQ0v5kqlIaOqZRaw7fsErL1miqA5fzdLyZiMhDUpaKjnVKM1rFUN99ZQmmtp4msMqSihhFV5SCxKq2w0ACHaIKH_9EDFEkBGR8aLNvxoQg4zh1cvJX2q-dl-FATEKpuSlkg2X0kVqqVCQGDi6ALNUIMEjVcjJ3ai9glcBliCAoxDE0UIncDIEcbTTMlqTJ-RILmM6yQOZjHJmnIwykNZY2r9_A6AxhXXyRGRRyVIE-5EuJrgPOJGAqxgngrwS_4x-mOlSi7SKvo6C1zoDMkkeJvhhJuV_-JXmUymdZ8A5lMmdlaupnEHlNCtnUDnNWik4zdoZM2-2cpqNKI0ojZNsRGmDojrpRohGBo377Mzt3GdXikzBLXQy6ONiw83Tcp5vt8vjDhfpxtvT6XH5Nh9-2x_2x_3X-TvM27tP-O4enubDu3m7P-zPz--X7XzeL8cwTr8T1643NvycjUUKMjN2Zbw0K96cVQo2ZsQz9mejvzdY0sQOP8-Hw3K-ez7t8Ef8OB_vd1_Cz19X_VUPWwQAAA)" 
+title = "Differences Regarding Evenly Spaced Winners"
 caption = "STV picks a broader set of candidates to match the voters, but other methods pick more broad candidates that more voters would like."
 comment = "The explanation is going to be tricky"
 id = "distribution_matching_sim" %}
@@ -64,8 +107,8 @@ id = "distribution_matching_sim" %}
 
 There are more methods that only provide proportionality to distinct groups, and don't provide the kind of distribution matching that STV does to cover an area of voters with evenly-spaced candidates. They are mechanically-different. They apply a method of counting votes that is used for apportionment. Apportionment means you have separate groups like different states, and you want to find out how many representatives to give to each state. Two examples are given below: reweighted range voting and reweighted approval voting. 
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31Ty25TQQz9l1l7Mfb4MTe7fgAL2qqbKIuAuqgUSFQVRFXBt-PxARUJiiLd49fYx2cmL6233X6vndj6gfbMaamnpUrStxXqTsIjrdlJKhcbsXAaIkHsq0pC05Jl-cr2ilmetGUNTmv-slj8cKDGa3LkPK8SM-KIlRht16lp27UfrI2ale9ZnslI6PTXLzPzzcz2ZoZ79ebFZVCQrsQi2liQAZnkUQAq7IDkwpqYk1kScw5Tk-yZUcmeGRQBoI8oSrLPSEAfCXgT3lYHRi_SvPTgSgyps2MgD0YjO-1T0n_91lFHMSYMCJF3QYOUjDxXnpT3lcFVrhi6lFF-NeXVzOF7qdaqtab-n4B6kdbAnWJFhVAG8Q3rGYQyrGcQygwAoSyQm7WNQSjvAK5Kx7U55HYr5vl4m6OFg4FvBQEGgbMBgWMAIHCAQazn195_OT8dbz6eH-_zWZZzdbk8nr8eT7_9dw-fHz4dv6V7c3uX3-vr-l7dtfV2A73mn9ew4tBjdgDYTLCZYDO1tpwGwLV-OJ5O56fb58t9_ldA6_tPpHa3y9IDAAA)" 
-title = "Differences Between Proportional Methods"
+{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31TPY8TQQz9L1NbaOyxx5N0NFRUdyeaVYoQpYgUEUChOCH47dh-SIcEh1ba5_Xn85vZ7623_bZpJ7Z-oI05LJ1hqZL0Xbr6JOER1uokFfMdsXAYIk48M0tcw5K0ZkZ7-SwqLa3BYa3fFss8HKhxTvaYNyvFjNg9A6PtOzVt-_aTtVGz-p6RHkEP6PTXE5H1amT3aoR79ebkMshJM5BEGwsiIBM8CkCFJyC4sAbGZJbAmMPUJHqGV6JnOEUA6COKlOgzAtBHHF8LX7sqGL1Ic-rBFRhStWMgDkYjOm0h6b-eLJ1IxoQBIeIsaJCS0YyVF8V5hTPTFUNTGeUXU17MGL5JtVatNfX_BHQWaXWcKVZUCGUQ37CeQSjDegahzAAQyhyxVdsYhJodwJU5cWwTck8r5nF520SLCQZzV-Bg4Kh1COwDAIEdDDyvX3t8-hD38eGh3m_zff7y7Xh9dzxdrpf78_vb6Xi_3D61vKeOuvWn5OnH7qsDMHmB9QLrpbXRMgCIL_Rb4L-S_xuLq40NPh6v19v96fnzOf6ax9Pt67n9-AW7Hm2n3AMAAA)" 
+title = "Semi-Proportional Methods"
 caption = "STV picks a broader set of candidates to match the voters, but other methods pick more broad candidates that more voters would like."
 comment = "The explanation is going to be tricky"
 id = "semi_proportional_sim" %}
