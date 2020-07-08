@@ -120,7 +120,7 @@ Let's get back to the idea of proportionality. You can see that in these proport
 title = "Quotas Give Proportional Results"
 caption = "Try all the voting systems. They each give a 1:2 ratio of voters between the groups. Also try a larger number of seats. The large group is 63% of voters, so it's a 4:7 ratio."
 comment = "Maybe choose a more interesting example. altlink is [link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31SvW6UMRB8F9dbeNf27vddxwNQQCKa0xUfcEXEkTtFAYEQPDuznpwUKQS5mP3f8di_Si27_b5X0VEPsleF1R1W72J1zVB1MW2wzFQ0sswWlIXBiiHWMxnIWdabr7BmVSZ1pNUU1vJkqfnhIEVzczTRJfuXgKFZ0V3Ul6xoZVel9LIrf9SLlDF9R5_Ji4P6QKbKi4PM8mpmfTWjda7T5NkkpD-FjWGS004gNbCcACLagVirBsQSgGEgooaBDWAMco5hjgIGc5xjQW-hxymtTsaa-uhMNJu9rTFPRg2T9tD6XydbncXc0KgCHkmadBniuO8ieEgEs7zXq0zp6HPHnjvtujSdPmf3_xPpPsn34Fvzqn2dwcEXGLzmoGCD1xwUbAwCBRvB3DI3DwrmlaCz0vl8Ttl9TPb4gMU5wsnA1wlBBsHeoNDRCBQ6yCDyW5Z3386P282n88MR33U6by6Xh_P37XT1397d333dfsC9uf1Q8tPG7P-4nU7nx9uflyO--_vt_svxc_n9Fwg5q72fAwAA)"
-id = "proportional_two_to_one_sim" %}
+id = "again_proportional_two_to_one_sim" %}
 
 This proportionality applies even when there aren't distinct groups. In the example below, there is a difference between STV and the other methods. STV picks a set of candidates that is spaced more widely to cover a larger area of voters. The other methods tend to pick candidates more toward the center. This is probably because STV considers the first choices above others, while the other systems consider all the options at the same time.
 
