@@ -626,7 +626,93 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 
 	// star exception
 	//if (strategy == "starnormfrontrunners") {
-	if(doStar) {
+	if (doStar) {
+		// put shortlist in order
+		sortedShortlist = _jcopy(shortlist).sort( (i,k) => dista[i] - dista[k] ) // shortest distance first
+		// use the shortlist to make a piece-wise linear function
+		var ubScore = []
+		var lbScore = []
+		var tryScore = []
+		var ns = sortedShortlist.length
+		if (ns <= maxscore + 1) {
+
+			// start at top
+			var k = maxscore
+			for ( var i = 0 ; i < ns ; i ++) {
+				ubScore[i] = k
+				k--
+			}
+
+			// start at bottom
+			var k = 0 
+			for ( var i = ns - 1 ; i >= 0 ; i --) {
+				lbScore[i] = k
+				k++
+			}
+
+			// try to space candidates
+			var k = maxscore
+			for ( var i = 0 ; i < ns ; i ++) {
+				var desiredScore = scores[canAid[sortedShortlist[i]]]
+				if (ubScore[i] > desiredScore && lbScore[i] <= desiredScore) {
+					// we gave too good a score and we can lower the score
+					k = desiredScore
+				}
+				tryScore[i] = k
+				k--
+			}
+
+			// assign scores to shortlist
+			for ( var i = 0 ; i < ns ; i ++) {
+				scores[canAid[sortedShortlist[i]]] = tryScore[i]
+			}
+
+			// still need to assign scores to candidates outside the shortlist
+			// so we've got a list of distances and scores.  let's just use linear interpolation.
+
+			var fillScore = []
+			var intervals = sortedShortlist.map( i => dista[i] )
+			for(var i=0; i<lc; i++){
+				
+				// first, find the interval this distance fits into
+				var d1 = dista[i]
+				var valEnd = intervals.find( x => x >= d1)
+				var end = intervals.indexOf(valEnd)
+
+				if (end == -1) {
+					// too big distance, assign min score
+					fillScore[i] = 0
+				} else if (end == 0) {
+					fillScore[i] = maxscore // easy
+				} else {
+					var start = Math.max(0,end-1)
+					var s = intervals[start]
+					var e = intervals[end]
+					if (e === s) {
+						// avoid dividing by zero
+						var frac = 0
+					} else {
+						if (utility_shape == "linear") {
+							frac = ( d1 - s ) / ( e - s )
+						} else {
+							var u = utility_function(utility_shape)
+							frac = ( u(d1) - u(s) ) / ( u(e) - u(s) )
+						}
+					}
+					// apply fraction 
+					var ss = tryScore[start]
+					var es = tryScore[end]
+					fillScore[i] = Math.round( ss + (es-ss)*frac )
+				}	
+			}
+			
+			// assign scores to all candidates
+			for ( var i = 0 ; i < lc ; i ++) {
+				scores[canAid[i]] = fillScore[i]
+			}
+		}
+	}
+	if(0 && doStar) {
 		// find best candidate and make sure that only he gets the best score
 		var n1 = n
 		var n1i = ni
