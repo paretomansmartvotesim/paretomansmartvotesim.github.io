@@ -305,6 +305,11 @@ svg {
     height: 1em;
 }
 
+svg.sankey {
+    width: unset;
+    height: unset;
+}
+
 .displayNoneClass {
     display:none !important;
 }
