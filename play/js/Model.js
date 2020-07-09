@@ -320,7 +320,7 @@ function Model(idModel){
 
 	self.sortVoters = function() {
 
-		if (self.checkGotoTarena()) // find order of voters
+		if (self.checkDoSort()) // find order of voters
 		{
 			var v = self.voterSet.getVoterArray()
 			if (self.system == "STV") {
@@ -683,6 +683,10 @@ function Model(idModel){
 		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
 		// right now, we don't have a good visual of these for multiple districts, just one
 		return (self.nDistricts < 2) && (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.roundChart == "off")
+	}
+
+	self.checkDoSort = function() {
+		return self.checkGotoTarena() || self.system == "IRV"
 	}
 
 	self.checkDoBeatMap = function() {

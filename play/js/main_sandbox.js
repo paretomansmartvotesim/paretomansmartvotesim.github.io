@@ -600,11 +600,16 @@ function bindModel(ui,model,config) {
                 var transfers = model.result.transfers
                 var numRounds = transfers.length
 
+
+                // function to find the sorted position of the candidate
+                var xpos =  cid => model.tarena.modelToArena(model.candidatesById[cid]).x
+
                 // make ids and lookup tool
                 var idx = 0
                 // var listOfCandidates = Object.keys(transfers[0][0].flows)
                 // listOfCandidates.push(transfers[0][0].from)
                 var listOfCandidates = model.district[0].candidates.map(c => c.id)
+                // listOfCandidates.sort((a,b) => a.length - b.length)
                 var lookup = {}
                 for (var rid = 0; rid <= numRounds; rid ++) {
                     lookup[rid] = {}
@@ -613,6 +618,7 @@ function bindModel(ui,model,config) {
                     } else {
                         var useList = continuing[rid-1] // continuing from last round
                     }
+                    useList = _jcopy(useList).sort( (a,b) => xpos(a) - xpos(b) )
                     for( var cid of useList) {
                         lookup[rid][cid] = idx
                         var node = {name:rid + "_" + cid}
@@ -620,6 +626,8 @@ function bindModel(ui,model,config) {
                         idx ++
                     }
                 }
+
+                
 
                 for (var rid = 0; rid < numRounds; rid ++) {
                     var round = transfers[rid]
