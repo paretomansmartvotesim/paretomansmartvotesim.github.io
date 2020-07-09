@@ -516,7 +516,8 @@ function bindModel(ui,model,config) {
 
             var formatNumber = d3.format(",.0f"),
                 format = function(d) { return formatNumber(d); },
-                color = d3.scale.category20();
+                color = (cid) => model.candidatesById[cid].fill
+
 
 
             var path = sankey.link();
@@ -535,7 +536,7 @@ function bindModel(ui,model,config) {
                 .attr("class", "link")
                 .attr("d", path)
                 .style("stroke-width", function(d) { return Math.max(1, d.dy); })
-                .style("stroke", function(d) { return d.source.color = color(d.source.name.replace(/ .*/, "")); })
+                .style("stroke", function(d) { return d.source.color = color(d.source.name.replace(/^[0-9]*_/, "")); })
                 .sort(function(a, b) { return b.dy - a.dy; });
 
             link.append("title")
@@ -557,7 +558,7 @@ function bindModel(ui,model,config) {
             node.append("rect")
                 .attr("height", sankey.nodeWidth())
                 .attr("width", function(d) { return d.dy; })
-                .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
+                .style("fill", function(d) { return d.color = color(d.name.replace(/^[0-9]*_/, "")); })
                 .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
                 .append("title")
                 .text(function(d) { return d.name + "\n" + format(d.value); });
