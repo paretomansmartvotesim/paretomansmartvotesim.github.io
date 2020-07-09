@@ -1759,6 +1759,8 @@ Election.irv = function(district, model, options){
 		var coalitionInRound = []
 		var lastlosers = []
 		var losers = []
+		var tallies = []
+		var continuing = []
 	}
 	var ballots = model.voterSet.getBallotsDistrict(district)
 	cBallots = _jcopy(ballots)
@@ -1852,6 +1854,7 @@ Election.irv = function(district, model, options){
 				first = topChoice[0][k]
 				coalitionInRound[roundNum-1][cid][first] ++
 			}
+			tallies.push(_jcopy(tally))
 		}
 
 
@@ -1969,6 +1972,8 @@ Election.irv = function(district, model, options){
 					}
 				}
 				transfers[roundNum-1].push(transfer)
+
+				continuing.push(_jcopy(candidates))
 			}
 		}
 		roundNum++
@@ -2035,6 +2040,8 @@ Election.irv = function(district, model, options){
 		result.coalitions = coalitions
 		result.lastlosers = lastlosers
 		result.nBallots = cBallots.length
+		result.tallies = tallies
+		result.continuing = continuing
 	}
 
 	// district.pollResults = undefined // clear polls for next time
