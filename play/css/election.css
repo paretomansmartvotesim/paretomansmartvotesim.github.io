@@ -305,9 +305,34 @@ svg {
     height: 1em;
 }
 
-svg.sankey {
+#chart svg {
     width: unset;
     height: unset;
+}
+
+#chart {
+    background-color: white;
+}
+
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+  fill: none;
+  /*stroke: #000;*/
+  stroke-opacity: .5;
+}
+
+.link:hover {
+  stroke-opacity: .8;
 }
 
 .displayNoneClass {
