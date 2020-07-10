@@ -2291,7 +2291,7 @@ DrawTally.Score = function (model,voterModel,voterPerson) {
 	}
 	if (1) {
 		var distList = voterPerson.distList
-		text += dotPlot("score",distList,model,{differentDisplay: true})
+		text += tBarChart("score",distList,model,{differentDisplay: true})
 		text += `<br>`
 		
 	}
@@ -2340,7 +2340,7 @@ DrawTally.Three = function (model,voterModel,voterPerson) {
 	}
 	if (1) {
 		var distList = voterPerson.distList
-		text += dotPlot("score",distList,model,{differentDisplay: true})
+		text += tBarChart("score",distList,model,{differentDisplay: true})
 		text += `<br>`
 		
 	}
@@ -2417,7 +2417,7 @@ DrawTally.Approval = function (model,voterModel,voterPerson) {
 	}
 	if (1) {
 		var distList = voterPerson.distList
-		text += dotPlot("score",distList,model,{differentDisplay: true})
+		text += tBarChart("score",distList,model,{differentDisplay: true})
 		text += `</span><br>`
 		
 	}
@@ -2566,7 +2566,7 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 	if (pick.doPoints) {
 		if (voterModel.say) text += "<span class='small' style> Points: </span><br />" 
 		if (1) {
-			text += dotPlot("score", voterPerson.distList ,model,{differentDisplay:true})
+			text += tBarChart("score", voterPerson.distList ,model,{differentDisplay:true})
 		} else {
 			var numCandidates = ballot.rank.length
 			for(var i=0; i<ballot.rank.length; i++){
@@ -2748,7 +2748,7 @@ function GeneralVoterModel(model,voterModel) {
 		// 	text3 += `
 		// 	You gave the following scores: <br>
 		// 	`
-		// 	text3 += dotPlot("score",distList,model,{differentDisplay: true})
+		// 	text3 += tBarChart("score",distList,model,{differentDisplay: true})
 		// 	text3 += `<br>`
 		// }
 
@@ -2756,7 +2756,7 @@ function GeneralVoterModel(model,voterModel) {
 			text3 += `
 			This is your perceived distance from each candidate using a <b>${model.utility_shape}</b> utility function: <span class="percent">(as % of your perceived distance of the arena width)</span><br>
 			`
-			text3 += dotPlot("nUNorm",distList,model,{distLine:true})
+			text3 += tBarChart("nUNorm",distList,model,{distLine:true})
 			// for (var d of distList) {
 			// 	text3 += `
 			// 	${makeIconsCan([d.c])}: <b>${Math.round(d.uNorm*100)}</b> <br>
@@ -2767,14 +2767,14 @@ function GeneralVoterModel(model,voterModel) {
 
 		text3 += `
 		This is your percieved utility for each candidate: <span class="percent">(100% minus perceived distance)</span> <br>`
-		text3 += dotPlot("uNorm",distList,model)
+		text3 += tBarChart("uNorm",distList,model)
 		text3 += `
 		<br>`
 
 		text3 += `
 		This is your distance from each candidate: <span class="percent">(as % of arena width)</span> <br>
 		`
-		text3 += dotPlot("dNorm",distList,model,{distLine:true})
+		text3 += tBarChart("dNorm",distList,model,{distLine:true})
 		// for (var d of distList) {
 		// 	text3 += `
 		// 	${makeIconsCan([d.c])}: <b>${Math.round(d.dist/model.size*100)}</b> <br>
@@ -2895,7 +2895,7 @@ function GeneralVoterModel(model,voterModel) {
 			Alternative form of ballot:
 			</span>
 			`
-			part4 += dotPlot("score",distList,model,{differentDisplay: true,bubbles:true})
+			part4 += tBarChart("score",distList,model,{differentDisplay: true,bubbles:true})
 			part4 += `<br>`
 			part4 += tableFoot
 		}
@@ -2906,7 +2906,7 @@ function GeneralVoterModel(model,voterModel) {
 			Visualization of ballot:
 			</span>
 			`
-			part4 += dotPlot("score",distList,model,{differentDisplay: true,distLine:true})
+			part4 += tBarChart("score",distList,model,{differentDisplay: true,distLine:true})
 			part4 += `<br>`
 			part4 += tableFoot
 		}
@@ -3030,7 +3030,7 @@ function makeDistListFromTally(tally, cans, maxscore, nballots) {
 	return distList
 }
 
-function dotPlot(measure,distList,model,opt) {
+function tBarChart(measure,distList,model,opt) {
 	opt = opt || {}
 	opt.differentDisplay = opt.differentDisplay || false
 	opt.sortOrder = opt.sortOrder || false

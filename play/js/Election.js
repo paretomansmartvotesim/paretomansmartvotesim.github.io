@@ -76,8 +76,8 @@ function tallyChart(tally,cans,model,maxscore,nballots,opt) {
 	
 	var distList = makeDistListFromTally(tally, cans, maxscore, nballots)
 	var text = ""
-	// text += dotPlot("score",distList,model,{differentDisplay: true})
-	text += dotPlot("score",distList,model,opt)
+	// text += tBarChart("score",distList,model,{differentDisplay: true})
+	text += tBarChart("score",distList,model,opt)
 	return text
 }
 
