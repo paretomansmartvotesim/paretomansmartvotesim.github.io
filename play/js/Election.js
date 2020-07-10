@@ -539,6 +539,16 @@ function pairChart(ballots,district,model) {
 	return text
 }
 
+function squarePairChart(ballots,district,model) {
+	var text = ""
+	text += "<span class='small'>"
+	let opt = {entity:"winner",light:true,diagonal:true}
+	let hh = head2HeadTally(model, district,ballots)
+	text += pairwiseTable(hh,district,model,opt)
+	text += "</span><br>"
+	return text
+}
+
 // PairElimination
 Election.schulze = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
 
@@ -4402,7 +4412,11 @@ function pairwiseTable(hh,district,model,opt) {
 				if (opt.triangle) {
 					row += '<td style="text-align:center;">' + model.icon(a[k].id) + ' </td>'
 				} else {
-					row += '<td> </td>'
+					if (opt.diagonal) {
+						row += `<td style='background-color:${a[k].fill}; '> </td>`
+					} else {
+						row += '<td> </td>'
+					}
 				}
 			} else if (opt.triangle && i > k) {
 				row += '<td> </td>' // skip

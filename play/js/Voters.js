@@ -2429,6 +2429,7 @@ DrawTally.Approval = function (model,voterModel,voterPerson) {
 DrawTally.Ranked = function (model,voterModel,voterPerson) {
 	var voterAtStage = voterPerson.stages[model.stage]
 	var ballot = voterAtStage.ballot
+	var district = model.district[voterPerson.iDistrict]
 
 	var system = model.system
 	var rbsystem = model.rbsystem
@@ -2522,8 +2523,6 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 			text += "</pre></span>"
 		}
 		if(1){
-
-			let district = model.district[voterPerson.iDistrict]
 			
 			text += "<span class='small'>"
 			// text += " Pair Preferences:  <br />"
@@ -2557,6 +2556,10 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 			}
 			text += "</span>"
 			text += "</pre>"
+		}
+		if(1) {
+			text += pairChart([ballot], district, model)
+			text += squarePairChart([ballot], district, model)
 		}
 	}
 
