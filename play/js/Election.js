@@ -41,6 +41,7 @@ Election.score = function(district, model, options){
 		text += "<b>score as % of max possible: </b><br>";
 		if (model.doTallyChart) {
 			text += tallyChart(tally,cans,model,maxscore,ballots.length)
+			text += "<br>";
 		} else {
 			for(var i=0; i<cans.length; i++){
 				var c = cans[i].id;
@@ -490,7 +491,7 @@ Election.condorcet = function(district, model, options){
 	if (model.doTop2) var theTop2 = _sortTally(tallyWins).slice(0,2)
 	if (model.doTop2) result.theTop2 = theTop2
 	if (!options.sidebar) return result
-	
+
 	var topWinner = topWinners[0];
 	// Winner... or NOT!!!!
 	text += "<br>";
@@ -509,6 +510,7 @@ Election.condorcet = function(district, model, options){
 			var c = cans[i].id;
 			text += model.icon(c)+" got "+tallyWins[c]+" wins<br>";
 		}
+		text += "<br>";
 		text += _tietext(model,topWinners);
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else {
@@ -547,14 +549,22 @@ Election.schulze = function(district, model, options){ // Pairs of candidates ar
 	var reverseExplanation = true
 
 	var text = "";
-	text += "<span class='small'>";
-	if (reverseExplanation) {
-		text += "<b>who lost the least, one-on-one?</b><br>";
-	} else {
-		text += "<b>who had the strongest wins, one-on-one?</b><br>";
-	}
 
 	var ballots = model.voterSet.getBallotsDistrict(district)
+
+	
+	if (options.sidebar) {
+			
+		text += "<span class='small'>";
+		text += "<b>who wins each one-on-one?</b><br>";
+		text += pairChart(ballots,district,model)
+		
+		if (reverseExplanation) {
+			text += "<b>who lost the least, one-on-one?</b><br>";
+		} else {
+			text += "<b>who had the strongest wins, one-on-one?</b><br>";
+		}
+	}
 
 	// Create the WIN tally
 	var tally = {};
@@ -930,12 +940,20 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 
 	var reverseExplanation = true
 
+	
 	var text = "";
-	text += "<span class='small'>";
-	if (reverseExplanation) {
-		text += "<b>who lost by the least, one-on-one?</b><br>";
-	} else {
-		text += "<b>who had the strongest wins, one-on-one?</b><br>";
+
+	if (options.sidebar) {
+			
+		text += "<span class='small'>";
+		text += "<b>who wins each one-on-one?</b><br>";
+		text += pairChart(ballots,district,model)
+		
+		if (reverseExplanation) {
+			text += "<b>who lost the least, one-on-one?</b><br>";
+		} else {
+			text += "<b>who had the strongest wins, one-on-one?</b><br>";
+		}
 	}
 
 
@@ -1146,14 +1164,21 @@ Election.rankedPairs = function(district, model, options){ // Pairs of candidate
 	var reverseExplanation = false
 
 	var text = "";
-	text += "<span class='small'>";
-	if (reverseExplanation) {
-		text += "<b>who lost the least, one-on-one?</b><br>";
-	} else {
-		text += "<b>who had the strongest wins, one-on-one?</b><br>";
-	}
 
 	var ballots = model.voterSet.getBallotsDistrict(district)
+	
+	if (options.sidebar) {
+			
+		text += "<span class='small'>";
+		text += "<b>who wins each one-on-one?</b><br>";
+		text += pairChart(ballots,district,model)
+		
+		if (reverseExplanation) {
+			text += "<b>who lost the least, one-on-one?</b><br>";
+		} else {
+			text += "<b>who had the strongest wins, one-on-one?</b><br>";
+		}
+	}
 
 	// Create the WIN tally
 	var tally = {};
@@ -1411,9 +1436,17 @@ Election.rbvote = function(district, model, options){ // Use the RBVote from Rob
 	result = _check01(district,model)
 	if (! result.good) return result
 
-	var text = "<span class='small'>";
+	var text = "";
 
 	var ballots = model.voterSet.getBallotsDistrict(district)
+
+	
+	if (options.sidebar) {
+			
+		text += "<span class='small'>";
+		text += "<b>who wins each one-on-one?</b><br>";
+		text += pairChart(ballots,district,model)
+	}
 
 	rbvote.setreturnstring() // tell rbvote that we might want return strings (unless we're not doing the sidebar)
 	rbvote.readballots(ballots,district,model)
@@ -1546,8 +1579,8 @@ Election.rrv = function(district, model, options){
 		var text = "";
 		for(j=0; j<winnerslist.length;j++){
 			text += '<div id="district'+district.i+'round' + (j+1) + '" class="round">'
-			text += "Round " + (j+1);
 			text += "<span class='small'>";
+			text += "Round " + (j+1);
 			var tally = tallies[j]
 			var winner = winnerslist[j];
 			if (j>0) text += "<br><b>After votes go to winner,</b>"
@@ -1566,11 +1599,13 @@ Election.rrv = function(district, model, options){
 			var color = _colorsWinners([winner],model)[0]
 			text += "";
 			//text += model.icon(winner)+" has the highest score, so...";
-			text += "</span>";
 			text += "";
+			text += '<br>'
 			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>";
 			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;
+			text += "</span>";
 			text += '</div>'
+			text += '<br>'
 		}
 	
 		if(options.sidebar) {
@@ -1703,8 +1738,8 @@ Election.rav = function(district, model, options){
 		var text = "";
 		for(j=0; j<winnerslist.length;j++){
 			text += '<div id="district'+district.i+'round' + (j+1) + '" class="round">'
-			text += "Round " + (j+1);
 			text += "<span class='small'>";
+			text += "Round " + (j+1);
 			var tally = tallies[j]
 			var winner = winnerslist[j];
 			if (j>0) text += "<br><b>After votes go to winner,</b>"
@@ -1723,15 +1758,18 @@ Election.rav = function(district, model, options){
 			var color = _colorsWinners([winner],model)[0]
 			text += "";
 			//text += model.icon(winner)+" has the highest score, so...";
-			text += "</span>";
 			text += "";
+			text += '<br>'
 			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>";
 			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;
+			text += "</span>";
 			text += '</div>'
+			text += '<br>'
 		}
 	
 		if(options.sidebar) {
 			text += '<div id="district'+district.i+'round' + (winnerslist.length+1) + '" class="round">'
+			text += '</span>'
 			text += "Final Winners:";
 			text += "<br>";
 			for(var j=0; j<winnerslist.length; j++){
@@ -3009,6 +3047,7 @@ Election.quotaApproval = function(district, model, options){
 	
 	if (options.sidebar) {
 		var text = ""
+		text += "<span class='small'>";
 		var history = {}
 		history.rounds = []
 		history.v = v
@@ -3149,6 +3188,7 @@ Election.quotaScore = function(district, model, options){
 	
 	if (options.sidebar) {
 		var text = ""
+		text += "<span class='small'>";
 		var history = {}
 		history.rounds = []
 		history.v = v
@@ -3301,18 +3341,23 @@ function lpGeneral(_solver,district,model,options) {
 	var result = _result(winners,model)
 	var color = result.color
 
+	var text = "";
+	if (options.sidebar) {
+		text += "<span class='small'>";
+	}
 	if (0 && options.sidebar) {
 
 		// Caption
 		var winner = winners[0];
-		var text = "";
-		text += "<span class='small'>";
 		if ("Auto" == model.autoPoll) text += polltext;
 		text += "<b>score as % of max possible: </b><br>";
 		for(var i=0; i<cans.length; i++){
 			var c = cans[i].id;
 			text += model.icon(c)+"'s score: "+_percentFormat(district, tally[c] / maxscore)+"<br>";
 		}
+	}
+		
+	if (options.sidebar) {
 		if(!winner | winners.length>=2){
 			// NO WINNER?! OR TIE?!?!
 			text += _tietext(model,winners);
@@ -3520,11 +3565,18 @@ Election.equalFacilityLocation = function(district, model, options){
 	
 	var makeIcons = x => x ? x.map(a => model.icon(a)) : ""
 
-	result.text = `
-	The computer has determined that with a total combined score of 
-	<b>${_textPercent(comboScore)}</b>, the winners are 
-	${makeIcons(result.winners)}
-	`
+	if (options.sidebar) {
+		var text = "";
+		text += `
+		<span class='small'>
+		The computer has determined that with a total combined score of 
+		<b>${_textPercent(comboScore)}</b>, the winners are 
+		${makeIcons(result.winners)}
+		<span>
+		`
+		result.text = text
+		
+	}
 	return result
 
 }
@@ -3731,6 +3783,7 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 			tally2[cid] = tally[cid]
 		}
 		text += tallyChart(tally2,cans,model,1,ballots.length)
+		text += "<br>";
 	} else {
 		for(var i=0; i<cans.length; i++){
 			var c = cans[i].id;
@@ -3989,6 +4042,7 @@ Election.plurality = function(district, model, options){
 	text += "<b>most votes wins</b><br>";
 	if (model.doTallyChart) {
 		text += tallyChart(tally,cans,model,1,ballots.length)
+		text += "<br>";
 	} else {
 		for(var i=0; i<cans.length; i++){
 			var c = cans[i].id;
