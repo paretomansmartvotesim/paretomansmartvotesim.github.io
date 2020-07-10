@@ -2427,7 +2427,8 @@ DrawTally.Approval = function (model,voterModel,voterPerson) {
 }
 
 DrawTally.Ranked = function (model,voterModel,voterPerson) {
-	var ballot = voterPerson.stages[model.stage].ballot
+	var voterAtStage = voterPerson.stages[model.stage]
+	var ballot = voterAtStage.ballot
 
 	var system = model.system
 	var rbsystem = model.rbsystem
@@ -2561,14 +2562,18 @@ DrawTally.Ranked = function (model,voterModel,voterPerson) {
 
 	if (pick.doPoints) {
 		if (voterModel.say) text += "<span class='small' style> Points: </span><br />" 
-		var numCandidates = ballot.rank.length
-		for(var i=0; i<ballot.rank.length; i++){
-			var candidate = ballot.rank[i];
-			var score = numCandidates - i
-			for (var j=0; j < score; j++) {
-				text += model.icon(candidate) 
+		if (1) {
+			text += dotPlot("score", voterPerson.distList ,model,{differentDisplay:true})
+		} else {
+			var numCandidates = ballot.rank.length
+			for(var i=0; i<ballot.rank.length; i++){
+				var candidate = ballot.rank[i];
+				var score = numCandidates - i
+				for (var j=0; j < score; j++) {
+					text += model.icon(candidate) 
+				}
+				text += "<br />"
 			}
-			text += "<br />"
 		}
 	}
 
@@ -2971,8 +2976,16 @@ function makeDistList(model,voterPerson,voterAtStage,cans) {
 			distSet.scoreDisplay = distSet.score
 		}
 		if (model.ballotType == "Ranked") {
-			distSet.scoreDisplay = (voterAtStage.ballot.rank.indexOf(c.id) + 1)
-			distSet.score = distSet.scoreDisplay / voterAtStage.ballot.rank.length
+			if (model.system == "Borda") {
+				var rank = voterAtStage.ballot.rank.indexOf(c.id) + 1
+				var maxpoints = voterAtStage.ballot.rank.length
+				var points = maxpoints - rank
+				distSet.scoreDisplay = points
+				distSet.score = points / maxpoints
+			} else {
+				distSet.scoreDisplay = (voterAtStage.ballot.rank.indexOf(c.id) + 1)
+				distSet.score = distSet.scoreDisplay / voterAtStage.ballot.rank.length
+			}
 		}
 		distList.push(distSet)
 	
