@@ -2986,12 +2986,41 @@ function makeDistList(model,voterPerson,voterAtStage,cans) {
 	return distList
 }
 
+function makeDistListFromTally(tally, cans, maxscore, nballots) {
+	var distList = []
+	
+	var k = 0
+	for (var i = 0; i < cans.length; i++) {
+		var c = cans[i]
+		if (tally[c.id] !== undefined) {
+			var distSet =  {
+				i:k,
+				c:c,
+				cid:c.id,
+				score: tally[c.id] / maxscore / nballots,
+				scoreDisplay: tally[c.id] / maxscore,
+				maxscore: maxscore,
+			}
+			distList.push(distSet)
+			k++
+		}
+	}
+	
+	distList.sort(function(a,b) {return a.score - b.score})
+	for (var i = 0; i < distList.length; i++) {
+		distList[i].iSort = i // we might want to show these by the sorted order
+	}
+
+	return distList
+}
+
 function dotPlot(measure,distList,model,opt) {
 	opt = opt || {}
 	opt.differentDisplay = opt.differentDisplay || false
 	opt.sortOrder = opt.sortOrder || false
 	opt.distLine = opt.distLine || false
 	opt.bubbles = opt.bubbles || false
+	opt.percent = opt.percent || false
 
 	var text = ""
 
@@ -3061,9 +3090,11 @@ function dotPlot(measure,distList,model,opt) {
 			</div>
 			`
 		}
+		var f = x => x
+		if (opt.percent) f = x => _textPercent(x/100)
 		text += `
 		<div style=' position: absolute; top: ${y}em; left: ${x+2}px; margin-left: -.5em; white-space: nowrap;'>
-		${makeIconsCan([d.c])}: <b>${Math.round(d[display] * mult)}</b> <br>
+		${makeIconsCan([d.c])}: <b>${f(Math.round(d[display] * mult))}</b> <br>
 		</div>
 		`
 	}

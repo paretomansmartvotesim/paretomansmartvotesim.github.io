@@ -39,9 +39,13 @@ Election.score = function(district, model, options){
 		text += "<span class='small'>";
 		if ("Auto" == model.autoPoll) text += polltext;
 		text += "<b>score as % of max possible: </b><br>";
-		for(var i=0; i<cans.length; i++){
-			var c = cans[i].id;
-			text += model.icon(c)+"'s score: "+_percentFormat(district, tally[c] / maxscore)+"<br>";
+		if (model.doTallyChart) {
+			text += tallyChart(tally,cans,model,maxscore,ballots.length)
+		} else {
+			for(var i=0; i<cans.length; i++){
+				var c = cans[i].id;
+				text += model.icon(c)+"'s score: "+_percentFormat(district, tally[c] / maxscore)+"<br>";
+			}
 		}
 		if(!winner | winners.length>=2){
 			// NO WINNER?! OR TIE?!?!
@@ -63,6 +67,18 @@ Election.score = function(district, model, options){
 	if (model.doTop2) result.theTop2 = theTop2
 	return result;
 };
+
+function tallyChart(tally,cans,model,maxscore,nballots,opt) {
+
+	opt = opt || {}
+	if(opt.percent == undefined) opt.percent = true
+	
+	var distList = makeDistListFromTally(tally, cans, maxscore, nballots)
+	var text = ""
+	// text += dotPlot("score",distList,model,{differentDisplay: true})
+	text += dotPlot("score",distList,model,opt)
+	return text
+}
 
 Election.star = function(district, model, options){
 
@@ -128,13 +144,21 @@ Election.star = function(district, model, options){
 		text += "<span class='small'>";
 		if ("Auto" == model.autoPoll) text += polltext;
 		text += "<b>pairwise winner of two highest average scores wins</b><br>";
-		for(var i=0; i<cans.length; i++){
-			var c = cans[i].id;
-			text += model.icon(c)+":"+_percentFormat(district, tally[c] / maxscore)+"<br>";
+		if (model.doTallyChart) {
+			text += tallyChart(tally,cans,model,maxscore,ballots.length)
+		} else {
+			for(var i=0; i<cans.length; i++){
+				var c = cans[i].id;
+				text += model.icon(c)+":"+_percentFormat(district, tally[c] / maxscore)+"<br>";
+			}	
 		}
 		if (frontrunners.length >= 2) {
 			text += "<br>";
 			text += "<b>Final Round between the top two:<br></b>";
+			var runoffTally = {}
+			runoffTally[frontrunners[0]] = aWins
+			runoffTally[frontrunners[1]] = bWins
+			text += tallyChart(runoffTally,cans,model,1,ballots.length)
 			text += model.icon(frontrunners[0])+_percentFormat(district, aWins)+". "+model.icon(frontrunners[1]) +_percentFormat(district, bWins) + "<br>";
 			text += "</span>";
 		}
@@ -177,8 +201,9 @@ Election.three21 = function(district, model, options){
 	   semifinalists.push(c.id);
 	}
 	semifinalists.sort(function(a,b){return tallies[2][b]-tallies[2][a]})
+	semifinalists = semifinalists.slice(0,3)
 
-	var finalists = semifinalists.slice(0,3);
+	var finalists = _jcopy(semifinalists)
 	finalists.sort(function(a,b){return tallies[0][a]-tallies[0][b]})
 
 	var aWins = 0;
@@ -220,21 +245,43 @@ Election.three21 = function(district, model, options){
 		var text = "";
 		text += "<span class='small'>";
 		if ("Auto" == model.autoPoll) text += polltext;
-		text += "Semifinalists: 3 most good. <br>Finalists: 2 least bad. <br>Winner: more preferred.<br><br>";
-		text += "<b>Semifinalists:</b><br>";
-		for(var i=0; i<semifinalists.length; i++){
-			var c = semifinalists[i];
-			text += model.icon(c)+"'s 'good': "+ _percentFormat(district, tallies[2][c]) +"<br>";
-			
+		// text += "Semifinalists: 3 most good. <br>Finalists: 2 least bad. <br>Winner: more preferred.<br><br>";
+		text += "<b>Pick semifinalists:</b> 3 most good<br>";
+		
+		if (model.doTallyChart) {
+			text += tallyChart(tallies[2],cans,model,1,ballots.length)
+		} else {
+			for(var i=0; i<semifinalists.length; i++){
+				var c = semifinalists[i];
+				text += model.icon(c)+"'s 'good': "+ _percentFormat(district, tallies[2][c]) +"<br>";
+			}
 		}
-		text += "<b>Finalists:</b><br>";
-		for(var i=0; i<finalists.length; i++){
-			var c = finalists[i];
-			text += model.icon(c)+"'s 'bad': "+_percentFormat(district, tallies[0][c])+"<br>";
+		text += "<br>";
+		text += "<b>Pick finalists:</b> 2 least bad<br>";
+		if (model.doTallyChart) {
+			var semiTally = {}
+			for(var i=0; i<semifinalists.length; i++){
+				var c = semifinalists[i];
+				semiTally[c] = tallies[0][c]
+			}
+			text += tallyChart(semiTally,cans,model,1,ballots.length,{distLine:true})
+		} else {
+			for(var i=0; i<finalists.length; i++){
+				var c = finalists[i];
+				text += model.icon(c)+"'s 'bad': "+_percentFormat(district, tallies[0][c])+"<br>";
+			}
 		}
-		text += "<b>Winner:</b><br>";
+		text += "<br>";
+		text += "<b>Pick winner:</b> 1 more preferred<br>";
+		if (model.doTallyChart) {
+			var runoffTally = {}
+			runoffTally[finalists[0]] = aWins
+			runoffTally[finalists[1]] = bWins
+			text += tallyChart(runoffTally,cans,model,1,ballots.length)
+		} else {
+			text += model.icon(finalists[0])+": "+_percentFormat(district, aWins)+"; "+model.icon(finalists[1]) +": "+_percentFormat(district, bWins)+", so...<br>";			
+		}
 
-		text += model.icon(finalists[0])+": "+_percentFormat(district, aWins)+"; "+model.icon(finalists[1]) +": "+_percentFormat(district, bWins)+", so...<br>";
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+model.nameUpper(winners[0])+"</b> WINS";
@@ -279,9 +326,13 @@ Election.approval = function(district, model, options){
 	text += "<span class='small'>";
 	if ("Auto" == model.autoPoll) text += polltext;
 	text += "<b>most approvals wins (%)</b><br>";
-	for(var i=0; i<cans.length; i++){
-		var c = cans[i].id;
-		text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+	if (model.doTallyChart) {
+		text += tallyChart(tally,cans,model,1,ballots.length)
+	} else {
+		for(var i=0; i<cans.length; i++){
+			var c = cans[i].id;
+			text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+		}
 	}
 	if(!winner | winners.length>=2){
 		// NO WINNER?! OR TIE?!?!
@@ -1486,12 +1537,16 @@ Election.rrv = function(district, model, options){
 			var winner = winnerslist[j];
 			if (j>0) text += "<br><b>After votes go to winner,</b>"
 			text += "<br><b>score as %:</b><br>";
-			for(var i=0; i<cans.length; i++){
-				var c = cans[i].id;
-				//text += model.icon(c)+"'s score: "+((tally[c]/district.voterPeople.length).toFixed(2))+" out of 5.00<br>";
-				text += model.icon(c)+": "+_percentFormat(district, tally[c] / maxscore)
-				if (winner == c) text += " &larr;"//" <--"
-				text += "<br>";
+			if (model.doTallyChart) {
+				text += tallyChart(tally,cans,model,maxscore,ballots.length)
+			} else {
+				for(var i=0; i<cans.length; i++){
+					var c = cans[i].id;
+					//text += model.icon(c)+"'s score: "+((tally[c]/district.voterPeople.length).toFixed(2))+" out of 5.00<br>";
+					text += model.icon(c)+": "+_percentFormat(district, tally[c] / maxscore)
+					if (winner == c) text += " &larr;"//" <--"
+					text += "<br>";
+				}
 			}
 			var color = _colorsWinners([winner],model)[0]
 			text += "";
@@ -1639,13 +1694,17 @@ Election.rav = function(district, model, options){
 			var winner = winnerslist[j];
 			if (j>0) text += "<br><b>After votes go to winner,</b>"
 			text += "<br><b>score as %:</b><br>";
-			for(var i=0; i<cans.length; i++){
-				var c = cans[i].id;
-				//text += model.icon(c)+"'s score: "+((tally[c]/district.voterPeople.length).toFixed(2))+" out of 5.00<br>";
-				text += model.icon(c)+": "+_percentFormat(district, tally[c])
-				if (winner == c) text += " &larr;"//" <--"
-				text += "<br>";
-			}
+			if (model.doTallyChart) {
+				text += tallyChart(tally,cans,model,maxscore,ballots.length)
+			} else {
+				for(var i=0; i<cans.length; i++){
+					var c = cans[i].id;
+					//text += model.icon(c)+"'s score: "+((tally[c]/district.voterPeople.length).toFixed(2))+" out of 5.00<br>";
+					text += model.icon(c)+": "+_percentFormat(district, tally[c])
+					if (winner == c) text += " &larr;"//" <--"
+					text += "<br>";
+				}   
+            }
 			var color = _colorsWinners([winner],model)[0]
 			text += "";
 			//text += model.icon(winner)+" has the highest score, so...";
@@ -1723,10 +1782,14 @@ Election.borda = function(district, model, options){
 	// Caption
 	var text = "";
 	text += "<span class='small'>";
-	text += "<b>higher score is better</b><br>";
-	for(var i=0; i<cans.length; i++){
-		var c = cans[i].id;
-		text += model.icon(c)+"'s total score: "+tally[c]+" = "+_percentFormat(district, tally[c] / (numcan-1))+"<br>";
+	// text += "<b>higher score is better</b><br>";
+	if (model.doTallyChart) {
+		text += tallyChart(tally,cans,model,numcan-1,ballots.length)
+	} else {
+		for(var i=0; i<cans.length; i++){
+			var c = cans[i].id;
+			text += model.icon(c)+"'s total score: "+tally[c]+" = "+_percentFormat(district, tally[c] / (numcan-1))+"<br>";
+		}	
 	}
 	if(winners.length>=2){
 		// NO WINNER?! OR TIE?!?!
@@ -1824,11 +1887,15 @@ Election.irv = function(district, model, options){
 		{
 			text += "<b>round "+roundNum+":</b><br>";
 			text += "who's voters' #1 choice?<br>";
-			for(var i=0; i<candidates.length; i++){
-				var c = candidates[i];
-				text += model.icon(c)+":"+_percentFormat(district, tally[c])
-				if(i<candidates.length-1) text+=", ";
-			}
+			if (model.doTallyChart) {
+				text += tallyChart(tally,cans,model,1,ballots.length)
+			} else {
+				for(var i=0; i<candidates.length; i++){
+					var c = candidates[i];
+					text += model.icon(c)+":"+_percentFormat(district, tally[c])
+					if(i<candidates.length-1) text+=", ";
+				}   
+            }
 			text += "<br>";
 		}
 
@@ -2175,13 +2242,17 @@ Election.stv = function(district, model, options){
 
 		if (options.sidebar) {
 			// Say 'em...
-			for(var i=0; i<candidates.length; i++){
-				var c = candidates[i];
-				// text += model.icon(c)+":"+Math.round(tally[c]);
-				text += model.icon(c)+":"+_percentFormat(district,tally[c]);
-				
-				if(i<candidates.length-1) text+=",<br>";
-			}
+			if (model.doTallyChart) {
+				text += tallyChart(tally,cans,model,1,ballots.length)
+			} else {
+				for(var i=0; i<candidates.length; i++){
+					var c = candidates[i];
+					// text += model.icon(c)+":"+Math.round(tally[c]);
+					text += model.icon(c)+":"+_percentFormat(district,tally[c]);
+					
+					if(i<candidates.length-1) text+=",<br>";
+				}   
+            }
 			text += "<br>";
 		}
 
@@ -2959,10 +3030,19 @@ Election.quotaApproval = function(district, model, options){
 			text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
 			text += "Round " + (n+1);
 			text += "<br>";
-			for(var i=0; i<cans.length; i++){
-				var c = cans[i].id;
-				text += model.icon(c)+" got "+_percentFormat(district, tally[i])+"<br>";
-			}
+			if (model.doTallyChart) {
+				var cidTally = {}
+				for(var i=0; i<cans.length; i++){
+					var cid = cans[i].id;
+					cidTally[cid] = tally[i]
+				}   
+				text += tallyChart(cidTally,cans,model,1,v.length)
+			} else {
+				for(var i=0; i<cans.length; i++){
+					var c = cans[i].id;
+					text += model.icon(c)+" got "+_percentFormat(district, tally[i])+"<br>";
+				}   
+            }
 			text += "<br>";
 			text += '</div>'
 		}
@@ -3088,10 +3168,19 @@ Election.quotaScore = function(district, model, options){
 			text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
 			text += "Round " + (n+1);
 			text += "<br>";
-			for(var i=0; i<cans.length; i++){
-				var c = cans[i].id;
-				text += model.icon(c)+" got "+_percentFormat(district, tally[i])+"<br>";
-			}
+			if (model.doTallyChart) {
+				var cidTally = {}
+				for(var i=0; i<cans.length; i++){
+					var cid = cans[i].id;
+					cidTally[cid] = tally[i]
+				}   
+				text += tallyChart(cidTally,cans,model,1,v.length)
+			} else {
+				for(var i=0; i<cans.length; i++){
+					var c = cans[i].id;
+					text += model.icon(c)+" got "+_percentFormat(district, tally[i])+"<br>";
+				}
+            }
 			text += "<br>";
 			text += '</div>'
 		}
@@ -3612,20 +3701,32 @@ Election.toptwo = function(district, model, options){ // not to be confused with
 	text += "<span class='small'>";
 	if ("Auto" == model.autoPoll) text += polltext;
 	text += "<b>top two move to 2nd round</b><br>";
-	for(var i=0; i<cans.length; i++){
-		var c = cans[i].id;
-		text += model.icon(c)+" got "+_percentFormat(district, tally1[c])+"<br>";
+	if (model.doTallyChart) {
+		text += tallyChart(tally1,cans,model,1,ballots.length)
+	} else {
+		for(var i=0; i<cans.length; i++){
+			var c = cans[i].id;
+			text += model.icon(c)+" got "+_percentFormat(district, tally1[c])+"<br>";
+		}	
 	}
 	text += "<br><b>2nd round</b><br>";
-	for(var i=0; i<cans.length; i++){
-		var c = cans[i].id;
-		if (toptwo.includes(c)) text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+	if (model.doTallyChart) {
+		var tally2 = {}
+		for (var cid of toptwo) {
+			tally2[cid] = tally[cid]
+		}
+		text += tallyChart(tally2,cans,model,1,ballots.length)
+	} else {
+		for(var i=0; i<cans.length; i++){
+			var c = cans[i].id;
+			if (toptwo.includes(c)) text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+		}
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
 		if(options.sidebar){
 			text += "<br>";
-			text += model.icon(winner)+" has most votes, so...<br>";
+			text += model.icon(winner)+" has the most votes, so...<br>";
 		}
 		text += "</span>";
 		text += "<br>";
@@ -3706,24 +3807,37 @@ Election.pluralityWithPrimary = function(district, model, options){
 		var ip1 = i*1+1
 		text += "<b>primary for group " + ip1 + ":</b><br>";
 		var pwin = _countWinner(tally1)
-		for(let k=0; k<cans.length; k++){
-			let c = cans[k]
-			let cid = c.id
-			if (district.parties[i].candidates.includes(c)) {
-				text += model.icon(cid)+" got "+_primaryPercentFormat(tally1[cid], totalPeopleInPrimary);
-				if (pwin.includes(cid)) text += " &larr;"
-				text += "<br>"
-			}
+		
+		if (model.doTallyChart) {
+			text += tallyChart(tally1,cans,model,1,ballots2.length)
+		} else {
+			for(let k=0; k<cans.length; k++){
+				let c = cans[k]
+				let cid = c.id
+				if (district.parties[i].candidates.includes(c)) {
+					text += model.icon(cid)+" got "+_primaryPercentFormat(tally1[cid], totalPeopleInPrimary);
+					if (pwin.includes(cid)) text += " &larr;"
+					text += "<br>"
+				}
+			}	
 		}
 		text += "<br>"
 	}
 	text += "<b>general election:</b><br>";
 
+	if (pwinners.length == 1) {
+		text += "There was only one nominee. Win by default.<br>"
+	}
+
 	text += generalPollText
 
-	for(var i=0; i<cans.length; i++){
-		var c = cans[i].id;
-		if (pwinners.includes(c)) text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+	if (model.doTallyChart) {
+		text += tallyChart(tally,cans,model,1,ballots2.length)
+	} else {
+		for(var i=0; i<cans.length; i++){
+			var c = cans[i].id;
+			if (pwinners.includes(c)) text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+		}
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {
@@ -3858,9 +3972,13 @@ Election.plurality = function(district, model, options){
 	text += "<span class='small'>";
 	if ("Auto" == model.autoPoll) text += polltext;
 	text += "<b>most votes wins</b><br>";
-	for(var i=0; i<cans.length; i++){
-		var c = cans[i].id;
-		text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+	if (model.doTallyChart) {
+		text += tallyChart(tally,cans,model,1,ballots.length)
+	} else {
+		for(var i=0; i<cans.length; i++){
+			var c = cans[i].id;
+			text += model.icon(c)+" got "+_percentFormat(district, tally[c])+"<br>";
+		}
 	}
 	// Caption text for winner, or tie
 	if (winners.length == 1) {

@@ -110,6 +110,7 @@ function Model(idModel){
 		showPowerChart: true,
 		centerPollThreshold: .5,
 		howBadlyDefeatedThreshold: 1.1,
+		doTallyChart: true,
 	})
 	
 	self.viz = new Viz(self);
