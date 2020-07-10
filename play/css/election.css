@@ -355,11 +355,16 @@ svg {
 }
 
 .strategyTable {
-    background-color: #222;
+    background-color: white;
 }
 .strategyTable th {
     text-align: center;
 }
 .strategyTable td {
     text-align: right;
+    background-color: white;
+
 }
+/* .nameLabelName {
+    opacity: 1;
+} */

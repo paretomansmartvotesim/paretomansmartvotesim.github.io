@@ -357,8 +357,6 @@ Election.condorcet = function(district, model, options){
 	let cans = district.stages[model.stage].candidates
 
 	var text = "";
-	text += "<span class='small'>";
-	text += "<b>who wins each one-on-one?</b><br>";
 
 	var ballots = model.voterSet.getBallotsDistrict(district)
 
@@ -378,6 +376,13 @@ Election.condorcet = function(district, model, options){
 
 	// make a list of mouseover events
 	let eventsToAssign = []
+
+	if (options.sidebar) {
+			
+		text += "<span class='small'>";
+		text += "<b>who wins each one-on-one?</b><br>";
+		text += pairChart(ballots,district,model)
+	}
 
 	// For each combination... who's the better ranking?
 	for(var i=0; i<cans.length-1; i++){
@@ -521,6 +526,16 @@ Election.condorcet = function(district, model, options){
 
 	return result;
 };
+
+function pairChart(ballots,district,model) {
+	var text = ""
+	text += "<span class='small'>"
+	let opt = {entity:"winner",doSort:true,triangle:true,light:true}
+	let hh = head2HeadTally(model, district,ballots)
+	text += pairwiseTable(hh,district,model,opt)
+	text += "</span><br>"
+	return text
+}
 
 // PairElimination
 Election.schulze = function(district, model, options){ // Pairs of candidates are sorted by their win margin.  Then we eliminate the weakest wins until there is a Condorcet winner.  A condorcet winner has 0 losses.
@@ -4011,7 +4026,7 @@ function _electionDefaults(options) {
 	return options
 }
 
-function head2HeadPoll(model,district,ballots) {
+function head2HeadTally(model,district,ballots) {
 
 	var cans = district.stages[model.stage].candidates
 
@@ -4114,10 +4129,10 @@ function runPoll(district,model,options,electiontype){
 				model.updateDistrictBallots(district);
 				
 				var ballots2 = model.voterSet.getBallotsDistrict(district)
-				let head2head = head2HeadPoll(model, district,ballots2)
+				let head2head = head2HeadTally(model, district,ballots2)
 				district.pollResults = temp1
 			} else {
-				let head2head = head2HeadPoll(model, district,ballots)
+				let head2head = head2HeadTally(model, district,ballots)
 			}
 			
 			var results = {head2head:head2head, firstpicks:tally, winners:winners}
@@ -4205,21 +4220,51 @@ function runPoll(district,model,options,electiontype){
 	return polltext
 }
 
+
 function cellText(model,opt,hh,a,b) {
+	var pairText1 = pairText(model,opt,hh,a,b)
+	var winnerColor1 = winnerColor(hh,a,b)
+	var margin1 = margin(hh,a,b)
+	if (opt.light) {
+		var cellText = `<td style='background-color:${winnerColor1}; opacity: ${margin1*.5 + .5};'><div class='nameLabelName' >${pairText1}</div></td>`
+	} else {
+		var cellText = "<td><span class='nameLabelName' style='color:"+winnerColor1+"'>" + pairText1 + "</span></td>"
+	}
+	// row += '<td bgcolor="' + winnerColor + '">' + cellText + '</td>'
+	return cellText
+}
+
+function winnerColor(hh,a,b) {
+	let win = hh[a.id][b.id]
+	let loss = hh[b.id][a.id]
+	
+	var winnerColor = (win == loss) ? "#ccc" : (win > loss) ? a.fill : b.fill
+	return winnerColor
+}
+
+
+function margin(hh,a,b) {
+	let win = hh[a.id][b.id]
+	let loss = hh[b.id][a.id]
+	
+	var margin = Math.abs(win - loss) / (win + loss)
+	return margin
+}
+
+function pairText(model,opt,hh,a,b) {
 	let win = hh[a.id][b.id]
 	let loss = hh[b.id][a.id]
 	if (opt.entity == "winner") {
 		let winnerTally = Math.max(win,loss)
-		var pairText = Math.round(100*winnerTally / (win+loss))
+		var frac = winnerTally / (win+loss)
 	} else { // opt.entity == "row"
 		// let pairText = win + '-' + loss
 		// let pairText = win
-		var pairText = Math.round(100*win / (win+loss))
+		var frac = win / (win+loss)
 	}
-	let winnerColor = (win == loss) ? "#ccc" : (win > loss) ? a.fill : b.fill
-	let cellText = "<span class='nameLabelName' style='color:"+winnerColor+"'>" + pairText + "</span>"
-	// row += '<td bgcolor="' + winnerColor + '">' + cellText + '</td>'
-	return cellText
+	// var pairText = Math.round(100*frac)
+	var pairText = _textPercent(frac)
+	return pairText
 }
 
 function strategyTable(district,model,opt) {
@@ -4232,7 +4277,7 @@ function strategyTable(district,model,opt) {
 	<tbody>
 	<tr>
 	<th>
-	+
+	${ (opt.entity == "row") ? "+" : " " }
 	</th>
 	`
 	for (let i = 0; i < b.length; i++) {
@@ -4248,7 +4293,7 @@ function strategyTable(district,model,opt) {
 		let row = "<tr>"
 		row += '<td>' + model.icon(a[k].id) + '</td>'
 		for (let i = 0; i < b.length; i++) {
-			row += '<td>' + cellText(model,opt,hh,a[k],b[i]) + '</td>'
+			row += cellText(model,opt,hh,a[k],b[i])
 		}
 		row += "</tr>"
 
@@ -4262,35 +4307,53 @@ function strategyTable(district,model,opt) {
 	return text
 }
 
-function pairwiseTable(district,model,opt) {
+function pairwiseTable(hh,district,model,opt) {
 
 	let cans = district.stages[model.stage].candidates
-	let a = cans
-	let b = a
-	let text = ""
-	let header = `
-	<table class="strategyTable"><tbody>
-	<tr>
-	<th>+</th>
-	`
-	for (let i = 0; i < b.length; i++) {
-		header += '<th>' + model.icon(b[i].id) + '</th>'
+	
+
+	if (opt.doSort) {
+		var a = cans.map( x => x ) // copy
+		a.sort( (a,b) => hh[b.id][a.id] - hh[a.id][b.id] ) // might be kinda random for cycles
+	} else {
+		var a = cans
 	}
-	header += '</tr>'
 
-	text += header
-
-	let hh = district.primaryPollResults.head2head
+	let text = ""
+	text += `<table class="strategyTable"><tbody>`
+	
+	var square = opt.triangle == undefined
+	if (square) {
+		let header = `
+		<tr>
+		<th> 
+		${ (opt.entity == "row") ? "+" : " " }
+		</th>
+		`
+		for (let i = 0; i < a.length; i++) {
+			header += '<th>' + model.icon(a[i].id) + '</th>'
+		}
+		header += '</tr>'
+	
+		text += header
+	}
 
 	for (let k = 0; k < a.length; k++) {
 		let row = "<tr>"
-		row += '<td>' + model.icon(a[k].id) + '</td>'
-		for (let i = 0; i < b.length; i++) {
+		if (square) {
+			row += '<td>' + model.icon(a[k].id) + '</td>'
+		}
+		for (let i = 0; i < a.length; i++) {
 			if (i === k) {
-				// row += '<td>' + model.icon(a[k].id) + ' </td>'
-				row += '<td> </td>'
+				if (opt.triangle) {
+					row += '<td style="text-align:center;">' + model.icon(a[k].id) + ' </td>'
+				} else {
+					row += '<td> </td>'
+				}
+			} else if (opt.triangle && i > k) {
+				row += '<td> </td>' // skip
 			} else {
-				row += '<td>' + cellText(model,opt,hh,a[k],b[i]) + '</td>'
+				row += cellText(model,opt,hh,a[k],a[i])
 			}
 		}
 		row += "</tr>"
@@ -4332,26 +4395,31 @@ var runPrimaryPoll = function(district,model,options,electiontype){
 	}
 
 	// tally the ranked ballots
-	let head2head = head2HeadPoll(model,district,ballots)
+	let head2head = head2HeadTally(model,district,ballots)
 	district.primaryPollResults.head2head = head2head
 
 	// not yet needed
 	district.stages[model.stage].primaryPollResults = district.primaryPollResults
+	
 
 	// display results
 	if(options.sidebar) {
 		// let opt = {entity:"row"}
-		let opt = {entity:"winner"}
+		let opt = {entity:"winner",light:true}
+		// let opt = {entity:"winner",doSort:true,triangle:true,light:true}
 		if (opt.entity == "row") {
 			polltext += "Vote % for Row Nominee<br>"
 		} else { // opt.entity == "winner"
 			polltext += "Vote % for Winning Nominee<br>"
 		}
+		
+		let hh = district.primaryPollResults.head2head
 		if (numParties == 2) {
 			polltext += strategyTable(district,model,opt)
 		} else {
-			polltext += pairwiseTable(district,model,opt)
+			polltext += pairwiseTable(hh,district,model,opt)
 		}
+
 		polltext += "</span><br>"
 	}
 	
