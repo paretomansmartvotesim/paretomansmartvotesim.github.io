@@ -474,21 +474,36 @@ function bindModel(ui,model,config) {
     }
 
     function sankeyDraw() {
-        var sankeyOn = ["IRV","STV"].includes(model.system)
+        var sankeyOn = ["IRV","STV"].includes(model.system)        
+        
+        // do sankey if any districts have more than 1 person
+        var sankeyOn = sankeyOn && model.district.map(x => x.voterPeople.length).some( x => x > 1) 
 
-        if (model.district[0].voterPeople.length <= 1) sankeyOn = false
-        // var sankeyOn = true
-        if (sankeyOn) {
-            if (ui.dom.sankey) {
-                // do nothing
-            } else {
-                ui.sankey = d3.sankey()  
-            }
-        } else {
+        if (! sankeyOn) {
             if (ui.dom.sankey) ui.dom.sankey.remove() 
+            return
         }
 
-        if (sankeyOn) {
+        if (ui.sankey == undefined) {
+            ui.sankey = d3.sankey()  
+        }
+        if (ui.dom.sankey) {
+            ui.dom.sankey.remove() 
+        }
+        ui.dom.sankey = document.createElement("div")
+        ui.dom.right.prepend(ui.dom.sankey)
+
+        ui.dom.sankey.id = "chart"
+        ui.dom.sankey.innerHTML = '<div style="text-align:center;"><span class="small" > Sankey Diagram </span></div>'
+
+
+        for (var district of model.district) {
+
+            if (model.district.length > 1) {
+                ui.dom.sankey.innerHTML += `<div style="text-align:center;"><span class="small" > District ${district.i+1} </span></div>`
+            }
+
+            if (district.voterPeople.length <= 1) continue
 
             // option
             var doSpecialWinColor = true
@@ -496,7 +511,7 @@ function bindModel(ui,model,config) {
             var sankey = ui.sankey
 
 
-            var numcans = model.district[0].candidates.length
+            var numcans = district.candidates.length
             var nodewidth = Math.max(10, Math.min(25, 100 / numcans)) // really this is node height, but the original code was horizontal, not vertical
 
             var outHeight = numcans * 50
@@ -510,24 +525,12 @@ function bindModel(ui,model,config) {
             .nodePadding(0) // was 10
             .size([width, height]);
 
-            if (ui.dom.sankey) ui.dom.sankey.remove() 
-            ui.dom.sankey = document.createElement("div")
-            ui.dom.right.prepend(ui.dom.sankey)
-            // var title = document.createElement("span")
-            ui.dom.sankey.innerHTML = '<div style="text-align:center;"><span class="small" > Sankey Diagram </span></div>'
-            // model.caption.prepend(title)
-            
-            ui.dom.sankey.id = "chart"
-
-
-            if(ui.dom.sankeySVG) ui.dom.sankeySVG.remove()
-            ui.dom.sankeySVG = d3.select(ui.dom.sankey).append("svg")
+            var svg = d3.select(ui.dom.sankey).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            var svg = ui.dom.sankeySVG
 
             var formatNumber = d3.format(",.0f"),
                 format = function(d) { return formatNumber(d); },
@@ -537,7 +540,7 @@ function bindModel(ui,model,config) {
 
             var path = sankey.link();
 
-            var dataSankey = getDataSankey()
+            var dataSankey = getDataSankey(district)
             // var dataSankey = getEnergyData()
 
             sankey
@@ -597,48 +600,53 @@ function bindModel(ui,model,config) {
                 link.attr("d", path);
             }
 
-            function getDataSankey() {
+            function getDataSankey(district) {
                 var nodes = []
                 var links = []
 
-                console.log(model.result.coalitions[0][0])
-                console.log(model.result.transfers)
+                console.log(district.result.coalitions[0][0])
+                console.log(district.result.transfers)
                 // each transfer is referred to by transfers [ round ] [ transfer index ] 
                 // we use ids
                 // transfer.from 
                 // transfer.flows [ to ] 
                 // transfer.flows [ to ] [ first ]    -- also shows who was the first choice
 
-                var coalitions = model.result.coalitions
-                var tallies = model.result.tallies
-                var continuing = model.result.continuing
-                var transfers = model.result.transfers
+                var coalitions = district.result.coalitions
+                var tallies = district.result.tallies
+                var continuing = district.result.continuing
+                var transfers = district.result.transfers
                 var numRounds = transfers.length
                 
                 var winnersContinue = model.system == "STV" && 1
-                if (winnersContinue)var won = model.result.won
-                if (winnersContinue) var quotaAmount = model.district[0].voterPeople.length / (model.seats + 1)
+                if (winnersContinue)var won = district.result.won
+                if (winnersContinue) var quotaAmount = district.voterPeople.length / (model.seats + 1)
                 
 
                 // function to find the sorted position of the candidate
                 var xpos =  cid => model.tarena.modelToArena(model.candidatesById[cid]).x
+                // var listOfCandidates = Object.keys(transfers[0][0].flows)
+                // listOfCandidates.push(transfers[0][0].from)
+                var listOfCandidates = district.candidates.map(c => c.id)
+                // listOfCandidates.sort((a,b) => a.length - b.length)
+                var xc = {}
+                for (var cid of listOfCandidates) {
+                    xc[cid] = xpos(cid)
+                }
+                
 
                 // make ids and lookup tool
                 var idx = 0
-                // var listOfCandidates = Object.keys(transfers[0][0].flows)
-                // listOfCandidates.push(transfers[0][0].from)
-                var listOfCandidates = model.district[0].candidates.map(c => c.id)
-                // listOfCandidates.sort((a,b) => a.length - b.length)
                 var lookup = {}
                 for (var rid = 0; rid <= numRounds; rid ++) {
                     lookup[rid] = {}
                     if (rid == 0) {
-                        var useList = listOfCandidates
+                        var useList = _jcopy(listOfCandidates)
                     } else {
                         var useList = _jcopy(continuing[rid-1]) // continuing from last round
                         if (winnersContinue) useList = useList.concat(won[rid-1])
                     }
-                    useList = _jcopy(useList).sort( (a,b) => xpos(a) - xpos(b) )
+                    useList = useList.sort( (a,b) => xc[a] - xc[b] )
                     for( var cid of useList) {
                         lookup[rid][cid] = idx
                         var node = {name:rid + "_" + cid}
