@@ -604,8 +604,6 @@ function bindModel(ui,model,config) {
                 var nodes = []
                 var links = []
 
-                console.log(district.result.coalitions[0][0])
-                console.log(district.result.transfers)
                 // each transfer is referred to by transfers [ round ] [ transfer index ] 
                 // we use ids
                 // transfer.from 

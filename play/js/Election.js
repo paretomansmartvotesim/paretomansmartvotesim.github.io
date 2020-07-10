@@ -2105,6 +2105,19 @@ Election.stv = function(district, model, options){
 		text += "<span class='small'>";
 		text += "Find " + numreps + " winners.<br>"
 		text += "Set quota at 1/(1+" + numreps + ") = " + quotapercent + "%.<br><br>"
+		
+		var hsid = "hide-show-detail-" + _rand5()
+
+		if (0) {
+			text += `<button onclick='var x = document.getElementById("${hsid}");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			};'
+			">Hide/show detailed results</button>`
+		}
+		text += `<div id="${hsid}" >` // style="display:none;"
 	}
 	var resolved = null;
 	var roundNum = 1;
@@ -2389,6 +2402,7 @@ Election.stv = function(district, model, options){
 		history.rounds.push(roundHistory)
 
 		text += "<br>"
+		text += '</div>'
 		text += '</div>'
 
 		// push out a final reweight just to evaluate how well the method worked
