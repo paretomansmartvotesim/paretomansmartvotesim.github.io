@@ -2081,6 +2081,9 @@ Election.stv = function(district, model, options){
 		var lastlosers = []
 		var losers = []
 		var canIdByDecision = []
+		var tallies = []
+		var continuing = []
+		var won = []
 	}
 
 	if (options.sidebar) {
@@ -2196,6 +2199,7 @@ Election.stv = function(district, model, options){
 				first = topChoice[0][k]
 				coalitionInRound[roundNum-1][cid][first] += ballotweight[k]
 			}
+			tallies.push(_jcopy(tally))
 		}
 
 
@@ -2342,6 +2346,8 @@ Election.stv = function(district, model, options){
 					}
 				}
 				transfers[roundNum-1].push(transfer)
+                continuing.push(_jcopy(candidates))
+                won.push(_jcopy(winnerslist))
 			}
 		}
 
@@ -2486,6 +2492,9 @@ Election.stv = function(district, model, options){
 		result.coalitions = coalitions
 		result.lastlosers = lastlosers
 		result.nBallots = cBallots.length
+		result.tallies = tallies
+		result.continuing = continuing
+		result.won = won
 	}
 
 	if (options.sidebar) {

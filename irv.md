@@ -46,7 +46,7 @@ During counting, your vote counts for your top candidate. One-by-one, the candid
 
 This is pretty similar to what we do now, eliminating candidates in the run up to the election. Except now that voters put all the information on their ballot, the process of elimination is transparent.
 
-Here's a sketch that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated.
+Here's a sketch that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated.  The flow diagram shown on the right is called a Sankey diagram, after it's inventor.
 
 {% capture cap5 %}Your vote counted for {{ A }}, your favorite, in the first round. Not enough people chose {{ A }} as their favorite, so {{ A }} was eliminated. Your vote counted for {{ B }} over {{ C }} in the final round, so you didn't spoil the election for {{ B }} by voting for {{ A }}.{% endcapture %}
 

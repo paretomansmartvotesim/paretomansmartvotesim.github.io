@@ -686,7 +686,7 @@ function Model(idModel){
 	}
 
 	self.checkDoSort = function() {
-		return self.checkGotoTarena() || self.system == "IRV"
+		return self.checkGotoTarena() ||  ["IRV","STV"].includes(self.system)
 	}
 
 	self.checkDoBeatMap = function() {

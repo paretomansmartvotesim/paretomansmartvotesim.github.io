@@ -63,7 +63,8 @@ Election/Sandbox design:
     }
 }
 
-.div-election #caption{
+.div-election #caption,
+.div-election #chart{
     margin: 0px auto;
 	text-align: left;
     line-height: 1.0em;
@@ -74,9 +75,15 @@ Election/Sandbox design:
     border: 2px solid #ccc;
     width: 220px;
 }
-.div-election #caption .small{
+.div-election #caption .small,
+.div-election #chart .small{
 	font-size: 15px;
 	line-height: 1.0em;
+}
+
+.div-election #chart {
+	margin: 10px auto;
+    margin-top: 0px;
 }
 
 .div-election .buttonshape img{
@@ -308,6 +315,10 @@ svg {
 #chart svg {
     width: unset;
     height: unset;
+}
+
+#chart {
+	border: 2px solid #ccc;
 }
 
 #chart {
