@@ -3061,10 +3061,8 @@ function dotPlot(measure,distList,model,opt) {
 	var w1 = 156
 	var w2 = 200
 	var ncans = distList.length
-	text += `
-	<div style=' position: relative; width: ${w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 2px solid #ccc; padding: .25em .75em;'>
-	<div style=' position: relative; width: ${w1-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: ${(opt.bubbles) ? 0 : 1}px dashed #ccc; padding: 0 .5em;'>
-	`
+	text += `<div style=' position: relative; width: ${w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: ${ (1) ? 0 : 2}px solid #ccc; padding: .25em .75em;'>`
+	text += `<div style=' position: relative; width: calc(${w1-4}px - .25em); height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: ${(opt.bubbles) ? 0 : 1}px dashed #ccc; padding: 0 ${ (1) ? 0 : .5}em;'>`
 	distList.reverse()
 	for (var d of distList) {
 		var iV = (opt.sortOrder) ? d.iSort : d.i
