@@ -68,7 +68,7 @@ id='crowded_sim' %}
 
 If you use single-winner Ranked Choice Voting, then the quota is 50%. The ballot counts for the top choice, so there is no way that there is another candidate with more than 50% of ballots who could win. So, more than 50% of people are represented. More than 50% had their votes matter in the election (unless they didn't use all their rankings).
 
-**Refresher on RCV:** Ranked choice voting asks voters to rank the candidates in order from best to worst. During counting, your vote counts for your top candidate. One-by-one, the candidate with the least number of votes is eliminated and taken out of the running. **Check out the sketch below** that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated.
+**Refresher on RCV:** Ranked choice voting asks voters to rank the candidates in order from best to worst. During counting, your vote counts for your top candidate. One-by-one, the candidate with the least number of votes is eliminated and taken out of the running. **Check out the sketch below** that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated.  The flow diagram shown on the right is called a Sankey diagram.
 
 (That's enough of a refresher on RCV to get you through this page, but after you're done on this page, [read this other page on single-winner RCV](irv). )
 
