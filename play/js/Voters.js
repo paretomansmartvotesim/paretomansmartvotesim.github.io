@@ -3082,7 +3082,7 @@ function tBarChart(measure,distList,model,opt) {
 		var x = Math.round(d[measure]*w1)
 		if (opt.distLine) {
 			text += `
-			<div style=' position: absolute; top: ${y + .5}em; width: ${x}px; background-color: #ccc; height: 2px; '>
+			<div style=' position: absolute; top: ${y + .5}em; width: ${x}px; background-color: #ccc; height: 2px; opacity: .8; '>
 			</div>
 			<img src="play/img/voter.png" style=' position: absolute; top: ${y}em; left:0; '/>
 			`
@@ -3112,7 +3112,7 @@ function tBarChart(measure,distList,model,opt) {
 			continue
 		} else {
 			text += `
-			<div style=' position: absolute; top: ${y}em; width: ${x}px; left: 0; background-color: ${d.c.fill}; height: 1em; '>
+			<div style=' position: absolute; top: ${y}em; width: ${x}px; left: 0; background-color: ${d.c.fill}; height: 1em; opacity: .8;'>
 			</div>
 			`
 		}
@@ -3160,7 +3160,7 @@ function dLineChart(measure,dls,model,opt) {
 			var y2 = i * yscale
 			var x2 = d[measure]*w1
 			if (i > 0) {
-				text += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="5" />`
+				text += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="5" opacity=".8" />`
 			}
 			var y1 = y2
 			var x1 = x2

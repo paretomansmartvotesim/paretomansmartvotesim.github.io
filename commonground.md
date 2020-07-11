@@ -215,7 +215,7 @@ STAR also counteracts any distortion caused by a strategy by using a final runof
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38WzhWLHdnLdeAXa7XQDoG6VihALQuXZcfJThqLqht-xk_8-J_6iQrt19WApdeNVpLC0ZUQu3D0D_UupWW4r28Yk45R4ZbE61pV2hcloR9-ixORzHbkriy2l8L8vK_1uZblbkTK9ZSBEIKVIgUIMAgYJSEKIpeYvPSX9hUnTK5OaXpqiENioYUva1BTYaMOqY7XMA7VMWBn3ILNQ4VQrBEA1nVbh329sDpThWdGysHJly7JN2xHINdBrkMarjsDmWbu1tpjw1vAuwDU07bhAB6oD1YHqaNodgqa9odbnvxxNR4HI3Bl4gcDVhc9WcqAoYBEgiGVKA0HD2aaQCsFlNRC0MUK0Pzw-5VDtX8_vRxoD1VDsNzfW0GAvELxqB1oHWjckHQK6Dr8OyD4gH3JIFmC-PJ9O54_D59sxxxsMlx9StnChOAMAAA)" title='STAR Voting' 
 
-caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs.  <b>Use the voter dude</b>.  He's in the bottom left corner.  Drag him around to see what each voter was thinking." 
+caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs.  <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>.  He's in the bottom left corner.  Drag him around to see what each voter was thinking." 
 
 comment='same as above but star' id='star_sim' %}
 
