@@ -81,6 +81,25 @@ function tallyChart(tally,cans,model,maxscore,nballots,opt) {
 	return text
 }
 
+function lineChart(collectTallies,cans,model,maxscore,nballots,opt) {
+	
+	opt = opt || {}
+	if(opt.percent == undefined) opt.percent = true
+	var text = ""
+	var dls = []
+	for (var i = 0; i < collectTallies.length; i++) {
+		var tally = collectTallies[i]
+		var distList = makeDistListFromTally(tally, cans, maxscore, nballots, {dontSort: true})
+		// text += tBarChart("score",distList,model,{differentDisplay: true})
+		dls.push(distList)
+	}
+	text += dLineChart("score",dls,model,opt)
+	text += tBarChart("score",dls[dls.length-1],model,opt)
+	return text
+}
+
+
+
 Election.star = function(district, model, options){
 
 	options = _electionDefaults(options)
@@ -156,11 +175,14 @@ Election.star = function(district, model, options){
 		if (frontrunners.length >= 2) {
 			text += "<br>";
 			text += "<b>Final Round between the top two:<br></b>";
-			var runoffTally = {}
-			runoffTally[frontrunners[0]] = aWins
-			runoffTally[frontrunners[1]] = bWins
-			text += tallyChart(runoffTally,cans,model,1,ballots.length)
-			text += model.icon(frontrunners[0])+_percentFormat(district, aWins)+". "+model.icon(frontrunners[1]) +_percentFormat(district, bWins) + "<br>";
+			if (model.doTallyChart) {
+				var runoffTally = {}
+				runoffTally[frontrunners[0]] = aWins
+				runoffTally[frontrunners[1]] = bWins
+				text += tallyChart(runoffTally,cans,model,1,ballots.length)
+			} else {
+				text += model.icon(frontrunners[0])+_percentFormat(district, aWins)+". "+model.icon(frontrunners[1]) +_percentFormat(district, bWins) + "<br>";
+			}
 			text += "</span>";
 		}
 		text += "<br>";
@@ -4219,17 +4241,21 @@ function runPoll(district,model,options,electiontype){
 				collectTallies.push(ptallies)
 			} else {
 			
-				for(var i=0; i<cans.length; i++){
-					var c = cans[i].id;
-					if (electiontype == "irv"){
-						polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally[c]) + ". ") + " "
-					}else {
-						polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
-						//if (tally[c] > threshold) polltext += " &larr;"//" <--"
-						//polltext += "<br>"
+				if (model.doTallyChart) {
+					collectTallies.push(_jcopy(tally))
+				} else {
+					for(var i=0; i<cans.length; i++){
+						var c = cans[i].id;
+						if (electiontype == "irv"){
+							polltext += model.icon(c)+""+_padAfter(3,_percentFormat(district, tally[c]) + ". ") + " "
+						}else {
+							polltext += model.icon(c)+""+ _padAfter(3,_percentFormat(district, tally[c]/model.voterGroups[0].voterModel.maxscore) + ".") + " "
+							//if (tally[c] > threshold) polltext += " &larr;"//" <--"
+							//polltext += "<br>"
+						}
 					}
+					polltext += "<br>"
 				}
-				polltext += "<br>"
 			}
 		}
 				
@@ -4248,28 +4274,43 @@ function runPoll(district,model,options,electiontype){
 	district.stages[model.stage].pollResults = district.pollResults
 
 	if (options.sidebar) {
+		var maxscore = model.voterGroups[0].voterModel.maxscore
 		if (model.stage == "primary") {
 			for (let i in collectTallies[0]) {	
 				text = ""
 				text += "<span class='small'>";
 				var ip1 = i*1+1
 				text += "<b>group " + ip1 + ":</b><br>";
-				for (var ptallies of collectTallies) {
-					var tally1 = ptallies[i]
-					let totalPeopleInPrimary = district.parties[i].voterPeople.length
-					var pwin = _countWinner(tally1)
-					for(let k=0; k<cans.length; k++){
-						let c = cans[k]
-						let cid = c.id
-						if (district.parties[i].candidates.includes(c)) {
-							
-							text += model.icon(cid)+""+ _padAfter(3,_primaryPercentFormat(tally1[cid]/model.voterGroups[0].voterModel.maxscore, totalPeopleInPrimary) + ".") + " "
-						}
+				
+				let totalPeopleInPrimary = district.parties[i].voterPeople.length
+				if (model.doTallyChart) {
+					var partyCollect = []
+					for (var ptallies of collectTallies) {
+						var tally1 = ptallies[i]
+						partyCollect.push(tally1)
 					}
+					text += lineChart(partyCollect,cans,model,maxscore,totalPeopleInPrimary)
 					text += "<br>"
+				} else {
+					for (var ptallies of collectTallies) {
+						var tally1 = ptallies[i]
+						var pwin = _countWinner(tally1)
+						for(let k=0; k<cans.length; k++){
+							let c = cans[k]
+							let cid = c.id
+							if (district.parties[i].candidates.includes(c)) {
+								
+								text += model.icon(cid)+""+ _padAfter(3,_primaryPercentFormat(tally1[cid]/model.voterGroups[0].voterModel.maxscore, totalPeopleInPrimary) + ".") + " "
+							}
+						}
+						text += "<br>"
+					}
 				}
 				polltext += text
 			}
+		} else if (model.doTallyChart) {
+			var nballots = district.voterPeople.length
+			polltext += lineChart(collectTallies,cans,model,maxscore,nballots)
 		}
 	}
 

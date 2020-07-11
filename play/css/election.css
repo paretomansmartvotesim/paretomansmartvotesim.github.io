@@ -368,3 +368,8 @@ svg {
 /* .nameLabelName {
     opacity: 1;
 } */
+
+#pollChart{
+    width: unset;
+    height: unset;
+}

@@ -2952,7 +2952,10 @@ function GeneralVoterModel(model,voterModel) {
 }
 
 
-function makeDistList(model,voterPerson,voterAtStage,cans) {
+function makeDistList(model,voterPerson,voterAtStage,cans,opt) {
+	opt = opt || {}
+	opt.dontSort = opt.dontSort || false
+
 	var distList = []
 	var uf = utility_function(model.utility_shape)
 	for (var i = 0; i < cans.length; i++) {
@@ -2994,15 +2997,21 @@ function makeDistList(model,voterPerson,voterAtStage,cans) {
 	
 	}
 	
-	distList.sort(function(a,b) {return a.dist - b.dist})
-	for (var i = 0; i < distList.length; i++) {
-		distList[i].iSort = i // we might want to show these by the sorted order
+	var doSort = ! opt.dontSort
+	if (doSort) {
+		distList.sort(function(a,b) {return a.dist - b.dist})
+		for (var i = 0; i < distList.length; i++) {
+			distList[i].iSort = i // we might want to show these by the sorted order
+		}
 	}
 
 	return distList
 }
 
-function makeDistListFromTally(tally, cans, maxscore, nballots) {
+function makeDistListFromTally(tally, cans, maxscore, nballots,opt) {
+	opt = opt || {}
+	opt.dontSort = opt.dontSort || false
+
 	var distList = []
 	
 	var k = 0
@@ -3022,9 +3031,12 @@ function makeDistListFromTally(tally, cans, maxscore, nballots) {
 		}
 	}
 	
-	distList.sort(function(a,b) {return a.score - b.score})
-	for (var i = 0; i < distList.length; i++) {
-		distList[i].iSort = i // we might want to show these by the sorted order
+	var doSort = ! opt.dontSort
+	if (doSort) {
+		distList.sort(function(a,b) {return a.score - b.score})
+		for (var i = 0; i < distList.length; i++) {
+			distList[i].iSort = i // we might want to show these by the sorted order
+		}
 	}
 
 	return distList
@@ -3061,8 +3073,8 @@ function tBarChart(measure,distList,model,opt) {
 	var w1 = 156
 	var w2 = 200
 	var ncans = distList.length
-	text += `<div style=' position: relative; width: ${w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: ${ (1) ? 0 : 2}px solid #ccc; padding: .25em .75em;'>`
-	text += `<div style=' position: relative; width: calc(${w1-4}px - .25em); height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: ${(opt.bubbles) ? 0 : 1}px dashed #ccc; padding: 0 ${ (1) ? 0 : .5}em;'>`
+	text += `<div style=' position: relative; width: ${ (1) ? w2 : w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: ${ (1) ? 0 : 2}px solid #ccc; padding: .25em .75em;'>`
+	text += `<div style=' position: relative; width: calc(${ (1) ? w1 : w1-4}px - .25em); height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: ${(opt.bubbles) ? 0 : 1}px dashed #ccc; padding: 0 ${ (1) ? 0 : .5}em;'>`
 	distList.reverse()
 	for (var d of distList) {
 		var iV = (opt.sortOrder) ? d.iSort : d.i
@@ -3113,6 +3125,48 @@ function tBarChart(measure,distList,model,opt) {
 		`
 	}
 	distList.reverse()
+	text += `
+	</div>
+	</div>
+	`
+	return text
+}
+
+function dLineChart(measure,dls,model,opt) {
+	opt = opt || {}
+
+	var text = ""
+
+	// helper
+	var makeIconsCan = x => x ? x.map(a => model.icon(a.id)) : ""
+
+	// dot plot from 0 to 150
+	// border at 100 * 220 / 141 = 156 
+	// also the .5 em margins and padding help center the icons.
+	var w1 = 156
+	var w2 = 200
+	var npolls = dls.length
+	var yscale = 20
+	var h1 = Math.max( 1 , npolls-1 ) * yscale // pixels
+	var ncans = dls[0].length
+	text += `<div style=' position: relative; width: ${w1}px; height: ${h1}px; border: 0px solid #ccc; padding: .25em .75em; margin-left: -.5em;'>`
+	text += `<div style=' position: relative; width: ${w1}px; height: ${h1}px; border: 0px solid #ccc; border: 1px dashed #ccc; margin-left: -1px; padding: 0 0em;'>`
+	text += `<svg id="pollChart" viewBox="0 0 ${w1} ${h1}" xmlns="http://www.w3.org/2000/svg">`
+	for (var k = 0; k < ncans; k++) {
+		for (var i = 0; i < dls.length; i++) {
+			var dl = dls[i]
+			var d = dl[k]
+			var color = d.c.fill
+			var y2 = i * yscale
+			var x2 = d[measure]*w1
+			if (i > 0) {
+				text += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2" />`
+			}
+			var y1 = y2
+			var x1 = x2
+		}
+	}
+	text += `</svg>`
 	text += `
 	</div>
 	</div>
