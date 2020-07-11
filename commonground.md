@@ -8,7 +8,7 @@ twuser: paretoman1
 ---
 {% include letters.html %}
 
-Hello, I'm going to show you how to find common ground as a group . We'll go over the following:
+Hello, I'm going to show you how to find common ground as a group. We'll go over the following:
 
 * what we mean by common ground and the middle, 
 * how we can find the middle by using votes and simple comparisons, 
