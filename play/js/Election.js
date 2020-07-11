@@ -4283,6 +4283,7 @@ function runPoll(district,model,options,electiontype){
 				text += "<b>group " + ip1 + ":</b><br>";
 				
 				let totalPeopleInPrimary = district.parties[i].voterPeople.length
+				text += `${collectTallies.length} rounds of polling<br>`
 				if (model.doTallyChart) {
 					var partyCollect = []
 					for (var ptallies of collectTallies) {
@@ -4309,6 +4310,7 @@ function runPoll(district,model,options,electiontype){
 				polltext += text
 			}
 		} else if (model.doTallyChart) {
+			polltext += `${collectTallies.length} rounds of polling<br>`
 			var nballots = district.voterPeople.length
 			polltext += lineChart(collectTallies,cans,model,maxscore,nballots)
 		}

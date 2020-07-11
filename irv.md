@@ -126,7 +126,7 @@ For new candidates who don't have many supporters yet, the barrier to entry woul
 
 (The technical definition of a spoiler is a candidate with a small enough level of support that they cannot win themselves, but that can change who wins merely by being in the election. You would think that the only way to change who wins is to be the winner, and that can be true for some really great voting systems. For instant runoff voting, it's true if the candidate is small enough to be called a spoiler. )
 
-{% capture cap7 %}{{ B }} accuses {{ C }} of spoiling the election, hoping he’ll get C’s supporters{% endcapture %}
+{% capture cap7 %}{{ B }} accuses {{ C }} of spoiling the election, hoping he’ll get {{ C }}’s supporters{% endcapture %}
 
 {% include sim.html id="standard_spoiler_sim"
 
@@ -136,7 +136,7 @@ caption = cap7
 
 comment = "standard spoiler example. Maybe needs a switch between FPTP and IRV." %}
 
-{% capture cap8 %}{{ B }} is okay with {{ C }} running because C’s supporters will support {{ B }} against {{ A }}.{% endcapture %}
+{% capture cap8 %}{{ B }} is okay with {{ C }} running because {{ C }}’s supporters will support {{ B }} against {{ A }}.{% endcapture %}
 
 {% include sim.html id="no_spoilers_sim"
 
