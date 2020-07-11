@@ -21,7 +21,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   for making group decisions. The best voting methods are responsive to all parts
   of the group and can even work when voters use strategies.
 baseurl: "/" # the subpath of your site, e.g. /blog
-url: "https://paretoman.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://paretomansmartvotesim.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: paretoman1
 github_username:  paretoman
 author:
