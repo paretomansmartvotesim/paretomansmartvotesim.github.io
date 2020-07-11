@@ -1971,7 +1971,7 @@ Election.irv = function(district, model, options){
 		if (options.sidebar) 
 		{
 			text += "<b>round "+roundNum+":</b><br>";
-			text += "who's voters' #1 choice?<br>";
+			text += "who's voters' top choice?<br>";
 			if (model.doTallyChart) {
 				text += tallyChart(tally,cans,model,1,ballots.length)
 			} else {
@@ -2308,7 +2308,7 @@ Election.stv = function(district, model, options){
 
 			text += '<div id="district'+district.i+'round' + (roundNum) + '" class="round">'
 			text += "<b>round "+roundNum+":</b><br>";
-			text += "who's voters' #1 choice?<br>";
+			text += "who's voters' top choice?<br>";
 		}
 
 		var pre_tally = _zeroTally(cans)
