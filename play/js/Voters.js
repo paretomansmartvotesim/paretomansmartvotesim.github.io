@@ -3073,8 +3073,8 @@ function tBarChart(measure,distList,model,opt) {
 	var w1 = 156
 	var w2 = 200
 	var ncans = distList.length
-	text += `<div style=' position: relative; width: ${ (1) ? w2 : w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: ${ (1) ? 0 : 2}px solid #ccc; padding: .25em .75em;'>`
-	text += `<div style=' position: relative; width: calc(${ (1) ? w1 : w1-4}px - .25em); height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: ${(opt.bubbles) ? 0 : 1}px dashed #ccc; padding: 0 ${ (1) ? 0 : .5}em;'>`
+	text += `<div style=' position: relative; width: ${ (1) ? w2 : w2-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: ${ (1) ? 0 : 2}px solid #ccc; padding: .25em 0;'>`
+	text += `<div style=' position: relative; width: ${ (1) ? w1 : w1-4}px; height: ${Math.max( 1 , vertdim * ncans )}em; border: 0px solid #ccc; border-right: ${(opt.bubbles) ? 0 : 1}px dashed #ccc; padding: 0 ${ (1) ? 0 : .5}em;'>`
 	distList.reverse()
 	for (var d of distList) {
 		var iV = (opt.sortOrder) ? d.iSort : d.i
@@ -3082,13 +3082,13 @@ function tBarChart(measure,distList,model,opt) {
 		var x = Math.round(d[measure]*w1)
 		if (opt.distLine) {
 			text += `
-			<div style=' position: absolute; top: ${y + .5}em; width: ${x}px; left: -.5em; background-color: #ccc; height: 2px; '>
+			<div style=' position: absolute; top: ${y + .5}em; width: ${x}px; background-color: #ccc; height: 2px; '>
 			</div>
-			<img src="play/img/voter.png" style=' position: absolute; top: ${y}em; left:-.5em; '/>
+			<img src="play/img/voter.png" style=' position: absolute; top: ${y}em; left:0; '/>
 			`
 		} else if (opt.bubbles) {
 			text += `
-			<div style=' position: absolute; top: ${y}em; left: ${0+2}px; margin-left: -.5em; white-space: nowrap;'>
+			<div style=' position: absolute; top: ${y}em; left: ${0+2}px; white-space: nowrap;'>
 			${makeIconsCan([d.c])} <br>
 			</div>
 			`
@@ -3112,14 +3112,14 @@ function tBarChart(measure,distList,model,opt) {
 			continue
 		} else {
 			text += `
-			<div style=' position: absolute; top: ${y}em; width: ${x}px; left: -.5em; background-color: ${d.c.fill}; height: 1em; '>
+			<div style=' position: absolute; top: ${y}em; width: ${x}px; left: 0; background-color: ${d.c.fill}; height: 1em; '>
 			</div>
 			`
 		}
 		var f = x => x
 		if (opt.percent) f = x => _textPercent(x/100)
 		text += `
-		<div style=' position: absolute; top: ${y}em; left: ${x+2}px; margin-left: -.5em; white-space: nowrap;'>
+		<div style=' position: absolute; top: ${y}em; left: ${x+2}px; white-space: nowrap;'>
 		${makeIconsCan([d.c])}: <b>${f(Math.round(d[display] * mult))}</b> <br>
 		</div>
 		`
@@ -3149,8 +3149,8 @@ function dLineChart(measure,dls,model,opt) {
 	var yscale = 20
 	var h1 = Math.max( 1 , npolls-1 ) * yscale // pixels
 	var ncans = dls[0].length
-	text += `<div style=' position: relative; width: ${w1}px; height: ${h1}px; border: 0px solid #ccc; padding: .25em .75em; margin-left: -.5em;'>`
-	text += `<div style=' position: relative; width: ${w1}px; height: ${h1}px; border: 0px solid #ccc; border: 1px dashed #ccc; margin-left: -1px; padding: 0 0em;'>`
+	text += `<div style=' position: relative; width: ${w1}px; height: ${h1}px; padding: .25em 0;'>`
+	text += `<div style=' position: relative; width: ${w1}px; height: ${h1}px; border: 1px dashed #ccc; border-left: 0px dashed #ccc; padding: 0 0em;'>`
 	text += `<svg id="pollChart" viewBox="0 0 ${w1} ${h1}" xmlns="http://www.w3.org/2000/svg">`
 	for (var k = 0; k < ncans; k++) {
 		for (var i = 0; i < dls.length; i++) {
@@ -3160,7 +3160,7 @@ function dLineChart(measure,dls,model,opt) {
 			var y2 = i * yscale
 			var x2 = d[measure]*w1
 			if (i > 0) {
-				text += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2" />`
+				text += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="5" />`
 			}
 			var y1 = y2
 			var x1 = x2
