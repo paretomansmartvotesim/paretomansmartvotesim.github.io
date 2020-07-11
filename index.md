@@ -26,13 +26,13 @@ twuser: paretoman1
 
 {% include card.html title="Proportional Representation" description=" - Bring the candidates closer to the voters. Continuing after STV, here are more kinds of proportional representation without parties, using scoring and paired methods." url='proportional' img='img/proportional2.png' %}
 
-{% include card.html title="Sandbox" description=' - Try everything.  Share your creations.' url='sandbox/' img='img/sandbox.png' %}
+{% include card.html title="Sandbox" description=' - Try everything. Share your creations.' url='sandbox/' img='img/sandbox.png' %}
 
 
 
 # Intro
 
-Take a look at this great interactive sketch that Nicky Case made. You have two candidates  {{ A }} {{ B }} and you have a voter <img src="play/img/voter.png" />  . Just move the voter and you'll see that he is just gonna vote for whoever he's closest to.
+Take a look at this great interactive sketch that Nicky Case made. You have two candidates {{ A }} {{ B }} and you have a voter <img src="play/img/voter.png" /> . Just move the voter and you'll see that he is just gonna vote for whoever he's closest to.
 
 {% include sim-intro.html id='model1' caption='`<b><span style="font-size:2.5em;">click &amp; drag</span><br>the candidates and the voter:</b>`' %}
 

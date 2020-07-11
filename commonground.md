@@ -22,13 +22,13 @@ Let's jump right in with an example and some diagrams.
 
 Let's start simple for this first example. Let’s say we have to decide as a group what to have for dinner. Each person is going to have their own opinion. For example, some people are vegetarian and some people eat meat. Also some people like to spend a lot of money and some would rather spend a little. Let’s make a diagram to show their opinions. In the diagram below, we show these types of opinion on different axes.
 
-{% include sim.html  link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu24CMRD8lZNrF971E0qK1CREaQ4KJzrBhQsXXaBAUfLtWXtAioSQi9n1rsezY38ro-ZtyzbpWdjollzUHEiiwJqNlYBtvESBNBHXLinGzUYrKqfJWU3OlNyqudHKqbn6NUorX9MgTVKLAkbfLKmku5XZ3QqZyk0EcmKkEEAOgPspAEQAOUG5LggIN2nFwiObLDwswADQsEOL0FgB0HBElpDN6gFrqlAqFlAtWAiyFnUIssLUiovXVdoDGsBqMTBp1lY77aXBVeoS0DXgayDkLZfA1dPult6FOoKLeBiIdhjdGwCV51qrp_Gch-Ypv6_Xh8Vp2nZTs8jTQbLVscv7ZrXLb3vJXrrttu-al34YsqTLqf8Ym8XiUeLnXdc8jKepWXX5azx8rVX5BPDUwwkPT70HwFMPeT7VMTw8DQZAtTPAz4CXCf5iQQBBwGBhViHib0ScjAywALxExNeI178ZUUz_7S_7cCqBMIEwQUqClOSqzOQB0JPAlyDrNQ_DeHw-f3bi9HI4TXnoj2f18wcgESI7fgMAAA)"
+{% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu24CMRD8lZNrF971E0qK1CREaQ4KJzrBhQsXXaBAUfLtWXtAioSQi9n1rsezY38ro-ZtyzbpWdjollzUHEiiwJqNlYBtvESBNBHXLinGzUYrKqfJWU3OlNyqudHKqbn6NUorX9MgTVKLAkbfLKmku5XZ3QqZyk0EcmKkEEAOgPspAEQAOUG5LggIN2nFwiObLDwswADQsEOL0FgB0HBElpDN6gFrqlAqFlAtWAiyFnUIssLUiovXVdoDGsBqMTBp1lY77aXBVeoS0DXgayDkLZfA1dPult6FOoKLeBiIdhjdGwCV51qrp_Gch-Ypv6_Xh8Vp2nZTs8jTQbLVscv7ZrXLb3vJXrrttu-al34YsqTLqf8Ym8XiUeLnXdc8jKepWXX5azx8rVX5BPDUwwkPT70HwFMPeT7VMTw8DQZAtTPAz4CXCf5iQQBBwGBhViHib0ScjAywALxExNeI178ZUUz_7S_7cCqBMIEwQUqClOSqzOQB0JPAlyDrNQ_DeHw-f3bi9HI4TXnoj2f18wcgESI7fgMAAA)"
 
 title='Where to go eat?' 
 
-caption='Horizontal Meat-Veggie axis. Vertical $-$$$ axis'  comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
+caption='Horizontal Meat-Veggie axis. Vertical $-$$$ axis' comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
 
-Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like to make a decision that other people will accept and won't regret.  In other words, don't want to find out that most people would rather do something else. That's why you might want to pick something in the middle.  No matter what you pick in the middle, if you compare the middle option to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
+Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like to make a decision that other people will accept and won't regret. In other words, don't want to find out that most people would rather do something else. That's why you might want to pick something in the middle. No matter what you pick in the middle, if you compare the middle option to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
 
 {% capture cap1 %}Move {{ B }} anywhere. A line forms between that and the middle option, and you will see most people are on the side of the middle option.{% endcapture %}
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsWoDMQz9F80eLMmSz_cVHbodN6TQIXCQUtIhlP57ZT3SDiEYLMlPenrS3TdVWreNjQub7mXjsRSRuu-FGIgkErHSWgu1vC1vjwwpDydyeyC1PJxAlqfIeIpwzXY8Fc1QEEIQQxFDEjtMCOAWNtpJmODmQhI88SicjyIwoJGGlKDRMKCRjmhBNLJAawrluRJOQCVrVYFDkAbTxkhzAGDT8Vffkmo6fHfk7uhc7nRaVrV_uubZrnV8EIhrGNGwKoMww4iGEQ0jmsFgRAOLLdnFMKJXGM5Mx74dLG4pP34WclA4FPhI06Ggo7ZjNW-n47hcX28f77TSy_H1eTrO1xv9_AKWPS3kgAIAAA)"
@@ -93,14 +93,14 @@ caption='You are saying something about each pair of options. Mouse over each pa
 
 comment='ranked ballot with pairs' id='pair_ballot_sim' %}
 
-You can also use a tier list, because ties are okay, too.  You can have multiple top-tier candidates if you really can't decide.  Voters who aren't sure can use tiers and still say something about top-tier versus bottom-tier, and every tier in between.
+You can also use a tier list, because ties are okay, too. You can have multiple top-tier candidates if you really can't decide. Voters who aren't sure can use tiers and still say something about top-tier versus bottom-tier, and every tier in between.
 
 <p style="text-align: center;" ><strong>Tier List for Candy</strong></p>
 <div class="picture-container">
  <img src="https://cdn.kapwing.com/final_5dc9d759968f590014bbe8ce_848166.jpg" alt="tier list for candy" class="picture" />
 </div>
 
-Pairwise rankings really give you a lot of power.  
+Pairwise rankings really give you a lot of power. 
 
 Next, let's talk about an even simpler way to find the middle.
 
@@ -143,13 +143,13 @@ caption='You can move individual voters.'
 
 comment='less voters' id='small_group_approval_sim' %}
 
-Approval voting is simple to use.  It's also a huge improvement in finding the middle.
+Approval voting is simple to use. It's also a huge improvement in finding the middle.
 
 ## The Median
 
 Why does approval voting work? It uses a median.
 
-A median finds the middle of a list of numbers by putting half above it and half below it.  
+A median finds the middle of a list of numbers by putting half above it and half below it. 
 
 *More* *importantly*, this minimizes the sum of the distances to all those numbers.
 
@@ -158,7 +158,7 @@ In a way, all numbers are treated equally. It doesn't matter how far a number is
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTu04EMQz8l9QRih9JvPsVFHSnKw6JAmklEDoKhLhvx-tJruHQaYtxHHsynk2-U0nr4ZgTORyoUmYrx3xYZkBLHRFzmTnqM9JrrsmMuo6ot9kqNiKdqbbMvQYK1yBp5Zw0relSUk41rSWnBn3doeQ_n--Y76QL7R0X5nSjYokK5holUm7VeP9-GtGwg7EUgAKgiBrAJZE6GpZ-CuXEzuNJppjF9QSAhhUlTiMOoOGOFVh4iQYZf0UosgI1AoMEaqSOmoYseGRBVncGyv98ewHddvTqiPK9Arl3hIYkHUK1xfjaQ75iYIVtFfZXzFthW5Xor7CtVgBsqx0lhpIFd6VEsoGlwbUG81uNccSFNFA0KGjo7VDQKU7pDBAAHO_4_31eyY5NC2J_MHsO4xjIDGQGIQYhpiHSKgBaDFxmgF3SQ_ebW2L9fNq2t_PT1_uLv43H7fPjtL2ev9LPL23Jkue-AwAA)"
 title = "Median in 1D"
-caption = "<b>Try moving some voters.  Add a candidate. </b> The total area of the bars below is the sum of all the distances.  Notice that moving the median left or right would not decrease this sum because the same number of people are on each side (same number of bars are growing/shrinking)."
+caption = "<b>Try moving some voters. Add a candidate. </b> The total area of the bars below is the sum of all the distances. Notice that moving the median left or right would not decrease this sum because the same number of people are on each side (same number of bars are growing/shrinking)."
 comment = "Maybe it would be good to try to move the median itself?"
 id = "median_1d_sim" %}
 
@@ -167,7 +167,7 @@ A median can also be found in two dimensions by using the same idea of minimizin
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTwUpEMQz8l56DNGmS5u1XePC27GEFD8KCInoQcb_dpLOC4Iq8wzTJdDpN8z5ab7v9gRon7FmERMeB9hHEvOWCw4i9V0ppFk4mtuIMTQ4Xp3fizWuluS9qZZIpq5QbudaiNnLUSiatmrCTcGmJZFH5kE5G23Vq2nbt3Bs1W6HD5Uzo9OvLSmSlnbl2nEXaFca2GCK2KKNf4-T-Oo350hRBCEusADhiB6Ql1sRAmKcwNUmdTErqSIIAICOKKGVGAmRkIoKKbIsyLm8zeGUH3IyBItwMu3AcWeiMDVkthezsX19R-HpPf3RF5X_K-P8gXdb0Ylh9dUonnhsXV7TP8AyGexvaZ2P11BQUA6B9NkGJdYRtmJm-kg4VR_ccj-C2rpSj1xwSDgeOvRMOJq9TpgAGAJ2fmIP5PZoTxVjCTFI5XCcgFhALGAkYCUxDGABeAloRgLJ0M3OC-4rvj6fT0-vd-_ND_iO3p7eX4-nx9b19fgGnVnGdzAMAAA)"
 title = "Median in 2D"
-caption = "<b>Move some voters.  Add a candidate (+). </b> Just like for the 1D case, the total area or length of the lines below is the sum of all the distances between the voters and the candidate or median.  The median we chose here minimizes this sum.  A winning candidate should also minimize this sum."
+caption = "<b>Move some voters. Add a candidate (+). </b> Just like for the 1D case, the total area or length of the lines below is the sum of all the distances between the voters and the candidate or median. The median we chose here minimizes this sum. A winning candidate should also minimize this sum."
 comment = ""
 id = "median_2d_sim" %}
 
@@ -175,11 +175,11 @@ How does approval voting use a median?
 
 In a way, approval voting is asking you whether each candidate is close to you or far from you, so you're measuring distance and writing it on your ballot.
 
-<!--This is different than finding the median of the distances.  We're finding the median position.-->
+<!--This is different than finding the median of the distances. We're finding the median position.-->
 
-Score voting can give a more precise measurement of this distance.  In score voting, you give every candidate a score from 0 to 5.  Add up the scores, and the winner has the highest score, just like usual.  You could even say that approval voting is score voting with only two levels of support.
+Score voting can give a more precise measurement of this distance. In score voting, you give every candidate a score from 0 to 5. Add up the scores, and the winner has the highest score, just like usual. You could even say that approval voting is score voting with only two levels of support.
 
-Distance is measured on your ballot.  When you find the highest score, you're also finding the smallest distance.  So you're finding the median.
+Distance is measured on your ballot. When you find the highest score, you're also finding the smallest distance. So you're finding the median.
 
 That's the motivation for score voting.
 
@@ -189,7 +189,7 @@ caption='Give as many as you like a score from 0 to 5.'
 
 comment='simple,lots of candidates, one voter' id='score_sim' %}
 
-In practice, voters can adjust their self-reported distances, which is called using a strategy.  Jameson Quinn has a good discussion of strategies in the links at the end of this page.  Basically, using strategies means score voting looks a lot like approval voting.
+In practice, voters can adjust their self-reported distances, which is called using a strategy. Jameson Quinn has a good discussion of strategies in the links at the end of this page. Basically, using strategies means score voting looks a lot like approval voting.
 
 In the example below, 
 
@@ -207,7 +207,7 @@ comment='score can look like approval voting' id='score_strategy_sim' %}
 
 STAR voting was created to counteract this strategizing. 
 
-STAR combines the two ways of finding the middle, scoring and counting by pairs.  It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before.
+STAR combines the two ways of finding the middle, scoring and counting by pairs. It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before.
 
 Voters will use a less aggressive strategy than the Frontrunner strategy because they'll want to put all the frontrunners at different levels for the runoff.
 
@@ -215,15 +215,15 @@ STAR also counteracts any distortion caused by a strategy by using a final runof
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38WzhWLHdnLdeAXa7XQDoG6VihALQuXZcfJThqLqht-xk_8-J_6iQrt19WApdeNVpLC0ZUQu3D0D_UupWW4r28Yk45R4ZbE61pV2hcloR9-ixORzHbkriy2l8L8vK_1uZblbkTK9ZSBEIKVIgUIMAgYJSEKIpeYvPSX9hUnTK5OaXpqiENioYUva1BTYaMOqY7XMA7VMWBn3ILNQ4VQrBEA1nVbh329sDpThWdGysHJly7JN2xHINdBrkMarjsDmWbu1tpjw1vAuwDU07bhAB6oD1YHqaNodgqa9odbnvxxNR4HI3Bl4gcDVhc9WcqAoYBEgiGVKA0HD2aaQCsFlNRC0MUK0Pzw-5VDtX8_vRxoD1VDsNzfW0GAvELxqB1oHWjckHQK6Dr8OyD4gH3JIFmC-PJ9O54_D59sxxxsMlx9StnChOAMAAA)" title='STAR Voting' 
 
-caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs.  <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>.  He's in the bottom left corner.  Drag him around to see what each voter was thinking." 
+caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking." 
 
 comment='same as above but star' id='star_sim' %}
 
 ## Bringing Groups Together
 
-Part of finding common ground is finding allies.  Any voting system that avoids vote-splitting will also allow allies to come together as a team.  The scoring and pairwise systems mentioned above do this, and so do the methods in this section.
+Part of finding common ground is finding allies. Any voting system that avoids vote-splitting will also allow allies to come together as a team. The scoring and pairwise systems mentioned above do this, and so do the methods in this section.
 
-To avoid vote-splitting, you could eliminate candidates that aren't doing well. That way they don't interfere with the main candidates.  The main candidates won't see the smaller candidates and spoilers and can ally with them.  This method is called RCV and is getting more popular in the US.
+To avoid vote-splitting, you could eliminate candidates that aren't doing well. That way they don't interfere with the main candidates.  The main candidates won't see the smaller candidates and spoilers and can ally with them. This method is called RCV and is getting more popular in the US.
 
 {% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4md29zMQ3WqLQ1zFCShoEOLfcTwcBadTirF37MnY2a_W27bvHsRdD9qZO_FYZ-QLLZ6B_H0Ssyzrx0GNZxe7EpvOXNvWqVnbjJpXHFkhdHOydiTT6eYks9xl1rsM97qOp6OZClIYYgPAEgcgDXD65LzOE1KbqUkv85I6kiAAyIihJGU0ATIykC3I1mrQXkZ5roSLUKleVfAwpKm0M_2eWRygoakYl3NhSpa0lewM-BrINdC56BlY9dp_aYsyYANPBLuGoR3Lc1h1DO2KZ8TQ7gAM7QMlS93lGDo6gKsy8AKB1YXXKPlvtYBEwEGsBQMOBnoHlvV0ulzePh4_389taw-n15fzc_v-AdZjYJarAgAA)' title='Single-Winner Ranked Choice Voting' 
 
@@ -239,7 +239,7 @@ caption='We can order two.'
 
 comment='meat lovers and veggie lovers win' id='stv_sim' %}
 
-And of course, there's primaries, which is the way we do things now. Basically, a whole party gets behind one candidate. This can work in the best case scenario.  But primaries can malfunction when there's a crowded field, or when one party has many more voters than the other party, or when there's more than two parties.
+And of course, there's primaries, which is the way we do things now. Basically, a whole party gets behind one candidate. This can work in the best case scenario. But primaries can malfunction when there's a crowded field, or when one party has many more voters than the other party, or when there's more than two parties.
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)' title='Primaries' 
 
@@ -253,7 +253,7 @@ To wrap things up, there's a lot of ways you could deal with voting (casting a b
 
 Still want more? Try the sandbox below, where I've added a ton more voting methods and configuration options.  
 
-Want more of a narrative?  Then choose your path.  I go into depth on all the voting methods above.  This page was just an overview.
+Want more of a narrative?  Then choose your path.  I go into depth on all the voting methods above. This page was just an overview.
 
 Either read about primaries and polls, more details about approval voting and strategy based on polling, or an essay by Jameson Quinn on types of strategy with score voting and some resistance to it with STAR voting.  Find out more about IRV (the single-winner RCV) and STV (the multi-winner RCV). I also have a draft of a page about proportional representation using more methods than just STV. It's a work in progress. Just be sure you get to read more about Condorcet methods. I like them best.
 
