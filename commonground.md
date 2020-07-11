@@ -10,17 +10,17 @@ twuser: paretoman1
 
 Hello, I'm going to show you how to find common ground as a group . We'll go over the following:
 
-* what we mean by the middle, 
-* how we can use votes to find the middle by simple comparisons, 
+* what we mean by common ground and the middle, 
+* how we can find the middle by using votes and simple comparisons, 
 * the simplest voting method that finds the middle,
-* what a median really is, and
+* what a median is, and
 * how to bring groups together.
 
 Let's jump right in with an example and some diagrams.
 
 ## The Middle
 
-Now in a group you may have to come to a decision, and there's going to be a lot of different people in this group. So each one is going to have a different opinion, and they're going to be spaced out in different dimensions of how they feel about a topic: maybe what pizza to get as a group order for pizza,  or where you are going to go out to eat, or something like that.   So some people would be vegetarian or like meat.   And some people like to spend a lot of money and some a little money. So whatever dimensions there are, you're going to have differing opinions on dining or whatever. 
+Let's start simple for this first example. Let’s say we have to decide as a group what to have for dinner. Each person is going to have their own opinion. For example, some people are vegetarian and some people eat meat. Also some people like to spend a lot of money and some would rather spend a little. Let’s make a diagram to show their opinions. In the diagram below, we show these types of opinion on different axes.
 
 {% include sim.html  link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu24CMRD8lZNrF971E0qK1CREaQ4KJzrBhQsXXaBAUfLtWXtAioSQi9n1rsezY38ro-ZtyzbpWdjollzUHEiiwJqNlYBtvESBNBHXLinGzUYrKqfJWU3OlNyqudHKqbn6NUorX9MgTVKLAkbfLKmku5XZ3QqZyk0EcmKkEEAOgPspAEQAOUG5LggIN2nFwiObLDwswADQsEOL0FgB0HBElpDN6gFrqlAqFlAtWAiyFnUIssLUiovXVdoDGsBqMTBp1lY77aXBVeoS0DXgayDkLZfA1dPult6FOoKLeBiIdhjdGwCV51qrp_Gch-Ypv6_Xh8Vp2nZTs8jTQbLVscv7ZrXLb3vJXrrttu-al34YsqTLqf8Ym8XiUeLnXdc8jKepWXX5azx8rVX5BPDUwwkPT70HwFMPeT7VMTw8DQZAtTPAz4CXCf5iQQBBwGBhViHib0ScjAywALxExNeI178ZUUz_7S_7cCqBMIEwQUqClOSqzOQB0JPAlyDrNQ_DeHw-f3bi9HI4TXnoj2f18wcgESI7fgMAAA)"
 
@@ -28,7 +28,7 @@ title='Where to go eat?'
 
 caption='Horizontal Meat-Veggie axis. Vertical $-$$$ axis'  comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' id='eat_sim' %}
 
-Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like to make a decision that other people will accept and won't regret.  One way you will find out if people regret this decision is if most people say they would rather do something else. That's why you might want to pick something in the middle.  No matter what you pick in the middle, if you compare the middle option to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
+Really, this is about politics, and as a group you want to make a decision for everyone in the group. You'd like to make a decision that other people will accept and won't regret.  In other words, don't want to find out that most people would rather do something else. That's why you might want to pick something in the middle.  No matter what you pick in the middle, if you compare the middle option to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
 
 {% capture cap1 %}Move {{ B }} anywhere. A line forms between that and the middle option, and you will see most people are on the side of the middle option.{% endcapture %}
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsWoDMQz9F80eLMmSz_cVHbodN6TQIXCQUtIhlP57ZT3SDiEYLMlPenrS3TdVWreNjQub7mXjsRSRuu-FGIgkErHSWgu1vC1vjwwpDydyeyC1PJxAlqfIeIpwzXY8Fc1QEEIQQxFDEjtMCOAWNtpJmODmQhI88SicjyIwoJGGlKDRMKCRjmhBNLJAawrluRJOQCVrVYFDkAbTxkhzAGDT8Vffkmo6fHfk7uhc7nRaVrV_uubZrnV8EIhrGNGwKoMww4iGEQ0jmsFgRAOLLdnFMKJXGM5Mx74dLG4pP34WclA4FPhI06Ggo7ZjNW-n47hcX28f77TSy_H1eTrO1xv9_AKWPS3kgAIAAA)"
