@@ -87,10 +87,11 @@ Below this chart is another chart which I called a **power** chart. When a candi
 
 The concept of a quota extends to multiple ballot counting methods:
 
-1. Single-Top Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
-2. Scoring methods (including Approval Voting and STAR voting): Monroe voting
-3. Pairwise ballot methods (I'm working on the version of minimax below)
-4. Choose only one methods: Single Non-Transferable Vote (SNTV). An obvious Improvement would be to have a Single Transferable Vote.
+1. Top-choice-counts Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
+2. Scoring methods (including Approval Voting and STAR voting): the facility location problem, Monroe voting, and a few methods the election method community has developed.
+3. Pairwise ballot methods (I'm working on a version of minimax)
+
+<!-- SNTV? SNTV kind of is proportional-->
 
 The power chart is more useful for scoring methods because the voter can support multiple candidates at the same time. That means the voter is able to say that their vote counted for a candidate so that candidate owes them some share of representation. Also, the votes by round has an additional data dimension for the same reason, and it's hard to visualize, so you need to mouse over the rounds to see how the election was counted.
 

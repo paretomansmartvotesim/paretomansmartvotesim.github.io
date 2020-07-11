@@ -135,17 +135,6 @@ id = "power_sim" %}
 
 What happens if a candidate gets more votes than just a quota? The rule is that exactly a quota of votes is used up by the winner, which means the excess number of votes above the quota remains in the count. These votes will count in proportion to that excess amount. It's a calculation of dividing the excess by the quota to find the new weight for the vote. This bookkeeping makes sure that the power each voter gets from their vote is the same. It makes sure that all voters are as equal as possible.
 
-### Quota with Other Ballots
-
-The concept of a quota extends to multiple ballot counting methods:
-
-1. Top-choice-counts Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
-2. Scoring methods (including Approval Voting and STAR voting): Monroe voting and a few methods I'm working on
-3. Pairwise ballot methods (I'm working on a version of minimax)
-4. Choose-only-one methods: Single Non-Transferable Vote (SNTV). An obvious Improvement would be to have a Single Transferable Vote.
-
-After you're done with this page, [read this page (currently a draft) about all the different kinds of proportional voting methods.](proportional)
-
 ## Proportionality
 
 Let's get back to the idea of proportionality. You can see that in STV, a voter group with two times as many voters gets two times as many representatives.
@@ -156,7 +145,7 @@ caption = "Here's two groups with a 1:2 ratio (really 4:7). The winners are also
 comment = "Maybe choose a more interesting example."
 id = "proportional_two_to_one_sim" %}
 
-This proportionality applies even when there aren't distinct groups. Let's look again at the example we saw ealier, but now using the additional charts. 
+This proportionality applies even when there aren't distinct groups. Let's look again at the example we saw earlier, but now using the additional charts. 
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41TzYqUQQx8lz7n0Ek6_TOPId6GOay4Jxf14EXEfXYrqQFnWQT5YNKdn-pKJfOr9Xa5XteWuW9yNeuyow4quh0njXM_HRcdmaUDQbc8dZfT87BNThbq6aI28qR-L7QwmZUeQ_Yq-IGsenF0MUtfuEy_3aRpMrIRpBRdptajG89blUwxnZnq7dKljXZprzqbtKj7BIDJuw_5C5Eu7z5ENiIA6QB5tVm_1hCD7e1N5qlM80f3QxgQyUGzC5cl6E93-o1-UtZBQ8LgXgb0dMCCjAbsKTcIXOA1ICoMcAyGODboBI7DEMcWb5u3UwXeq3dN1bQCblXrzjgZOZCuGO-_vwSYLOE7fogMjV2GYG5oewvWBk4UmOQmYCXa6H_1z6ve3yKtYW-jXgqiVDyv4AdNxv_wG7M6G4vrQR3GKWdwPkENgmoGNQiqGUFDNWMxtqvZoJqz0xBlcraTKDNq_5L0JMQkg8l5LjJYnOfiFJbTcAqLe7Fyk3NtF4P7Uej0s6Xdy3x6enn59uPjz-_P-D98ePr65flz-_0HKwv-beEDAAA)"
 title = "Evenly Distributed Representation - Again - With Charts"
@@ -165,6 +154,12 @@ comment = "to show how STV can prevent factions from fighting each other."
 id = "even_2_sim" %}
 
 <!--Add a section on gerrymandering-->
+
+### Proportional Methods without Parties
+
+There are more voting methods that use a similar way of assigning voters to STV to achieve proportionality.  After you're done with this page, read more about all the different kinds of proportional voting methods:
+
+* [Proportional Voting Methods](proportional)
 
 ## Footnotes
 
