@@ -204,7 +204,7 @@ d3.sankey = function() {
             i;
 
             // Push any overlapping nodes right.
-            nodes.sort(ascendingDepth);
+            // nodes.sort(ascendingDepth); // commenting this out preserved the order of the nodes!
             for (i = 0; i < n; ++i) {
                 node = nodes[i];
                 dy = x0 - node.x;

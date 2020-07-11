@@ -644,8 +644,9 @@ function bindModel(ui,model,config) {
                         var useList = _jcopy(continuing[rid-1]) // continuing from last round
                         if (winnersContinue) useList = useList.concat(won[rid-1])
                     }
-                    useList = useList.sort( (a,b) => xc[a] - xc[b] )
-                    for( var cid of useList) {
+                    useList.sort( (a,b) => xc[a] - xc[b] )
+                    for( var k = 0; k < useList.length; k++) {
+                        var cid = useList[k]
                         lookup[rid][cid] = idx
                         var node = {name:rid + "_" + cid}
                         nodes.push(node)
