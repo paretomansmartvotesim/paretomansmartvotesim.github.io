@@ -44,7 +44,7 @@ a:hover{ color: hsl(240,80%,80%); }
 }
 
 #content{
-	font-size: 22px;
+	font-size: 20px;
 }
 .words{
 	max-width: 900px;
@@ -84,7 +84,7 @@ a:hover{ color: hsl(240,80%,80%); }
 
 #content p{
 	text-align: left;
-	line-height: 1.7em;
+	line-height: 1.5em;
 	color: #333;
 }
 #content p.caption{
