@@ -24,7 +24,7 @@ Let's apply this idea to voting. Above, we're selecting multiple facilities to s
 We already used the idea of minimizing distance to find a candidate that is in the middle of the voters (on the common ground page). This is what the median does.
 
 {% include sim.html 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTu04EMQz8l9QRih9JvPsVFHSnKw6JAmklEDoKhLhvx-tJruHQaYtxHHsynk2-U0nr4ZgTORyoUmYrx3xYZkBLHRFzmTnqM9JrrsmMuo6ot9kqNiKdqbbMvQYK1yBp5Zw0relSUk41rSWnBn3doeQ_n--Y76QL7R0X5nSjYokK5holUm7VeP9-GtGwg7EUgAKgiBrAJZE6GpZ-CuXEzuNJppjF9QSAhhUlTiMOoOGOFVh4iQYZf0UosgI1AoMEaqSOmoYseGRBVncGyv98ewHddvTqiPK9Arl3hIYkHUK1xfjaQ75iYIVtFfZXzFthW5Xor7CtVgBsqx0lhpIFd6VEsoGlwbUG81uNccSFNFA0KGjo7VDQKU7pDBAAHO_4_31eyY5NC2J_MHsO4xjIDGQGIQYhpiHSKgBaDFxmgF3SQ_ebW2L9fNq2t_PT1_uLv43H7fPjtL2ev9LPL23Jkue-AwAA)"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTu04EMQz8l9QRih9xsvsVFHSnKw6JAmklEDoKhLhvx-tJruHQaYuxHWc8mU2-U0nr4ZgTORyoUuZejvmwzICWOiLmMmvUZqTXmsmMmo6o2dwqfUQ6S7bMNQOFa5C0ck6a1nQpKaea1pKTQV9zKPnP5yvdV9KF9h0X5nSjY4kO5hotUm71-P59GtGwg5EKQAFQRAZwSaSOHalPoZzYebzIFGdxPQGgYUXmNOIAGm7IwMJLtMj4K0JRFagRGCRQI3X0GKrgkQVV3Rko__PtDXTb0asjyvca5N4IDUk6hKqFQ9pCvuLACtsq7K84b4VtFbZVRUsFwLba0NJjRF1wV0oUDSwG1wwsVuM44kIMFAYFhr0NChrFlMYAAcDxhv_f5pVsWOxB7A9mr-E4HWQdZB1COoR03IJeAdDSwdU7YJf00PzmlsifT9v2dn76en_xt_G4fX6cttfzV_r5BWjH9i2-AwAA)"
 title = "Median in 1D"
 caption = "Recall this example of finding the median. <b>Try moving some voters. Add a candidate (+). </b> The total area of the bars below is the sum of all the distances between the voters and the candidate or median. The median minimizes this sum. A winning candidate should also minimize this sum."
 comment = ""
