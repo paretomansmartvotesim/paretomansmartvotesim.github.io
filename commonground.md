@@ -100,7 +100,7 @@ You can also use a tier list, because ties are okay, too. You can have multiple 
  <img src="https://cdn.kapwing.com/final_5dc9d759968f590014bbe8ce_848166.jpg" alt="tier list for candy" class="picture" />
 </div>
 
-Pairwise rankings really give you a lot of power. 
+Pairwise rankings really give you a lot of power.  They are used in a family of voting systems called Condorcet methods, and we'll talk about those later on their own page.
 
 Next, let's talk about an even simpler way to find the middle.
 
@@ -189,13 +189,13 @@ caption='Give as many as you like a score from 0 to 5.'
 
 comment='simple,lots of candidates, one voter' id='score_sim' %}
 
-In practice, voters can adjust their self-reported distances, which is called using a strategy. Jameson Quinn has a good discussion of strategies in the links at the end of this page. Basically, using strategies means score voting looks a lot like approval voting.
+In practice, voters can adjust their self-reported distances, which is called using a strategy. Jameson Quinn has a good discussion of strategies in a page linked at the bottom, and I have a page that discusses how strategies play out in approval voting.  Basically, using strategies means score voting changes and takes on qualities of approval voting and pairwise voting.  Also, in the approval voting page, I show that when you combine approval voting with polls, you get almost the same winners as pairwise voting, which is nice.
 
-In the example below, 
+These are the strategies un the example below:
 
-- the J=Judge strategy measures distance well and would best find the median,
-- the N=Normalize strategy is basically using the full power of your vote, and
-- the F=Frontrunner strategy considers polling data and makes score voting very similar to approval voting.
+- The J = Judge strategy measures distance well and would best find the median.
+- The N = Normalize strategy is basically stretching your vote to the max score. Any voter would rather do N than J.
+- the F = Frontrunner strategy considers polling data and stretches your vote to the max score only for the frontrunners. Other candidates can get pushed to max or 0 or in between. 
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8l5wjFCdO7O6ZP4Dbag_QLqJS1a3aIoQQfDt2pr0UVTmMX5mMHX-HFIZxlBaJZYojkUbS5lY1i7NbKpdYzmYVmaYYyK9RMj-x-yUMKQYOQ_glCjHUMFAMzaosKQYp_juW0buZ1d0Mpf4WuYRmwkuk7OGMMJQQAyqgdTlkQogN7dlqsOrJbHwWzNRrcgaAJjM8oykGDUGBp_CMJdsAfJAmJbqWAq6SkQJXAVcxrpHi5XhxQxVYCxo3nlgiW5qd2OvYG_YBcL4axd90g_tdvqVm9M2C34FgXvVgxRgrASC1FgCkVvxiRdtVkNP-VkXbLQHQcMMfNDTcam_FBTZQNChoGLxAgeCuQIEUePg_wf_JdZEESb2ZkaAlBaFSZ1KIUYhRECoIFXoUfApZ6rIebDFeX3a75fz8dZhtn5_Wy3G2jT69L5-P82l93B7O22Xvm_6x38xv2_28CT9_6sQykEkDAAA)" 
 
@@ -205,13 +205,9 @@ caption='Try the different strategies.'
 
 comment='score can look like approval voting' id='score_strategy_sim' %}
 
-STAR voting was created to counteract this strategizing. 
+STAR voting was created to counteract scoring strategies.  It uses a final runoff where stretching your scores doesn't matter.
 
-STAR combines the two ways of finding the middle, scoring and counting by pairs. It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs, like we did before.
-
-Voters will use a less aggressive strategy than the Frontrunner strategy because they'll want to put all the frontrunners at different levels for the runoff.
-
-STAR also counteracts any distortion caused by a strategy by using a final runoff where strategy has no influence.
+STAR combines the two ways of finding the middle, scoring and counting by pairs. It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever has the higher score.
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38WzhWLHdnLdeAXa7XQDoG6VihALQuXZcfJThqLqht-xk_8-J_6iQrt19WApdeNVpLC0ZUQu3D0D_UupWW4r28Yk45R4ZbE61pV2hcloR9-ixORzHbkriy2l8L8vK_1uZblbkTK9ZSBEIKVIgUIMAgYJSEKIpeYvPSX9hUnTK5OaXpqiENioYUva1BTYaMOqY7XMA7VMWBn3ILNQ4VQrBEA1nVbh329sDpThWdGysHJly7JN2xHINdBrkMarjsDmWbu1tpjw1vAuwDU07bhAB6oD1YHqaNodgqa9odbnvxxNR4HI3Bl4gcDVhc9WcqAoYBEgiGVKA0HD2aaQCsFlNRC0MUK0Pzw-5VDtX8_vRxoD1VDsNzfW0GAvELxqB1oHWjckHQK6Dr8OyD4gH3JIFmC-PJ9O54_D59sxxxsMlx9StnChOAMAAA)" title='STAR Voting' 
 
