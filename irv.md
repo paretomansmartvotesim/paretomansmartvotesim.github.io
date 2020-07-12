@@ -124,7 +124,7 @@ The worst part of single-choice voting is the term spoiler. It sounds bad. and t
 
 For new candidates who don't have many supporters yet, the barrier to entry would be lowered. Hopefully, this would create competitive pressure to bring out the best candidates. 
 
-(The technical definition of a spoiler is a candidate with a small enough level of support that they cannot win themselves, but that can change who wins merely by being in the election. You would think that the only way to change who wins is to be the winner, and that can be true for some really great voting systems. For instant runoff voting, it's true if the candidate is small enough to be called a spoiler. )
+The technical definition of a spoiler is a candidate with a small enough level of support that they cannot win themselves, but that can change who wins merely by being in the election. You would think that the only way to change who wins is to be the winner.  For instant runoff voting, it's true if the candidate is small enough to be called a spoiler.
 
 {% capture cap7 %}{{ B }} accuses {{ C }} of spoiling the election, hoping he’ll get {{ C }}’s supporters{% endcapture %}
 
@@ -146,11 +146,11 @@ caption = cap8
 
 comment = "no spoilers" %}
 
-Resistance to spoilers cannot be overstated. If you decide to become engaged in your community and run for office, the other candidates can't call you a spoiler any more. They might even see you as an ally who can help bring in supporters. Running for office is a great avenue for people to become involved in politics, and it would be nice if they are welcomed.
+Resistance to spoilers cannot be overstated. If you decide to become engaged in your community and run for office, the other candidates can't call you a spoiler anymore. They might even see you as an ally who can help bring in supporters. Running for office is a great avenue for people to become involved in politics, and it would be nice if they are welcomed.
 
 ## Afterward
 
-In summary we have illustrated the problem that the fundamental way in which we cast our votes pits every candidate against each other. We can address the problem by allowing voters to support more than one choice. That means candidates can join each other as teams and work together on campaigns, at least until they become large enough to become each others' best competition. We also showed that voters are able to support candidates that they feel best represent themselves, and even in more complex situations where they need to strategize, voters will be able to rely on more informative head-to-head polls.
+In summary we have illustrated the problem that the fundamental way in which we cast our votes pits every candidate against each other. We can address the problem by allowing voters to support more than one choice. That means candidates can join each other as teams and work together on campaigns, at least until they become large enough to become each other's best competition. We also showed that voters are able to support candidates that they feel best represent themselves, and even in more complex situations where they need to strategize, voters will be able to rely on more informative head-to-head polls.
 
  <!--Footnote: This is a Sankey diagram, which can be used to report poll results. It doesn't report all the results because it doesn't show a head-to-head chart. It only explains how the tallying was done and how the winner was chosen.-->
 

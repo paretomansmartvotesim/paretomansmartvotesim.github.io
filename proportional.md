@@ -53,11 +53,11 @@ caption = "Similar results to STV in broadness of support."
 comment = "Maybe choose a more interesting example."
 id = "facility_sim" %}
 
-That was actually a lot of computation, but the good thing is that this problem is already solved. There are techniques called the branch and bound method and the Simplex method that are used together to solve this problem. Basically, branch and bound means you can look at all the possibilities without calculating every one. You put them into groups called branches, and the best case scenario for that branch is bound by some value. Then you can cut branches off and simplify the problem. 
+That was actually a lot of computation, but the good thing is that this problem is already solved. There are techniques called the branch and bound method and the Simplex method that are used together to solve this problem. Basically, branch and bound means you can look at all the possibilities without calculating every one. You put them into groups called branches, and the best-case scenario for that branch is bound by some value. Then you can cut branches off and simplify the problem. 
 
 If you would like to know more about branch and bound and Simplex, they are part of a more general set of algorithms called mixed integer linear programming. These tools are used in the business world in what is known as the field of operations research. They deal with logistics - physically moving around things, like groceries. They also apply to our case of electing representatives to serve voters.
 
-This is a good method to inspire other methods like the Single Transferable Vote, STV. Voters might be more willing to accept STV because they can see the calculations being done. Also, STV gets pretty close to the motivating idea of the facility location problem, and if you compare their visualizations they look very similar. There are more methods like the Monroe method that are also very close to this motivating idea of optimizing assignments of voters to the candidates they scored highest.
+This is a good method to inspire other methods like the Single Transferable Vote, STV. Voters might be more willing to accept STV because they can see the calculations being done. Also, STV gets pretty close to the motivating idea of the facility location problem, and if you compare their visualizations, they look very similar. There are more methods like the Monroe method that are also very close to this motivating idea of optimizing assignments of voters to the candidates they scored highest.
 
 ## STV's Quota
 
@@ -133,7 +133,7 @@ id = "distribution_matching_sim" %}
 
 ### Semi-Proportional Multi-Winner Methods
 
-There are more methods that only provide proportionality to distinct groups, and don't provide the kind of distribution matching that STV does to cover an area of voters with evenly-spaced candidates. They are mechanically-different. They apply a method of counting votes that is used for apportionment. Apportionment means you have separate groups like different states, and you want to find out how many representatives to give to each state. Two examples are given below: reweighted range voting and reweighted approval voting. 
+There are more methods that only provide proportionality to distinct groups, and don't provide the kind of distribution matching that STV does to cover an area of voters with evenly spaced candidates. They are mechanically different. They apply a method of counting votes that is used for apportionment. Apportionment means you have separate groups like different states, and you want to find out how many representatives to give to each state. Two examples are given below: reweighted range voting and reweighted approval voting. 
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA31TPY8TQQz9L1NbaOyxx5N0NFRUdyeaVYoQpYgUEUChOCH47dh-SIcEh1ba5_Xn85vZ7623_bZpJ7Z-oI05LJ1hqZL0Xbr6JOER1uokFfMdsXAYIk48M0tcw5K0ZkZ7-SwqLa3BYa3fFss8HKhxTvaYNyvFjNg9A6PtOzVt-_aTtVGz-p6RHkEP6PTXE5H1amT3aoR79ebkMshJM5BEGwsiIBM8CkCFJyC4sAbGZJbAmMPUJHqGV6JnOEUA6COKlOgzAtBHHF8LX7sqGL1Ic-rBFRhStWMgDkYjOm0h6b-eLJ1IxoQBIeIsaJCS0YyVF8V5hTPTFUNTGeUXU17MGL5JtVatNfX_BHQWaXWcKVZUCGUQ37CeQSjDegahzAAQyhyxVdsYhJodwJU5cWwTck8r5nF520SLCQZzV-Bg4Kh1COwDAIEdDDyvX3t8-hD38eGh3m_zff7y7Xh9dzxdrpf78_vb6Xi_3D61vKeOuvWn5OnH7qsDMHmB9QLrpbXRMgCIL_Rb4L-S_xuLq40NPh6v19v96fnzOf6ax9Pt67n9-AW7Hm2n3AMAAA)" 
 title = "Semi-Proportional Methods"

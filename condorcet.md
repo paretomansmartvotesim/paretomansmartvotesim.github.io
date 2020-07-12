@@ -67,12 +67,12 @@ id = "4" %}
 
 This visualization **above** is a little crowded. The colors here are the same is in the case of the single ballot. The three voter's ballot diagrams are overlapping in this combined diagram. 
 
-Lets clean up the visual by showing a map of where a candidate can beat an opponent.
+Let's clean up the visual by showing a map of where a candidate can beat an opponent.
 
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WTy24CMQxF_8XrLGI7r-ErqrY7hgW0g4RAUEG7qCr49jq5yhSpQjOSH4lP7JuZH_K0WC6Ld8y8ckuR7FiKeRyCkzisVo64bsnRidYF0eS4hLpF1WVfdygtvKNAC7oN5Ci2MFmZrWUz3v17bKU8XBkerrBvbK490W0kP5IdaA53R7qj3Qndid1J3cndKd0ZZuAfembzDOeZzjOeZz7XA2q3gm61KjPSabttOzggDZ04wZhQHMyaLGpmaFmxeS0pNi-bMZ6Ygd4SkIytQICRjKggGlqB1luu8im3tKIvBUfRjhpnabzb8etwIMeOa0ECAFQ16g9ddu_TZn2mxef5a7paFtclTq0g-EZBdeB-kTWQ-0Dvt4VGD_E-l9pwIePTwjhhaMnoYRiyPp_e9uN4tPflbXe5nM4Xc5_WH9O5qR0hWtR2SIRoMcJAtJgRQfoI6ZNvdQnSJ0iWIFmKbZY6cAIiocOE2ozPNKM2C4zCQO6M28_9N0ELGT8FVzVdqHmMXAAsuL-CZgqaKQAWAAv62awPh9Pn6_fHZCI9r4_76Z2uv_hO5zDvAwAA)" 
 title = "Beat Map of Rock Paper Scissors"
-caption = "This map shows that scissors is in rock's territory, but paper is outside, so paper beats rock. Wiggle rock to see it's territory move."
+caption = "This map shows that scissors is in rock's territory, but paper is outside, so paper beats rock. Wiggle rock to see its territory move."
 comment = ""
 id = "41" %}
 
@@ -154,7 +154,7 @@ These examples are made to show particular concepts, and a real election would h
 
 To get a more fundamental understanding of Condorcet cycles, let's talk about how this beat map is related to the median. In this section, I'll show that the reason we have Condorcet cycles is because there's no one single position in two dimensions that would beat all the other positions head-to-head.
 
-The median works in one dimension just like the Condorcet winner. If you compare the median to any other position, then, in a vote, it would beat the other position . 
+The median works in one dimension just like the Condorcet winner. If you compare the median to any other position, then, in a vote, it would beat the other position.
 
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA21SMU4EMQz8i-sUsWPHyb6Cgm51xSFRIK0EQkdxQvB2HI8OCk5bzNqOxzNOPqnStu-ss_R5KjtPL15Pp0J8y7PZihttUkhpo-9KhYy2WqjHoah5QC3_vqiMqNA3a6e75ZllaXa_zDWnMGMMC8IGUACUcAeEFNbAkXI5BnAhCZ5ICmdSBAAaURwJmhYAGnFEA9HMhlbTJq9lcBYaBDXspkFQmNl2xrGOAtja_O3XpFo_y1pm5JYJsr2tH80u_aOLLS6p6jlHIU5h0bAqgzCDRWtJYbBoBoBFA4sNHJm4z5p9HSwd9joW1S3lL2kdFB0KOnodChy9LjnMGwCrcdyV356NoziwlyIrBzsDZIMRQciAkKEpchgAWga4ns7H8Xp5vL49x0N9OD7ez8fL5UpfPzIyeM7oAgAA)"

@@ -10,13 +10,13 @@ We Don’t Need Primaries
 =======================
 
 
-I’m going to talk about what we're trying to achieve when we vote.  And I'd like to talk about how using primaries and choosing only one candidate on our ballots will only achieve accurate representation in the best case scenario. In many cases, a lot of votes are wasted, and a lot of voters receive no consideration.
+I’m going to talk about what we're trying to achieve when we vote.  And I'd like to talk about how using primaries and choosing only one candidate on our ballots will only achieve accurate representation in the best-case scenario. In many cases, a lot of votes are wasted, and a lot of voters receive no consideration.
 
 We're going to go over each aspect of voting and see how other methods of voting can work in more scenarios.  And I’m going to try to make it easier to think about voting by using diagrams. Voting is not an easy subject because there are many voters and each have different perspectives.  There are also a lot of strategic considerations you have to make. Voting is hard, but it could be easier.  You should walk away from this tutorial wanting to change how we vote.
 
 Primaries were created to allow a party to deal with vote splitting, but there are other ways to vote that beat primaries on this original design point.  Additionally, better systems can have better competition which produces better candidates.  They also can encourage voters to vote honestly without having to watch the polls to help them vote strategically.  Most fundamentally, they avoid splitting the vote so voters don't have to coordinate on who they should support and who they will encourage to drop out.
 
-| Method of Voting                                | Outcome in Lots of Scenarios | Outcome in Best Case Scenario |
+| Method of Voting                                | Outcome in Lots of Scenarios | Outcome in Best-Case Scenario |
 | ----------------------------------------------- | ---------------------------- | ----------------------------- |
 | Primaries with Choose Only One Plurality Voting | Bad                          | Good                          |
 | Alternative Voting Methods without Primaries    | Good                         | Good                          |
@@ -34,7 +34,7 @@ A referendum is actually pretty simple; you just say yes or no. Really, the *har
 
 {% include sim.html title="Referendum - Your Ballot" caption="Yes or No?" id="yesno_sim" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DQQz8lZPrFVo_9nH5CERBg-5SBCkF0gkQhCJC8O14PQoUKLpi1h7v7Ni-T8q0W5bSEhfZp0WsJra-3yfiQbD2xFVGrLTLiYx29J0pUYmwepFzzSGnf58z_SozX2U4hzYzxFkQwgAbAO-zG2AHN8Dm6M-JwxykuI4nhRFJcAIZsbgoLqMOFcmGqCOa44LmMMpjBFBSGFIFD0PqSgujrIKAms6_921IxWG0Nlo1uRxcbNFxsLhlf3KGHq1hATBncyRLBvBYy0rTw_F9Wtfn6fZlWmlsCU0XDdGCpksBoOnSUNJRgqZrBnBUVjRcMbpaoqFhtkKiwlPF2BvW1zCsJiHRFIBhNWyvXX6fBhI_CydJmmzk0WSHYOfw1GGmw0w3JAsAfjr0Omz1YeumJHo8bNvL6f78evRp3W0fb4ft6XSmrx9CIcEjBQMAAA)" %}
 
-And lets see a whole group of people.
+And let's see a whole group of people.
 
 {% include sim.html title="Referendum - Result" caption="Everybody Votes" id="yesno_many_sim" link="[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRsWpDMQz8leDZgyVL8nM-onToUt7LkEKGwqMpbTKE0n57ZR1phxAMPktnnU_yVyppO8_aMinv8sximWTa7XKiQZCwx33ENW1LThK7xm5-g_PN8rvNmZJvljPTXabfZajEczQcjZARwhDBEcESGcANkDj6c-zQI8uu40l2HXLg4BgyLEi6THWADDdEE6IeBbWEURojoSAqDNUKHoaqK82EawYCarX_1UtIjQNdD3w91FE-DhJV8i8nFlal4UNgTnoktQBcL_0s6fnwuSxvm4fjZknJ02hZa8xB0bIqAC1rw5UpXlW0bAWAwRnaNQzONNqpbswgYXBkGHrD5zXUNg542a_r8fR0eT-4z8f1_LFfX0-X9P0LH8D-m48CAAA)" %}
 
@@ -74,7 +74,7 @@ So, this solves the problem of splitting votes, which is caused by limiting your
 
 If, in a primary, the voters are not engaged and not paying attention to the head-to-head polls, then their vote can be manipulated by whatever media they are consuming. The polling data itself could even be inaccurate.  A better voting system wouldn’t ask you to find the middle from the polling data.  It would find the middle for you.
 
-Now, the voting system is smarter, and the voter also needs to get smarter. The voter needs to do more work because now they have to consider every candidate. With primaries, we got away with doing our civic duty pretty easily: we voted for one candidate and said, “Well I voted for that guy, that's all I need to do.”  Now it’s your duty to consider all the candidates.
+Now, the voting system is smarter, and the voter also needs to get smarter. The voter needs to do more work because now they have to consider every candidate. With primaries, we got away with doing our civic duty pretty easily: we voted for one candidate and said, “Well I voted for that guy, that's all I need to do.” Now it’s your duty to consider all the candidates.
 
 ### A Brief Intro to the World of Voting Methods
 
@@ -84,7 +84,7 @@ There are also other ways to count ranked ballots and there are other kinds of b
 
 I think scored ballots aren't quite as good as pairwise because the voter has to watch the polls to decide which candidates need their vote. This is a little more work for the voter, but in the end, it works out pretty much the same as counting by pairs.
 
-Also, up to now, we haven't called our voting system by it's proper English name: First Past the Post (FPTP). FPTP is another name for our choose only one voting method. Let's compare these methods in the simulation below.
+Also, up to now, we haven't called our voting system by its proper English name: First Past the Post (FPTP). FPTP is another name for our choose only one voting method. Let's compare these methods in the simulation below.
 
 {% comment %} How do I actually show vote splitting? {% endcomment %}
 
@@ -106,14 +106,14 @@ Read more about:
 
 This is just a brief introduction to the world of voting methods. After you're finished with this page, see the other pages on this site for more explorable explanations of voting methods.
 
-Game Theory: The Competitive Pressure that the Primary Relies on has a Flaw and Only Works in the Best Case Scenario
+Game Theory: The Competitive Pressure that the Primary Relies on has a Flaw and Only Works in the Best-Case Scenario
 --------------------------------------------------------------------------------------------------------------------
 
 Primaries rely on competitive pressure to get good results for the voters.  If the scenario changes so that the competitive pressure breaks down, then the results are not good.
 
 ### Game Rules
 
-Say we have a set of candidates in two primaries, {{ A }}{{ B }}{{ C }}{{ D }}, arranged in a line, like in the drawing below.  There are some candidates more towards the middle that would better represent all the voters: that’s {{ B }} and {{ C }}.  Ideally, in the best case scenario, {{ B }} or {{ C }} would win.   That's what we want the voting system to do.  We also want {{ B }}&{{ C }} to actually run.  We want them to not think that they will cause any problems for their party by splitting votes or in any other way. 
+Say we have a set of candidates in two primaries, {{ A }}{{ B }}{{ C }}{{ D }}, arranged in a line, like in the drawing below.  There are some candidates more towards the middle that would better represent all the voters: that’s {{ B }} and {{ C }}.  Ideally, in the best-case scenario, {{ B }} or {{ C }} would win.   That's what we want the voting system to do.  We also want {{ B }}&{{ C }} to actually run.  We want them to not think that they will cause any problems for their party by splitting votes or in any other way. 
 
 This is kind of a game. There's two players: the {{ A }}{{ B }} party and the {{ C }}{{ D }} party. A party takes an action by nominating a candidate. The party is happier when their candidate wins . They are the least happy when an extreme candidate of the other party wins. This defines what is known in game theory as a normal form game.
 
@@ -209,7 +209,7 @@ The same strategy works for both sides, which means that there is a competitive 
 
 We can make the same table for the {{ C }}{{ D }} party.  {{ D }} is the party center candidate and {{ C }} is the moderate. You can be lucky (+),  or you could be unlucky (-).  And you can even use the same values in reverse.  You have {{ D }} {{ C }} {{ B }} {{ A }} in order from best to worst and I used the numbers 4 3 2 1 again.  
 
-Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.  By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly-wrong technical sense, no candidate is better than any other candidate. I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game . The numbers are really just here as useful tools for making comparisons for a single player. Maybe you could extend the idea if you had two outcomes being decided.
+Side Note: They could be any numbers just as long as the candidates are in this order.  For example, the numbers could be  8 6 1 0.  By choosing 4 3 2 1, I actually made this a zero-sum game which means that, in a slightly wrong technical sense, no candidate is better than any other candidate. I don't think utilities can be added in this way, but if these were a divisible good like dollars, then this would be a zero-sum game . The numbers are really just here as useful tools for making comparisons for a single player. Maybe you could extend the idea if you had two outcomes being decided.
 
 **{{ C }}{{ D }} Party's Utility (or Happiness) for Each Outcome**
 
@@ -229,7 +229,7 @@ Side Note: They could be any numbers just as long as the candidates are in this 
 
 <!--Repeating, maybe take out-->
 
-Will the parties actually behave strategically like this?  Well that would be the best case scenario, but it may not happen.  We would like voters to behave in this strategic way because, optimistically, there would be this competitive pressure between the parties.  Having that competitive pressure would encourage more moderate candidates to run.   Each party has to consider if the other party is going to challenge them with a moderate candidate, and **in this best case scenario, we have each party putting out a candidate that would best represent everybody, not just one side**.
+Will the parties actually behave strategically like this?  Well that would be the best-case scenario, but it may not happen.  We would like voters to behave in this strategic way because, optimistically, there would be this competitive pressure between the parties.  Having that competitive pressure would encourage more moderate candidates to run.   Each party has to consider if the other party is going to challenge them with a moderate candidate, and **in this best-case scenario, we have each party putting out a candidate that would best represent everybody, not just one side**.
 
 Voters can try to find out what's best for everybody by looking at the polls.  Specifically, there are head-to-head polls done each election that put one candidate from one side against one candidate from the other side.  If a voter sees that the candidate they like best would lose to a candidate from the other side then rationally, if they want to have an effect on the results of the election, they need to support someone else.  They need to support a candidate that can win: a candidate that is electable.  <!--\<third time mentioning electable\> \<maybe take out whole paragraph\>-->
 
@@ -301,7 +301,7 @@ comment='The big party picks a candidate in their own center, since all their ow
 
 <!--next color background for each big section-->
 
-The Primary Does not Eliminate Vote Splitting: Choose Only One Splits Votes in the Primary Too
+The Primary Does Not Eliminate Vote Splitting: Choose Only One Splits Votes in the Primary Too
 ----------------------------------------------------------------------------------------------
 
 <!--Alt title = Primaries only work in the case where there are at most two electable candidates in each primary.-->
@@ -342,14 +342,14 @@ comment='right now, this isnt implemented' %}
 
 ### False Leverage
 
-There is an flawed idea that single-choice voting can give power to a small groups of voters through a mechanism of leverage. The idea goes that voting for only one makes your vote valuable, and gives your favorite candidate leverage over the others so that your policies can get adopted. Your candidate would pull some strings to make a deal in exchange for dropping out of the election. Philosophically, the bad part about this argument is that it gives all the power to the candidate. Candidates are deciding among themselves who will be elected rather than asking the voter who is best. Practically, not all voters would be on-board to vote for their favorite if their favorite has no chance of winning. Without the voters, the candidate will have no leverage. In the worst case, a corrupt candidate could use their leverage for personal gain, so less power goes to the voter. 
+There is a flawed idea that single-choice voting can give power to a small groups of voters through a mechanism of leverage. The idea goes that voting for only one makes your vote valuable and gives your favorite candidate leverage over the others so that your policies can get adopted. Your candidate would pull some strings to make a deal in exchange for dropping out of the election. Philosophically, the bad part about this argument is that it gives all the power to the candidate. Candidates are deciding among themselves who will be elected rather than asking the voter who is best. Practically, not all voters would be on-board to vote for their favorite if their favorite has no chance of winning. Without the voters, the candidate will have no leverage. In the worst case, a corrupt candidate could use their leverage for personal gain, so less power goes to the voter. 
 
 **Decision for Viable Candidate** - Leverage only works if the voters follow through.
 
-| Action | Outcome If  Voters Vote Strategically | Outcome If Voters Follow Through |
-| ------ | ------------------------------------- | -------------------------------- |
-| Reject | win independently                     | lose                             |
-| Adopt  | win                                   | win                              |
+| Action | Outcome If Voters Vote Strategically | Outcome If Voters Follow Through |
+| ------ | ------------------------------------ | -------------------------------- |
+| Reject | win independently                    | lose                             |
+| Adopt  | win                                  | win                              |
 
 Afterword
 ---------

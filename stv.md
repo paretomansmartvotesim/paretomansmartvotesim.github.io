@@ -16,7 +16,7 @@ This differs from our current **district-based single-winner single-choice votin
 - voters often feel their vote is wasted, and
 - candidates are antagonistic towards each other during campaigns.
 
-I’m also going to describe other mechanically-similar voting methods that achieve the same goals.
+I’m also going to describe other mechanically similar voting methods that achieve the same goals.
 
 ## Representative Politics
 
@@ -48,7 +48,7 @@ id = "even_distribution_sim" %}
 
 ## Kinder Political Culture
 
-STV allows multiple factions within a party to be represented, so these factions don’t have to feel threatened by each other, which would allow them to work better together. Small groups can form to support an idea, and supporters don't have to face a dilemma of whether they're going to support an idea that they like best or support an idea that is more likely to be accepted by many other people. This is easier for the voters because the voters can use the voting method to find common ground rather than trying to use polls to figure out which candidate to unite behind. The voters can be more honest and the campaigns can be more honest. 
+STV allows multiple factions within a party to be represented, so these factions don’t have to feel threatened by each other, which would allow them to work better together. Small groups can form to support an idea, and supporters don't have to face a dilemma of whether they're going to support an idea that they like best or support an idea that is more likely to be accepted by many other people. This is easier for the voters because the voters can use the voting method to find common ground rather than trying to use polls to figure out which candidate to unite behind. The voters can be more honest, and the campaigns can be more honest. 
 
 Still, some things won’t change. There will still be disagreements in the legislature once candidates are seated. I think it's more acceptable to expect compromises and cooperative trading of policy favors in a legislature rather than at the time of an election where voters would have to sift through any misinformative campaign techniques. Legislators are more able to form cooperative relationships than groups of voters, so we are designing a system that works better for representing people, and it should lift a lot of burden off the voters’ shoulders.
 
@@ -97,7 +97,7 @@ caption = "Each of three groups is able to be represented."
 comment = "three parties is a cognitive achievement. don't show power chart."
 id = "three_sim" %}
 
-Ranked-Choice Voting is better (more representative) when it allows smaller groups be represented. Five would be a great number. More would be even more representative but could be overwhelming. Voters don’t have to rank all the candidates. They just need to rank enough to get one candidate elected, or maybe two.
+Ranked-Choice Voting is better (more representative) when it allows smaller groups to be represented. Five would be a great number. More would be even more representative but could be overwhelming. Voters don’t have to rank all the candidates. They just need to rank enough to get one candidate elected, or maybe two.
 
 ## Counting Ballots
 

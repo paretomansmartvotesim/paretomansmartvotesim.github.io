@@ -37,7 +37,7 @@ title="The middle is the common ground."
 
 caption=cap1
 
-comment="allow adding candidates with + and use condorcet rule, maybe make a custom pairwise comparison between the middle option, which cant be moved, and any other option.  And you cant move the voters either" id="middle_sim" %}
+comment="allow adding candidates with + and use condorcet rule, maybe make a custom pairwise comparison between the middle option, which can't be moved, and any other option.  And you can't move the voters either" id="middle_sim" %}
 
 So how do you find the middle option?  Well, you could hold a vote and ask everyone to pick one option out of all the options.  What happens is that people will pick a side, and you end up dividing people into little groups.  It's kind of random which side wins, and that's a win with maybe with less than 25% of people. That hardly seems like a win. 
 
@@ -81,7 +81,7 @@ caption=cap12
 
 comment='two candidates with a circle. Maybe I could use names for ping pong.' id='by_pairs2_sim' %}
 
-So what would that look like in an actual election?. That would basically be counting the votes for every possible pair of options.  Say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot. But really, you have a single ranking, which is easier to write.  
+So what would that look like in an actual election? That would basically be counting the votes for every possible pair of options.  Say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot. But really, you have a single ranking, which is easier to write.  
 
 You would get a ballot with the names {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} written on it. And because you like them in that order, you'd write 1 2 3 4 5 on the ballot. 
 
@@ -207,7 +207,7 @@ comment='score can look like approval voting' id='score_strategy_sim' %}
 
 STAR voting was created to counteract scoring strategies.  It uses a final runoff where stretching your scores doesn't matter.
 
-STAR combines the two ways of finding the middle, scoring and counting by pairs. It's name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever has the higher score.
+STAR combines the two ways of finding the middle, scoring and counting by pairs. Its name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever has the higher score.
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38WzhWLHdnLdeAXa7XQDoG6VihALQuXZcfJThqLqht-xk_8-J_6iQrt19WApdeNVpLC0ZUQu3D0D_UupWW4r28Yk45R4ZbE61pV2hcloR9-ixORzHbkriy2l8L8vK_1uZblbkTK9ZSBEIKVIgUIMAgYJSEKIpeYvPSX9hUnTK5OaXpqiENioYUva1BTYaMOqY7XMA7VMWBn3ILNQ4VQrBEA1nVbh329sDpThWdGysHJly7JN2xHINdBrkMarjsDmWbu1tpjw1vAuwDU07bhAB6oD1YHqaNodgqa9odbnvxxNR4HI3Bl4gcDVhc9WcqAoYBEgiGVKA0HD2aaQCsFlNRC0MUK0Pzw-5VDtX8_vRxoD1VDsNzfW0GAvELxqB1oHWjckHQK6Dr8OyD4gH3JIFmC-PJ9O54_D59sxxxsMlx9StnChOAMAAA)" title='STAR Voting' 
 
@@ -235,13 +235,13 @@ caption='We can order two.'
 
 comment='meat lovers and veggie lovers win' id='stv_sim' %}
 
-And of course, there's primaries, which is the way we do things now. Basically, a whole party gets behind one candidate. This can work in the best case scenario. But primaries can malfunction when there's a crowded field, or when one party has many more voters than the other party, or when there's more than two parties.
+And of course, there's primaries, which is the way we do things now. Basically, a whole party gets behind one candidate. This can work in the best-case scenario. But primaries can malfunction when there's a crowded field, or when one party has many more voters than the other party, or when there's more than two parties.
 
 {% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)' title='Primaries' 
 
 caption="Here's a best-case scenario. In reality, they don't always work so nicely." 
 
-comment='an best case example of primaries ABCD two groups' id='primaries_sim' %}
+comment='an best-case example of primaries ABCD two groups' id='primaries_sim' %}
 
 ## Afterword
 
