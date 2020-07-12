@@ -29,18 +29,14 @@ a:hover{ color: hsl(240,80%,80%); }
 
 #sandbox-section,
 #sandbox-index-section,
-#sandbox-embed-section{
-	/* background: #EFE9D5; */
-	background-color: #bed7dbd2;
-}
-.banner{
-	/* background: #EFE9D5; */
-	background-color: #bed7dbd2;
-}
+#sandbox-embed-section,
+.banner,
 .sim-ballot,
 .sim-test {
+	/* background: #EFE9D5; */
 	/* background-color: #e6e6e6; */
-	background-color: #bed7dbd2;
+	/* background-color: #bed7dbd2; */
+	background-color: #dfebec;
 }
 
 #content{
