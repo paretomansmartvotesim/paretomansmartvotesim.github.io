@@ -3909,7 +3909,7 @@ Election.pluralityWithPrimary = function(district, model, options){
 		var pwin = _countWinner(tally1)
 		
 		if (model.doTallyChart) {
-			text += tallyChart(tally1,cans,model,1,ballots2.length)
+			text += tallyChart(tally1,cans,model,1,totalPeopleInPrimary)
 		} else {
 			for(let k=0; k<cans.length; k++){
 				let c = cans[k]
