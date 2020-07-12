@@ -30,7 +30,7 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 - [To Build a Better Ballot](https://ncase.me/ballot) - by Nicky Case - the original sim this sim is based on
 - [Voteline](http://zesty.ca/voting/voteline/) - by Ka-Ping Yee, who is the originator of win maps AKA Yee diagrams
 - [Political Sim](https://www.accuratedemocracy.com/s_sim.htm) - by [Accurate Democracy](https://www.accuratedemocracy.com/) - the earliest interactive voting simulator - It requires some technical know-how to get going.
-- [Median Voter](https://pianop.ly/voting/median) - a simple conceptual experiment with discussion of strategy and median and mean
+- [Median Voter](https://pianop.ly/voting/median.html) - a simple conceptual experiment with discussion of strategy and median and mean
 - [RBVote Calculator](http://www.cs.angelo.edu/~rlegrand/rbvote/calc.html) - I copied all of his methods into this simulator under "RBVote".
 - [More Software on ElectoWiki](https://electowiki.org/wiki/Voting_links#Software)
 
