@@ -33,6 +33,7 @@ minima:
     twitter: Paretoman1
     youtube_channel: UCrwpT8YjxePjH0RxSCwbTlQ
     youtube_channel_name: Paretoman
+google_analytics: UA-172540609-1
 github: [metadata] # make warning go away # https://github.com/github/pages-gem/issues/399
 
 # # Build settings
