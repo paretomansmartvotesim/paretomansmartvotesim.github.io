@@ -56,7 +56,7 @@ comment = "Description: this should be like ncase's 'drag the voter' examples, w
 As soon as voters are using strategy in score voting — even a very slight amount of strategy, such as normalization — it is no longer fully exempt from impossibility theorems like Arrow's theorem. In particular, it no longer obeys independence of irrelevant alternatives (IIA); adding or removing a losing candidate can change how voters normalize, and thus change who wins. For instance, in the simulation below, try moving the losing yellow triangle candidate, and see what happens.
 
 {% include sim.html 
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQW7EIAxF78IaVdhg7OQq0Zxk1J59DE8ZjdRWWXxjw-fZ5FlaOa9LtFWx9qiXxjtqRI9aZO-x97qXs9Uyyll-REotttczd2XRU45Wf31Ziiz9XTn-rUjb5rIYRFZCSQAhAwFBJpIMMlLzwp5y7KymUyY1nSRFEWx0sMJGsVHfxzVYpYtm722jLpKOUweod1Y4dVu8Vdg4OYpfp1mpmqWx7VYgd6B3kIZXX8HY58an5Zj7muE8BYjj2EljZCaI7sutI-CZITRqTo1xGY3OhtDkpMnJuKbtFhbcxGJCMBm1Q-CcdQicATkv5oza77_GKcY9m9rrWHlaiobQUgATwAQtBYYBT-AXYMXC-rL8zxbY9wsTcUex9gIAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQW7EIAxF78IaVdhg4-Qq0Zxk1J59DE8ZjdRWWXxjw-fZ5FlaOa9LtFWx9qiXxjtqRI9aZO-x97qXs9Uyyll-REottteeu7I4U45Wf31Ziiz9XTn-rUjb5rIYRKp79WOllTQoMhBAxJEkkZGa1_aUY2c1_TKp6ScpimCjgxU2io3OfVyDVbpoTqBtYFnDwKkD1DsrnLot6ipsdI7i12lZqmZpbLsVyB3oHaTh1Vcw9rnxaTl8XzMmDwLiOHbSGJwJovty6wh4ZgiN2qTGuIxGvSE06TTpjMttt7DgHAuHwBn1hGBydkIwGdDkxSajnve_MynGPZva61h5WoqG0FIAE8AELQWGAU_gF2DFwvqy_NsW2PcLK_RwUvwCAAA)"
 title = "Non-optimal"
 caption = ""
 id = "election7"
@@ -66,7 +66,7 @@ comment = "This should be a score voting scenario with 100% normalizing voters. 
 But a bigger problem than IIA violation, which in the real world is relatively hard to engineer or take advantage of, is the issue of differential voting power. In the following election, one of the groups of voters normalizes, and the other one doesn't. The two groups are the same size, but the normalizing group gets a candidate they like a lot better.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQW7EIAxF7-I1qrAx4MxVMrOdbQ9QtWev4Wk6bdUqUj7Y8P3s5E2qXM5Tay3a662c9rXKd7Fc3Yro32cy0-RSi7hc5ENVivS9H3k-kzNFZs2wH1Lqzyfzkfn6O74zx78ZrbuCLiTVFTACbTFc5fV-v0pWVCcMkA4kidRTs7KlZBktYmmZQVN2htCZOTtsDBtLm5YS7I5t1upmtjUUnBpkrbHDqfUFXvJZBwdX8Wt0rdvDsVstuz6X9lym7Wmc9X3fv1v72OV88oFAdRruzLArYhuiNwTM3hEa7pNc7DqdhkdFaHbQ7GBso2_OliADiwHBOLZMCCZ3JwSTQU2-3GTk8_EvTZLxmFFpxVeclqIitBTABDBBS4FhwBP4BVixsF56_ngL7P0T2lZ4lBYDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQW7EIAxF7-I1qrAxhsxVMrOdbQ9QtWev4Wk6bdUqUj7Y8P3s5E2qXM5Tay3a662c9rXKd7Fc3Yro32cy0-RSi7hc5ENVivS9jzyfyZEio2bYDyn155P5mfn6O74zx78ZrbuCLiTVElHiWGEj3BbJVV7v96tkXXXCYGkgyaWemvUtJYtpEUvjDJqyM4T-zNlhY9hY2rSUye7YZq1uclujwalB1ho7nFpf-CWfdTC4il-jd90ejt1q3PW5tOcybU_jrO_7_t3aY5fzwWcC1Wm4M8muiG2I3hAwe0douA9yc9fpNBwVodmg2WBs0TdnS5DAIiCIY8uAYHB3QDAY1ODLDUY-Hn_UIDkfMyqt-IrT0qwILU1gJjCTliaGE56J3wRrLqyXnr_fAnv_BKDnu5IcAwAA)"
 title = "Strategists win"
 caption = ""
 id = "election8"
@@ -114,7 +114,7 @@ One scenario where approval becomes a factor is called the "chicken dilemma". Im
 Here's that scenario in sandbox form. The slider on the right controls the percent of the smallest group that is strongly strategic between triangle and square; all the rest of the voters use normalized strategy (that is, approve any candidate better than the average of their favorite and least-favorite).
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSS24EMQhE7-I1iszPxnOVmdlmmwNEydkDlEbqKIp6UY3BxTP255jjdr-zMLGdJ92Zg3jP-jtG7Of5pMFdw4uyrmvyL6xrPGu8anTcJg0bt_HNc9DwjlfuzOROSWMROkLz-mUyMjnpz5eZ828mW5Q9FxlzLQgWtAAe4-P9_TGSghOIU0DDC5I4bKnZWVOyjdCQtMxF4d4hAsGxBDYCG4GN7N4ugQguOpuZSWom8FJ4qXa9wku90LOw6HVhMxz1XDxsvoZQAV8DuTiYXgNrH7u2sNVtbeOeAG2nFx3TdIZIw7hCgOsOwdF9Ixe_p-2YwZoQnH7hZhYmubxPoEm04LWAsk7LBsrG3g2UrYgMOdzCfr2tjWS8hkZKVus4W0wIDAMwAZjAnMK7S4An4BfAisJ683yLBfb1Azz3QwAwAwAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSS24EMQhE7-I1iszXeK4yM9tsc4AoOXswpZE6iqJeVGNw8aD7c8xxu99ZmNj2k-7MSbzmedtG7Pv5pMFdw0FV1zX1ltY1XjV-anTcJg0bt_HNc9DwjqNuVnKVlLEIbaF5fSqZlZz056nM_jdTLY49HzJmiqDY51hwrAfjMT7e3x-jWLiwuARMHJCCYiut_lpSzYSGlHEdCvcNEQiGE9gIbAQ2svq6JCK46GxyJjmbgZfCS7XrFV7qZ4Aq5FMYuAxH3RcPm69VnICvgVwcTK-BtY9dW1h0W1v4WoC23YeOnTpDpGFcIcB1h2B0X8jl7207dhATgukDXyawyfCeQIso4BVAid2ygLJwdwFlKSJDDl9hvf6whWS-lkZKds4xW04IDBMwCZjEntK7S4In4ZfAyoP15vVHHrCvH3AL_hg2AwAA)"
 title = "Playing Chicken"
 caption = ""
 id = "election10"
@@ -124,14 +124,14 @@ comment = "Clumps of voters at (x,y,size): (-2,1,6); (-2,-1,4)slider; (3,0,10)."
 The "chicken dilemma" is a genuinely tough situation for almost any voting method. The motivations for the two rival factions to vote strategically are hard to minimize safely. Voting methods that go too far out of their way to punish strategic voters in this scenario tend to get the wrong answer in other, more-common scenarios like center squeeze. Look at how these various methods deal with both of these situations:
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy0pDMRD9Fck6lczkNemuFQR3pV66absofazElEvRhei3O8lBuCJy4Z7M68yZST6MM_PtlpgshbK3WyKxlF07lWAplv3eGuo5lKzm9Rw9Seg5UXNiy_Fm7qwJZm6-yBlrYreTVmowKygxsy1s3fTToGjQ2T-fRsq_EW3R6KkpI4KL4fJNws7Uy2VnVAepJFKAHkoAFURBUXt7BW3E1rCSqpOpVzADMBiDhkHDoOHcy1lggcW7rpost62Ay4PL-57vweVjE6-J1BITisHoy4QjuJ81NIOmBk8Ygp8aofOEaYuQetuQcVMQHUp3RuwzEoC7mOgBkBsjAKPHjJj83nbEDpIDYPqEm0nYZIp9Aq-KErgSpKTSIUNKRm2GlOxhBcQgJbfXZR5Xw0o7P603-l_W8XRQXFyvY307vOjx-VjHs-JDfT3V8Xi-Nd-wWCv4Gc9IcajXu-G96mm93NTb2bQnm9FDJjeRsSxxACgUTCeYTrB4iV22YEABl2BOaXPex89vRwqx3XwDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTWtbMRD8K0VnpWhX0kryLSkEegvuIxfHBzdxTqYyxqSU0v72jjS0vFLKgzf6GM3OrPTdBbfZ7UTFS2p7vxOpXkoYo5a85LbfeyeTI-bBmxyMapqcDE4enOg2wbvkNu6nBOddnnPDSWwWgFPDsmbnm_qw_kCoIAT_z4ed9t8dlBklZLgTwaKZt-ateKu-BF9kkJSkOIw9uf76-uRgQ2BUAHQpRoBNSUC4iQCUVjhGGSyqzBOqBMZVyihllDJa5nGtnFElhplDvI5eUStSK8bJj9SKecQBcbiPxsNUjG2lkcLvxoyJrCe6UkhxPUlTJ61LJJtlU-H90XRqczGzw1kIOs3kSKDdnAmMngv36t_dzuyBBQLTG2_G2EnLM0GEI6OW0Yq1CYVWCs8WWimRs8Q9Winjzbn7h-UBlT9uH_G_65eXA_D2fL70t8MJw0_P_XIEfuhfXvrl-Xgda8vtFhBv9EaASz-_W752jLZ3j_16dOMhF9aoq5sobFYNBDqsTFeZrrLxNU_blQErtSpz1pHzfcaDZ9LPh9OpX5dv5yN6-cf4j1-q-t8nsQMAAA)"
 title = "Playing Chicken with Different Methods"
 caption = ""
 id = "election11"
 %}
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy2oDMQz8leKzUyxbsr17SwqF3kK65LLJIeRxKnVYQnso7bdX9jQQKCGQkSx5NCPvl3GmH0disSSytSNl1ijUyEWN0nZrDbUecZq7mgfTO2vY9OaHjTXS0qhNWksKzv77aSXfrXR3K-QaN1UFLffIQ529MeV02hhVQIxjKKEIUCnEijo4KHTt1CujHnplJAUPgCPPyEDjQeNTu-4zMmXxugHXJJP1dR3gCtAWAjrAFZRrJG2k2hhRAmPobjjY_Tnkq1X210AJx1ADbvf4lpJjG8MJTwKR3LVDwfKEAL4NF8gTyBMBwKok1LAwgdXoADAZYTJiYVGahSougiJCQcSyExQk3E1QkAIyvFmCglQ_H_O8HJb6nEM5PwyfRaPVYl0uRw1eVmv9X5TpsFN8Ku-HMu2PF43n5_NUPnZvGr7uy1Sbw8zPqObDfGXqN5kwI18XboPleo49ZQfAnjIcZjjMUJmlSc8wmcGX4TVXr4_y_QtIT4MDTAMAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwWpCMRD8lZJzLNkku4netFDoTax4eXqQqqfSyEPaQ2m_vbsZBKHIg7ez2c1kZpNvF9xsGCizJ-adH6hmRclQEEVlt_OOeg8HzYPlyc2Cd9nN3G923nFPRZu0VjQE_-_TSr1bmd6tUOjcRL1DxEvxUq0QUUgmYuva6bR1KoUyliGJBEE1UdaoCpKGaV-NSq2LUalJQ0SAtZiRgSaCJpa-PVZkyhJ1FKErIx9tLuBK0JYSOsCVlGsgbSRrFJTAmKY3HLkTGqAriFeghEMykPu-fEuZpR-TC-4GIvO0LzKmyIQQ--EMeQx5zAiwygU1DIxhVQICTApMCgYm3C2YOAGFQIFg2AUKCvYWKCgJGe6sQEGxd-Sel-ulXue6nR_WX03RarFpl6OCl9VG_4s2HvYan9rHoY1vx4vi-fk8ts_9u8LXtzZac5rECVm-nq-cPc6CM-p14D75bOuYUw0ImFOFwwqHFSord-kVJiv4KrxW8_rI-p7N7c8fqv0fv1wDAAA)"
 title = "Center Squeeze"
 caption = ""
 id = "election12"
@@ -142,20 +142,22 @@ So, now I've explained why strategic voting makes things tricky, I can explain m
 
 ## Star voting
 
-"Star", or more precisely, "s+ar", stands for "score plus automatic runoff." In this method, voters use the same ballot as score voting. Between the two candidates with the highest scores, the winner is the one that comes higher on more ballots. Here's a one-voter star election. You can choose between three kinds of strategy: normalized, moderately strategic, and strongly strategic. The first and last kinds you've seen before. The third is almost like a strongly strategic voter, except that the ratings may be changed by one to avoid giving a frontrunner the same score as any other candidate. Here's a one-voter election:
+"Star" stands for "score then automatic runoff." In this method, voters use the same ballot as score voting. Between the two candidates with the highest scores, the winner is the one that comes higher on more ballots. 
+
+Here's a one-voter star election. Try the N = Normalized and F = Frontrunner strategies.  These are almost the same as in score voting, except that the ratings may be changed a little to avoid giving the same score to two frontrunners.  That is an important change that can matter in the runoff. Here's a one-voter election:
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwUoDQQz9lzkPsskkmdk9-wd6W3rQdsVC6UpbERH9djN5FAQpe3iZJPP2vUy-0pCmebYxU9NNnknNI_aIlSPa5ES9hQevSJxLmoacJE3phzjlpGminMy7vFgdhvzv80q7WRlvVmiIf1GXYC6g9BwjBxkkAAVYaCFXQeLo_ywOYxTZyTzJFD3MANCw4AQaNkCN69xwchZ2931iFOoKmAqjAKYCpqLR5l9vNHSAr8AvZZ9zkqDrQffYWYWvgRPO3bFI3JO_lAKnUvEYkChjJBVTUwJAnhYA5CkeTWFUK2oYl8KoDQCYNEzdYNI0LHRxBgqDAsOoKxRU3K1QUAtOeLGKUdfr3lQU23U2uWTpeVhqA4CCqUFMg5gGwgbCBj0NfA2yWpd1p75qEPb8dDisl8fPt8W3-GG7nhbf4_Pr-nG_nLen_dtlvx77fr8fd8vL_rjs0vcv6HnVzysDAAA)"
+link="[link](http://www.howtofixtheelection.com/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84Rih0n8e6ZH5TbqgdoF1Gp6lZtEUII3o6dUUEIVTlMHDuTGccfIYVxmuoQScs6TlSq7dh2XPhnJ5GF1usYyIspaaScPM5hTDFIGMMXcYihhJFiqFZlyWaQ4r9lGb2ZGW5mKPW3yCVUE5n9jHEGGSSAAqhdC5kKEkN702HoSU49Yuo1zADQsCACDVeA0WQDRWQsbO69d2z6yFsBrsxIgSuDKxvXRLEvL62oAWeGZ4oc3ZM4qVeJO3XnwteNkU69RvpN-UsrcCwNnwKpMvTDgu4VAkBkyQCILPi8AsOlIaf9pQLDNQFgtaL7FVZr6TZcXgVFhYKKljcoaLjboKBlRPi5hpa36_w0JPW3P1H8HJY0AagzKcQoxCgIFYQKPQo-hSx1WXfFRg7Cnh73--Xy8H6cbZpXm-U02zyfX5a3-_m8Oe2Ol91y8Dl_PWzn591h3obPb7MMRxU9AwAA)"
 title = "Star Strong"
 caption = "Keeps a space for the best."
 id = "ballot9"
 comment = "one-voter star election"
 %}
 
-And here's the chicken dilemma you saw above:
+In STAR voting, the runoff resolves the chicken dilemma example we've been using.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQU4DMQxF75K1hWI7TpxeA3ZtF4DaVaUixAahcnYcf1UahNAs_jh2fp6dfJVadvs9CxO3eaQ9sxOPuv5mI7Z5PFLhrOFOUZc18ectayxqbNVo2VUqrezKN0uhYhn32BnJERLGIjSF6vaLpEey0p8vMvPfDNe050XGvBYEC7oADuV6Ph9KUHAAcQhouEMCh1tonKwhcYxQkbCMReHcIQJBWwIbgY3ARkZuF0cEF63JzCRrJvBSeKlmvcJLbaFH4aLXjs1w1LnxaPU-hBXwNpCNQ9Nt0NKnbY9oPY9tA_cE6DZz0TBNY4gkjCkEuGYQtG4DOf89bcMMeoWg-46b6Zhkt-xAg6jDqwOlz5QBlIG9AyhDETXkcAvj_rYGkn4fGim1tY7evEJg6IBxwDjm5JanOHgcfg4sX1gPFm8RYC_Pl8v14-nz7RStP75e30_l9gMrdmg0RQMAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQU4DMQxF75K1hWI7dpJeA3ZtF4DaVaUixAahcnYcf1UahNAs_jh2fp6dfJVadvs9CxO3eaQ98yDudf3NRmzzeKTCWcNOUZc18Tda1ljU2KrRsqtUWtmVb5ZCxTL22BnJHhLGIjSF6vaL5IhkpT9fZOa_Ga5pz4uMmdzJ51oWLOvCOJTr-XwowcKBxSFgYocEFLfQOF9D4jChImEci8K5QwSC5gQ2AhuBjfTcLgMRXLQmOZOsycBL4aWa9QovtdVAFPIqdGyGo86NR6v3UayAt4FsHJpug5Y-bXtE8zy2ddwWoNvMRcNMjSGSMKYQ4JpB0Lp15MbvaRtm4BWC7h0345ikW3agQeTwcqD4TOlA6djbgdIVUUMOt9DvL6wjOe5DI6W21tHbqBAYDsAMwAzMaVieMsAz4DeANRbWg8WLBNjL8-Vy_Xj6fDtF64-v1_dTuf0As25D0UsDAAA)"
 title = "Chicken Star"
 caption = ""
 id = "election13"
@@ -167,21 +169,23 @@ comment = "chicken dilemma with star"
 In 3-2-1 voting, voters rate each candidate "Good", "OK", or "Bad". To find the winner, you first narrow it down to three semifinalists, the candidates with the most "good" ratings. Then, narrow it further to two finalists, the candidates with the fewest "bad" ratings. Finally, the winner is the one preferred on more ballots. Here's a ballot to play with:
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy2oDMQz8F59NWcmS7N1zPyG3JYe22ZJASEIelFLab6-sIVAoYQ8jS_LsjKyvNKRpnm3M1HSdZ1LziD1i5YjWOVFv4cErEueSpiEnSVP6oZJy0jRRTuZdXqwOQ_73eaU9rIwPKzTEv6hLMBdQeo6RgwwSgAIstJCrIHH0fxaHMYrsZJ5kih5mAGhYcAING6DGdW44OQu7-z4xCnUFTIVRAFMBU9Fo8683GjrAV-CXss85SdD1oHvsrML3wAnn7lgk7slfSoFTqXgMSJQxkoqpKQEgTwsA8hSPpjCqFTWMS2HUBgBMGqZuMGkaFro4A4VBgWHUFQoq7lYoqAUnvFjFqOt9byqK7T6bXLL0PCy1AUDB1CCmQUwDYQNhg54GvgZZrct6Ul81CHt92e-P19XnafEtXm3Py-J7fNkeP56Xy9t5d7rujoe-37fDZnnfHZZN-v4Ftz7ZVisDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy2oDMQz8F59NsWTZ1u65n5Dbsoe22ZJASEIelFLab6_kIS2lBB_GsuTxjKyPkMI4TXWIpGWOE5VqO7YdF_7ZSWSheY6BvJiSRsrJ4xzGFIOEMXxRDjGUMFIM1aos2QxS_Lcso3czw90Mpf4WuYRqIrOfMc4ggwRQALVrIVNBYmhvOgw9yalHTL2GGQAaFkSg4QowmmygiIyFzb33jk0feSvAlRkpcGVwZeOaKPblpRU14MzwTJGjexIn9Spxp-5c-LYx0qnXSL8pf2kFjqXhUyBVhn5Y0L1CAIgsGQCRBZ9XYLg05LS_VGC4JgCsVnS_wmot3YbLq6CoUFDR8gYFDXcbFLSMCD_X0PJ2m5-GpP72J4qfw5ImAHUmhRiFGAWhglChR8GnkKUu66HYyEHY89Nud7is3o-LTfNqc1oWm-fz5vD2uJxfTtvjZXvY-5xf9-vldbtf1uHzG8L9T7c9AwAA)"
 title = "321 Strategic"
-caption = "Approval with an extra level."
+caption = "Extra rounds of approval."
 id = "ballot10"
 comment = "one-voter 3-2-1"
 %}
 
-And here's the chicken dilemma. Note "moderately strategic" doesn't change the result from "normalized". So unlike in star voting, candidates wouldn't have to go negative against their nearby rivals in order to ensure that their voters would at least be moderately strategic and wouldn't just normalize.
+And here's the chicken dilemma. Note that Frontrunner strategy doesn't change the result from Normalize strategy. Candidates wouldn't have to go negative against their nearby rivals in order to ensure that their voters would at least be moderately strategic and wouldn't just normalize.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQWoDMQxF7-K1KJZk2XLOkV2SRQsJXQRSSjelNGevrE9gSimz-CNL_n6S_VVq2R0OLEzc5okOzE486vqbjdjm6USFs4Y7RV3WxJ-3rLGosVWjZVeptLIrd9ZCxTLusTOSIySMRWgK1e0XSY9kpT9fZOa_Ga5pz4uMeS0IFnQBHMvtcjmWoOAA4hDQcIcEDrfQOFlD4hihImEZi8K5QwSCtgQ2AhuBjYzcLo4ILlqTmUnWTOCl8FLNeoWX2kKPwkWvHZvhqHPj0epjCCvgbSAbh6bboKVP2x7Reh7bBu4J0G3momGaxhBJGFMIcM0gaN0Gcv572oYZ9ApB9x030zHJbtmBBlGHVwdKnykDKAN7B1CGImrI4RbG420NJP0xNFJqax29eYXA0AHjgHHMyS1PcfA4_BxYvrCeLN4iwF6er9fbx_7z7Ryt71_fz-fy_QOkh_1jRQMAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQWoDMQxF7-K1KJZkyXbOkV2SRQsJXQRSSjelNGevrE9gSimz-CNL_n6S_VVq2R0OLEzc5okOzIO41_U3G7HN04kKZw07RV3WxN9oWWNRY6tGy65SaWVX7qyFimXssTOSPSSMRWgK1e0XyRHJSn--yMx_M1zTnhcZM7mTz7UsWNaFcSy3y-VYgoUDi0PAxA4JKG6hcb6GxGFCRcI4FoVzhwgEzQlsBDYCG-m5XQYiuGhNciZZk4GXwks16xVeaquBKORV6NgMR50bj1Yfo1gBbwPZODTdBi192vaI5nls67gtQLeZi4aZGkMkYUwhwDWDoHXryI3f0zbMwCsE3TtuxjFJt-xAg8jh5UDxmdKB0rG3A6UrooYcbqE_XlhHcjyGRkptraO3USEwHIAZgBmY07A8ZYBnwG8AayysJ4sXCbCX5-v19rH_fDtH6_vX9_O5fP8Ao9uz_ksDAAA)"
 title = "321 Chicken"
 caption = ""
 id = "election14"
 comment = "chicken dilemma with 3-2-1"
 %}
 
-Putting it all together, here's a sandbox for you to try out all the different systems and to make your own scenarios:
+## Afterward
+
+**From Paretoman**: To finish where Jameson left off, STAR voting and 3-2-1 voting encourage voters to put better information on their ballot. Both voting methods use additional rounds to help more accurately determine the best candidate.  The additional rounds also give them some resistance to the chicken dilemma.  
