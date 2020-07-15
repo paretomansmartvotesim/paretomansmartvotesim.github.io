@@ -1,20 +1,17 @@
 
     <!-- Schema.org markup for Google+ -->
-    <meta itemprop="name" content="{{ include.title }}">
-    <meta itemprop="description" content="{{ include.description }}">
-    <meta itemprop="image" content="http://ncase.me/ballot/social/thumbnail.png">
+    <meta itemprop="name" content="{{ page.title }}">
+    <meta itemprop="description" content="{{ page.description }}">
+    <meta itemprop="image" content="{{ site.url }}{{ site.baseurl }}{{ site.thumbnail }}">
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image">
-    {% if include.twuser %}<meta name="twitter:site" content="@{{ include.twuser }}">{% endif %}
-    <meta name="twitter:title" content="{{ include.title }}">
-    <meta name="twitter:description" content="{{ include.description }}">
-    {% if include.twuser %}<meta name="twitter:creator" content="@{{ include.twuser }}">{% endif %}
-    <meta name="twitter:image" content="http://ncase.me/ballot/social/thumbnail.png">
+    {% if page.twuser %}<meta name="twitter:site" content="@{{ page.twuser }}">{% endif %}
+    <meta name="twitter:title" content="{{ page.title }}">
+    <meta name="twitter:description" content="{{ page.description }}">
+    {% if page.twuser %}<meta name="twitter:creator" content="@{{ page.twuser }}">{% endif %}
+    <meta name="twitter:image" content="{{ site.url }}{{ site.baseurl }}{{ site.thumbnail }}">
 
     <!-- Open Graph data -->
-    <meta property="og:title" content="{{ include.title }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="http://ncase.me/ballot/">
-    <meta property="og:image" content="http://ncase.me/ballot/social/thumbnail.png">
-    <meta property="og:description" content="{{ include.description }}">
+    <!-- most of this is included in the seo include -->
+    <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}{{ site.thumbnail }}">

@@ -35,6 +35,7 @@ minima:
     youtube_channel_name: Paretoman
 google_analytics: UA-172540609-1
 github: [metadata] # make warning go away # https://github.com/github/pages-gem/issues/399
+thumbnail: "/social/thumbnail.png"
 
 # # Build settings
 markdown: kramdown
