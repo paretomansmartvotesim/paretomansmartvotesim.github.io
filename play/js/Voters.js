@@ -106,7 +106,8 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 
 // return function(x, y, strategy, iDistrict, i){
 
-	doStar =  (model.election == Election.star  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
+	var starOr321 = ["STAR","3-2-1"].includes(model.system)
+	var doStar =  ( starOr321  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
 	if (model.autoPoll == "Auto" && district.pollResults) {
 		tally = district.pollResults
 
