@@ -131,9 +131,7 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 	var cans = model.district[iDistrict].stages[model.stage].candidates
 	var scoresfirstlast = dostrategy(model,x,y,voterModel.minscore,voterModel.maxscore,strategy,viable,cans,voterModel.defaultMax,doStar,model.utility_shape)
 	
-	voterModel.radiusFirst[i] = scoresfirstlast.radiusFirst // this is okay for now but could mess up if one voterModel is shared by more than one voterCrowd
-	voterModel.radiusLast[i] = scoresfirstlast.radiusLast
-	voterModel.dottedCircle = scoresfirstlast.dottedCircle
+	voterPerson.dottedCircle = scoresfirstlast.dottedCircle
 	var scores = scoresfirstlast.scores
 
 	// store info on voterPerson
@@ -942,7 +940,6 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 	var y = voterPerson.yArena
 	var strategy = voterPerson.strategy
 	var iDistrict = voterPerson.iDistrict
-	var k = voterPerson.iPoint
 	var ballot = voterPerson.stages[model.stage].ballot
 
 
@@ -981,9 +978,10 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 
 		var frac = (1-(i+.5)/scorange)
 		var worst = f(1)
-		var best = f(voterModel.radiusFirst[k]/voterModel.radiusLast[k])
+		var best = f(voterPerson.radiusFirst/voterPerson.radiusLast)
 		var x1 = finv(frac*(worst-best)+best)
-		var dist = x1 * voterModel.radiusLast[k]
+		var dist = x1 * voterPerson.radiusLast
+
 		
 		if (model.doVoterMapGPU) {
 			voterPerson.rad.push(dist)
@@ -1017,7 +1015,7 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 		}
 		ctx.closePath()
 		ctx.setLineDash([]);
-		if (voterModel.dottedCircle) ctx.setLineDash([5, 15]);
+		if (voterPerson.dottedCircle) ctx.setLineDash([5, 15]);
 		if (voterModel.filledCircles) {
 			var temp = ctx.globalAlpha
 			// ctx.globalAlpha = .01
@@ -1035,7 +1033,7 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 		} else {
 			ctx.stroke()
 		}
-		if (voterModel.dottedCircle) ctx.setLineDash([]);
+		if (voterPerson.dottedCircle) ctx.setLineDash([]);
 	}
 	ctx.globalCompositeOperation = tempComposite
 	
