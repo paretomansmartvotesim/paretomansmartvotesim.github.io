@@ -2362,6 +2362,8 @@ DrawTally.Score = function (model,voterModel,voterPerson) {
 			text += "<br />"
 		}
 		text += "</pre>"
+		text += pairChart([ballot], district, model)
+		text += squarePairChart([ballot], district, model)
 	}
 	return text
 	
