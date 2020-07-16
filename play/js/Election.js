@@ -2556,6 +2556,8 @@ Election.stv = function(district, model, options){
 			roundHistory.winners = []
 		}
 		history.rounds.push(roundHistory)
+		
+		won.push(_jcopy(winnerslist))
 
 		text += "<br>"
 		text += '</div>'
