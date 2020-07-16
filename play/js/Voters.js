@@ -628,7 +628,7 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 	// star exception
 	//if (strategy == "starnormfrontrunners") {
 	if (doStar) {
-		scores = starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape)
+		scores = starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape, strategy)
 	}
 
 
@@ -636,7 +636,7 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 }
 
 
-function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape) {
+function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape, strategy) {
 	// put shortlist in order
 	sortedShortlist = _jcopy(shortlist).sort( (i,k) => dista[i] - dista[k] ) // shortest distance first
 	// use the shortlist to make a piece-wise linear function
@@ -747,16 +747,27 @@ function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_sh
 			k++
 		}
 
-		// try to space candidates
-		var k = maxscore
-		for ( var i = 0 ; i < ns ; i ++) {
-			var desiredScore = scores[canAid[sortedShortlist[i]]]
-			if (ubScore[i] > desiredScore && lbScore[i] <= desiredScore) {
-				// we gave too good a score and we can lower the score
-				k = desiredScore
+		if (strategy == "best frontrunner") { // give lower bound scores
+			for ( var i = 0 ; i < ns ; i ++) {
+				tryScore[i] = lbScore[i]
+			}			
+		} else if (strategy == "not the worst frontrunner") { // give upper bound scores
+			for ( var i = 0 ; i < ns ; i ++) {
+				tryScore[i] = ubScore[i]
 			}
-			tryScore[i] = k
-			k--
+			tryScore[ns-1] = 0 // zero score for worst frontrunner
+		} else {
+			// try to space candidates
+			var k = maxscore
+			for ( var i = 0 ; i < ns ; i ++) {
+				var desiredScore = scores[canAid[sortedShortlist[i]]]
+				if (ubScore[i] > desiredScore && lbScore[i] <= desiredScore) {
+					// we gave too good a score and we can lower the score
+					k = desiredScore
+				}
+				tryScore[i] = k
+				k--
+			}
 		}
 
 	}
@@ -2366,6 +2377,7 @@ DrawTally.Three = function (model,voterModel,voterPerson) {
 		text += model.icon(okay[i])
 	}
 	text += "</pre>"
+	text += "<br>"
 	if(0) {
 		text += "<br /> preferences:<br />"
 		for(var i = 2; i > -1; i--){
