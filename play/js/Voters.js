@@ -105,9 +105,7 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 
 
 // return function(x, y, strategy, iDistrict, i){
-
-	var starOr321 = ["STAR","3-2-1"].includes(model.system)
-	var doStar =  ( starOr321  &&  strategy != "zero strategy. judge on an absolute scale.") || model.doStarStrategy
+	var doStar =  model.checkDoStarStrategy(strategy)
 	if (model.autoPoll == "Auto" && district.pollResults) {
 		tally = district.pollResults
 
@@ -137,6 +135,7 @@ CastBallot.Score = function (model,voterModel,voterPerson) {
 	// store info on voterPerson
 	voterPerson.radiusFirst = scoresfirstlast.radiusFirst
 	voterPerson.radiusLast = scoresfirstlast.radiusLast
+	voterPerson.maphelp = scoresfirstlast.maphelp
 
 	return scores
 
@@ -626,11 +625,13 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 	// star exception
 	//if (strategy == "starnormfrontrunners") {
 	if (doStar) {
-		scores = starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape, strategy)
+		decision = starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape, strategy)
+		scores = decision.scores
+		var maphelp = decision.maphelp
 	}
 
 
-	return {scores:scores, radiusFirst:n , radiusLast:m, dottedCircle:dottedCircle}
+	return {scores:scores, radiusFirst:n , radiusLast:m, dottedCircle:dottedCircle, maphelp:maphelp}
 }
 
 
@@ -759,9 +760,12 @@ function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_sh
 			var k = maxscore
 			for ( var i = 0 ; i < ns ; i ++) {
 				var desiredScore = scores[canAid[sortedShortlist[i]]]
-				if (ubScore[i] > desiredScore && lbScore[i] <= desiredScore) {
+				if (ubScore[i] > desiredScore) {
 					// we gave too good a score and we can lower the score
 					k = desiredScore
+				}
+				if (lbScore[i] > k) { // did we go too low?
+					k = lbScore[i] // use lower bound
 				}
 				tryScore[i] = k
 				k--
@@ -840,7 +844,7 @@ function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_sh
 		}
 	}
 
-	return scores
+	return {scores:scores, maphelp:{intervals:intervals,scores:tryScore}}
 }
 
 
@@ -973,6 +977,8 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 		// ctx.globalCompositeOperation = "darken" // not uniform 1,2,3
 	}
 
+	var doStar =  model.checkDoStarStrategy(strategy)
+
 	for(var i=0;i<scorange;i++){
 		//var dist = step*(i+.5) + voterModel.radiusFirst
 
@@ -982,7 +988,35 @@ DrawMap.Score = function (ctx, model,voterModel,voterPerson) {
 		var x1 = finv(frac*(worst-best)+best)
 		var dist = x1 * voterPerson.radiusLast
 
-		
+		if (doStar) {
+			// use maphelp
+			var m = voterPerson.maphelp
+			var iv = m.intervals
+			var sc = m.scores
+			
+			// we want to use our guiding scores to make maps
+			var slo = sc.find( x => x <= i)
+			var ilo = sc.indexOf( slo )
+			var ihi = Math.max(ilo - 1,0)
+			// hi and lo distances
+			var dhi = iv[ihi]
+			var dlo = iv[ilo]
+			// hi and lo scores
+			var shi = sc[ihi]
+			var slo = sc[ilo]
+			// interpolate to find boundary (and handle dividing by zero)
+			var frac = (slo == shi) ? 0 : ( (i+.5) - slo) / (shi - slo)
+			if (model.utility_shape == "linear") {
+				dist = dlo + (dhi - dlo) * frac 
+			} else {
+				var f = utility_function(model.utility_shape)
+				var finv = inverse_utility_function(model.utility_shape)
+				var fdist = f(dlo) + (f(dhi) - f(dlo)) * frac
+				dist = finv(fdist)
+			}
+			
+		}
+			
 		if (model.doVoterMapGPU) {
 			voterPerson.rad.push(dist)
 			voterPerson.idxCan.push(0)
