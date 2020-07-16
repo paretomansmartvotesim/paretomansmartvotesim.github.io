@@ -33,7 +33,7 @@ title = "Unstrategic Ballot"
 caption = "Judge, don't choose."
 id = "ballot4"
 comment = "Description: this should just be an unstrategic score voter, as in ncase's thing. Allow ballot picture to show 0 scores."
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPH8e6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ4T28lkxvFnSGGcpkaRhFZxoiq_u8zpL6cxl-Y5IdvV1SoG8mtDiUTsYQljioHDGL6JQgw1jBSD2CErNoMU_y2r6M3KcLNCqb9FrkBMbfFcRg4yiAEVIF0LmQpiQ3uzGgy9mI3Mkpn6mZwBoMmMCDRZAEZTDBSRsWRz703Mpo-8FeAqkFTAVcBVjGuyXmP5YQEBWAtcW5NjiWxldmI_x-7W3XO-bIx4cu_M_S5fUzN8c8PXQDAPPVnRw0qA3EXUAoDUii-ssF0batrfqrAtCQDDAsMCw1K7FRcooBAoEDS-QUHD3QYFrSDC_zU0vl2mqKGoVz1qsKQJAEsKMQoxCkIFoUKPgk8hS13WnQ3GAGHPT7vdcn78OMw20w_r5TjbVJ9el_f7-bQ-bg_n7bL3aX_bb-aX7X7ehK8fte0tn0wDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPHzu6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ4T28lkxvFnSGGcJqVIQqs4UZXfXeb0l2sxF_WckO3qahUD-bWhRCL2sIQxxcBhDN9EIYYaRopB7JAV1SDFf8sq7WZluFmh1N8iVyCmtnguIwcZxIAKkK6FTAWxob1ZDYZezEZmyUz9TM4A0GRGZDTFQJBURA2RsWRz703Mpo-8FeAqkFTAVcBVjGuyXmP5YQEBWAtcW5NjiWxldmI_x-7W3XO-bIx4cu_M_S5fUzN8s-JrIJiHnqzoYSVA7iJqAUBqxRdW2K6KWutvVdiWBIBhgWGBYandigsUUAgUCBqvUKC4q1CgBRH-T_F_epkiRbFd9UhhqSUALDWIaRDTQNhA2KCnga9BVnNZdzYYA4Q9P-12y_nx4zDbTD-sl-NsU316Xd7v59P6uD2ct8vep_1tv5lftvt5E75-ABCA83FMAwAA)"
 
 %}
 
@@ -46,7 +46,7 @@ As I suggested above, in the real world, in score voting and similar methods, mo
 Here's an example of a "normalizing" voter for you to play with:
 
 {% include sim.html
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPH8e6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ4T28lkxvFnSGGcpkaRhFZxoiq_u8zpL6cxl-Y5IdvV1SoG8mtDiUTsYQljioHDGL6JQgw1jBSD2CErNoMU_y2r6M3KcLNCqb9FrkBMbfFcRg4yiAEVIF0LmQpiQ3uzGgy9mI3Mkpn6mZwBoMmMCDRZAEZTDBSRsWRz703Mpo-8FeAq4CrgKuAqxjVZr7H8sIAArAWurcmxRLYyO7GfY3fr7jlfNkY8uXfmfpevqRm-ueFrIJiHnqzoYSVA7iJqAUBqxRdW2K4NNe1vVdiWBIBhwR8IDEvtVlyggEKgQND4BgUNdxsUtIII_9fQ-HaZooaiXvWowZImAAgVYhRiFIQKQoUeBZ9ClrqsOxuMAcKen3a75fz4cZhtph_Wy3G2qT69Lu_382l93B7O22Xv0_6238wv2_28CV8_5K2SYUwDAAA)"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPHzu6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ4T28lkxs5nSGGcJqVIQqs4UZXfXeb0l2sxF_WckO3qahUD-bWhRCL2sIQxxcBhDN9EIYYaRopB7JAV1SDFf8sq7WZluFmh1N8iVyCmtnguIwcZxIAKkK6FTAWxob1ZDYZezEZmyUz9TM4A0GRGZDTFQJBURA2RsWRz703Mpo-8FeAq4CrgKuAqxjVZr7H8sIAArAWurcmxRLYyO7GfY3fr7jlfNkY8uXfmfpevqRm-WTEaCOahJyt6WAmQu4haAJBaMcIK21VRa_2tCtuSADAsmIHAsNRuxQUKKAQKBI1XKFDcVSjQggjzU8xPL79IUWxXPVJYagkAwgYxDWIaCBsIG_Q08DXIai7rzj7GAGHPT7vdcn78OMz2px_Wy3G2X316Xd7v59P6uD2ct8vef_vbfjO_bPfzJnz9AEHATI9MAwAA)"
 title = "Normalizing Voter"
 caption = "Best is 5. Worst is 0."
 id = "ballot5"
@@ -56,7 +56,7 @@ comment = "Description: this should be like ncase's 'drag the voter' examples, w
 As soon as voters are using strategy in score voting — even a very slight amount of strategy, such as normalization — it is no longer fully exempt from impossibility theorems like Arrow's theorem. In particular, it no longer obeys independence of irrelevant alternatives (IIA); adding or removing a losing candidate can change how voters normalize, and thus change who wins. For instance, in the simulation below, try moving the losing yellow triangle candidate, and see what happens.
 
 {% include sim.html 
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQW7EIAxF78IaVdhg4-Qq0Zxk1J59DE8ZjdRWWXxjw-fZ5FlaOa9LtFWx9qiXxjtqRI9aZO-x97qXs9Uyyll-REottteeu7I4U45Wf31Ziiz9XTn-rUjb5rIYRKp79WOllTQoMhBAxJEkkZGa1_aUY2c1_TKp6ScpimCjgxU2io3OfVyDVbpoTqBtYFnDwKkD1DsrnLot6ipsdI7i12lZqmZpbLsVyB3oHaTh1Vcw9rnxaTl8XzMmDwLiOHbSGJwJovty6wh4ZgiN2qTGuIxGvSE06TTpjMttt7DgHAuHwBn1hGBydkIwGdDkxSajnve_MynGPZva61h5WoqG0FIAE8AELQWGAU_gF2DFwvqy_NsW2PcLK_RwUvwCAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSXW7EIAyE78IzqrDBxslVoj3Jqj37Gj5ltVJb5WH8g4cZk2dp5bwu0VbF2qNeGu-oET1qkX3G3nkvZ6tllLP8iJRabOeep7I5E45Wf33Zimz93Tn-7Ujb5LI0iFT36scqK2WkyAAQIg6kEhmJeW1POHZVky-LmnySoAA0OshsDyg0OsmCLFk0N9C2YFnLgKkjqHcymLot1VU46IzC17EsVbM1Nt0K5A70DpLw6isYe258Ug7f14zJgyBxHLtoLM4E0H25dQB5ZgBGbdJjXYZRbwAmHZPOuty2hSXOoXAUOKueKJjMThRMFjR5scmLzfvfmTTj3k3tdaw6lqIBWArEBGICSwFhoCfgC2TFkvVl-bctYd8vXQbN5fwCAAA)"
 title = "Non-optimal"
 caption = ""
 id = "election7"
@@ -66,7 +66,7 @@ comment = "This should be a score voting scenario with 100% normalizing voters. 
 But a bigger problem than IIA violation, which in the real world is relatively hard to engineer or take advantage of, is the issue of differential voting power. In the following election, one of the groups of voters normalizes, and the other one doesn't. The two groups are the same size, but the normalizing group gets a candidate they like a lot better.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQW7EIAxF7-I1qrAxhsxVMrOdbQ9QtWev4Wk6bdUqUj7Y8P3s5E2qXM5Tay3a662c9rXKd7Fc3Yro32cy0-RSi7hc5ENVivS9jzyfyZEio2bYDyn155P5mfn6O74zx78ZrbuCLiTVElHiWGEj3BbJVV7v96tkXXXCYGkgyaWemvUtJYtpEUvjDJqyM4T-zNlhY9hY2rSUye7YZq1uclujwalB1ho7nFpf-CWfdTC4il-jd90ejt1q3PW5tOcybU_jrO_7_t3aY5fzwWcC1Wm4M8muiG2I3hAwe0douA9yc9fpNBwVodmg2WBs0TdnS5DAIiCIY8uAYHB3QDAY1ODLDUY-Hn_UIDkfMyqt-IrT0qwILU1gJjCTliaGE56J3wRrLqyXnr_fAnv_BKDnu5IcAwAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSUW4DIQxE7-Jvq8JgDJurbPKb3x6gas9ew1Oatmq10g62YTxjeJMil_O0UtR6uelZv1b515qrm4r9vScrTS5FxeUiH2ai0nccuT-LI0FGybQfouXnl_WZ9fI7vyvHvxUru4MtSWYaoXGsdCXdlpKrvN7vV8m-5qSRZQGkLvPE7F8Tspmp1CTOZDWiCuCvOlHStARo6iCaRMcma2Urr2s0MDWUtUYEU-tLvua3NgZH4Wt4t83h0C3jbs9lfS6T9qzs9X3ev1N77HY-uCakOoY7k-wG1C2iNwCZvQMY7oPa3H06hqMAmA3MBmOLvnW2FBJQBAri2DBQMDg7UDAY1ODmBjc3Hi9qUJyPGWlTX3kszQJgaSJmImZiaUI40TPhm8iaS9ZLz-e3hL1_AuiA1g8cAwAA)"
 title = "Strategists win"
 caption = ""
 id = "election8"
@@ -76,7 +76,7 @@ comment = "groups of voters at (-4,0)non-normalizing and (4,0)normalizing. Cands
 Is that kind of thing realistic? Perhaps not in the form above; few voters would be so unstrategic as not to normalize. But actually, normalizing as above is a pretty weak strategy. To strategize even more strongly, voters could somehow assess which two candidates were the frontrunners, and use them as the endpoints for normalization. Mostly, this means casting an approval-like ballot that gives every candidate either a 5 or a 0. For instance, in the election below, the voter believes triangle and square are the frontrunners. Compare the strongly strategic voter below with the normalized voter in the second example above.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPH8e6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ6T2M5kxvFnSGGcpkaRhFZxoiq_u8zpL6Yxl-YxIdvV1SoG8mtDiUTsxxLGFAOHMXwThRhqGCkGsSJLNoMU_y3L6M3McDNDqb9FrkBMbfFYRgwyiAEVIF0LmQpiQ3uzGgw9mY3Mgpl6Tc4A0GTGCTRZAEZTDBQnY8nm3puYTR95K8BVMlLgKuAqxjVZr7G8WFAF1gLX1uRYIluandjr2N26e86XjRFP7p253-VraoZvbvgaCOahByt6WAkAqbUAILXiCyts14ac9rcqbEsCwLDgDwSGpXYrLlBAIVAgaHyDgoa7DQpawQn_19D4dpmihqRe9ajBkiYAdSaFGIUYBaGCUKFHwaeQpS7rzgZjgLDnp91uOT9-HGab6Yf1cpxtqk-vy_v9fFoft4fzdtn7tL_tN_PLdj9vwtcPVmsiuUwDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPHzu6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ6T2M5kxvFnSGGcJqVIQqs4UZXfXeb0F2sxF_WYkO3qahUD-bWhRCL2YwljioHDGL6JQgw1jBSDWJEl1SDFf8sy7WZmuJmh1N8iVyCmtngsIwYZxIAKkK6FTAWxob1ZDYaezEZmwUy9JmcAaDLjZDTFQBBUnBpOxpLNvTcxmz7yVoCrZKTAVcBVjGuyXmN5saAKrAWurcmxRLY0O7HXsbt195wvGyOe3Dtzv8vX1AzfrPgaCOahByt6WAkAqbUAILXiCytsV0Wu9bcqbEsCwLDgDwSGpXYrLlBAIVAgaLxCgeKuQoEWnPB_iv_TyxQpku2qRwpLLQGoMzWIaRDTQNhA2KCnga9BVnNZdzYYA4Q9P-12y_nx4zDbTD-sl-NsU316Xd7v59P6uD2ct8vep_1tv5lftvt5E75-APMG_FdMAwAA)"
 title = "Strong Strategic Voter"
 caption = "Almost like strategic approval."
 id = "ballot8"
@@ -88,7 +88,7 @@ Just as normalized voters can have more voting power than naive voters, strongly
 Even stronger strategic voters could only choose the best of the frontrunners.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84Rih3Hye6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ6T2M5kxvFnSGGcpkqRlFZxoqK_O5b0F2uRc_WYku3KahUD-bUhRyLxYw5jikHCGL6JQgwljBSDWpElq0GK_5Zl2s3McDNDqb9FrkBNbfYYIwYZJIAC0K6FTAWJob1ZDIaeZCOzIFOvYQaAhgUn0LACjCYbNJyMhc29N5FNH3krwJW5F2ZwZXBl45qs11herCAAa4Zra3LMUSwtTux14m7dvfBlY8STexfpd-WaWuBbKr4GgmXowYIeFgJwF1EyAFILvrDAdqnItf5WgW1NABhW_IHCsJZuxQUqKBQKFI2vUFBxt0JBzTjh_yoaXy9TVJFsVz2qsNQSgLrCBjENYhoIGwgb9DTwNchqLuvOBmOAsOen3W45P34cZpvph_VynG2qT6_L-_18Wh-3h_N22fu0v-0388t2P2_C1w8HK51HTAMAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPHzu6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ6T2M5kxvFnSGGcJqVIQqs4UZXfXeb0F2sxF_WYkO3qahUD-bWhRCL2YwljioHDGL6JQgw1jBSDWJEl1SDFf8sy7WZmuJmh1N8iVyCmtngsIwYZxIAKkK6FTAWxob1ZDYaezEZmwUy9JmcAaDLjZDTFQBBUnBpOxpLNvTcxmz7yVoCr5F5YwFXAVYxrsl5jebGAAKwFrq3JsUS2NDux17G7dfecLxsjntw7c7_L19QM36z4GgjmoQcrelgJkLuIWgCQWvGFFbarItf6WxW2JQFgWPAHAsNSuxUXKKAQKBA0XqFAcVehQAtO-D_F_-llihTJdtUjhaWWANQVNohpENNA2EDYoKeBr0FWc1l3NhgDhD0_7XbL-fHjMNtMP6yX42xTfXpd3u_n0_q4PZy3y96n_W2_mV-2-3kTvn4AokZDqUwDAAA)"
 title = "Best Frontrunner"
 caption = "And everybody you like better."
 id = "ballot11"
@@ -97,7 +97,7 @@ id = "ballot11"
 A more risk-averse, safe strategic voter could avoid the worst frontrunner by voting for everyone better.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84Rih3Hye6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ4T28lkxvFnSGGcpkqRlFZxoqK_O5b0l2uRc_Wcku3KahUD-bUhRyLxMIcxxSBhDN9EIYYSRopB7ZAVq0GK_5ZV2s3KcLNCqb9FrkBNbfYcIwcZJIAC0K6FTAWJob1ZDIZeZCOzJFM_wwwADQsi0LACjCYbNETGwubem8imj7wV4MrcmTO4MriycU3Wayw_rCAAa4Zra3LMUawsTuznxN26e-HLxogn9y7S78o1tcC3VHwNBMvQkwU9LATgLqJkAKQWfGGB7VJRa_2tAtuaADCs-AOFYS3digtUUCgUKBpfoaDiboWCmhHh_yoaXy9TVFFsVz2qsNQSgHrbG8Q0iGkgbCBs0NPA1yCruaw7G4wBwp6fdrvl_PhxmG2mH9bLcbapPr0u7_fzaX3cHs7bZe_T_rbfzC_b_bwJXz9z4DLTTAMAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPHzu6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ4T28lkxs5nSGGcJqVIQqs4UZXfXeb0l2sxF_WckO3qahUD-bWhRCL2sIQxxcBhDN9EIYYaRopB7JAV1SDFf8sq7WZluFmh1N8iVyCmtnguIwcZxIAKkK6FTAWxob1ZDYZezEZmyUz9TM4A0GRGZDTFQJBURA2RsWRz703Mpo-8FeAquTMXcBVwFeOarNdYflhAANYC19bkWCJbmZ3Yz7G7dfecLxsjntw7c7_L19QM36wYDQTz0JMVPawEyF1ELQBIrRhhhe2qqLX-VoVtSQAYFsxAYFhqt-ICBRQCBYLGKxQo7ioUaEGE-Snmp5dfpCi2qx4pLLUEoN72BjENYhoIGwgb9DTwNchqLuvOPsYAYc9Pu91yfvw4zPanH9bLcbZffXpd3u_n0_q4PZy3y95_-9t-M79s9_MmfP0A1o3sPUwDAAA)"
 title = "Not the Worst Frontrunner"
 caption = "Just everybody you like better."
 id = "ballot12"
@@ -114,7 +114,7 @@ One scenario where approval becomes a factor is called the "chicken dilemma". Im
 Here's that scenario in sandbox form. The slider on the right controls the percent of the smallest group that is strongly strategic between triangle and square; all the rest of the voters use normalized strategy (that is, approve any candidate better than the average of their favorite and least-favorite).
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSS24EMQhE7-I1iszXeK4yM9tsc4AoOXswpZE6iqJeVGNw8aD7c8xxu99ZmNj2k-7MSbzmedtG7Pv5pMFdw0FV1zX1ltY1XjV-anTcJg0bt_HNc9DwjqNuVnKVlLEIbaF5fSqZlZz056nM_jdTLY49HzJmiqDY51hwrAfjMT7e3x-jWLiwuARMHJCCYiut_lpSzYSGlHEdCvcNEQiGE9gIbAQ2svq6JCK46GxyJjmbgZfCS7XrFV7qZ4Aq5FMYuAxH3RcPm69VnICvgVwcTK-BtY9dW1h0W1v4WoC23YeOnTpDpGFcIcB1h2B0X8jl7207dhATgukDXyawyfCeQIso4BVAid2ygLJwdwFlKSJDDl9hvf6whWS-lkZKds4xW04IDBMwCZjEntK7S4In4ZfAyoP15vVHHrCvH3AL_hg2AwAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSS24EMQhE7-I1iszXeK4yM9tsc4AoOXswpZE6iqJeVGNw8aD7c8xxu99ZmNj2k-7MSbzmedtG7Pv5pMFdw0FV1zX1ltY1XjV-anTcJg0bt_HNc9DwjqNuVnKVlLEIbaF5fSqZlZz056nM_jdTLY49HzJmiqDY51hwrAfjMT7e3x-jWLiwuARMHJCCYiut_lpSzYSGlHEdCvcNEQiGE9iI9wWBjSxEiQguOpucSc5m4KXwUu16hZf6GaAK-RQGLsNR98XD5msVJ-BrIBcH02tg7WPXFhbd1ha-FqBt96Fjp84QaRhXCHDdIRjdF3L5e9uOHcSEYPrAlwlsMrwn0CIKeAVQYrcsoCzcXUBZisiQw8dcrz9sIZmvpZGSnXPMlhMCwwRMAiaxp_TukuBJ-CWw8mC9ef2RB-zrB8ZdeYg2AwAA)"
 title = "Playing Chicken"
 caption = ""
 id = "election10"
@@ -124,14 +124,14 @@ comment = "Clumps of voters at (x,y,size): (-2,1,6); (-2,-1,4)slider; (3,0,10)."
 The "chicken dilemma" is a genuinely tough situation for almost any voting method. The motivations for the two rival factions to vote strategically are hard to minimize safely. Voting methods that go too far out of their way to punish strategic voters in this scenario tend to get the wrong answer in other, more-common scenarios like center squeeze. Look at how these various methods deal with both of these situations:
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTWtbMRD8K0VnpWhX0kryLSkEegvuIxfHBzdxTqYyxqSU0v72jjS0vFLKgzf6GM3OrPTdBbfZ7UTFS2p7vxOpXkoYo5a85LbfeyeTI-bBmxyMapqcDE4enOg2wbvkNu6nBOddnnPDSWwWgFPDsmbnm_qw_kCoIAT_z4ed9t8dlBklZLgTwaKZt-ateKu-BF9kkJSkOIw9uf76-uRgQ2BUAHQpRoBNSUC4iQCUVjhGGSyqzBOqBMZVyihllDJa5nGtnFElhplDvI5eUStSK8bJj9SKecQBcbiPxsNUjG2lkcLvxoyJrCe6UkhxPUlTJ61LJJtlU-H90XRqczGzw1kIOs3kSKDdnAmMngv36t_dzuyBBQLTG2_G2EnLM0GEI6OW0Yq1CYVWCs8WWimRs8Q9Winjzbn7h-UBlT9uH_G_65eXA_D2fL70t8MJw0_P_XIEfuhfXvrl-Xgda8vtFhBv9EaASz-_W752jLZ3j_16dOMhF9aoq5sobFYNBDqsTFeZrrLxNU_blQErtSpz1pHzfcaDZ9LPh9OpX5dv5yN6-cf4j1-q-t8nsQMAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTWsbMRT8K0Xnl6KnjyfJt6QQ6C24Sy6OD27inExljEkppf3tHWlo2VLKwo6eNJo383a_O-82u50GFU1tLzvVKlr8WLUkmtt-L04nR03AmxysapqcDE4enOg2XlxyG_dTvROXZ224icMCcMGwHbKTFsSvHxAqCF7-eXDS_nuCNqOFDneq2DQTa2JFrErxUnSQAklxGHty_fX1ycGGwqgC6FKNAJuagHATAWgd4BhtsBl03giBwLiBMgg1LgTKhMKqsqJK9DOHShizolakVoyTH6kV84gD4nAfjZepGNtKI_nfgxmFrouwUkhxXaSpk9Ytks22qfD70XRqczNzwlkJYZrJkUC7ORMYPRee1b-nnTkD8wSmN34Z4yQtzwQRjoxaRivWJhRaKbxbaKVEVolntFLGP-fuH5YHdP64fcT7rl9eDsDb8_nS3w4nLD8998sR-KF_eemX5-N17C23W0C8CTcKXPr53fK1Y7W9e-zXoxs_cmGPuvoShcOqnkCHlekq01UOvuZpuzJgpVZlzjpyvs_44Zn08-F06tfl2_mIWf4x_uMXJYo73bEDAAA)"
 title = "Playing Chicken with Different Methods"
 caption = ""
 id = "election11"
 %}
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwWpCMRD8lZJzLNkku4netFDoTax4eXqQqqfSyEPaQ2m_vbsZBKHIg7ez2c1kZpNvF9xsGCizJ-adH6hmRclQEEVlt_OOeg8HzYPlyc2Cd9nN3G923nFPRZu0VjQE_-_TSr1bmd6tUOjcRL1DxEvxUq0QUUgmYuva6bR1KoUyliGJBEE1UdaoCpKGaV-NSq2LUalJQ0SAtZiRgSaCJpa-PVZkyhJ1FKErIx9tLuBK0JYSOsCVlGsgbSRrFJTAmKY3HLkTGqAriFeghEMykPu-fEuZpR-TC-4GIvO0LzKmyIQQ--EMeQx5zAiwygU1DIxhVQICTApMCgYm3C2YOAGFQIFg2AUKCvYWKCgJGe6sQEGxd-Sel-ulXue6nR_WX03RarFpl6OCl9VG_4s2HvYan9rHoY1vx4vi-fk8ts_9u8LXtzZac5rECVm-nq-cPc6CM-p14D75bOuYUw0ImFOFwwqHFSord-kVJiv4KrxW8_rI-p7N7c8fqv0fv1wDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwWpCMRD8lZJzLNkku4netFDoTax4eXqQqqfSyEPaQ2m_vbsZBKHIg7ez2c1kZpNvF9xsGCizJ-adH6hmRclQEEVlt_OOeg8HzYPlyc2Cd9nN3G923nFPRZu0VjQE_-_TSr1bmd6tUOjcRL1DxEvxUq0QUUgmYuva6bR1KoUyliGJBEE1UdaoCpKGaV-NSq2LUalJQ0SAtZiRcd8QQRMLsopMWaKOInRl5KPNBVwJ2lJCB7iScg2kjWSNghIY0_SGI3dCA3QF8QqUcEgGct-Xbymz9GNywd1AZJ72RcYUmRBiP5whjyGPGQFWuaCGgTGsSkCASYFJwcCEuwUTJ6AQKBAMu0BBwd4CBSUhw50VKCj2jtzzcr3U61y388P6qylaLTbtclTwstrof9HGw17jU_s4tPHteFE8P5_H9rl_V_j61kZrTpM4IcvX85Wzx1lwRr0O3CefbR1zqgEBc6pwWOGwQmXlLr3CZAVfhddqXh9Z37O5_fkD-BG5DlwDAAA)"
 title = "Center Squeeze"
 caption = ""
 id = "election12"
@@ -147,7 +147,7 @@ So, now I've explained why strategic voting makes things tricky, I can explain m
 Here's a one-voter star election. Try the N = Normalized and F = Frontrunner strategies.  These are almost the same as in score voting, except that the ratings may be changed a little to avoid giving the same score to two frontrunners.  That is an important change that can matter in the runoff. Here's a one-voter election:
 
 {% include sim.html
-link="[link](http://www.howtofixtheelection.com/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84Rih0n8e6ZH5TbqgdoF1Gp6lZtEUII3o6dUUEIVTlMHDuTGccfIYVxmuoQScs6TlSq7dh2XPhnJ5GF1usYyIspaaScPM5hTDFIGMMXcYihhJFiqFZlyWaQ4r9lGb2ZGW5mKPW3yCVUE5n9jHEGGSSAAqhdC5kKEkN702HoSU49Yuo1zADQsCACDVeA0WQDRWQsbO69d2z6yFsBrsxIgSuDKxvXRLEvL62oAWeGZ4oc3ZM4qVeJO3XnwteNkU69RvpN-UsrcCwNnwKpMvTDgu4VAkBkyQCILPi8AsOlIaf9pQLDNQFgtaL7FVZr6TZcXgVFhYKKljcoaLjboKBlRPi5hpa36_w0JPW3P1H8HJY0AagzKcQoxCgIFYQKPQo-hSx1WXfFRg7Cnh73--Xy8H6cbZpXm-U02zyfX5a3-_m8Oe2Ol91y8Dl_PWzn591h3obPb7MMRxU9AwAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8l5wjFDtO4t0zf1Buqx6gXUSlqlu1RQgh-HbsjApCqNrDxI-dzDj-CCmM01SHSFrWcaJS7cR24sI_J4kstF7HQN5MSSPl5HEOY4pBwhi-iEMMJYwUQ7UuKzaDFP99VtGbleFmhVK_i1xCNZHZc4wcZJAACqB2LWQqSAztToehFzn1iKn3MANAw4LIaLJBRbIhUkTGwubeZ8emj3wU4MqMErgyuLJxTRT7560VPeDM8EyRo3sSJ_UucafuXPh6MNKp90j_U_7SChxLw6NAqgw9WTC9QgCILBkAkQWPV2C4NNS031RguCYArFZMv8JqLd2Gy6ugqFBQMfIGBQ3_NihoGRFeruHl2nV_Gor6O58onoclTQDqTAoxCjEKQgWhQo-CTyFLXdZdsZWDsKfH_X65PLwfZ9vm1WY5zbbP55fl7X4-b06742W3HHzPXw_b-Xl3mLfh8xuKlzI8PQMAAA)"
 title = "Star Strong"
 caption = "Keeps a space for the best."
 id = "ballot9"
@@ -157,7 +157,7 @@ comment = "one-voter star election"
 In STAR voting, the runoff resolves the chicken dilemma example we've been using.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQU4DMQxF75K1hWI7dpJeA3ZtF4DaVaUixAahcnYcf1UahNAs_jh2fp6dfJVadvs9CxO3eaQ98yDudf3NRmzzeKTCWcNOUZc18Tda1ljU2KrRsqtUWtmVb5ZCxTL22BnJHhLGIjSF6vaL5IhkpT9fZOa_Ga5pz4uMmdzJ51oWLOvCOJTr-XwowcKBxSFgYocEFLfQOF9D4jChImEci8K5QwSC5gQ2AhuBjfTcLgMRXLQmOZOsycBL4aWa9QovtdVAFPIqdGyGo86NR6v3UayAt4FsHJpug5Y-bXtE8zy2ddwWoNvMRcNMjSGSMKYQ4JpB0Lp15MbvaRtm4BWC7h0345ikW3agQeTwcqD4TOlA6djbgdIVUUMOt9DvL6wjOe5DI6W21tHbqBAYDsAMwAzMaVieMsAz4DeANRbWg8WLBNjL8-Vy_Xj6fDtF64-v1_dTuf0As25D0UsDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQU4DMQxF75K1hWI7dpJeA3ZtF4DaVaUixAahcnYcf1UahNAs_jh2fp6dfJVadvs9CxO3eaQ98yDudf3NRmzzeKTCWcNOUZc18Tda1ljU2KrRsqtUWtmVb5ZCxTL22BnJHhLGIjSF6vaL5IhkpT9fZOa_Ga5pz4uMmdzJ51oWLOvCOJTr-XwowcKBxSFgYocEFLfQOF9D4jChImEci8K5QwSC5gQ2YrlBYCMd0UAEF61JziRrMvBSeKlmvcJLbTUQhbwKHZvhqHPj0ep9FCvgbSAbh6bboKVP2x7RPI9tHbcF6DZz0TBTY4gkjCkEuGYQtG4dufF72oYZeIWge8fNOCbplh1oEDm8HCg-UzpQOvZ2oHRF1JDDZfb7C-tIjvvQSKmtdfQ2KgSGAzADMANzGpanDPAM-A1gjYX1YPEiAfbyfLlcP54-307R-uPr9f1Ubj-GvhvISwMAAA)"
 title = "Chicken Star"
 caption = ""
 id = "election13"
@@ -169,7 +169,7 @@ comment = "chicken dilemma with star"
 In 3-2-1 voting, voters rate each candidate "Good", "OK", or "Bad". To find the winner, you first narrow it down to three semifinalists, the candidates with the most "good" ratings. Then, narrow it further to two finalists, the candidates with the fewest "bad" ratings. Finally, the winner is the one preferred on more ballots. Here's a ballot to play with:
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy2oDMQz8F59NsWTZ1u65n5Dbsoe22ZJASEIelFLab6_kIS2lBB_GsuTxjKyPkMI4TXWIpGWOE5VqO7YdF_7ZSWSheY6BvJiSRsrJ4xzGFIOEMXxRDjGUMFIM1aos2QxS_Lcso3czw90Mpf4WuYRqIrOfMc4ggwRQALVrIVNBYmhvOgw9yalHTL2GGQAaFkSg4QowmmygiIyFzb33jk0feSvAlRkpcGVwZeOaKPblpRU14MzwTJGjexIn9Spxp-5c-LYx0qnXSL8pf2kFjqXhUyBVhn5Y0L1CAIgsGQCRBZ9XYLg05LS_VGC4JgCsVnS_wmot3YbLq6CoUFDR8gYFDXcbFLSMCD_X0PJ2m5-GpP72J4qfw5ImAHUmhRiFGAWhglChR8GnkKUu66HYyEHY89Nud7is3o-LTfNqc1oWm-fz5vD2uJxfTtvjZXvY-5xf9-vldbtf1uHzG8L9T7c9AwAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy2oDMQz8F59NsWTZ1u65n5Dbsoe22ZJASEIelFLab6_kIS2lhD2M9djxjKyPkMI4TXWIpGWOE5VqJ7YTF_45SWSheY6BvJmSRsrJ4xzGFIOEMXxRDjGUMFIM1bqs2AxS_PdZRe9WhrsVSv0ucgnVRGbPMXKQQQIogNq1kKkgMbQ7HYZe5NQjpt7DDAANCyKjyQYVyYZIERkLm3ufHZs-8lGAKzNK4MrgysY1Ueyft1b0gDPDM0WO7kmc1LvEnbpz4dvBSKfeI_1P-UsrcCwNjwKpMvRkwfQKASCyZABEFjxegeHSUNN-U4HhmgCwWjH9Cqu1dBsur4KiQkHFyBsUNPzboKBlRHi5hpdrt_1pKOrvfKJ4HpY0AagzKcQoxCgIFYQKPQo-hSx1WQ_FVg7Cnp92u8Nl9X5cbJtXm9Oy2D6fN4e3x-X8ctoeL9vD3vf8ul8vr9v9sg6f3_tmOp49AwAA)"
 title = "321 Strategic"
 caption = "Extra rounds of approval."
 id = "ballot10"
@@ -179,7 +179,7 @@ comment = "one-voter 3-2-1"
 And here's the chicken dilemma. Note that Frontrunner strategy doesn't change the result from Normalize strategy. Candidates wouldn't have to go negative against their nearby rivals in order to ensure that their voters would at least be moderately strategic and wouldn't just normalize.
 
 {% include sim.html
-link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQWoDMQxF7-K1KJZkyXbOkV2SRQsJXQRSSjelNGevrE9gSimz-CNL_n6S_VVq2R0OLEzc5okOzIO41_U3G7HN04kKZw07RV3WxN9oWWNRY6tGy65SaWVX7qyFimXssTOSPSSMRWgK1e0XyRHJSn--yMx_M1zTnhcZM7mTz7UsWNaFcSy3y-VYgoUDi0PAxA4JKG6hcb6GxGFCRcI4FoVzhwgEzQlsBDYCG-m5XQYiuGhNciZZk4GXwks16xVeaquBKORV6NgMR50bj1Yfo1gBbwPZODTdBi192vaI5nls67gtQLeZi4aZGkMkYUwhwDWDoHXryI3f0zbMwCsE3TtuxjFJt-xAg8jh5UDxmdKB0rG3A6UrooYcbqE_XlhHcjyGRkptraO3USEwHIAZgBmY07A8ZYBnwG8AayysJ4sXCbCX5-v19rH_fDtH6_vX9_O5fP8Ao9uz_ksDAAA)"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQWoDMQxF7-K1KJZkyXbOkV2SRQsJXQRSSjelNGevrE9gSimz-CNL_n6S_VVq2R0OLEzc5okOzIO41_U3G7HN04kKZw07RV3WxN9oWWNRY6tGy65SaWVX7qyFimXssTOSPSSMRWgK1e0XyRHJSn--yMx_M1zTnhcZM7mTz7UsWNaFcSy3y-VYgoUDi0PAxA4JKG6hcb6GxGFCRcI4FoVzhwgEzQlsxHKDwEY6ooEILlqTnEnWZOCl8FLNeoWX2mogCnkVOjbDUefGo9XHKFbA20A2Dk23QUuftj2ieR7bOm4L0G3momGmxhBJGFMIcM0gaN06cuP3tA0z8ApB946bcUzSLTvQIHJ4OVB8pnSgdOztQOmKqCGHy-yPF9aRHI-hkVJb6-htVAgMB2AGYAbmNCxPGeAZ8BvAGgvryeJFAuzl-Xq9few_387R-v71_Xwu3z-WC-vnSwMAAA)"
 title = "321 Chicken"
 caption = ""
 id = "election14"
