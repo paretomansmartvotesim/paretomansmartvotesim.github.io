@@ -780,10 +780,78 @@ function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_sh
 	}
 
 	// still need to assign scores to candidates outside the shortlist
-	// so we've got a list of distances and scores.  let's just use linear interpolation.
+	// so we've got a list of distances and scores. let's set up linear interpolation intervals.
+
+	// first we set up breaks between scores
+
+	var breaks = []
+
+	var iclosest = sortedShortlist[0]
+	var ifurthest = sortedShortlist[sortedShortlist.length-1]
+	var dclosest = dista[iclosest]
+	var dfurthest = dista[ifurthest]
+		
+	if (strategy == "best frontrunner") { 
+		var d = dclosest * 1.001
+		for (var i = 0; i < maxscore; i++ ) {
+			breaks.push(d)
+		}
+	} else if (strategy == "not the worst frontrunner") { 
+		var d = dfurthest * .999
+		for (var i = 0; i < maxscore; i++ ) {
+			breaks.push(d)
+		}
+	} else {
+		for (var i = 0; i < maxscore; i++ ) {
+			// assign default breaks
+			var frac = (i+.5) / maxscore
+			var d = dfurthest + frac * (dclosest - dfurthest) 
+			breaks.push(d)
+		}
+	}
+
+	// adjust breaks to match shortlist
+	for (var i = 0; i < maxscore; i++ ) {
+		// look at boundary between a score of i and i+1
+		var db = breaks[i]
+		var shi = i+1 // score on high side of break
+		var slo = i
+
+		// does the interval need to be adjusted?
+		for ( var k = 0 ; k < ns ; k ++) { // check the shortlist
+			var d = dista[sortedShortlist[k]]
+			var s = tryScore[k]
+			// check for push lower
+			// if distance is further than break and score is higher than break would suggest, then push break closer
+			// and opposite, too
+			var dfurther = d > db
+			var shigher = s >= shi
+			var dcloser = d < db
+			var slower = s <= slo
+			if ( dfurther && shigher ) {
+				db = d * 1.001 // put boundary just outside of this candidate
+			} else if ( dcloser && slower ) {
+				db = d * .999 // put boundary just in front of this candidate
+			}
+		}
+		breaks[i] = db // store any adjustments
+	}
+
+	// remake beginning and ending intervals
+	var intervals = []
+	ivScore = []
+	intervals.push(0)
+	ivScore.push(maxscore)
+	for (var i=breaks.length-1; i >= 0; i--) {
+		intervals.push(breaks[i])
+		ivScore.push(i+.5)
+	}
+	iLast = intervals[intervals.length-1]
+	intervals.push(iLast*2)
+	ivScore.push(0)
 
 	var fillScore = []
-	var intervals = sortedShortlist.map( i => dista[i] )
+	// var intervals = sortedShortlist.map( i => dista[i] ) // old way, kind of jerky
 	for(var i=0; i<lc; i++){
 		
 		// first, find the interval this distance fits into
@@ -812,8 +880,8 @@ function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_sh
 				}
 			}
 			// apply fraction 
-			var ss = tryScore[start]
-			var es = tryScore[end]
+			var ss = ivScore[start]
+			var es = ivScore[end]
 			fillScore[i] = Math.round( ss + (es-ss)*frac )
 		}	
 	}
@@ -844,7 +912,7 @@ function starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_sh
 		}
 	}
 
-	return {scores:scores, maphelp:{intervals:intervals,scores:tryScore}}
+	return {scores:scores, maphelp:{intervals:intervals,scores:ivScore}}
 }
 
 
