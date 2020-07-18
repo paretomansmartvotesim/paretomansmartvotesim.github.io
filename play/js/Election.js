@@ -551,28 +551,32 @@ Election.condorcet = function(district, model, options){
 	return result;
 };
 
-function pairChart(ballots,district,model) {
+function pairChart(ballots,district,model,hh) {
 	var text = ""
 	text += "<span class='small'>"
 	let opt = {entity:"winner",doSort:true,triangle:true,light:true}
-	if (model.ballotType == "Ranked") {
-		var hh = head2HeadTally(model, district,ballots)
-	} else {
-		var hh = head2HeadScoreTally(model, district,ballots)
+	if (hh == undefined) {
+		if (model.ballotType == "Ranked") {
+			var hh = head2HeadTally(model, district,ballots)
+		} else {
+			var hh = head2HeadScoreTally(model, district,ballots)
+		}
 	}
 	text += pairwiseTable(hh,district,model,opt)
 	text += "</span><br>"
 	return text
 }
 
-function squarePairChart(ballots,district,model) {
+function squarePairChart(ballots,district,model,hh) {
 	var text = ""
 	text += "<span class='small'>"
 	let opt = {entity:"winner",light:true,diagonal:true}
-	if (model.ballotType == "Ranked") {
-		var hh = head2HeadTally(model, district,ballots)
-	} else {
-		var hh = head2HeadScoreTally(model, district,ballots)
+	if (hh == undefined) {
+		if (model.ballotType == "Ranked") {
+			var hh = head2HeadTally(model, district,ballots)
+		} else {
+			var hh = head2HeadScoreTally(model, district,ballots)
+		}
 	}
 	text += pairwiseTable(hh,district,model,opt)
 	text += "</span><br>"
@@ -4330,6 +4334,7 @@ function runPoll(district,model,options,electiontype){
 						partyCollect.push(tally1)
 					}
 					text += lineChart(partyCollect,cans,model,maxscore,totalPeopleInPrimary)
+					// TODO: add primary head2head polling for irv
 					text += "<br>"
 				} else {
 					for (var ptallies of collectTallies) {
@@ -4352,6 +4357,12 @@ function runPoll(district,model,options,electiontype){
 			polltext += `${collectTallies.length} rounds of polling<br>`
 			var nballots = district.voterPeople.length
 			polltext += lineChart(collectTallies,cans,model,maxscore,nballots)
+			if (electiontype == 'irv') {
+				var hh = district.pollResults.head2head
+				polltext += "<br>"
+				polltext += "<b>Head-to-head polls:</b><br>"
+				polltext += pairChart(ballots,district,model,hh)
+			}
 		}
 	}
 
