@@ -3674,6 +3674,7 @@ function _fillVoterDefaults(self) {
 		vid: 0,
 		snowman: false,
 		x_voters: false,
+		crowdShape: "Nicky circles",
 		// SECOND group in "exp_addVoters"
 		// same for all voter groups in model
 		preFrontrunnerIds:["square","triangle"],
@@ -3715,7 +3716,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				
 		// HACK: larger grab area
 		// self.radius = 50;
-		if (!self.x_voters) {
+		if (self.crowdShape == "Nicky circles") {
 			// SPACINGS, dependent on NUM
 			var spacings = [0, 12, 12, 12, 12, 20, 30, 50, 100];
 			if (self.snowman) {
@@ -3762,7 +3763,31 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				}
 
 			}
-		} else {
+		} else if (self.crowdShape == "circles") {
+
+			var _spread_factor = 2 * Math.exp(.01*self.group_spread) / 20
+			var space = 12 * self.spread_factor_voters * _spread_factor
+
+			var numRings = Math.sqrt(self.group_count/6)
+			var points = [[0,0]]
+
+			for(var i=1; i<=numRings; i++){
+				var radius = i * space
+				
+				var circum = Math.TAU*radius
+				var num = Math.floor(circum/(space-1))
+				var dAngle = Math.TAU/num
+
+				for(var k = 0; k < num; k++){
+					var angle = k * dAngle
+					var x = Math.cos(angle)*radius 
+					var y = Math.sin(angle)*radius
+					points.push([x,y])
+				}
+			}
+			self.radius = radius // last radius
+			self.points = points
+		} else if (self.crowdShape == "gaussian sunflower" ) {
 			var points = [];
 			self.points = points;
 			var angle = 0;
@@ -3780,6 +3805,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				} else {
 					_radius_norm = 1-(count+.5)/self.group_count
 					_radius = Math.sqrt(-2*Math.log(1-_radius_norm)) * self.stdev * .482
+					// _radius = Math.sqrt(_radius_norm) * self.stdev * .482
 				}
 				var x = Math.cos(angle)*_radius  * self.spread_factor_voters;
 				var y = Math.sin(angle)*_radius  * self.spread_factor_voters;

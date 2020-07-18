@@ -930,8 +930,9 @@ function Arena(arenaName, model) {
 				n.y = self.y
 				if (self.isPlusXVoterGroup) {
 					n.x_voters = true
+					n.crowdShape = "gaussian sunflower"
 				} else {
-					n.disk = 1
+					n.crowdShape = "circles"
 				}
 				var max = 0
 				for (var i = 0; i < model.voterGroups.length; i++) {
@@ -2559,8 +2560,10 @@ _pileVoters = function(model) {
 				var u = 1.5
 				if (!v.isGaussianVoters) {
 					stdev[m] = 5
-				} else if (v.x_voters) {
+				} else if (v.crowdShape == "gaussian sunflower") {
 					stdev[m] = v.stdev
+				} else if (v.crowdShape == "circles") {
+					radius[m] = v.radius
 				} else if (v.snowman) {
 					if (v.disk == 3) {
 						stdev[m] = u * 42 // 60
@@ -2585,10 +2588,10 @@ _pileVoters = function(model) {
 				} 
 				stdev[m] = stdev[m] * model.spread_factor_voters * .5
 				radius[m] = radius[m] * model.spread_factor_voters * .5
-				if (v.x_voters) {
+				if (v.crowdShape == "gaussian sunflower") {
 					amplitude[m] = v.points.length/stdev[m] * amp_factor
 				} else if (v.disk) {
-					if (!v.snowman && v.disk==3) {
+					if (!v.snowman && v.disk==3 && v.crowdShape != "circles") {
 						amplitude[m] = v.points.length/stdev[m] * amp_factor
 					} else {
 						amplitude[m] = v.points.length/radius[m] * amp_factor
@@ -2612,10 +2615,10 @@ _pileVoters = function(model) {
 					for (var k = 0; k < m; k++) {
 						var o = model.voterGroups[k]
 						// add background
-						if (o.x_voters) {
+						if (o.crowdShape == "gaussian sunflower") {
 							back -= gaussian( x , o.x-v.x , stdev[k] ) * amplitude[k]
 						} else if (o.disk) {
-							if (!o.snowman && o.disk==3) {
+							if (!o.snowman && o.disk==3 && o.crowdShape != "circles") {
 								back -= gaussian( x , o.x-v.x , stdev[k] ) * amplitude[k]
 							} else {
 								back -= disk( x , o.x-v.x , radius[k]+5) * .5 * (amplitude[k] + 15)
@@ -2623,10 +2626,10 @@ _pileVoters = function(model) {
 						} 
 					}
 					// add voters
-					if (v.x_voters) {
+					if (v.crowdShape == "gaussian sunflower") {
 						v.points[i][2] = back + (_erf(y/stdev[m])-1) * .5 * gaussian(x,0,stdev[m]) * amplitude[m]
 					} else if (v.disk) {
-						if (!v.snowman && v.disk==3) {
+						if (!v.snowman && v.disk==3 && v.crowdShape != "circles") {
 							v.points[i][2] = back + (_erf(y/stdev[m])-1) * .5 * gaussian(x,0,stdev[m]) * amplitude[m]
 						} else {
 							if (1) {
