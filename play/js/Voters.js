@@ -3787,6 +3787,25 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			}
 			self.radius = radius // last radius
 			self.points = points
+			
+		} else if (self.crowdShape == "rectangles") {
+
+			var _spread_factor = 2 * Math.exp(.01*self.group_spread) / 20
+			var space = 12 * self.spread_factor_voters * _spread_factor
+
+			var numRings = Math.floor(Math.sqrt(self.group_count/6))
+			var points = []
+
+			for (var i=-numRings; i<=numRings; i++) {
+				for (var k=-numRings; k<=numRings; k++) {
+					var x = space * i
+					var y = space * k
+					points.push([x,y])
+				}
+			}
+			self.halfwidth = (numRings+.5) * space // last radius
+			self.points = points
+			
 		} else if (self.crowdShape == "gaussian sunflower" ) {
 			var points = [];
 			self.points = points;
