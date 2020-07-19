@@ -9,6 +9,8 @@ twuser: bettercount_us
 min-width: 460
 ---
 
+{% include letters.html %}
+
 You read/played Nicky Case's great [explainer on voting methods](original). And you still want more!
 
 Never fear. I have two more voting methods to teach you about, and I hope I can convince you that they're the best yet.
@@ -37,7 +39,7 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DM
 
 %}
 
-But notice something about that ballot? For many positions of the voter and candidate, the ballot doesn't include a score of 5 or a score of 0. If you actually voted like that, you'd be giving up on some of your voting power. Say Triangle is your favorite, and you give them a score of 3, which also happens to be their average score. If Square wins with a score of 3.2, you're going to feel very silly for not giving a triangle a 5, in order to pull their average up as high as you can.
+But notice something about that ballot? For many positions of the voter and candidate, the ballot doesn't include a score of 5 or a score of 0. If you actually voted like that, you'd be giving up on some of your voting power. Say Triangle is your favorite, and you give them a score of 3, which also happens to be their average score. If Square wins with a score of 3.2, you're going to feel very silly for not giving {{ B }} a 5, in order to pull their average up as high as you can.
 
 ## Lightly-strategic voting: "normalization"
 
@@ -53,14 +55,14 @@ id = "ballot5"
 comment = "Description: this should be like ncase's 'drag the voter' examples, with a normalizing score voter. This voter should have a series of circles, where the closest one intersects the closest candidate and the farthest one the farthest candidate. Thus, as you moved the voter or candidates the circles would change size."
 %}
 
-As soon as voters are using strategy in score voting — even a very slight amount of strategy, such as normalization — it is no longer fully exempt from impossibility theorems like Arrow's theorem. In particular, it no longer obeys independence of irrelevant alternatives (IIA); adding or removing a losing candidate can change how voters normalize, and thus change who wins. For instance, in the simulation below, try moving the losing yellow triangle candidate, and see what happens.
+As soon as voters are using strategy in score voting — even a very slight amount of strategy, such as normalization — it is no longer fully exempt from impossibility theorems like Arrow's theorem. In particular, it no longer obeys independence of irrelevant alternatives (IIA); adding or removing a losing candidate can change how voters normalize, and thus change who wins. For instance, in the simulation below, try moving the losing {{ B }}, and see what happens.
 
 {% include sim.html 
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSXW7EIAyE78IzqrDBxslVoj3Jqj37Gj5ltVJb5WH8g4cZk2dp5bwu0VbF2qNeGu-oET1qkX3G3nkvZ6tllLP8iJRabOeep7I5E45Wf33Zimz93Tn-7Ujb5LI0iFT36scqK2WkyAAQIg6kEhmJeW1POHZVky-LmnySoAA0OshsDyg0OsmCLFk0N9C2YFnLgKkjqHcymLot1VU46IzC17EsVbM1Nt0K5A70DpLw6isYe258Ug7f14zJgyBxHLtoLM4E0H25dQB5ZgBGbdJjXYZRbwAmHZPOuty2hSXOoXAUOKueKJjMThRMFjR5scmLzfvfmTTj3k3tdaw6lqIBWArEBGICSwFhoCfgC2TFkvVl-bctYd8vXQbN5fwCAAA)"
 title = "Non-optimal"
 caption = ""
 id = "election7"
-comment = "This should be a score voting scenario with 100% normalizing voters. the voter median around (0,0), and candidates square (3,0), triangle (-2,0), pentagon (-4,0). Pentagon voters are not enthusiastic enough about triangle so square wins, even though triangle is higher utility. Removing penta fixes the problem. "
+comment = "This should be a score voting scenario with 100% normalizing voters. the voter median around (0,0), and candidates A (3,0), B (-2,0), D (-4,0). Pentagon voters are not enthusiastic enough about B so A wins, even though B is higher utility. Removing D fixes the problem. "
 %}
 
 But a bigger problem than IIA violation, which in the real world is relatively hard to engineer or take advantage of, is the issue of differential voting power. In the following election, one of the groups of voters normalizes, and the other one doesn't. The two groups are the same size, but the normalizing group gets a candidate they like a lot better.
@@ -73,7 +75,7 @@ id = "election8"
 comment = "groups of voters at (-4,0)non-normalizing and (4,0)normalizing. Cands at (-2.5,.5), (-2,0), (0,0), (2,0), (2.5,.5). (2,0) wins."
 %}
 
-Is that kind of thing realistic? Perhaps not in the form above; few voters would be so unstrategic as not to normalize. But actually, normalizing as above is a pretty weak strategy. To strategize even more strongly, voters could somehow assess which two candidates were the frontrunners, and use them as the endpoints for normalization. Mostly, this means casting an approval-like ballot that gives every candidate either a 5 or a 0. For instance, in the election below, the voter believes triangle and square are the frontrunners. Compare the strongly strategic voter below with the normalized voter in the second example above.
+Is that kind of thing realistic? Perhaps not in the form above; few voters would be so unstrategic as not to normalize. But actually, normalizing as above is a pretty weak strategy. To strategize even more strongly, voters could somehow assess which two candidates were the frontrunners, and use them as the endpoints for normalization. Mostly, this means casting an approval-like ballot that gives every candidate either a 5 or a 0. For instance, in the election below, the voter believes {{ A }}, {{ B }}, and {{ C }} are the frontrunners. Compare the strongly strategic voter below with the normalized voter in the second example above.
 
 {% include sim.html
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DMQz8S84RihPHzu6ZH8Bt1QO0i6hUdau2CCEEb8fOUA5FVQ6T2M5kxvFnSGGcJqVIQqs4UZXfXeb0F2sxF_WYkO3qahUD-bWhRCL2YwljioHDGL6JQgw1jBSDWJEl1SDFf8sy7WZmuJmh1N8iVyCmtngsIwYZxIAKkK6FTAWxob1ZDYaezEZmwUy9JmcAaDLjZDTFQBBUnBpOxpLNvTcxmz7yVoCrZKTAVcBVjGuyXmN5saAKrAWurcmxRLY0O7HXsbt195wvGyOe3Dtzv8vX1AzfrPgaCOahByt6WAkAqbUAILXiCytsV0Wu9bcqbEsCwLDgDwSGpXYrLlBAIVAgaLxCgeKuQoEWnPB_iv_TyxQpku2qRwpLLQGoMzWIaRDTQNhA2KCnga9BVnNZdzYYA4Q9P-12y_nx4zDbTD-sl-NsU316Xd7v59P6uD2ct8vep_1tv5lftvt5E75-APMG_FdMAwAA)"
@@ -111,7 +113,7 @@ Note: in FPTP, you would have to strategically vote for somebody other than thei
 
 One scenario where approval becomes a factor is called the "chicken dilemma". Imagine 3 groups of voters, with 25%, 30%, and 45% of the vote respectively. Say that the first two groups both prefer each other over the third, so that either of them could beat that third opponent by 55% to 45%. Whichever of the first two groups strategically gives fewer approvals to its rival will win... unless neither of them gives enough, in which case the opponent will win. This is called a "chicken dilemma" because it's like a game of chicken between the voters for the two similar rivals: they can "swerve" and let their second-favorite win, or they can "drive straight" and either win (if the other side swerves) or crash (if the other side doesn't).
 
-Here's that scenario in sandbox form. The slider on the right controls the percent of the smallest group that is strongly strategic between triangle and square; all the rest of the voters use normalized strategy (that is, approve any candidate better than the average of their favorite and least-favorite).
+Here's that scenario in sandbox form. The slider on the right controls the percent of the smallest group that is strongly strategic between {{ A }} and {{ B }}; all the rest of the voters use normalized strategy (that is, approve any candidate better than the average of their favorite and least-favorite).
 
 {% include sim.html
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSS24EMQhE7-I1iszXeK4yM9tsc4AoOXswpZE6iqJeVGNw8aD7c8xxu99ZmNj2k-7MSbzmedtG7Pv5pMFdw0FV1zX1ltY1XjV-anTcJg0bt_HNc9DwjqNuVnKVlLEIbaF5fSqZlZz056nM_jdTLY49HzJmiqDY51hwrAfjMT7e3x-jWLiwuARMHJCCYiut_lpSzYSGlHEdCvcNEQiGE9iI9wWBjSxEiQguOpucSc5m4KXwUu16hZf6GaAK-RQGLsNR98XD5msVJ-BrIBcH02tg7WPXFhbd1ha-FqBt96Fjp84QaRhXCHDdIRjdF3L5e9uOHcSEYPrAlwlsMrwn0CIKeAVQYrcsoCzcXUBZisiQw8dcrz9sIZmvpZGSnXPMlhMCwwRMAiaxp_TukuBJ-CWw8mC9ef2RB-zrB8ZdeYg2AwAA)"
