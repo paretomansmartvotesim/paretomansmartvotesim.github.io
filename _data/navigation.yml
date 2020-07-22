@@ -1,5 +1,7 @@
 - name: Home
   link: .
+- name: Basics
+  link: basics
 - name: Common Ground
   link: commonground
 - name: Primaries

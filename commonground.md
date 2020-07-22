@@ -191,11 +191,11 @@ comment='simple,lots of candidates, one voter' id='score_sim' %}
 
 In practice, voters can adjust their self-reported distances, which is called using a strategy. Jameson Quinn has a good discussion of strategies in a page linked at the bottom, and I have a page that discusses how strategies play out in approval voting.  Basically, using strategies means score voting changes and takes on qualities of approval voting and pairwise voting.  Also, in the approval voting page, I show that when you combine approval voting with polls, you get almost the same winners as pairwise voting, which is nice.
 
-These are the strategies un the example below:
+These are the strategies in the example below:
 
 - The J = Judge strategy measures distance well and would best find the median.
 - The N = Normalize strategy is basically stretching your vote to the max score. Any voter would rather do N than J.
-- the F = Frontrunner strategy considers polling data and stretches your vote to the max score only for the frontrunners. Other candidates can get pushed to max or 0 or in between. 
+- The F = Frontrunner strategy considers polling data and stretches your vote to the max score only for the frontrunners. Other candidates can get pushed to max or 0 or in between. 
 
 {% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8l5wjFCdO7O6ZP4Dbag_QLqJS1a3aIoQQfDt2pr0UVTmMX5mMHX-HFIZxlBaJZYojkUbS5lY1i7NbKpdYzmYVmaYYyK9RMj-x-yUMKQYOQ_glCjHUMFAMzaosKQYp_juW0buZ1d0Mpf4WuYRmwkuk7OGMMJQQAyqgdTlkQogN7dlqsOrJbHwWzNRrcgaAJjM8oykGDUGBp_CMJdsAfJAmJbqWAq6SkQJXAVcxrpHi5XhxQxVYCxo3nlgiW5qd2OvYG_YBcL4axd90g_tdvqVm9M2C34FgXvVgxRgrASC1FgCkVvxiRdtVkNP-VkXbLQHQcMMfNDTcam_FBTZQNChoGLxAgeCuQIEUePg_wf_JdZEESb2ZkaAlBaFSZ1KIUYhRECoIFXoUfApZ6rIebDFeX3a75fz8dZhtn5_Wy3G2jT69L5-P82l93B7O22Xvm_6x38xv2_28CT9_6sQykEkDAAA)" 
 
