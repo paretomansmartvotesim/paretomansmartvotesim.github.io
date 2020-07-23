@@ -209,7 +209,7 @@ STAR voting was created to counteract scoring strategies.  It uses a final runof
 
 STAR combines the two ways of finding the middle, scoring and counting by pairs. Its name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever each voter prefers.
 
-{% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38WzhWLHdnLdeAXa7XQDoG6VihALQuXZcfJThqLqht-xk_8-J_6iQrt19WApdeNVpLC0ZUQu3D0D_UupWW4r28Yk45R4ZbE61pV2hcloR9-ixORzHbkriy2l8L8vK_1uZblbkTK9ZSBEIKVIgUIMAgYJSEKIpeYvPSX9hUnTK5OaXpqiENioYUva1BTYaMOqY7XMA7VMWBn3ILNQ4VQrBEA1nVbh329sDpThWdGysHJly7JN2xHINdBrkMarjsDmWbu1tpjw1vAuwDU07bhAB6oD1YHqaNodgqa9odbnvxxNR4HI3Bl4gcDVhc9WcqAoYBEgiGVKA0HD2aaQCsFlNRC0MUK0Pzw-5VDtX8_vRxoD1VDsNzfW0GAvELxqB1oHWjckHQK6Dr8OyD4gH3JIFmC-PJ9O54_D59sxxxsMlx9StnChOAMAAA)" title='STAR Voting' 
+{% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38VzhGLHdnLdeAXa7XQDoG6VihALQuXZcfxThqLqht-xk_8-J_6iSrt1NS9c21ZW5lq4LzOyFjmJSP5yohq5um2FeB7LPdrmutGuFlLa0TcLFbJce-yKYg-p5d8XlXG3stytcE1vngjuSAlSoGCFgIEdEhCsofFLCwl_LiThFUkJLwkRCGxEsSVsWghspGM1sFryQKsJy_MeOAsNTq1BANTCaeXy-83NjjI8G1rmIqUVjbKm7Qz4Gsg1CONVZqB5Vm-t1RNeO94FuIqmDRdoQDWgGlANTZtB0LR11Eb-y9C0VwjnTscLOK7OLVuJiSKHhYPAl5QOgo6zXSANgsvqIOhzhGh_eHyKodq_nt-PNAeqozhubqyjwVEheNUBtAG0oUgaBHQDfgOQY0I-xJAswHx5Pp3OH4fPt2OMNxguP5L3f-I5AwAA)" title='STAR Voting' 
 
 caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking." 
 
@@ -221,7 +221,7 @@ Part of finding common ground is finding allies. Any voting system that avoids v
 
 To avoid vote-splitting, you could eliminate candidates that aren't doing well. That way they don't interfere with the main candidates.  The main candidates won't see the smaller candidates as spoilers and can ally with them. This method is called RCV and is getting more popular in the US.
 
-{% include sim.html link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4md29zMQ3WqLQ1zFCShoEOLfcTwcBadTirF37MnY2a_W27bvHsRdD9qZO_FYZ-QLLZ6B_H0Ssyzrx0GNZxe7EpvOXNvWqVnbjJpXHFkhdHOydiTT6eYks9xl1rsM97qOp6OZClIYYgPAEgcgDXD65LzOE1KbqUkv85I6kiAAyIihJGU0ATIykC3I1mrQXkZ5roSLUKleVfAwpKm0M_2eWRygoakYl3NhSpa0lewM-BrINdC56BlY9dp_aYsyYANPBLuGoR3Lc1h1DO2KZ8TQ7gAM7QMlS93lGDo6gKsy8AKB1YXXKPlvtYBEwEGsBQMOBnoHlvV0ulzePh4_389taw-n15fzc_v-AdZjYJarAgAA)' title='Single-Winner Ranked Choice Voting' 
+{% include sim.html link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QWil9Jdj8D0a22OMRVnICCBiH4dhwPS3HolGLs2JnMOPkstazb5o246k4bcyXuy4zcaJmB_G2JWbTVfafC8xS7EpvOXMtaqVhZy7cVKp5pi6ao9YBK_1ZUxs3KcrPCNbmZQc6CFALYALifGyAEsAXGdR4Q3ExFgic2JXgkQACgEUNL0GgAaKQjG8iWPKA1hfIcAWdBIUgVdQjSYNqYftdsbiiDU2GXSUjJomxJOwM-AjmCIN5kBpZn7ZraWoq3jieBXINpx_AcUh2mXXMSDtPuAJj2jpaRdzlMtwrg7Gww3DC65mkl_lJpoGhQ0JaEDgUdZ7sAFIBhdbxeP75PR3FczajD0gDhAOGAmAExw1LocAD0DPANyBpT1l18iwU8j6fL5fX94ePtHH_5_vTyfH4qXz-HLDOpJgMAAA)" title='Single-Winner Ranked Choice Voting' 
 
 caption='Your vote counts for your top choice.  Then, do a process of elimination of the candidate in last place and repeat.' 
 
