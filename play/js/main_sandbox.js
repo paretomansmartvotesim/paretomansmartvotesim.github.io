@@ -1196,6 +1196,10 @@ function Config(ui, config, initialConfig) {
                 config.crowdShape = config.voterGroupX.map( x => (x) ? "gaussian sunflower" : "Nicky circles" ) 
             }
 
+            if (config.group_count_vert == undefined) {
+                config.group_count_vert = config.voterGroupX.map( x =>  50) 
+            }
+
             // there's no incompatibility problems yet, so no need to increment
             // code below this if {} statement are still needed in future versions
         }
@@ -1405,6 +1409,7 @@ function Cypher(ui) {
         89:"centerPollThreshold",
         90:"doMedianDistViz",
         91:"crowdShape",
+        92:"group_count_vert",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -2415,6 +2420,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         x_voters: config.voterGroupX[i],
                         disk: config.voterGroupDisk[i],
                         crowdShape: config.crowdShape[i],
+                        group_count_vert: config.group_count_vert[i],
                     })
                     model.voterGroups[i].typeVoterModel = model.ballotType // needs init	
                 }
@@ -6642,6 +6648,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         snowman = []
         disk = []
         crowdShape = []
+        group_count_vert = []
         // voter types are varied in style
         for(var i=0; i<model.voterGroups.length; i++){
             var voter = model.voterGroups[i];
@@ -6654,6 +6661,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
             snowman.push(voter.snowman)
             disk.push(voter.disk)
             crowdShape.push(voter.crowdShape)
+            group_count_vert.push(voter.group_count_vert)
         }
         if(log) console.log("voterPositions: "+JSON.stringify(positions));
         var voterPositions = positions;
@@ -6669,6 +6677,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
             voterGroupSnowman: snowman,
             voterGroupDisk: disk,
             crowdShape: crowdShape,
+            group_count_vert:group_count_vert,
         };
 
     };

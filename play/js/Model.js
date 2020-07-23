@@ -1177,7 +1177,13 @@ function Arena(arenaName, model) {
 				self.configure()
 				if (flashydude.isGaussianVoters) {
 					model.arena.up = new Up(model,flashydude) // create controls
+					if (flashydude.crowdShape == "rectangles") {
+						model.arena.down = new Down(model,flashydude)
+					}
 					model.arena.up.init()
+					if (model.arena.down) {
+						model.arena.down.init()
+					}
 				}
 				model.arena.right = new Right(model,flashydude)
 				model.arena.right.init()
@@ -1194,6 +1200,7 @@ function Arena(arenaName, model) {
 			self.focus = null
 			model.arena.up = null
 			model.arena.right = null
+			model.arena.down = null
 		}
 	}
 	function ViewMan(model) {
@@ -1456,6 +1463,80 @@ function Arena(arenaName, model) {
 		};
 
 	}
+	function Down(model,o) {  // o is the object that is being modified
+		var self = this;
+		Draggable.call(self);
+		self.isDown = true // might help later
+		self.isArenaObject = true
+		self.dontchangex = true
+		self.o = o
+		self.scale = 5
+		self.sizeScale = 2/3
+		
+		// CONFIGURE DEFAULTS
+		self.size = 20;
+		
+		self.init = function() {
+			var srcMod = "play/img/gear.png"
+			// if (Loader) {
+			// 	if (Loader.assets[srcMod]) {
+			// 		self.img = Loader.assets[srcMod]
+			// 	}
+			// }
+			self.img = new Image();
+			self.img.src = srcMod
+			model.nLoading++
+			self.img.onload = onLoadTool
+			self.configure()
+		}
+		self.configure = function() {
+			var oa = model.arena.modelToArena(o)
+			if (typeof o.group_count_vert !== "undefined") {
+				var length = o.group_count_vert / self.scale
+				self.y = oa.y + length
+			} else {
+				self.y = oa.y + 60
+			}
+			self.x = oa.x
+			self.xC = oa.x
+			self.yC = oa.y
+		}
+		self.draw = function(ctx,arena){
+			// RETINA
+			var p = self
+			var x = p.x*2;
+			var y = p.y*2;
+			var size = self.size*2;
+	
+			if(self.highlight) {
+				var temp = ctx.globalAlpha
+				ctx.globalAlpha = 0.8
+				size *= 2
+				// y -= size/4
+			}
+			
+			ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
+
+			var arrow_size = 20
+			var offset_y = 0
+
+			ctx.beginPath();
+			ctx.moveTo(x,y-offset_y)
+			ctx.lineTo(self.xC*2,self.yC*2)
+			ctx.moveTo(x,y-offset_y)
+			ctx.lineTo(x+arrow_size, y - offset_y - arrow_size)
+			ctx.moveTo(x,y-offset_y)
+			ctx.lineTo(x-arrow_size, y - offset_y - arrow_size)
+			ctx.lineWidth = 10
+			ctx.strokeStyle = "#333";
+			ctx.stroke();
+			
+			if(self.highlight) {
+				ctx.globalAlpha = temp
+			}
+		};
+
+	}
 	function onLoadTool() {
 		model.nLoading--
 		if (model.nLoading == 0) {
@@ -1512,6 +1593,9 @@ function Arena(arenaName, model) {
 			if (self.modify.active) {
 				if (self.up) {
 					self.draggables.push(self.up)
+				}
+				if (self.down) {
+					self.draggables.push(self.down)
 				}
 				self.draggables.push(self.right)
 			}
@@ -1674,6 +1758,17 @@ function Arena(arenaName, model) {
 					model.dm.redistrict()
 					model.updateFromModel()
 				}
+			} else if (d.isDown) {
+				d.x = d.xC
+				d.y = Math.max(d.yC,d.y)
+				if (d.o.voterGroupType && d.o.voterGroupType=="GaussianVoters" && d.o.crowdShape == "rectangles") {
+					var length = d.y - d.yC
+					d.o.group_count_vert = length * d.scale
+					d.o.init()
+					_pileVoters(model)
+					model.dm.redistrict()
+					model.updateFromModel()
+				}
 			} else if (d.isRight) {
 				d.y = d.yC
 				d.x = Math.max(d.xC,d.x)
@@ -1697,6 +1792,9 @@ function Arena(arenaName, model) {
 			self.right.configure()  // so re-configure the lengths of these controls
 			if (self.modify.focus.group_spread) { // this value might have changed
 				self.up.configure()	
+			} 
+			if (self.modify.focus.group_count_vert) { // this value might have changed
+				self.down.configure() 
 			} 
 		}
 		if (self.viewMan && self.viewMan.active) { // update the viewMan value
@@ -2271,6 +2369,9 @@ function Arena(arenaName, model) {
 					if (self.up) {
 						self.up.draw(self.ctx,self)
 					}
+					if (self.down) {
+						self.down.draw(self.ctx,self)
+					}
 					self.right.draw(self.ctx,self)
 				}
 
@@ -2565,6 +2666,7 @@ _pileVoters = function(model) {
 			var amplitude = []
 			var radius = []
 			var halfwidth = []
+			var halfheight = []
 			for (var m = 0; m < model.voterGroups.length; m++) {
 				var v = model.voterGroups[m]
 				var points = v.points
@@ -2578,6 +2680,7 @@ _pileVoters = function(model) {
 					radius[m] = v.radius
 				} else if (v.crowdShape == "rectangles") {
 					halfwidth[m] = v.halfwidth
+					halfheight[m] = v.halfheight
 				} else if (v.snowman) {
 					if (v.disk == 3) {
 						stdev[m] = u * 42 // 60
@@ -2647,7 +2750,7 @@ _pileVoters = function(model) {
 					if (v.crowdShape == "gaussian sunflower") {
 						v.points[i][2] = back + (_erf(y/stdev[m])-1) * .5 * gaussian(x,0,stdev[m]) * amplitude[m]
 					} else if (v.crowdShape == "rectangles") {
-						v.points[i][2] = back +  (y / halfwidth[m] - 1) * .5 * amplitude[k]
+						v.points[i][2] = back +  (y / halfheight[m] - 1) * .5 * amplitude[k]
 					} else if (v.disk) {
 						if (!v.snowman && v.disk==3 && v.crowdShape != "circles") {
 							v.points[i][2] = back + (_erf(y/stdev[m])-1) * .5 * gaussian(x,0,stdev[m]) * amplitude[m]
