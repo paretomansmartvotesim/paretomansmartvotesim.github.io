@@ -3793,21 +3793,22 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var _spread_factor = 2 * Math.exp(.01*self.group_spread) / 20
 			var space = 12 * self.spread_factor_voters * _spread_factor
 
-			self.group_count_vert = self.group_count_vert || self.group_count
+			self.group_count_v = self.group_count_v || 5
+			self.group_count_h = self.group_count_h || 5
 			
-			var normit = 1/20
-			var numRings = Math.floor(normit * self.group_count)
-			var vNumRings = Math.floor(normit * self.group_count_vert)
+			var numRings = self.group_count_h / 2
+			var vNumRings = self.group_count_v / 2
 			var points = []
 
 
-			for (var i=-numRings; i<=numRings; i++) {
-				for (var k=-vNumRings; k<=vNumRings; k++) {
+			for (var i=-numRings+.5; i<numRings; i++) {
+				for (var k=-vNumRings+.5; k<vNumRings; k++) {
 					var x = space * i
 					var y = space * k
 					points.push([x,y])
 				}
 			}
+			self.group_count = points.length
 			self.halfwidth = (numRings+.5) * space
 			self.halfheight = (vNumRings+.5) * space
 			self.points = points

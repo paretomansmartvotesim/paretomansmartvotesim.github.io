@@ -1321,6 +1321,7 @@ function Arena(arenaName, model) {
 		self.dontchangex = true
 		self.o = o
 		self.scale = 4
+		self.shapeScale = 5/20
 		
 		// CONFIGURE DEFAULTS
 		self.size = 20;
@@ -1340,16 +1341,54 @@ function Arena(arenaName, model) {
 		}
 		self.configure = function() {
 			var oa = model.arena.modelToArena(o)
-			if (typeof o.group_count !== "undefined") {
-				var length = o.group_count / self.scale
-				self.y = oa.y - length
-			} else {
-				self.y = oa.y - 60
-			}
+			var length = self.getLengthFromProp()
+			self.y = oa.y - length
 			self.x = oa.x
 			self.xC = oa.x
 			self.yC = oa.y
 		}
+		self.getLengthFromProp = function() {
+			if (o.crowdShape == "rectangles") {
+				if (typeof o.group_count_h !== "undefined") {
+					var length = self.propToLength(o.group_count_h)
+				} else {
+					var length = 60
+				}
+			} else {
+				if (typeof o.group_count !== "undefined") {
+					var length = self.propToLength(o.group_count)
+				} else {
+					var length = 60
+				}
+			}
+			return length
+		}
+		self.propToLength = function(p) {
+			if (o.crowdShape == "rectangles") {
+				return Math.round(p / self.shapeScale)
+			} else {
+				return Math.round(p / self.scale)
+			}
+			 
+		}
+		self.updatePropFromLength = function(length) {
+			var prop = self.lengthToProp(length)
+			if (o.crowdShape == "rectangles") {
+				o.group_count_h = prop
+			} else {
+				o.group_count = prop
+			}
+
+		}
+		self.lengthToProp = function(length) {
+			if (o.crowdShape == "rectangles") {
+				return Math.round(length * self.shapeScale)
+			} else {
+				return Math.round(length * self.scale)
+			}
+			 
+		}
+
 		self.draw = function(ctx,arena){
 			// RETINA
 			var p = self
@@ -1470,7 +1509,7 @@ function Arena(arenaName, model) {
 		self.isArenaObject = true
 		self.dontchangex = true
 		self.o = o
-		self.scale = 5
+		self.scale = 5/20
 		self.sizeScale = 2/3
 		
 		// CONFIGURE DEFAULTS
@@ -1491,8 +1530,8 @@ function Arena(arenaName, model) {
 		}
 		self.configure = function() {
 			var oa = model.arena.modelToArena(o)
-			if (typeof o.group_count_vert !== "undefined") {
-				var length = o.group_count_vert / self.scale
+			if (typeof o.group_count_v !== "undefined") {
+				var length = self.propToLength(o.group_count_v)
 				self.y = oa.y + length
 			} else {
 				self.y = oa.y + 60
@@ -1501,6 +1540,8 @@ function Arena(arenaName, model) {
 			self.xC = oa.x
 			self.yC = oa.y
 		}
+		self.lengthToProp = p => Math.round(p * self.scale)
+		self.propToLength = p => p / self.scale
 		self.draw = function(ctx,arena){
 			// RETINA
 			var p = self
@@ -1752,7 +1793,7 @@ function Arena(arenaName, model) {
 				d.y = Math.min(d.yC,d.y)
 				if (d.o.voterGroupType && d.o.voterGroupType=="GaussianVoters") {
 					var length = -(d.y - d.yC)
-					d.o.group_count = length * d.scale
+					d.updatePropFromLength(length)
 					d.o.init()
 					_pileVoters(model)
 					model.dm.redistrict()
@@ -1763,7 +1804,7 @@ function Arena(arenaName, model) {
 				d.y = Math.max(d.yC,d.y)
 				if (d.o.voterGroupType && d.o.voterGroupType=="GaussianVoters" && d.o.crowdShape == "rectangles") {
 					var length = d.y - d.yC
-					d.o.group_count_vert = length * d.scale
+					d.o.group_count_v = d.lengthToProp(length)
 					d.o.init()
 					_pileVoters(model)
 					model.dm.redistrict()
@@ -1793,7 +1834,7 @@ function Arena(arenaName, model) {
 			if (self.modify.focus.group_spread) { // this value might have changed
 				self.up.configure()	
 			} 
-			if (self.modify.focus.group_count_vert) { // this value might have changed
+			if (self.modify.focus.group_count_v) { // this value might have changed
 				self.down.configure() 
 			} 
 		}
