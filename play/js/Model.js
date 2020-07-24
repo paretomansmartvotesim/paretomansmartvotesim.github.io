@@ -1348,7 +1348,7 @@ function Arena(arenaName, model) {
 			self.yC = oa.y
 		}
 		self.getLengthFromProp = function() {
-			if (o.crowdShape == "rectangles") {
+			if (o.crowdShape == "rectangles" || o.crowdShape == "circles") {
 				if (typeof o.group_count_h !== "undefined") {
 					var length = self.propToLength(o.group_count_h)
 				} else {
@@ -1364,7 +1364,7 @@ function Arena(arenaName, model) {
 			return length
 		}
 		self.propToLength = function(p) {
-			if (o.crowdShape == "rectangles") {
+			if (o.crowdShape == "rectangles" || o.crowdShape == "circles") {
 				return Math.round(p / self.shapeScale)
 			} else {
 				return Math.round(p / self.scale)
@@ -1373,7 +1373,7 @@ function Arena(arenaName, model) {
 		}
 		self.updatePropFromLength = function(length) {
 			var prop = self.lengthToProp(length)
-			if (o.crowdShape == "rectangles") {
+			if (o.crowdShape == "rectangles" || o.crowdShape == "circles") {
 				o.group_count_h = prop
 			} else {
 				o.group_count = prop
@@ -1381,7 +1381,7 @@ function Arena(arenaName, model) {
 
 		}
 		self.lengthToProp = function(length) {
-			if (o.crowdShape == "rectangles") {
+			if (o.crowdShape == "rectangles" || o.crowdShape == "circles") {
 				return Math.round(length * self.shapeScale)
 			} else {
 				return Math.round(length * self.scale)
@@ -1530,8 +1530,8 @@ function Arena(arenaName, model) {
 		}
 		self.configure = function() {
 			var oa = model.arena.modelToArena(o)
-			if (typeof o.group_count_v !== "undefined") {
-				var length = self.propToLength(o.group_count_v)
+			if (typeof o.group_count_vert !== "undefined") {
+				var length = self.propToLength(o.group_count_vert)
 				self.y = oa.y + length
 			} else {
 				self.y = oa.y + 60
@@ -1804,7 +1804,7 @@ function Arena(arenaName, model) {
 				d.y = Math.max(d.yC,d.y)
 				if (d.o.voterGroupType && d.o.voterGroupType=="GaussianVoters" && d.o.crowdShape == "rectangles") {
 					var length = d.y - d.yC
-					d.o.group_count_v = d.lengthToProp(length)
+					d.o.group_count_vert = d.lengthToProp(length)
 					d.o.init()
 					_pileVoters(model)
 					model.dm.redistrict()
@@ -1834,7 +1834,7 @@ function Arena(arenaName, model) {
 			if (self.modify.focus.group_spread) { // this value might have changed
 				self.up.configure()	
 			} 
-			if (self.modify.focus.group_count_v) { // this value might have changed
+			if (self.modify.focus.group_count_vert) { // this value might have changed
 				self.down.configure() 
 			} 
 		}

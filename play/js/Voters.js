@@ -3768,11 +3768,16 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var _spread_factor = 2 * Math.exp(.01*self.group_spread) / 20
 			var space = 12 * self.spread_factor_voters * _spread_factor
 
-			var numRings = Math.sqrt(self.group_count/6)
+			self.group_count_h = self.group_count_h || 5
+			var numRings = self.group_count_h / 2
+			var odd = self.group_count_h % 2
+
 			var points = [[0,0]]
 
 			for(var i=1; i<=numRings; i++){
+
 				var radius = i * space
+				if (odd) radius += .5 * space
 				
 				var circum = Math.TAU*radius
 				var num = Math.floor(circum/(space-1))
@@ -3785,6 +3790,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 					points.push([x,y])
 				}
 			}
+			self.group_count = points.length
 			self.radius = radius // last radius
 			self.points = points
 			
@@ -3793,11 +3799,11 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var _spread_factor = 2 * Math.exp(.01*self.group_spread) / 20
 			var space = 12 * self.spread_factor_voters * _spread_factor
 
-			self.group_count_v = self.group_count_v || 5
+			self.group_count_vert = self.group_count_vert || 5
 			self.group_count_h = self.group_count_h || 5
 			
 			var numRings = self.group_count_h / 2
-			var vNumRings = self.group_count_v / 2
+			var vNumRings = self.group_count_vert / 2
 			var points = []
 
 
