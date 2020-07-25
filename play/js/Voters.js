@@ -596,6 +596,16 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 	}
 	
 
+
+	// star exception
+	//if (strategy == "starnormfrontrunners") {
+	if (doStar) {
+		decision = starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape, strategy)
+		scores = decision.scores
+		var maphelp = decision.maphelp
+	}
+
+
 	// boundary condition correction
 	// scores[canAid[mi]] = minscore
 	scores[canAid[ni]] = maxscore
@@ -620,16 +630,6 @@ function dostrategy(model,x,y,minscore,maxscore,strategy,preFrontrunnerIds,candi
 			dottedCircle = true
 		}
 	}
-
-
-	// star exception
-	//if (strategy == "starnormfrontrunners") {
-	if (doStar) {
-		decision = starStrategy(scores, shortlist, dista, canAid, maxscore, lc, utility_shape, strategy)
-		scores = decision.scores
-		var maphelp = decision.maphelp
-	}
-
 
 	return {scores:scores, radiusFirst:n , radiusLast:m, dottedCircle:dottedCircle, maphelp:maphelp}
 }
