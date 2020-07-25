@@ -3773,21 +3773,36 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 			var odd = self.group_count_h % 2
 
 			var points = [[0,0]]
+			if (odd) points = []
 
-			for(var i=1; i<=numRings; i++){
+			for(var i=(odd)?0:1; i<=numRings; i++){
 
 				var radius = i * space
 				if (odd) radius += .5 * space
 				
-				var circum = Math.TAU*radius
-				var num = Math.floor(circum/(space-1))
-				var dAngle = Math.TAU/num
+				var symmetry = true
+				if (symmetry) {
+					var num = (i + odd*.5) * 6
+					var dAngle = Math.TAU/num
+	
+					for(var k = 0; k < num; k++){
+						var angle = k * dAngle
+						var x = Math.sin(angle)*radius 
+						var y = -Math.cos(angle)*radius
+						points.push([x,y])
+					}
+				} else { // the old way
+					var circum = Math.TAU*radius
+					var num = Math.floor(circum/(space-1))
+						
+					var dAngle = Math.TAU/num
 
-				for(var k = 0; k < num; k++){
-					var angle = k * dAngle
-					var x = Math.cos(angle)*radius 
-					var y = Math.sin(angle)*radius
-					points.push([x,y])
+					for(var k = 0; k < num; k++){
+						var angle = k * dAngle
+						var x = Math.cos(angle)*radius 
+						var y = Math.sin(angle)*radius
+						points.push([x,y])
+					}
 				}
 			}
 			self.group_count = points.length
