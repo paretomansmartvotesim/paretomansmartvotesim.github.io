@@ -1831,10 +1831,10 @@ function Arena(arenaName, model) {
 		if (self.modify && self.modify.active) { // update the modify value
 			self.modify.configure()
 			self.right.configure()  // so re-configure the lengths of these controls
-			if (self.modify.focus.group_spread) { // this value might have changed
+			if (self.up) { // this value might have changed
 				self.up.configure()	
 			} 
-			if (self.modify.focus.group_count_vert) { // this value might have changed
+			if (self.down) { // this value might have changed
 				self.down.configure() 
 			} 
 		}
