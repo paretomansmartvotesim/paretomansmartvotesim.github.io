@@ -198,7 +198,7 @@ Election.star = function(district, model, options){
 Election.three21 = function(district, model, options){
 
 	options = _electionDefaults(options)
-	var polltext = _beginElection(district,model,options,"score")	
+	var polltext = _beginElection(district,model,options,"3-2-1")	
 	let cans = district.stages[model.stage].candidates	
 	
 	var ballots = model.voterSet.getBallotsDistrict(district)
@@ -4225,6 +4225,26 @@ function runPoll(district,model,options,electiontype){
 					tally[candidate] += ballot[candidate];
 				}
 			}
+		} else if (electiontype == "3-2-1") {
+			// Create the tally
+			// not bad
+			var nb = _zeroTally(cans)
+			var tallies = [];
+			for (var level=0; level < 3; level++) {
+				tallies.push(_zeroTally(cans))
+			}
+			// Count 'em up
+			for(var i=0; i<ballots.length; i++){
+				var ballot = ballots[i]
+				for(var candidate in ballot){
+					tallies[ballot[candidate]][candidate] += 2; // 2 because we normalize later
+					if (ballot[candidate]) {
+						nb[candidate] += 2
+					}
+				}
+			}
+			var tally = tallies[2]
+			// var tally = nb
 		} else if (electiontype=="approval"){ 
 			// Tally the approvals & get winner!
 			var tally = _zeroTally(cans)
