@@ -4,22 +4,22 @@
   link: basics
 - name: Common Ground
   link: commonground
-- name: Primaries
-  link: primaries
-- name: Approval Voting
-  link: approval
 - name: Condorcet Methods
   link: condorcet
+- name: Approval Voting
+  link: approval
+- name: The Approval Score STAR 3-2-1 Family
+  link: scorefamily
 - name: Instant Runoff Voting
   link: irv
 - name: Single Transferable Vote
   link: stv
 - name: Proportional Methods
   link: proportional
+- name: Primaries
+  link: primaries
 - name: Original
   link: original
-- name: An Even Better Ballot
-  link: newer
 - name: Test Runs
   link: testRuns
 - name: Blog

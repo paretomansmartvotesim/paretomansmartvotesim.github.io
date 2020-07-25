@@ -20,7 +20,7 @@ This is in contrast to what we have now with **single choice voting**, where
 
 In an ideal world, like-minded people would gather together to work as a group to accomplish goals that are larger than themselves. The higher the goal, the bigger and broader the group needs to be.
 
-We can get closer to this ideal if we use Ranked Choice Voting because this voting method allows candidates to ally and work together as a team. This happened in an actual election for mayor in 2018 where two candidates came together to support each other against a third. The campaign not only got the strength of both candidates, but because the ballots were Ranked Choice ballots, it got the strength of all their combined voters. This happens in any system which avoids vote-splitting. In Ranked Choice Voting, in approval voting, in STAR voting, in score voting, and in pairwise ranked condorcet voting, there is a spirit of cooperation. Candidates see each other as assets to help reach out to new voters rather than liabilities that take their voters away.
+We can get closer to this ideal if we use Ranked Choice Voting because this voting method allows candidates to ally and work together as a team. This happened in an actual election for mayor in 2018 where two candidates came together to support each other against a third. The campaign not only got the strength of both candidates, but because the ballots were Ranked Choice ballots, it got the strength of all their combined voters. This happens in any system which avoids vote-splitting. In Ranked Choice Voting and also in approval voting, in STAR voting, in score voting, and in pairwise ranked Condorcet voting, there is a spirit of cooperation because voters can support more than one candidate. Candidates see each other as assets to help reach out to new voters rather than liabilities that take their voters away.
 
 So.. what is Ranked Choice Voting and how does it work?
 
@@ -28,15 +28,13 @@ So.. what is Ranked Choice Voting and how does it work?
 
 <!--This is as opposed to digs at each other.-->
 
-<!--**need to explain how RCV works, and what the diagram means**-->
-
 ## Introducing RCV
 
 Ranked choice voting asks voters to rank the candidates in order from best to worst. Here's an example ballot where you can just write a number next to each candidate:
 
 {% include sim.html id="irv_ballot_sim"
 
-link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8lUO1C0uW7PV-RIqQJuxucSFb5bgLJE0IybdH1nAQOA4XY73GM_I3ZZqXZeqJtW9p4Z6vN89JqduWiEdLl6TTiArNOZHSrIks7tXrkm6O9zav5HRzvDLdrfS7Fc7xHA89IxSEEMQKgCR2TezgAth1sj9XHHoUJYd4YUROIw6gEY1BsRiQimRDNCHqMVByCOWxEjAVMJUCgKDiTAsnRmNFCXwFVjlWpYNu9OiwN-yqXC9OuJRx0ZjT_5QKp9rwLZCoPZKGhZkz0u9Kz_vHup4PD5fDSuRpyDXINRg3A8C4gdWwPoPxmgEcnRW_ULG-amFpiK2gqFBUsfoGRQ0LaxIUrQCwsJfj6XT5fPp631314_H8tr_Szx9OauPpqAIAAA)" title = "Ranked Choice Voting Ballot"
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8lSrnCMWJnTj9CA6IC9rtoYieqFokuCAE347t0UpIqNrDxK_JjLNfqaT9sujMxPOQF5plO1mutn445ETeMmtm9ailfcmJ0z79cMpJIuzWYrVhUPK_zyp6szJvVqgENxHIqSKEAGIA7icTQAYmgNjQrmsGM4rVeCxZCZHRVAPQVI7BKjFQO5IDkSKaMdBKCCVfAZgaBLWGOgQ1Y1ooExo7SuBrsEq5WomdznvY7bldrtvBCJfmB445_kvJcMoDzwCJPCMpWJiQP86ank7v63rZ3V93a_KXgnGBXIFxEQCMC1gF6xMY7wVA0dlhumN9XcKSi-2g6FDUsfoBRQMLGzUoRgNgYQMvOLZfaKCo265yy-x5WFQQKoUmhRiFGGUkBQA9Cj6FLHVZd8P-OvA8H8_n68fj59vJVvZwvLyeXtL3Lx2Xrl0VAwAA)" title = "Ranked Choice Voting Ballot"
 
 caption = "Your vote counts for your top choice. It's like a stack of cards. The top card is who you like best. Under that is your second choice, and so on."
 

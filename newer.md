@@ -6,7 +6,6 @@ description: An addendum to the Interactive Guide to Approval Voting
 description-banner: An <span class="notation">addendum to the</span> Interactive Guide to Approval Voting
 byline: by <span class="notation">Jameson Quinn &</span> nicky case, <span class="strike">dec 2016</span> <span class="notation">sep 2017</span>
 twuser: bettercount_us
-min-width: 460
 ---
 
 {% include letters.html %}
@@ -39,7 +38,7 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DM
 
 %}
 
-But notice something about that ballot? For many positions of the voter and candidate, the ballot doesn't include a score of 5 or a score of 0. If you actually voted like that, you'd be giving up on some of your voting power. Say Triangle is your favorite, and you give them a score of 3, which also happens to be their average score. If Square wins with a score of 3.2, you're going to feel very silly for not giving {{ B }} a 5, in order to pull their average up as high as you can.
+But notice something about that ballot? For many positions of the voter and candidate, the ballot doesn't include a score of 5 or a score of 0. If you actually voted like that, you'd be giving up on some of your voting power. Say {{ B }} is your favorite, and you give them a score of 3, which also happens to be their average score. If {{ A }} wins with a score of 3.2, you're going to feel very silly for not giving {{ B }} a 5, in order to pull their average up as high as you can.
 
 ## Lightly-strategic voting: "normalization"
 

@@ -99,7 +99,7 @@ Another method you've likely heard of if you are reading this page is Ranked Cho
 Read more about:
 
 * [Approval Voting](approval)
-* [Score Voting, STAR voting, and 3-2-1](newer)
+* [Score Voting, STAR voting, and 3-2-1](scorefamily)
 * [Instant Runoff Voting, IRV (Single-Winner RCV)](irv)
 * [The Single Transferable Vote, STV (Multi-Winner RCV)](stv)
 * [Condorcet Methods](condorcet)
@@ -373,7 +373,7 @@ We said we could use utilities because it would help us put the candidates in or
 
 Even in some better voting methods, there can be a game of chicken. The game of chicken is weird. Let's consider the center squeeze example with {{ B }} {{ E }} {{ F }} again. {{ F }} voters can pull back their support from {{ B }} if they think {{ F }} can win against {{ E }}. And some of the {{ B }} supporters can pull away from {{ F }}. But if the {{ F }} supporters are overconfident, they can lose to {{ B }}. 
 
-[The page on scored systems](newer) has a more thorough chicken dilemma explanation. Personally, I have a hard time trying to think of the chicken dilemma for pairwise voting, so I don't think it would affect voters.
+[The page on scored systems](scorefamily) has a more thorough chicken dilemma explanation. Personally, I have a hard time trying to think of the chicken dilemma for pairwise voting, so I don't think it would affect voters.
 
 {% include sim.html id='chicken_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwUoEMQz9l5xzaJIm3Zmb_-Bt2cMK3gZ3ERVE9NtN8xQHFilMmvTl9eV1PqjRejzKWFjcTnyUNlhi1C5YTE8nJpmYEF4060NZJXKjE9r7BBitjanTKhm8ksge45uV4JEnFEbZJvkZjbjtV0IOCWl8s_Jk-fdEWt0rU6zILCgKECdTXQaok0BILdIz5oWWIdmVSZMpiyoIiiJoFDTq1aCg0YHsgAwsNp2dOnLKWTatTrPCGnjMpxlfT6_bRpz5z-6vUgQBQtxi0wLhzp5Hvf36MRPZJ1owMHTbJ714uu9rUXL6wENikL5U0WGsYwzHGG5ljmMMdwTY4aP0Okx12BENQQoZeJuAqeElfP4cAYqAglgqDCgY6B1Q8HDetsvL_fv1kVa6u16fL2_njT6_Ab_6IUHSAgAA)'
 

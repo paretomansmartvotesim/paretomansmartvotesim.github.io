@@ -260,7 +260,7 @@ Either read about primaries and polls, more details about approval voting and st
 -   [The Single Transferable Vote](stv) - AKA Multi-Winner Ranked Choice Voting
 -   [Proportional Representation](proportional) - draft
 -   [To Build a Better Ballot](original) - by Nicky Case - the original sim that this sim was based on
--   [An Even Better Ballot](newer) - by Jameson Quinn - on types of strategy with score voting and resistance to it with STAR voting and 3-2-1 voting
+-   [The Approval Score STAR 3-2-1 Family](scorefamily) - by Paretoman and Jameson Quinn - on types of strategy with approval and score voting and adaptation to it with STAR voting and 3-2-1 voting
 
 **External Links**
 
