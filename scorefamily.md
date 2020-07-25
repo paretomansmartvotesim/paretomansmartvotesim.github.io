@@ -44,15 +44,19 @@ id = "median_2d_sim" %}
 
 How does approval voting use a median?  Approval voting is asking you whether each candidate is close to you or far from you, so you’re measuring distance and writing it on your ballot.
 
-In approval, score, STAR, and 3-2-1, you're doing the same thing, you're writing your distance on your ballot. Higher score means shorter distance.  
+In approval, score, STAR, and 3-2-1, you're doing the same thing, you're writing your distance on your ballot. Higher score means shorter distance. All of these methods add up the scores to find the highest totals, and they do so in different ways.
+
+Score is approval voting with more levels of support.
+
+STAR combines the two ways of finding the middle, scoring and counting by pairs. Its name is an acronym, STAR, Score Then Automatic Runoff. First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever each voter prefers.
+
+In 3-2-1 voting, voters rate each candidate "Good", "OK", or "Bad". To find the winner, you first narrow it down to three semifinalists, the candidates with the most "good" ratings. Then, narrow it further to two finalists, the candidates with the fewest "bad" ratings. Finally, the winner is the one preferred on more ballots. 
 
 {% include sim.html 
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTTW_CMAz9LzmHqU6cOO0NiV8wuFUcGHQaEqIVsE3TtP322XljBybUw4s_8vzsuJ-ucV3fC3nKtPY9pfx7Ctz8-YoPUcyXSU9pvfaO7FobPRGbGV3XeMeuc99EzrvkOvIua5IGRaHx_z6NlLuR9m6EmlqLTEG1A2xIIAYkQK46SBUQK2q9pNDWYFAidQaqOSEAQBMYltJEhQynwCqwlCVo5zbAoNrIxgCuCK4YkQGuqFy9zhmfJWeEwRrRsQ7YR88aZiO2PL52yuF6UOI-2oHrXb6lZvTNgmeBYG6rM2F-iQChikiQmiA14fkS2k6CWKm1EtrODQANZ7xBxvByqq2YwAyKDAUZgxcoENwVKJAIC-8nUCC2QW4-TafxbXPQvVpux9OgGGdhZnu2XM0fna2YIL_cDFHQc2kAqFigtkBt4Vq_YGMKBBfwFegupvtBdCuh_GlzOIyX1cc06MJfJZ1fxvfFcN6e9tNlPx7tV3g97obn_XHYua8fEHJuRmkDAAA)"
 altlink='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8i885xI6dbPfMD-ht1QO0i6hUdau2CCEEb8fOlAuoymHs2J7MOJ-UaZymVhNr26SJeUg81IjMI5WIhna7E_GotM0mEccYZ8-zRl5ozImURuZE5pCoektO_443t7uV4W5ldbfCub_NISlSQQpFrAAD1K6MXQCroz9nDqteFOfxS-HeIwIAjSgypykOFZcN2YDMWcQXkbtQjp2AqYCpgKmAqTjTxOl2orliHJwFdjlJKkm9rEEbfRo2w7bKb-DEU4lA-6z-pVa41oY_glxd9UvD8owBkGqQatid4TsNpq11nTb0twymawbAcMUPVLBU61ZCYAVFhYKKtTcoaJht0pmenw6H5br-OM000uN2Oc-U6PK6vD_Ml-15f7rul6NXvt-Ou_llf5x39PUDc7xiOMsCAAA)' title='Approval Score STAR and 3-2-1 Ballots' 
 caption="Try all four voting methods in this family. They all use the Normalize strategy, which we'll get to next."
 comment='one-voter ballots for approval, score, STAR, and 3-2-1, switch between them' id='score_family_ballot_sim' %}
-
-All of these methods add up the scores to find the highest totals, and they do so in different ways.  We'll get to each one later in the page. 
 
 [See the page on finding common ground for more examples.](commonground)
 
@@ -176,7 +180,7 @@ If voters play chicken and crash, they might wish they had played it safe. It's 
 
 STAR voting was created to address scoring strategies. It uses a final runoff where stretching your scores doesn’t matter. Voters aren't playing the game of chicken anymore because STAR's extra round can resolve the contention between factions.
 
-STAR combines the two ways of finding the middle, scoring and counting by pairs. Its name is an acronym, STAR, Score Then Automatic Runoff. First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever each voter prefers.
+Let's repeat the definition of STAR. STAR combines the two ways of finding the middle, scoring and counting by pairs. Its name is an acronym, STAR, Score Then Automatic Runoff. First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever each voter prefers. 
 
 All the usual advantages of this family of voting methods still apply: voters can give their favorite a top score, and candidates might offer support to other candidates on the same side.
 
@@ -208,9 +212,11 @@ comment = "chicken with star"
 
 3-2-1 voting is another method that avoids the chicken dilemma by addressing scoring strategies.
 
-In 3-2-1 voting, voters rate each candidate "Good", "OK", or "Bad". To find the winner, you first narrow it down to three semifinalists, the candidates with the most "good" ratings. Then, narrow it further to two finalists, the candidates with the fewest "bad" ratings. Finally, the winner is the one preferred on more ballots. 
+Let's repeat the definition of 3-2-1. In 3-2-1 voting, voters rate each candidate "Good", "OK", or "Bad". To find the winner, you first narrow it down to three semifinalists, the candidates with the most "good" ratings. Then, narrow it further to two finalists, the candidates with the fewest "bad" ratings. Finally, the winner is the one preferred on more ballots.
 
 3-2-1 voting is doing something similar to STAR by adding a second additional round of counting votes.  It's kind of like there are two rounds of counting approval ballots and one round of counting preference ballots. The first round of approval just counts "good".  The second round counts "good" and "okay".
+
+Important todo: I haven't put good strategies into 3-2-1 yet.  Right now, these strategies are okay for this example, but other examples might not be correct.
 
 {% include sim.html
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy2oDMQz8F59NsWTZ1u65n5Dbsoe22ZJASEIelFLab6_kIS2lhD2M9djxjKyPkMI4TXWIpGWOE5VqJ7YTF_45SWSheY6BvJmSRsrJ4xzGFIOEMXxRDjGUMFIM1bqs2AxS_PdZRe9WhrsVSv0ucgnVRGbPMXKQQQIogNq1kKkgMbQ7HYZe5NQjpt7DDAANCyKjyQYVyYZIERkLm3ufHZs-8lGAKzNK4MrgysY1Ueyft1b0gDPDM0WO7kmc1LvEnbpz4dvBSKfeI_1P-UsrcCwNjwKpMvRkwfQKASCyZABEFjxegeHSUNN-U4HhmgCwWjH9Cqu1dBsur4KiQkHFyBsUNPzboKBlRHi5hpdrt_1pKOrvfKJ4HpY0AagzKcQoxCgIFYQKPQo-hSx1WQ_FVg7Cnp92u8Nl9X5cbJtXm9Oy2D6fN4e3x-X8ctoeL9vD3vf8ul8vr9v9sg6f3_tmOp49AwAA)"
