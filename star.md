@@ -26,7 +26,7 @@ STAR combines the two ways of finding the middle, scoring and counting by pairs.
 Let's see how this works in an actual election. Let's use a range of scores from 0 to 5. Let's also model voter behavior. We'll get to how voters behave using strategies by the end of the page.
 
 {% include sim.html title="STAR Voting"
-caption="Score from 0 to 5 and add up the scores."
+caption="Score from 0 to 5 and add up the scores. AND THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking."
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38VzhGLHdnLdeAXa7XQDoG6VihALQuXZcfxThqLqht-xk_8-J_6iSrt1NS9c21ZW5lq4LzOyFjmJSP5yohq5um2FeB7LPdrmutGuFlLa0TcLFbJce-yKYg-p5d8XlXG3stytcE1vngjuSAlSoGCFgIEdEhCsofFLCwl_LiThFUkJLwkRCGxEsSVsWghspGM1sFryQKsJy_MeOAsNTq1BANTCaeXy-83NjjI8G1rmIqUVjbKm7Qz4Gsg1CONVZqB5Vm-t1RNeO94FuIqmDRdoQDWgGlANTZtB0LR11Eb-y9C0VwjnTscLOK7OLVuJiSKHhYPAl5QOgo6zXSANgsvqIOhzhGh_eHyKodq_nt-PNAeqozhubqyjwVEheNUBtAG0oUgaBHQDfgOQY0I-xJAswHx5Pp3OH4fPt2OMNxguP5L3f-I5AwAA)"
 comment='' id='scores_sim' %}
 
@@ -76,7 +76,7 @@ id='score_family_election_sim' %}
 {% include sim.html 
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VST0vDMQz9Lj0HadombXfbxfPQ3-3HDlN2G2wMEUT0s5vkMURFenj519eXNO8pp826zkFc5p5Wln6zhtDsbkwL9brfU2Kv5VaJa3G_pk2m1NImfXJJlCR8tSpLdgNjp_z7WG5Y7k88MvPfDOdgZxcxSLuFVT1eEIcYbgBIYQWYFm6G9q6DPcKUSg6vGGExKADQlIYSo6kGoCkd3oA340LNoZh9HByJCqZaARBUjWlliuOliiQYK7pmKlQt2YLSDb4Z5WYY6VrcaHGz_aRtGrJbx8dAaEO7gvkJRApECkQK2hUBoF3pyI14SdCuZgBHpWL2iqGpRBvegoJCoUBnQIeCjru9ACoAY-pQ0H2H0vZyuZ5fDyfbrMfn8_XouGwfDO53yy75jnWUj-_5UfM4Wh4ZgB8eaHlA7GjwBAC9A3wDsofLvhNbSgh_OpxO55fl7XK0jYeijy-Hm9dbQQMAAA)"
 title='Finding the Middle in a Tough Situation' 
-caption="Again, like the above, FPTP doesn't find the middle. The voting methods in this family do find the middle. And they are strategizing based on polls."
+caption="Again, like the above, FPTP doesn't find the middle. The voting methods in this family do find the middle. Also, voters are strategizing based on polls."
 comment='a tougher example of center squeeze working , but not for FPTP'
 id='score_family_election_tougher_sim' %}
 
@@ -86,7 +86,7 @@ We need to now fill in a little more detail about these strategies that we've be
 
 Strategy is when voters adjust their self-reported distances. This makes finding the median more complicated. Part of the reason STAR voting exists is to deal with strategy.
 
-We'll show you the score strategy and the STAR strategy, which is slightly different because STAR also uses a runoff.
+We'll show you five strategies, and how they work in score voting and the STAR voting.  Strategy with STAR voting is slightly different because STAR also uses a runoff.
 
 First, let's look at an example where voters don't use strategy. The voter judges the candidates based on distance. This measures distance well and finds the median.
 
