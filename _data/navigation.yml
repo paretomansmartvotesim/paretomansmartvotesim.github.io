@@ -4,13 +4,13 @@
   link: basics
 - name: Common Ground
   link: commonground
-- name: Condorcet Methods
+- name: Condorcet
   link: condorcet
-- name: Approval Voting
+- name: Approval
   link: approval
-- name: The Approval Score STAR 3-2-1 Family
-  link: scorefamily
-- name: Instant Runoff Voting
+- name: STAR
+  link: star
+- name: Instant Runoff
   link: irv
 - name: Single Transferable Vote
   link: stv

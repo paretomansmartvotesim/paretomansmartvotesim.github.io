@@ -19,6 +19,8 @@ In this kind of voting, you get a single choice for who you want to win. The bal
 
 {% include sim.html title='Single Choice Voting' caption='Also called First Past the Post.' id='ballotSingle' link='[link](http://127.0.0.1:8000/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQWrEMAz8i84-RLZkJzn3AT30FnLYdlMaCNllN0tZSvv2Sp4WCiUEIsmSxjPjD2qoH4aSA0sZw8DKlollkT3TcQzEPsKlDdy2Xifqm0BS_0o9B8o20YR_n82W3U672-l2O9zUS9kZeRlRghCDEStCrszYCLBYtOuSha42o-HYYeQ6EyMCYKKg0roQMw4LqhaVoUTzoalE2S0BUgJSAlICUjKkwczEYMYq8BKkcojWEofzGXF5Llfib2KAQ_JE6p78hRQolYJnAUXp6qHCMGUE0FPQ058XxBMqhGqp_BR2KYTmBgEiM1zPQMlaJTi5DIgMBhlWFzAo2C2xIj0fluW0Pd3PE_X0uNwuh2Xe7hTo-nZ6f5iuL5f5vM2n1bpft_U4vc7rdKTPbxSiHLmuAgAA)' %}
 
+That's the end of **The Basics**.
+
 Why do we vote this way? Why do we even vote? In the next part, I'm going to explain voting as a way to find common ground as a group.
 
 {% include card.html title='Finding Common Ground' description=' - Click here next.' url='commonground' img='img/venn-diagram.png' %}

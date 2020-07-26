@@ -24,7 +24,7 @@ You’ll really enjoy this site if you feel like there's got to be a smarter way
 
 {% include card.html title='Approval Voting' description=' - a practical improvement - And it works with strategy.' url='approval' img='img/winner-circle.png' %}
 
-{% include card.html title="The Approval Score STAR 3-2-1 Family" description=' - a deeper dive into using strategy and the game of chicken.' url='scorefamily' img='img/chicken.png' %}
+{% include card.html title="STAR Voting" description=' - and a deeper dive into using strategy and the game of chicken.' url='star' img='img/chicken.png' %}
 
 {% include card.html title="Instant Runoff Voting" description=" - a kinder politics with a kind of Ranked Choice Voting (RCV) for single-winner elections" url='irv' img='img/irv.png' class='drawBorder' %}
 

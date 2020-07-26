@@ -255,12 +255,11 @@ Either read about primaries and polls, more details about approval voting and st
 
 -   [Primaries](primaries) - and electability polls
 -   [Approval Voting](approval) - and strategy based on polling
+-   [STAR Voting](star) - by Paretoman and Jameson Quinn - on STAR voting and its motivation from strategies of score voting
 -   [Condorcet Methods](condorcet) - I like them best because they count by pairs.
 -   [Instant Runoff Voting](irv) - AKA Single-Winner Ranked Choice Voting
 -   [The Single Transferable Vote](stv) - AKA Multi-Winner Ranked Choice Voting
 -   [Proportional Representation](proportional) - draft
--   [To Build a Better Ballot](original) - by Nicky Case - the original sim that this sim was based on
--   [The Approval Score STAR 3-2-1 Family](scorefamily) - by Paretoman and Jameson Quinn - on types of strategy with approval and score voting and adaptation to it with STAR voting and 3-2-1 voting
 
 **External Links**
 

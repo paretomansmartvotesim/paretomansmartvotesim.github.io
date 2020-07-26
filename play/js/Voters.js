@@ -2881,7 +2881,7 @@ function GeneralVoterModel(model,voterModel) {
 		}
 
 		text3 += `
-		This is your percieved utility for each candidate: <span class="percent">(100% minus perceived distance)</span> <br>`
+		This is your perceived utility for each candidate: <span class="percent">(100% minus perceived distance)</span> <br>`
 		text3 += tBarChart("uNorm",distList,model)
 		text3 += `
 		<br>`
