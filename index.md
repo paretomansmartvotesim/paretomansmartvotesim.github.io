@@ -40,7 +40,7 @@ Where to find more information:
 
 * [Links](links) - I have a big list of links to communities, organizations, simulators, polling sites, courses, videos, essays, books, references, and bibliographies.
 
-Now that you have learned so much, you can try and share your ideas in the sandbox.  Also, try the original simulation that this sim was based on.
+Now that you have learned so much, you can try and share your ideas in the sandbox. Also, try the original simulation that this sim was based on.
 
 {% include card.html title="Sandbox" description=' - Try everything. Share your creations.' url='sandbox/' img='img/sandbox.png' %}
 

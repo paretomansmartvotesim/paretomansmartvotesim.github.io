@@ -122,7 +122,7 @@ The worst part of single-choice voting is the term spoiler. It sounds bad. and t
 
 For new candidates who don't have many supporters yet, the barrier to entry would be lowered. Hopefully, this would create competitive pressure to bring out the best candidates. 
 
-The technical definition of a spoiler is a candidate with a small enough level of support that they cannot win themselves, but that can change who wins merely by being in the election. You would think that the only way to change who wins is to be the winner.  For instant runoff voting, it's true if the candidate is small enough to be called a spoiler.
+The technical definition of a spoiler is a candidate with a small enough level of support that they cannot win themselves, but that can change who wins merely by being in the election. You would think that the only way to change who wins is to be the winner. For instant runoff voting, it's true if the candidate is small enough to be called a spoiler.
 
 {% capture cap7 %}{{ B }} accuses {{ C }} of spoiling the election, hoping he’ll get {{ C }}’s supporters{% endcapture %}
 

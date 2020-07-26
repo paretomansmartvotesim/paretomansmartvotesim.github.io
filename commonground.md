@@ -100,7 +100,7 @@ You can also use a tier list, because ties are okay, too. You can have multiple 
  <img src="https://cdn.kapwing.com/final_5dc9d759968f590014bbe8ce_848166.jpg" alt="tier list for candy" class="picture" />
 </div>
 
-Pairwise rankings really give you a lot of power.  They are used in a family of voting systems called Condorcet methods, and we'll talk about those later on their own page.
+Pairwise rankings really give you a lot of power. They are used in a family of voting systems called Condorcet methods, and we'll talk about those later on their own page.
 
 Next, let's talk about an even simpler way to find the middle.
 
@@ -189,7 +189,7 @@ caption='Give as many as you like a score from 0 to 5.'
 
 comment='simple,lots of candidates, one voter' id='score_sim' %}
 
-In practice, voters can adjust their self-reported distances, which is called using a strategy. Jameson Quinn has a good discussion of strategies in a page linked at the bottom, and I have a page that discusses how strategies play out in approval voting.  Basically, using strategies means score voting changes and takes on qualities of approval voting and pairwise voting.  Also, in the approval voting page, I show that when you combine approval voting with polls, you get almost the same winners as pairwise voting, which is nice.
+In practice, voters can adjust their self-reported distances, which is called using a strategy. Jameson Quinn has a good discussion of strategies in a page linked at the bottom, and I have a page that discusses how strategies play out in approval voting. Basically, using strategies means score voting changes and takes on qualities of approval voting and pairwise voting. Also, in the approval voting page, I show that when you combine approval voting with polls, you get almost the same winners as pairwise voting, which is nice.
 
 These are the strategies in the example below:
 
@@ -205,7 +205,7 @@ caption='Try the different strategies.'
 
 comment='score can look like approval voting' id='score_strategy_sim' %}
 
-STAR voting was created to counteract scoring strategies.  It uses a final runoff where stretching your scores doesn't matter.
+STAR voting was created to counteract scoring strategies. It uses a final runoff where stretching your scores doesn't matter.
 
 STAR combines the two ways of finding the middle, scoring and counting by pairs. Its name is an acronym, STAR, Score Then Automatic Runoff.  First we score. Then we find the top two and send them to a runoff. The runoff uses the same scores but counts them by pairs for whoever each voter prefers.
 

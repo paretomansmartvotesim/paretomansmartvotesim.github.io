@@ -145,7 +145,7 @@ So, now I've explained why strategic voting makes things tricky, I can explain m
 
 "Star" stands for "score then automatic runoff." In this method, voters use the same ballot as score voting. Between the two candidates with the highest scores, the winner is the one that comes higher on more ballots. 
 
-Here's a one-voter star election. Try the N = Normalized and F = Frontrunner strategies.  These are almost the same as in score voting, except that the ratings may be changed a little to avoid giving the same score to two frontrunners.  That is an important change that can matter in the runoff. Here's a one-voter election:
+Here's a one-voter star election. Try the N = Normalized and F = Frontrunner strategies. These are almost the same as in score voting, except that the ratings may be changed a little to avoid giving the same score to two frontrunners. That is an important change that can matter in the runoff. Here's a one-voter election:
 
 {% include sim.html
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSy04DMQz8l5wjFDtO4t0zf1Buqx6gXUSlqlu1RQgh-HbsjApCqNrDxI-dzDj-CCmM01SHSFrWcaJS7cR24sI_J4kstF7HQN5MSSPl5HEOY4pBwhi-iEMMJYwUQ7UuKzaDFP99VtGbleFmhVK_i1xCNZHZc4wcZJAACqB2LWQqSAztToehFzn1iKn3MANAw4LIaLJBRbIhUkTGwubeZ8emj3wU4MqMErgyuLJxTRT7560VPeDM8EyRo3sSJ_UucafuXPh6MNKp90j_U_7SChxLw6NAqgw9WTC9QgCILBkAkQWPV2C4NNS031RguCYArFZMv8JqLd2Gy6ugqFBQMfIGBQ3_NihoGRFeruHl2nV_Gor6O58onoclTQDqTAoxCjEKQgWhQo-CTyFLXdZdsZWDsKfH_X65PLwfZ9vm1WY5zbbP55fl7X4-b06742W3HHzPXw_b-Xl3mLfh8xuKlzI8PQMAAA)"
@@ -189,4 +189,4 @@ comment = "chicken dilemma with 3-2-1"
 
 ## Afterward
 
-**From Paretoman**: To finish where Jameson left off, STAR voting and 3-2-1 voting encourage voters to put better information on their ballot. Both voting methods use additional rounds to help more accurately determine the best candidate.  The additional rounds also give them some resistance to the chicken dilemma.  
+**From Paretoman**: To finish where Jameson left off, STAR voting and 3-2-1 voting encourage voters to put better information on their ballot. Both voting methods use additional rounds to help more accurately determine the best candidate. The additional rounds also give them some resistance to the chicken dilemma. 
