@@ -51,7 +51,7 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 
 #### Courses
 
-- Making Better Group Decisions: [Voting](https://www.youtube.com/watch?v=EYJ3ta080bI&list=PLBmjSBnW7zFm9rutlKI0nm9dQDZfnSo_g&index=3), Judgement Aggregation, and Fair Division - by Eric Pacuit - formal logic and math perspective - on my Youtube playlist
+- [Making Better Group Decisions: Voting, Judgement Aggregation, and Fair Division](https://www.youtube.com/watch?v=EYJ3ta080bI&list=PLBmjSBnW7zFm9rutlKI0nm9dQDZfnSo_g&index=3) - by Eric Pacuit - formal logic and math perspective - on my Youtube playlist
   - [Syllabus](http://ai.stanford.edu/~epacuit/classes/voting-fall2012.html) from a previous year
   - [Split Cycle](https://arxiv.org/pdf/2004.02350.pdf) - a new method he invented with Wes Holliday
 - [Game Theory](http://www.game-theory-class.org/) - on Coursera and Youtube - from Stanford and UBC - by Matthew O. Jackson, Kevin Leyton-Brown, and Yoav Shoham
@@ -88,5 +88,5 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 - [Stephen Martin](https://sites.google.com/site/stephendownesmartin/puppet-mastery/bookshelf) - game theory and voting
 
 #### Tangents
-- [3Blue1Brown Windmill Problem](https://www.youtube.com/watch?v=M64HUIJFTZM)
+- [Windmill Problem](https://www.youtube.com/watch?v=M64HUIJFTZM) - by 3Blue1Brown
 - [Facility Location Problem](https://en.wikipedia.org/wiki/Facility_location_problem) - on Wikipedia
