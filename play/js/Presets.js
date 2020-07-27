@@ -117,6 +117,7 @@ function _lookupPreset(ui) {
 				voterGroupX: [false],
 				voterGroupSnowman: [false],
 				voterGroupDisk: [2],
+				crowdShape: ["Nicky circles"],
 				seats: 3,
 				candidateB: [1,1,1,1,1],
 				nDistricts: 1,
