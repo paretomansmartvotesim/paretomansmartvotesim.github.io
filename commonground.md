@@ -1,7 +1,6 @@
 ---
 layout: page-3
-title: Home
-banner: Finding Common Ground
+title: Finding Common Ground
 description: An Explorable Guide to Group Decision Making
 byline: 'By Paretoman and Contributors, June 2020'
 twuser: paretoman1
