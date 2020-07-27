@@ -1,4 +1,11 @@
-
+---
+layout: page-2
+title: 3-2-1
+description: draft
+byline: by Jameson Quinn and Paretoman
+twuser: bettercount_us
+---
+{% include letters.html %}
 
 ## 3-2-1 voting
 

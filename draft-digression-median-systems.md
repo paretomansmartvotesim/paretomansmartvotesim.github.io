@@ -1,3 +1,10 @@
+---
+layout: page-2
+title: 3-2-1
+description: draft
+byline: by Jameson Quinn and Paretoman
+twuser: bettercount_us
+---
 ## Digression: median systems
 
 [skip this digression](newer#lightly-strategic-voting-normalization)
