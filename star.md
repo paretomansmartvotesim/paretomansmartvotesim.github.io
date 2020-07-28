@@ -84,11 +84,11 @@ id='score_family_election_tougher_sim' %}
 
 We need to now fill in a little more detail about these strategies that we've been using. These strategies get very detailed. Still, STAR voting is able to find the middle. The only really complicated situations involve factions playing a game of chicken. To explain the game of chicken, we have to first explain strategy.
 
-Strategy is when voters adjust their self-reported distances. This makes finding the median more complicated. Part of the reason STAR voting exists is to deal with strategy.
+Strategy is just how a voter decides what scores to give.
 
-We'll show you five strategies, and how they work in score voting and the STAR voting.  Strategy with STAR voting is slightly different because STAR also uses a runoff.
+We'll show you five strategies, and how they work in score voting and in STAR voting.  Strategies are slightly different with STAR voting because STAR also uses a runoff.
 
-First, let's look at an example where voters don't use strategy. The voter judges the candidates based on distance. This measures distance well and finds the median.
+First, let's look at an example where voters try to judge candidates. This makes more sense for something like a pie-baking contest where the point is to recognize excellence. Each voter has their own taste. In our model, we visually represent taste as distance. So, basically, the voter judges the candidates based on distance, and this is really good for finding the median.
 
 See if you notice something odd about the ballot below. 
 
@@ -105,7 +105,9 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU7DM
 
 Most voters will want to make sure that their ballot contains at least one candidate at the top rating and one candidate at the bottom rating. The simplest way to do that is "normalization". That means that you give your favorite a 5, you give your least favorite a 0, and you judge the rest on that scale between 0 and 5.
 
-One more consideration is made in STAR voting, and this makes it different than score voting. The ratings are changed to avoid giving the same score to two candidates. That is an important change that can matter in the runoff. 
+This is probably the first instinct for a voter. Also, it's the instructions for STAR voting. The ballot is labeled 0 worst - 5 best so it's relative, not a fixed scale.
+
+One more consideration is made in STAR voting, and this makes it different than score voting. The voter will want to avoid giving the same score to two candidates. That is an important change that can matter in the runoff. 
 
 {% include sim.html
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU7DMAyG38XnCNWJ46S9Ie0J2G7VDrAVMWlap20IIQTPjp0fOAxNPfyJnfz97PiDOhrGsXBg5XUYOevPKkr3F6shpuIxZVvl9ToQ-7U-BWbxbaKhCyQ00BdHCpRp4EBqhyxZTLrw77NMvZnpb2a4a_9iJ1CjTYhGRAHCAskQbTRsHCym9tds0rdkNDsLRm5nYoTAJgp2ZpNMFMGCXcXOXKLV722MRsjeDHgleKUEgVcyr9G6jc8PKwzgmlC3tTmkIJYWN_Zz4vV6pRJ_F2Y8Jl9IuyvX1oK6peBxACx9C2Z0MTMkNoicIEDNeMSMsnNBrrZ_ZZStHQQFK95A0TzNrRQHVFgoCBSNLyAouFtAUNCsgvcrICg-R7Rc3T_YZC0382kin6qCZL3qWEGBtYPAvgKtAq2iwIrxqKCr8KuArA55Z2PSA_Ppcb-fL6v342QzDoZA55f5bTGdN6fd8bKbDz79r4ft9Lw7TFv6_AY8yRtZXAMAAA)"
@@ -115,7 +117,7 @@ id = "ballot5"
 comment = "Description: this should be like ncase's 'drag the voter' examples, with a normalizing score voter. This voter should have a series of circles, where the closest one intersects the closest candidate and the farthest one the farthest candidate. Thus, as you moved the voter or candidates the circles would change size."
 %}
 
-Normalizing as above is a pretty weak strategy. To strategize even more strongly, voters could look at polls to see which candidates are the frontrunners and use them as the endpoints for normalization. Any candidate better would get a 5, and any candidate worse would get a 0. In other words, the scores are clipped.
+Voters can further maximize their vote's effect. Voters could look at polls to see which candidates are the frontrunners and use them as the endpoints for normalization. Any candidate better would get a 5, and any candidate worse would get a 0. In other words, the scores are clipped.
 
 Again, one more consideration is made for STAR voting as opposed to score voting. The voter strategically gives different scores to each frontrunner.
 
