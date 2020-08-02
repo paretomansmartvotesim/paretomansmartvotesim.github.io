@@ -196,7 +196,7 @@ id = "election13"
 comment = "chicken with star"
 %}
 
-## Afterward
+## Afterword
 
 The major point we've been supporting on this page has been that STAR voting allows voters to find common ground. 
 

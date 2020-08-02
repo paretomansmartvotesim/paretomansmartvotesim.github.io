@@ -149,7 +149,7 @@ Additionally, there are ways to have proportionality by using a party system, bu
 
 I still need to work out what the strategies would be for voters and candidates. So far, in the above examples, I've been using the honest strategy for ranking and the normalization strategy for scoring.
 
-## Afterward
+## Afterword
 
 I hope that by seeing how proportional methods work you're inspired to improve our ability to represent all members of society. Basically, proportional methods allow candidates to better serve a segment of society by being closer to them.
 

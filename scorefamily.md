@@ -236,7 +236,7 @@ id = "election14"
 comment = "chicken with 3-2-1"
 %}
 
-## Afterward
+## Afterword
 
 The major point we've been supporting on this page has been that this family of voting methods allows voters to find common ground. 
 

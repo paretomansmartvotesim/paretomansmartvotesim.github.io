@@ -187,6 +187,6 @@ id = "election14"
 comment = "chicken dilemma with 3-2-1"
 %}
 
-## Afterward
+## Afterword
 
 **From Paretoman**: To finish where Jameson left off, STAR voting and 3-2-1 voting encourage voters to put better information on their ballot. Both voting methods use additional rounds to help more accurately determine the best candidate. The additional rounds also give them some resistance to the chicken dilemma. 

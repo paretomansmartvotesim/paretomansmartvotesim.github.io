@@ -171,7 +171,7 @@ Additionally, there are ways to have proportionality by using a party system, bu
 
 I still need to work out what the strategies would be for voters and candidates. So far, in the above examples, I've been using the honest strategy for ranking.
 
-## Afterward
+## Afterword
 
 The main drive for STV is to have representation of all diverse groups and to include minorities. Group bargaining in this representative group would ideally be able to offer a policy package that includes a little bit from everyone at the table. This is also a vision of a more responsive politics. We don't have to wait until the election. We can represent each sector of the population today, so that when an event occurs, action can be taken. Also, proportional representation is a further way to avoid antagonistic campaigns. It won't get rid of partisanship, but it might prevent it from being broadcast to the voters . We can change the political culture and have campaigns that are capable of bringing groups together to achieve a greater goal.
 

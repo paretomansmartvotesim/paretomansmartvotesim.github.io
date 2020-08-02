@@ -270,7 +270,7 @@ In each of these Condorcet methods, voters would have a hard time trying to use 
 
 Pair counts are never affected by strategy. It’s only in a cycle-breaker that voters would even think about using strategy, because cycle-breakers don’t use just plain pair counts. In a Condorcet cycle, candidates are virtually in a tie, so candidates will always feel a pressure to move toward the middle, and there will always be a spot in the middle for a new common ground candidate to enter the race.
 
-## Afterward
+## Afterword
 
 You may have noticed the above examples seem to all be ties, so what does it matter which condorcet method we choose? They all seem to be about the same. As long as we pick one, we’ll be okay. 
 
