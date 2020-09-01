@@ -96,7 +96,7 @@ You can also use a tier list, because ties are okay, too. You can have multiple 
 
 <p style="text-align: center;" ><strong>Tier List for Candy</strong></p>
 <div class="picture-container">
- <img src="https://cdn.kapwing.com/final_5dc9d759968f590014bbe8ce_848166.jpg" alt="tier list for candy" class="picture" />
+ <img src="img/candy-tier-list.png" alt="tier list for candy" class="picture" />
 </div>
 
 Pairwise rankings really give you a lot of power. They are used in a family of voting systems called Condorcet methods, and we'll talk about those later on their own page.
