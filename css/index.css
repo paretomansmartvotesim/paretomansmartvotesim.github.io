@@ -456,4 +456,5 @@ p#editnote {
 
 img.gif_show {
 	max-width: calc(100vw - 60px);
+	margin-bottom: 20px;
 }

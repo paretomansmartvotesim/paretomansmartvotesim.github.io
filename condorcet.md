@@ -23,7 +23,9 @@ link = "[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA
 title = "Pairwise Ranked Ballot"
 caption = ""
 comment = ""
-id = "1" %}
+id = "1"
+gif="img/pair_ballot.gif"
+%}
 
 We're going to use that background map for ballot visualization in the two elections below. We'll overlay the ballots for all the voters to try to make it more clear how everybody's ballots get added together.
 
@@ -32,14 +34,18 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSMWs
 title = "FPTP Spoilers, Condorcet None"
 caption = "Switch between FTPTP and Condorcet"
 comment = "Example of no spoiler effect - basic spoiler intro stuff."
-id = "2" %}
+id = "condorcet_2" 
+gif = "img/condorcet_2.gif"
+%}
 
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsU5DMQz8F88Wih07SbsiMXfo9tShQAekiiJUhgrBt-P46AKq3nB2bF_u_PJJhdbLItVYXHe8yBCWUiNSrSxjRmLOahKRexyV3Y5JcsxLjGVeaV2YjNb0XYjJM23RFLUeUPjfF5Vxs7K6WZGS3DIVZK7IoUAMAAHSAKFALDDu84AgFyYNojjUINIABYBGDS1BUwNAox3ZQLbKgVpSqcwdSBYqBNWKOgTVYFpitfhmc0MZnBV-hZUrW5St_Nqzq0_TaxDEi87Actb-UltL8dbxTyDXYNqxPYdUh2mHVIdpdwBMe0dt5F0O060AJDsbDDesrnlaiYdDDRQNCtoqoUNBx2xXQAVgWR0K-nw_9LDZbuJF3Z9en0_vT4czzRfV0TCuW5tnMDgKAPQD0gakDUvZwwFQN8A1BmCKvOtMj_vj8XTeXt4O8aY3x4_3_fHlfKGvHw30UswyAwAA)" 
 title = "Condorcet: No Vote Splitting"
 caption = "Switch between FTPTP and Condorcet"
 comment = "Example of no vote splitting. - even with that crowded example the IRV had a hard time with."
-id = "3" %}
+id = "condorcet_3"
+gif = "img/condorcet_3.gif"
+%}
 
 How does this work? We have this information about each pair of candidates, so the obvious thing to do is check if there is a winner that won all of their matches, which is called the Condorcet winner. If you ever hear somebody talking about counting by pairs or Condorcet methods, well, they're pretty much the same thing. 
 
@@ -63,7 +69,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy24
 title = "Rock Paper Scissors."
 caption = "Rock beats scissors, and scissors beats paper, but paper beats rock, so it’s a tie, or a cycle."
 comment = ""
-id = "4" %}
+id = "condorcet_4_rock_paper_scissors" 
+gif = "img/condorcet_4_rock_paper_scissors.gif" 
+%}
 
 This visualization **above** is a little crowded. The colors here are the same is in the case of the single ballot. The three voter's ballot diagrams are overlapping in this combined diagram. 
 
@@ -74,7 +82,8 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WTy24
 title = "Beat Map of Rock Paper Scissors"
 caption = "This map shows that scissors is in rock's territory, but paper is outside, so paper beats rock. Wiggle rock to see its territory move."
 comment = ""
-id = "41" %}
+id = "condorcet_beat_map_41"
+gif = "img/condorcet_beat_map_41.gif" %}
 
 This cycle can happen when there is division between three deeply divided groups. It goes away if we add voters to the middle. (Also, let's use odd numbers so we don't have to deal with ties.)
 
@@ -83,7 +92,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy04
 title = "Middle Voters Break the Cycle"
 caption = "The middle voters' choice determines who wins because the rest of the voters can’t agree."
 comment = ""
-id = "5" %}
+id = "condorcet_5_middle_voters"
+gif = "img/condorcet_5_middle_voters.gif"
+%}
 
 Or if we add one candidate to the middle, then they win.
 
@@ -92,7 +103,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy24
 title = "Common ground Candidate Breaks Cycle"
 caption = "A common ground candidate enters the race and wins all their matches."
 comment = ""
-id = "6" %}
+id = "condordet_6_candidate_common_ground" 
+gif = "img/condordet_6_candidate_common_ground.gif"
+%}
 
 There is tremendous competitive pressure to go towards the middle as you can see in this new diagram, a win map. The solid yellow region is where {{ B }} needs to be in order to win. 
 
@@ -101,7 +114,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTQW4
 title = "Win Map"
 caption = "This is a map of where B would have to go to win. Move B around."
 comment = ""
-id = "7" %}
+id = "condorcet_7_win_map"
+gif = "img/condorcet_7_win_map.gif"
+ %}
 
 This map is much fuller when there are voters in the center. (Also, the striped region in the below diagram is just a regular tie, not a cycle, like the above diagram with thinner striping.)
 
@@ -110,7 +125,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy24
 title = "Win Map with Middle"
 caption = "Middle voters make it easy for common ground candidates to win. Move B around."
 comment = ""
-id = "win_map_middle_sim" %}
+id = "win_map_middle_sim"
+gif = "img/win_map_middle.gif"
+ %}
 
 Let's go back to the beat maps. They show where any candidate would need to go to beat {{ B }} in a one-on-one. It looks like B has most locations locked down except for a white angular area in the center.
 
@@ -119,7 +136,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy24
 title = "Beat Maps"
 caption = "B beats any candidate in the yellow region. Move everybody to see how their beat maps change."
 comment = ""
-id = "beat_map_middle_sim" %}
+id = "beat_map_middle_sim"
+gif = "img/beat_map_middle_sim.gif" 
+%}
 
 Also, just to make a pretty picture, you can see that if the two middle voters are exactly in the middle, then the regions where the cycle happens become very thin.
 
@@ -128,7 +147,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy24
 title = "Thin Beat Maps"
 caption = ""
 comment = ""
-id = "thin_beat_map_middle_sim" %}
+id = "thin_beat_map_middle_sim"
+gif = "img/thin_beat_map_middle_sim.gif" 
+%}
 
 In an election, there are many more voters (the dots below), and {{ B }}'s beat map is a circle (close to it).
 
@@ -137,7 +158,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTQW4
 title = "B's Election Beat Map"
 caption = "Only candidates more near the middle can win. Move A, C, and D to make them win."
 comment = ""
-id = "election_beat_map_middle_sim" %}
+id = "election_beat_map_middle_sim"
+gif = "img/election_beat_map_middle.gif" 
+%}
 
 Let's look at all the candidates' beat maps to show that there is a cycle between {{ A }}, {{ C }}, and {{ D }}, but {{ B }} beats them all. Also, the white spot in the middle is where a new candidate could win.
 
@@ -146,7 +169,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTQW4
 title = "All Beat Maps in Election"
 caption = "The spot in the middle is where a new candidate can win."
 comment = ""
-id = "all_election_beat_map_middle_sim" %}
+id = "all_election_beat_map_middle_sim" 
+gif = "img/all_election_beat_map_middle.gif" 
+%}
 
 These examples are made to show particular concepts, and a real election would have a wider spread of voters and candidates.
 
@@ -161,7 +186,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA21SMU4
 title = "Median Beats All in 1D"
 caption = "Candidate A takes the position at the median of the position of voters and wins. Move B to show there's no other position that beats A."
 comment = "maybe continue using candidate B for the middle"
-id = "median_1d_sim" %}
+id = "median_beats_1d_sim" 
+gif = "img/median_beats_1d.gif" 
+%}
 
 In two dimensions, the median doesn’t work this way. Finding the median in two dimensions actually has many definitions. 
 
@@ -174,7 +201,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA22SsW7
 title = "Median Beats All in 2D"
 caption = "In this circular distribution of voters, the candidate that positions themselves at the geometric median beats all other candidates."
 comment = ""
-id = "median_2d_sim" %}
+id = "median_beats_2d_sim"
+gif = "img/median_beats_2d.gif"
+ %}
 
 The geometric median doesn't work in the multi-modal distributions we've been looking at that have Condorcet cycles.
 
@@ -185,7 +214,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTu27
 title = "Median Doesn't Quite Beat All in a Multi-Modal Distribution"
 caption = "In this triangular distribution of voters, there is a small white region near the center where a candidate can take a position to beat the candidate positioned at the median."
 comment = ""
-id = "median_2d_multimodal_sim" %}
+id = "median_2d_multimodal_sim"
+gif = "img/median_2d_multimodal.gif"
+%}
 
 There's another definition of median you could think of. You could project to one dimension and find the median as usual.
 
@@ -212,7 +243,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSW44
 title = "Minimax"
 caption = ""
 comment = ""
-id = "minimax_sim" %}
+id = "minimax_sim"
+gif = "img/minimax.gif"
+%}
 
 ### Schulze
 
@@ -225,7 +258,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU4
 title = "Schulze"
 caption = ""
 comment = ""
-id = "schulze_sim" %}
+id = "schulze_sim"
+gif = "img/schulze.gif"
+%}
 
 ### Schulze Alternative
 
@@ -236,7 +271,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU4
 title = "Schulze Alternative"
 caption = ""
 comment = ""
-id = "schulze_alt_sim" %}
+id = "schulze_alt_sim"
+gif = "img/schulze_alt.gif" 
+%}
 
 ### Ranked Pairs
 
@@ -247,7 +284,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU4
 title = "Ranked Pairs"
 caption = ""
 comment = ""
-id = "ranked_pairs_sim" %}
+id = "ranked_pairs_sim" 
+gif = "img/ranked_pairs.gif"
+%}
 
 ### Even More Condorcet Methods
 
@@ -258,7 +297,9 @@ link = "[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA
 title = "More Methods"
 caption = "Rob LeGrand did a lot of work to include all these Condorcet methods, and some that aren't."
 comment = ""
-id = "robla_sim" %}
+id = "robla_sim" 
+gif = "img/robla.gif" 
+%}
 
 ## Strategy
 
