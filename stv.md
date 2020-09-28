@@ -24,27 +24,35 @@ Representation is a very fundamental concept to government. The idea of a body o
 
 Voting districts are used to give representation to voters that live in a geographical area. For example, you could have each state elect representatives to a national body. Here’s an interactive simulation of districts: (as a side point, candidates from different districts don’t have to fight each other. At least, not until they get elected and start arguing about legislation.)
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRS25EMQi7S9Yswj8zV3mak1Tt2Qu40lM1GmVhiBNj4Gvt9bwuZqGzX3Txyb-AmWSfudKJXrR43tohEWvGlI42oeu5adl6rp-9aPmkUa-F3k49z2I2vZ1izkfm8ZHhPeW43XUqSOGJDQBLHIAywFZY5RpKW2jJnkxKRwsEl5CRkuECBwcZSWQHGVR0j1HuqfAQKvNXFTwMaSldTHP6aYCEoqLZ2gBpkQbJ7tX4DuUOFWId2ijYf3mDvCX2BMP2GF-O8TnMOtp2mHW07Q5A257gzlRytB0bAJXADgLDCx-n3UpAIuAgHgMJB8lTJTGuVADGldhfBnacCfLccyLre7R0WvD7F50SWj_cAgAA)"
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRS25EMQi7S9Yswj8zV3mak1Tt2Qu40lM1GmVhiBNj4Gvt9bwuZqGzX3Txyb-AmWSfudKJXrR43tohEWvGlI42oeu5adl6rp-9aPmkUa-F3k49z2I2vZ1izkfm8ZHhPeW43XUqSOGJDQBLHIAywFZY5RpKW2jJnkxKRwsEl5CRkuECBwcZSWQHGVR0j1HuqfAQKvNXFTwMaSldTHP6aYCEoqLZ2gBpkQbJ7tX4DuUOFWId2ijYf3mDvCX2BMP2GF-O8TnMOtp2mHW07Q5A257gzlRytB0bAJXADgLDCx-n3UpAIuAgHgMJB8lTJTGuVADGldhfBnacCfLccyLre7R0WvD7F50SWj_cAgAA)"
 title = "District Representation"
 caption = "Each district gets a representative, and we use choose-only-one voting within each district."
 comment = "just show some districts. It would be good to have a uniform distribution."
-id = "district_sim" %}
+id = "district_sim"
+gif = "gif/district.gif" %}
 
 In the same way, representation can be given to voters that are from different political spaces. This idea is called proportional representation because the number of representatives is proportional to how many voters are in a political space. It’s more representative than districts for reasons we will go over later on this page.
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvU6DMQx8l8wZ4v-0j4HYPnUoohMVMLAgBM9exweqUFVlODvn73K2v6822n7biLjPcegbRfwGRJ3HXNGUig69UdWq_DHqqzgJafvRm7Z9-yFvvVnlnuXcb07WRzKj35xk5l1md5ehUc_RsrdSRgpTpABYSncFaYA0MZ9bkNrcG4_KOHUkgXEJGU4ZSjBwkOFANpFBRUYZpTUWKkK4vhUBD0OSShv1OqvUQUJR0GyuoEuSCsnVq9I15GsoEFuhlpD-l1cvCxpYFAzrri4N4zOYNbRtMGto2wyAti3AzfJqaNuh4lBx7MAxPLdyulpxSDgc-K4g8G1QvRIYVwgA4wrsLxw7jgA5r3Pquu7R0oTg0_F8fvt4_Hw_5Z_5cHx9OT237ws0clXs8wIAAA)"
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSvU6DMQx8l8wZ4v-0j4HYPnUoohMVMLAgBM9exweqUFVlODvn73K2v6822n7biLjPcegbRfwGRJ3HXNGUig69UdWq_DHqqzgJafvRm7Z9-yFvvVnlnuXcb07WRzKj35xk5l1md5ehUc_RsrdSRgpTpABYSncFaYA0MZ9bkNrcG4_KOHUkgXEJGU4ZSjBwkOFANpFBRUYZpTUWKkK4vhUBD0OSShv1OqvUQUJR0GyuoEuSCsnVq9I15GsoEFuhlpD-l1cvCxpYFAzrri4N4zOYNbRtMGto2wyAti3AzfJqaNuh4lBx7MAxPLdyulpxSDgc-K4g8G1QvRIYVwgA4wrsLxw7jgA5r3Pquu7R0oTg0_F8fvt4_Hw_5Z_5cHx9OT237ws0clXs8wIAAA)"
 title = "Proportional Representation"
 caption = "Each center of political thought gets a representative. We use two-winner Ranked Choice Voting."
 comment = "not sure whether to have two side by side or top-bottom. Same winners as district representation. don’t show power chart."
-id = "prop_sim" %}
+id = "prop_sim"
+gif = "gif/prop.gif"
+%}
 
 The key advantage of STV is that districts do not need to be drawn around political minority groups in order to give them representation. Just look at how in a complex opinion-space, there is an evenly distributed selection of winning candidates:
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41TS2pcQQy8S6-1aH1a3W-OEbJ7zMLGXsUkWWQTQnz2VKsGMsYYzIPRv1Qtaf603i7nOZfkuspp1mWNUlR0OTQdx007XDRWuUzUdGvd5ehbmcjvpR0dwdia-q3SUJBWlSFrFn4gq1pGF7PtGy7p16s03ZQsBjmNLlm9YqG_VUmKae5Ub5cuLdqlvWo2aaPsBIDJuw_5E5Eu7z5EFiIA6QB5taxfa4hB9vYm86hM83v3XRgQm4PuV2zTaJKpBgV5gnIJsNKABAcdkEe50fcCrwFIIYBjEMSxoBM4DkEcm7QWraMKvNeTdQ9LK-BWte6Mk5ED6cQOP_42QLKEffwgMkbrEoJ1yZQlOBc4UYAj2ReDuuj_x75NvfUirbC3UfA6HZAqvk3ww0ziM_wi62UxeRWcQxzlHFzL4AwGpzk4g8FpjkHBaY7J2KrHDk4ziZJESe42iZKjzm6TTkIkGST3OVk7uc_JLUyn4BYm72Imb2dOBtf9oLefT1oEfHx4efnx6-vvn8_4G3x5-P7t-an9_Qc4HPJW2QMAAA)"
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA41TS2pcQQy8S6-1aH1a3W-OEbJ7zMLGXsUkWWQTQnz2VKsGMsYYzIPRv1Qtaf603i7nOZfkuspp1mWNUlR0OTQdx007XDRWuUzUdGvd5ehbmcjvpR0dwdia-q3SUJBWlSFrFn4gq1pGF7PtGy7p16s03ZQsBjmNLlm9YqG_VUmKae5Ub5cuLdqlvWo2aaPsBIDJuw_5E5Eu7z5EFiIA6QB5taxfa4hB9vYm86hM83v3XRgQm4PuV2zTaJKpBgV5gnIJsNKABAcdkEe50fcCrwFIIYBjEMSxoBM4DkEcm7QWraMKvNeTdQ9LK-BWte6Mk5ED6cQOP_42QLKEffwgMkbrEoJ1yZQlOBc4UYAj2ReDuuj_x75NvfUirbC3UfA6HZAqvk3ww0ziM_wi62UxeRWcQxzlHFzL4AwGpzk4g8FpjkHBaY7J2KrHDk4ziZJESe42iZKjzm6TTkIkGST3OVk7uc_JLUyn4BYm72Imb2dOBtf9oLefT1oEfHx4efnx6-vvn8_4G3x5-P7t-an9_Qc4HPJW2QMAAA)"
 title = "Evenly Distributed Representation"
 caption = "With five representatives, STV can spread them out to be closer to the voters. (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
 comment = "to show how STV can prevent factions from fighting each other."
-id = "even_distribution_sim" %}
+id = "even_distribution_sim"
+gif = "gif/even_distribution.gif" 
+%}
 
 ## Kinder Political Culture
 
@@ -60,11 +68,14 @@ For districts, you have a district size, which is the number of people in a dist
 
 In a way, the idea of a quota size already applies within a single-winner district, and it’s about 50%. It can be higher, and it can be lower. Someone can win with 48% if nobody else did better. Or 28%, which actually happens in crowded races. If only 28% voted for the winner, then that means 72% of voters might not be represented until the next election.
 
-{% include sim.html link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSPW_CQAz9K9HNN8T3mXTM0K0SBcSSMFyrCNKmpAowoKr97fX5laUInXS2z_bL83O-VKke2pas1RTsVrd868qwYww_RZefbNSGavaC1-Rou9WKpMtxiStzbNVDqZWT28sduMLom8O1kTOlvjmcqe5m6rsZKuVzlBnl0CAEIQIjAiUKMEyAHFv-nGfD2KSVYRx-NIxj2BgYwBiHEoaxbABjIqIKUS0NthSilCUhSVgjvdYiD0KWkVrSfycXB6SBaTEusWBW8wqUE9js0NUxV8dmobPjpNf9h3ZBCLiIFYGuw9Ae4nlGVT-dWk6XNBbL9NZ1h-Y87_q5aNJ84OipT6ditU-v7xxs-t1u6IvNMI6Jw8U8fExF0zyzv973xeN0notVn47T4dgpxfAQ00MCDzG9h4GYHux8JTN4iBlKGJLKgM0GrCR4kYh_WRUAETBZqMVETBbRG7GElzSO02l9-ex53sV4ntM4nC7q-xe0u0DUBgMAAA)'
+{% include sim.html 
+link='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSPW_CQAz9K9HNN8T3mXTM0K0SBcSSMFyrCNKmpAowoKr97fX5laUInXS2z_bL83O-VKke2pas1RTsVrd868qwYww_RZefbNSGavaC1-Rou9WKpMtxiStzbNVDqZWT28sduMLom8O1kTOlvjmcqe5m6rsZKuVzlBnl0CAEIQIjAiUKMEyAHFv-nGfD2KSVYRx-NIxj2BgYwBiHEoaxbABjIqIKUS0NthSilCUhSVgjvdYiD0KWkVrSfycXB6SBaTEusWBW8wqUE9js0NUxV8dmobPjpNf9h3ZBCLiIFYGuw9Ae4nlGVT-dWk6XNBbL9NZ1h-Y87_q5aNJ84OipT6ditU-v7xxs-t1u6IvNMI6Jw8U8fExF0zyzv973xeN0notVn47T4dgpxfAQ00MCDzG9h4GYHux8JTN4iBlKGJLKgM0GrCR4kYh_WRUAETBZqMVETBbRG7GElzSO02l9-ex53sV4ntM4nC7q-xe0u0DUBgMAAA)'
 title='Single-Winner Single-Choice: 28% Wins' 
 caption='If you only say, "pick only one", then the winner can win with only a small part of the votes.' 
 comment='crowded election, winner gets less than 25%.  Everybody is an individual.  Everybody has an option' 
-id='crowded_sim' %}
+id='crowded_sim' 
+gif = "gif/crowded.gif"
+%}
 
 If you use single-winner Ranked Choice Voting, then the quota is 50%. The ballot counts for the top choice, so there is no way that there is another candidate with more than 50% of ballots who could win. So, more than 50% of people are represented. More than 50% had their votes matter in the election (unless they didn't use all their rankings).
 
@@ -72,11 +83,14 @@ If you use single-winner Ranked Choice Voting, then the quota is 50%. The ballot
 
 (That's enough of a refresher on RCV to get you through this page, but after you're done on this page, [read this other page on single-winner RCV](irv). )
 
-{% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4md29zMQ3WqLQ1zFCShoEIJvP8dTHOKEtpg4Y4_Hzn613rZ9X4JWOWjn6MTS58mDeF2OgxrPDA4htkhmUVKe99q2Ts3a1n6sUfMKI5OF7r5MH8lkN-p_v-SW5O7ui1n_ZbhXQ572ZigI4YoNAFMcgLTAlpjtNCG1mZqkTl5K6kiCACAjhhSvAoGMDEQLorUKtJdRnnvhIhSGVMFDSVNpZ2IkBijoKUblWpbd5IyxgnmU21Fr0ZVgVW-_pS2qnQ28EawaBnYszmHTMbDDpsOmOwAD-wCHtTkGjg7gygwMG1hbePnUNBKQCDiItWDAwUDtEIAC8HIDLzcCrztGkU-ny-Xt4_Hz_Zx_3cPp9eX83L6vdVB8gMQCAAA)"
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9Qu4md29zMQ3WqLQ1zFCShoEIJvP8dTHOKEtpg4Y4_Hzn613rZ9X4JWOWjn6MTS58mDeF2OgxrPDA4htkhmUVKe99q2Ts3a1n6sUfMKI5OF7r5MH8lkN-p_v-SW5O7ui1n_ZbhXQ572ZigI4YoNAFMcgLTAlpjtNCG1mZqkTl5K6kiCACAjhhSvAoGMDEQLorUKtJdRnnvhIhSGVMFDSVNpZ2IkBijoKUblWpbd5IyxgnmU21Fr0ZVgVW-_pS2qnQ28EawaBnYszmHTMbDDpsOmOwAD-wCHtTkGjg7gygwMG1hbePnUNBKQCDiItWDAwUDtEIAC8HIDLzcCrztGkU-ny-Xt4_Hz_Zx_3cPp9eX83L6vdVB8gMQCAAA)"
 title = "Single-Winner RCV (IRV)"
 caption = "A candidate needs 50% to win."
 comment = "Refresher. 1 winner example. don't show power chart."
-id = "irv_sim" %}
+id = "irv_sim"
+gif = "gif/irv.gif"
+%}
 
 We can extend this logic to quotas for multi-winner Ranked Choice Voting. You wouldn’t be able to elect more than one candidate with a quota at 50%. Mathematically, it is the smallest quota where you can’t elect more than one. So let’s consider two candidates; 33% is the smallest quota where you can’t elect more than two. For three candidates, it’s 25%, and for a number n of candidates, the smallest quota where you can’t elect n+1 is 1/(n+1).
 
@@ -95,7 +109,9 @@ We can extend this logic to quotas for multi-winner Ranked Choice Voting. You wo
 title = "Three Winners"
 caption = "Each of three groups is able to be represented."
 comment = "three parties is a cognitive achievement. don't show power chart."
-id = "three_sim" %}
+id = "three_sim"
+gif = "gif/three.gif" 
+%}
 
 Ranked-Choice Voting is better (more representative) when it allows smaller groups to be represented. Five would be a great number. More would be even more representative but could be overwhelming. Voters don’t have to rank all the candidates. They just need to rank enough to get one candidate elected, or maybe two.
 
@@ -117,7 +133,9 @@ See the example chart below for a visual of the process of elimination. It start
 title = "Voter Chart By Round"
 caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory. Mouse over the rounds to see how the chart progresses through the rounds. "
 comment = "voter chart time"
-id = "voter_chart_sim" %}
+id = "voter_chart_sim" 
+gif = "gif/voter_chart.gif"
+%}
 
 Below this chart is another chart which I called a **power** chart. When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the power chart. The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power . (This is best viewed on a bigger screen. there's a lot of bookkeeping to do between rounds.) 
 
@@ -129,7 +147,9 @@ In the background is a dark bar that shows what total equality would look like. 
 title = "Power Chart"
 caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory. Mouse over the rounds to see how the chart progresses through the rounds. "
 comment = "power chart time"
-id = "power_sim" %}
+id = "power_sim" 
+gif = "gif/power.gif"
+%}
 
 ### Quota Excess
 
@@ -143,7 +163,9 @@ Let's get back to the idea of proportionality. You can see that in STV, a voter 
 title = "Quotas Give Proportional Results"
 caption = "Here's two groups with a 1:2 ratio (really 4:7). The winners are also in the same ratio."
 comment = "Maybe choose a more interesting example."
-id = "proportional_two_to_one_sim" %}
+id = "proportional_two_to_one_sim" 
+gif = "gif/proportional_two_to_one.gif"
+%}
 
 This proportionality applies even when there aren't distinct groups. Let's look again at the example we saw earlier, but now using the additional charts. 
 
@@ -151,7 +173,9 @@ This proportionality applies even when there aren't distinct groups. Let's look 
 title = "Evenly Distributed Representation - Again - With Charts"
 caption = "With five representatives, STV can spread them out to be closer to the voters. (Dots are used for voters and circles show candidate totals, including transferred votes from eliminated candidates.)"
 comment = "to show how STV can prevent factions from fighting each other."
-id = "even_2_sim" %}
+id = "even_2_sim" 
+gif = "gif/even_2.gif"
+%}
 
 <!--Add a section on gerrymandering-->
 

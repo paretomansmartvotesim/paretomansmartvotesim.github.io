@@ -28,7 +28,8 @@ Let's see how this works in an actual election. Let's use a range of scores from
 {% include sim.html title="STAR Voting"
 caption="Score from 0 to 5 and add up the scores. AND THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking."
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38VzhGLHdnLdeAXa7XQDoG6VihALQuXZcfxThqLqht-xk_8-J_6iSrt1NS9c21ZW5lq4LzOyFjmJSP5yohq5um2FeB7LPdrmutGuFlLa0TcLFbJce-yKYg-p5d8XlXG3stytcE1vngjuSAlSoGCFgIEdEhCsofFLCwl_LiThFUkJLwkRCGxEsSVsWghspGM1sFryQKsJy_MeOAsNTq1BANTCaeXy-83NjjI8G1rmIqUVjbKm7Qz4Gsg1CONVZqB5Vm-t1RNeO94FuIqmDRdoQDWgGlANTZtB0LR11Eb-y9C0VwjnTscLOK7OLVuJiSKHhYPAl5QOgo6zXSANgsvqIOhzhGh_eHyKodq_nt-PNAeqozhubqyjwVEheNUBtAG0oUgaBHQDfgOQY0I-xJAswHx5Pp3OH4fPt2OMNxguP5L3f-I5AwAA)"
-comment='' id='scores_sim' %}
+comment='' id='star_scores_sim'
+gif = "gif/star_scores.gif" %}
 
 Why does STAR voting work?
 
@@ -38,7 +39,10 @@ The easiest way to see how STAR allows voters to find common ground is with a Ve
 {% include sim.html title='Approval Voting Venn Diagram' 
 caption=cap21 
 link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu24CMRD8lZNrF16_jqMLRbpICSAaoHCiE5BcOHRAJBQl356xp0AKQlfMrmc93p29b2XUeLmMUYt1a70UMVrqmCNf46xEowZnHpF1gjOzXmsl-Zo1qAkCpgERXCacGhutvBpDSYWSRNRaffOhuAZj9M0HZnSXae4yYspzknvLqWXKjsQT2JJEAhoQD8RzAQBt0cpCB4cWOhZgCZSxniWQcQDK2JrZiFlTLjhTGpXsiRTC2XLXOfJsyEFpCff45eJImpqO4woMcxo7UN6wPodCK3Jor6G7Fvii4f8_4WNpxNfcFdv2HD7QxABt9btS0_6Sumqa3ler_eQ8bNqhmqRhj-ypTadqtk1vH0gW7Waza6vFrusS0udh99lXk8kL4vm2rR7781DN2nTs98eVUpCnqcEVpwNNDYFAUwO7C6MyQ6Cp0RCkVEZuOHI1MRQP8BurSInIyWJToOZkNe_WXMZr6rr-NL8cWsz7cDgM_Vfq1M8fSXNUexgDAAA)' 
-comment='' id='venn_diagram_sim' %}
+comment='' 
+id='venn_diagram_sim'
+gif = "gif/venn_approval.gif"
+%}
 
 It's important that voters can support more than one candidate because that means two candidates can share support and could possibly work together. It also means you can always give your favorite a top score. The same is true in STAR voting.
 
@@ -49,7 +53,9 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA4VTwUp
 title = "Median in 2D"
 caption = "<b>Move some voters. Add a candidate (+). </b> The total length of all the lines below is the sum of all the distances between the voters and the candidate or median. The median we chose here minimizes this sum. A winning candidate should also minimize this sum."
 comment = ""
-id = "median_2d_sim" %}
+id = "median_2d_sim"
+gif = "gif/median_2d.gif" 
+%}
 
 [See the page on finding common ground for more examples of finding the median.](commonground)
 
@@ -60,7 +66,10 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSQU4DM
 altlink='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8i885xI6dbPfMD-ht1QO0i6hUdau2CCEEb8fOlAuoymHs2J7MOJ-UaZymVhNr26SJeUg81IjMI5WIhna7E_GotM0mEccYZ8-zRl5ozImURuZE5pCoektO_443t7uV4W5ldbfCub_NISlSQQpFrAAD1K6MXQCroz9nDqteFOfxS-HeIwIAjSgypykOFZcN2YDMWcQXkbtQjp2AqYCpgKmAqTjTxOl2orliHJwFdjlJKkm9rEEbfRo2w7bKb-DEU4lA-6z-pVa41oY_glxd9UvD8owBkGqQatid4TsNpq11nTb0twymawbAcMUPVLBU61ZCYAVFhYKKtTcoaJht0pmenw6H5br-OM000uN2Oc-U6PK6vD_Ml-15f7rul6NXvt-Ou_llf5x39PUDc7xiOMsCAAA)' 
 title='STAR Ballots' 
 caption="See what the voter is thinking."
-comment='one-voter ballots for approval, score, STAR, and 3-2-1, switch between them' id='score_family_ballot_sim' %}
+comment='one-voter ballots for approval, score, STAR, and 3-2-1, switch between them' 
+id='star_ballot_sim' 
+gif = "gif/star_ballot.gif"
+%}
 
 STAR also works by counting by pairs. In the runoff, your support goes 100% to the candidate you like better. That means whichever candidate is closer to the middle will win. This also encourages voters to give different scores to each candidate.
 
@@ -71,14 +80,18 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTUtDM
 title='Finding the Middle' 
 caption="The voting methods in this family find the middle and FPTP does not. We're using a frontrunner-based strategy and getting frontrunners from polls. We'll get to this next."
 comment='example of center squeeze working , but not for FPTP'
-id='score_family_election_sim' %}
+id='star_election_sim' 
+gif = "gif/star_election.gif"
+%}
 
 {% include sim.html 
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VST0vDMQz9Lj0HadombXfbxfPQ3-3HDlN2G2wMEUT0s5vkMURFenj519eXNO8pp826zkFc5p5Wln6zhtDsbkwL9brfU2Kv5VaJa3G_pk2m1NImfXJJlCR8tSpLdgNjp_z7WG5Y7k88MvPfDOdgZxcxSLuFVT1eEIcYbgBIYQWYFm6G9q6DPcKUSg6vGGExKADQlIYSo6kGoCkd3oA340LNoZh9HByJCqZaARBUjWlliuOliiQYK7pmKlQt2YLSDb4Z5WYY6VrcaHGz_aRtGrJbx8dAaEO7gvkJRApECkQK2hUBoF3pyI14SdCuZgBHpWL2iqGpRBvegoJCoUBnQIeCjru9ACoAY-pQ0H2H0vZyuZ5fDyfbrMfn8_XouGwfDO53yy75jnWUj-_5UfM4Wh4ZgB8eaHlA7GjwBAC9A3wDsofLvhNbSgh_OpxO55fl7XK0jYeijy-Hm9dbQQMAAA)"
 title='Finding the Middle in a Tough Situation' 
 caption="Again, like the above, FPTP doesn't find the middle. The voting methods in this family do find the middle. Also, voters are strategizing based on polls."
 comment='a tougher example of center squeeze working , but not for FPTP'
-id='score_family_election_tougher_sim' %}
+id='star_election_tougher_sim' 
+gif = "gif/star_election_tougher.gif"
+%}
 
 ## Strategy
 
@@ -98,9 +111,9 @@ No candidates got a 5 and no candidates got a 0. This voter is giving up some of
 title = "Judge Strategy"
 caption = "Give a score based on distance. Drag the voter and see that the circles stay the same size."
 id = "ballot4"
+gif = "gif/ballot4_judge.gif"
 comment = "Description: this should just be an unstrategic score voter, as in ncase's thing. Allow ballot picture to show 0 scores."
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU7DMAyG38XnCNWJ46S9Ie0J2G7VDrAVMWlap20IIQTPjp0fOAxNPTixkz_f7_qDOhrGsXBg5XUYOevPKkr3l6shpuI5ZVvl9ToQ-7U-BWbxbaKhCyQ00BdHCpRp4EBqh6xYLHTh32eVerPS36xw195iJ1CjTchGZAHCgpARtNGwcbBYtFezhb4Vo8lZMnI7EyMCZKJgZzLJgiJZsKvYmUo0_97GaITszYBWAlKCVoJWMq3Ruo3PDysEoJrg29ocUhAriwv7OXG_7lTi78KEx-QLaXflWlrgWwp-DoClb8mMLmZGiA0iJwSgZvzEDNu5oFbbWxm2tUOAYYVhhWHNzYoDKiQUBIrGFxAU3C0gKAk7_L8CguJzRMvV_YNN1nIznybyqSoo1quOFRisHQIMVqBVoFXIV4xHBV2FXgVkdcg7G5MemE-P-_18Wb0fJ5txMAQ6v8xvi-m8Oe2Ol9188Ol_PWyn591h2tLnN-FJWrFcAwAA)"
-
 %}
 
 Most voters will want to make sure that their ballot contains at least one candidate at the top rating and one candidate at the bottom rating. The simplest way to do that is "normalization". That means that you give your favorite a 5, you give your least favorite a 0, and you judge the rest on that scale between 0 and 5.
@@ -114,6 +127,7 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU7
 title = "Normalizing Strategy"
 caption = "Stretch your vote to the max score, 5, and the min score, 0."
 id = "ballot5"
+gif = "gif/ballot5_normalize.gif"
 comment = "Description: this should be like ncase's 'drag the voter' examples, with a normalizing score voter. This voter should have a series of circles, where the closest one intersects the closest candidate and the farthest one the farthest candidate. Thus, as you moved the voter or candidates the circles would change size."
 %}
 
@@ -128,6 +142,7 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DM
 title = "Frontrunner Strategy"
 caption = "Consider polling data and stretch your vote to the max score only for the frontrunners. Push other candidates to 5 if closer, 0 if farther, and normalize in between."
 id = "ballot8"
+gif = "gif/ballot8_frontrunners.gif"
 comment = "Single-voter example with 3 candidates and a voter who normalizes based on only the 2 of them."
 %}
 
@@ -140,6 +155,7 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwU7DM
 title = "Best Frontrunner - Optimist Strategy"
 caption = "Vote for the best of the frontrunners and everybody you like better."
 id = "ballot11"
+gif = "gif/ballot11_best_frontrunner.gif"
 %}
 
 A more risk-averse voter could try to avoid the worst frontrunner by voting 100% for everyone else they feel is better.
@@ -151,6 +167,7 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSQU4DM
 title = "Not the Worst Frontrunner - Pessimist Strategy"
 caption = "Vote at max for anybody better than the worst frontrunner."
 id = "ballot12"
+gif = "gif/ballot12_not_worst_frontrunner.gif"
 %}
 
 There is a whole range of strategies in between these two extremes. 
@@ -162,7 +179,9 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTUtDM
 title='Repeat: Finding the Middle' 
 caption="This is the same example as before. The voting methods in this family find the middle and FPTP does not."
 comment='same as above, example of center squeeze working , but not for FPTP'
-id='score_family_election_copy_sim' %}
+id='star_election_copy_sim'
+gif = "gif/star_election.gif" 
+%}
 
 ## Playing Chicken
 
@@ -180,6 +199,7 @@ altlink="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSTW
 title = "Playing Chicken with Approval and Score Voting"
 caption = ""
 id = "election11"
+gif = "gif/election11_chicken_score.gif"
 %}
 
 If voters play chicken and crash, they might wish they had played it safe. It's impossible to have the foresight to know the election result ahead of time. All they can do is rely on polling to make their decision. It is their judgement of risk that leads to their decision. In a way, this perception of risk is more information that gets fed into the voting method.
@@ -193,6 +213,7 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WS0UpDM
 title = "Not Playing Chicken with Star Voting"
 caption = ""
 id = "election13"
+gif = "gif/election13_no_chicken_star.gif"
 comment = "chicken with star"
 %}
 

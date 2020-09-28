@@ -24,7 +24,7 @@ title = "Pairwise Ranked Ballot"
 caption = ""
 comment = ""
 id = "1"
-gif="img/pair_ballot.gif"
+gif="gif/pair_ballot.gif"
 %}
 
 We're going to use that background map for ballot visualization in the two elections below. We'll overlay the ballots for all the voters to try to make it more clear how everybody's ballots get added together.
@@ -35,7 +35,7 @@ title = "FPTP Spoilers, Condorcet None"
 caption = "Switch between FTPTP and Condorcet"
 comment = "Example of no spoiler effect - basic spoiler intro stuff."
 id = "condorcet_2" 
-gif = "img/condorcet_2.gif"
+gif = "gif/condorcet_2.gif"
 %}
 
 {% include sim.html 
@@ -44,7 +44,7 @@ title = "Condorcet: No Vote Splitting"
 caption = "Switch between FTPTP and Condorcet"
 comment = "Example of no vote splitting. - even with that crowded example the IRV had a hard time with."
 id = "condorcet_3"
-gif = "img/condorcet_3.gif"
+gif = "gif/condorcet_3.gif"
 %}
 
 How does this work? We have this information about each pair of candidates, so the obvious thing to do is check if there is a winner that won all of their matches, which is called the Condorcet winner. If you ever hear somebody talking about counting by pairs or Condorcet methods, well, they're pretty much the same thing. 
@@ -70,7 +70,7 @@ title = "Rock Paper Scissors."
 caption = "Rock beats scissors, and scissors beats paper, but paper beats rock, so it’s a tie, or a cycle."
 comment = ""
 id = "condorcet_4_rock_paper_scissors" 
-gif = "img/condorcet_4_rock_paper_scissors.gif" 
+gif = "gif/condorcet_4_rock_paper_scissors.gif" 
 %}
 
 This visualization **above** is a little crowded. The colors here are the same is in the case of the single ballot. The three voter's ballot diagrams are overlapping in this combined diagram. 
@@ -83,7 +83,7 @@ title = "Beat Map of Rock Paper Scissors"
 caption = "This map shows that scissors is in rock's territory, but paper is outside, so paper beats rock. Wiggle rock to see its territory move."
 comment = ""
 id = "condorcet_beat_map_41"
-gif = "img/condorcet_beat_map_41.gif" %}
+gif = "gif/condorcet_beat_map_41.gif" %}
 
 This cycle can happen when there is division between three deeply divided groups. It goes away if we add voters to the middle. (Also, let's use odd numbers so we don't have to deal with ties.)
 
@@ -93,7 +93,7 @@ title = "Middle Voters Break the Cycle"
 caption = "The middle voters' choice determines who wins because the rest of the voters can’t agree."
 comment = ""
 id = "condorcet_5_middle_voters"
-gif = "img/condorcet_5_middle_voters.gif"
+gif = "gif/condorcet_5_middle_voters.gif"
 %}
 
 Or if we add one candidate to the middle, then they win.
@@ -104,7 +104,7 @@ title = "Common ground Candidate Breaks Cycle"
 caption = "A common ground candidate enters the race and wins all their matches."
 comment = ""
 id = "condordet_6_candidate_common_ground" 
-gif = "img/condordet_6_candidate_common_ground.gif"
+gif = "gif/condordet_6_candidate_common_ground.gif"
 %}
 
 There is tremendous competitive pressure to go towards the middle as you can see in this new diagram, a win map. The solid yellow region is where {{ B }} needs to be in order to win. 
@@ -115,7 +115,7 @@ title = "Win Map"
 caption = "This is a map of where B would have to go to win. Move B around."
 comment = ""
 id = "condorcet_7_win_map"
-gif = "img/condorcet_7_win_map.gif"
+gif = "gif/condorcet_7_win_map.gif"
  %}
 
 This map is much fuller when there are voters in the center. (Also, the striped region in the below diagram is just a regular tie, not a cycle, like the above diagram with thinner striping.)
@@ -126,7 +126,7 @@ title = "Win Map with Middle"
 caption = "Middle voters make it easy for common ground candidates to win. Move B around."
 comment = ""
 id = "win_map_middle_sim"
-gif = "img/win_map_middle.gif"
+gif = "gif/win_map_middle.gif"
  %}
 
 Let's go back to the beat maps. They show where any candidate would need to go to beat {{ B }} in a one-on-one. It looks like B has most locations locked down except for a white angular area in the center.
@@ -137,7 +137,7 @@ title = "Beat Maps"
 caption = "B beats any candidate in the yellow region. Move everybody to see how their beat maps change."
 comment = ""
 id = "beat_map_middle_sim"
-gif = "img/beat_map_middle_sim.gif" 
+gif = "gif/beat_map_middle_sim.gif" 
 %}
 
 Also, just to make a pretty picture, you can see that if the two middle voters are exactly in the middle, then the regions where the cycle happens become very thin.
@@ -148,7 +148,7 @@ title = "Thin Beat Maps"
 caption = ""
 comment = ""
 id = "thin_beat_map_middle_sim"
-gif = "img/thin_beat_map_middle_sim.gif" 
+gif = "gif/thin_beat_map_middle_sim.gif" 
 %}
 
 In an election, there are many more voters (the dots below), and {{ B }}'s beat map is a circle (close to it).
@@ -159,7 +159,7 @@ title = "B's Election Beat Map"
 caption = "Only candidates more near the middle can win. Move A, C, and D to make them win."
 comment = ""
 id = "election_beat_map_middle_sim"
-gif = "img/election_beat_map_middle.gif" 
+gif = "gif/election_beat_map_middle.gif" 
 %}
 
 Let's look at all the candidates' beat maps to show that there is a cycle between {{ A }}, {{ C }}, and {{ D }}, but {{ B }} beats them all. Also, the white spot in the middle is where a new candidate could win.
@@ -170,7 +170,7 @@ title = "All Beat Maps in Election"
 caption = "The spot in the middle is where a new candidate can win."
 comment = ""
 id = "all_election_beat_map_middle_sim" 
-gif = "img/all_election_beat_map_middle.gif" 
+gif = "gif/all_election_beat_map_middle.gif" 
 %}
 
 These examples are made to show particular concepts, and a real election would have a wider spread of voters and candidates.
@@ -187,7 +187,7 @@ title = "Median Beats All in 1D"
 caption = "Candidate A takes the position at the median of the position of voters and wins. Move B to show there's no other position that beats A."
 comment = "maybe continue using candidate B for the middle"
 id = "median_beats_1d_sim" 
-gif = "img/median_beats_1d.gif" 
+gif = "gif/median_beats_1d.gif" 
 %}
 
 In two dimensions, the median doesn’t work this way. Finding the median in two dimensions actually has many definitions. 
@@ -202,7 +202,7 @@ title = "Median Beats All in 2D"
 caption = "In this circular distribution of voters, the candidate that positions themselves at the geometric median beats all other candidates."
 comment = ""
 id = "median_beats_2d_sim"
-gif = "img/median_beats_2d.gif"
+gif = "gif/median_beats_2d.gif"
  %}
 
 The geometric median doesn't work in the multi-modal distributions we've been looking at that have Condorcet cycles.
@@ -215,7 +215,7 @@ title = "Median Doesn't Quite Beat All in a Multi-Modal Distribution"
 caption = "In this triangular distribution of voters, there is a small white region near the center where a candidate can take a position to beat the candidate positioned at the median."
 comment = ""
 id = "median_2d_multimodal_sim"
-gif = "img/median_2d_multimodal.gif"
+gif = "gif/median_2d_multimodal.gif"
 %}
 
 There's another definition of median you could think of. You could project to one dimension and find the median as usual.
@@ -244,7 +244,7 @@ title = "Minimax"
 caption = ""
 comment = ""
 id = "minimax_sim"
-gif = "img/minimax.gif"
+gif = "gif/minimax.gif"
 %}
 
 ### Schulze
@@ -259,7 +259,7 @@ title = "Schulze"
 caption = ""
 comment = ""
 id = "schulze_sim"
-gif = "img/schulze.gif"
+gif = "gif/schulze.gif"
 %}
 
 ### Schulze Alternative
@@ -272,7 +272,7 @@ title = "Schulze Alternative"
 caption = ""
 comment = ""
 id = "schulze_alt_sim"
-gif = "img/schulze_alt.gif" 
+gif = "gif/schulze_alt.gif" 
 %}
 
 ### Ranked Pairs
@@ -285,7 +285,7 @@ title = "Ranked Pairs"
 caption = ""
 comment = ""
 id = "ranked_pairs_sim" 
-gif = "img/ranked_pairs.gif"
+gif = "gif/ranked_pairs.gif"
 %}
 
 ### Even More Condorcet Methods
@@ -298,7 +298,7 @@ title = "More Methods"
 caption = "Rob LeGrand did a lot of work to include all these Condorcet methods, and some that aren't."
 comment = ""
 id = "robla_sim" 
-gif = "img/robla.gif" 
+gif = "gif/robla.gif" 
 %}
 
 ## Strategy

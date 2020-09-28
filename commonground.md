@@ -27,7 +27,7 @@ title='Where to go eat?'
 caption='Horizontal Meat-Veggie axis. Vertical $-$$$ axis' 
 comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' 
 id='eat_sim' 
-gif="img/eat.gif"
+gif="gif/eat.gif"
 %}
 
 Really, this is about politics, and you want to make a decision for everyone in the group. You'd like to make a decision that other people will accept and won't regret. In other words, you don't want to find out that most people would rather do something else. That's why you might want to pick something in the middle. No matter what you pick in the middle, if you compare the middle option to something else, then more people are going to prefer that middle option. It's really the common ground that you're looking for. 
@@ -39,7 +39,7 @@ title="The middle is the common ground."
 caption=cap1
 comment="allow adding candidates with + and use condorcet rule, maybe make a custom pairwise comparison between the middle option, which can't be moved, and any other option.  And you can't move the voters either" 
 id="middle_sim" 
-gif="img/middle.gif"
+gif="gif/middle.gif"
 %}
 
 So how do you find the middle option?  Well, you could hold a vote and ask everyone to pick one option out of all the options.  What happens is that people will pick a side, and you end up dividing people into little groups.  It's kind of random which side wins, and that's a win with maybe with less than 25% of people. That hardly seems like a win. 
@@ -50,7 +50,7 @@ title='Too Many Choices'
 caption='If you only say, "pick only one", then the winner can win with only a small part of the votes.' 
 comment='crowded election, winner gets less than 25%.  Everybody is an individual.  Everybody has an option' 
 id='crowded_sim' 
-gif="img/crowded.gif" 
+gif="gif/crowded.gif" 
 %}
 
 This problem is called vote-splitting, which you get if you have three candidates in an election. Notice that a candidate can change the outcome of the race even if they don't win. If this is a small candidate, then we call this the spoiler effect because they spoil the election for whichever side they're on.
@@ -62,7 +62,7 @@ link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRTWvDM
 title='The Spoiler Effect'
 caption=cap16 
 id='spoiler_sim' 
-gif='img/spoiler.gif'
+gif='gif/spoiler.gif'
 %}
 
 ## Simple Comparisons
@@ -75,7 +75,7 @@ title='Count By Pairs'
 caption='Consider the alternatives one at a time.  It is simpler, and you can always tell which option is closer to the middle.'
 comment='two candidates with a circle.' 
 id='by_pairs_sim' 
-gif="img/by_pairs.gif" 
+gif="gif/by_pairs.gif" 
 %}
 
 And you can do this for all the options.  And you can see that the middle option would beat any other option.  This is called a round robin.  Ping pong tournaments work like this.
@@ -87,7 +87,7 @@ link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRPW_CQ
 title='Count By Pairs for Everyone' 
 caption=cap12 
 comment='two candidates with a circle. Maybe I could use names for ping pong.' id='by_pairs2_sim' 
-gif="img/by_pairs2.gif"%}
+gif="gif/by_pairs2.gif"%}
 
 So what would that look like in an actual election? That would basically be counting the votes for every possible pair of options.  Say there's options {{ A }} {{ B }} {{ C }} {{ D }} {{ E }}, and you like them in that order.  That means you like {{ A }} over {{ B }}, and {{ A }} over {{ C }}, and {{ B }} over {{ C }}, and so on. You have a choice for every pair.  And you could write that on a ballot. But really, you have a single ranking, which is easier to write.  
 
@@ -101,7 +101,7 @@ title='Rankings'
 caption='You are saying something about each pair of options. Mouse over each pair in the tally to see how each pair is represented in your ranking.'
 comment='ranked ballot with pairs' 
 id='pair_ballot_sim' 
-gif="img/pair_ballot.gif"
+gif="gif/pair_ballot.gif"
 %}
 
 You can also use a tier list, because ties are okay, too. You can have multiple top-tier candidates if you really can't decide. Voters who aren't sure can use tiers and still say something about top-tier versus bottom-tier, and every tier in between.
@@ -127,7 +127,7 @@ title='Venn Diagram'
 caption=cap17 
 comment='too simple?' 
 id='venn_approval_sim' 
-gif="img/venn_approval.gif"
+gif="gif/venn_approval.gif"
 %}
 
 On the ballot you have {{ A }} {{ B }} {{ C }} {{ D }} {{ E }} and you have a checkbox next to each one. If you like {{ A }} and {{ B }}, check both boxes.  If you like {{ D }} and {{ E }}, check those.  If you like every candidate but {{ A }}, then there you go.  This is approval voting, where you vote for those you approve of. 
@@ -137,7 +137,7 @@ link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRTU_DM
 title='Approval Voting' 
 caption='Vote for as many as you like.' 
 comment='simple,lots of candidates, one voter' 
-id='approval_sim' gif="img/approval.gif"
+id='approval_sim' gif="gif/approval.gif"
 %}
 
 Say there's two populations of voters and they each like candidates in their little circle. If you allow them to vote for everybody in their circle, then the candidates in the middle get more votes than the candidates on either side.  
@@ -149,7 +149,7 @@ title='Approval Election'
 caption='Voters on both sides vote for candidates in the middle.' 
 comment='lots of voters' 
 id='election_approval_sim' 
-gif="img/election_approval.gif"
+gif="gif/election_approval.gif"
 %}
 
 Here's another example for a small group.  {{ B }} on the left gets half the vote.  {{ D }} on the right gets half the vote.  {{ C }} in the middle gets all the vote.  {{ C }} is the common ground.
@@ -161,7 +161,7 @@ altlink='[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAA
 title='Approval for a Small Group' 
 caption='You can move individual voters.' 
 comment='less voters' id='small_group_approval_sim' 
-gif="img/small_group_approval.gif"
+gif="gif/small_group_approval.gif"
 %}
 
 Approval voting is simple to use. It's also a huge improvement in finding the middle.
@@ -182,7 +182,7 @@ title = "Median in 1D"
 caption = "<b>Try moving some voters. Add a candidate. </b> The total area of the bars below is the sum of all the distances. Notice that moving the median left or right would not decrease this sum because the same number of people are on each side (same number of bars are growing/shrinking)."
 comment = "Maybe it would be good to try to move the median itself?"
 id = "median_1d_sim"
-gif = "img/median.gif"
+gif = "gif/median.gif"
 %}
 
 A median can also be found in two dimensions by using the same idea of minimizing distance.
@@ -193,7 +193,7 @@ title = "Median in 2D"
 caption = "<b>Move some voters. Add a candidate (+). </b> Just like for the 1D case, the total area or length of the lines below is the sum of all the distances between the voters and the candidate or median. The median we chose here minimizes this sum. A winning candidate should also minimize this sum."
 comment = ""
 id = "median_2d_sim"
-gif = "img/median_2d.gif"
+gif = "gif/median_2d.gif"
 %}
 
 How does approval voting use a median?
@@ -214,7 +214,7 @@ title='Score Voting'
 caption='Give as many as you like a score from 0 to 5.' 
 comment='simple,lots of candidates, one voter' 
 id='score_sim'
-gif="img/score.gif"
+gif="gif/score.gif"
 %}
 
 In practice, voters can adjust their self-reported distances, which is called using a strategy. Jameson Quinn has a good discussion of strategies in a page linked at the bottom, and I have a page that discusses how strategies play out in approval voting. Basically, using strategies means score voting changes and takes on qualities of approval voting and pairwise voting. Also, in the approval voting page, I show that when you combine approval voting with polls, you get almost the same winners as pairwise voting, which is nice.
@@ -231,7 +231,7 @@ title='Practical Score Voting'
 caption='Try the different strategies.' 
 comment='score can look like approval voting' 
 id='score_strategy_sim' 
-gif="img/score_strategy.gif"
+gif="gif/score_strategy.gif"
 %}
 
 STAR voting was created to counteract scoring strategies. It uses a final runoff where stretching your scores doesn't matter.
@@ -244,7 +244,7 @@ title='STAR Voting'
 caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking." 
 comment='same as above but star' 
 id='star_sim' 
-gif="img/star.gif"
+gif="gif/star.gif"
 %}
 
 ## Bringing Groups Together
@@ -259,7 +259,7 @@ title='Single-Winner Ranked Choice Voting'
 caption='Your vote counts for your top choice.  Then, do a process of elimination of the candidate in last place and repeat.' 
 comment='same example' 
 id='irv_sim'
-gif='img/irv.gif'
+gif='gif/irv.gif'
 %}
 
 Also, you can have a multi-winner system where you have maybe two candidates getting elected.  For example, you're picking two pizzas to order, so you can have meat lover's pizza and you can also have a vegetarian pizza. You don't have to all eat the same pizza.  
@@ -270,7 +270,7 @@ title='Pick a Pizza'
 caption='We can order two.' 
 comment='meat lovers and veggie lovers win' 
 id='stv_sim'
-gif='img/stv.gif'%}
+gif='gif/stv.gif'%}
 
 And of course, there's primaries, which is the way we do things now. Basically, a whole party gets behind one candidate. This can work in the best-case scenario. But primaries can malfunction when there's a crowded field, or when one party has many more voters than the other party, or when there's more than two parties.
 
@@ -280,7 +280,7 @@ caption="Here's a best-case scenario. In reality, they don't always work so nice
 
 comment='an best-case example of primaries ABCD two groups' id='primaries_sim'
 
-gif='img/primaries.gif' %}
+gif='gif/primaries.gif' %}
 
 ## Afterword
 

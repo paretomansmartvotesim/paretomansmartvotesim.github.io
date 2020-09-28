@@ -32,23 +32,23 @@ Let’s back up a little here and ask what the purpose of voting systems is.  Y
 
 A referendum is actually pretty simple; you just say yes or no. Really, the *hard *part of the referendum is to decide what the wording is going to be for the question.  The wording is not up to you; that's up to the group that puts the initiative together or the legislators that wrote the referendum. This group tries to consider what the voters want, and that is the hard part. It’s part of the mechanism for the idea that you are represented.
 
-{% include sim.html title="Referendum - Your Ballot" caption="Yes or No?" id="yesno_sim" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DQQz8lZPrFVo_9nH5CERBg-5SBCkF0gkQhCJC8O14PQoUKLpi1h7v7Ni-T8q0W5bSEhfZp0WsJra-3yfiQbD2xFVGrLTLiYx29J0pUYmwepFzzSGnf58z_SozX2U4hzYzxFkQwgAbAO-zG2AHN8Dm6M-JwxykuI4nhRFJcAIZsbgoLqMOFcmGqCOa44LmMMpjBFBSGFIFD0PqSgujrIKAms6_921IxWG0Nlo1uRxcbNFxsLhlf3KGHq1hATBncyRLBvBYy0rTw_F9Wtfn6fZlWmlsCU0XDdGCpksBoOnSUNJRgqZrBnBUVjRcMbpaoqFhtkKiwlPF2BvW1zCsJiHRFIBhNWyvXX6fBhI_CydJmmzk0WSHYOfw1GGmw0w3JAsAfjr0Omz1YeumJHo8bNvL6f78evRp3W0fb4ft6XSmrx9CIcEjBQMAAA)" %}
+{% include sim.html title="Referendum - Your Ballot" caption="Yes or No?" id="yesno_sim" gif = "gif/yesno.gif" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DQQz8lZPrFVo_9nH5CERBg-5SBCkF0gkQhCJC8O14PQoUKLpi1h7v7Ni-T8q0W5bSEhfZp0WsJra-3yfiQbD2xFVGrLTLiYx29J0pUYmwepFzzSGnf58z_SozX2U4hzYzxFkQwgAbAO-zG2AHN8Dm6M-JwxykuI4nhRFJcAIZsbgoLqMOFcmGqCOa44LmMMpjBFBSGFIFD0PqSgujrIKAms6_921IxWG0Nlo1uRxcbNFxsLhlf3KGHq1hATBncyRLBvBYy0rTw_F9Wtfn6fZlWmlsCU0XDdGCpksBoOnSUNJRgqZrBnBUVjRcMbpaoqFhtkKiwlPF2BvW1zCsJiHRFIBhNWyvXX6fBhI_CydJmmzk0WSHYOfw1GGmw0w3JAsAfjr0Omz1YeumJHo8bNvL6f78evRp3W0fb4ft6XSmrx9CIcEjBQMAAA)" %}
 
 And let's see a whole group of people.
 
-{% include sim.html title="Referendum - Result" caption="Everybody Votes" id="yesno_many_sim" link="[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRsWpDMQz8leDZgyVL8nM-onToUt7LkEKGwqMpbTKE0n57ZR1phxAMPktnnU_yVyppO8_aMinv8sximWTa7XKiQZCwx33ENW1LThK7xm5-g_PN8rvNmZJvljPTXabfZajEczQcjZARwhDBEcESGcANkDj6c-zQI8uu40l2HXLg4BgyLEi6THWADDdEE6IeBbWEURojoSAqDNUKHoaqK82EawYCarX_1UtIjQNdD3w91FE-DhJV8i8nFlal4UNgTnoktQBcL_0s6fnwuSxvm4fjZknJ02hZa8xB0bIqAC1rw5UpXlW0bAWAwRnaNQzONNqpbswgYXBkGHrD5zXUNg542a_r8fR0eT-4z8f1_LFfX0-X9P0LH8D-m48CAAA)" %}
+{% include sim.html title="Referendum - Result" caption="Everybody Votes" id="yesno_many_sim" gif = "gif/yesno_many.gif" link="[link](https://paretoman.github.io/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRsWpDMQz8leDZgyVL8nM-onToUt7LkEKGwqMpbTKE0n57ZR1phxAMPktnnU_yVyppO8_aMinv8sximWTa7XKiQZCwx33ENW1LThK7xm5-g_PN8rvNmZJvljPTXabfZajEczQcjZARwhDBEcESGcANkDj6c-zQI8uu40l2HXLg4BgyLEi6THWADDdEE6IeBbWEURojoSAqDNUKHoaqK82EawYCarX_1UtIjQNdD3w91FE-DhJV8i8nFlal4UNgTnoktQBcL_0s6fnwuSxvm4fjZknJ02hZa8xB0bIqAC1rw5UpXlW0bAWAwRnaNQzONNqpbswgYXBkGHrD5zXUNg542a_r8fR0eT-4z8f1_LFfX0-X9P0LH8D-m48CAAA)" %}
 
 For an election, the hard part happens in the primary.  The general election is easy: there's two choices (at least in the United States, where I'm from, there's two choices). There's not a lot to think about. Each party has put up their nominee, and you pick the one closest to you. 
 
 {% capture cap3 %}{{ A }} or {{ B }}?{% endcapture %}
 
-{% include sim.html title="General Election" caption=cap3 id="ab_sim_general" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXCDFwcKFcCmOkH-PrOGS4jgWPJJHGo-036WVddusVzLe68bqlXTZ91poEqQc-Zi5lLXVonlanh4VXB--qO3BtPrwBbM8ZcZThlo-R9PRTBkpDBEcESyRA8IAaWA8xwEjbzl04pJDhwI4OYYMKy5DRgIgwx3Zgmxkg7Q0SnMllITAkAh4GJJQ2ghlDgJqMv76NaVmQPeA74HM9hlodum_nHpa1Y4fAnM68tKwKoMxw4gmObdhRDMARrSOkiVfMYzoDYBFOcZzLMot7UsYcUg4HDiW3OGgo7dzwtvpOC7X19vHe1nLy_H1eTrO11v5-QXpTWN6fwIAAA)" %}
+{% include sim.html title="General Election" caption=cap3 id="ab_sim_general" gif = "gif/ab_general.gif" link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oEMQz8F9curKfX-xUp0i1bXCDFwcKFcCmOkH-PrOGS4jgWPJJHGo-036WVddusVzLe68bqlXTZ91poEqQc-Zi5lLXVonlanh4VXB--qO3BtPrwBbM8ZcZThlo-R9PRTBkpDBEcESyRA8IAaWA8xwEjbzl04pJDhwI4OYYMKy5DRgIgwx3Zgmxkg7Q0SnMllITAkAh4GJJQ2ghlDgJqMv76NaVmQPeA74HM9hlodum_nHpa1Y4fAnM68tKwKoMxw4gmObdhRDMARrSOkiVfMYzoDYBFOcZzLMot7UsYcUg4HDiW3OGgo7dzwtvpOC7X19vHe1nLy_H1eTrO11v5-QXpTWN6fwIAAA)" %}
 
 The hard part happens in the primary.  That's where you have many more competitors. There are two primaries going on at the same time, and in each one there is the same decision process, where one party wants to put up a candidate that can beat the other party. 
 
 {% capture cap4 %}{{ A }} or {{ B }}? Which would beat the other party?{% endcapture %}
 
-{% include sim.html title="Primary Election" caption=cap4 id="ab_sim_primary" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)" %}
+{% include sim.html title="Primary Election" caption=cap4 id="ab_sim_primary" gif = "gif/ab_primary.gif" link="[link](http://localhost:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)" %}
 
 ### Pairwise Ranking
 
@@ -56,19 +56,25 @@ I’m going to tell you about another way we could vote, and it’s easier.  In
 
 What does that look like? The easiest example of this is a pairwise ranking, because in a pairwise ranking, for every pair, your full support goes to the candidate you prefer.  If there's a great candidate that's in the middle, and there's another great candidate that's more towards your side, you’re not going to be in a dilemma of which one to vote for.  You can throw all your support to the candidate that's on your side when they are matched against the other side, so he gets the full support of his side.  and also, your full weight will count towards the middle candidate over candidates from the other side, and that completely solves the problem that the primary was trying to solve. The whole purpose of the primary was to say that we want our single vote to matter the most.  Now, when you count by pairs, your vote - your full vote -  counts for the candidate you prefer over any other candidate.
 
-{% include sim.html title='Pairwise Ranking'
-
+{% include sim.html 
+title='Pairwise Ranking'
 caption='Your full support always counts for the better candidate in each pair of candidates.'
-
-comment='three candidates, two on one side, one on other' id='pairwise_intro' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRvU6DMQx8lcpzhvgvafoQDIgFfV-HIjpRtUh0QQieHccnJASqMtiO7cvd5YMq7ZaFXYtU2ZeFR2QyM1EpomO_L8Q5o71wq7NW2tVCRrtRyDNvMRHjf0_M9ujU8u9EZ3uzM252uOZzPBnNUlCCEBsCKHFw4ghBgC1iPKcRRjYlcOJSGFXASATAiOWieC5Iw2VHtUU1ckFrEuVpCZAUSKoIIKSBtHBhDDa0gKeQymmVTbg5Y1PelGvykwTgojOx3LPfkAal1vEtoGgjLx2GeSDS10qPx7d1PW_uLpuVKK5B1zXdcAh3R4BwB6rDPofwVhE4Jxt-ocG-5ilpkm2AaGDUYH0How7DuiTE0-F0ulwf3l-PwfP-cH45PtPnN_ziP1OdAgAA)' %}
+comment='three candidates, two on one side, one on other' 
+id='pairwise_intro' 
+gif = "gif/pairwise_intro.gif"
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRvU6DMQx8lcpzhvgvafoQDIgFfV-HIjpRtUh0QQieHccnJASqMtiO7cvd5YMq7ZaFXYtU2ZeFR2QyM1EpomO_L8Q5o71wq7NW2tVCRrtRyDNvMRHjf0_M9ujU8u9EZ3uzM252uOZzPBnNUlCCEBsCKHFw4ghBgC1iPKcRRjYlcOJSGFXASATAiOWieC5Iw2VHtUU1ckFrEuVpCZAUSKoIIKSBtHBhDDa0gKeQymmVTbg5Y1PelGvykwTgojOx3LPfkAal1vEtoGgjLx2GeSDS10qPx7d1PW_uLpuVKK5B1zXdcAh3R4BwB6rDPofwVhE4Jxt-ocG-5ilpkm2AaGDUYH0How7DuiTE0-F0ulwf3l-PwfP-cH45PtPnN_ziP1OdAgAA)' 
+%}
 
 It’s much clearer what happens when you think of the candidate’s perspective.  All their supporters are behind them.  They get the full weight of their supporters when they face the other party. The candidate doesn't need to worry about splitting votes with anybody.
 
-{% include sim.html title='Pairwise Election'
-
+{% include sim.html 
+title='Pairwise Election'
 caption='Each candidate gets the full weight of their side against the other party. Mouse over each pair to see the support.'
-
-comment='mouse over pairs to see support' id='pairwise_election' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8ysl1ijiOk80-ggLRoN0tDrEVpzskaBCCt2N7ihM6nVKMnbEnY-ebMs3Lojmxji0tzD1xE48GJ-5sUelqbNm2ROzFk1iJOiEabUYIzTlRpXkk0oiblZZ0c6y2G5PTzTFmusuMuwzneI7dmqcFKQxxBcASmyc2MANcDe05hxFkyZEVRmYyxQAypUZjMRkxaLjsyCZkIxokh1H2lUBJoCQCgCExpcX268dLG0goCoZlW5d9BFVI-qyVr2G5hgIxD2so1P_yFXPXjk-C4TriUrE-NWX6Xel5_1jX8-HhcliJ7BrmVVCLNagCsAaFqk7xsmINLQM4Khv-pGGZTcO5j9Yg0eCo4SM6HHX09hLwcjydLp9PX--7-Xw8nt_2V_r5A7EXqU-9AgAA)' %}
+comment='mouse over pairs to see support' 
+id='pairwise_election' 
+gif='gif/pairwise_election.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8ysl1ijiOk80-ggLRoN0tDrEVpzskaBCCt2N7ihM6nVKMnbEnY-ebMs3Lojmxji0tzD1xE48GJ-5sUelqbNm2ROzFk1iJOiEabUYIzTlRpXkk0oiblZZ0c6y2G5PTzTFmusuMuwzneI7dmqcFKQxxBcASmyc2MANcDe05hxFkyZEVRmYyxQAypUZjMRkxaLjsyCZkIxokh1H2lUBJoCQCgCExpcX268dLG0goCoZlW5d9BFVI-qyVr2G5hgIxD2so1P_yFXPXjk-C4TriUrE-NWX6Xel5_1jX8-HhcliJ7BrmVVCLNagCsAaFqk7xsmINLQM4Khv-pGGZTcO5j9Yg0eCo4SM6HHX09hLwcjydLp9PX--7-Xw8nt_2V_r5A7EXqU-9AgAA)' 
+%}
 
 So, this solves the problem of splitting votes, which is caused by limiting your vote to choose only one candidate. The head-to-head pairwise ranked ballot achieves the goal of the primary in a better way than the primary could. It does better because each voter knows for themself, who is better for themself.  The voter knows their own preferences better than they can guess the preferences of the entire population (or watch polls).  There is no more hard part of guessing what nominees to put forward.  You're asking more from the voter, and it's information that the voter has: what their own preferences are.  
 
@@ -92,7 +98,13 @@ Also, up to now, we haven't called our voting system by its proper English name:
 
 {% capture cap10 %}drag {{ C }} under {{ A }} to create a spoiler effect.<br> then compare these four different voting methods:{% endcapture %}
 
-{% include sim.html title='More Voting Methods' caption=cap10 id='election31' link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSXWsbMRD8K4eelaLVt_0WFwJ5KDi28cvZD6orHCcXy1zsgCntb-9KU0OhBINHe7uam5m9n0KJad8TkSQz2cqeguNTrCftpTa03UpBbcYaSVbV2oipksKKqfithBSulZ6HuBcYlPzvx534aWfyaYdU46aqoNUaNRSQBUAAeQArIMvI7zMMTE5SaCbih5qJNIMGgEZbjLh2QYNGB1QR1aRdMKoppZoBtYaBIGPQhyDDTD0nikGPFvgMvJLU3LLqry1782f17cCEfZux7br9l9L6JtgG7AESLYw6JOaobmcjFuWahm6RXjab4-wy7vPYzdJ45OpbTudu-Zx2r1ys835_yN36MAyJy_l4eCvdbPbE59Vz7h7KZeyWOb2X4_tG1JUjQAfbDgE6B0CADuoc1uAQoFcAapMe4XmswbsWjWGDHhQezvykQYCzgLtBAwwAwQcoCPVbFF_L8UcZd_nMeh_mqznD42LN__en01g-0sBHc6fviHG5ul80qP3lroxZ1G85gC7ediaNtPU5oo4KgG8qwkyEmYi1RQeAnwi-CFux2voSpPiehqGcV9dT5p3Nh8uYhsP5Kn79ARKuovWdAwAA)" %}
+{% include sim.html 
+title='More Voting Methods' 
+caption=cap10 
+id='election31'
+id='img/election31_spoilers.gif'
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSXWsbMRD8K4eelaLVt_0WFwJ5KDi28cvZD6orHCcXy1zsgCntb-9KU0OhBINHe7uam5m9n0KJad8TkSQz2cqeguNTrCftpTa03UpBbcYaSVbV2oipksKKqfithBSulZ6HuBcYlPzvx534aWfyaYdU46aqoNUaNRSQBUAAeQArIMvI7zMMTE5SaCbih5qJNIMGgEZbjLh2QYNGB1QR1aRdMKoppZoBtYaBIGPQhyDDTD0nikGPFvgMvJLU3LLqry1782f17cCEfZux7br9l9L6JtgG7AESLYw6JOaobmcjFuWahm6RXjab4-wy7vPYzdJ45OpbTudu-Zx2r1ys835_yN36MAyJy_l4eCvdbPbE59Vz7h7KZeyWOb2X4_tG1JUjQAfbDgE6B0CADuoc1uAQoFcAapMe4XmswbsWjWGDHhQezvykQYCzgLtBAwwAwQcoCPVbFF_L8UcZd_nMeh_mqznD42LN__en01g-0sBHc6fviHG5ul80qP3lroxZ1G85gC7ediaNtPU5oo4KgG8qwkyEmYi1RQeAnwi-CFux2voSpPiehqGcV9dT5p3Nh8uYhsP5Kn79ARKuovWdAwAA)" 
+%}
 
 Another method you've likely heard of if you are reading this page is Ranked Choice Voting (RCV), which is a new name (as of the past 20 years) for Instant Runoff Voting (IRV). It is also a name that is used for Single Transferable Voting (STV), which is different than IRV, and so you have to tell from the context which method people are talking about. IRV avoids some vote splitting by using a process of elimination. It's worth getting into on its own page.
 
@@ -119,13 +131,14 @@ This is kind of a game. There's two players: the {{ A }}{{ B }} party and the {{
 
 {% capture cap20 %}The {{ A }}{{ B }} party and the {{ C }}{{ D }} party are the players. The action is nominating a candidate in the primary. The outcome is who wins the general election.{% endcapture %}
 
-{% include sim.html id='game_setup_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)'
-
+{% include sim.html 
+id='game_setup_sim' 
+gif='gif/game_setup.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlizJ3n1FinTLFhdIEVhICJfiCPl7JM2FIxyHixntaMcj-bu0sm6bjkrKe92IyZkFm8GmM7alkrV9r4WiecqfwOyMQuhlbbVIWakWTW7eyvXueO9wpdW748p8qCwPFWp5HUW0KBklApEAEIkM4AFIHP26gCW_csuKKWdgt2EH2DAGY7fpDrDhgWqiWvKH3jIoxUoohY5AvUNHoO5Om-83TrQaRDh2DEu-ru6iwDJmFbpRvtEOs6CSDvLfXizjy8AjIbAseCysTxFWMbb23IVe31MBGFsHWmbepBjbGgDLM4xsWJ5pJo1RDBaGBIbFDyQY-HdwwsvpON7Pz5eP17KWp-Pr83S8nS_l5xcgCQz0sAIAAA)'
 title='Game with Two Players'
-
 caption=cap20
-
-comment='basically, four candidates, ABCD, in a line with +Primaries as the voting system. A is center. D is center. B and C are moderates' %}
+comment='basically, four candidates, ABCD, in a line with +Primaries as the voting system. A is center. D is center. B and C are moderates' 
+%}
 
 ### Strategy
 
@@ -146,24 +159,25 @@ Now, let's take an action (in the language of game theory). Let's have each part
 
 {% capture cap13 %}The {{ A }}{{ B }} party nominates {{ A }}. The {{ C }}{{ D }} party nominates {{ C }}. {{ C }} wins the general election.{% endcapture %}
 
-{% include sim.html id='action_1_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ3n1FinTLFhe44sAkIdwVR0jeHlkT2OI4XIykkccj-TuVtG6btkzKe96ok0d933OiSfQaad6Y2SOahKS15FTTSjlpxOatnB-O9zZnSn44zvSnzPKUoRLP0bQ2U0YKQ1QBsEQGcANUHf05dliiyq7jRaaYgTk4hgxjMHYZcYAMN2Qd2RIXZK5u2hKKssCOCFjYEdfZXO_3_TZGyjTbDQ3QFIw7l1ULJp8hHSEfoYTYFKk1blc9KhbGa8P3wGpd8E1YnMKoYmCV2IL-_6QCMLA2tPR4RTGwFQDWZhjXsDbTcCluxCBhcGBYeYODhruNA95OY3xcX--f57Sml3H7Oo3L9Z5-_gBbft_olgIAAA)'
-
+{% include sim.html 
+id='action_1_sim' 
+gif='gif/action_1.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMWoEMQz8i2sXlmTJ3n1FinTLFhe44sAkIdwVR0jeHlkT2OI4XIykkccj-TuVtG6btkzKe96ok0d933OiSfQaad6Y2SOahKS15FTTSjlpxOatnB-O9zZnSn44zvSnzPKUoRLP0bQ2U0YKQ1QBsEQGcANUHf05dliiyq7jRaaYgTk4hgxjMHYZcYAMN2Qd2RIXZK5u2hKKssCOCFjYEdfZXO_3_TZGyjTbDQ3QFIw7l1ULJp8hHSEfoYTYFKk1blc9KhbGa8P3wGpd8E1YnMKoYmCV2IL-_6QCMLA2tPR4RTGwFQDWZhjXsDbTcCluxCBhcGBYeYODhruNA95OY3xcX--f57Sml3H7Oo3L9Z5-_gBbft_olgIAAA)'
 title='Action Example'
-
 caption=cap13
-
-comment='not sure if I need this' %}
+comment='not sure if I need this' 
+%}
 
 Let’s look at another example: what happens if the parties pick {{ A }} and {{ D }} as the nominees?  It could be a tie. 
 
 {% capture cap14 %}The {{ A }}{{ B }} party nominates {{ A }}. The {{ C }}{{ D }} party nominates {{ D }}. There is a tie in the general election.{% endcapture %}
 
-{% include sim.html id='action_2_tie_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8S-oUsR072X0FBd1qi0OiQIoAobvihODtOB50W5xOKcbOJJMZ5zuVtG5b40xqe964zqrve040iV6inQR5pZOQtJacalopJ43a_Cjnu-VnmzMl3y1n-kNmechQiedoWpsto4UhqgBYIgO4AaqO_hw7LLHLruObTJGBOTiGDCMYu4w4QIYbuo5uiQsyRzdtCcW2wI4IWNgR19lc7_f9Mka6Ic1rhoPQFsQWJ2rBBGZJR8lHKSE6RWqN21WPHYsAteGbYLku-C4MUGFYEVwlpqH_P6oABNeGIz1eUQS3AsD4DLEN4zO9xTBIGBwYRt_goOFu44CX0xgf5-fr52ta09O4fJ3G2_mafv4AxW1RZ54CAAA)'
-
+{% include sim.html 
+id='action_2_tie_sim' 
+gif='gif/action_2_tie.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMU4EMQz8S-oUsR072X0FBd1qi0OiQIoAobvihODtOB50W5xOKcbOJJMZ5zuVtG5b40xqe964zqrve040iV6inQR5pZOQtJacalopJ43a_Cjnu-VnmzMl3y1n-kNmechQiedoWpsto4UhqgBYIgO4AaqO_hw7LLHLruObTJGBOTiGDCMYu4w4QIYbuo5uiQsyRzdtCcW2wI4IWNgR19lc7_f9Mka6Ic1rhoPQFsQWJ2rBBGZJR8lHKSE6RWqN21WPHYsAteGbYLku-C4MUGFYEVwlpqH_P6oABNeGIz1eUQS3AsD4DLEN4zO9xTBIGBwYRt_goOFu44CX0xgf5-fr52ta09O4fJ3G2_mafv4AxW1RZ54CAAA)'
 title='Tie Example'
-
 caption=cap14
-
 comment='not sure if I need this' %}
 
 In a real election with millions of voters, there won't be a tie, so let's model this tie as a probability: there's a 50/50 chance between {{ A }} and {{ D }}.  How do we compute the utility? We could average the two utilities of the two outcomes. But we wouldn't get the full picture. We want to know what our risks are, so we consider both possibilities. There is another variable. It's kind of like another player. We're treating chance as another player in the game.
@@ -235,13 +249,14 @@ Voters can try to find out what's best for everybody by looking at the polls.  
 
 Let's show this competitive pressure with a map. If a candidate enters the race in the right position, they can win. The map below shows those positions in grey. This win region is only on the side with the losing party because the winning party doesn't need a new candidate and won't vote for them. All the pressure is on the losing party, which is kind of common sense. If you're losing, you need to try harder. Even existing candidates will feel this pressure to move toward the middle. 
 
-{% include sim.html id='new_can_win_circle_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8SuVzDrHjOLv7CMSBC9rdQ5F6QFpRBOVQIXg7jgdUoarKwXbGmYzHn5RpmmeVxFXXNA-jJ-KJZE2sY8_MQW3rmoh77_DXK1I84w4UmnIipYkT1cjNWyVdHe9tjuR0dRwZbiLjTYRzfMddWi8FJQSxIkASW-hjF8Dq0b_rYQxQclTCqJxGPIBGMJg4TfFguGyoBlRjPCg5hHK3BExF4m0pwCGoONPMKU5vNYBgLBiW3a7ioIKyz6p8SeWSFpD1VINB_9Mr5taGJUGwjlgW7KvOTN8LPR7el-Vld3fcLUR-DRsqxNff_VYEsFaw1iF-rrDBMgJHi2EnBjOthvI-msFJgyLDIhoUNbxtsO9pv23H08P59eA677ePt_32fDrT1w_cKFitvwIAAA)'
-
+{% include sim.html 
+id='new_can_win_circle_sim'
+gif='gif/new_can_win_circle.gif'
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRQU4DMQz8SuVzDrHjOLv7CMSBC9rdQ5F6QFpRBOVQIXg7jgdUoarKwXbGmYzHn5RpmmeVxFXXNA-jJ-KJZE2sY8_MQW3rmoh77_DXK1I84w4UmnIipYkT1cjNWyVdHe9tjuR0dRwZbiLjTYRzfMddWi8FJQSxIkASW-hjF8Dq0b_rYQxQclTCqJxGPIBGMJg4TfFguGyoBlRjPCg5hHK3BExF4m0pwCGoONPMKU5vNYBgLBiW3a7ioIKyz6p8SeWSFpD1VINB_9Mr5taGJUGwjlgW7KvOTN8LPR7el-Vld3fcLUR-DRsqxNff_VYEsFaw1iF-rrDBMgJHi2EnBjOthvI-msFJgyLDIhoUNbxtsO9pv23H08P59eA677ePt_32fDrT1w_cKFitvwIAAA)'
 title='Candidate Pressure'
-
 caption="A new candidate can enter the contest if they're in the center. (when there is competitive pressure)"
-
-comment='FPTP+primary with win map for new can, same setup as before' %}
+comment='FPTP+primary with win map for new can, same setup as before' 
+%}
 
 (That's all the game theory you need for this article. Later, you can see more [game theory through this class on youtube](https://www.youtube.com/user/gametheoryonline). There are some quiz questions that are only on the Coursera site.)
 
@@ -255,13 +270,14 @@ Primaries will only work if everything goes according to this plan.  You can’
 
 Or you may feel that you can't betray your favorite. Emotionally it is hard to vote strategically because you know it's your duty to vote, and you'll be abandoning the people on your side that voted for the candidate that you like the best.  They stood up for the right thing, and maybe you should do your duty to report your opinion so that we can all make a better decision together.  But you are pulled in another direction by a candidate who also needs your vote, and although they don’t agree with you on as much, you choose them over your favorite because they agree with you on a lot of things, and you can’t betray them as well.  You’d rather not betray anyone.
 
-{% include sim.html id='honest_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu27DMAz8F80axIco21_RoZvhIQUyFDDQokiHoOi_l-QlDYIg8HCkjzrdUT-llWVdTSt12-pKTNdqiqp7xSxe6bbVQjE8-DLC8k9IWVotWhaqpWdtPsr14fPZ4UyrD58z01NmfspQy-sorEXLaGGIFABLZAA3QOro1wXM-ZdbdkyZgV2GHSDDCMYuIw6Q4YFuQjfnAWlplGIlUBIGCHgYEldafb_xxaiBhKIgLPm6xEmFZGRVupV8KwViUWoq6L28WlrQgUeCYZ3xWFhfJwBid5jtl_fsAMTuA9yUN3XEtgZAZMMbGJZnPZ1GFIOEwYFh8QMOBs4OrGvg7Nth3z9Or-fPY1nKy_79ddjfT-fy-wf2gqrYtwIAAA)'
-
+{% include sim.html 
+id='honest_primary_sim' 
+gif='gif/honest_primary.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu27DMAz8F80axIco21_RoZvhIQUyFDDQokiHoOi_l-QlDYIg8HCkjzrdUT-llWVdTSt12-pKTNdqiqp7xSxe6bbVQjE8-DLC8k9IWVotWhaqpWdtPsr14fPZ4UyrD58z01NmfspQy-sorEXLaGGIFABLZAA3QOro1wXM-ZdbdkyZgV2GHSDDCMYuIw6Q4YFuQjfnAWlplGIlUBIGCHgYEldafb_xxaiBhKIgLPm6xEmFZGRVupV8KwViUWoq6L28WlrQgUeCYZ3xWFhfJwBid5jtl_fsAMTuA9yUN3XEtgZAZMMbGJZnPZ1GFIOEwYFh8QMOBs4OrGvg7Nth3z9Or-fPY1nKy_79ddjfT-fy-wf2gqrYtwIAAA)'
 title='Honest Voters'
-
 caption='Honesty is not the best policy. Strategy would have helped elect the best candidate.'
-
-comment='example here with honest voters, just like the two player game example, but people voting honestly and losing for their party' %}
+comment='example here with honest voters, just like the two player game example, but people voting honestly and losing for their party' 
+%}
 
 #### Asymmetric Information
 
@@ -279,25 +295,27 @@ Here's an example. You have {{ A }}{{ B }}{{ C }}{{ D }}.   Now say {{ D }} is 
 
 {% capture cap11 %}{{ D }} is certain, so {{ E }} is chosen even though more people would prefer the moderate {{ B }}.{% endcapture %}
 
-{% include sim.html id='asymmetric_info' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu24DQQj8F-otlseyd_cVKdKdrnCkFJFOSRTZhRXF3x6WseXCsrYAdmAY4JcqLevatbD1rays4bUanlQLj8df9UCnbSvEt-QEhJESgNJSCxktXKil75Eq5eFFbg-klocXyPQUmZ8iXLMdD2kjFIQQxAYDSewwISCUE0e7Yeb8lZqRcM4gQSNhQCMYTIJGw4BGOqIJ0ZwFWlMoj5VwAipZqwocgjSYVi7xf_k87TuFlyWOJDArhuaixQI0UI-Zje-u3F0F6XAtGezW5vrrKcU6jgXhNuNoWGOD6IbxG0S3610bDMZvHdiUnRrG9wqDJTpu4Viit1SqIcRB4VDgOECHgo7ajrW9Hfb96_h6_n6nhV72089h_zie6e8fixjlGbgCAAA)'
-
+{% include sim.html 
+id='asymmetric_info' 
+gif='gif/asymmetric_info.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu24DQQj8F-otlseyd_cVKdKdrnCkFJFOSRTZhRXF3x6WseXCsrYAdmAY4JcqLevatbD1rays4bUanlQLj8df9UCnbSvEt-QEhJESgNJSCxktXKil75Eq5eFFbg-klocXyPQUmZ8iXLMdD2kjFIQQxAYDSewwISCUE0e7Yeb8lZqRcM4gQSNhQCMYTIJGw4BGOqIJ0ZwFWlMoj5VwAipZqwocgjSYVi7xf_k87TuFlyWOJDArhuaixQI0UI-Zje-u3F0F6XAtGezW5vrrKcU6jgXhNuNoWGOD6IbxG0S3610bDMZvHdiUnRrG9wqDJTpu4Viit1SqIcRB4VDgOECHgo7ajrW9Hfb96_h6_n6nhV72089h_zie6e8fixjlGbgCAAA)'
 title='Information Failure'
-
 caption=cap11
-
-comment='remove C, add E between A and B. In reference to ABCD in a line.' %}
+comment='remove C, add E between A and B. In reference to ABCD in a line.' 
+%}
 
 #### Lopsided Districts
 
 The same scenario plays out when one party is dominant: when we don't have a 50-50 split between parties. There is no reason for a party to back down from nominating somebody who they think they would be best for their party without thinking about what's best for everyone.  And if nobody is considering you then you don't have any representation, because choices are made without you. And in this scenario where there is a “safe seat”, the losing side doesn't get any representation. 
 
-{% include sim.html id='party_dominance_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itcpDtcOJAicBBjnMIE_3tWOwQTjFExuzer0czeT2ll3TZfKlk71o2Eo-KoWPrftyFZHWuhOZyMjmB85HAQUtZWi5aVarGsPUa5Pp2Y7cG0-nSCWV4y4yVDLZ-jaW22jBaGSAGwRA4IA6SB8dyEka65ZcehwwEMgAwjGIeMBECGO7oF3cgL0tIozZVQEsJ5VwQ8DEkobVTzzFEHCUVBWKqS61JIzqxKj5IfpeSqp5BqKuh_efW0oB0_CYYVsQ3rM5g1xDaYNZg1wyRiWwe35EuG2N4AlJOOf-BYnls6lTDikHA48JHQ4aDjbse63k_7_nV9u50_yloO-_fltH9eb-X-C08n7YKwAgAA)'
-
+{% include sim.html
+id='party_dominance_sim' 
+gif='gif/party_dominance.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDMRD8F9UqtE-d7itcpDtcOJAicBBjnMIE_3tWOwQTjFExuzer0czeT2ll3TZfKlk71o2Eo-KoWPrftyFZHWuhOZyMjmB85HAQUtZWi5aVarGsPUa5Pp2Y7cG0-nSCWV4y4yVDLZ-jaW22jBaGSAGwRA4IA6SB8dyEka65ZcehwwEMgAwjGIeMBECGO7oF3cgL0tIozZVQEsJ5VwQ8DEkobVTzzFEHCUVBWKqS61JIzqxKj5IfpeSqp5BqKuh_efW0oB0_CYYVsQ3rM5g1xDaYNZg1wyRiWwe35EuG2N4AlJOOf-BYnls6lTDikHA48JHQ4aDjbse63k_7_nV9u50_yloO-_fltH9eb-X-C08n7YKwAgAA)'
 title='Party Dominance'
-
 caption='One party can leave out any consideration of the other voters and choose a candidate from their own party center.'
-
-comment='The big party picks a candidate in their own center, since all their own candidates are electable.' %}
+comment='The big party picks a candidate in their own center, since all their own candidates are electable.' 
+%}
 
 <!--next color background for each big section-->
 
@@ -312,17 +330,18 @@ So far we have only looked at primaries in which there are at most two electable
 
 What happens when you do have vote splitting? How do people strategize in that situation? What kind of negative behavior do they show? 
 
-What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates {{ E }} and {{ F }}.  {{ E }} and {{ F }} are just as moderate as {{ B }}, so there's no strategic advantage for either one, and voters only care which one they are closest to.  In other words, there's three electable candidates.  {{ B }}&{{ F }} share the same space at the bottom, so  {{ B }} might say to {{ F }}, “Please drop out,  and I'll help you out later.”  You don't do favors for nothing right?  That puts {{ F }} into kind of a bluffing game if he stays in. A bluffing game is a game where you try to get a good outcome by threatening to hurt another candidate, and where if you follow through with the threat then you end up hurting yourself, too.
+What happens when there are more than two electable candidates is that similar candidates hurt each other.  See the election below with the additional candidates {{ E }} and {{ F }}.  {{ E }} and {{ F }} are just as moderate as {{ B }}, so there's no strategic advantage for either one, and voters only care which one they are closest to. In other words, there's three electable candidates.  {{ B }}&{{ F }} share the same space at the bottom, so  {{ B }} might say to {{ F }}, “Please drop out, and I'll help you out later.”  You don't do favors for nothing right?  That puts {{ F }} into kind of a bluffing game if he stays in. A bluffing game is a game where you try to get a good outcome by threatening to hurt another candidate, and where if you follow through with the threat then you end up hurting yourself, too.
 
 {% capture cap19 %}{{ B }} gets squeezed out, even though {{ B }} is the best option{% endcapture %}
 
-{% include sim.html id='center_squeeze_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMW4EMQj8i2sKAwav9xUp0q2uuEgpIq2UKLoUpyh_D2ZyuWJ1cgEYGIbhu9SybpsvxFZPtLFKeBKeaL_9sRFrelKJe3oLZ92JCifA-G-LYuOZ0LJWKq2sTMXS9ygVOryo7ZGpdHiRWR5mxsMM1xzHk9oMBSEIcYMBJXaYIMAtbIzzMCN_JXDiUzh3kICRMIARLCYBo2EAIx3Rgmhkg9YkylMSzoRK9qoiD0IaSFuoenuz3FEAVMXCTEqNLGVrgJ47N767cncVoNNtidKOY5onndZxMJBvA4eDlAbiBgkMxO3vtgYDCawjt-Q0gwReYSCk4x4OId2SrQYRB4SDgeMIHQw6ejukeznv-_vl-frxWtbytH99nve3y7X8_AL0S0pr0AIAAA)'
-
+{% include sim.html 
+id='center_squeeze_primary_sim' 
+gif='gif/center_squeeze_primary.gif' 
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRMW4EMQj8i2sKAwav9xUp0q2uuEgpIq2UKLoUpyh_D2ZyuWJ1cgEYGIbhu9SybpsvxFZPtLFKeBKeaL_9sRFrelKJe3oLZ92JCifA-G-LYuOZ0LJWKq2sTMXS9ygVOryo7ZGpdHiRWR5mxsMM1xzHk9oMBSEIcYMBJXaYIMAtbIzzMCN_JXDiUzh3kICRMIARLCYBo2EAIx3Rgmhkg9YkylMSzoRK9qoiD0IaSFuoenuz3FEAVMXCTEqNLGVrgJ47N767cncVoNNtidKOY5onndZxMJBvA4eDlAbiBgkMxO3vtgYDCawjt-Q0gwReYSCk4x4OId2SrQYRB4SDgeMIHQw6ejukeznv-_vl-frxWtbytH99nve3y7X8_AL0S0pr0AIAAA)'
 title='Center Squeeze'
-
 caption=cap19
-
-comment='could be titled vote-splitting. Maybe just show EBF, not ACD' %}
+comment='could be titled vote-splitting. Maybe just show EBF, not ACD' 
+%}
 
 When there are more than two candidates, the voters need to coordinate to put their unified support behind a candidate. This coordination problem might involve some lying.  You might say, “Well, my candidate is doing really well, and yours isn't doing very well. You should back my candidate and your candidate should probably drop out.  You don't want to waste your vote.”
 
@@ -332,13 +351,14 @@ The poll numbers are important to voters so they can tell who they should be coo
 
 The problem is those polls aren't accurate. If you put {{ B }}&{{ F }} head to head, then {{ B }} would easily win, but in a choose-only-one poll, {{ B }} can get squeezed out because {{ E }}&{{ F }} take votes from both sides.  Even though {{ B }} is the center candidate, {{ B }} can lose because {{ B }} can get squeezed out.
 
-{% include sim.html id='amplify_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDQQz8F9VbrF67d_6KFOmOKxxIEViSEOzChOTbo9XYpDDm4EaP1WgkfVOlw7axSmGXvYTFhdnTqoVX2fdCPN8sGk_6dJUOtZDl3_Pf4oGUuy_e9sjUcvdFZnmYWR9muGY7noKmK3AhiKGIIYkbIASwBUY7DVgzKsETQQkeDggaCQCNGIKeBQIa6fAWeGsW6Nwdz4VwhhU8qgDI0eDZ6Pf9PAaV4L1a_5EkaChBF50L4GIlzkA2m8zZjW-G3Ay99jfLOvOsA6W1HMM6jgXhtmbQsUaHbIdsh2zH-O4AjO8dOSzRMX6rACyx4RYNS2yeN9QQ0kDRoKDhAB0KOmq7JLwcx_g4PV8-X-lAT-P8dRxvpwv9_AFQpOx0pQIAAA)'
-
+{% include sim.html 
+id='amplify_sim' 
+gif = "gif/amplify.gif"
+link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDQQz8F9VbrF67d_6KFOmOKxxIEViSEOzChOTbo9XYpDDm4EaP1WgkfVOlw7axSmGXvYTFhdnTqoVX2fdCPN8sGk_6dJUOtZDl3_Pf4oGUuy_e9sjUcvdFZnmYWR9muGY7noKmK3AhiKGIIYkbIASwBUY7DVgzKsETQQkeDggaCQCNGIKeBQIa6fAWeGsW6Nwdz4VwhhU8qgDI0eDZ6Pf9PAaV4L1a_5EkaChBF50L4GIlzkA2m8zZjW-G3Ay99jfLOvOsA6W1HMM6jgXhtmbQsUaHbIdsh2zH-O4AjO8dOSzRMX6rACyx4RYNS2yeN9QQ0kDRoKDhAB0KOmq7JLwcx_g4PV8-X-lAT-P8dRxvpwv9_AFQpOx0pQIAAA)'
 title='Poll Amplification'
-
 caption='A small advantage in polls becomes a big advantage.'
-
-comment='right now, this isnt implemented' %}
+comment='right now, this isnt implemented' 
+%}
 
 ### False Leverage
 
@@ -375,13 +395,15 @@ Even in some better voting methods, there can be a game of chicken. The game of 
 
 [The page on STAR voting](star) has a more thorough chicken dilemma explanation. Personally, I have a hard time trying to think of the chicken dilemma for pairwise voting, so I don't think it would affect voters.
 
-{% include sim.html id='chicken_sim' link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSwUoEMQz9l5xzaJIm3Zmb_-Bt2cMK3gZ3ERVE9NtN8xQHFilMmvTl9eV1PqjRejzKWFjcTnyUNlhi1C5YTE8nJpmYEF4060NZJXKjE9r7BBitjanTKhm8ksge45uV4JEnFEbZJvkZjbjtV0IOCWl8s_Jk-fdEWt0rU6zILCgKECdTXQaok0BILdIz5oWWIdmVSZMpiyoIiiJoFDTq1aCg0YHsgAwsNp2dOnLKWTatTrPCGnjMpxlfT6_bRpz5z-6vUgQBQtxi0wLhzp5Hvf36MRPZJ1owMHTbJ714uu9rUXL6wENikL5U0WGsYwzHGG5ljmMMdwTY4aP0Okx12BENQQoZeJuAqeElfP4cAYqAglgqDCgY6B1Q8HDetsvL_fv1kVa6u16fL2_njT6_Ab_6IUHSAgAA)'
-
+{% include sim.html 
+id='chicken_sim' 
+gif = "gif/election11_chicken_score.gif"
+link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSwUoEMQyG36XnIk3SpO3cfAa97e5hld3TwiyLCCL67Cb9UUZEBiZNk_75kvY9lbTsdiScSfmQfaWZOsVqVN8bh0NOFDmjZ-LhgViMMTN8ZSUyJC0lp5qW9EmUctLpm5_zYHOTaPj2z69sP0_pnlLyn88j498IlVmEgo7IN82yjWwtW8-t5EaRxEiSQNun9Xzep2BwVHIDTjIYB6Xq1mlkci6cE3sZ32SaJ5hh0DBDhnUeYMhwg9fhQUXK7IMyx7SgJdASmfkCLdFoxxODXgyHoShjo1HL92DCoa3DG4UqW6dOnbotUW2WrQ03COg65qZiwkowPGFUYICrCoPWtSHWf09bMQMrMOjecDOGSZrODsSJDFoGFBvTNKA0nG1AaQKvIgaUFq8u3V-vt_X1ePHqD8_r7ZTiHTYkxGOLETZ02QsMpDuwOrA6JtZ11usg69DpAOwBeKf-UoE4tncx4i40-xeObJyn4-Wyvjy-XU8-KyB-fAE9NyDXjgMAAA)"
+altlink="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy0oEMRD8l5wbSXenO8ne_Advyx4UvA3uIiqI6Lfb6XJxQGSYqfQjlUol81FqORyP3Cex6YmOXDux9xw5scrpRIVXjyv11REo4jEQVuI2VoOWQ6XSyqF8cS1ULGOPaVHsAfFZcb51_0R9RL3Snycq899KrLJW4KWMmdzJ50oL0tDDIYgDoIYdEHK4BcayGhBrCBUJvkgKAwRJ0AhoxHKCgEY6ooEILLrM5OUHZ1olZ6pmr4JHbfnx9fS6bYUi_hn9ZpLAQYhVdBnB1Mii1OrVlRXwPpBsA0PTfdCSp9k-5ymndZwdNtJmJg32GrZhsMMUgG2YAWCHddRgqsEOrwDOTsfZOEx1S-FxoYqDwqHAZ0KHgo65HUZ2BTTUcK79es06irhOTEJKbeWxpVEBIBwQMyBmwJ5hqXdAzwDfgKyxZN1Y3EkIm3vj5zLeyPJ8pu6Ch_ttO7_cvV8e49-4vVyez2_3W_n8Bpfywo53AwAA)"
 title='Chicken Dilemma'
-
 caption='I want my friend to win.. but I would rather win myself.'
-
-comment='just B E F' %}
+comment='just B E F' 
+%}
 
 ### Primary Variations in the US
 
