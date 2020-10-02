@@ -449,6 +449,7 @@ function bindModel(ui,model,config) {
 
                 var currentStage = model.stage
                 for (var stage of Object.keys(voterPerson.stages)) {
+                    if (stage == "backup") continue // just show the real stages, not this one that I made as a temporary holding place
                     model.stage = stage
 
                     var text = ""                    
