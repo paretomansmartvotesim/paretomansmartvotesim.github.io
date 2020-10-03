@@ -111,6 +111,9 @@ function Model(idModel){
 		centerPollThreshold: .5,
 		howBadlyDefeatedThreshold: 1.1,
 		doTallyChart: true,
+        codeEditorText: Election.defaultCodeScore,
+		createStrategyType: "score",
+		createBallotType: "Score",
 	})
 	
 	self.viz = new Viz(self);
