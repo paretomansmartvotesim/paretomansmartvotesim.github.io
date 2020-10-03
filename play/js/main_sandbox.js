@@ -1997,7 +1997,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
             
             
             var hideCodeEditor = ! (config.system == "Create")
+            
             showMenuItemsIf("divCreate", ! hideCodeEditor)
+            setTimeout( () => ui.dom.codeMirror.refresh() , 30);
+
             displayNoneIf(ui.arena.codeSave.dom, hideCodeEditor)
             ui.arena.codeEditor.dom.hidden = hideCodeEditor
             // ui.arena.codeSave.dom.hidden = hideCodeEditor
@@ -2999,7 +3002,9 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     var methodFunction = methodList.election
                     // copy text into box
                     var stringFunction = methodFunction.toString()
-                    ui.arena.codeEditor.text.dom.value = stringFunction
+                    ui.dom.codeMirror.setValue(stringFunction)
+                    setTimeout( () => ui.dom.codeMirror.refresh() , 30);
+
                     config.codeEditorText = stringFunction
                     model.codeEditorText = stringFunction
 
@@ -6757,9 +6762,12 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         containText.id = "double_codeEditorText_container";
         codeEditorDOM.appendChild(containText);
         containText.appendChild(codeEditorText);
+        ui.dom.codeMirror = CodeMirror.fromTextArea(ui.dom.codeEditorText, {lineNumbers: true, mode: "javascript", autorefresh: true}) // https://stackoverflow.com/a/42619796
 		// yay.
 		self.init_sandbox = function() {
-            codeEditorText.value = initialConfig.codeEditorText
+            ui.dom.codeMirror.setValue(initialConfig.codeEditorText)
+            setTimeout( () => ui.dom.codeMirror.refresh() , 30);
+
             model.codeEditorText = initialConfig.codeEditorText
 		}
         self.configure = function () {
@@ -6800,7 +6808,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
         // Description
         config.description = ui.dom.descText || "";
-        config.codeEditorText = ui.dom.codeEditorText.value || "";
+        config.codeEditorText = ui.dom.codeMirror.getValue() || "";
     }
 
     ui.arena.save = new function() { // Create a "save" button

@@ -29,9 +29,11 @@
 .div-sandbox #codeEditorText_container{
     height: 620px;
 }
-.div-sandbox textarea, .div-sandbox input{
+.div-sandbox textarea, .div-sandbox input, .div-sandbox .CodeMirror{
     border: 1px solid #bbb;
     resize: none;
+}
+.div-sandbox textarea, .div-sandbox input{
     font-family: Arial, sans-serif;
 }
 .div-sandbox #description_container textarea,
@@ -47,9 +49,22 @@
 .div-sandbox #codeEditorText_container textarea{
     height: 597px;
 }
-.div-sandbox div#double_description_container,
-.div-sandbox div#double_codeEditorText_container {
+.div-sandbox div#double_description_container{
     margin: 0px 20px;
+}
+.div-sandbox div#double_codeEditorText_container {
+    margin: 10px 10px;
+}
+.CodeMirror {
+    text-align: left;
+    height: 597px;
+    font-size: 15px;
+    line-height: 15px;
+}
+.CodeMirror { 
+    /* This 2-line part makes the codemirror scale its width with its container. Comment it out to have codemirror scale width with it's longest line of code inside it. */
+    position: absolute;
+    width: calc(100% - 45px);
 }
 .div-sandbox div.topMenuSpacer {
     height: 0.5em;
