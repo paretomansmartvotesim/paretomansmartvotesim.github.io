@@ -6772,7 +6772,6 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
 		}
         self.configure = function () {
             
-            ui.dom.center.style.width = config.arena_size + model.border*2 + "px"
             codeEditorText.placeholder = Election.defaultCodeScore
         }
         self.dom = codeEditorDOM
@@ -6807,7 +6806,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         var pos = savePositions()  // saves the candidate and voter positions in the config.
         for (i in pos) config[i] = pos[i]  // for some weird reason config doesn't have the correct positions, hope i'm not introducing a bug
         // Description
-        config.description = ui.dom.descText || "";
+        config.description = ui.dom.descText.value || "";
         config.codeEditorText = ui.dom.codeMirror.getValue() || "";
     }
 
