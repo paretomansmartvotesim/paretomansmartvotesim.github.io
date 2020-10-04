@@ -106,6 +106,10 @@ DAT RESET BUTTON
     transition: all 0.1s;
 }
 
+.codeSave{
+    margin-bottom: 10px;
+}
+
 #reset,
 #save{
 	width: 100px;
