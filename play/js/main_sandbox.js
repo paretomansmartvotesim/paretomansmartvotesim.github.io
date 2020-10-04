@@ -3052,6 +3052,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             width: bw(2),
             data: self.list,
             onChoose: self.onChoose,
+            justButton: true,
         });
     }
 
