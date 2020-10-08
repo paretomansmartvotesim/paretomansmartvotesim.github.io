@@ -504,6 +504,7 @@ function bindModel(ui,model,config) {
         ui.dom.sankey.id = "chart"
         ui.dom.sankey.innerHTML = '<div style="text-align:center;"><span class="small" > Sankey Diagram </span></div>'
 
+        var noSankeys = true
 
         for (var district of model.district) {
 
@@ -551,6 +552,10 @@ function bindModel(ui,model,config) {
 
             var dataSankey = getDataSankey(district)
             // var dataSankey = getEnergyData()
+
+            var noLinks = dataSankey.links.length == 0
+            if (noLinks) continue
+            noSankeys = false
 
             sankey
                 .nodes(dataSankey.nodes)
@@ -733,8 +738,9 @@ function bindModel(ui,model,config) {
                 return data
             }
 
-            
         }
+        
+        if (noSankeys) ui.dom.sankey.remove()
 
     };
 
