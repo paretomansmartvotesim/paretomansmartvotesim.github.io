@@ -1,4 +1,5 @@
 ---
+permalink: /newer/
 layout: page-3
 title: An Even Better Ballot
 banner: To Build a<span class="notation">n Even</span> Better Ballot

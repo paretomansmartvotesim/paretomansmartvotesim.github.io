@@ -1,4 +1,5 @@
 ---
+permalink: /draft-321/
 layout: page-2
 title: 3-2-1
 description: draft

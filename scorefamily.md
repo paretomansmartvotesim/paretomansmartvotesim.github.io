@@ -1,4 +1,5 @@
 ---
+permalink: /scorefamily/
 layout: page-3
 title: The Approval Score STAR and 3-2-1 Family
 description: An Explorable Guide to Voting Methods

@@ -1,4 +1,5 @@
 ---
+permalink: /star/
 layout: page-3
 title: STAR Voting
 description: An Explorable Guide

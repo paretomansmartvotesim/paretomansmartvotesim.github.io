@@ -1,4 +1,5 @@
 ---
+permalink: /irv/
 layout: page-3
 title: Instant Runoff Voting
 description: An Interactive Guide to IRV (the Single-Winner form of Ranked Choice Voting RCV)

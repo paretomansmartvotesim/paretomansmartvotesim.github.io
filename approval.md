@@ -1,4 +1,5 @@
 ---
+permalink: /approval/
 layout: page-3
 title: Approval Voting
 banner: Practical Approval Voting

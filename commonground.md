@@ -1,4 +1,5 @@
 ---
+permalink: /commonground/
 layout: page-3
 title: Finding Common Ground
 description: An Explorable Guide to Group Decision Making

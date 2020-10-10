@@ -1,4 +1,5 @@
 ---
+permalink: /proportional/
 layout: page-3
 title: Proportional Methods
 description: An Interactive Guide to Proportional Voting Methods

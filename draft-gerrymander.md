@@ -1,4 +1,5 @@
 ---
+permalink: /draft-gerrymander/
 layout: page-3
 title: Condorcet Methods
 banner: Condorcet Methods Explained

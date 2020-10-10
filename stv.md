@@ -1,4 +1,5 @@
 ---
+permalink: /stv/
 layout: page-3
 title: The Single Transferable Vote
 description: An Interactive Guide to STV (the multi-winner form of Ranked Choice Voting RCV)

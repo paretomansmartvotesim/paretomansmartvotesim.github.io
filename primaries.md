@@ -1,4 +1,5 @@
 ---
+permalink: /primaries/
 layout: page-3
 title: Primaries
 description: An Interactive Guide to Voting

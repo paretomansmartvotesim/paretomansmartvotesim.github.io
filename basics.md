@@ -1,4 +1,5 @@
 ---
+permalink: /basics/
 layout: page-2
 title: The Basics
 description: An Explorable Guide to Group Decision Making
