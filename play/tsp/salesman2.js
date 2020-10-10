@@ -78,68 +78,9 @@ function order_by_distance(nodes, distance, opts) {
   
     nodes = m.get(0).map(i => nodes[i]);
   
+    opts = opts || {}
     if (opts.crossover || opts.points) {
-      for (var counter = 0; counter < 500; counter ++ ) { // put some limit on iterations
-        // yield nodes;
-        var gain = 0;
-        for (var i = 0; i < nodes.length - 2; i++) {
-          for (var j = i + 2; j < nodes.length - 1; j++) {
-            // no-crossings optimization [i,i+1] vs [j, j+1]
-            if (opts.crossover) {
-              const ii1 = distance(nodes[i], nodes[i + 1]),
-                jj1 = distance(nodes[j], nodes[j + 1]),
-                ij = distance(nodes[i], nodes[j]),
-                i1j1 = distance(nodes[j + 1], nodes[i + 1]),
-                diff = ii1 + jj1 - ij - i1j1;
-              if (diff > 0) {
-                gain += diff;
-                nodes = nodes
-                  .slice(0, i + 1)
-                  .concat(nodes.slice(i + 1, j + 1).reverse())
-                  .concat(nodes.slice(j + 1, Infinity));
-              }
-            }
-  
-            if (opts.points && j < nodes.length - 3) {
-              const ii1 = distance(nodes[i], nodes[i + 1]),
-                i1i2 = distance(nodes[i + 1], nodes[i + 2]),
-                ij1 = distance(nodes[i], nodes[j + 1]),
-                i1j = distance(nodes[i + 1], nodes[j]),
-                ii2 = distance(nodes[i], nodes[i + 2]),
-                i1j1 = distance(nodes[i + 1], nodes[j + 1]),
-                jj1 = distance(nodes[j], nodes[j + 1]),
-                j1j2 = distance(nodes[j + 1], nodes[j + 2]),
-                jj2 = distance(nodes[j], nodes[j + 2]),
-                diff0 = ii1 + jj1 + j1j2 - (ij1 + i1j1 + jj2),
-                diff1 = ii1 + jj1 + i1i2 - (i1j + i1j1 + ii2);
-              if (diff0 > 0) {
-                /*
-      i   j
-         >j1
-      i1  j2  */
-                gain += diff0;
-                nodes = nodes
-                  .slice(0, i + 1)
-                  .concat([nodes[j + 1]])
-                  .concat(nodes.slice(i + 1, j + 1))
-                  .concat(nodes.slice(j + 2, Infinity));
-              } else if (diff1 > 0) {
-                /*
-      j   i
-         >i1
-      j1  i2  */
-                gain += diff1;
-                nodes = nodes
-                  .slice(0, i + 1)
-                  .concat(nodes.slice(i + 2, j + 1))
-                  .concat([nodes[i + 1]])
-                  .concat(nodes.slice(j + 1, Infinity));
-              }
-            }
-          }
-        }
-        if (gain == 0) break
-      } 
+      crosssOverAndPoints(nodes, distance, opts)
     }
   
     nodes.connect = connect;
@@ -152,3 +93,67 @@ function order_by_distance(nodes, distance, opts) {
       return a.map((_, i) => (a[i] - b[i]) ** 2).reduce((a, b) => a + b);
     }
   }
+
+function crosssOverAndPoints(nodes, distance, opts) {
+  for (var counter = 0; counter < 200; counter ++ ) { // put some limit on iterations
+    // yield nodes;
+    var gain = 0;
+    for (var i = 0; i < nodes.length - 2; i++) {
+      for (var j = i + 2; j < nodes.length - 1; j++) {
+        // no-crossings optimization [i,i+1] vs [j, j+1]
+        if (opts.crossover) {
+          const ii1 = distance(nodes[i], nodes[i + 1]),
+            jj1 = distance(nodes[j], nodes[j + 1]),
+            ij = distance(nodes[i], nodes[j]),
+            i1j1 = distance(nodes[j + 1], nodes[i + 1]),
+            diff = ii1 + jj1 - ij - i1j1;
+          if (diff > 0) {
+            gain += diff;
+            nodes = nodes
+              .slice(0, i + 1)
+              .concat(nodes.slice(i + 1, j + 1).reverse())
+              .concat(nodes.slice(j + 1, Infinity));
+          }
+        }
+
+        if (opts.points && j < nodes.length - 3) {
+          const ii1 = distance(nodes[i], nodes[i + 1]),
+            i1i2 = distance(nodes[i + 1], nodes[i + 2]),
+            ij1 = distance(nodes[i], nodes[j + 1]),
+            i1j = distance(nodes[i + 1], nodes[j]),
+            ii2 = distance(nodes[i], nodes[i + 2]),
+            i1j1 = distance(nodes[i + 1], nodes[j + 1]),
+            jj1 = distance(nodes[j], nodes[j + 1]),
+            j1j2 = distance(nodes[j + 1], nodes[j + 2]),
+            jj2 = distance(nodes[j], nodes[j + 2]),
+            diff0 = ii1 + jj1 + j1j2 - (ij1 + i1j1 + jj2),
+            diff1 = ii1 + jj1 + i1i2 - (i1j + i1j1 + ii2);
+          if (diff0 > 0) {
+            /*
+  i   j
+     >j1
+  i1  j2  */
+            gain += diff0;
+            nodes = nodes
+              .slice(0, i + 1)
+              .concat([nodes[j + 1]])
+              .concat(nodes.slice(i + 1, j + 1))
+              .concat(nodes.slice(j + 2, Infinity));
+          } else if (diff1 > 0) {
+            /*
+  j   i
+     >i1
+  j1  i2  */
+            gain += diff1;
+            nodes = nodes
+              .slice(0, i + 1)
+              .concat(nodes.slice(i + 2, j + 1))
+              .concat([nodes[i + 1]])
+              .concat(nodes.slice(j + 1, Infinity));
+          }
+        }
+      }
+    }
+    if (gain == 0) break
+  } 
+}
