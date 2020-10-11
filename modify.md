@@ -4,19 +4,43 @@ layout: page-2
 title: Modify the Simulator
 ---
 
-These are the build instructions. That means, if you want to run the site locally on your computer, you have to follow these instructions.
+These are the build instructions to help you run this site on your computer.
 
-Why? Because I’m using a build tool, Jekyll. The reason I'm using Jekyll is I want to modularize my html, and jekyll seems to be popular and minimal, and github does it.
+There are two paths. 
 
-If you really don't want to run jekyll, I also have a repository for the [build](https://github.com/paretoman/ballot_site/). So you can start from there. But really, you're making it harder on yourself to do things like add new pages.  To get started from this build, do the following:
+## Modify a Build
 
-1. open a terminal get in an empty folder
+If you want to mess around with the javascript code for calculating elections and votes, then it's quicker and easier to work from the already-compiled repository, the [build](https://github.com/paretoman/ballot_site/). 
 
-2. git clone https://github.com/paretoman/ballot_site.git
+To get started from this build, do the following:
 
-3. rename "ballot_site/" to "ballot/": mv ballot_site ballot
+1. Download the repository from github.
 
-4. python -m http.server or some other way to serve the files.  Serve from the folder that contains "ballot/".
+2. Start an http server. For example, start a terminal in the downloaded folder and type: 
+
+   ```
+   python -m http.server
+   ```
+
+Here's more detailed instructions for those that are new to programming web pages:
+
+1. Download the repository from github.
+2. Install VS Code.
+3. Open VS Code, and open the repository folder you downloaded.
+4. Install the Live Server extension by Ritwick Dey.
+5. Hit "Go Live" in bottom right corner, small text.
+6. Hit F5 in VS Code. This starts a debug session.
+7. The first time you hit F5, you have to edit the config file. Change the port from 8080 to 5500 because that's what Live Server uses. Then save. Then hit F5.
+
+Now you are in a debug session where you can search through the code for interesting parts and set breakpoints and check out variable contents. You can basically watch the code work.
+
+You can make changes. When you hit save on your changes, the current page you're on in the browser will reload with your changes.
+
+## Modify the Source
+
+If you want to edit the html or add more js files, then you'll want to run the jekyll build tool at some point. 
+
+Jekyll is a build tool. The reason I'm using Jekyll is I want to modularize my html, and jekyll seems to be popular and minimal, and github does it.
 
 Here are instructions for building this site on your local machine.
 
