@@ -6,9 +6,15 @@ title: Modify the Simulator
 
 These are the build instructions to help you run this site on your computer.
 
-There are two paths. 
+There are two paths: modify a build, or modify the source.
+
+## Sandbox Editor
 
 Also, there is some ability to write code in the sandbox. Just hit "dev" under "Voting systems by Type" and "Create One" under "what voting system?". Then you can load and edit the code for any system. This is limited to only the parts of the code that count the ballots and display the output. To change how voters fill in their ballot, you'll have to modify the code locally on your computer. Instructions are below.
+
+{% include gif-show.html
+gif = "gif/create_one_wide.gif"
+%}
 
 ## Modify a Build
 
