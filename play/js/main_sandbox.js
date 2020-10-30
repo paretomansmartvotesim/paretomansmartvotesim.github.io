@@ -7102,39 +7102,41 @@ sandbox.assets = [
     // the peeps
     "play/img/voter_face.png",
 
-    "play/img/square.png",
-    "play/img/triangle.png",
-    "play/img/hexagon.png",
-    "play/img/pentagon.png",
-    "play/img/bob.png",
+    // candidate images - now we dynamically load them
 
-    "play/img/square.svg",
-    "play/img/triangle.svg",
-    "play/img/hexagon.svg",
-    "play/img/pentagon.svg",
-    "play/img/bob.svg",
+    // "play/img/square.png",
+    // "play/img/triangle.png",
+    // "play/img/hexagon.png",
+    // "play/img/pentagon.png",
+    // "play/img/bob.png",
 
-    "play/img/blue_bee.png",
-    "play/img/yellow_bee.png",
-    "play/img/red_bee.png",
-    "play/img/green_bee.png",
-    "play/img/orange_bee.png",
+    // "play/img/square.svg",
+    // "play/img/triangle.svg",
+    // "play/img/hexagon.svg",
+    // "play/img/pentagon.svg",
+    // "play/img/bob.svg",
 
-    // plus
-    "play/img/plusCandidate.png",
-    "play/img/plusOneVoter.png",
-    "play/img/plusVoterGroup.png",
+    // "play/img/blue_bee.png",
+    // "play/img/yellow_bee.png",
+    // "play/img/red_bee.png",
+    // "play/img/green_bee.png",
+    // "play/img/orange_bee.png",
 
-    // Ballot instructions
-    "play/img/ballot5_fptp.png",
-    "play/img/ballot5_ranked.png",
-    "play/img/ballot5_approval.png",
-    "play/img/ballot5_range.png",
+    // plus - dynamic loading works for these 
+    // "play/img/plusCandidate.png",
+    // "play/img/plusOneVoter.png",
+    // "play/img/plusVoterGroup.png",
 
-    // The boxes
-    "play/img/ballot5_box.png",
-    "play/img/ballot_rate.png",
-    "play/img/ballot_three.png"
+    // Ballot instructions - old style ballot
+    // "play/img/ballot5_fptp.png",
+    // "play/img/ballot5_ranked.png",
+    // "play/img/ballot5_approval.png",
+    // "play/img/ballot5_range.png",
+
+    // The boxes - old style ballot
+    // "play/img/ballot5_box.png",
+    // "play/img/ballot_rate.png",
+    // "play/img/ballot_three.png"
 
 ];
 
