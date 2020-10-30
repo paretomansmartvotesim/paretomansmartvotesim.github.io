@@ -9,12 +9,7 @@
 		<script src="play/js/{{ include.id }}.js">
 		</script>
 		{% if include.gif %}
-		<div>
-			<div class="demonstrate" onclick="var x = document.getElementById('img_{{ include.id }}'); x.hidden = ! x.hidden;">Demonstrate</div>
-		</div>
-		<div>
-			<img class="gif_show" src="{{ include.gif }}" id="img_{{ include.id }}" hidden="true"/>
-		</div>
+		{% include gif-show.html %}
 		{% endif %}
 	</div>
 
