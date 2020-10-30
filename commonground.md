@@ -109,7 +109,7 @@ You can also use a tier list, because ties are okay, too. You can have multiple 
 
 <p style="text-align: center;" ><strong>Tier List for Candy</strong></p>
 <div class="picture-container">
- <img src="img/candy-tier-list.png" alt="tier list for candy" class="picture" />
+ <img src="img/candy-tier-list.png" alt="tier list for candy" class="picture" loading="lazy" />
 </div>
 
 Pairwise rankings really give you a lot of power. They are used in a family of voting systems called Condorcet methods, and we'll talk about those later on their own page.
@@ -242,7 +242,7 @@ STAR combines the two ways of finding the middle, scoring and counting by pairs.
 {% include sim.html 
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38VzhGLHdnLdeAXa7XQDoG6VihALQuXZcfxThqLqht-xk_8-J_6iSrt1NS9c21ZW5lq4LzOyFjmJSP5yohq5um2FeB7LPdrmutGuFlLa0TcLFbJce-yKYg-p5d8XlXG3stytcE1vngjuSAlSoGCFgIEdEhCsofFLCwl_LiThFUkJLwkRCGxEsSVsWghspGM1sFryQKsJy_MeOAsNTq1BANTCaeXy-83NjjI8G1rmIqUVjbKm7Qz4Gsg1CONVZqB5Vm-t1RNeO94FuIqmDRdoQDWgGlANTZtB0LR11Eb-y9C0VwjnTscLOK7OLVuJiSKHhYPAl5QOgo6zXSANgsvqIOhzhGh_eHyKodq_nt-PNAeqozhubqyjwVEheNUBtAG0oUgaBHQDfgOQY0I-xJAswHx5Pp3OH4fPt2OMNxguP5L3f-I5AwAA)" 
 title='STAR Voting' 
-caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking." 
+caption="Same ballot as above for score. Score from 0-5, and add up the scores. BUT THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' loading='lazy' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking." 
 comment='same as above but star' 
 id='star_sim' 
 gif="gif/star.gif"

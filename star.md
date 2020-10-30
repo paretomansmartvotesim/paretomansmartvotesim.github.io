@@ -27,7 +27,7 @@ STAR combines the two ways of finding the middle, scoring and counting by pairs.
 Let's see how this works in an actual election. Let's use a range of scores from 0 to 5. Let's also model voter behavior. We'll get to how voters behave using strategies by the end of the page.
 
 {% include sim.html title="STAR Voting"
-caption="Score from 0 to 5 and add up the scores. AND THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking."
+caption="Score from 0 to 5 and add up the scores. AND THEN take the top two and count by pairs. <b>Use the voter dude <img src='play/img/viewMan2.png' loading='lazy' /></b>. He's in the bottom left corner. Drag him around to see what each voter was thinking."
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSsU4DMQyG38VzhGLHdnLdeAXa7XQDoG6VihALQuXZcfxThqLqht-xk_8-J_6iSrt1NS9c21ZW5lq4LzOyFjmJSP5yohq5um2FeB7LPdrmutGuFlLa0TcLFbJce-yKYg-p5d8XlXG3stytcE1vngjuSAlSoGCFgIEdEhCsofFLCwl_LiThFUkJLwkRCGxEsSVsWghspGM1sFryQKsJy_MeOAsNTq1BANTCaeXy-83NjjI8G1rmIqUVjbKm7Qz4Gsg1CONVZqB5Vm-t1RNeO94FuIqmDRdoQDWgGlANTZtB0LR11Eb-y9C0VwjnTscLOK7OLVuJiSKHhYPAl5QOgo6zXSANgsvqIOhzhGh_eHyKodq_nt-PNAeqozhubqyjwVEheNUBtAG0oUgaBHQDfgOQY0I-xJAswHx5Pp3OH4fPt2OMNxguP5L3f-I5AwAA)"
 comment='' id='star_scores_sim'
 gif = "gif/star_scores.gif" %}

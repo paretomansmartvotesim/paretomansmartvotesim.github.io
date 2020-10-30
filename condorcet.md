@@ -55,7 +55,7 @@ The name Condorcet comes from the guy that thought it up, the Marquis de Condorc
 <p style="text-align: center;" ><strong>Statues of Concorcet and Llull</strong></p>
 
 <div class="picture-container">
- <img src="img\condorcet.jpg" alt="condorcet" class="picture" /> <img src="img\llull.jpg" alt="llull" class="picture" />
+ <img src="img\condorcet.jpg" alt="condorcet" class="picture" loading="lazy" /> <img src="img\llull.jpg" alt="llull" class="picture" loading="lazy" />
 </div>
 Also, when there is a Condorcet winner, I would say this is the perfect voting system because we get around Arrow’s Impossibility Theorem. Arrow's theorem requires a set of good principles for a voting system, and when there is a Condorcet winner, all those principles are met. The only problem is that there could be a Condorcet cycle, which we'll talk about next.
 
@@ -308,7 +308,7 @@ In each of these Condorcet methods, voters would have a hard time trying to use 
 
 **Backfiring** - Jameson Quinn's study of how often strategies backfire versus work. The Condorcet methods Schulze and Ranked Pairs (Rp) have a high likelihood of backfiring and a small likelihood of working.
 
-<img src="img/backfire.png" alt="backfire" class="picture100" />
+<img src="img/backfire.png" alt="backfire" class="picture100" loading="lazy" />
 
 Pair counts are never affected by strategy. It’s only in a cycle-breaker that voters would even think about using strategy, because cycle-breakers don’t use just plain pair counts. In a Condorcet cycle, candidates are virtually in a tie, so candidates will always feel a pressure to move toward the middle, and there will always be a spot in the middle for a new common ground candidate to enter the race.
 
