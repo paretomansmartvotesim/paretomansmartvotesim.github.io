@@ -79,7 +79,7 @@ caption = cap6
 comment = "slider showing strategy of voters. show a single voter, too. Show choice between systems FPTP and IRV." 
 %}
 
-This dilemma is familiar to anyone who has voted in a single-choice voting eleciton. (More formally, this kind of choose-only-one voting is called plurality or First Past the Post, FPTP).
+This dilemma is familiar to anyone who has voted in a single-choice voting election. (More formally, this kind of choose-only-one voting is called plurality or First Past the Post, FPTP).
 
 {% capture cap9 %}Do I waste my vote on my favorite {{ A }} or do I support the more viable {{ B }}? Change from H=honesty, to F=frontrunner strategy to get a better result.{% endcapture %}
 

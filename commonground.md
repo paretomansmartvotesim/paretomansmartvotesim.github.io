@@ -26,7 +26,7 @@ Let's start simple for this first example. Let’s say we have to decide as a gr
 link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu24CMRD8lZNrF971E0qK1CREaQ4KJzrBhQsXXaBAUfLtWXtAioSQi9n1rsezY38ro-ZtyzbpWdjollzUHEiiwJqNlYBtvESBNBHXLinGzUYrKqfJWU3OlNyqudHKqbn6NUorX9MgTVKLAkbfLKmku5XZ3QqZyk0EcmKkEEAOgPspAEQAOUG5LggIN2nFwiObLDwswADQsEOL0FgB0HBElpDN6gFrqlAqFlAtWAiyFnUIssLUiovXVdoDGsBqMTBp1lY77aXBVeoS0DXgayDkLZfA1dPult6FOoKLeBiIdhjdGwCV51qrp_Gch-Ypv6_Xh8Vp2nZTs8jTQbLVscv7ZrXLb3vJXrrttu-al34YsqTLqf8Ym8XiUeLnXdc8jKepWXX5azx8rVX5BPDUwwkPT70HwFMPeT7VMTw8DQZAtTPAz4CXCf5iQQBBwGBhViHib0ScjAywALxExNeI178ZUUz_7S_7cCqBMIEwQUqClOSqzOQB0JPAlyDrNQ_DeHw-f3bi9HI4TXnoj2f18wcgESI7fgMAAA)"
 title='Where to go eat?' 
 caption='Horizontal Meat-Veggie axis. Vertical $-$$$ axis' 
-comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendlyness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' 
+comment='show a group of people preferring many options, restaurants named and sorted by money on one axis and eco-friendliness on the other.  Meat Shack. Burger Barn. Veggie Villa. The Four Seasons.  Primo BBQ.  Raj Veggies ' 
 id='eat_sim' 
 gif="gif/eat.gif"
 %}

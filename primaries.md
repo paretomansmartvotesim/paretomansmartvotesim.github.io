@@ -265,7 +265,7 @@ comment='FPTP+primary with win map for new can, same setup as before'
 
 #### Other Voter Behavior
 
-Primaries will only work if everything goes according to this plan. You can’t rely on all voters to behave in the same way. Voters might consider other things than electablility. Some voters don't pay attention to the polls. And you could imagine some voters don't know what is best for everybody. There is also a rational argument for choosing your favorite even if they are not electable because maybe your focus is not to affect the election that's happening now but to affect an election that is going to happen in the future or to affect decisions that are made by your party in a convention.
+Primaries will only work if everything goes according to this plan. You can’t rely on all voters to behave in the same way. Voters might consider other things than electability. Some voters don't pay attention to the polls. And you could imagine some voters don't know what is best for everybody. There is also a rational argument for choosing your favorite even if they are not electable because maybe your focus is not to affect the election that's happening now but to affect an election that is going to happen in the future or to affect decisions that are made by your party in a convention.
 
 #### Honesty
 
@@ -358,7 +358,7 @@ gif = "gif/amplify.gif"
 link='[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VRu2oDQQz8F9VbrF67d_6KFOmOKxxIEViSEOzChOTbo9XYpDDm4EaP1WgkfVOlw7axSmGXvYTFhdnTqoVX2fdCPN8sGk_6dJUOtZDl3_Pf4oGUuy_e9sjUcvdFZnmYWR9muGY7noKmK3AhiKGIIYkbIASwBUY7DVgzKsETQQkeDggaCQCNGIKeBQIa6fAWeGsW6Nwdz4VwhhU8qgDI0eDZ6Pf9PAaV4L1a_5EkaChBF50L4GIlzkA2m8zZjW-G3Ay99jfLOvOsA6W1HMM6jgXhtmbQsUaHbIdsh2zH-O4AjO8dOSzRMX6rACyx4RYNS2yeN9QQ0kDRoKDhAB0KOmq7JLwcx_g4PV8-X-lAT-P8dRxvpwv9_AFQpOx0pQIAAA)'
 title='Poll Amplification'
 caption='A small advantage in polls becomes a big advantage.'
-comment='right now, this isnt implemented' 
+comment='right now, this is not implemented' 
 %}
 
 ### False Leverage

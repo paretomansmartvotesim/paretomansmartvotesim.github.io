@@ -72,7 +72,7 @@ link="[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSUW4DI
 title = "Strategists win"
 caption = ""
 id = "election8"
-comment = "groups of voters at (-4,0)non-normalizing and (4,0)normalizing. Cands at (-2.5,.5), (-2,0), (0,0), (2,0), (2.5,.5). (2,0) wins."
+comment = "groups of voters at (-4,0)non-normalizing and (4,0)normalizing. Candidates at (-2.5,.5), (-2,0), (0,0), (2,0), (2.5,.5). (2,0) wins."
 %}
 
 Is that kind of thing realistic? Perhaps not in the form above; few voters would be so unstrategic as not to normalize. But actually, normalizing as above is a pretty weak strategy. To strategize even more strongly, voters could somehow assess which two candidates were the frontrunners, and use them as the endpoints for normalization. Mostly, this means casting an approval-like ballot that gives every candidate either a 5 or a 0. For instance, in the election below, the voter believes {{ A }}, {{ B }}, and {{ C }} are the frontrunners. Compare the strongly strategic voter below with the normalized voter in the second example above.

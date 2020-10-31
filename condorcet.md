@@ -33,7 +33,7 @@ We're going to use that background map for ballot visualization in the two elect
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3WSMWsDMQyF_4tmUyxbsnVZC50zZDtuSNsMhaMpIR1CaX97Zb0GAiVkeFYkv3xP8Rdl2swzF0usuqSZTfxUxilbKpWXJRHHjGbv5FFX2uREQhv6yZRIo2w-5L3uktO_j3fsbme62-Ec3jwIoi6oQcACAQA3iBOwuPrvVRc350TFjfzL4kbFpUBgUwQjGhcKbEpHZaimuFBzkPLYAUejAqhW9AFU3WnmxBhsaMGvIisnXzFJ_osl13xSrgc3nGNG4p7cWkoLYOn4H4AoCKrYmAJPEVSBpwiqCkFQ7ehhXYqgLUM4JhtCNqyraUSoDtJg0UDQppAOgo67vUAqBAvqIOjjzdDTdrf1V_R4fH89nl4OZxqvqGPAbrbVEdAyBPYGNAOaSWCbQkBn8DKDDMiHnuh5v67H8-7ycfB3vF0_T_v17Xyh718YJyuqEwMAAA)" 
 title = "FPTP Spoilers, Condorcet None"
-caption = "Switch between FTPTP and Condorcet"
+caption = "Switch between FPTP and Condorcet"
 comment = "Example of no spoiler effect - basic spoiler intro stuff."
 id = "condorcet_2" 
 gif = "gif/condorcet_2.gif"
@@ -42,7 +42,7 @@ gif = "gif/condorcet_2.gif"
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSsU5DMQz8F88Wih07SbsiMXfo9tShQAekiiJUhgrBt-P46AKq3nB2bF_u_PJJhdbLItVYXHe8yBCWUiNSrSxjRmLOahKRexyV3Y5JcsxLjGVeaV2YjNb0XYjJM23RFLUeUPjfF5Vxs7K6WZGS3DIVZK7IoUAMAAHSAKFALDDu84AgFyYNojjUINIABYBGDS1BUwNAox3ZQLbKgVpSqcwdSBYqBNWKOgTVYFpitfhmc0MZnBV-hZUrW5St_Nqzq0_TaxDEi87Actb-UltL8dbxTyDXYNqxPYdUh2mHVIdpdwBMe0dt5F0O060AJDsbDDesrnlaiYdDDRQNCtoqoUNBx2xXQAVgWR0K-nw_9LDZbuJF3Z9en0_vT4czzRfV0TCuW5tnMDgKAPQD0gakDUvZwwFQN8A1BmCKvOtMj_vj8XTeXt4O8aY3x4_3_fHlfKGvHw30UswyAwAA)" 
 title = "Condorcet: No Vote Splitting"
-caption = "Switch between FTPTP and Condorcet"
+caption = "Switch between FPTP and Condorcet"
 comment = "Example of no vote splitting. - even with that crowded example the IRV had a hard time with."
 id = "condorcet_3"
 gif = "gif/condorcet_3.gif"
@@ -52,7 +52,7 @@ How does this work? We have this information about each pair of candidates, so t
 
 The name Condorcet comes from the guy that thought it up, the Marquis de Condorcet, whose actual name is Nicholas Caritat and who is actually just from the town of Condorcet, so really it gets its name from a town in France. And actually, it maybe should be called Llull because Ramon Llull thought it up 500 years before Condorcet.
 
-<p style="text-align: center;" ><strong>Statues of Concorcet and Llull</strong></p>
+<p style="text-align: center;" ><strong>Statues of Condorcet and Llull</strong></p>
 
 <div class="picture-container">
  <img src="img\condorcet.jpg" alt="condorcet" class="picture" loading="lazy" /> <img src="img\llull.jpg" alt="llull" class="picture" loading="lazy" />
@@ -104,8 +104,8 @@ link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VTy24
 title = "Common ground Candidate Breaks Cycle"
 caption = "A common ground candidate enters the race and wins all their matches."
 comment = ""
-id = "condordet_6_candidate_common_ground" 
-gif = "gif/condordet_6_candidate_common_ground.gif"
+id = "condorcet_6_candidate_common_ground" 
+gif = "gif/condorcet_6_candidate_common_ground.gif"
 %}
 
 There is tremendous competitive pressure to go towards the middle as you can see in this new diagram, a win map. The solid yellow region is where {{ B }} needs to be in order to win. 
