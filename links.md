@@ -49,6 +49,7 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 
 - [CGP Grey](https://www.youtube.com/watch?v=s7tWHJfhiyo&index=1&list=PLkLBH5Kzphe0Qu8mCW1Leef2xSxPK1FIe) - This set of videos are excellent intro to voting methods, ready to share. He made them at the time that the UK was considering using IRV, which the UK called the Alternative Vote for historical reasons. 
 - [Tactical Voting](https://www.youtube.com/watch?v=tE-ktIxN-6Q) - a good overview of what strategy means in voting
+- [Simulating Alternate Voting Systems](https://www.youtube.com/watch?v=yhO6jfHPFQU) - from Primer - a 2D simulation of the voter's dilemma and how IRV/RCV and Approval address it.
 
 #### Courses
 
