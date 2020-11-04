@@ -906,7 +906,7 @@ function bindModel(ui,model,config) {
         // Create the data table.
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Candidate');
-        data.addColumn('number', 'Votes %');
+        data.addColumn('number', 'Votes');
         data.addColumn({ type:'string', role: 'style' })
         data.addColumn({ type:'string', role: 'annotation' })
 
@@ -943,7 +943,7 @@ function bindModel(ui,model,config) {
                 lookup[node.cid] = i
                 var name = getName(node.cid)
                 var barColor = hslToHex(color(node.cid))
-                var annotation = getName(node.cid) + " - lose"
+                var annotation = "Lose: " + name
                 // todo: convert color from hsl
                 rows.push([name,0,barColor,annotation])
             }
@@ -954,16 +954,17 @@ function bindModel(ui,model,config) {
             for ( var i = 0; i < nodes.length; i++) {
                 var node = nodes[i]
                 var num = district.result.tallies[round][node.cid]
-                var annotation = getName(node.cid)
+                var name = getName(node.cid)
+                var annotation = name
                 if (num == null) {
-                    annotation += " - win"
+                    annotation = "Win: " + name
                     num = quotaAmount
                 } else {
                     if (round == district.result.tallies.length - 1) { //last round
                         if (result.winners.includes(node.cid)) {
-                            annotation += " - win" 
+                            annotation = "Win: " + name
                         } else {
-                            annotation += " - lose"
+                            annotation = "Lose: " + name
                         }
                     }
                 }
@@ -986,6 +987,11 @@ function bindModel(ui,model,config) {
         //                     role: "annotation" },
         //                 2]);
 
+
+        var formatter = new google.visualization.NumberFormat(
+            {suffix: '%', fractionDigits:0});
+        formatter.format(data, 1); // Apply formatter to second column
+
         // Set chart options
         var options = {
             "height": 20 * rows.length,
@@ -1001,18 +1007,23 @@ function bindModel(ui,model,config) {
             hAxis: { 
                 minValue: 0,
                 maxValue: 100,
-                ticks: [0,10,20,30,40,50,60,70,80,90,100]
+                ticks: [0,10,20,30,40,50,60,70,80,90,100],
+                gridlines: {
+                    color: '#eee'
+                },
+
             },
             bar: {groupWidth: '100%'},
             annotations: {
                 // alwaysOutside: true,
                 textStyle: {
-                    fontSize: 18,
+                    fontSize: 15,
                     auraColor: 'none',
                     bold: true,
-                }
-            }
+                },
+            },
         }
+
         if (opt.ease) {
             options.animation = {
               duration: 1000,
