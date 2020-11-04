@@ -398,6 +398,8 @@ function bindModel(ui,model,config) {
         
         ui.redrawButtons() // make sure the icons show up
         
+        roundChartDraw()
+
         sankeyDraw()
 
         ballotDraw()
@@ -627,124 +629,341 @@ function bindModel(ui,model,config) {
                 link.attr("d", path);
             }
 
-            function getDataSankey(district) {
-                var nodes = []
-                var links = []
-
-                // each transfer is referred to by transfers [ round ] [ transfer index ] 
-                // we use ids
-                // transfer.from 
-                // transfer.flows [ to ] 
-                // transfer.flows [ to ] [ first ]    -- also shows who was the first choice
-
-                var coalitions = district.result.coalitions
-                var tallies = district.result.tallies
-                var continuing = district.result.continuing
-                var transfers = district.result.transfers
-                var numRounds = transfers.length
-                var numBallots = district.voterPeople.length
-                
-                var winnersContinue = model.system == "STV" && 1
-                if (winnersContinue)var won = district.result.won
-                if (winnersContinue) var quotaAmount = numBallots / (model.seats + 1)
-                
-
-                // function to find the sorted position of the candidate
-                var xpos =  cid => model.tarena.modelToArena(model.candidatesById[cid]).x
-                // var listOfCandidates = Object.keys(transfers[0][0].flows)
-                // listOfCandidates.push(transfers[0][0].from)
-                var listOfCandidates = district.candidates.map(c => c.id)
-                // listOfCandidates.sort((a,b) => a.length - b.length)
-                var xc = {}
-                for (var cid of listOfCandidates) {
-                    xc[cid] = xpos(cid)
-                }
-                
-
-                // make ids and lookup tool
-                var idx = 0
-                var lookup = {}
-                for (var rid = 0; rid <= numRounds; rid ++) {
-                    lookup[rid] = {}
-                    if (rid == 0) {
-                        var useList = _jcopy(listOfCandidates)
-                    } else {
-                        var useList = _jcopy(continuing[rid-1]) // continuing from last round
-                        if (winnersContinue) useList = useList.concat(won[rid-1])
-                    }
-                    useList.sort( (a,b) => xc[a] - xc[b] )
-                    for( var k = 0; k < useList.length; k++) {
-                        var cid = useList[k]
-                        lookup[rid][cid] = idx
-                        var node = {name:rid + "_" + cid,round:rid,cid:cid,numBallots:numBallots}
-                        if (winnersContinue) {
-                            if (won[rid] && won[rid].includes(cid)) node.winner = true
-                        } else {
-                            if (rid == numRounds) { //last round
-                                if (result.winners.includes(cid)) node.winner = true
-                            }
-                        }
-                        nodes.push(node)
-                        idx ++
-                    }
-                }
-
-
-                for (var rid = 0; rid < numRounds; rid ++) {
-                    var round = transfers[rid]
-                    // var unTransferred = _jcopy(listOfCandidates)
-                    for (var transfer of round) {
-                        var from = transfer.from
-                        // delete unTransferred[from]
-                        for (var to in transfer.flows) {
-                            var lfrom = lookup[rid][from]
-                            var lto = lookup[rid+1][to]
-                            var v = 0
-                            var allfirst = transfer.flows[to]
-                            for (var first of Object.keys(allfirst) ) {
-                                v += allfirst[first]
-                            }
-                            if (v > 0) {
-                                var link = {"source":lfrom,"target":lto,"value":v,numBallots:numBallots}
-                                links.push(link)
-                            }
-                            
-                        }
-                    }
-                    for (var cid of continuing[rid]) {
-                        var lfrom = lookup[rid][cid]
-                        var lto = lookup[rid+1][cid]
-                        var v = tallies[rid][cid]
-                        if (v > 0) {
-                            var link = {"source":lfrom,"target":lto,"value":v,numBallots:numBallots}
-                            links.push(link)
-                        }
-
-                    }
-                    if (winnersContinue) {
-                        for (var cid of won[rid]) {
-                            var lfrom = lookup[rid][cid]
-                            var lto = lookup[rid+1][cid]
-                            var v = quotaAmount
-                            var link = {"source":lfrom,"target":lto,"value":v,"winner":true,numBallots:numBallots}
-                            links.push(link)
-                        }
-                    }
-                    // if (v == 0 && stv && rid > 0 && won[rid-1].includes(from) ) { // you won, and you're not on the tally
-                    //     v = quotaAmount
-                    // }
-                }
-
-
-                var data = {nodes:nodes,links:links}
-                return data
-            }
+            
 
         }
         
         if (noSankeys) ui.dom.sankey.remove()
 
     };
+    
+    function getDataSankey(district) {
+        var nodes = []
+        var links = []
+
+        // each transfer is referred to by transfers [ round ] [ transfer index ] 
+        // we use ids
+        // transfer.from 
+        // transfer.flows [ to ] 
+        // transfer.flows [ to ] [ first ]    -- also shows who was the first choice
+
+        var coalitions = district.result.coalitions
+        var tallies = district.result.tallies
+        var continuing = district.result.continuing
+        var transfers = district.result.transfers
+        var numRounds = transfers.length
+        var numBallots = district.voterPeople.length
+        
+        var winnersContinue = model.system == "STV" && 1
+        if (winnersContinue)var won = district.result.won
+        if (winnersContinue) var quotaAmount = numBallots / (model.seats + 1)
+        
+
+        // function to find the sorted position of the candidate
+        var xpos =  cid => model.tarena.modelToArena(model.candidatesById[cid]).x
+        // var listOfCandidates = Object.keys(transfers[0][0].flows)
+        // listOfCandidates.push(transfers[0][0].from)
+        var listOfCandidates = district.candidates.map(c => c.id)
+        // listOfCandidates.sort((a,b) => a.length - b.length)
+        var xc = {}
+        for (var cid of listOfCandidates) {
+            xc[cid] = xpos(cid)
+        }
+        
+
+        // make ids and lookup tool
+        var idx = 0
+        var lookup = {}
+        for (var rid = 0; rid <= numRounds; rid ++) {
+            lookup[rid] = {}
+            if (rid == 0) {
+                var useList = _jcopy(listOfCandidates)
+            } else {
+                var useList = _jcopy(continuing[rid-1]) // continuing from last round
+                if (winnersContinue) useList = useList.concat(won[rid-1])
+            }
+            useList.sort( (a,b) => xc[a] - xc[b] )
+            for( var k = 0; k < useList.length; k++) {
+                var cid = useList[k]
+                lookup[rid][cid] = idx
+                var node = {name:rid + "_" + cid,round:rid,cid:cid,numBallots:numBallots}
+                if (winnersContinue) {
+                    if (won[rid] && won[rid].includes(cid)) node.winner = true
+                } else {
+                    if (rid == numRounds) { //last round
+                        if (result.winners.includes(cid)) node.winner = true
+                    }
+                }
+                nodes.push(node)
+                idx ++
+            }
+        }
+
+
+        for (var rid = 0; rid < numRounds; rid ++) {
+            var round = transfers[rid]
+            // var unTransferred = _jcopy(listOfCandidates)
+            for (var transfer of round) {
+                var from = transfer.from
+                // delete unTransferred[from]
+                for (var to in transfer.flows) {
+                    var lfrom = lookup[rid][from]
+                    var lto = lookup[rid+1][to]
+                    var v = 0
+                    var allfirst = transfer.flows[to]
+                    for (var first of Object.keys(allfirst) ) {
+                        v += allfirst[first]
+                    }
+                    if (v > 0) {
+                        var link = {"source":lfrom,"target":lto,"value":v,numBallots:numBallots}
+                        links.push(link)
+                    }
+                    
+                }
+            }
+            for (var cid of continuing[rid]) {
+                var lfrom = lookup[rid][cid]
+                var lto = lookup[rid+1][cid]
+                var v = tallies[rid][cid]
+                if (v > 0) {
+                    var link = {"source":lfrom,"target":lto,"value":v,numBallots:numBallots}
+                    links.push(link)
+                }
+
+            }
+            if (winnersContinue) {
+                for (var cid of won[rid]) {
+                    var lfrom = lookup[rid][cid]
+                    var lto = lookup[rid+1][cid]
+                    var v = quotaAmount
+                    var link = {"source":lfrom,"target":lto,"value":v,"winner":true,numBallots:numBallots}
+                    links.push(link)
+                }
+            }
+            // if (v == 0 && stv && rid > 0 && won[rid-1].includes(from) ) { // you won, and you're not on the tally
+            //     v = quotaAmount
+            // }
+        }
+
+
+        var data = {nodes:nodes,links:links}
+        return data
+    }
+
+    function roundChartDraw() {
+ 
+
+        var roundChartOn = ["IRV","STV"].includes(model.system)  
+
+        // turning off
+        if (! roundChartOn) {
+            if (ui.dom.roundChart) ui.dom.roundChart.remove()
+            return
+        }
+
+        // hmm, might have a problem with changing number of districts.
+
+        // turning on
+        if (ui.dom.roundChart) {
+            // nothing
+        } else {
+            // set up container dom for chart
+    
+            ui.dom.roundChart = document.createElement("div")
+            ui.dom.roundChart.id = "chart"
+            ui.dom.right.prepend(ui.dom.roundChart)
+    
+
+            // for (var i = 0; i < model.district.length; i++) {}
+            ui.dom.roundChart.innerHTML += '<div style="text-align:center;"><span class="small" > Rounds </span></div>'
+            ui.dom.roundChartBackButton = document.createElement("button")
+            ui.dom.roundChartBackButton.innerText = "Back"
+            ui.dom.roundChart.append(ui.dom.roundChartBackButton)
+            ui.dom.roundChartForwardButton = document.createElement("button")
+            ui.dom.roundChartForwardButton.innerText = "Forward"
+            ui.dom.roundChart.append(ui.dom.roundChartForwardButton)
+            ui.roundCurrent = 0
+            ui.dom.roundChartSpace = document.createElement("div")
+            ui.dom.roundChart.append(ui.dom.roundChartSpace)
+            
+        }
+
+        if (ui.roundChart == undefined) {
+            // set up chart
+
+            // Load the Visualization API and the corechart package.
+            // google.charts.load('current', {'packages':['corechart']});
+            google.charts.load('49', {'packages':['corechart']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(instantiateThenDrawRoundChart);
+            
+        } else {
+            // update chart
+            actualRoundChartDraw()
+        }
+
+    }
+
+    function instantiateThenDrawRoundChart() {
+        // Instantiate chart        
+        ui.roundChart = new google.visualization.BarChart(ui.dom.roundChartSpace);
+
+        // Disabling the button while the chart is drawing.
+        getButtonReady(ui.dom.roundChartBackButton)
+        getButtonReady(ui.dom.roundChartForwardButton)
+        function getButtonReady(button) {
+            button.disabled = true;
+            google.visualization.events.addListener(ui.roundChart, 'ready', function() {
+                button.disabled = false;
+            });
+        }
+
+        
+
+        ui.dom.roundChartBackButton.onclick = function() {
+            var district = model.district[0] // todo
+            ui.roundCurrent --
+            if (ui.roundCurrent < 0) ui.roundCurrent = 0
+            actualRoundChartDraw({ease:true});
+        }
+        ui.dom.roundChartForwardButton.onclick = function() {
+            var district = model.district[0] // todo
+            ui.roundCurrent ++
+            var maxRound = district.result.tallies.length - 1 //todo
+            if (ui.roundCurrent > maxRound) ui.roundCurrent = maxRound
+            actualRoundChartDraw({ease:true});
+        }
+      
+        actualRoundChartDraw()
+        
+    }
+
+    function actualRoundChartDraw(opt) {
+
+        opt = opt || {}
+        opt.ease = opt.ease || false
+
+        // for (var district of model.district) {
+
+        //
+        var district = model.district[0]
+        var round = ui.roundCurrent
+
+            var dataSankey = getDataSankey(district)
+        // }
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Candidate');
+        data.addColumn('number', 'Votes %');
+        data.addColumn({ type:'string', role: 'style' })
+        data.addColumn({ type:'string', role: 'annotation' })
+
+        var color = (cid) => model.candidatesById[cid].fill
+        var getName = (cid) => model.candidatesById[cid].name
+        var fPercent = (frac) => Math.round(100 * frac) + "%"
+
+        if (0) {
+            // get round
+            var nodes = dataSankey.nodes.filter( x => x.round == round)
+    
+            var rows = []
+            for ( var i = 0; i < nodes.length; i++) {
+                var node = nodes[i]
+                var num = district.result.tallies[round][node.cid]
+                var frac = num / node.numBallots
+                var name = getName(node.cid)
+                var barColor = hslToHex(color(node.cid))
+                // todo: convert color from hsl
+                rows.push([name,frac*100,barColor])
+            }
+        } else {
+            // get round
+            var nodes = dataSankey.nodes.filter( x => x.round == round)
+    
+            // get round 0
+            var nodes0 = dataSankey.nodes.filter( x => x.round == 0)
+    
+    
+            var lookup = []
+            var rows = []
+            for ( var i = 0; i < nodes0.length; i++) {
+                var node = nodes0[i]
+                lookup[node.cid] = i
+                var name = getName(node.cid)
+                var barColor = hslToHex(color(node.cid))
+                // todo: convert color from hsl
+                rows.push([name,0,barColor,"lose"])
+            }
+
+            var numBallots = dataSankey.nodes[0].numBallots 
+            var quotaAmount = numBallots / (model.seats + 1)
+
+            for ( var i = 0; i < nodes.length; i++) {
+                var node = nodes[i]
+                var num = district.result.tallies[round][node.cid]
+                var annotation = ""
+                if (num == null) {
+                    annotation = "win"
+                    num = quotaAmount
+                } else {
+                    if (round == district.result.tallies.length - 1) { //last round
+                        if (result.winners.includes(node.cid)) {
+                            annotation = "win" 
+                        } else {
+                            annotation = "lose"
+                        }
+                    }
+                }
+                var frac = num / node.numBallots
+                var name = getName(node.cid)
+                var barColor = hslToHex(color(node.cid))
+                // todo: convert color from hsl
+                var idx = lookup[node.cid]
+                rows[idx] = [name,frac*100,barColor,annotation]
+            }
+        }
+        data.addRows(rows);
+
+        // make annotations at end of bars. https://developers.google.com/chart/interactive/docs/gallery/barchart
+        // var view = new google.visualization.DataView(data);
+        // view.setColumns([0, 1,
+        //                 { calc: "stringify",
+        //                     sourceColumn: 1,
+        //                     type: "string",
+        //                     role: "annotation" },
+        //                 2]);
+
+        // Set chart options
+        var options = {
+            chartArea: {
+                left: 10,
+                top: 10,
+                bottom: 10,
+                right: 10,
+                width: 200,
+                height: 300
+            },                
+            legend: { position: 'none' },             
+            hAxis: { 
+                minValue: 0,
+                maxValue: 100,
+                ticks: [0,10,20,30,40,50,60,70,80,90,100]
+            },
+            bar: {groupWidth: '100%'},
+        }
+        if (opt.ease) {
+            options.animation = {
+              duration: 1000,
+              easing: 'out',
+            }
+        }
+
+        // draw our chart, passing in some options.
+        ui.roundChart.draw(data, options);
+        // ui.roundChart.draw(view, options);
+    }
 
     model.updateFromModel = function() {
         _objF(ui.menu,"updateFromModel")
