@@ -763,32 +763,69 @@ function bindModel(ui,model,config) {
 
         // hmm, might have a problem with changing number of districts.
 
+        var haveCharts = (ui.dom.roundChart != undefined) && ui.roundChartDistricts == model.district.length  // we already have the number of charts we need. They're ready.
+
         // turning on
-        if (ui.dom.roundChart) {
+        if (haveCharts) { // we already have the number of charts we need. They're ready.
             // nothing
         } else {
+
+            // if we're updating the number, remove the old charts
+            if (ui.dom.roundChart) ui.dom.roundChart.remove()
+
             // set up container dom for chart
+            ui.roundChartDistricts = model.district.length
     
             ui.dom.roundChart = document.createElement("div")
             ui.dom.roundChart.id = "chart"
             ui.dom.right.prepend(ui.dom.roundChart)
     
-
-            // for (var i = 0; i < model.district.length; i++) {}
             ui.dom.roundChart.innerHTML += '<div style="text-align:center;"><span class="small" > Rounds </span></div>'
-            ui.dom.roundChartBackButton = document.createElement("button")
-            ui.dom.roundChartBackButton.innerText = "Back"
-            ui.dom.roundChart.append(ui.dom.roundChartBackButton)
-            ui.dom.roundChartForwardButton = document.createElement("button")
-            ui.dom.roundChartForwardButton.innerText = "Forward"
-            ui.dom.roundChart.append(ui.dom.roundChartForwardButton)
-            ui.roundCurrent = 0
-            ui.dom.roundChartSpace = document.createElement("div")
-            ui.dom.roundChart.append(ui.dom.roundChartSpace)
+
+            
+            ui.dom.roundChartRoundNumText = []
+            ui.dom.roundChartBackButton = []
+            ui.dom.roundChartForwardButton = []
+            
+            ui.dom.roundChartSpace = []
+            ui.roundCurrent = []
+            ui.dom.roundChartCaption = []
+            for (var i = 0; i < model.district.length; i++) {
+                if (model.district.length > 1) {
+                    var title = document.createElement("div")
+                    // title.innerText = `District ${i+1}`
+                    title.innerHTML = `<div style="text-align:center;"><span class="small" > District ${i+1} </span></div>`
+                    ui.dom.roundChart.append(title)
+                    // don't use innerHTML on ui.dom.roundChart here. It will cause problems. The bindings to variables will be lost.
+                    // if (model.district.length > 1) ui.dom.roundChart.innerHTML += `<div style="text-align:center;"><span class="small" > District ${i+1} </span></div>`
+                }
+                var buttonDiv = document.createElement("div")
+                buttonDiv.setAttribute("style","margin-left:10px;")
+                ui.dom.roundChart.append(buttonDiv)
+                ui.dom.roundChartBackButton[i] = document.createElement("button")
+                ui.dom.roundChartBackButton[i].innerText = " < "
+                ui.dom.roundChartBackButton[i].className = "roundChartButton"
+                buttonDiv.append(ui.dom.roundChartBackButton[i])
+                
+                ui.dom.roundChartRoundNumText[i] = document.createElement("span")
+                ui.dom.roundChartRoundNumText[i].className = "small"
+                buttonDiv.append(ui.dom.roundChartRoundNumText[i])
+                // var roundNumberText = document.createTextNode(` Round x `);
+                // ui.dom.roundChart.appendChild(roundNumberText)
+                ui.dom.roundChartForwardButton[i] = document.createElement("button")
+                ui.dom.roundChartForwardButton[i].innerText = " > "
+                ui.dom.roundChartForwardButton[i].className = "roundChartButton"
+                buttonDiv.append(ui.dom.roundChartForwardButton[i])
+                ui.roundCurrent[i] = 0
+                ui.dom.roundChartSpace[i] = document.createElement("div")
+                ui.dom.roundChart.append(ui.dom.roundChartSpace[i])
+                ui.dom.roundChartCaption[i] = document.createElement("div")
+                ui.dom.roundChart.append(ui.dom.roundChartCaption[i])
+            }
             
         }
 
-        if (ui.roundChart == undefined) {
+        if (!haveCharts) {
             // set up chart
 
             // Load the Visualization API and the corechart package.
@@ -796,50 +833,58 @@ function bindModel(ui,model,config) {
             google.charts.load('49', {'packages':['corechart']});
 
             // Set a callback to run when the Google Visualization API is loaded.
-            google.charts.setOnLoadCallback(instantiateThenDrawRoundChart);
+            ui.roundChart = []
+            for (var i = 0; i < model.district.length; i++) {
+
+                google.charts.setOnLoadCallback( (function(a) { return function() { instantiateThenDrawRoundChart(a) }})(i) )
+            }
             
         } else {
             // update chart
-            actualRoundChartDraw()
+            for (var i = 0; i < model.district.length; i++) {
+                actualRoundChartDraw(i)
+            }
         }
 
     }
 
-    function instantiateThenDrawRoundChart() {
+    function instantiateThenDrawRoundChart(i) {
+
         // Instantiate chart        
-        ui.roundChart = new google.visualization.BarChart(ui.dom.roundChartSpace);
+        ui.roundChart[i] = new google.visualization.BarChart(ui.dom.roundChartSpace[i]);
 
         // Disabling the button while the chart is drawing.
-        getButtonReady(ui.dom.roundChartBackButton)
-        getButtonReady(ui.dom.roundChartForwardButton)
-        function getButtonReady(button) {
+        getButtonReady(ui.dom.roundChartBackButton[i],i)
+        getButtonReady(ui.dom.roundChartForwardButton[i],i)
+        
+        ui.dom.roundChartBackButton[i].onclick = (function(i) { return function() {
+            var district = model.district[i]
+            ui.roundCurrent[i] --
+            if (ui.roundCurrent[i] < 0) ui.roundCurrent[i] = 0
+            actualRoundChartDraw(i, {ease:true});
+        }})(i)
+        ui.dom.roundChartForwardButton[i].onclick = (function(i) { return function() {
+            var district = model.district[i]
+            ui.roundCurrent[i] ++
+            var maxRound = district.result.tallies.length - 1
+            if (ui.roundCurrent[i] > maxRound) ui.roundCurrent[i] = maxRound
+            actualRoundChartDraw(i, {ease:true});
+        }})(i)
+            
+        
+        function getButtonReady(button,i) {
             button.disabled = true;
-            google.visualization.events.addListener(ui.roundChart, 'ready', function() {
+            google.visualization.events.addListener(ui.roundChart[i], 'ready', function() {
                 button.disabled = false;
             });
         }
 
+        actualRoundChartDraw(i)
         
-
-        ui.dom.roundChartBackButton.onclick = function() {
-            var district = model.district[0] // todo
-            ui.roundCurrent --
-            if (ui.roundCurrent < 0) ui.roundCurrent = 0
-            actualRoundChartDraw({ease:true});
-        }
-        ui.dom.roundChartForwardButton.onclick = function() {
-            var district = model.district[0] // todo
-            ui.roundCurrent ++
-            var maxRound = district.result.tallies.length - 1 //todo
-            if (ui.roundCurrent > maxRound) ui.roundCurrent = maxRound
-            actualRoundChartDraw({ease:true});
-        }
-      
-        actualRoundChartDraw()
         
     }
 
-    function actualRoundChartDraw(opt) {
+    function actualRoundChartDraw(iDistrict, opt) {
 
         opt = opt || {}
         opt.ease = opt.ease || false
@@ -847,8 +892,13 @@ function bindModel(ui,model,config) {
         // for (var district of model.district) {
 
         //
-        var district = model.district[0]
-        var round = ui.roundCurrent
+        var district = model.district[iDistrict]
+        var round = ui.roundCurrent[iDistrict]
+
+        // future
+        // ui.dom.roundChartCaption[i].innerHTML = district.result.roundText[round+1]
+
+        ui.dom.roundChartRoundNumText[iDistrict].innerText = ` ${round + 1} `
 
             var dataSankey = getDataSankey(district)
         // }
@@ -893,8 +943,9 @@ function bindModel(ui,model,config) {
                 lookup[node.cid] = i
                 var name = getName(node.cid)
                 var barColor = hslToHex(color(node.cid))
+                var annotation = getName(node.cid) + " - lose"
                 // todo: convert color from hsl
-                rows.push([name,0,barColor,"lose"])
+                rows.push([name,0,barColor,annotation])
             }
 
             var numBallots = dataSankey.nodes[0].numBallots 
@@ -903,16 +954,16 @@ function bindModel(ui,model,config) {
             for ( var i = 0; i < nodes.length; i++) {
                 var node = nodes[i]
                 var num = district.result.tallies[round][node.cid]
-                var annotation = ""
+                var annotation = getName(node.cid)
                 if (num == null) {
-                    annotation = "win"
+                    annotation += " - win"
                     num = quotaAmount
                 } else {
                     if (round == district.result.tallies.length - 1) { //last round
                         if (result.winners.includes(node.cid)) {
-                            annotation = "win" 
+                            annotation += " - win" 
                         } else {
-                            annotation = "lose"
+                            annotation += " - lose"
                         }
                     }
                 }
@@ -937,13 +988,14 @@ function bindModel(ui,model,config) {
 
         // Set chart options
         var options = {
+            "height": 20 * rows.length,
+            width: 200,
+            fontSize: 13,
             chartArea: {
                 left: 10,
                 top: 10,
                 bottom: 10,
                 right: 10,
-                width: 200,
-                height: 300
             },                
             legend: { position: 'none' },             
             hAxis: { 
@@ -952,6 +1004,14 @@ function bindModel(ui,model,config) {
                 ticks: [0,10,20,30,40,50,60,70,80,90,100]
             },
             bar: {groupWidth: '100%'},
+            annotations: {
+                // alwaysOutside: true,
+                textStyle: {
+                    fontSize: 18,
+                    auraColor: 'none',
+                    bold: true,
+                }
+            }
         }
         if (opt.ease) {
             options.animation = {
@@ -961,7 +1021,7 @@ function bindModel(ui,model,config) {
         }
 
         // draw our chart, passing in some options.
-        ui.roundChart.draw(data, options);
+        ui.roundChart[iDistrict].draw(data, options);
         // ui.roundChart.draw(view, options);
     }
 
