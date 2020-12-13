@@ -114,6 +114,7 @@ function Model(idModel){
         codeEditorText: Election.defaultCodeScore,
 		createStrategyType: "score",
 		createBallotType: "Score",
+		showUtilityChart: false,
 	})
 	
 	self.viz = new Viz(self);

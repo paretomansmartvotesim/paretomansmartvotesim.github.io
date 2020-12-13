@@ -1083,6 +1083,7 @@ function bindModel(ui,model,config) {
             ui.dom.utilityChartForwardButton = []
             
             ui.dom.utilityChartSpace = []
+            ui.dom.utilityChartSpace2 = []
             ui.dom.utilityChartCaption = []
             for (var i = 0; i < model.district.length; i++) {
                 if (model.district.length > 1) {
@@ -1092,6 +1093,8 @@ function bindModel(ui,model,config) {
                 }
                 ui.dom.utilityChartSpace[i] = document.createElement("div")
                 ui.dom.utilityChart.append(ui.dom.utilityChartSpace[i])
+                ui.dom.utilityChartSpace2[i] = document.createElement("div")
+                ui.dom.utilityChart.append(ui.dom.utilityChartSpace2[i])
                 ui.dom.utilityChartCaption[i] = document.createElement("div")
                 ui.dom.utilityChart.append(ui.dom.utilityChartCaption[i])
             }
@@ -1107,6 +1110,7 @@ function bindModel(ui,model,config) {
 
             // Set a callback to run when the Google Visualization API is loaded.
             ui.utilityChart = []
+            ui.utilityChartAverage = []
             for (var i = 0; i < model.district.length; i++) {
 
                 google.charts.setOnLoadCallback( (function(a) { return function() { instantiateThenDrawUtilityChart(a) }})(i) )
@@ -1125,6 +1129,7 @@ function bindModel(ui,model,config) {
 
         // Instantiate chart        
         ui.utilityChart[i] = new google.visualization.LineChart(ui.dom.utilityChartSpace[i]);
+        ui.utilityChartAverage[i] = new google.visualization.BarChart(ui.dom.utilityChartSpace2[i])
 
         actualUtilityChartDraw(i)
         
@@ -1243,6 +1248,80 @@ function bindModel(ui,model,config) {
         // draw our chart, passing in some options.
         ui.utilityChart[iDistrict].draw(data, options);
         // ui.utilityChart.draw(view, options);
+
+        // do an average over the rows
+        sums = rows[0].map( () => 0) // zeros
+        for ( var i = 0; i < rows.length; i++) {
+            for ( var j = 0; j < rows[i].length; j++) {
+                sums[j] += rows[i][j]
+            }
+        }
+        // remove the first column
+        sums.shift()
+        // average
+        var avg = sums.map( (x) => x / rows.length)
+
+
+        // Create the data table.
+        var dataAverage = new google.visualization.DataTable();
+        dataAverage.addColumn('string', 'Candidate');
+        dataAverage.addColumn('number', 'Utility');
+        dataAverage.addColumn({ type:'string', role: 'style' })
+        dataAverage.addColumn({ type:'string', role: 'annotation' })
+
+        var color = (cid) => model.candidatesById[cid].fill
+        var getName = (cid) => model.candidatesById[cid].name
+        var fPercent = (frac) => Math.round(100 * frac) + "%"
+
+        rows = []
+        for (var idx = 0; idx < cans.length; idx ++) {
+            var c = cans[idx]
+            var barColor = hslToHex(color(c.id))
+            rows[idx] = [c.name,avg[idx] * 100,barColor,c.name]
+        }
+        dataAverage.addRows(rows);
+
+        var formatter = new google.visualization.NumberFormat(
+            {suffix: '', fractionDigits:0});
+        formatter.format(dataAverage, 1); // Apply formatter to second column
+
+        // Set chart options
+        var options = {
+            "height": 20 * rows.length,
+            width: 200,
+            fontSize: 13,
+            chartArea: {
+                left: 10,
+                top: 10,
+                bottom: 10,
+                right: 10,
+            },                
+            legend: { position: 'none' },             
+            hAxis: { 
+                minValue: 0,
+                maxValue: 100,
+                ticks: [0,10,20,30,40,50,60,70,80,90,100],
+                gridlines: {
+                    color: '#eee'
+                },
+
+            },
+            bar: {groupWidth: '100%'},
+            annotations: {
+                // alwaysOutside: true,
+                textStyle: {
+                    fontSize: 15,
+                    auraColor: 'none',
+                    bold: true,
+                },
+            },
+        }
+
+        // draw our chart, passing in some options.
+
+
+        ui.utilityChartAverage[iDistrict].draw(dataAverage, options);
+        
     }
 
     model.updateFromModel = function() {
