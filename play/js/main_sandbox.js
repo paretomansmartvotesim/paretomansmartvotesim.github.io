@@ -2573,6 +2573,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",ballotType:"Ranked", election:Election.quotaMinimax},
             {name:"Test LP", value:"PhragmenMax", realname:"Phragmen's method of minimizing the maximum representation with assignments.",ballotType:"Score", election:Election.phragmenMax},
             {name:_smaller("Equal Facility"), nameIsHTML:true, value:"equalFacilityLocation", realname:"Facility location problem with equal assignments.",ballotType:"Score", election:Election.equalFacilityLocation},
+            {name:"Monroe Seq", value:"Monroe Seq", realname:"A monroe-like sequential method.", ballotType:"Score",election:Election.monroeSequentialRange},
             {name:"Create One", value:"Create",realname:"Write your own javascript code for a voting method.",ballotType:undefined, election:Election.create},
             
         ];
@@ -2603,6 +2604,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     20:"PhragmenMax",
                     21:"equalFacilityLocation",
                     22:"Create",
+                    23:"Monroe Seq",
                 }
             }
         ]
@@ -3537,6 +3539,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "QuotaScore": scoreType,
             "PhragmenMax": scoreType,
             "equalFacilityLocation": scoreType,
+            "Monroe Seq": scoreType,
         }
         self.stratBySys = function(sys) { 
             if (sys == "Create") {
@@ -6710,6 +6713,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "PhragmenMax",
                 "equalFacilityLocation",
                 "Create",
+                "Monroe Seq",
             ]
         }
         includeOnlyIf = {
@@ -6720,6 +6724,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "QuotaApproval",
                 "QuotaMinimax",
                 "QuotaScore",
+                "Monroe Seq",
                 "PhragmenMax",
                 "equalFacilityLocation",
             ],
@@ -6727,6 +6732,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "QuotaApproval",
                 "QuotaMinimax",
                 "QuotaScore",
+                "Monroe Seq",
                 "PhragmenMax",
                 "equalFacilityLocation",
                 "Create",
@@ -6757,6 +6763,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "QuotaApproval",
             "QuotaMinimax",
             "QuotaScore",
+            "Monroe Seq",
             "PhragmenMax",
             "equalFacilityLocation",
             "Create",

@@ -3366,6 +3366,177 @@ Election.quotaScore = function(district, model, options){
 	return result
 }
 
+Election.monroeSequentialRange = function(district, model, options){
+	// Monroe like
+	// sort scores
+	// sum only the top quota of ballots
+	// top means highest ballotweight * score
+	// or top means highest score
+	// highest sum wins
+	// sequential rounds
+
+	options = _electionDefaults(options)
+	var polltext = _beginElection(district,model,options,"nopoll")	
+	let cans = district.stages[model.stage].candidates
+	
+	var v = model.voterSet.getDistrictVoterArray(district)
+
+	var seats = model.seats
+	var winners = []
+	var winnersIndexes = []
+	var maxscore = model.voterGroups[0].voterModel.maxscore
+	
+	if (options.sidebar) {
+		var text = ""
+		text += "<span class='small'>";
+		var history = {}
+		history.rounds = []
+		history.v = v
+		history.seats = seats
+		history.maxscore = maxscore
+		model.round = -1
+	}
+
+	var q = []
+	for (var i=0; i < v.length; i++) {
+		q.push(1)
+	}
+	for (var n = 0; n < cans.length; n++) {
+		if (winners.length >= seats) {
+			break
+		}
+		var tally = []
+		for (var k = 0; k < cans.length; k++) {
+			tally[k] = 0
+		}
+		
+		// how many in quota?
+		var quota = Math.ceil(v.length / seats) // number of voters in a quota
+
+		// make sorted arrays of index and score for each candidate
+		var bByCan = [] // going to be a sorted array of voters for each candidate
+		var tally = []
+		var lasti = [] // the number of voters needed to complete a quota (based on ballotweight and sort order)
+		for (var k = 0; k < cans.length; k++) {
+			bByCan[k] = v.map( (x,i) => [x.b[k],i] ).sort().reverse() // 
+			// only get q's adding up to quota
+			var sumq = 0
+			lasti[k] = v.length - 1 // default value, all of them are in quota
+			for (var i = 0; i < v.length; i++) {
+				var idx = bByCan[k][i][1]
+				sumq += q[idx]
+				if (sumq > quota) {
+					lasti[k] = i
+					break // this is the i value we want
+				}
+			}
+			
+			var talsum = 0
+			for (var i = 0; i <= lasti[k]; i++) {
+				var voter = bByCan[k][i]
+				talsum += voter[0] * q[voter[1]]// sum, score * q
+			}
+			tally[k] = talsum/ maxscore
+			// tally[k] = bByCan[k].slice(0,lasti[k]).reduce( (p,c) => p + c[0]*q[c[1]]) // sum, score * q
+			if (winnersIndexes.includes(k)) tally[k] = 0
+		}
+		
+		// display winner
+		if(options.sidebar) {
+			text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
+			text += "Round " + (n+1);
+			text += "<br>";
+			if (model.doTallyChart) {
+				var cidTally = {}
+				for(var i=0; i<cans.length; i++){
+					var cid = cans[i].id;
+					cidTally[cid] = tally[i]
+				}   
+				text += tallyChart(cidTally,cans,model,1,v.length)
+			} else {
+				for(var i=0; i<cans.length; i++){
+					var c = cans[i].id;
+					text += model.icon(c)+" got "+_percentFormat(district, tally[i])+"<br>";
+				}
+            }
+			text += "<br>";
+			text += '</div>'
+		}
+
+		// who won this round?
+		var roundWinners = _countWinner(tally) // need to exclude twice-winners
+		if (model.opt.breakWinTiesMultiSeat) {
+			roundWinners = roundWinners[Math.floor(Math.random() * roundWinners.length)]
+			roundWinners = [roundWinners]
+		}
+		roundWinners = roundWinners.map(x => Number(x))
+		roundWinners.forEach(x => winnersIndexes.push(Number(x)))
+		roundWinnersId = roundWinners.map( x => cans[x].id)
+		roundWinnersId.forEach(x => winners.push(x))
+
+		// subtract off the quota
+		for (var k=0; k < roundWinners.length; k++) {
+			var winnerIndex = roundWinners[k]
+			// var sum = tally[winnerIndex]
+			// var rep = v.length / sum / seats
+			for (var i=0; i < lasti[winnerIndex]; i++) { 
+				var idx = bByCan[winnerIndex][i][1]
+				q[idx] = 0 // zero out all within quota
+				// var b = v[k].b
+				// q[k] -= rep * b[winnerIndex] / maxscore // we could just multiply by b[wI]
+			}
+		}
+
+		if (options.sidebar) {
+			var roundHistory = {
+				winners: roundWinners,
+				q:q,
+				tally:tally
+			}
+			history.rounds.push(roundHistory)
+		}
+	}
+
+	
+	if(options.sidebar) {
+		text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
+		text += "Final Winners:";
+		text += "<br>";
+		for(var i=0; i<winners.length; i++){
+			var c = winners[i]
+			text += model.icon(c)+" ";
+		}
+		text += "<br>";
+		text += "<br>";
+		text += '</div>'
+	}
+	
+	var result = _result(winners,model)
+	if (options.sidebar) {
+		result.history = history
+		
+		result.text = text
+
+		result.eventsToAssign = [] // we have an interactive caption
+		// attach caption hover functions
+		for (var i=0; i < n+1; i++) {
+			var cbDraw = function(i) { // a function is returned, so that i has a new scope
+				return function() {
+					model.round = i+1
+					model.drawArenas()
+					model.round = -1
+				}
+			}
+			var e = {
+				eventID: "district"+district.i+"round" + (i+1),
+				f: cbDraw(i)
+			}
+			result.eventsToAssign.push(e)
+		}
+	}
+	return result
+}
+
 
 Election.phragmenMax = function(district, model, options){
 
@@ -5176,7 +5347,7 @@ function _drawBars(iDistrict, arena, model, round) {
 						
 				for (var i = 0; i < v.length; i++) {
 					var b = v[i].b
-					if (model.system == "QuotaApproval" || model.system == "QuotaScore") { // workaround for now
+					if (model.system == "QuotaApproval" || model.system == "QuotaScore" || model.system == "Monroe Seq") { // workaround for now
 						var quota = Math.max(q[i],0)
 					} else {
 						if (m==0) {
@@ -5241,7 +5412,7 @@ function _drawBars(iDistrict, arena, model, round) {
 		} else {
 			for (var i = 0; i < v.length; i++) {
 				var b = v[i].b
-				if (model.system == "QuotaApproval" || model.system == "QuotaScore") { // workaround for now
+				if (model.system == "QuotaApproval" || model.system == "QuotaScore" || model.system == "Monroe Seq") { // workaround for now
 					var quota = Math.max(q[i],0)
 				} else {
 					if (r==0) {

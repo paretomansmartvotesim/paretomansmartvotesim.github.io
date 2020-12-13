@@ -798,7 +798,7 @@ function Model(idModel){
 	self.checkGotoTarena = function() { 
 		// checks to see if we want to add the additional arena for displaying the bar charts that we use for multi-winner systems
 		// right now, we don't have a good visual of these for multiple districts, just one
-		return (self.nDistricts < 2) && (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.roundChart == "off")
+		return (self.nDistricts < 2) && (self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "Monroe Seq" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV") && ! (self.roundChart == "off")
 	}
 
 	self.checkDoSort = function() {
@@ -854,7 +854,7 @@ function Model(idModel){
 	}
 	
 	self.checkMultiWinner = function(system) {
-		return (system == "QuotaApproval"  || system == "QuotaScore" || system == "RRV" ||  system == "RAV" ||  system == "STV" || system == "QuotaMinimax" || system == "PhragmenMax" || system == "equalFacilityLocation") 
+		return (system == "QuotaApproval"  || system == "QuotaScore" || system == "Monroe Seq" || system == "RRV" ||  system == "RAV" ||  system == "STV" || system == "QuotaMinimax" || system == "PhragmenMax" || system == "equalFacilityLocation") 
 	}
 
 	self.updateVC = function() {
