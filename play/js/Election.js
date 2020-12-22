@@ -3401,6 +3401,7 @@ Election.monroeSequentialRange = function(district, model, options){
 	for (var i=0; i < v.length; i++) {
 		q.push(1)
 	}
+	var qPrevious = _jcopy(q)
 	for (var n = 0; n < cans.length; n++) {
 		if (winners.length >= seats) {
 			break
@@ -3413,12 +3414,14 @@ Election.monroeSequentialRange = function(district, model, options){
 		// how many in quota?
 		var quota = Math.ceil(v.length / seats) // number of voters in a quota
 
+		// TODO: Add weighting so that we can assign all the voters that gave a score or higher. Rather than just choosing them by whatever sort order the sorting algorithm placed them in.
+
 		// make sorted arrays of index and score for each candidate
 		var bByCan = [] // going to be a sorted array of voters for each candidate
 		var tally = []
 		var lasti = [] // the number of voters needed to complete a quota (based on ballotweight and sort order)
 		for (var k = 0; k < cans.length; k++) {
-			bByCan[k] = v.map( (x,i) => [x.b[k],i] ).sort().reverse() // 
+			bByCan[k] = v.map( (x,i) => [x.b[k],i] ).sort( (a,b) => a-b ).reverse() // TODO: check ORDER 
 			// only get q's adding up to quota
 			var sumq = 0
 			lasti[k] = v.length - 1 // default value, all of them are in quota
@@ -3486,13 +3489,332 @@ Election.monroeSequentialRange = function(district, model, options){
 				// q[k] -= rep * b[winnerIndex] / maxscore // we could just multiply by b[wI]
 			}
 		}
+		var qUsed = []
+		var beforeWeightUsed = qPrevious.map( x => 1-x )
+		for (var i = 0; i < q.length; i++) {
+			qUsed.push(qPrevious[i] - q[i])
+		}
 
 		if (options.sidebar) {
 			var roundHistory = {
-				winners: roundWinners,
-				q:q,
-				tally:tally
+				winners: _jcopy(roundWinners),
+				beforeWeightUsed: _jcopy(beforeWeightUsed),
+				weightUsed:_jcopy(qUsed),
+				q:_jcopy(q),
+				qUsed:_jcopy(qUsed),
+				tally:_jcopy(tally)
 			}
+			history.rounds.push(roundHistory)
+			
+			qPrevious = _jcopy(q)
+		}
+	}
+
+	
+	if(options.sidebar) {
+		text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
+		text += "Final Winners:";
+		text += "<br>";
+		for(var i=0; i<winners.length; i++){
+			var c = winners[i]
+			text += model.icon(c)+" ";
+		}
+		text += "<br>";
+		text += "<br>";
+		text += '</div>'
+	}
+	
+	var result = _result(winners,model)
+	if (options.sidebar) {
+		result.history = history
+		
+		result.text = text
+
+		result.eventsToAssign = [] // we have an interactive caption
+		// attach caption hover functions
+		for (var i=0; i < n+1; i++) {
+			var cbDraw = function(i) { // a function is returned, so that i has a new scope
+				return function() {
+					model.round = i+1
+					model.drawArenas()
+					model.round = -1
+				}
+			}
+			var e = {
+				eventID: "district"+district.i+"round" + (i+1),
+				f: cbDraw(i)
+			}
+			result.eventsToAssign.push(e)
+		}
+	}
+	return result
+}
+
+
+Election.phragmenSequentialRange = function(district, model, options){
+	// sequential Phragmen after KP transform 
+	// KP transform means from score to approval in a certain way. It's a particular way of counting support.
+
+	// do KP transform
+
+	// sequential rounds start
+	// group by ballot weight remaining
+	// groups[weight class].voters[i] = {b:ballot, i:original index}
+	// groups[weight class].weight
+	// for each candidate
+		// keep track of total ballot weight used, start at 0. This is the same across all supporting ballots.
+		// add up number of supporting ballots, starting with ballots with most weight, m = 0
+		//   weight required = divide remaining quota by number of supporting ballots
+		//   if this is the last weight class, then
+		//     update the total ballot weight used by adding the weight required
+		//     exit the loop
+		//   else
+		//     if the weight required is greater than the jump to the next weight class, then 
+		//       weight diff = the difference between this weight class and the next weight class
+		//       update the total ballot weight used by adding the weight diff
+		//       update the quota remaining
+		//       continue the loop
+		//     else
+		//       update the total ballot weight used by adding the weight required
+		//       exit the loop
+		// now we know the total ballot weight used for all the voters in the included ballot weight groups
+		// the included ballot weight groups are 0 through m
+		// the last weight group is m
+	// find the candidate with the lowest total ballot weight used
+	// For display later, calculate ballot weight used for this candidate from each voter.  
+	//   This is just the "total ballot weight used" minus each voters's already used ballot weight.
+	// sequential rounds end
+
+	options = _electionDefaults(options)
+	var polltext = _beginElection(district,model,options,"nopoll")	
+	let cans = district.stages[model.stage].candidates
+	
+	var v = model.voterSet.getDistrictVoterArray(district)
+
+	var seats = model.seats
+	var winners = []
+	var winnersIndexes = []
+	var maxscore = model.voterGroups[0].voterModel.maxscore
+
+	// do KP transform
+	var va = []
+	var t = 0
+	for (var i = 0; i < v.length; i++) {
+		// did the voter give at least this score?
+		for (var s = 1; s <= maxscore; s++) {
+			var va0 = []
+			for (var k = 0; k < cans.length; k++) {
+				if (v[i].b[k] >= s) {
+					va0.push(1)
+				} else {
+					va0.push(0)
+				}
+			}
+			va.push({b:va0,i:i,t:t}) // i is voter id, n is transformed voter id
+			t++
+		}
+	}
+
+	if (options.sidebar) {
+		var text = ""
+		text += "<span class='small'>";
+		var history = {}
+		history.rounds = []
+		history.v = va
+		history.seats = seats
+		history.maxscore = maxscore
+		model.round = -1
+	}
+
+	var q = va.map(() => 1)
+
+	var qPrevious = _jcopy(q)
+	
+	var qi = v.map( () => 1 )
+	var qiPrevious = _jcopy(qi)
+	var beforeWeightUsed = v.map( () => 0 )
+
+	// group by ballot weight remaining
+	// groups[weight class].voters[i] = {b:ballot, i:original index}
+	// groups[weight class].weight
+	var groups = []
+	groups[0] = { voters:va, weight:1 }
+
+	for (var n = 0; n < cans.length; n++) {
+		if (winners.length >= seats) {
+			break
+		}
+		var tally = []
+		for (var k = 0; k < cans.length; k++) {
+			tally[k] = 0
+		}
+		
+		// how many in quota?
+		var quota = Math.ceil(va.length / seats) // number of transformed voters in a quota
+		var allused = []
+		var lastgroup = [] // the last group of supporters needed to complete a quota
+		for (var k = 0; k < cans.length; k++) {
+			// keep track of total ballot weight used, start at 0. This is the same across all supporting ballots.
+			var used = 0
+			// add up number of supporting ballots, starting with ballots with most weight, m = 0
+			var supporting = 0
+			var remaining = quota // initial value
+
+			for (var m = 0; m < groups.length; m++) {
+				var group = groups[m]
+				// count how many voters support the candidate
+				var groupvoters = group.voters
+				var thisGroupSupport = 0
+				for (var i = 0; i < groupvoters.length; i++) {
+					if (groupvoters[i].b[k] === 1) {
+						thisGroupSupport += 1
+					}
+				}
+				supporting += thisGroupSupport
+				// weight required = divide remaining quota by number of supporting ballots
+				var required = remaining / supporting
+			
+				// if this is the last weight class, then
+				if (m == groups.length - 1) {
+					// update the total ballot weight used by adding the weight required
+					used += required
+					// exit the loop
+					break
+				} else {
+					// weight jump = the difference between this weight class and the next weight class
+					var jump = groups[m].weight - groups[m+1].weight
+					// if the weight required is greater than the jump to the next weight class, then 
+					if (required > jump) {
+						// update the total ballot weight used by adding the weight jump
+						used += jump
+						// update the quota remaining
+						remaining -= jump * supporting
+						// continue the loop
+						continue
+					} else {
+						// update the total ballot weight used by adding the weight required
+						used += required
+						// exit the loop
+						break
+					}
+				}	
+			}
+			// used = now we know the total ballot weight used for all the voters in the included ballot weight groups
+			// the included ballot weight groups are 0 through m
+			// the last weight group is m
+			allused.push(used)
+			lastgroup.push(m)
+
+			// tally is just a vestigial functionality for now
+			// find the candidate with the lowest total ballot weight used
+			tally[k] = (1-used) * v.length
+			if (winnersIndexes.includes(k)) tally[k] = -Infinity
+		}
+		
+		// display winner
+		if(options.sidebar) {
+			text += '<div id="district'+district.i+'round' + (n+1) + '" class="round">'
+			text += "Round " + (n+1);
+			text += "<br>";
+			if (0 && model.doTallyChart) {
+				var cidTally = {}
+				for(var i=0; i<cans.length; i++){
+					var cid = cans[i].id;
+					cidTally[cid] = tally[i]
+				}
+				text += tallyChart(cidTally,cans,model,1,v.length)
+			} else {
+				for(var i=0; i<cans.length; i++){
+					var c = cans[i].id;
+					text += model.icon(c)+" uses "+_percentFormat(district, allused[i] * v.length)+"<br>";
+				}
+            }
+			text += "<br>";
+			text += '</div>'
+		}
+
+		// who won this round?
+		// find the candidate with the lowest total ballot weight used
+
+		var roundWinners = _countWinner(tally) // need to exclude twice-winners
+		if (model.opt.breakWinTiesMultiSeat) {
+			roundWinners = roundWinners[Math.floor(Math.random() * roundWinners.length)]
+			roundWinners = [roundWinners]
+		}
+		roundWinners = roundWinners.map(x => Number(x))
+		roundWinners.forEach(x => winnersIndexes.push(Number(x)))
+		roundWinnersId = roundWinners.map( x => cans[x].id)
+		roundWinnersId.forEach(x => winners.push(x))
+
+		// subtract off the quota
+		for (var k=0; k < roundWinners.length; k++) {
+			var winnerIndex = roundWinners[k]
+			// fill up a new group with voters
+			// if they supported the winner
+			// otherwise, keep them in the old group
+			var newVoterGroup = []
+			var oldGroups = []
+			for (var m = 0; m <= lastgroup[winnerIndex]; m++) {
+				var group = groups[m]
+				var groupvoters = group.voters
+				oldGroups[m] = { voters:[] , weight:groups[m].weight } // make a replacement group
+				oldVoterGroup = oldGroups[m].voters
+				for (var i = 0; i < groupvoters.length; i++) {
+					if (groupvoters[i].b[winnerIndex] === 1) {
+						var t = group.voters[i].t
+						q[t] = 1 - allused[winnerIndex] // use up quota
+						newVoterGroup.push(groupvoters[i])
+					} else {
+						oldVoterGroup.push(groupvoters[i])
+					}
+				}
+			}
+			// TODO: This probably won't work with multiple winners in one round.
+			// remove old groups
+			groups.splice(0,lastgroup[winnerIndex]+1)
+			// add old groups back, but only non-supporters of the winning candidate
+			groups = oldGroups.concat(groups)
+			// add new group with supporters of the winning candidate
+			var newGroup = { voters:newVoterGroup, weight:1-allused[winnerIndex] }
+			groups.push(newGroup)
+		}
+		// sort groups by weight remaining, descending
+		groups.sort( (a,b) => -(a.weight - b.weight) )
+
+		if (options.sidebar) {
+			// For display later, calculate ballot weight used for this candidate from each voter.  
+			// This is just the "total ballot weight used" minus each voters's already used ballot weight.
+			var qUsed = []
+			for (var t = 0; t < q.length; t++) {
+				qUsed.push(qPrevious[t] - q[t])
+			}
+			
+			var qi = []
+			var qiUsed = []
+			var t = 0
+			for (var i = 0; i < v.length; i++) {
+				// loop through all transformed ballots for this voter
+				qi[i] = 0
+				for (var s = 1; s <= maxscore; s++) {
+					qi[i] += q[t] // sum up the used fraction
+					t++
+				}
+				qi[i] *= 1/maxscore // average the used fraction
+				qiUsed[i] = qiPrevious[i] - qi[i]
+				beforeWeightUsed[i] = 1 - qiPrevious[i]
+			} 
+			var roundHistory = {
+				winners: _jcopy(roundWinners),
+				beforeWeightUsed: _jcopy(beforeWeightUsed),
+				weightUsed: _jcopy(qiUsed),
+				q:_jcopy(qi), // change of naming convention... should probably rename the variable
+				qUsed:_jcopy(qiUsed),
+				qt:_jcopy(q), // qt is the ballot weight for the transformed ballots. I'm not using this yet.
+				qtUsed:_jcopy(qUsed),
+				tally:_jcopy(tally)
+			}
+			qPrevious = _jcopy(q)
+			qiPrevious = _jcopy(qi)
 			history.rounds.push(roundHistory)
 		}
 	}
