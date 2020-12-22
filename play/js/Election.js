@@ -5601,6 +5601,361 @@ function _drawBars(iDistrict, arena, model, round) {
 }
 
 
+function firstAttemptDrawBallots(model,arena,i,k,barOptions) {
+    var widthRectangle = barOptions.widthRectangle
+    var heightRectangle = barOptions.heightRectangle3
+    
+    var lineHeight = 6
+    
+    var left = Math.round(i * widthRectangle)
+    var right = Math.round((i+1) * widthRectangle)
+
+    var top = Math.round((k+1/2) * heightRectangle - lineHeight / 2)
+    var bottom = Math.round((k+1/2) * heightRectangle + lineHeight / 2)
+    
+    var color = model.candidates[k].fill
+    arena.ctx.fillStyle = color
+    arena.ctx.fillRect(left,top,right-left,bottom-top)
+    arena.ctx.fill()
+}
+
+function drawBackGroundPowerChart(model,arena,barOptions) {
+    
+    var width = barOptions.width
+    var heightRectangle = barOptions.heightRectangle
+    var base = barOptions.base
+
+	if (model.showPowerChart) {
+			
+		// draw background for quota and build
+		var left = 0
+		var right = width
+		var top = base - heightRectangle
+		var bottom = base
+		if (0) {
+			var color = "#492"
+			arena.ctx.fillStyle = color
+		} else {
+			var g = arena.ctx.createLinearGradient(0,top,0,bottom)
+			g.addColorStop(0,"#ccc")
+			g.addColorStop(1,"black")
+			arena.ctx.fillStyle = g
+		}
+		arena.ctx.fillRect(left,top,right-left,bottom-top)
+		//arena.ctx.fill()
+	}
+}
+
+function drawOneLayerOfBuild(model,arena,k,q,support,rep,winnerIndex,barOptions) {
+    if (model.showPowerChart) {
+        
+        var build = 1-q[k]
+
+        var baralpha = barOptions.baralpha
+        var widthRectangle = barOptions.widthRectangle
+        var heightRectangle = barOptions.heightRectangle
+        var base = barOptions.base
+                
+        var left = Math.round(k * widthRectangle)
+        var right = Math.round((k+1) * widthRectangle)
+        var top = Math.round(base-(build + rep*support) * heightRectangle)
+        var bottom = Math.round(base-build * heightRectangle)
+        var bucket = Math.round(base- heightRectangle) // where the shadows start
+    
+        // white background for bar
+        arena.ctx.globalAlpha = 1
+        arena.ctx.fillStyle = "white"
+        arena.ctx.fillRect(left,top,right-left,bottom-top)
+        arena.ctx.fill()
+        arena.ctx.globalAlpha = baralpha
+    
+        var color = model.candidates[winnerIndex].fill
+        arena.ctx.fillStyle = color
+    
+        var greyedout = .2
+        if (bottom > bucket) { // bottom is in bucket
+            if (top < bucket) { // top is out of bucket
+                arena.ctx.fillRect(left,bucket,right-left,bottom-bucket)
+                arena.ctx.fill()
+                arena.ctx.globalAlpha = greyedout
+                arena.ctx.fillRect(left,top,right-left,bucket-top)
+                arena.ctx.fill()
+            } else { // entirely in bucket
+                arena.ctx.fillRect(left,top,right-left,bottom-top)
+                arena.ctx.fill()
+            }
+        } else { // entirely out of bucket
+            arena.ctx.globalAlpha = greyedout
+            arena.ctx.fillRect(left,top,right-left,bottom-top)
+            arena.ctx.fill()
+        }
+        arena.ctx.globalAlpha = baralpha
+    }
+}
+
+function drawOneLayerOfBuild2(model,arena,i,beforeWeightUsed,weightUsed,winnerIndex,barOptions) {
+    if (model.showPowerChart) {
+        
+        var baralpha = barOptions.baralpha
+        var widthRectangle = barOptions.widthRectangle
+        var heightRectangle = barOptions.heightRectangle
+        var base = barOptions.base
+                
+        var left = Math.round(i * widthRectangle)
+        var right = Math.round((i+1) * widthRectangle)
+        var top = Math.round(base-(beforeWeightUsed + weightUsed) * heightRectangle)
+        var bottom = Math.round(base-beforeWeightUsed * heightRectangle)
+        var bucket = Math.round(base- heightRectangle) // where the shadows start
+    
+        // white background for bar
+        arena.ctx.globalAlpha = 1
+        arena.ctx.fillStyle = "white"
+        arena.ctx.fillRect(left,top,right-left,bottom-top)
+        arena.ctx.fill()
+        arena.ctx.globalAlpha = baralpha
+    
+        var color = model.candidates[winnerIndex].fill
+        arena.ctx.fillStyle = color
+    
+        var greyedout = .2
+        if (bottom > bucket) { // bottom is in bucket
+            if (top < bucket) { // top is out of bucket
+                arena.ctx.fillRect(left,bucket,right-left,bottom-bucket)
+                arena.ctx.fill()
+                arena.ctx.globalAlpha = greyedout
+                arena.ctx.fillRect(left,top,right-left,bucket-top)
+                arena.ctx.fill()
+            } else { // entirely in bucket
+                arena.ctx.fillRect(left,top,right-left,bottom-top)
+                arena.ctx.fill()
+            }
+        } else { // entirely out of bucket
+            arena.ctx.globalAlpha = greyedout
+            arena.ctx.fillRect(left,top,right-left,bottom-top)
+            arena.ctx.fill()
+        }
+        arena.ctx.globalAlpha = baralpha
+    }
+}
+
+
+function drawWeight(model,arena,q,r,barOptions) {
+    
+    var widthRectangle = barOptions.widthRectangle
+    var heightRectangle = barOptions.heightRectangle
+
+    if (model.system == "RRV" || model.system == "RAV") {
+        var startpos = 450
+        // draw the quota
+        for (var i=0; i < q.length; i++) {
+            var quota = Math.max(q[i],0)
+            if (r==0) {
+                var quota = 1
+            } else {
+                var quota = Math.max(model.result.history.rounds[r-1].q[model.districtIndexOfVoter[model.orderOfVoters[i]]],0)
+            }
+            var left = Math.round(i * widthRectangle)
+            var right = Math.round((i+1) * widthRectangle)
+            var top = Math.round(startpos - 1 * heightRectangle)
+            var bottom = Math.round(startpos - (1-quota) * heightRectangle)
+            arena.ctx.fillStyle = "#ccc"
+            arena.ctx.fillRect(left,top,right-left,bottom-top)
+            arena.ctx.fill()
+
+        }
+        // draw line at bottom
+        var yLine = bottom
+        var ctx = arena.ctx
+        ctx.beginPath();
+        ctx.moveTo(0,yLine*2);
+        ctx.lineTo(ctx.canvas.width,yLine*2);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#888";
+        ctx.stroke();
+
+        _drawStroked("Weight",70,400,40,arena.ctx)
+    }
+}
+
+
+function drawOneRoundSquareSTV(model,arena,quota,i,m,color,barOptions) {
+
+    var widthRectangle = barOptions.widthRectangle
+    var heightRectangle = barOptions.heightRectangle2
+    var pos = barOptions.pos
+
+    // determine where to draw
+    var left = Math.round(i * widthRectangle)
+    var right = Math.round((i+1) * widthRectangle)
+    var middle = Math.round(pos+(m+quota*1) * heightRectangle)
+    var middle2 = Math.round(pos+(m+1-quota) * heightRectangle)
+    var top = Math.round(pos+(m) * heightRectangle)
+    var bottom = Math.round(pos+(m+1) * heightRectangle)
+
+    // draw candidate color
+    arena.ctx.fillStyle = color
+    arena.ctx.fillRect(left,top,right-left,bottom-top)
+    arena.ctx.fill()
+
+    // draw amount of support
+    arena.ctx.fillStyle = "white"
+    supportMethod = "useTransparency"
+    if (supportMethod == "useTransparency") {
+        arena.ctx.globalAlpha = 1-quota
+        var width = right-left
+        var height = bottom-top
+        arena.ctx.fillRect(left,top,width,height)
+    } else { // "useVertical"
+        arena.ctx.globalAlpha = .7
+        var topdown = true
+        if (topdown) {
+            arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+        } else {
+            arena.ctx.fillRect(left,top,right-left,middle2-top)
+        }
+    }
+                    
+    arena.ctx.globalAlpha = 1
+}
+
+function drawOneCandidateSquareSTV(model,arena,quota,i,c,stillin,barOptions) {
+
+    var widthRectangle = barOptions.widthRectangle
+    var heightRectangle = barOptions.heightRectangle2
+    var pos = barOptions.pos
+
+    // determine where to draw
+    var left = Math.round(i * widthRectangle)
+    var right = Math.round((i+1) * widthRectangle)
+
+    var middle = Math.round(pos+(c+quota*1) * heightRectangle)
+    var middle2 = Math.round(pos+(c+1-quota) * heightRectangle)
+    var top = Math.round(pos+(c) * heightRectangle)
+    var bottom = Math.round(pos+(c+1) * heightRectangle)
+    
+    var color = model.candidates[c].fill
+    if (stillin.includes(c)) {
+        // draw support in color
+    } else {
+        // draw support in grey
+        // var color = "#ccc"
+        middle = top // just solid grey, no quota stuff
+    }
+
+    arena.ctx.fillStyle = color
+    arena.ctx.fillRect(left,top,right-left,bottom-top)
+    arena.ctx.fill()
+    
+    arena.ctx.globalAlpha = .7
+    arena.ctx.fillStyle = "white"
+    if (1) {
+        arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+    } else {
+        arena.ctx.fillRect(left,top,right-left,middle2-top)
+    }
+                    
+    arena.ctx.globalAlpha = 1
+}
+
+function drawOneCandidateSquareScore(model,arena,quota,support,i,k,m,r,barOptions) {
+
+    if (support > 0) {
+
+        var widthRectangle = barOptions.widthRectangle
+        var heightRectangle = barOptions.heightRectangle4
+        var pos = barOptions.pos
+
+        var left = Math.round(i * widthRectangle)
+        var right = Math.round((i+1) * widthRectangle)
+
+        var interleaveCandidates = false
+        if (interleaveCandidates) {
+            var g = m * b.length + k
+        } else {
+            var g = m + k * (r+1)
+        }
+        var middle = Math.round(pos+(g+quota*support) * heightRectangle)
+        var middle2 = Math.round(pos+(g+1-quota) * heightRectangle)
+        var top = Math.round(pos+(g) * heightRectangle)
+        var useHeight = true
+        if (useHeight) { // for STV, support = 1
+            var bottom = Math.round(pos+(g+support) * heightRectangle)
+        } else {
+            var bottom = Math.round(pos+(g+1) * heightRectangle)
+        }
+        
+        var color = model.candidates[k].fill
+        arena.ctx.fillStyle = color
+        arena.ctx.fillRect(left,top,right-left,bottom-top)
+        arena.ctx.fill()
+        
+        // draw amount of support
+        arena.ctx.fillStyle = "white"
+        supportMethod = "useTransparency"
+        if (supportMethod == "useTransparency") {
+            arena.ctx.globalAlpha = (1-quota) * support
+            var width = right-left
+            var height = bottom-top
+            arena.ctx.fillRect(left,top,width,height)
+        } else { // "useVertical"
+            arena.ctx.globalAlpha = .7
+            var topdown = true
+            if (topdown) {
+                arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+            } else {
+                arena.ctx.fillRect(left,top,right-left,middle2-top)
+            }
+        }
+                        
+        arena.ctx.globalAlpha = 1
+    }
+}
+
+
+function drawOneRoundSquareScore(model,arena,quota,support,i,k,r,barOptions) {
+    if (support > 0) {
+            
+        var widthRectangle = barOptions.widthRectangle
+        var heightRectangle = barOptions.heightRectangle2
+        var pos = barOptions.pos
+        
+        var left = Math.round(i * widthRectangle)
+        var right = Math.round((i+1) * widthRectangle)
+
+        var middle = Math.round(pos+(k+quota*support) * heightRectangle)
+        var middle2 = Math.round(pos+(k+1-quota) * heightRectangle)
+        var top = Math.round(pos+(k) * heightRectangle)
+        var bottom = Math.round(pos+(k+support) * heightRectangle)
+        
+        var color = model.candidates[k].fill
+        arena.ctx.fillStyle = color
+        arena.ctx.fillRect(left,top,right-left,bottom-top)
+        arena.ctx.fill()
+        
+            // draw amount of support
+            arena.ctx.fillStyle = "white"
+            // var supportMethod = "useTransparency"
+            var supportMethod = "useVertical"
+            if (supportMethod == "useTransparency") {
+                arena.ctx.globalAlpha = (1-quota) * support
+                var width = right-left
+                var height = bottom-top
+                arena.ctx.fillRect(left,top,width,height)
+            } else { // "useVertical"
+                arena.ctx.globalAlpha = .7
+                var topdown = true
+                if (topdown) {
+                    arena.ctx.fillRect(left,middle,right-left,bottom-middle)
+                } else {
+                    arena.ctx.fillRect(left,top,right-left,middle2-top)
+                }
+            }
+                        
+        arena.ctx.globalAlpha = 1
+    }
+}
+
+
 
 function _percentileToX(percentile,model) {
 	var v = model.getSortedVoters()
