@@ -4074,7 +4074,7 @@ Election.phragmenSequentialRange = function(district, model, options){
 
 Election.phragmenMax = function(district, model, options){
 
-	return lpGeneral(_solvePhragmenMax,district,model,options)
+	return lpGeneral(_solvePhragmenMaxKP,district,model,options)
 
 }
 
@@ -4091,12 +4091,14 @@ function lpGeneral(_solver,district,model,options) {
 
 	var b = _getBallotsAsB(ballots, cans)
 
-	var phragmenResult = _solver(b,model.seats)
+	var maxscore = 5
+
+	var phragmenResult = _solver(b,model.seats,maxscore)
 	district.stages[model.stage].lpResult = phragmenResult.results
+	district.stages[model.stage].assignments = phragmenResult.assignments
 
 	var winners = _getWinnersFromPhragmenResult(phragmenResult,cans)
 
-	var maxscore = 5
 
 	// var winners = _countWinner(tally);
 	var result = _result(winners,model)
@@ -4154,11 +4156,139 @@ function _getBallotsAsB(ballots,cans) {
 	return b
 }
 
-function _solvePhragmenMax(b,seats) {
+function _solvePhragmenMaxKP(b,seats,maxscore) {
+
+
+	// do KP transform
+	var nk = b[0].length
+	var ni = b.length
+	var ba = []
+	var baInfo = []
+	var t = 0
+	for (var i = 0; i < ni; i++) {
+		// did the voter give at least this score?
+		for (var s = 1; s <= maxscore; s++) {
+			var ba0 = []
+			for (var k = 0; k < nk; k++) {
+				if (b[i][k] >= s) {
+					ba0.push(1)
+				} else {
+					ba0.push(0)
+				}
+			}
+			ba.push(ba0)
+			baInfo.push({b:ba0,i:i,t:t}) // i is voter id, n is transformed voter id
+			t++
+		}
+	}
+	maxscore1 = 1
+
+	phragmenResult = _solvePhragmenMax(ba,seats,maxscore1)
+
+	// reverse KP transform
+	var a = []
+	if (0) {
+		var t = 0
+		for (var i = 0; i < ni; i++) {
+			a[i] = []
+			for (var k = 0; k < nk; k++) {
+				// loop through all transformed ballots for this voter
+				a[i][k] = 0
+				for (var s = 1; s <= maxscore; s++) {
+					var t = s-1 + i * maxscore
+					a[i][k] += phragmenResult.assignments[t][k] // sum up the used fraction
+				}
+				a[i][k] *= 1/maxscore // average the used fraction
+			}
+		} 
+	} else {
+		var a = b.map( () => [] ) // empty i by k array
+		for (var i = 0; i < ni; i++) {
+			for (var k = 0; k < nk; k++) {
+				a[i][k] = 0 // zero
+			}
+		}
+		var nt = ba.length
+		for (var t = 0; t < nt; t++) {
+			var i = baInfo[t].i
+			for (var k = 0; k < nk; k++) {
+				var x = phragmenResult.assignments[t][k]
+				if (x > 0) {
+					a[i][k] += x // sum
+				}
+			}
+		}
+		for (var i = 0; i < ni; i++) {
+			for (var k = 0; k < nk; k++) {
+				a[i][k] *= 1/maxscore // average
+			}
+		}
+	}
+
+	testAssignment(phragmenResult.assignments)
+	testAssignment(a)
+
+	testAssignment(phragmenResult.assignments,ba)
+	testAssignmentB(a,b) 
+
+	phragmenResult.assignments = a
+
+
+	return phragmenResult
+}
+
+
+function testAssignment(a) {
+	// test
+
+	var ni = a.length
+	var nk = a[0].length
+
+	var avg = []
+	for (var k = 0; k < nk; k++) {
+		avg[k] = 0 
+	}
+	for (var i = 0; i < ni; i++) {
+		for (var k = 0; k < nk; k++) {
+			if (a[i][k] > 0) {
+				avg[k] += a[i][k]
+			}
+		}
+	}
+	for (var k = 0; k < nk; k++) {
+		avg[k] /= nk
+	}
+	console.log(avg)
+}
+
+function testAssignmentB(a,b) {
+	// test
+
+	var ni = a.length
+	var nk = a[0].length
+
+	var avg = []
+	for (var k = 0; k < nk; k++) {
+		avg[k] = 0 
+	}
+	for (var i = 0; i < ni; i++) {
+		for (var k = 0; k < nk; k++) {
+			if (a[i][k] > 0) {
+				avg[k] += a[i][k] * b[i][k]
+			}
+		}
+	}
+	for (var k = 0; k < nk; k++) {
+		avg[k] /= nk
+	}
+	console.log(avg)
+}
+
+function _solvePhragmenMax(b,seats,maxscore) {
 
 	// doesn't work right now due to limitations of the solver.
 
-	var lb = true
+	var lb = false
 
 	var nk = b[0].length
 	var ni = b.length
@@ -4207,9 +4337,9 @@ function _solvePhragmenMax(b,seats) {
 	// support must be the same for all winning candidates
 	for (var k of kset) {
 		con['xby' + k] = {"equal": 0}
-		va['x' + k]["xby" + k] = ni / seats // 1
+		va['x' + k]["xby" + k] = ni / seats // the y values are weights and should be 1 on average, so they sum to the number of voters divided by the number of seats.
 		for (var i of iset) {
-			va["y" + i + "_" + k]["xby" + k] = -b[i][k] * .2
+			va["y" + i + "_" + k]["xby" + k] = -b[i][k] / maxscore
 			// va["y" + i + "_" + k]["xby" + k] = -1 // or.. same assignment level for all winning candidates
 		}
 	}
@@ -4217,11 +4347,22 @@ function _solvePhragmenMax(b,seats) {
 	// find upper bound of assignment level for voters
 	va["z"] = {}
 	for (var i of iset) {
-		con["zoy" + i] = {"min": 0},
+		con["zoy" + i] = {"min": 0}
 		va["z"]["zoy" + i] = 1
 		for (var k of kset) {
 			va["y" + i + "_" + k]["zoy" + i] = -1
 			// va["y" + i + "_" + k]["zoy" + i] = -b[i][k] // or.. find ub of support level
+		}
+	}
+
+	// if x is not elected, then y is 0
+	// Not sure why I needed this. I think there is a bug in the linear programming solver.
+	for ( var i of iset) {
+		for (var k of kset) {
+			var conName = "xy_i" + i + "_k" + k
+			con[conName] = {"min": 0}
+			va["x" + k][conName] = 1000 // the limit is 1 / smallest value of b .  So, 1/(1/5)) = 5 or anything greater should be good.
+			va["y" + i + "_" + k][conName] = -1
 		}
 	}
 
@@ -4235,6 +4376,7 @@ function _solvePhragmenMax(b,seats) {
 		"variables": va,
 		"ints": ints,
 		"options": {
+			"timeout": 30,
 			"tolerance": 0.05
 		}
 	};
@@ -4263,12 +4405,15 @@ function _solvePhragmenMax(b,seats) {
 	console.log(model)
 	results = solver.Solve(model);
 	console.log(results)
+	console.log(results.z)
 	var canResult = []
 	for (var k = 0; k < nk; k++) {
 		canResult[k] = results['x' + k]
 	}
+	
+	var assignments = _getAssignmentsFromLP(results, ni, nk)
 
-	var phragmenResult = { results:results, canResult:canResult}
+	var phragmenResult = { results:results, canResult:canResult, assignments:assignments}
 
 	return phragmenResult
 }
@@ -4315,6 +4460,19 @@ function _getWinnersFromPhragmenResult(phragmenResult,cans) {
 	return winners
 } 
 
+
+function _getAssignmentsFromLP(results, ni, nk) {
+
+	var a = []
+	for(var i = 0; i < ni; i++ ){
+		a[i] = []
+		for(var k = 0; k < nk; k++){
+			a[i][k] = results["y" + i + "_" + k]
+		}
+	}
+	return a
+}
+
 Election.equalFacilityLocation = function(district, model, options){
 
 	var result = lpGeneral(_solveEqualFacilityLocation,district,model,options)
@@ -4342,7 +4500,7 @@ Election.equalFacilityLocation = function(district, model, options){
 
 }
 
-function _solveEqualFacilityLocation(b,seats) {
+function _solveEqualFacilityLocation(b,seats,maxscore) {
 
 	var nk = b[0].length
 	var ni = b.length
@@ -4442,7 +4600,7 @@ function _solveEqualFacilityLocation(b,seats) {
 		va["z"]["zby"] = -1
 		for (var i of iset) {
 			for (var k of kset) {
-				va["y" + i + "_" + k]["zby"] = 6-b[i][k]
+				va["y" + i + "_" + k]["zby"] = maxscore-b[i][k]
 				// va["y" + i + "_" + k]["zby" + i] = -b[i][k] // or.. find ub of support level
 			}
 		}
@@ -4471,7 +4629,9 @@ function _solveEqualFacilityLocation(b,seats) {
 		canResult[k] = results['x' + k]
 	}
 
-	var phragmenResult = { results:results, canResult:canResult}
+	var assignments = _getAssignmentsFromLP(results, ni, nk)
+
+	var phragmenResult = { results:results, canResult:canResult, assignments:assignments}
 
 	return phragmenResult
 }

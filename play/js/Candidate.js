@@ -106,11 +106,11 @@ function Candidate(model){
 		
 		if (opt.rotate != 0) {
 			var angle = Math.PI/180 * -opt.rotate
-				ctx.save()
-				ctx.translate(x, y)
-				x = 0
-				y = 0
-				ctx.rotate(angle);
+			ctx.save()
+			ctx.translate(x, y)
+			x = 0
+			y = 0
+			ctx.rotate(angle);
 		}
 			
 		// Draw image instead!
