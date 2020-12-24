@@ -416,14 +416,23 @@ function bindModel(ui,model,config) {
     }
 
     function handleRoundTransition() {
-        if (ui.roundCurrent == undefined) return
+
         if (!model.checkSystemWithBarChart()) return
-        // make sure round is in the right range
-        for (var i = 0; i < model.district.length; i++) {
-            var round = ui.roundCurrent[i]
-            var maxRound = model.district[i].result.history.rounds.length
-            round = Math.min(round, maxRound)
-            ui.roundCurrent[i] = round
+
+        if (ui.roundCurrent == undefined) {
+            // initialize
+            ui.roundCurrent = []
+            for (var i = 0; i < model.district.length; i++) {
+                ui.roundCurrent[i] = 0
+            }
+        } else {
+            // make sure round is in the right range
+            for (var i = 0; i < model.district.length; i++) {
+                var round = ui.roundCurrent[i]
+                var maxRound = model.district[i].result.history.rounds.length
+                round = Math.min(round, maxRound)
+                ui.roundCurrent[i] = round
+            }
         }
     }
 
@@ -829,7 +838,6 @@ function bindModel(ui,model,config) {
             ui.dom.roundChartForwardButton = []
             
             ui.dom.roundChartSpace = []
-            ui.roundCurrent = []
             ui.dom.roundChartCaption = []
             ui.dom.roundChartPreCaption = []
             for (var i = 0; i < model.district.length; i++) {
@@ -865,7 +873,6 @@ function bindModel(ui,model,config) {
                 ui.dom.roundChartForwardButton[i].innerText = " > "
                 ui.dom.roundChartForwardButton[i].className = "roundChartButton"
                 buttonDiv.append(ui.dom.roundChartForwardButton[i])
-                ui.roundCurrent[i] = 0
                 ui.dom.roundChartSpace[i] = document.createElement("div")
                 ui.dom.roundChart.append(ui.dom.roundChartSpace[i])
                 ui.dom.roundChartCaption[i] = document.createElement("div")
