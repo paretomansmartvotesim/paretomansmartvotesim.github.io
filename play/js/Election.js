@@ -5791,6 +5791,8 @@ function drawWeightUsed(model,arena,barOptions,v,round) {
 function drawKWeightUsed(model,arena,barOptions,v,round) {
 
 	// do KP transform on v
+
+	// the rest just is a modification of the drawWeightUsed function
 	
 	var vk = []
 	var t = 0
@@ -6007,6 +6009,121 @@ function drawWeight(model,arena,barOptions,v,round) {
 		_drawText("Votes by Round",10,pos-20,40,arena.ctx,"start") // used to be _drawStroked
 	} else {
 		_drawText("Votes",10,pos-20,40,arena.ctx,"start")
+	}
+	
+}
+
+function drawKWeight(model,arena,barOptions,v,round) {
+
+
+	// do KP transform on v
+
+	// the rest just is a modification of the drawWeight function
+	
+	var vk = []
+	var t = 0
+	var nk = v[0].b.length
+	var maxscore = model.district[0].result.history.maxscore
+	for (var i = 0; i < v.length; i++) {
+		// did the voter give at least this score?
+		for (var s = 1; s <= maxscore; s++) {
+			var va0 = []
+			for (var k = 0; k < nk; k++) {
+				if (v[i].b[k] >= s) {
+					va0.push(1)
+				} else {
+					va0.push(0)
+				}
+			}
+			vk.push({b:va0,i:i,t:t,s:s}) // i is voter id, n is transformed voter id
+			t++
+		}
+	}
+
+	barOptions.widthRectangle = barOptions.width / vk.length 
+
+	var maxscore = model.result.history.maxscore
+
+	var rLimit = _rLimitFrom(model,round)
+	var type1 = _type1Get(model)
+
+
+	// calculate the weight remaining before the current round
+    // calculate weight not used, selectedRoundBeforeWeight
+	var selectedRoundBeforeWeight = vk.map( () => 1)
+	// If we're looking at the results after the final round, then calculate the weight remaining after the final round
+	var doAfterFinalRound = (round == -1) || (round == model.result.history.rounds.length + 1) // show the weight after the final round
+	for (var i=0; i < vk.length; i++) {
+		if (type1) {
+			var idx = model.orderOfVoters[vk[i].i]
+		} else {
+			var idx = model.districtIndexOfVoter[model.orderOfVoters[vk[i].i]]
+		}
+		var idxk = idx * maxscore + vk[i].s - 1 // KP transform changes the indices
+		if (doAfterFinalRound) {
+			var lastIdx = model.result.history.rounds.length - 1
+			var lastround = model.result.history.rounds[lastIdx]
+			selectedRoundBeforeWeight[i] = 1 - (lastround.tBeforeWeightUsed[idxk] + lastround.tWeightUsed[idxk])
+		} else {
+			var lastIdx = round - 1
+			var lastround = model.result.history.rounds[lastIdx]
+			selectedRoundBeforeWeight[i] = 1 - lastround.tBeforeWeightUsed[idxk]
+		}
+	}
+
+	
+	// I should make it clear the difference between weight and power. This may be different for different systems.
+
+
+	if (0){ // don't draw the weight.. for now
+		drawWeightGrey(model,arena,selectedRoundBeforeWeight,rLimit,barOptions)
+	}
+	
+
+	// draw votes for each candidate in this round
+
+	if (0) {
+	} else { // not STV
+		
+		// var rowFunction = "rounds"
+		var rowFunction = "candidates"
+
+		if (rowFunction == "rounds") {
+			barOptions.heightRectangle4 = barOptions.heightRectangle2 / (rLimit+1)
+			for (var r = 0	; r <= rLimit; r++) {
+				// var thisround = model.result.history.rounds[r]						
+				for (var i = 0; i < vk.length; i++) {
+					var b = vk[i].b
+					var beforeWeight = Math.max(selectedRoundBeforeWeight[i],0)
+					for (var k = 0; k < b.length; k++) {
+						var support = b[k] 
+						drawOneCandidateSquareScore(model,arena,beforeWeight,support,i,k,r,rLimit,barOptions)
+					}
+				}
+			}
+
+		} else {
+			for (var i = 0; i < vk.length; i++) {
+                var b = vk[i].b
+                // beforeWeight is just the weight at the beginning of the round
+				// support is the score the voter gave to each candidate
+
+				var beforeWeight = Math.max(selectedRoundBeforeWeight[i],0)
+				for (var k = 0; k < b.length; k++) {
+					var support = b[k] 
+					drawOneRoundSquareScore(model,arena,beforeWeight,support,i,k,barOptions)
+				}
+			}
+		}
+	
+	}
+
+	// labels
+	var pos = barOptions.pos
+	if (rowFunction == "rounds") {
+		_drawText("Votes by Round",10,pos-20,40,arena.ctx,"start") // used to be _drawStroked
+	} else {
+		_drawText("Votes KP Transform",10,pos-20,40,arena.ctx,"start")
 	}
 	
 }

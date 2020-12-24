@@ -1530,6 +1530,13 @@ function bindModel(ui,model,config) {
         canvasP.style = "height: 67px; width:200px; margin-left: 10px;"
         ui.dom.weightChartsSpace[i].append(canvasP)
         
+        var canvasWK = document.createElement('canvas')
+        var ctxWK = canvasWK.getContext('2d')
+        canvasWK.height = 300
+        canvasWK.width = 600
+        canvasWK.style = "height: 100px; width:200px; margin-left: 10px;"
+        ui.dom.weightChartsSpace[i].append(canvasWK)
+
         var canvasK = document.createElement('canvas')
         var ctxK = canvasK.getContext('2d')
         canvasK.height = 201
@@ -1538,7 +1545,7 @@ function bindModel(ui,model,config) {
         ui.dom.weightChartsSpace[i].append(canvasK)
         
 
-        ui.weightCharts[i] = {arena: {canvas:canvas, ctx:ctx} , arenaP: {canvas:canvasP, ctx:ctxP} , arenaU: {canvas:canvasU, ctx:ctxU} , arenaW: {canvas:canvasW, ctx:ctxW} , arenaK: {canvas:canvasK, ctx:ctxK} }
+        ui.weightCharts[i] = {arena: {canvas:canvas, ctx:ctx} , arenaP: {canvas:canvasP, ctx:ctxP} , arenaU: {canvas:canvasU, ctx:ctxU} , arenaW: {canvas:canvasW, ctx:ctxW} , arenaK: {canvas:canvasK, ctx:ctxK} , arenaWK: {canvas:canvasWK, ctx:ctxWK} }
     
         ui.dom.weightChartsBackButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
@@ -1620,6 +1627,13 @@ function bindModel(ui,model,config) {
 
             if (model.system == "Phragmen Seq S") {
 
+                var arenaWK = ui.weightCharts[iDistrict].arenaWK
+                arenaWK.canvas.hidden = false
+                var barOptionsWK = _jcopy(barOptions)
+                barOptionsWK.pos = 80
+                arenaWK.ctx.clearRect(0,0,arenaWK.canvas.width,arenaWK.canvas.height)
+                drawKWeight(model,arenaWK,barOptionsWK,v,round+1)
+
                 var arenaK = ui.weightCharts[iDistrict].arenaK
                 arenaK.canvas.hidden = false
                 var barOptionsK = _jcopy(barOptions)   
@@ -1627,6 +1641,8 @@ function bindModel(ui,model,config) {
                 arenaK.ctx.clearRect(0,0,arenaK.canvas.width,arenaK.canvas.height)
                 drawKWeightUsed(model,arenaK,barOptionsK,v,round+1)
             } else {
+                var arenaWK = ui.weightCharts[iDistrict].arenaWK
+                arenaWK.canvas.hidden = true
                 var arenaK = ui.weightCharts[iDistrict].arenaK
                 arenaK.canvas.hidden = true
             }
@@ -1637,6 +1653,9 @@ function bindModel(ui,model,config) {
             
             var arenaP = ui.weightCharts[iDistrict].arenaP
             arenaP.canvas.hidden = true
+
+            var arenaWK = ui.weightCharts[iDistrict].arenaWK
+            arenaWK.canvas.hidden = true
 
             var arenaK = ui.weightCharts[iDistrict].arenaK
             arenaK.canvas.hidden = true
