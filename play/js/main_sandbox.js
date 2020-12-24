@@ -395,22 +395,43 @@ function bindModel(ui,model,config) {
 
     model.onDraw = function(){
 
+        // explanation boxes are drawn from bottom to top
         
         ui.redrawButtons() // make sure the icons show up
         
-        roundChartDraw()
-
-        sankeyDraw()
+        if (model.optionsForElection.sidebar ) {
+            handleRoundTransition()
+    
+            sankeyDraw()
+    
+            weightChartsDraw()
+    
+            roundChartDraw()
+    
+        }
 
         ballotDraw()
 
         utilityDraw()
     }
 
+    function handleRoundTransition() {
+        if (ui.roundCurrent == undefined) return
+        if (!model.checkSystemWithBarChart()) return
+        // make sure round is in the right range
+        for (var i = 0; i < model.district.length; i++) {
+            var round = ui.roundCurrent[i]
+            var maxRound = model.district[i].result.history.rounds.length
+            round = Math.min(round, maxRound)
+            ui.roundCurrent[i] = round
+        }
+    }
+
     function ballotDraw() {
 
         // CREATE A BALLOT
         if (ui.dom.rightBallot) ui.dom.rightBallot.remove() // remove old one, if there was one
+        ui.dom.rightBallot = undefined
 
         // decide whether to draw the election explanation
         var hideSidebar = ! model.optionsForElection.sidebar
@@ -495,19 +516,31 @@ function bindModel(ui,model,config) {
         
         if (! sankeyOn) {
             if (ui.dom.sankey) ui.dom.sankey.remove() 
+            ui.dom.sankey = undefined
             return
         }
 
-        if (ui.sankey == undefined) {
-            ui.sankey = d3.sankey()  
+        var haveCharts = (ui.dom.sankey != undefined) && ui.sankeyDistricts == model.district.length  // we already have the number of charts we need. They're ready.
+
+        // turning on
+        if (! haveCharts) { 
+
+            if (ui.sankey == undefined) {
+                ui.sankey = d3.sankey()  
+            }
+            if (ui.dom.sankey) {
+                ui.dom.sankey.remove() 
+                ui.dom.sankey = undefined
+            }
+            ui.dom.sankey = document.createElement("div")
+    
+            ui.dom.sankey.id = "chart"
+            
         }
-        if (ui.dom.sankey) {
-            ui.dom.sankey.remove() 
-        }
-        ui.dom.sankey = document.createElement("div")
         ui.dom.right.prepend(ui.dom.sankey)
 
-        ui.dom.sankey.id = "chart"
+        ui.sankeyDistricts = model.district.length
+
         ui.dom.sankey.innerHTML = '<div style="text-align:center;"><span class="small" > Sankey Diagram </span></div>'
 
         var noSankeys = true
@@ -635,7 +668,10 @@ function bindModel(ui,model,config) {
 
         }
         
-        if (noSankeys) ui.dom.sankey.remove()
+        if (noSankeys) {
+            ui.dom.sankey.remove()
+            ui.dom.sankey = undefined
+        }
 
     };
     
@@ -760,6 +796,7 @@ function bindModel(ui,model,config) {
         // turning off
         if (! roundChartOn) {
             if (ui.dom.roundChart) ui.dom.roundChart.remove()
+            ui.dom.roundChart = undefined
             return
         }
 
@@ -773,16 +810,18 @@ function bindModel(ui,model,config) {
         } else {
 
             // if we're updating the number, remove the old charts
-            if (ui.dom.roundChart) ui.dom.roundChart.remove()
+            if (ui.dom.roundChart) {
+                ui.dom.roundChart.remove()
+                ui.dom.roundChart = undefined
+            }
 
             // set up container dom for chart
             ui.roundChartDistricts = model.district.length
     
             ui.dom.roundChart = document.createElement("div")
             ui.dom.roundChart.id = "chart"
-            ui.dom.right.prepend(ui.dom.roundChart)
     
-            ui.dom.roundChart.innerHTML += '<div style="text-align:center;"><span class="small" > Rounds </span></div>'
+            ui.dom.roundChart.innerHTML += '<div style="text-align:center;"><span class="small" > Votes by Round </span></div>'
 
             
             ui.dom.roundChartRoundNumText = []
@@ -792,6 +831,7 @@ function bindModel(ui,model,config) {
             ui.dom.roundChartSpace = []
             ui.roundCurrent = []
             ui.dom.roundChartCaption = []
+            ui.dom.roundChartPreCaption = []
             for (var i = 0; i < model.district.length; i++) {
                 if (model.district.length > 1) {
                     var title = document.createElement("div")
@@ -800,6 +840,13 @@ function bindModel(ui,model,config) {
                     ui.dom.roundChart.append(title)
                     // don't use innerHTML on ui.dom.roundChart here. It will cause problems. The bindings to variables will be lost.
                     // if (model.district.length > 1) ui.dom.roundChart.innerHTML += `<div style="text-align:center;"><span class="small" > District ${i+1} </span></div>`
+                }
+                var startText = model.district[i].result.history.startText
+                if (startText) {
+                    ui.dom.roundChartPreCaption[i] = document.createElement("div")
+                    ui.dom.roundChartPreCaption[i].setAttribute("style","font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 10px;")
+                    ui.dom.roundChartPreCaption[i].innerHTML = `<span class="xsmall" > ${startText}</span>`
+                    ui.dom.roundChart.append(ui.dom.roundChartPreCaption[i])
                 }
                 var buttonDiv = document.createElement("div")
                 buttonDiv.setAttribute("style","margin-left:10px;")
@@ -822,10 +869,12 @@ function bindModel(ui,model,config) {
                 ui.dom.roundChartSpace[i] = document.createElement("div")
                 ui.dom.roundChart.append(ui.dom.roundChartSpace[i])
                 ui.dom.roundChartCaption[i] = document.createElement("div")
+                ui.dom.roundChartCaption[i].setAttribute("style","margin-left:10px;min-height:2em;")
                 ui.dom.roundChart.append(ui.dom.roundChartCaption[i])
             }
             
         }
+        ui.dom.right.prepend(ui.dom.roundChart)
 
         if (!haveCharts) {
             // set up chart
@@ -863,14 +912,18 @@ function bindModel(ui,model,config) {
             var district = model.district[i]
             ui.roundCurrent[i] --
             if (ui.roundCurrent[i] < 0) ui.roundCurrent[i] = 0
-            actualRoundChartDraw(i, {ease:true});
+            ui.roundUpdateSet(i)
         }})(i)
         ui.dom.roundChartForwardButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
             ui.roundCurrent[i] ++
-            var maxRound = district.result.tallies.length - 1
+            if (model.system == "IRV") {
+                var maxRound = district.result.tallies.length
+            } else {
+                var maxRound = district.result.history.rounds.length
+            }
             if (ui.roundCurrent[i] > maxRound) ui.roundCurrent[i] = maxRound
-            actualRoundChartDraw(i, {ease:true});
+            ui.roundUpdateSet(i)
         }})(i)
             
         
@@ -900,10 +953,21 @@ function bindModel(ui,model,config) {
         // future
         // ui.dom.roundChartCaption[i].innerHTML = district.result.roundText[round+1]
 
-        ui.dom.roundChartRoundNumText[iDistrict].innerText = ` ${round + 1} `
+        if (model.system == "IRV") { // TODO: add result.history.rounds to IRV
+            var maxRound = district.result.tallies.length
+        } else {
+            var maxRound = district.result.history.rounds.length
+        }
+        if (round == maxRound) {
+            var rt = ` F `
+            var flagF = true
+            round -- // temporary bandage TODO: handle final totals better. right now round 1 annotations are displayed in round 2.
+        } else {
+            var rt = ` ${round + 1} `
+        }
+        ui.dom.roundChartRoundNumText[iDistrict].innerText = rt
 
-            var dataSankey = getDataSankey(district)
-        // }
+        var dataSankey = getDataSankey(district)
 
         // Create the data table.
         var data = new google.visualization.DataTable();
@@ -916,79 +980,58 @@ function bindModel(ui,model,config) {
         var getName = (cid) => model.candidatesById[cid].name
         var fPercent = (frac) => Math.round(100 * frac) + "%"
 
-        if (0) {
-            // get round
-            var nodes = dataSankey.nodes.filter( x => x.round == round)
-    
-            var rows = []
-            for ( var i = 0; i < nodes.length; i++) {
-                var node = nodes[i]
-                var num = district.result.tallies[round][node.cid]
-                var frac = num / node.numBallots
-                var name = getName(node.cid)
-                var barColor = hslToHex(color(node.cid))
-                // todo: convert color from hsl
-                rows.push([name,frac*100,barColor])
-            }
+        // get list of all candidates in the same order as the sankey nodes
+        var nodes0 = dataSankey.nodes.filter( x => x.round == 0)
+        var cids = nodes0.map( x => x.cid)
+
+        var lookup = []
+        var rows = []
+        for ( var i = 0; i < cids.length; i++) {
+            var cid = cids[i]
+            lookup[cid] = i
+        }
+            
+        var numBallots = dataSankey.nodes[0].numBallots 
+        var quotaAmount = numBallots / (model.seats + 1)
+
+        // won : list of all candidates that have won at the end of the round
+        // continuing : list of candidates still continuing to be tallied at the end of the round
+        if (district.result.won) { // for STV, not IRV
+            var won = district.result.won[round]
         } else {
-            // get round
-            var nodes = dataSankey.nodes.filter( x => x.round == round)
-    
-            // get round 0
-            var nodes0 = dataSankey.nodes.filter( x => x.round == 0)
-    
-    
-            var lookup = []
-            var rows = []
-            for ( var i = 0; i < nodes0.length; i++) {
-                var node = nodes0[i]
-                lookup[node.cid] = i
-                var name = getName(node.cid)
-                var barColor = hslToHex(color(node.cid))
-                var annotation = "Lose: " + name
-                // todo: convert color from hsl
-                rows.push([name,0,barColor,annotation])
-            }
-
-            var numBallots = dataSankey.nodes[0].numBallots 
-            var quotaAmount = numBallots / (model.seats + 1)
-
-            for ( var i = 0; i < nodes.length; i++) {
-                var node = nodes[i]
-                var num = district.result.tallies[round][node.cid]
-                var name = getName(node.cid)
-                var annotation = name
-                if (num == null) {
-                    annotation = "Win: " + name
-                    num = quotaAmount
-                } else {
-                    if (round == district.result.tallies.length - 1) { //last round
-                        if (district.result.winners.includes(node.cid)) {
-                            annotation = "Win: " + name
-                        } else {
-                            annotation = "Lose: " + name
-                        }
-                    }
-                }
-                var frac = num / node.numBallots
-                var name = getName(node.cid)
-                var barColor = hslToHex(color(node.cid))
-                // todo: convert color from hsl
-                var idx = lookup[node.cid]
-                rows[idx] = [name,frac*100,barColor,annotation]
+            if (round == maxRound - 1) {
+                var won = result.winners
+            } else {
+                var won = []
             }
         }
+        var continuing = district.result.continuing[round]
+        if (continuing == undefined) continuing = []
+
+        for ( var i = 0; i < cids.length; i++) {
+            var cid = cids[i]
+            var name = getName(cid)
+            var num = district.result.tallies[round][cid]
+            if (num === undefined) {
+                if (won.includes(cid)) {
+                    num = quotaAmount
+                } else {
+                    num = 0
+                }
+            }
+            var frac = num / numBallots
+            var barColor = hslToHex(color(cid))
+            if (won.includes(cid)) {
+                var annotation = "Win: " + name
+            } else if (continuing.includes(cid)) {
+                var annotation = name
+            } else {
+                var annotation = "Lose: " + name
+            }
+            var idx = lookup[cid]
+            rows[idx] = [name,frac*100,barColor,annotation]
+        }
         data.addRows(rows);
-
-        // make annotations at end of bars. https://developers.google.com/chart/interactive/docs/gallery/barchart
-        // var view = new google.visualization.DataView(data);
-        // view.setColumns([0, 1,
-        //                 { calc: "stringify",
-        //                     sourceColumn: 1,
-        //                     type: "string",
-        //                     role: "annotation" },
-        //                 2]);
-
 
         var formatter = new google.visualization.NumberFormat(
             {suffix: '%', fractionDigits:0});
@@ -1035,7 +1078,27 @@ function bindModel(ui,model,config) {
 
         // draw our chart, passing in some options.
         ui.roundChart[iDistrict].draw(data, options);
-        // ui.roundChart.draw(view, options);
+
+        // caption
+        
+        if (flagF) {
+            var roundText = district.result.history.afterFinalRound.finalText
+        } else {
+            var roundText = district.result.history.rounds[round].roundText
+        }
+        roundText = `<span class="small" > ${roundText} </span>`
+        if (model.placeHolding || model.doPlaceHoldDuringElection) {
+            if (model.nLoading > 0) {
+                // will do on next draw
+                return
+            } else {
+                // ready to replace
+                ui.dom.roundChartCaption[iDistrict].innerHTML = model.replacePlaceholder(roundText)
+            }
+        } else {
+            ui.dom.roundChartCaption[iDistrict].innerHTML = roundText
+        }
+        
     }
 
     function utilityDraw() {
@@ -1073,7 +1136,6 @@ function bindModel(ui,model,config) {
     
             ui.dom.utilityChart = document.createElement("div")
             ui.dom.utilityChart.id = "chart"
-            ui.dom.right.prepend(ui.dom.utilityChart)
     
             ui.dom.utilityChart.innerHTML += '<div style="text-align:center;"><span class="small" > Utility </span></div>'
 
@@ -1100,6 +1162,7 @@ function bindModel(ui,model,config) {
             }
             
         }
+        ui.dom.right.prepend(ui.dom.utilityChart)
 
         if (!haveCharts) {
             // set up chart
@@ -1322,6 +1385,236 @@ function bindModel(ui,model,config) {
 
         ui.utilityChartAverage[iDistrict].draw(dataAverage, options);
         
+    }
+
+    function weightChartsDraw() {
+ 
+        var weightChartsOn = model.checkDoMultiWinnerBarCharts()
+    
+        // turning off
+        if (! weightChartsOn) {
+            if (ui.dom.weightCharts) ui.dom.weightCharts.remove()
+            ui.dom.weightCharts = undefined
+            return
+        }
+    
+        // hmm, might have a problem with changing number of districts.
+    
+        var haveCharts = (ui.dom.weightCharts != undefined) && ui.weightChartsDistricts == model.district.length  // we already have the number of charts we need. They're ready.
+    
+        // turning on
+        if (haveCharts) { // we already have the number of charts we need. They're ready.
+            // nothing
+        } else {
+    
+            // if we're updating the number, remove the old charts
+            if (ui.dom.weightCharts) ui.dom.weightCharts.remove()
+            ui.dom.weightCharts == undefined
+    
+            // set up container dom for chart
+            ui.weightChartsDistricts = model.district.length
+    
+            ui.dom.weightCharts = document.createElement("div")
+            ui.dom.weightCharts.id = "chart"
+    
+            ui.dom.weightCharts.innerHTML += '<div style="text-align:center;"><span class="small" > Voter Weight by Round</span></div>'
+    
+            
+            ui.dom.weightChartsRoundNumText = []
+            ui.dom.weightChartsBackButton = []
+            ui.dom.weightChartsForwardButton = []
+            
+            ui.dom.weightChartsSpace = []
+            ui.roundCurrent = []
+            ui.dom.weightChartsCaption = []
+            ui.dom.weightChartsPreCaption = []
+            for (var i = 0; i < model.district.length; i++) {
+                if (model.district.length > 1) {
+                    var title = document.createElement("div")
+                    // title.innerText = `District ${i+1}`
+                    title.innerHTML = `<div style="text-align:center;"><span class="small" > District ${i+1} </span></div>`
+                    ui.dom.weightCharts.append(title)
+                    // don't use innerHTML on ui.dom.weightCharts here. It will cause problems. The bindings to variables will be lost.
+                    // if (model.district.length > 1) ui.dom.weightCharts.innerHTML += `<div style="text-align:center;"><span class="small" > District ${i+1} </span></div>`
+                }
+                ui.dom.weightChartsPreCaption[i] = document.createElement("div")
+                ui.dom.weightChartsPreCaption[i].setAttribute("style","font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 10px;")
+                ui.dom.weightChartsPreCaption[i].innerHTML = `<span class="xsmall" > Sort the voters by similarity. <br> Show candidates near closest voter. <br> Show the weight of each vote.</span>`
+                ui.dom.weightCharts.append(ui.dom.weightChartsPreCaption[i])
+                var buttonDiv = document.createElement("div")
+                buttonDiv.setAttribute("style","margin-left:10px;")
+                ui.dom.weightCharts.append(buttonDiv)
+                ui.dom.weightChartsBackButton[i] = document.createElement("button")
+                ui.dom.weightChartsBackButton[i].innerText = " < "
+                ui.dom.weightChartsBackButton[i].className = "weightChartsButton"
+                buttonDiv.append(ui.dom.weightChartsBackButton[i])
+                
+                ui.dom.weightChartsRoundNumText[i] = document.createElement("span")
+                ui.dom.weightChartsRoundNumText[i].className = "small"
+                buttonDiv.append(ui.dom.weightChartsRoundNumText[i])
+                // var roundNumberText = document.createTextNode(` Round x `);
+                // ui.dom.weightCharts.appendChild(roundNumberText)
+                ui.dom.weightChartsForwardButton[i] = document.createElement("button")
+                ui.dom.weightChartsForwardButton[i].innerText = " > "
+                ui.dom.weightChartsForwardButton[i].className = "weightChartsButton"
+                buttonDiv.append(ui.dom.weightChartsForwardButton[i])
+                ui.roundCurrent[i] = 0
+                ui.dom.weightChartsSpace[i] = document.createElement("div")
+                ui.dom.weightCharts.append(ui.dom.weightChartsSpace[i])
+                ui.dom.weightChartsCaption[i] = document.createElement("div")
+                ui.dom.weightCharts.append(ui.dom.weightChartsCaption[i])
+            }
+            
+        }
+        ui.dom.right.prepend(ui.dom.weightCharts) // yes, prepend every time so that we get the order right... maybe not the best solution but it works
+    
+        if (!haveCharts) {
+            // set up chart
+    
+            // Load the Visualization API and the corechart package.
+            // google.charts.load('current', {'packages':['corechart']});
+            // google.charts.load('49', {'packages':['corechart']});
+    
+            // Set a callback to run when the Google Visualization API is loaded.
+            ui.weightCharts = []
+            for (var i = 0; i < model.district.length; i++) {
+                instantiateThenDrawWeightCharts(i)
+            }
+            
+        } else {
+            // update chart
+            for (var i = 0; i < model.district.length; i++) {
+                actualWeightChartsDraw(i)
+            }
+        }
+    
+    }
+    
+    function instantiateThenDrawWeightCharts(i) {
+    
+        // Instantiate chart       
+        
+        var canvas = document.createElement('canvas')
+        var ctx = canvas.getContext('2d')
+        canvas.height = 130
+        canvas.width = 600
+        canvas.style = "height: 43px; width:200px; margin-left: 10px; margin-top: 10px;"
+        ui.dom.weightChartsSpace[i].append(canvas)
+
+        var canvasW = document.createElement('canvas')
+        var ctxW = canvasW.getContext('2d')
+        canvasW.height = 300
+        canvasW.width = 600
+        canvasW.style = "height: 100px; width:200px; margin-left: 10px;"
+        ui.dom.weightChartsSpace[i].append(canvasW)
+
+        if (model.showPowerChart) {
+            var canvasU = document.createElement('canvas')
+            var ctxU = canvasU.getContext('2d')
+            canvasU.height = 201
+            canvasU.width = 600
+            canvasU.style = "height: 67px; width:200px; margin-left: 10px;"
+            ui.dom.weightChartsSpace[i].append(canvasU)
+
+            var canvasP = document.createElement('canvas')
+            var ctxP = canvasP.getContext('2d')
+            canvasP.height = 201
+            canvasP.width = 600
+            canvasP.style = "height: 67px; width:200px; margin-left: 10px;"
+            ui.dom.weightChartsSpace[i].append(canvasP)
+        }
+
+        ui.weightCharts[i] = {arena: {canvas:canvas, ctx:ctx} , arenaP: {canvas:canvasP, ctx:ctxP} , arenaU: {canvas:canvasU, ctx:ctxU} , arenaW: {canvas:canvasW, ctx:ctxW} }
+    
+        ui.dom.weightChartsBackButton[i].onclick = (function(i) { return function() {
+            var district = model.district[i]
+            ui.roundCurrent[i] --
+            if (ui.roundCurrent[i] < 0) ui.roundCurrent[i] = 0
+            ui.roundUpdateSet(i);
+        }})(i)
+        ui.dom.weightChartsForwardButton[i].onclick = (function(i) { return function() {
+            var district = model.district[i]
+            ui.roundCurrent[i] ++
+            var maxRound = district.result.history.rounds.length - 1 + 1
+            if (ui.roundCurrent[i] > maxRound) ui.roundCurrent[i] = maxRound
+            ui.roundUpdateSet(i);
+        }})(i)        
+    
+        actualWeightChartsDraw(i)
+        
+        
+    }
+    
+    function actualWeightChartsDraw(iDistrict, opt) {
+    
+        opt = opt || {}
+    
+        var round = ui.roundCurrent[iDistrict]
+        var arena = ui.weightCharts[iDistrict].arena
+        var district = model.district[iDistrict]
+
+        // get only the sorted voters for this district.
+        var v = model.getSortedVoters()
+        v = v.filter(x => x.iDistrict == iDistrict) 
+    
+        var barOptions = {}
+        barOptions.width = arena.canvas.width
+        barOptions.widthRectangle = barOptions.width / v.length    
+        barOptions.heightRectangle = 100
+        barOptions.baralpha = .9
+        
+        barOptions.heightRectangle2 = Math.min(200 / model.candidates.length, 200/5)
+
+        if (round == district.result.history.rounds.length) {
+            var rt = ` F `
+        } else {
+            var rt = ` ${round + 1} `
+        }
+        ui.dom.weightChartsRoundNumText[iDistrict].innerText = rt
+    
+        arena.ctx.clearRect(0,0,arena.canvas.width,arena.canvas.height)
+        drawDottedVoterLine(100,barOptions,v,arena.ctx)
+        for(var i=0; i<district.candidates.length; i++){
+            var c = district.candidates[i]
+            c.draw(arena.ctx,model.tarena) // tarena just provides a function that translates coordinates.
+        }
+		_drawText("Candidates in Voter Space",10,50,40,arena.ctx,"start")
+
+        var arenaW = ui.weightCharts[iDistrict].arenaW
+        var barOptionsW = _jcopy(barOptions)
+        barOptionsW.pos = 80
+		arenaW.ctx.clearRect(0,0,arenaW.canvas.width,arenaW.canvas.height)
+        drawWeight(model,arenaW,barOptionsW,v,round+1)
+
+        if (model.showPowerChart) {
+            var arenaU = ui.weightCharts[iDistrict].arenaU
+            var barOptionsU = _jcopy(barOptions)
+            barOptionsU.base = 200
+            arenaU.ctx.clearRect(0,0,arenaU.canvas.width,arenaU.canvas.height)
+            drawWeightUsed(model,arenaU,barOptionsU,v,round+1)
+
+            var arenaP = ui.weightCharts[iDistrict].arenaP
+            var barOptionsP = _jcopy(barOptions)
+            barOptionsP.doPowerUsed = true
+            barOptionsP.base = 200
+            arenaP.ctx.clearRect(0,0,arenaP.canvas.width,arenaP.canvas.height)
+            drawWeightUsed(model,arenaP,barOptionsP,v,round+1)
+        }
+    }
+    
+    ui.roundUpdateSet = function() {
+        if (ui.dom.weightCharts != undefined) {
+            // update chart
+            for (var i = 0; i < model.district.length; i++) {
+                actualWeightChartsDraw(i)
+            }
+        }
+        if (ui.dom.roundChart != undefined) {
+            // update chart
+            for (var i = 0; i < model.district.length; i++) {
+                actualRoundChartDraw(i, {ease:true});
+            }
+        }
     }
 
     model.updateFromModel = function() {
@@ -2674,16 +2967,15 @@ function menu(ui,model,config,initialConfig, cConfig) {
 
             model.BallotType = window[model.ballotType+"Ballot"];
 
-            var doTarena = model.checkGotoTarena()
             if (autoSwitchDim) {
-                if (doTarena) {
+                if (model.checkSystemWithBarChart()) {
                     model.dimensions = "1D+B"
                 } else {
                     model.dimensions = "2D"
                 }
             }
             
-            if (doTarena) {
+            if (model.checkGotoTarena()) {
                 model.tarena.canvas.hidden = false
             } else {
                 model.tarena.canvas.hidden = true

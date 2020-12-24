@@ -1990,10 +1990,18 @@ Election.irv = function(district, model, options){
 	var ballots = model.voterSet.getBallotsDistrict(district)
 	cBallots = _jcopy(ballots)
 
-	var text = "";
-	if (options.sidebar) text += "<span class='small'>";
+	if (options.sidebar) {
+		var text = "";
+		text += "<span class='small'>";
+		text += polltext;
 
-	text += polltext;
+		var history = {}
+		history.rounds = []
+
+		var startText = "Who's voters' top choice?";
+		history.startText = startText
+	}
+
 	var resolved = null;
 	var roundNum = 1;
 
@@ -2059,6 +2067,8 @@ Election.irv = function(district, model, options){
 				}   
             }
 			text += "<br>";
+
+			var roundHistory = {}
 		}
 
 		if (drawFlows) {
@@ -2097,7 +2107,12 @@ Election.irv = function(district, model, options){
 		if (option100) {
 			if (candidates.length == 1) {
 				resolved = "done";
-				if (options.sidebar) text += model.icon(winner)+" is the last candidate standing<br>";
+				if (options.sidebar) {
+					var roundText = model.icon(winner)+" is the last candidate standing";
+					text += roundText
+					text += "<br>"
+					roundHistory.roundText = roundText
+				}
 				break;
 			}
 			
@@ -2107,23 +2122,34 @@ Election.irv = function(district, model, options){
 				break;
 			}
 			resolved = "done";
-			if (options.sidebar) text += model.icon(winner)+" has more than 50%<br>";
+			if (options.sidebar) {
+				var roundText = model.icon(winner)+" has more than 50%";
+				text += roundText
+				text += "<br>"
+				roundHistory.roundText = roundText
+			}
 			break;
 		}
 		// Otherwise... runoff...
 		var losers = _countLoser(tally);
 		var loser = losers[0];
+		if (options.sidebar) var roundText = ""
 		if (model.opt.breakEliminationTiesIRV && losers.length > 1) {
 
 			loser = losers[Math.floor(losers.length * Math.random())]
 
 			if (options.sidebar) {
+
 				for (var li = 0; li < losers.length ; li++ ) {
 					cid = losers[li]
-					text += model.icon(cid)
+					roundText += model.icon(cid)
 				}
-				text += " tie during elimination.<br>"
-				text += model.icon(loser) + " chosen to lose by tiebreaker.<br>"
+				var eTieText = " tie for lowest. Break tie.<br>"
+				// eTieText += model.icon(loser) + " chosen to lose by tiebreaker."
+				// eTieText += "<br>"
+				roundText += eTieText
+				text += eTieText
+				roundHistory.roundText = roundText
 			}
 
 			losers = [loser]
@@ -2134,7 +2160,13 @@ Election.irv = function(district, model, options){
 		}
 		if (0 && candidates.length > 2 && candidates.length - losers.length === 1) {
 			// There's only one candidate left
-			if (options.sidebar) text += model.icon(winner)+" wins because the others tied in this elimination round.<br>";
+			if (options.sidebar) {
+				var elimText = model.icon(winner)+" wins because the others tied in this elimination round."
+				roundText += elimText;
+				text += elimText
+				text += "<br>"
+				roundHistory.roundText = roundText
+			}
 			break;
 		}
 		loserslist = loserslist.concat(losers)
@@ -2165,7 +2197,13 @@ Election.irv = function(district, model, options){
 
 		for (var li = 0; li < losers.length ; li++ ) {
 			loser = losers[li];
-			if (options.sidebar) text += "eliminate loser, "+model.icon(loser)+".<br>";
+			if (options.sidebar) {
+				var eText =  "Eliminate loser, "+model.icon(loser)+".";
+				roundText += eText
+				text += eText
+				text += "<br>"
+				roundHistory.roundText = roundText
+			}
 
 			// REMOVE THE LOSER
 			candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
@@ -2206,8 +2244,11 @@ Election.irv = function(district, model, options){
 			}
 		}
 		roundNum++
-		if (options.sidebar) text += "<br>"
-	
+		if (options.sidebar) {
+			text += "<br>"
+
+			history.rounds.push(_jcopy(roundHistory))
+		}
 	}
 
 	if (drawFlows) {
@@ -2277,8 +2318,12 @@ Election.irv = function(district, model, options){
 
 	if (!options.sidebar) return result
 
+	
+
 	if (resolved == "tie") {
-		text += _tietext(model,winners);
+		var tieText = _tietext(model,winners)
+		text += tieText
+		var finalText = tieText
 		// text = "<b>TIE</b> <br> <br>" + text;
 	} else {
 		// END!
@@ -2286,7 +2331,14 @@ Election.irv = function(district, model, options){
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
 		// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br> <br>" + text;	
+		
+		var finalText = "Final Winner: ";
+		finalText += model.icon(winner)
 	}
+
+	history.rounds.push(roundHistory)
+	history.afterFinalRound = {finalText:finalText}
+	result.history = history
 
 	result.text = text;
 
@@ -2333,10 +2385,17 @@ Election.stv = function(district, model, options){
 
 	if (options.sidebar) {
 		var quotapercent = Math.round(quota * 100)
+		var startText = "";
+		startText += "Find " + numreps + " winners.<br>"
+		startText += "Set quota at 1/(1+" + numreps + ") = " + quotapercent + "%.<br>"
+		
 		var text = "";
 		text += "<span class='small'>";
-		text += "Find " + numreps + " winners.<br>"
-		text += "Set quota at 1/(1+" + numreps + ") = " + quotapercent + "%.<br><br>"
+		text += startText
+		text += "<br>"
+
+		startText += "Who's voters' top choice?";
+		history.startText = startText
 		
 		var hsid = "hide-show-detail-" + _rand5()
 
@@ -2485,8 +2544,11 @@ Election.stv = function(district, model, options){
 			winnerslist.push(winner)
 			
 			if (options.sidebar) {
-				text += model.icon(winner)+" has more than " + quotapercent + "%<br>";
-				text += "select winner, "+model.icon(winner)+".<br><br>";
+				var roundText = model.icon(winner)+" has more than " + quotapercent + "%<br>";
+				roundText += "select winner, "+model.icon(winner)+".<br>";
+				text += roundText
+				text += "<br>"
+				roundHistory.roundText = roundText
 			}
 
 			if (drawFlows) {
@@ -2578,7 +2640,10 @@ Election.stv = function(district, model, options){
 				loser = losers[li];
 				
 				if (options.sidebar) {
-					text += "eliminate loser, "+model.icon(loser)+".<br>";
+					var roundText = "eliminate loser, "+model.icon(loser)+".";
+					text += roundText
+					roundHistory.roundText = roundText
+					text += "<br>"
 				}
 				candidates.splice(candidates.indexOf(loser), 1); // remove from candidates...
 				for(var i=0; i<cBallots.length; i++){
@@ -2776,7 +2841,9 @@ Election.stv = function(district, model, options){
 
 	if (options.sidebar) {
 		text += '<div id="district'+district.i+'round' + (roundNum+1) + '" class="round">'
+		var finalText = ""
 		if (resolved == "tie") {
+			finalText += _tietext(model,tiedlosers);
 			text += _tietext(model,tiedlosers);
 			// text = "<b>TIE</b> <br> <br>" + text;
 		} 
@@ -2786,12 +2853,21 @@ Election.stv = function(district, model, options){
 			var color = _colorsWinners([winner],model)[0]
 			// END!
 			text += "</span>";
-			text += "<br>";
-			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS";
+			text += "<br>"
+			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS ";
 			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;	
 		}
 		text += '</div>'
+
+		
+		finalText += "Final Winners:";
+		finalText += "<br>";
+		for(var i=0; i<winners.length; i++){
+			var c = winners[i]
+			finalText += model.icon(c)+" ";
+		}
 	
+		history.afterFinalRound.finalText = finalText
 		result.history = history
 		result.eventsToAssign = [] // we have an interactive caption
 		result.text = text;
@@ -5421,15 +5497,9 @@ function _padAfter(padding,a){
 
 function _drawBars(iDistrict, arena, model, round) {
 
-	var v = model.getSortedVoters()
 	// get only the sorted voters for this district.
+	var v = model.getSortedVoters()
 	v = v.filter(x => x.iDistrict == iDistrict)
-	// draw only the district's voters
-	model.districtIndexOfVoter = []
-	for (var i = 0; i < v.length; i++) {
-        var iAll = model.district[iDistrict].voterPeople[i].iAll
-		model.districtIndexOfVoter[iAll] = i
-	}
 
 	// There are two sorts here... one for all voters and one for the district
 	// we want to use the one for all voters... and we want to get data that is based on the one for the districtq[]
@@ -5451,22 +5521,34 @@ function _drawBars(iDistrict, arena, model, round) {
 	barOptions.base = 600
 	barOptions.baralpha = .9
 
-	
+	drawWeightUsed(model,arena,barOptions,v,round)
+
+	barOptions.pos = 200
+	barOptions.heightRectangle2 = Math.min(200 / model.candidates.length, 200/5)
+
+	drawWeight(model,arena,barOptions,v,round)
+
+}
+
+function _rLimitFrom(model,round) {
     if (round == -1) {
         var rLimit = model.result.history.rounds.length // Draw the weight used in all rounds.
     } else if (round > -1) { // round is never 0
         var rLimit = round-1 // Only draw the weight used in previous rounds.
 	}
-	
-    var type1 = model.system == "Phragmen Seq S" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
-
-	drawWeightUsed(model,arena,barOptions,v,rLimit,type1)
-
-	drawWeight(model,arena,barOptions,v,rLimit,type1,round)
+	return rLimit
 }
 
-function drawWeightUsed(model,arena,barOptions,v,rLimit,type1) {
+function _type1Get(model) {
+	var type1 = model.system == "Phragmen Seq S" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
+	return type1
+}
 
+function drawWeightUsed(model,arena,barOptions,v,round) {
+
+	var rLimit = _rLimitFrom(model,round)
+	var type1 = _type1Get(model)
+	
 	drawBackGroundPowerChart(model,arena,barOptions,rLimit)
 
 	arena.ctx.globalAlpha = barOptions.baralpha
@@ -5478,7 +5560,6 @@ function drawWeightUsed(model,arena,barOptions,v,rLimit,type1) {
     // build one layer at a time
 	// for the last layer, keep track of the ballot weight remaining (unUsed) after the round
 	// rLimit is the upper bound for the index of the rounds. It lets us loop through all the rounds that ran previously.
-	var doWeightUsed = true
     for (var r=0; r < rLimit; r++) {
         var thisround = model.result.history.rounds[r]
         if (thisround.winners.length == 0) continue
@@ -5489,14 +5570,14 @@ function drawWeightUsed(model,arena,barOptions,v,rLimit,type1) {
 			} else {
 				var idx = model.districtIndexOfVoter[model.orderOfVoters[i]]
 			}
-			if (doWeightUsed) { 
-				var beforeWeightUsed = thisround.beforeWeightUsed[idx]
-				var weightUsed = thisround.weightUsed[idx]
-				drawOneLayerOfWeightUsed(model,arena,i,beforeWeightUsed,weightUsed,winnerIndex,barOptions)
-			} else { // doPowerUsed
+			if (barOptions.doPowerUsed) {  // doPowerUsed
 				var beforePowerUsed = thisround.beforePowerUsed[idx]
 				var powerUsed = thisround.powerUsed[idx]
 				drawOneLayerOfWeightUsed(model,arena,i,beforePowerUsed,powerUsed,winnerIndex,barOptions)
+			} else {
+				var beforeWeightUsed = thisround.beforeWeightUsed[idx]
+				var weightUsed = thisround.weightUsed[idx]
+				drawOneLayerOfWeightUsed(model,arena,i,beforeWeightUsed,weightUsed,winnerIndex,barOptions)
 			}
         }
 		// q[i] = 1 - (lastround.beforeWeightUsed[idx] + lastround.weightUsed[idx]) // the weight remaining after the round
@@ -5505,16 +5586,19 @@ function drawWeightUsed(model,arena,barOptions,v,rLimit,type1) {
 	arena.ctx.globalAlpha = 1
 
 	if (model.showPowerChart) {
-		if (doWeightUsed) { 
-			_drawStroked("Voter Weight Used",10,480,40,arena.ctx,"start")
+		if (barOptions.doPowerUsed) { 
+			_drawText("Voter Power Used",10,barOptions.base - 120,40,arena.ctx,"start")
 		} else {
-			_drawStroked("Voter Power Used",10,480,40,arena.ctx,"start")
+			_drawText("Voter Weight Used",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
 		}
     }
 	
 }
 
-function drawWeight(model,arena,barOptions,v,rLimit,type1,round) {
+function drawWeight(model,arena,barOptions,v,round) {
+
+	var rLimit = _rLimitFrom(model,round)
+	var type1 = _type1Get(model)
 
 	if (0) { // this was a first attempt to draw the ballots. It is no longer needed.
 		barOptions.heightRectangle3 = Math.min(300 / model.candidates.length, 300/10)
@@ -5560,9 +5644,6 @@ function drawWeight(model,arena,barOptions,v,rLimit,type1,round) {
 	
 
 	// draw votes for each candidate in this round
-	barOptions.pos = 170
-	// barOptions.heightRectangle2 = 30
-	barOptions.heightRectangle2 = Math.min(200 / model.candidates.length, 200/5)
 
 	if (model.system == "STV") {
 		var rowFunction = "rounds"
@@ -5650,10 +5731,11 @@ function drawWeight(model,arena,barOptions,v,rLimit,type1,round) {
 	}
 
 	// labels
+	var pos = barOptions.pos
 	if (rowFunction == "rounds") {
-		_drawStroked("Votes by Round",10,150,40,arena.ctx,"start")
+		_drawText("Votes by Round",10,pos-20,40,arena.ctx,"start") // used to be _drawStroked
 	} else {
-		_drawStroked("Votes",10,150,40,arena.ctx,"start")
+		_drawText("Votes",10,pos-20,40,arena.ctx,"start")
 	}
 	
 }
@@ -5675,6 +5757,31 @@ function firstAttemptDrawBallots(model,arena,i,k,barOptions) {
     arena.ctx.fillStyle = color
     arena.ctx.fillRect(left,top,right-left,bottom-top)
     arena.ctx.fill()
+}
+
+
+function drawDottedVoterLine(y,barOptions,v,ctx) {
+	ctx.save()
+    heightRectangle = barOptions.heightRectangle2
+    for (var i=0; i < v.length; i++) {
+        drawDotted(ctx,i,barOptions,heightRectangle,y)
+	}
+	ctx.restore()
+}
+
+function drawDotted(ctx,i,barOptions,heightRectangle,y) {
+    var widthRectangle = barOptions.widthRectangle    
+    
+    var left = Math.round(i * widthRectangle)
+    var right = Math.round((i+1) * widthRectangle)
+
+    var top = Math.round(y - heightRectangle * .5)
+    var bottom = Math.round(y + heightRectangle * .5)
+    
+    var color = (i % 2) ? "#fff" : "#ccc"
+    ctx.fillStyle = color
+    ctx.fillRect(left,top,right-left,bottom-top)
+    ctx.fill()
 }
 
 function drawBackGroundPowerChart(model,arena,barOptions) {
@@ -5728,7 +5835,7 @@ function drawOneLayerOfWeightUsed(model,arena,i,beforeWeightUsed,weightUsed,winn
         var color = model.candidates[winnerIndex].fill
         arena.ctx.fillStyle = color
     
-        var greyedout = .2
+        var greyedout = .7
         if (bottom > bucket) { // bottom is in bucket
             if (top < bucket) { // top is out of bucket
                 arena.ctx.fillRect(left,bucket,right-left,bottom-bucket)
