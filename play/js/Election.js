@@ -3621,7 +3621,7 @@ Election.monroeSequentialRange = function(district, model, options){
 		var tally = []
 		var lasti = [] // the number of voters needed to complete a quota (based on ballotweight and sort order)
 		for (var k = 0; k < cans.length; k++) {
-			bByCan[k] = v.map( (x,i) => [x.b[k],i] ).sort( (a,b) => a-b ).reverse() // TODO: check ORDER 
+			bByCan[k] = v.map( (x,i) => [x.b[k],i] ).sort( (a,b) => a[0]-b[0] ).reverse()
 			// only get q's adding up to quota
 			var sumq = 0
 			lasti[k] = v.length - 1 // default value, all of them are in quota
@@ -5700,7 +5700,7 @@ function _rLimitFrom(model,round) {
 }
 
 function _type1Get(model) {
-	var type1 = model.system == "Phragmen Seq S" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
+	var type1 = model.system == "Phragmen Seq S" || model.system == "Monroe Seq S" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
 	return type1
 }
 
