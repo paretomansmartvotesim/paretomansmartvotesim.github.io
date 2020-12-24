@@ -3682,11 +3682,30 @@ Election.monroeSequentialRange = function(district, model, options){
 			var winnerIndex = roundWinners[k]
 			// var sum = tally[winnerIndex]
 			// var rep = v.length / sum / seats
-			for (var i=0; i < lasti[winnerIndex]; i++) { 
-				var idx = bByCan[winnerIndex][i][1]
+
+			var bByCanWin = bByCan[winnerIndex]
+			var lastiWin = lasti[winnerIndex]
+			var smallestScore = bByCanWin[lastiWin][0]
+			var cutset = bByCanWin.filter( x => x[0] == smallestScore) // for the voters that gave the minimum score required to be part of the quota, reweight differently
+			var fullset = bByCanWin.filter( x => x[0] > smallestScore) // for the voters that gave more than the minimum score, use full weight
+
+			var qFull = 0
+			for (var i=0; i < fullset.length; i++) {
+				var idx = fullset[i][1]
+				qFull += q[idx]
 				q[idx] = 0 // zero out all within quota
-				// var b = v[k].b
-				// q[k] -= rep * b[winnerIndex] / maxscore // we could just multiply by b[wI]
+			}
+			
+			var qCut = 0
+			for (var i=0; i < cutset.length; i++) { 
+				var idx = cutset[i][1]
+				qCut += q[idx]
+			}
+			var needTotal = quota - qFull
+			var needPer = needTotal / cutset.length
+			for (var i=0; i < cutset.length; i++) { 
+				var idx = cutset[i][1]
+				q[idx] -= needPer * q[idx]
 			}
 		}
 		var qUsed = []
@@ -5690,7 +5709,7 @@ function _drawBars(iDistrict, arena, model, round) {
 	barOptions.widthRectangle = barOptions.width / v.length    
 	barOptions.heightRectangle = 100
 	barOptions.base = 600
-	barOptions.baralpha = .9
+	barOptions.baralpha = .8
 
 	drawWeightUsed(model,arena,barOptions,v,round)
 
