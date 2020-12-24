@@ -3859,6 +3859,7 @@ Election.phragmenSequentialRange = function(district, model, options){
 	var qi = v.map( () => 1 )
 	var qiPrevious = _jcopy(qi)
 	var beforeWeightUsed = v.map( () => 0 )
+	var tBeforeWeightUsed = []
 
 	// group by ballot weight remaining
 	// groups[weight class].voters[i] = {b:ballot, i:original index}
@@ -4013,6 +4014,7 @@ Election.phragmenSequentialRange = function(district, model, options){
 			var qUsed = []
 			for (var t = 0; t < q.length; t++) {
 				qUsed.push(qPrevious[t] - q[t])
+				tBeforeWeightUsed[t] = 1 - qPrevious[t] // The total weight used before this round.
 			}
 			
 			var qi = []
@@ -4035,8 +4037,9 @@ Election.phragmenSequentialRange = function(district, model, options){
 				beforeWeightUsed: _jcopy(beforeWeightUsed),
 				weightUsed: _jcopy(qiUsed),
 				beforeWeight: _jcopy(qiPrevious),
+				tBeforeWeightUsed: _jcopy(tBeforeWeightUsed),
 				tBeforeWeight:_jcopy(qPrevious), // qt is the ballot weight for the transformed ballots. I'm not using this yet.
-				tBeforeWeightUsed:_jcopy(qUsed),
+				tWeightUsed:_jcopy(qUsed),
 				powerUsed:_jcopy(powerUsed),
                 beforePowerUsed:_jcopy(beforePowerUsed),
 				tally:_jcopy(tally)
@@ -5780,6 +5783,84 @@ function drawWeightUsed(model,arena,barOptions,v,round) {
 			_drawText("Voter Power Used",10,barOptions.base - 120,40,arena.ctx,"start")
 		} else {
 			_drawText("Voter Weight Used",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
+		}
+    }
+	
+}
+
+function drawKWeightUsed(model,arena,barOptions,v,round) {
+
+	// do KP transform on v
+	
+	var vk = []
+	var t = 0
+	var nk = v[0].b.length
+	var maxscore = model.district[0].result.history.maxscore
+	for (var i = 0; i < v.length; i++) {
+		// did the voter give at least this score?
+		for (var s = 1; s <= maxscore; s++) {
+			var va0 = []
+			for (var k = 0; k < nk; k++) {
+				if (v[i].b[k] >= s) {
+					va0.push(1)
+				} else {
+					va0.push(0)
+				}
+			}
+			vk.push({b:va0,i:i,t:t,s:s}) // i is voter id, n is transformed voter id
+			t++
+		}
+	}
+
+	barOptions.widthRectangle = barOptions.width / vk.length 
+
+	var rLimit = _rLimitFrom(model,round)
+	var type1 = _type1Get(model)
+	
+	drawBackGroundPowerChart(model,arena,barOptions,rLimit)
+
+	arena.ctx.globalAlpha = barOptions.baralpha
+
+	// drawing functions are separated out to simplify the code
+	// this loop does a calculation of support that really should already be done in the election function.
+    
+    // loop through rounds
+    // build one layer at a time
+	// for the last layer, keep track of the ballot weight remaining (unUsed) after the round
+	// rLimit is the upper bound for the index of the rounds. It lets us loop through all the rounds that ran previously.
+	var maxscore = model.result.history.maxscore
+    for (var r=0; r < rLimit; r++) {
+        var thisround = model.result.history.rounds[r]
+        if (thisround.winners.length == 0) continue
+        var winnerIndex = thisround.winners[0]
+        for (var i=0; i < vk.length; i++) {
+            if (type1) {
+				var idx = model.orderOfVoters[vk[i].i]
+			} else {
+				var idx = model.districtIndexOfVoter[model.orderOfVoters[vk[i].i]]
+			}
+			var idxk = idx * maxscore + vk[i].s - 1 // KP transform changes the indices
+			// console.log(idxk)
+			if (barOptions.doPowerUsed) {  // doPowerUsed
+				var beforePowerUsed = thisround.tBeforePowerUsed[idxk]
+				var powerUsed = thisround.tPowerUsed[idxk]
+				drawOneLayerOfWeightUsed(model,arena,i,beforePowerUsed,powerUsed,winnerIndex,barOptions)
+			} else {
+				var beforeWeightUsed = thisround.tBeforeWeightUsed[idxk]
+				var weightUsed = thisround.tWeightUsed[idxk]
+				drawOneLayerOfWeightUsed(model,arena,i,beforeWeightUsed,weightUsed,winnerIndex,barOptions)
+			}
+        }
+		// q[i] = 1 - (lastround.beforeWeightUsed[idx] + lastround.weightUsed[idx]) // the weight remaining after the round
+	}
+
+	arena.ctx.globalAlpha = 1
+
+	if (model.showPowerChart) {
+		if (barOptions.doPowerUsed) { 
+			_drawText("Voter Power Used",10,barOptions.base - 120,40,arena.ctx,"start")
+		} else {
+			_drawText("Voter Weight Used KP Transform",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
 		}
     }
 	

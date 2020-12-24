@@ -1516,23 +1516,29 @@ function bindModel(ui,model,config) {
         canvasW.style = "height: 100px; width:200px; margin-left: 10px;"
         ui.dom.weightChartsSpace[i].append(canvasW)
 
-        if (model.showPowerChart) {
-            var canvasU = document.createElement('canvas')
-            var ctxU = canvasU.getContext('2d')
-            canvasU.height = 201
-            canvasU.width = 600
-            canvasU.style = "height: 67px; width:200px; margin-left: 10px;"
-            ui.dom.weightChartsSpace[i].append(canvasU)
+        var canvasU = document.createElement('canvas')
+        var ctxU = canvasU.getContext('2d')
+        canvasU.height = 201
+        canvasU.width = 600
+        canvasU.style = "height: 67px; width:200px; margin-left: 10px;"
+        ui.dom.weightChartsSpace[i].append(canvasU)
 
-            var canvasP = document.createElement('canvas')
-            var ctxP = canvasP.getContext('2d')
-            canvasP.height = 201
-            canvasP.width = 600
-            canvasP.style = "height: 67px; width:200px; margin-left: 10px;"
-            ui.dom.weightChartsSpace[i].append(canvasP)
-        }
+        var canvasP = document.createElement('canvas')
+        var ctxP = canvasP.getContext('2d')
+        canvasP.height = 201
+        canvasP.width = 600
+        canvasP.style = "height: 67px; width:200px; margin-left: 10px;"
+        ui.dom.weightChartsSpace[i].append(canvasP)
+        
+        var canvasK = document.createElement('canvas')
+        var ctxK = canvasK.getContext('2d')
+        canvasK.height = 201
+        canvasK.width = 600
+        canvasK.style = "height: 67px; width:200px; margin-left: 10px;"
+        ui.dom.weightChartsSpace[i].append(canvasK)
+        
 
-        ui.weightCharts[i] = {arena: {canvas:canvas, ctx:ctx} , arenaP: {canvas:canvasP, ctx:ctxP} , arenaU: {canvas:canvasU, ctx:ctxU} , arenaW: {canvas:canvasW, ctx:ctxW} }
+        ui.weightCharts[i] = {arena: {canvas:canvas, ctx:ctx} , arenaP: {canvas:canvasP, ctx:ctxP} , arenaU: {canvas:canvasU, ctx:ctxU} , arenaW: {canvas:canvasW, ctx:ctxW} , arenaK: {canvas:canvasK, ctx:ctxK} }
     
         ui.dom.weightChartsBackButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
@@ -1596,18 +1602,44 @@ function bindModel(ui,model,config) {
         drawWeight(model,arenaW,barOptionsW,v,round+1)
 
         if (model.showPowerChart) {
+
             var arenaU = ui.weightCharts[iDistrict].arenaU
+            arenaU.canvas.hidden = false
             var barOptionsU = _jcopy(barOptions)
             barOptionsU.base = 200
             arenaU.ctx.clearRect(0,0,arenaU.canvas.width,arenaU.canvas.height)
             drawWeightUsed(model,arenaU,barOptionsU,v,round+1)
 
             var arenaP = ui.weightCharts[iDistrict].arenaP
+            arenaP.canvas.hidden = false
             var barOptionsP = _jcopy(barOptions)
             barOptionsP.doPowerUsed = true
             barOptionsP.base = 200
             arenaP.ctx.clearRect(0,0,arenaP.canvas.width,arenaP.canvas.height)
             drawWeightUsed(model,arenaP,barOptionsP,v,round+1)
+
+            if (model.system == "Phragmen Seq S") {
+
+                var arenaK = ui.weightCharts[iDistrict].arenaK
+                arenaK.canvas.hidden = false
+                var barOptionsK = _jcopy(barOptions)   
+                barOptionsK.base = 200
+                arenaK.ctx.clearRect(0,0,arenaK.canvas.width,arenaK.canvas.height)
+                drawKWeightUsed(model,arenaK,barOptionsK,v,round+1)
+            } else {
+                var arenaK = ui.weightCharts[iDistrict].arenaK
+                arenaK.canvas.hidden = true
+            }
+        } else {
+            // hide canvases
+            var arenaU = ui.weightCharts[iDistrict].arenaU
+            arenaU.canvas.hidden = true
+            
+            var arenaP = ui.weightCharts[iDistrict].arenaP
+            arenaP.canvas.hidden = true
+
+            var arenaK = ui.weightCharts[iDistrict].arenaK
+            arenaK.canvas.hidden = true
         }
     }
     
