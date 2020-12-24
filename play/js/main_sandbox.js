@@ -869,7 +869,8 @@ function bindModel(ui,model,config) {
                 ui.dom.roundChartSpace[i] = document.createElement("div")
                 ui.dom.roundChart.append(ui.dom.roundChartSpace[i])
                 ui.dom.roundChartCaption[i] = document.createElement("div")
-                ui.dom.roundChartCaption[i].setAttribute("style","margin-left:10px;min-height:2em;")
+                var captionMinHeight = (model.customNames == "Yes") ? 4 : 2
+                ui.dom.roundChartCaption[i].setAttribute("style",`margin-left:10px;min-height:${captionMinHeight}em;`)
                 ui.dom.roundChart.append(ui.dom.roundChartCaption[i])
             }
             
@@ -1574,9 +1575,10 @@ function bindModel(ui,model,config) {
     
         arena.ctx.clearRect(0,0,arena.canvas.width,arena.canvas.height)
         drawDottedVoterLine(100,barOptions,v,arena.ctx)
+        var optCDraw =  (model.customNames == "Yes") ? {rotate:10} : {}
         for(var i=0; i<district.candidates.length; i++){
             var c = district.candidates[i]
-            c.draw(arena.ctx,model.tarena) // tarena just provides a function that translates coordinates.
+            c.draw(arena.ctx,model.tarena,optCDraw) // tarena just provides a function that translates coordinates.
         }
 		_drawText("Candidates in Voter Space",10,50,40,arena.ctx,"start")
 
