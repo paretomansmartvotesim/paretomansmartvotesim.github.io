@@ -4357,12 +4357,23 @@ function _solvePhragmenMax(b,seats,maxscore) {
 
 	// if x is not elected, then y is 0
 	// Not sure why I needed this. I think there is a bug in the linear programming solver.
-	for ( var i of iset) {
-		for (var k of kset) {
-			var conName = "xy_i" + i + "_k" + k
+	if (0) {
+		for ( var i of iset) {
+			for (var k of kset) {
+				var conName = "xy_i" + i + "_k" + k
+				con[conName] = {"min": 0}
+				va["x" + k][conName] = 1000 // the limit is 1 / smallest value of b .  So, 1/(1/5)) = 5 or anything greater should be good.
+				va["y" + i + "_" + k][conName] = -1
+			}
+		}
+	} else if (0) {
+		for ( var i of iset) {
+			var conName = "xy_k" + k
 			con[conName] = {"min": 0}
-			va["x" + k][conName] = 1000 // the limit is 1 / smallest value of b .  So, 1/(1/5)) = 5 or anything greater should be good.
-			va["y" + i + "_" + k][conName] = -1
+			va["x" + k][conName] = 100000 // the limit is ni / smallest value of b .  So, 100 * 5 /(1/5)) = 2500 or anything greater should be good.
+			for (var k of kset) {
+				va["y" + i + "_" + k][conName] = -1
+			}
 		}
 	}
 
