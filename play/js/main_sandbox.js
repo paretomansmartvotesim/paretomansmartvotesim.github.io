@@ -479,27 +479,44 @@ function bindModel(ui,model,config) {
                 var BallotType = model.BallotType
                 var ballot = new BallotType(model);
                 ui.dom.rightBallot = ballot.dom
+                ui.dom.right.prepend(ui.dom.rightBallot)
                 ballot.update(voterPerson.stages[model.stage].ballot);
 
             } else {
 
                 var divBallot = document.createElement("div")
+                divBallot.style["width"] = "230px"
                 ui.dom.rightBallot = divBallot
-
-                divBallot.innerHTML = ""
+                ui.dom.right.prepend(ui.dom.rightBallot)
 
                 var currentStage = model.stage
                 for (var stage of Object.keys(voterPerson.stages)) {
                     if (stage == "backup") continue // just show the real stages, not this one that I made as a temporary holding place
                     model.stage = stage
+           
+                    var divStage = document.createElement("div")
+                    divStage.className = "div-ballot"
+                    divBallot.append(divStage)
 
-                    var text = ""                    
-                    text += '<div class="div-ballot">'
+                    var divPaper = document.createElement("div")
+                    divPaper.id = "paper"
+                    divStage.append(divPaper)
+
                     // text += model.voterGroups[0].voterModel.toTextV(voterPerson.stages[model.stage].ballot);
-                    text += model.voterGroups[0].voterModel.toTextV(voterPerson);
-                    text += '</div>'
+                    parts = model.voterGroups[0].voterModel.toTextV(voterPerson);
+                    if (ui.minusControl == undefined) ui.minusControl = {}
+                    if (ui.minusControl.ballotPart == undefined) ui.minusControl.ballotPart = []
+                    for (var i = 0; i < parts.length; i++) {
+                        if (parts[i] == '') continue
+                        var divPart = document.createElement("div")
+                        divPart.style["margin-bottom"] = "10px"
+                        divPart.innerHTML = parts[i]
+                        divPaper.append(divPart)
+                        if (ui.minusControl.ballotPart[i] == undefined) ui.minusControl.ballotPart[i] = {}
+                        addMinusButtonC(divPart,ui.minusControl.ballotPart[i],{ballot:true})
+
+                    }
                     
-                    divBallot.innerHTML += text
                     var target = divBallot
                     if (model.tallyEventsToAssign) {
                         for (let e of model.tallyEventsToAssign) {
@@ -511,7 +528,6 @@ function bindModel(ui,model,config) {
                 }
                 model.stage = currentStage
             }
-            ui.dom.right.prepend(ui.dom.rightBallot)
         }
     }
 
@@ -542,16 +558,20 @@ function bindModel(ui,model,config) {
                 ui.dom.sankey = undefined
             }
             ui.dom.sankey = document.createElement("div")
-            addMinusButton(ui.dom.sankey)
     
             ui.dom.sankey.id = "chart"
-            
+
         }
         ui.dom.right.prepend(ui.dom.sankey)
 
         ui.sankeyDistricts = model.district.length
 
         ui.dom.sankey.innerHTML = '<div style="text-align:center;"><span class="small" > Sankey Diagram </span></div>'
+
+        
+        if (ui.minusControl == undefined) ui.minusControl = {}
+        if (ui.minusControl.sankey == undefined) ui.minusControl.sankey = {}
+        addMinusButtonC(ui.dom.sankey,ui.minusControl.sankey)
 
         var noSankeys = true
 
@@ -830,10 +850,12 @@ function bindModel(ui,model,config) {
     
             ui.dom.roundChart = document.createElement("div")
             ui.dom.roundChart.id = "chart"
-            addMinusButton(ui.dom.roundChart)
     
             ui.dom.roundChart.innerHTML += '<div style="text-align:center;"><span class="small" > Votes by Round </span></div>'
 
+            if (ui.minusControl == undefined) ui.minusControl = {}
+            if (ui.minusControl.roundChart == undefined) ui.minusControl.roundChart = {}
+            addMinusButtonC(ui.dom.roundChart,ui.minusControl.roundChart)
             
             ui.dom.roundChartRoundNumText = []
             ui.dom.roundChartBackButton = []
@@ -1426,11 +1448,12 @@ function bindModel(ui,model,config) {
     
             ui.dom.weightCharts = document.createElement("div")
             ui.dom.weightCharts.id = "chart"
-            addMinusButton(ui.dom.weightCharts)
             
-    
             ui.dom.weightCharts.innerHTML += '<div style="text-align:center;"><span class="small" > Voter Weight by Round</span></div>'
     
+            if (ui.minusControl == undefined) ui.minusControl = {}
+            if (ui.minusControl.weightCharts == undefined) ui.minusControl.weightCharts = {}
+            addMinusButtonC(ui.dom.weightCharts,ui.minusControl.weightCharts)
             
             ui.dom.weightChartsRoundNumText = []
             ui.dom.weightChartsBackButton = []
@@ -2780,7 +2803,6 @@ function createDOM(ui,model) {
     model.dom.removeChild(model.caption);
     ui.dom.right.appendChild(model.caption);
     model.caption.style.width = "";
-    addMinusButton(model.caption)
 }
 
 function menu(ui,model,config,initialConfig, cConfig) {
