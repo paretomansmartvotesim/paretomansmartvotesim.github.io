@@ -810,7 +810,9 @@ function Model(idModel){
 	self.checkSystemWithBarChart = function () {
 		return self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "Monroe Seq S" || self.system == "Phragmen Seq S" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV"
 	}
-
+	self.checkSystemWithRoundButtons = function() { 
+		return self.checkSystemWithBarChart() || self.system == "IRV"
+	}
 	self.checkDoSort = function() {
 		if (self.orderOfVoters == undefined || self.behavior == "stand") { 
 			return self.checkDoMultiWinnerBarCharts() ||  ["IRV","STV"].includes(self.system) || self.showUtilityChart

@@ -417,7 +417,7 @@ function bindModel(ui,model,config) {
 
     function handleRoundTransition() {
 
-        if (!model.checkSystemWithBarChart()) return
+        if (!model.checkSystemWithRoundButtons()) return
 
         if (ui.roundCurrent == undefined) {
             // initialize
