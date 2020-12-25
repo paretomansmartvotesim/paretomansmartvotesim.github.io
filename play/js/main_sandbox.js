@@ -1833,6 +1833,7 @@ function Config(ui, config, initialConfig) {
         codeEditorText: Election.defaultCodeScore,
         createStrategyType: "score",
         createBallotType: "Score",
+        minusControl: [],
     }
     // HOWTO: add to the end here (or anywhere inside)
 
@@ -2457,15 +2458,7 @@ function Cypher(ui) {
         94:"createStrategyType",
         95:"createBallotType",
         96:"showUtilityChart",
-        97:"minusControlCaptionShow",
-        98:"minusControlSankeyShow",
-        99:"minusControlWeightChartsShow",
-        100:"minusControlRoundChartShow",
-        101:"minusControlBallotPartShow0",
-        102:"minusControlBallotPartShow1",
-        103:"minusControlBallotPartShow2",
-        104:"minusControlBallotPartShow3",
-        105:"minusControlBallotPartShow4",
+        97:"minusControl",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -7878,18 +7871,19 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         var self = this
         self.init_sandbox = function() {
             if (model.minusControl == undefined) model.minusControl = {}
-            model.minusControl.caption = {show:config.minusControlCaptionShow}
             if (ui.minusControl == undefined) ui.minusControl = {}
-            ui.minusControl.sankey = {show:config.minusControlSankeyShow}
-            ui.minusControl.weightCharts = {show:config.minusControlWeightChartsShow}
-            ui.minusControl.roundChart = {show:config.minusControlRoundChartShow}
+            model.minusControl.caption = readConfigControl(0)
+            ui.minusControl.sankey = readConfigControl(1)
+            ui.minusControl.weightCharts = readConfigControl(2)
+            ui.minusControl.roundChart = readConfigControl(3)
             ui.minusControl.ballotPart = []
-            ui.minusControl.ballotPart[0] = {show:config.minusControlBallotPartShow0}
-            ui.minusControl.ballotPart[1] = {show:config.minusControlBallotPartShow1}
-            ui.minusControl.ballotPart[2] = {show:config.minusControlBallotPartShow2}
-            ui.minusControl.ballotPart[3] = {show:config.minusControlBallotPartShow3}
-            ui.minusControl.ballotPart[4] = {show:config.minusControlBallotPartShow4}
-            
+            ui.minusControl.ballotPart[0] = readConfigControl(4)
+            ui.minusControl.ballotPart[1] = readConfigControl(5)
+            ui.minusControl.ballotPart[2] = readConfigControl(6)
+            ui.minusControl.ballotPart[3] = readConfigControl(7)
+            ui.minusControl.ballotPart[4] = readConfigControl(8)
+            function readConfigControl(x) { return {show: defaultTrue(config.minusControl[x])} }
+            function defaultTrue(x) { return (x == undefined) ? true : x}
         }
     }
 
@@ -7924,17 +7918,26 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         config.codeEditorText = ui.dom.codeMirror.getValue() || "";
         // Minuses
         // if the minus is not defined, then it defaults to true. Maybe I should insert a step into the setup to set these variables to default to true with the others.
-        config.minusControlCaptionShow = defaultTrue(model.minusControl.caption.show)
-        config.minusControlSankeyShow = defaultTrue(ui.minusControl.sankey.show)
-        config.minusControlWeightChartsShow = defaultTrue(ui.minusControl.weightCharts.show)
-        config.minusControlRoundChartShow = defaultTrue(ui.minusControl.roundChart.show)
         var bp = ui.minusControl.ballotPart
-        config.minusControlBallotPartShow0 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[0].show)
-        config.minusControlBallotPartShow1 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[1].show)
-        config.minusControlBallotPartShow2 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[2].show)
-        config.minusControlBallotPartShow3 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[3].show)
-        config.minusControlBallotPartShow4 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[4].show)
+        if (bp == undefined) ui.minusControl.ballotPart = []
+        var mc = {
+            0: defaultTrue(model.minusControl.caption.show),
+            1: defaultTrue(ui.minusControl.sankey.show),
+            2: defaultTrue(ui.minusControl.weightCharts.show),
+            3: defaultTrue(ui.minusControl.roundChart.show),
+            4: defaultTrue(ui.minusControl.ballotPart[0].show),
+            5: defaultTrue(ui.minusControl.ballotPart[1].show),
+            6: defaultTrue(ui.minusControl.ballotPart[2].show),
+            7: defaultTrue(ui.minusControl.ballotPart[3].show),
+            8: defaultTrue(ui.minusControl.ballotPart[4].show),
+        }
         function defaultTrue(x) { return (x == undefined) ? true : x}
+        // convert to array
+        config.minusControl = []
+        for (const [key, value] of Object.entries(mc)) {
+            config.minusControl[key] = value
+        }
+        
     }
 
     ui.arena.save = new function() { // Create a "save" button
@@ -8071,15 +8074,13 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
             },
             field: "codeEditorText"
         },
-        { decode:{0:false,1:true}, field: "minusControlCaptionShow" },
-        { decode:{0:false,1:true}, field: "minusControlSankeyShow" },
-        { decode:{0:false,1:true}, field: "minusControlWeightChartsShow" },
-        { decode:{0:false,1:true}, field: "minusControlRoundChartShow" },
-        { decode:{0:false,1:true}, field: "minusControlBallotPartShow0" },
-        { decode:{0:false,1:true}, field: "minusControlBallotPartShow1" },
-        { decode:{0:false,1:true}, field: "minusControlBallotPartShow2" },
-        { decode:{0:false,1:true}, field: "minusControlBallotPartShow3" },
-        { decode:{0:false,1:true}, field: "minusControlBallotPartShow4" },
+        {
+            field: "minusControl",
+            decode:{
+                0:false,
+                1:true,
+            },
+        },
         {
             field: "hidegearconfig",
             decode:{
