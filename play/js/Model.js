@@ -630,6 +630,7 @@ function Model(idModel){
 						self.caption.querySelector("#" + e.eventID).addEventListener("mouseleave", ()=>self.drawArenas())
 					}
 				}
+				// addMinusButton(self.caption)
 			}
 		}
 	}
