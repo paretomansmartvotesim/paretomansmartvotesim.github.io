@@ -421,9 +421,9 @@ function addMinusButton(div) {
 	// add to dom
 	// var minus = document.createElement("div")
 	var minus = document.createElement("div")
-	// div.append(minus)
+	div.prepend(minus)
 	// div.parentNode.insertBefore(minus, div.nextSibling)
-	div.insertAdjacentElement('beforebegin', minus)
+	// div.insertAdjacentElement('beforebegin', minus)
 	// make float to upper right
 	// minus.style.position = "absolute"
 	// minus.style.top = "0"

@@ -542,12 +542,12 @@ function bindModel(ui,model,config) {
                 ui.dom.sankey = undefined
             }
             ui.dom.sankey = document.createElement("div")
+            addMinusButton(ui.dom.sankey)
     
             ui.dom.sankey.id = "chart"
             
         }
         ui.dom.right.prepend(ui.dom.sankey)
-        addMinusButton(ui.dom.sankey)
 
         ui.sankeyDistricts = model.district.length
 
@@ -830,6 +830,7 @@ function bindModel(ui,model,config) {
     
             ui.dom.roundChart = document.createElement("div")
             ui.dom.roundChart.id = "chart"
+            addMinusButton(ui.dom.roundChart)
     
             ui.dom.roundChart.innerHTML += '<div style="text-align:center;"><span class="small" > Votes by Round </span></div>'
 
@@ -884,7 +885,6 @@ function bindModel(ui,model,config) {
             
         }
         ui.dom.right.prepend(ui.dom.roundChart)
-        addMinusButton(ui.dom.roundChart)
 
         if (!haveCharts) {
             // set up chart
@@ -1426,6 +1426,7 @@ function bindModel(ui,model,config) {
     
             ui.dom.weightCharts = document.createElement("div")
             ui.dom.weightCharts.id = "chart"
+            addMinusButton(ui.dom.weightCharts)
             
     
             ui.dom.weightCharts.innerHTML += '<div style="text-align:center;"><span class="small" > Voter Weight by Round</span></div>'
@@ -1478,7 +1479,6 @@ function bindModel(ui,model,config) {
             
         }
         ui.dom.right.prepend(ui.dom.weightCharts) // yes, prepend every time so that we get the order right... maybe not the best solution but it works
-        addMinusButton(ui.dom.weightCharts)
     
         if (!haveCharts) {
             // set up chart
