@@ -385,6 +385,7 @@ function bindModel(ui,model,config) {
 		// ui.menu.gearicon.init_sandbox()
 		ui.arena.desc.init_sandbox()
 		ui.arena.codeEditor.init_sandbox()
+        ui.arena.minusControl.init_sandbox()
         ui.menu.theme.init_sandbox();
         // UPDATE
         ui.menu_update()
@@ -2456,6 +2457,15 @@ function Cypher(ui) {
         94:"createStrategyType",
         95:"createBallotType",
         96:"showUtilityChart",
+        97:"minusControlCaptionShow",
+        98:"minusControlSankeyShow",
+        99:"minusControlWeightChartsShow",
+        100:"minusControlRoundChartShow",
+        101:"minusControlBallotPartShow0",
+        102:"minusControlBallotPartShow1",
+        103:"minusControlBallotPartShow2",
+        104:"minusControlBallotPartShow3",
+        105:"minusControlBallotPartShow4",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -7864,6 +7874,25 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         self.text.dom = codeEditorText
     }
 
+    ui.arena.minusControl = new function() {
+        var self = this
+        self.init_sandbox = function() {
+            if (model.minusControl == undefined) model.minusControl = {}
+            model.minusControl.caption = {show:config.minusControlCaptionShow}
+            if (ui.minusControl == undefined) ui.minusControl = {}
+            ui.minusControl.sankey = {show:config.minusControlSankeyShow}
+            ui.minusControl.weightCharts = {show:config.minusControlWeightChartsShow}
+            ui.minusControl.roundChart = {show:config.minusControlRoundChartShow}
+            ui.minusControl.ballotPart = []
+            ui.minusControl.ballotPart[0] = {show:config.minusControlBallotPartShow0}
+            ui.minusControl.ballotPart[1] = {show:config.minusControlBallotPartShow1}
+            ui.minusControl.ballotPart[2] = {show:config.minusControlBallotPartShow2}
+            ui.minusControl.ballotPart[3] = {show:config.minusControlBallotPartShow3}
+            ui.minusControl.ballotPart[4] = {show:config.minusControlBallotPartShow4}
+            
+        }
+    }
+
     ui.arena.codeSave = new function() { // Create a "save" button for code
         var self = this
         var codeSaveDOM = document.createElement("div");
@@ -7893,6 +7922,19 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         // Description
         config.description = ui.dom.descText.value || "";
         config.codeEditorText = ui.dom.codeMirror.getValue() || "";
+        // Minuses
+        // if the minus is not defined, then it defaults to true. Maybe I should insert a step into the setup to set these variables to default to true with the others.
+        config.minusControlCaptionShow = defaultTrue(model.minusControl.caption.show)
+        config.minusControlSankeyShow = defaultTrue(ui.minusControl.sankey.show)
+        config.minusControlWeightChartsShow = defaultTrue(ui.minusControl.weightCharts.show)
+        config.minusControlRoundChartShow = defaultTrue(ui.minusControl.roundChart.show)
+        var bp = ui.minusControl.ballotPart
+        config.minusControlBallotPartShow0 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[0].show)
+        config.minusControlBallotPartShow1 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[1].show)
+        config.minusControlBallotPartShow2 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[2].show)
+        config.minusControlBallotPartShow3 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[3].show)
+        config.minusControlBallotPartShow4 = (bp == undefined) ? true : defaultTrue(ui.minusControl.ballotPart[4].show)
+        function defaultTrue(x) { return (x == undefined) ? true : x}
     }
 
     ui.arena.save = new function() { // Create a "save" button
@@ -8029,6 +8071,15 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
             },
             field: "codeEditorText"
         },
+        { decode:{0:false,1:true}, field: "minusControlCaptionShow" },
+        { decode:{0:false,1:true}, field: "minusControlSankeyShow" },
+        { decode:{0:false,1:true}, field: "minusControlWeightChartsShow" },
+        { decode:{0:false,1:true}, field: "minusControlRoundChartShow" },
+        { decode:{0:false,1:true}, field: "minusControlBallotPartShow0" },
+        { decode:{0:false,1:true}, field: "minusControlBallotPartShow1" },
+        { decode:{0:false,1:true}, field: "minusControlBallotPartShow2" },
+        { decode:{0:false,1:true}, field: "minusControlBallotPartShow3" },
+        { decode:{0:false,1:true}, field: "minusControlBallotPartShow4" },
         {
             field: "hidegearconfig",
             decode:{
