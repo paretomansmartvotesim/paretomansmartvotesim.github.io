@@ -5767,6 +5767,13 @@ function drawWeightUsed(model,arena,barOptions,v,round) {
 				var beforePowerUsed = thisround.beforePowerUsed[idx]
 				var powerUsed = thisround.powerUsed[idx]
 				drawOneLayerOfWeightUsed(model,arena,i,beforePowerUsed,powerUsed,winnerIndex,barOptions)
+			} else if (barOptions.doSatisfaction) {
+				var powerUsed = thisround.powerUsed[idx]
+				var support = v[i].b[winnerIndex] / model.result.history.maxscore
+				var satisfaction = powerUsed * support
+				if (r==0) var beforeSatisfaction = v.map( () => 0)
+				drawOneLayerOfWeightUsed(model,arena,i,beforeSatisfaction[idx],satisfaction,winnerIndex,barOptions)
+				beforeSatisfaction[idx] += satisfaction
 			} else {
 				var beforeWeightUsed = thisround.beforeWeightUsed[idx]
 				var weightUsed = thisround.weightUsed[idx]
@@ -5781,6 +5788,8 @@ function drawWeightUsed(model,arena,barOptions,v,round) {
 	if (model.showPowerChart) {
 		if (barOptions.doPowerUsed) { 
 			_drawText("Voter Power Used",10,barOptions.base - 120,40,arena.ctx,"start")
+		} else if (barOptions.doSatisfaction) {
+			_drawText("Ballot Satisfaction from Power",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
 		} else {
 			_drawText("Voter Weight Used",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
 		}

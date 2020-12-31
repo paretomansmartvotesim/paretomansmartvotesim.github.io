@@ -1558,6 +1558,13 @@ function bindModel(ui,model,config) {
         canvasP.style = "height: 67px; width:200px; margin-left: 10px;"
         ui.dom.weightChartsSpace[i].append(canvasP)
         
+        var canvasS = document.createElement('canvas')
+        var ctxS = canvasS.getContext('2d')
+        canvasS.height = 201
+        canvasS.width = 600
+        canvasS.style = "height: 67px; width:200px; margin-left: 10px;"
+        ui.dom.weightChartsSpace[i].append(canvasS)
+        
         var canvasWK = document.createElement('canvas')
         var ctxWK = canvasWK.getContext('2d')
         canvasWK.height = 300
@@ -1573,7 +1580,7 @@ function bindModel(ui,model,config) {
         ui.dom.weightChartsSpace[i].append(canvasK)
         
 
-        ui.weightCharts[i] = {arena: {canvas:canvas, ctx:ctx} , arenaP: {canvas:canvasP, ctx:ctxP} , arenaU: {canvas:canvasU, ctx:ctxU} , arenaW: {canvas:canvasW, ctx:ctxW} , arenaK: {canvas:canvasK, ctx:ctxK} , arenaWK: {canvas:canvasWK, ctx:ctxWK} }
+        ui.weightCharts[i] = {arena: {canvas:canvas, ctx:ctx} , arenaP: {canvas:canvasP, ctx:ctxP} , arenaU: {canvas:canvasU, ctx:ctxU} , arenaW: {canvas:canvasW, ctx:ctxW} , arenaK: {canvas:canvasK, ctx:ctxK} , arenaWK: {canvas:canvasWK, ctx:ctxWK}  , arenaS: {canvas:canvasS, ctx:ctxS}}
     
         ui.dom.weightChartsBackButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
@@ -1653,6 +1660,15 @@ function bindModel(ui,model,config) {
             arenaP.ctx.clearRect(0,0,arenaP.canvas.width,arenaP.canvas.height)
             drawWeightUsed(model,arenaP,barOptionsP,v,round+1)
 
+            // show satisfaction
+            var arenaS = ui.weightCharts[iDistrict].arenaS
+            arenaS.canvas.hidden = false
+            var barOptionsS = _jcopy(barOptions)   
+            barOptionsS.base = 200
+            barOptionsS.doSatisfaction = true
+            arenaS.ctx.clearRect(0,0,arenaS.canvas.width,arenaS.canvas.height)
+            drawWeightUsed(model,arenaS,barOptionsS,v,round+1)
+
             if (model.system == "Phragmen Seq S") {
 
                 var arenaWK = ui.weightCharts[iDistrict].arenaWK
@@ -1687,6 +1703,9 @@ function bindModel(ui,model,config) {
 
             var arenaK = ui.weightCharts[iDistrict].arenaK
             arenaK.canvas.hidden = true
+
+            var arenaS = ui.weightCharts[iDistrict].arenaS
+            arenaS.canvas.hidden = true
         }
     }
     
