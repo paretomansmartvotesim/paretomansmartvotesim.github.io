@@ -4120,6 +4120,7 @@ function lpGeneral(_solver,district,model,options) {
 	district.stages[model.stage].assignments = phragmenResult.assignments
 
 	var winners = _getWinnersFromPhragmenResult(phragmenResult,cans)
+	var iWinners = _getIWinnersFromPhragmenResult(phragmenResult,cans)
 
 
 	// var winners = _countWinner(tally);
@@ -4157,6 +4158,32 @@ function lpGeneral(_solver,district,model,options) {
 		}
 
 		result.text = text;
+
+		result.iWinners = iWinners // district candidate indexes of winners
+		result.history = {}
+		result.history.rounds = []
+		for (var r = 0; r < iWinners.length; r++) {
+			var k = iWinners[r]
+			if (r == 0) {
+				var beforeWeightUsed = b.map( () => 0)
+			} else {
+				for (var i = 0; i < weightUsed.length; i++) {
+					beforeWeightUsed[i] += weightUsed[i]
+				}
+			}
+			var weightUsed = phragmenResult.assignments.map( x => x[k])
+			var winners = [district.candidates[k].i]
+			var round = {
+				weightUsed:_jcopy(weightUsed),
+				beforeWeightUsed:_jcopy(beforeWeightUsed),
+				powerUsed:_jcopy(weightUsed),
+				beforePowerUsed:_jcopy(beforeWeightUsed),
+				winners:_jcopy(winners),
+			}
+			result.history.rounds.push(round)
+		}
+		result.history.maxscore = maxscore
+
 	}
 	
 	if (model.doTop2) var theTop2 = _sortTally(tally).slice(0,2)
@@ -4493,6 +4520,16 @@ function _getWinnersFromPhragmenResult(phragmenResult,cans) {
 	return winners
 } 
 
+function _getIWinnersFromPhragmenResult(phragmenResult,cans) {
+	var winners = []
+	for (var k = 0; k < cans.length; k++) {
+		if (phragmenResult.canResult[k] == 1) {
+			winners.push(k)
+		}
+	}
+	return winners
+} 
+
 
 function _getAssignmentsFromLP(results, ni, nk) {
 
@@ -4500,7 +4537,11 @@ function _getAssignmentsFromLP(results, ni, nk) {
 	for(var i = 0; i < ni; i++ ){
 		a[i] = []
 		for(var k = 0; k < nk; k++){
-			a[i][k] = results["y" + i + "_" + k]
+			var x = results["y" + i + "_" + k]
+			if (typeof x !== "number") {
+				x = 0
+			}
+			a[i][k] = x
 		}
 	}
 	return a

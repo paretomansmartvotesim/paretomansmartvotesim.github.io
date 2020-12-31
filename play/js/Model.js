@@ -819,7 +819,7 @@ function Model(idModel){
 		return self.checkSystemWithBarChart() && ! (self.roundChart == "off")
 	}
 	self.checkSystemWithBarChart = function () {
-		return self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "Monroe Seq S" || self.system == "Phragmen Seq S" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV"
+		return self.system == "QuotaApproval"  || self.system == "QuotaScore" || self.system == "Monroe Seq S" || self.system == "Phragmen Seq S" || self.system == "RRV" ||  self.system == "RAV" ||  self.system == "STV" || self.system == "equalFacilityLocation"
 	}
 	self.checkSystemWithRoundButtons = function() { 
 		return self.checkSystemWithBarChart() || self.system == "IRV"
