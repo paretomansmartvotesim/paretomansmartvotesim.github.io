@@ -5754,6 +5754,7 @@ function _drawBars(iDistrict, arena, model, round) {
 	barOptions.heightRectangle = 100
 	barOptions.base = 600
 	barOptions.baralpha = .8
+	barOptions.fontSize = 32
 
 	drawWeightUsed(model,arena,barOptions,v,round)
 
@@ -5829,11 +5830,11 @@ function drawWeightUsed(model,arena,barOptions,v,round) {
 
 	if (model.showPowerChart) {
 		if (barOptions.doPowerUsed) { 
-			_drawText("Voter Power Used",10,barOptions.base - 120,40,arena.ctx,"start")
+			_drawText("Voter Weight Contributed to Candidates",10,barOptions.base - 120,barOptions.fontSize,arena.ctx,"start")
 		} else if (barOptions.doSatisfaction) {
-			_drawText("Ballot Satisfaction from Power",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
+			_drawText("Voter Support for Assigned Candidate",10,barOptions.base - 120,barOptions.fontSize,arena.ctx,"start") // used to be _drawStroked
 		} else {
-			_drawText("Voter Weight Used",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
+			_drawText("Voter Weighting Used by Method",10,barOptions.base - 120,barOptions.fontSize,arena.ctx,"start") // used to be _drawStroked
 		}
     }
 	
@@ -5911,9 +5912,9 @@ function drawKWeightUsed(model,arena,barOptions,v,round) {
 
 	if (model.showPowerChart) {
 		if (barOptions.doPowerUsed) { 
-			_drawText("Voter Power Used",10,barOptions.base - 120,40,arena.ctx,"start")
+			_drawText("Voter Weight Contributed to Candidates",10,barOptions.base - 120,barOptions.fontSize,arena.ctx,"start")
 		} else {
-			_drawText("Voter Weight Used KP Transform",10,barOptions.base - 120,40,arena.ctx,"start") // used to be _drawStroked
+			_drawText("Voter Weighting Used by Method, KP",10,barOptions.base - 120,barOptions.fontSize,arena.ctx,"start") // used to be _drawStroked
 		}
     }
 	

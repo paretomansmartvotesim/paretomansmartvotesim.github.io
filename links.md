@@ -92,3 +92,4 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 #### Tangents
 - [Windmill Problem](https://www.youtube.com/watch?v=M64HUIJFTZM) - by 3Blue1Brown
 - [Facility Location Problem](https://en.wikipedia.org/wiki/Facility_location_problem) - on Wikipedia
+- [Facility Location Problem](https://www.gurobi.com/resource/facility-location-demo/) - on Gurobi's demo site (free demo but requires setting up an account)

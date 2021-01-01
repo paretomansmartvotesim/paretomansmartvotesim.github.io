@@ -1618,6 +1618,7 @@ function bindModel(ui,model,config) {
         barOptions.widthRectangle = barOptions.width / v.length    
         barOptions.heightRectangle = 100
         barOptions.baralpha = .9
+        barOptions.fontSize = 32
         
         barOptions.heightRectangle2 = Math.min(200 / model.candidates.length, 200/5)
 

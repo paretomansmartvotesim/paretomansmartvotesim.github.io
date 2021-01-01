@@ -138,19 +138,31 @@ id = "voter_chart_sim"
 gif = "gif/voter_chart.gif"
 %}
 
-Below this chart is another chart which I called a **power** chart. When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the power chart. The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power . (This is best viewed on a bigger screen. there's a lot of bookkeeping to do between rounds.) 
+Below this chart are a couple of charts that are a measure of voter power. They track the weight of the each voter's contribution to a candidate's election. When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the chart. The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power.
 
-In the background is a dark bar that shows what total equality would look like. The height of this bar is each voter's ideal share of representation. As candidates get elected, the bar is covered, showing that voters got represented. Any part of the bar that is still showing after all candidates are elected shows that some voters are underrepresented.
+In the first chart of the "Voter Weighting Used by the Method", the exact weights used by the voting method to select winners in each round are shown. To choose the final winner, the election is similar to a single-winner election. All that the last guy needs to win is 50% of the remaining vote weight. In the background is a dark bar with a height that corresponds to a vote at its full weight. As candidates get elected, the bar is covered. Any part of the bar that is still showing after all candidates are elected shows votes that are still not counted.
 
-(The voters and candidates are arranged in a line by using an algorithm that solves the traveling salesman problem to keep voters together who are near each other in 2D space. Specifically, the ballots are used as coordinates or feature vectors since this 2D space isn't something you'd be able to see in an election. You can wiggle around the candidates in this chart to see them take the traveling salesman's route to visit all the voters.)
+In the second chart of the "Voter Weight Contributed to Candidates", the total weight given to each candidate is rescaled so that it is equal for each candidate and sums across candidates to the full amount of representation available. In the background is a dark bar with a height that corresponds to every voter contributing equally to the election of the candidates. The height of this bar is each voter's ideal share of representation. 
+
+(Also, here are a few more specifics about these charts. The voters and candidates are arranged in a line by using an algorithm that solves the traveling salesman problem to keep voters together who are near each other in 2D space. Specifically, the ballots are used as coordinates or feature vectors since this 2D space isn't something you'd be able to see in an election.)
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxs_sZiG61xSGu4gQUNAjBt-N4OGnF6bTFxK_xZLJfpZZ129TJx04bSyWXODQh0eUvI22eRJjY6zyNGifZdyo8p12jeY67kflsaEZsYzZoWSuVVtbyw1ao9IwtxmLD_y_6PSqVbr6ojLuV5W6Fa67jKXOGghCiuAEgKdQlhABugbHOAoJbqEjwRFKCRwMESdBI0HBARw004ogGIrBoTaE8beEsqOSsKuoQpMG0hdfXb7YbGsCquDCHZUqNejS0evVgBnwM5BjolXoGLdna7bpmKas5Hg-XaEsmOyztuECHFR0X6LCidwCs6I7ayG0dVlgFcHYa3sVgqPVUrCHEQGFQYEuCQ4Fj1mGhKwAWOt7UDe_ujuI4-jbzuNIA4dPpcnn7ePx8P8ff-nB6fTk_l-9fV4vS8SEDAAA)"
-title = "Power Chart"
-caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory. Mouse over the rounds to see how the chart progresses through the rounds. "
+title = "Weight Charts"
+caption = "See the chart at the bottom for a visualization of where votes were counted towards a candidate's victory. Click through the rounds to see how the chart progresses through the rounds. "
 comment = "power chart time"
 id = "power_sim" 
 gif = "gif/power.gif"
 %}
+
+### Voter Power
+
+Voter weight contributed to candidates is not exactly voter power. Power is a collective phenomenon. 
+
+Think of single-winner voting methods. The winner is most representative of the median of the group. The median is a collective measure. If there are two sides and both are competing for the median, then both sides are represented. To see why this is the case, consider a case where the election is not competitive and the median belongs to only one side, then all the voters on that side benefit from that power, which is not very representative. The most representative election would be a competitive election where the median could be on either side. 
+
+In STV, there are multiple "medians" (more like percentiles), one for each winner. These medians can be spread out over a larger region than for the single-winner case. This means there are more ways to be part of a group that wins and candidates have to pay attention to more voters. 
+
+Also, consider what would happen if, after the election, a candidate shifted their position toward the center of the group that elected them. They would lose the more moderate voters that voted for them when the next election comes.
 
 ### Quota Excess
 
