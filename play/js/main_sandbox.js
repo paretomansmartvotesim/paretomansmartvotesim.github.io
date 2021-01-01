@@ -1172,6 +1172,9 @@ function bindModel(ui,model,config) {
     
             ui.dom.utilityChart.innerHTML += '<div style="text-align:center;"><span class="small" > Utility </span></div>'
 
+            if (ui.minusControl == undefined) ui.minusControl = {}
+            if (ui.minusControl.utilityChart == undefined) ui.minusControl.utilityChart = {}
+            addMinusButtonC(ui.dom.utilityChart,ui.minusControl.utilityChart)
             
             ui.dom.utilityChartRoundNumText = []
             ui.dom.utilityChartBackButton = []
@@ -7930,6 +7933,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         self.init_sandbox = function() {
             if (model.minusControl == undefined) model.minusControl = {}
             if (ui.minusControl == undefined) ui.minusControl = {}
+
             model.minusControl.caption = readConfigControl(0)
             ui.minusControl.sankey = readConfigControl(1)
             ui.minusControl.weightCharts = readConfigControl(2)
@@ -7940,6 +7944,8 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
             ui.minusControl.ballotPart[2] = readConfigControl(6)
             ui.minusControl.ballotPart[3] = readConfigControl(7)
             ui.minusControl.ballotPart[4] = readConfigControl(8)
+            ui.minusControl.utilityChart = readConfigControl(9)
+
             function readConfigControl(x) { return {show: defaultTrue(config.minusControl[x])} }
             function defaultTrue(x) { return (x == undefined) ? true : x}
         }
@@ -7988,6 +7994,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
             6: defaultTrue(ui.minusControl.ballotPart[2].show),
             7: defaultTrue(ui.minusControl.ballotPart[3].show),
             8: defaultTrue(ui.minusControl.ballotPart[4].show),
+            9: defaultTrue(ui.minusControl.utilityChart.show),
         }
         function defaultTrue(x) { return (x == undefined) ? true : x}
         // convert to array
