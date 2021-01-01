@@ -85,6 +85,8 @@ gif = "gif/sequential_monroe_score.gif"
 
 ## STV's Quota
 
+(mostly a refresher from the STV page)
+
 STV uses a quota to assign voters to candidates in a similar way to the facility location problem.
 
 Once a candidate has been elected by a quota of voters, the voters have successfully used their ballot to get representation, so it is not counted again for a second candidate.
@@ -100,9 +102,31 @@ id = "proportional_two_to_one_sim"
 gif = "gif/proportional_two_to_one.gif" 
 %}
 
+### Visualization 
+
+(refresher from STV page)
+
 Notice the chart that shows a visual of the process of elimination. It starts at the top and each row tracks who the **voter's** top pick is. Each column is a voter. Transparency is used to represent the excess vote that remains after a quota is filled. As candidates are eliminated, the groups of voters become visually apparent.
 
-Below this chart is another chart which I called a **power** chart. When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the power chart. The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power . (This is best viewed on a bigger screen. there's a lot of bookkeeping to do between rounds.) 
+Below this chart are a couple of charts that are a measure of voter power. They track the weight of the each voter's contribution to a candidate's election. When a candidate is elected in a round, the voters whose vote counted for that candidate are added to fill up the chart. The intuition is that the voter could have voted for someone else, so the candidate owes them some share of their power.
+
+In the first chart of the "Voter Weighting Used by the Method", the exact weights used by the voting method to select winners in each round are shown. To choose the final winner, the election is similar to a single-winner election. All that the last guy needs to win is 50% of the remaining vote weight. In the background is a dark bar with a height that corresponds to a vote at its full weight. As candidates get elected, the bar is covered. Any part of the bar that is still showing after all candidates are elected shows votes that are still not counted.
+
+In the second chart of the "Voter Weight Contributed to Candidates", the total weight given to each candidate is rescaled so that it is equal for each candidate and sums across candidates to the full amount of representation available. In the background is a dark bar with a height that corresponds to every voter contributing equally to the election of the candidates. The height of this bar is each voter's ideal share of representation. 
+
+(Also, here are a few more specifics about these charts. The voters and candidates are arranged in a line by using an algorithm that solves the traveling salesman problem to keep voters together who are near each other in 2D space. Specifically, the ballots are used as coordinates or feature vectors since this 2D space isn't something you'd be able to see in an election.)
+
+### Visualization of  Voter Power
+
+(refresher from STV page)
+
+Voter weight contributed to candidates is not exactly voter power. Power is a collective phenomenon. 
+
+Think of single-winner voting methods. The winner is most representative of the median of the group. The median is a collective measure. If there are two sides and both are competing for the median, then both sides are represented. To see why this is the case, consider a case where the election is not competitive and the median belongs to only one side, then all the voters on that side benefit from that power, which is not very representative. The most representative election would be a competitive election where the median could be on either side. 
+
+In STV, there are multiple "medians" (more like percentiles), one for each winner. These medians can be spread out over a larger region than for the single-winner case. This means there are more ways to be part of a group that wins and candidates have to pay attention to more voters. 
+
+Also, consider what would happen if, after the election, a candidate shifted their position toward the center of the group that elected them. They would lose the more moderate voters that voted for them when the next election comes.
 
 ------
 
@@ -121,8 +145,6 @@ The concept of a quota extends to multiple ballot counting methods:
 <!-- SNTV? SNTV kind of is proportional-->
 
 The power chart is more useful for scoring methods because the voter can support multiple candidates at the same time. That means the voter is able to say that their vote counted for a candidate so that candidate owes them some share of representation. Also, the votes by round has an additional data dimension for the same reason, and it's hard to visualize, so you need to click through the rounds to see how the election was counted.
-
-Also, this concept of power is not the only concept of power. Think of single-winner voting methods. The power is collective. The winner is most representative of the median of the group. If the median belongs to one side, then all the voters on that side benefit from that power. The most representative election would be a competitive election where the median could be on either side. 
 
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04DMRD8F9dbeN--_AZ0pxSA0kUKQjQIwbez9hAUCUVXjNezOx6P77P1dth3TcpxpJ2lU0otTEh0-90RmysZnXiRwlIrPh6p8ZxOreY5nkGRs8GCOMZs0Hbo1Kwd2jdvjZqvOmqsyCzo9O8rZtxltrsM96XNDHEWlHDABsD5HIAywFZYx0VBaQs1KZ3alNLRAsEmZKRkuMDBQUYS1UAFFe3LKM8MeBEqa1YVPAxpKe1Mf99sDzRAVXFhJiElJ6sG69cMZsG3hdwWepWehS01-3-cxbJliZfCJWxbm45IHRdwROG4gCMKdwCi8AQ31mmOKKIDeHUG3iUQaPhyrGUkIBFwENuChIPEbCLCVAAiTLxpXn-qBDlucpupJa40IDggOCA4IDhsGR0OwDs8P53Pl_fHj9dT_cQPL5e3U_v6AVYwU-E3AwAA)"
