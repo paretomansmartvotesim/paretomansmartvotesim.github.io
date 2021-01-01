@@ -1431,9 +1431,14 @@ function bindModel(ui,model,config) {
             return
         }
     
-        // hmm, might have a problem with changing number of districts.
+        var old = ui.justFinal
+        ui.justFinal = model.system == "equalFacilityLocation" // only show the final assignments
+        var matchOpt = old == ui.justFinal 
+
+        // redo charts when changing number of districts.
+        var matchDist = ui.weightChartsDistricts == model.district.length
     
-        var haveCharts = (ui.dom.weightCharts != undefined) && ui.weightChartsDistricts == model.district.length  // we already have the number of charts we need. They're ready.
+        var haveCharts = (ui.dom.weightCharts != undefined) && matchDist && matchOpt  // we already have the number of charts we need. They're ready.
     
         // turning on
         if (haveCharts) { // we already have the number of charts we need. They're ready.
@@ -1450,7 +1455,11 @@ function bindModel(ui,model,config) {
             ui.dom.weightCharts = document.createElement("div")
             ui.dom.weightCharts.id = "chart"
             
-            ui.dom.weightCharts.innerHTML += '<div style="text-align:center;"><span class="small" > Voter Weight by Round</span></div>'
+            if (ui.justFinal) {
+                ui.dom.weightCharts.innerHTML += '<div style="text-align:center;"><span class="small" > Voter Weight by Candidate</span></div>'
+            } else {
+                ui.dom.weightCharts.innerHTML += '<div style="text-align:center;"><span class="small" > Voter Weight by Round</span></div>'
+            }
     
             if (ui.minusControl == undefined) ui.minusControl = {}
             if (ui.minusControl.weightCharts == undefined) ui.minusControl.weightCharts = {}
