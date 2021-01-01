@@ -1252,12 +1252,21 @@ function bindModel(ui,model,config) {
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'Voter ID');
         cans.forEach( c => data.addColumn('number', c.name) )
+        var doMax = true
+        if (doMax) {
+            data.addColumn('number', "Max Utility of Winners")
+        }
 
         var optDist = {dontSort: true, noBallot:true}
 
         var rows = []
         var i = 0
 
+        if (doMax) {
+            var winnerCans = district.candidates.filter(c => district.result.winners.includes(c.id))
+            var winnerIndices = winnerCans.map( c => c.i )
+            var rowsPlus = []
+        }
         
         if (model.orderOfVoters) {
             var vPeople = []
@@ -1286,8 +1295,16 @@ function bindModel(ui,model,config) {
             var distList = makeDistList(model,voterPerson,null,cans,optDist)
             voterPerson.distList = distList // just pass it along.. maybe do this part better
             var utilities = distList.map( c => c.uNorm )
+            if (doMax) {
+                var winnerUtilities = utilities.filter( (x,idx) => winnerIndices.includes(idx))
+                var maxUtility = winnerUtilities.reduce( (a,b) =>  Math.max(a, b) )
+            }
             utilities.unshift(i)
-            rows.push(utilities)
+            rows.push(_jcopy(utilities))
+            if (doMax) {
+                utilities.push(maxUtility)
+                rowsPlus.push(utilities)
+            }
             i++
         }
         
@@ -1303,12 +1320,19 @@ function bindModel(ui,model,config) {
         for (let c of cans) {
             seriesColors.push({color: hslToHex(color(c.id))})
         }
+        if (doMax) {
+            seriesColors.push({color: "#555", pointSize:2, lineWidth:0}) // max chosen
+        }
         // seriesColors = cans.map( c => { color:hslToHex(color(c.id)) } )
 
         // var getName = (cid) => model.candidatesById[cid].name
         // var fPercent = (frac) => Math.round(100 * frac) + "%"
 
-        data.addRows(rows);
+        if (doMax) {
+            data.addRows(rowsPlus);
+        } else {
+            data.addRows(rows);
+        }
 
 
         // var formatter = new google.visualization.NumberFormat(
