@@ -5794,6 +5794,8 @@ function drawWeightUsed(model,arena,barOptions,v,round) {
     // build one layer at a time
 	// for the last layer, keep track of the ballot weight remaining (unUsed) after the round
 	// rLimit is the upper bound for the index of the rounds. It lets us loop through all the rounds that ran previously.
+	
+	if (barOptions.doSatisfaction) var beforeSatisfaction = v.map( () => 0)
     for (var r=0; r < rLimit; r++) {
         var thisround = model.result.history.rounds[r]
         if (thisround.winners.length == 0) continue
@@ -5812,7 +5814,6 @@ function drawWeightUsed(model,arena,barOptions,v,round) {
 				var powerUsed = thisround.powerUsed[idx]
 				var support = v[i].b[winnerIndex] / model.result.history.maxscore
 				var satisfaction = powerUsed * support
-				if (r==0) var beforeSatisfaction = v.map( () => 0)
 				drawOneLayerOfWeightUsed(model,arena,i,beforeSatisfaction[idx],satisfaction,winnerIndex,barOptions)
 				beforeSatisfaction[idx] += satisfaction
 			} else {

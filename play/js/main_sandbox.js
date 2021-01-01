@@ -1661,13 +1661,18 @@ function bindModel(ui,model,config) {
             drawWeightUsed(model,arenaP,barOptionsP,v,round+1)
 
             // show satisfaction
-            var arenaS = ui.weightCharts[iDistrict].arenaS
-            arenaS.canvas.hidden = false
-            var barOptionsS = _jcopy(barOptions)   
-            barOptionsS.base = 200
-            barOptionsS.doSatisfaction = true
-            arenaS.ctx.clearRect(0,0,arenaS.canvas.width,arenaS.canvas.height)
-            drawWeightUsed(model,arenaS,barOptionsS,v,round+1)
+            if (model.system != "STV") {
+                var arenaS = ui.weightCharts[iDistrict].arenaS
+                arenaS.canvas.hidden = false
+                var barOptionsS = _jcopy(barOptions)   
+                barOptionsS.base = 200
+                barOptionsS.doSatisfaction = true
+                arenaS.ctx.clearRect(0,0,arenaS.canvas.width,arenaS.canvas.height)
+                drawWeightUsed(model,arenaS,barOptionsS,v,round+1)
+            } else {
+                var arenaS = ui.weightCharts[iDistrict].arenaS
+                arenaS.canvas.hidden = true
+            }
 
             if (model.system == "Phragmen Seq S") {
 
