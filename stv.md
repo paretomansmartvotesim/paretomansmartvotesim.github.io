@@ -78,7 +78,7 @@ id='crowded_sim'
 gif = "gif/crowded.gif"
 %}
 
-If you use single-winner Ranked Choice Voting, then the quota is 50%. The ballot counts for the top choice, so there is no way that there is another candidate with more than 50% of ballots who could win. So, more than 50% of people are represented. More than 50% had their votes matter in the election (unless they didn't use all their rankings).
+If you use single-winner Ranked Choice Voting, then the quota is 50%. The ballot counts for the top choice, so there is no way that there is another candidate with more than 50% of ballots who could win. So, in the final round, between the last two contenders, more than 50% of people who had a preference between the two got their preferred candidate. In that sense, more than 50% of people are represented because their votes mattered in deciding the outcome.
 
 **Refresher on RCV:** Ranked choice voting asks voters to rank the candidates in order from best to worst. During counting, your vote counts for your top candidate. One-by-one, the candidate with the least number of votes is eliminated and taken out of the running. **Check out the sketch below** that shows everyone connected to their first pick. Colored flow lines show some voters moving to their next choice after their top pick is eliminated. The flow diagram shown on the right is called a Sankey diagram.
 
@@ -116,6 +116,18 @@ gif = "gif/three.gif"
 
 Ranked-Choice Voting is better (more representative) when it allows smaller groups to be represented. Five would be a great number. More would be even more representative but could be overwhelming. Voters don’t have to rank all the candidates. They just need to rank enough to get one candidate elected, or maybe two.
 
+Before we move on, let's revisit this idea of representation with a few tangent ideas that we'll only discuss briefly. Like we said before, in the final round, between the last two contenders, more than 50% of people who had a preference between the two got their preferred candidate. In that sense, more than 50% of people are represented because their votes mattered in deciding the outcome. Let's dive into a little more detail.
+
+<!--In another sense, many of those voters probably don't feel represented by that one preference. I have personally voted for many candidates that don't entirely represent me. Only in the sense of choosing between two did I feel my vote mattered.-->
+
+**Tangent 1:** Which supporters does a candidate represent? Which supporters could affect the outcome? Maybe candidates don't have to pay much attention to their most ardent supporters because their vote is guaranteed. The voters that really matter to them in this model are "swing voters" because those could go either way. In that case, STV is pretty good because there are many boundaries between candidates where voters can swing either way, so more voters matter to the outcome.
+
+**Tangent 2:** In another sense, the only position the candidate represents is their own. In that case, STV is still pretty good because there are more positions represented and voters have a candidate with a closer position to their own.
+
+**Tangent 3:** I didn't model voter engagement, but there is a point to be made here, and it's where I think an improvement could be made to this model. Disengaged voters are on a candidate's side but they don't vote because it takes time and effort. One way I could model engagement is to figure that the closer a voter's position is to a candidate, the more engaged that voter will be. In that case, having more candidates will lead to greater voter engagement. That is a key feature of voting methods where voters can give their opinion on many candidates, like STV.
+
+<!--In another sense, the only position the candidate represents is their own.-->
+
 ## Counting Ballots
 
 The fundamental part of what makes STV work is that it counts quotas exactly once.
@@ -129,6 +141,8 @@ This counting method is important because it is what allows small groups to come
 ### Visualization
 
 See the example chart below for a visual of the process of elimination. It starts at the top and each row tracks who the **voter's** top pick is. Each column is a voter. Transparency is used to represent the excess vote that remains after a quota is filled. As candidates are eliminated, the groups of voters become visually apparent.
+
+Also, notice that the choice of quota size makes sense because 50% of remaining votes are required to elect the final candidate.
 
 {% include sim.html link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSu04EMQz8l9QuYjuxs_sZiG61xSGu4gQUNAjBt-N4OGnF6bTFxK_xZLJfpZZ129TJx04bSyWXODQh0eUvI22eRJjY6zyNGifZdyo8p12jeY67kflsaEZsYzZoWSuVVtbyw1ao9IwtxmLD_y_6PSqVbr6ojLuV5W6Fa67jKXOGghCiuAEgKdQlhABugbHOAoJbqEjwRFKCRwMESdBI0HBARw004ogGIrBoTaE8beEsqOSsKuoQpMG0hdfXb7YbGsCquDCHZUqNejS0evVgBnwM5BjolXoGLdna7bpmKas5Hg-XaEsmOyztuECHFR0X6LCidwCs6I7ayG0dVlgFcHYa3sVgqPVUrCHEQGFQYEuCQ4Fj1mGhKwAWOt7UDe_ujuI4-jbzIBwgfDpdLm8fj5_v5_hbH06vL-fn8v0LhmM1_yEDAAA)"
 title = "Voter Chart By Round"
@@ -160,7 +174,7 @@ Voter weight contributed to candidates is not exactly voter power. Power is a co
 
 Think of single-winner voting methods. The winner is most representative of the median of the group. The median is a collective measure. If there are two sides and both are competing for the median, then both sides are represented. To see why this is the case, consider a case where the election is not competitive and the median belongs to only one side, then all the voters on that side benefit from that power, which is not very representative. The most representative election would be a competitive election where the median could be on either side. 
 
-In STV, there are multiple "medians" (more like percentiles), one for each winner. These medians can be spread out over a larger region than for the single-winner case. This means there are more ways to be part of a group that wins and candidates have to pay attention to more voters. 
+In STV, there are multiple "medians" (more like percentiles), one for each winner. These medians can be spread out over a larger region than for the single-winner case. This means there are more ways to be part of a group that wins, and there are more "swing voters" that could belong to one group or another. Both of these effects mean candidates have to pay attention to more voters. 
 
 Also, consider what would happen if, after the election, a candidate shifted their position toward the center of the group that elected them. They would lose the more moderate voters that voted for them when the next election comes.
 
