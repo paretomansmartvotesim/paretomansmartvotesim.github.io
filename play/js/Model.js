@@ -21,6 +21,7 @@ function Model(idModel){
 	self.tarena = new Arena("tarena",self)
 	self.nLoading = 0 // counter for drawing after everything is loaded
 	// the only thing to be done after loading the images is drawing the images
+	self.randomSeed = 0
 	
 	// CONFIGURE DEFAULTS
 	// helper
@@ -918,6 +919,12 @@ function Model(idModel){
 	}
 	self.updateBallots = function() {
 		self.voterSet.updateBallots()
+	}
+
+	self.random = function() {
+		Math.seedrandom(self.randomSeed)
+		self.randomSeed = Math.random()
+		return self.randomSeed
 	}
 };
 

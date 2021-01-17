@@ -6399,6 +6399,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"circle",value:"circle",realname:"circle",margin:4},
             {name:"top",value:"top",realname:"circles with the top preference only",margin:4},
             {name:"dots",value:"dots",realname:"dots",margin:4},
+            {name:"body",value:"body",realname:"People"},
             {name:"off",value:"off",realname:"off"},
         ]
         self.codebook = [ {
@@ -6408,6 +6409,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 1:"top",
                 2:"dots",
                 3:"off",
+                4:"body",
             }
         } ]
         self.onChoose = function(data){
