@@ -4206,8 +4206,10 @@ function _drawDot(diameter,x,y,ctx) {
 }
 
 function _drawSpeckMan1(fill,headColor,scale,x,y,ctx) {
-	sizex = 14 * scale
+	sizex = 11 * scale
 	sizey = 30 * scale
+
+	// ctx.save()
 	
 	ctx.translate(Math.round(x*2 - sizex/2), Math.round(y * 2 - sizey/2));
 	ctx.scale(scale,scale)
@@ -4221,6 +4223,11 @@ function _drawSpeckMan1(fill,headColor,scale,x,y,ctx) {
 	ctx.lineJoin = "round";
 	ctx.mitterLimit = "1";
 	// ctx.font = "normal normal 12 Courier";
+	
+	ctx.shadowColor = "rgba(0,0,0,0.3)";
+	ctx.shadowBlur = 4;
+	ctx.shadowOffsetX = 2;
+	ctx.shadowOffsetY = 2;
 
 	// head
 	ctx.fillStyle = headColor;
@@ -4258,6 +4265,11 @@ function _drawSpeckMan1(fill,headColor,scale,x,y,ctx) {
 	// ctx.strokeRect(0, 10, 11, 9);
 	// ctx.globalAlpha = "1.0";
 
+	
+	ctx.shadowBlur = 0;
+	ctx.shadowOffsetX = 0;
+	ctx.shadowOffsetY = 0;
+
 	// legs again
 	ctx.roundRect(2, 17, 7, 10, 2);
 	ctx.fill()
@@ -4271,6 +4283,110 @@ function _drawSpeckMan1(fill,headColor,scale,x,y,ctx) {
 	// ctx.strokeRect(7, 2, 1, 2);
 
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	// ctx.restore()
+
+}
+
+function _drawSpeckMan2(fill,headColor,scale,x,y,ctx) {
+	sizex = 17 * scale
+	sizey = 30 * scale
+	
+	ctx.translate(Math.round(x*2 - sizex/2), Math.round(y * 2 - sizey/2));
+	ctx.scale(scale,scale)
+
+	
+	ctx.fillStyle = fill;
+	ctx.strokeStyle = "black";
+	ctx.globalAlpha = "1.0";
+	ctx.lineWidth = "1";
+	ctx.lineCap = "butt";
+	ctx.lineJoin = "round";
+	ctx.mitterLimit = "1";
+	// ctx.font = "normal normal 12 Courier";
+	
+	ctx.shadowColor = "rgba(0,0,0,0.3)";
+	ctx.shadowBlur = 4;
+	ctx.shadowOffsetX = 2;
+	ctx.shadowOffsetY = 2;
+
+	// head
+	ctx.fillStyle = headColor;
+	ctx.roundRect(5, 0, 7, 8, 2);
+	ctx.globalAlpha = "0.3";
+	ctx.stroke()
+	ctx.globalAlpha = "1.0";
+	ctx.fill()
+
+	// ctx.fillRect(2, 0, 7, 8);
+	// ctx.globalAlpha = "0.3";
+	// ctx.strokeRect(2, 0, 7, 8);
+	// ctx.globalAlpha = "1.0";
+
+	// legs
+	ctx.fillStyle = fill;
+	ctx.roundRect(5, 13, 7, 14, 2);
+	ctx.globalAlpha = "0.3";
+	ctx.stroke()
+	ctx.globalAlpha = "1.0";
+	ctx.fill()
+	// ctx.fillRect(2, 17, 7, 10);
+	// ctx.globalAlpha = "0.3";
+	// ctx.strokeRect(2, 17, 7, 10);
+	// ctx.globalAlpha = "1.0";
+
+	
+	// arms
+	ctx.roundRect(0, 6, 4, 9, 2);
+	ctx.globalAlpha = "0.3";
+	ctx.stroke()
+	ctx.globalAlpha = "1.0";
+	ctx.fill()
+
+	
+	ctx.roundRect(14, 6, 4, 9, 2);
+	ctx.globalAlpha = "0.3";
+	ctx.stroke()
+	ctx.globalAlpha = "1.0";
+	ctx.fill()
+
+	// torso
+	ctx.roundRect(0, 10, 17, 5, 2);
+	ctx.globalAlpha = "0.3";
+	ctx.stroke()
+	ctx.globalAlpha = "1.0";
+	ctx.fill()
+	// ctx.fillRect(0, 10, 11, 9);
+	// ctx.globalAlpha = "0.3";
+	// ctx.strokeRect(0, 10, 11, 9);
+	// ctx.globalAlpha = "1.0";
+
+	ctx.shadowBlur = 0;
+	ctx.shadowOffsetX = 0;
+	ctx.shadowOffsetY = 0;
+
+	// legs again
+	ctx.roundRect(5, 13, 7, 14, 2);
+	ctx.fill()
+	
+	// arms again
+	ctx.roundRect(0, 6, 4, 9, 2);
+	ctx.fill()
+	ctx.roundRect(14, 6, 4, 9, 2);
+	ctx.fill()
+
+	// eyes
+	// ctx.fillStyle = "white";
+	// ctx.strokeStyle = "white";
+	// ctx.fillRect(10, 2, 1, 2);
+	// ctx.strokeRect(10, 2, 1, 2);
+	// ctx.fillRect(7, 2, 1, 2);
+	// ctx.strokeRect(7, 2, 1, 2);
+
+
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	
 }
 
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
@@ -4287,12 +4403,53 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
 
 function skinColor(i) {
 	
-	var colors = [
-		"#3b2219",
-		"#a16e4b",
-		"#d4aa78",
-		"#e6bc98",
-		"#ffe7d1",
+	// var colors = [
+	// 	"#3b2219",
+	// 	"#a16e4b",
+	// 	"#d4aa78",
+	// 	"#e6bc98",
+	// 	"#ffe7d1",
+	// 	"#80654B",
+	// 	"#271914",
+	// 	"#EEC1A0",
+	// ]
+	var colors = [		
+        "#382922",
+        "#3F2B2A",
+        "#512B1E",
+        "#522E20",
+        "#6A3928",
+        "#8F4C31",
+        "#9A5E42",
+        "#9A5E42",
+        "#AD6D4A",
+        "#AF613D",
+        "#AF775E",
+        "#AF775E",
+        "#BB7752",
+        "#BC7750",
+        "#BE8866",
+        "#BE8866",
+        "#CAA088",
+        "#CE8248",
+        "#D1957D",
+        "#D1957D",
+        "#D39475",
+        "#D3A67C",
+        "#D3AF97",
+        "#D6BAA5",
+        "#DCA788",
+        "#DCA788",
+        "#DCAE8D",
+        "#DCAE8D",
+        "#DDA479",
+        "#E19F7D",
+        "#E6B7B1",
+        "#E8BD9B",
+        "#E9BFA7",
+        "#E9CBC3",
+        "#EBD1B8",
+        "#F3C2B3",
 	]
 	// var x = i
 	Math.seedrandom(i * 100);

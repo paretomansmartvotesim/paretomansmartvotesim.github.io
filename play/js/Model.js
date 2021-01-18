@@ -2031,6 +2031,9 @@ function Arena(arenaName, model) {
 		// DRAW 'EM ALL.
 		// Draw voters' BG first, then candidates, then voters.
 
+		// set winners
+		setWinners()
+
 		var noClip = true
 		//set annotations
 		resetAnnotations()
@@ -2617,6 +2620,36 @@ function Arena(arenaName, model) {
 				// 		}
 				// 	}
 				// }
+	
+			}
+		}
+		
+		function setWinners() {
+			// might need to change in the future,
+			// just setting a parameter for each candidate to indicate if they are a winner.
+
+			if (!model.dontdrawwinners) {
+				// draw text next to the winners
+
+				// check how many winners there should be
+				let winnersAllowed = 1
+				if (model.checkMultiWinner(model.system)) {
+					winnersAllowed = model.seats
+				}
+
+				for (var k = 0; k < model.district.length; k++) {
+					var district = model.district[k]
+					var result = district.result
+
+					for (let can of district.candidates) {
+						if (result && result.winners && result.winners.includes(can.id)) {
+							can.winner = true
+						} else {
+							can.winner = false
+						}
+					}
+					
+				}
 	
 			}
 		}

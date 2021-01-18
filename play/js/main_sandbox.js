@@ -6473,9 +6473,10 @@ function menu(ui,model,config,initialConfig, cConfig) {
         self.list = [
             {name:"image",value:"image",realname:"image",margin:4},
             // {name:"both",value:"both",realname:"both image and name",margin:4},
+            {name:"body",value:"body",realname:"People",margin:4},
             {name:"name",value:"name",realname:"name",margin:4},
             // {name:"off",value:"off",realname:"off"},
-            {name:"dots",value:"dots",realname:"dots",margin:4},
+            {name:"dots",value:"dots",realname:"dots",margin:0},
             {name:"note",value:"note",realname:"annotation",margin:0},
         ]
         self.codebook = [ {
@@ -6485,6 +6486,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 1:"name",
                 2:"dots",
                 3:"note",
+                4:"body",
             }
         } ]
         var decoder = ["image","name","dots"] // be careful to only add to the end of this list
