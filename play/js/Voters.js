@@ -3671,6 +3671,13 @@ function VoterCrowd(model) {
 		model.voterSet.init()
 		self.updateVoterSet()
 	}
+	self.initVoterName = function() {
+		if (model.voterGroupCustomNames == "Yes" && self.vid < model.voterGroupNameList.length && model.voterGroupNameList[self.vid] != "") {
+			self.name = model.voterGroupNameList[self.vid]
+		} else {
+			self.name = self.vid + 1
+		}
+	}
 	self.updateVoterSet = function() {
 
 		for(var i=0; i<self.points.length; i++){
@@ -3726,6 +3733,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.initVoterModel()
 		self.initPoints()
 		self.initVoterSet()
+		self.initVoterName()
 	}
 
 	self.updatePeople = function() {
@@ -4101,14 +4109,7 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 				
 				// Face!
 				// ctx.drawImage(self.img, x*2-size, y*2-size, size*2, size*2);
-		
-				// Number ID
-				var textsize = 20
-				ctx.textAlign = "center";
-				
-				if(model.voterGroups.length != 1) {
-					_drawStroked(self.vid+1,x*2+0*textsize,y*2+0*textsize,textsize,ctx);
-				}
+				_drawName(model,ctx,x,y,self.name)
 			}				
 	
 		}
@@ -4469,6 +4470,7 @@ function SingleVoter(model){
 
 		self.initVoterModel()
 		self.initVoterSet()
+		self.initVoterName()
 
 		self.voterPerson = self.voterPeople[0] // shorthand
 		
@@ -4509,6 +4511,9 @@ function SingleVoter(model){
 
 		_drawMe(ctx)
 
+		if (model.drawNameSingleVoter || model.voterGroupCustomNames == "Yes") {
+			_drawName(model,ctx,self.voterPerson.xArena,self.voterPerson.yArena,self.name)
+		}
 	}
 
     function setPositionAndSizeSingle() {
@@ -4589,6 +4594,16 @@ function SingleVoter(model){
 		if(self.highlight) ctx.globalAlpha = temp
     }
     
+}
+
+function _drawName(model,ctx,x,y,name) {
+	// Number ID
+	var textsize = 20
+	ctx.textAlign = "center";
+	
+	if(model.voterGroupCustomNames == "Yes" || model.voterGroups.length != 1) {
+		_drawStroked(name,x*2+0*textsize,y*2+0*textsize,textsize,ctx);
+	}
 }
 
 function _findClosestCan(x,y,iDistrict,model) {

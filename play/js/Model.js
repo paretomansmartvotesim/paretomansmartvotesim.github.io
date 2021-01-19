@@ -117,6 +117,9 @@ function Model(idModel){
 		createBallotType: "Score",
 		showUtilityChart: false,
 		enableTArena: false,
+		voterGroupCustomNames: "No",
+		voterGroupNameList: [],
+		drawNameSingleVoter: false,
 	})
 	
 	self.viz = new Viz(self);
