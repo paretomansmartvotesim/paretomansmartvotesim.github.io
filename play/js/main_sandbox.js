@@ -2520,6 +2520,8 @@ function Cypher(ui) {
         95:"createBallotType",
         96:"showUtilityChart",
         97:"minusControl",
+        98:"codeEditorText",
+        99:"voterGroupRandomSeed",
     } 
     // HOWTO
     // add more on to the end ONLY
@@ -3548,6 +3550,12 @@ function menu(ui,model,config,initialConfig, cConfig) {
                         group_count_vert: config.group_count_vert[i],
                         group_count_h: config.group_count_h[i],
                     })
+                    if (config.voterGroupRandomSeeds && config.voterGroupRandomSeeds[i]) {
+                        // if we are reading a config that includes a seed, then assign the seed
+                        Object.assign(model.voterGroups[i], {
+                            randomSeed: config.voterGroupRandomSeeds[i]
+                        })
+                    }
                     model.voterGroups[i].typeVoterModel = model.ballotType // needs init	
                 }
             } else if (config.voterPositions) {
@@ -8006,6 +8014,7 @@ function uiArena(ui,model,config,initialConfig, cConfig) {
         for (const [key, value] of Object.entries(mc)) {
             config.minusControl[key] = value
         }
+        config.voterGroupRandomSeeds = model.voterGroups.map( x => x.randomSeed)
         
     }
 
