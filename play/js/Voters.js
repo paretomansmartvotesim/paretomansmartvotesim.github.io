@@ -3716,11 +3716,11 @@ function VoterCrowd(model) {
 		model.voterSet.init()
 		self.updateVoterSet()
 	}
-	self.initVoterName = function() {
-		if (model.voterGroupCustomNames == "Yes" && self.vid < model.voterGroupNameList.length && model.voterGroupNameList[self.vid] != "") {
-			self.name = model.voterGroupNameList[self.vid]
+	self.initVoterName = function(i) {
+		if (model.voterGroupCustomNames == "Yes" && i < model.voterGroupNameList.length && model.voterGroupNameList[i] != "") {
+			self.name = model.voterGroupNameList[i]
 		} else {
-			self.name = self.vid + 1
+			self.name = i + 1
 		}
 	}
 	self.updateVoterSet = function() {
@@ -3778,7 +3778,6 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 		self.initVoterModel()
 		self.initPoints()
 		self.initVoterSet()
-		self.initVoterName()
 	}
 
 	self.updatePeople = function() {
@@ -4516,7 +4515,6 @@ function SingleVoter(model){
 
 		self.initVoterModel()
 		self.initVoterSet()
-		self.initVoterName()
 
 		self.voterPerson = self.voterPeople[0] // shorthand
 		
@@ -4889,6 +4887,24 @@ function VoterCenter(model){
 		if(self.highlight) ctx.globalAlpha = temp
 	};
 
+}
+
+function VoterManager(model) {
+	var self = this
+	self.initVoters = function() {
+		for (let i = 0; i < model.voterGroups.length; i++) {
+			const voterGroup = model.voterGroups[i];
+			voterGroup.init()
+			voterGroup.initVoterName(i)
+		}
+	}
+	self.initNames = function() {
+		for (let i = 0; i < model.voterGroups.length; i++) {
+			const voterGroup = model.voterGroups[i];
+			voterGroup.initVoterName(i)
+		}
+	}
+	self.onDeleteVoterGroup = () => null // hook for plug in
 }
 
 function numericApproxGeometricMedian(voterPeople, guess, distancemeasure) {

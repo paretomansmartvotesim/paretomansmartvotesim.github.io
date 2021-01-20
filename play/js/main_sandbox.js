@@ -375,9 +375,7 @@ function bindModel(ui,model,config) {
             model.candidates[i].init()
         }
         model.initMODEL()
-        for (var i=0; i<model.voterGroups.length; i++) {
-            model.voterGroups[i].init()
-        }
+		model.voterManager.initVoters()
         _pileVoters(model)
         model.dm.redistrict()
 		// INIT (menu)
@@ -1781,6 +1779,11 @@ function bindModel(ui,model,config) {
         model.numOfCandidates = n
         config.numOfCandidates = n
         ui.menu.nCandidates.select()
+    }
+
+    model.voterManager.onDeleteVoterGroup = function() {
+        config.voterGroupNameList = model.voterGroupNameList.join('\n')
+        ui.menu.voterGroupNameList.select()
     }
 }
 
@@ -3256,9 +3259,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // INIT (LOADER)	
             model.initDOM()
             // INIT
-            for (var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].init()
-            }
+		    model.voterManager.initVoters()
             _pileVoters(model)
             model.dm.redistrict()
             for (var i=0; i<model.candidates.length; i++) {
@@ -3518,9 +3519,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.menu.spread_factor_voters.configure()
             // INIT
             model.initMODEL()
-            for(var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].init()
-            }
+            model.voterManager.initVoters()
             _pileVoters(model)
             model.dm.redistrict()
             // UPDATE
@@ -3659,9 +3658,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             ui.menu.spread_factor_voters.configure()
             // INIT
             model.initMODEL()
-            for(var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].init()
-            }
+            model.voterManager.initVoters()
             _pileVoters(model)
             model.dm.redistrict()
             // UPDATE
@@ -3951,10 +3948,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             self.configure()
             // INIT
-            for (let i = 0; i < model.voterGroups.length; i++) {
-                const voterGroup = model.voterGroups[i];
-                voterGroup.initVoterName()
-            }
+            model.voterManager.initNames()
             // UPDATE
             model.draw()
         };
@@ -4021,10 +4015,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             self.configure()
             // INIT
-            for (let i = 0; i < model.voterGroups.length; i++) {
-                const voterGroup = model.voterGroups[i];
-                voterGroup.initVoterName()
-            }
+            model.voterManager.initNames()
             // UPDATE
             model.draw()
         };
@@ -5493,9 +5484,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // CONFIGURE
             self.configure()
             // INIT
-            for (var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].init()
-            }
+		    model.voterManager.initVoters()
             _pileVoters(model)
             model.dm.redistrict()
             // UPDATE
@@ -5552,9 +5541,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             // INIT (LOADER)	
             model.initDOM()
             // INIT
-            for (var i=0; i<model.voterGroups.length; i++) {
-                model.voterGroups[i].init()
-            }
+		    model.voterManager.initVoters()
             _pileVoters(model)
             model.dm.redistrict()
             for (var i=0; i<model.candidates.length; i++) {

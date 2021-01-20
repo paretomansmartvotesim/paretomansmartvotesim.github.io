@@ -15,6 +15,7 @@ function Model(idModel){
 	self.voterSet = new VoterSet(self)
 	self.district = []
 	self.dm = new DistrictManager(self)
+	self.voterManager = new VoterManager(self)
 	self.candidates = [];
 	self.dom = document.createElement("div");
 	self.arena = new Arena("arena",self)
@@ -929,6 +930,7 @@ function Model(idModel){
 		self.randomSeed = Math.random()
 		return self.randomSeed
 	}
+
 };
 
 function Arena(arenaName, model) {
@@ -1108,7 +1110,7 @@ function Arena(arenaName, model) {
 				model.voterGroups.push(n)
 				// INIT
 				model.initMODEL()
-				n.init()
+				model.voterManager.initVoters()
 				return n
 			}
 		}
@@ -1218,6 +1220,12 @@ function Arena(arenaName, model) {
 					model.voterGroups.splice(i,1)
 					// need to init voterSet
 					model.voterSet.init()
+					// remove name from customNames, if there was one
+					if (model.voterGroupNameList && model.voterGroupNameList[i] !== undefined) {
+						model.voterGroupNameList.splice(i,1)
+					}
+					model.voterManager.initNames()
+					model.voterManager.onDeleteVoterGroup()
 
 					// also, check if the viewMan was on a voter in the group
 					var viewMan = model.arena.viewMan
