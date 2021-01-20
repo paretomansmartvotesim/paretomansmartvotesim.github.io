@@ -2216,7 +2216,7 @@ function _drawThickRing(ctx, x, y, size) {
 	x = x*2;
 	y = y*2;
 	// Just draw a circle.		
-	ctx.strokeStyle = 'rgb(50,50,50)';
+	ctx.strokeStyle = 'rgb(150,150,150,.7)';
 	ctx.lineWidth = 3; // border
 	ctx.beginPath();
 	ctx.arc(x, y, size, 0, Math.TAU, true);
@@ -2224,9 +2224,54 @@ function _drawThickRing(ctx, x, y, size) {
 	ctx.arc(x, y, size-8, 0, Math.TAU, true);
 	// ctx.arc(x, y, size, 0, 0, true);
 	ctx.closePath();
-	ctx.fillStyle = 'white'
+	ctx.fillStyle = 'rgb(255,255,255,.7)';
 	ctx.fill('evenodd')
 	ctx.stroke();
+}
+
+function drawArrows(ctx, x, y, size) {
+	
+
+	ctx.fillStyle = 'rgb(255,255,255,.5)';
+	ctx.strokeStyle = 'rgb(0,0,0,.5)';
+
+	size *=4
+
+	ctx.translate(Math.round(x*2 - size/2), Math.round(y * 2 - size/2));
+	var scale = size / 96
+	ctx.scale(scale,scale)
+
+	ctx.beginPath();
+	ctx.moveTo(73, 48.40);
+	ctx.lineTo(62.60, 38.80);
+	ctx.lineTo(62.60, 43.60);
+	ctx.lineTo(52.40, 43.60);
+	ctx.lineTo(52.40, 33.40);
+	ctx.lineTo(57.20, 33.40);
+	ctx.lineTo(47.60, 23);
+	ctx.lineTo(38.70, 33.40);
+	ctx.lineTo(43.50, 33.40);
+	ctx.lineTo(43.50, 43.60);
+	ctx.lineTo(33.40, 43.60);
+	ctx.lineTo(33.40, 38.80);
+	ctx.lineTo(23, 48.40);
+	ctx.lineTo(33.40, 57.30);
+	ctx.lineTo(33.40, 52.50);
+	ctx.lineTo(43.60, 52.50);
+	ctx.lineTo(43.60, 62.70);
+	ctx.lineTo(38.80, 62.70);
+	ctx.lineTo(47.60, 73);
+	ctx.lineTo(57.20, 62.60);
+	ctx.lineTo(52.40, 62.60);
+	ctx.lineTo(52.40, 52.40);
+	ctx.lineTo(62.60, 52.40);
+	ctx.lineTo(62.60, 57.20);
+	ctx.lineTo(73, 48.40);
+	ctx.closePath();
+	ctx.fill();
+	ctx.stroke();
+	
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 function _drawBlank(model, ctx, x, y, size){
@@ -4105,7 +4150,8 @@ function GaussianVoters(model){ // this config comes from addVoters in main_sand
 
 				// _drawBlank(model, ctx, x, y, size)
 				// _drawRing(ctx,x,y,self.size)
-				_drawThickRing(ctx,x,y,size)
+				// _drawThickRing(ctx,x,y,size)
+				drawArrows(ctx,x,y,size)
 				
 				// Face!
 				// ctx.drawImage(self.img, x*2-size, y*2-size, size*2, size*2);
@@ -4829,7 +4875,9 @@ function VoterCenter(model){
 				} else {
 					size = size*2;
 
-					_drawThickRing(ctx,x/2,y/2,size/2*.7)
+					// drawArrows(ctx,x/2,y/2,size/2)
+					// _drawThickRing(ctx,x/2,y/2,size/2 * .5)
+					_drawThickRing(ctx,x/2,y/2,size/2 * .7)
 
 					// ctx.drawImage(self.img, x-size/2, y-size/2, size, size);
 	
