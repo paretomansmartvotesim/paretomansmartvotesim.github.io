@@ -75,9 +75,10 @@ function Model(idModel){
 		opt: {
 			irv100: true, // show the final transfer to the winner (to reach 100%)
 			IRVShowdown: false,  // show a reverse-direction transfer to represent the winner
-			showIRVTransfers: true,  // show lines representing transfers between rounds
+			showIRVTransfers: false,  // show lines representing transfers between rounds
 			breakWinTiesMultiSeat: true, // break ties for winning candidates in multi-winner methods
-			breakEliminationTiesIRV: true // break ties for eliminations of candidates in IRV
+			breakEliminationTiesIRV: true, // break ties for eliminations of candidates in IRV
+			doDrawIRVCandidates: false, // TODO: make a button for this
 		},
 		ballotVis: true, // turn on or off the visuals that show where the ballots go
 		visSingleBallotsOnly: false, // only show the single ballots as part of the ballotVis
@@ -2206,7 +2207,7 @@ function Arena(arenaName, model) {
 		function drawCandidates() {
 			// There's two ways to draw the candidate.  One shows the candidate icon.
 			// Two shows the vote totals and optionally, the candidate icon.
-			var go = model.checkDoIRVConcept() && self.id == "arena"
+			var go = model.checkDoIRVConcept() && self.id == "arena" && model.opt.doDrawIRVCandidates
 			if (go) {
 				for (var k = 0; k < model.district.length; k++) {
 					result = model.district[k].result

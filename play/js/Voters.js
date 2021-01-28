@@ -1176,7 +1176,8 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 		}
 
 	} else if (model.system == "IRV" || model.system == "STV") {
-		if (1) {
+		var bon = model.ballotConcept == "on"
+		if (bon) {
 			if (ballot.rank.length == 0) return
 			var candidate = model.candidatesById[ballot.rank[0]];
 	
@@ -1196,7 +1197,7 @@ DrawMap.Ranked = function (ctx, model,voterModel,voterPerson) {
 			ctx.stroke();
 	
 
-		} else {
+		} else if (0) {
 			var old = {}
 			old.x = x
 			old.y = y
