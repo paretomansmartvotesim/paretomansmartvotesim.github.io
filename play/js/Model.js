@@ -2607,11 +2607,26 @@ function Arena(arenaName, model) {
 				for (var k = 0; k < model.district.length; k++) {
 					var district = model.district[k]
 					var result = district.result
+
+					
 					
 					if(result && result.winners) {
-						for (let wid of result.winners) {
+						var winners = result.winners
+
+						// draw differently for each round
+						if (model.roundCurrent !== undefined) {
+							var round = model.roundCurrent[district.i]
+							// if (round > model.result.history.rounds.length) round = model.result.history.rounds.length - 1
+							if (round !== undefined && (model.system == "STV")) {
+								if (round >= model.result.won.length) round = model.result.won.length - 1
+								winners = model.result.won[round]
+								// winnerIdxs = model.result.history.rounds[round].winners
+								// winners = winnerIdxs.map( x => district.candidates[x].id)
+							}
+						}
+						for (let wid of winners) {
 							let c = model.candidatesById[wid]
-							if (result.winners.length > winnersAllowed) {
+							if (winners.length > winnersAllowed) {
 								c.drawTie(self.ctx,self)
 							} else {
 								c.drawWin(self.ctx,self)
