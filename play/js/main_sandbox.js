@@ -418,19 +418,22 @@ function bindModel(ui,model,config) {
 
         if (!model.checkSystemWithRoundButtons()) return
 
-        if (ui.roundCurrent == undefined) {
+        if (model.roundCurrent == undefined) {
             // initialize
-            ui.roundCurrent = []
+            model.roundCurrent = []
+            model.flagFinalRound = []
             for (var i = 0; i < model.district.length; i++) {
-                ui.roundCurrent[i] = 0
+                model.roundCurrent[i] = 0
+                model.flagFinalRound[i] = false
             }
         } else {
             // make sure round is in the right range
             for (var i = 0; i < model.district.length; i++) {
-                var round = ui.roundCurrent[i]
+                var round = model.roundCurrent[i]
                 var maxRound = model.district[i].result.history.rounds.length
+                if (model.flagFinalRound[i]) round = maxRound // make sure round stays final. Final round is sticky. Stay in the final round.
                 round = Math.min(round, maxRound)
-                ui.roundCurrent[i] = round
+                model.roundCurrent[i] = round
             }
         }
     }
@@ -930,6 +933,13 @@ function bindModel(ui,model,config) {
 
     }
 
+    function enforceFlagFinalRound(i) {
+        // keep set to final round, even if the number of rounds changed... TODO
+        if (model.flagFinalRound[i]) {
+            model.roundCurrent[i] = district.result.history.rounds.length
+        }
+    }
+
     function instantiateThenDrawRoundChart(i) {
 
         // Instantiate chart        
@@ -941,19 +951,21 @@ function bindModel(ui,model,config) {
         
         ui.dom.roundChartBackButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
-            ui.roundCurrent[i] --
-            if (ui.roundCurrent[i] < 0) ui.roundCurrent[i] = 0
+            model.roundCurrent[i] --
+            if (model.roundCurrent[i] < 0) model.roundCurrent[i] = 0
+            model.flagFinalRound[i] = false
             ui.roundUpdateSet(i)
         }})(i)
         ui.dom.roundChartForwardButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
-            ui.roundCurrent[i] ++
+            model.roundCurrent[i] ++
             if (model.system == "IRV") {
                 var maxRound = district.result.tallies.length
             } else {
                 var maxRound = district.result.history.rounds.length
             }
-            if (ui.roundCurrent[i] > maxRound) ui.roundCurrent[i] = maxRound
+            if (model.roundCurrent[i] > maxRound) model.roundCurrent[i] = maxRound
+            if (model.roundCurrent[i] == maxRound) model.flagFinalRound[i] = true
             ui.roundUpdateSet(i)
         }})(i)
             
@@ -979,7 +991,7 @@ function bindModel(ui,model,config) {
 
         //
         var district = model.district[iDistrict]
-        var round = ui.roundCurrent[iDistrict]
+        var round = model.roundCurrent[iDistrict]
 
         // future
         // ui.dom.roundChartCaption[i].innerHTML = district.result.roundText[round+1]
@@ -990,11 +1002,11 @@ function bindModel(ui,model,config) {
             var maxRound = district.result.history.rounds.length
         }
         if (round == maxRound) {
-            var rt = ` F `
+            var rt = ` Final `
             var flagF = true
             round -- // temporary bandage TODO: handle final totals better. right now round 1 annotations are displayed in round 2.
         } else {
-            var rt = ` ${round + 1} `
+            var rt = ` Round ${round + 1} `
         }
         ui.dom.roundChartRoundNumText[iDistrict].innerText = rt
 
@@ -1495,7 +1507,7 @@ function bindModel(ui,model,config) {
             ui.dom.weightChartsForwardButton = []
             
             ui.dom.weightChartsSpace = []
-            ui.roundCurrent = []
+            model.roundCurrent = []
             ui.dom.weightChartsCaption = []
             ui.dom.weightChartsPreCaption = []
             for (var i = 0; i < model.district.length; i++) {
@@ -1528,7 +1540,7 @@ function bindModel(ui,model,config) {
                 ui.dom.weightChartsForwardButton[i].innerText = " > "
                 ui.dom.weightChartsForwardButton[i].className = "weightChartsButton"
                 buttonDiv.append(ui.dom.weightChartsForwardButton[i])
-                ui.roundCurrent[i] = 0
+                model.roundCurrent[i] = 0
                 ui.dom.weightChartsSpace[i] = document.createElement("div")
                 ui.dom.weightCharts.append(ui.dom.weightChartsSpace[i])
                 ui.dom.weightChartsCaption[i] = document.createElement("div")
@@ -1618,15 +1630,17 @@ function bindModel(ui,model,config) {
     
         ui.dom.weightChartsBackButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
-            ui.roundCurrent[i] --
-            if (ui.roundCurrent[i] < 0) ui.roundCurrent[i] = 0
+            model.roundCurrent[i] --
+            if (model.roundCurrent[i] < 0) model.roundCurrent[i] = 0
+            model.flagFinalRound[i] = false
             ui.roundUpdateSet(i);
         }})(i)
         ui.dom.weightChartsForwardButton[i].onclick = (function(i) { return function() {
             var district = model.district[i]
-            ui.roundCurrent[i] ++
+            model.roundCurrent[i] ++
             var maxRound = district.result.history.rounds.length - 1 + 1
-            if (ui.roundCurrent[i] > maxRound) ui.roundCurrent[i] = maxRound
+            if (model.roundCurrent[i] > maxRound) model.roundCurrent[i] = maxRound
+            if (model.roundCurrent[i] == maxRound) model.flagFinalRound[i] = true
             ui.roundUpdateSet(i);
         }})(i)        
     
@@ -1639,7 +1653,7 @@ function bindModel(ui,model,config) {
     
         opt = opt || {}
     
-        var round = ui.roundCurrent[iDistrict]
+        var round = model.roundCurrent[iDistrict]
         var arena = ui.weightCharts[iDistrict].arena
         var district = model.district[iDistrict]
 
@@ -1657,9 +1671,9 @@ function bindModel(ui,model,config) {
         barOptions.heightRectangle2 = Math.min(200 / model.candidates.length, 200/5)
 
         if (round == district.result.history.rounds.length) {
-            var rt = ` F `
+            var rt = ` Final `
         } else {
-            var rt = ` ${round + 1} `
+            var rt = ` Round ${round + 1} `
         }
         ui.dom.weightChartsRoundNumText[iDistrict].innerText = rt
     
@@ -1762,6 +1776,7 @@ function bindModel(ui,model,config) {
                 actualRoundChartDraw(i, {ease:true});
             }
         }
+        model.draw()
     }
 
     model.updateFromModel = function() {
