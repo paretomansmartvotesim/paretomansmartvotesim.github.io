@@ -1977,6 +1977,7 @@ Election.irv = function(district, model, options){
 	let cans = district.stages[model.stage].candidates
 
 	var drawFlows = (model.ballotConcept != "off") && ( ! options.yeefast )
+	drawFlows = options.sidebar // quick temporary fix
 	if (drawFlows) {
 		var transfers = []
 		var coalitions = []
