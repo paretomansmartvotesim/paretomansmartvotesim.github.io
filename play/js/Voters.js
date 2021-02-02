@@ -1847,8 +1847,8 @@ DrawMe.Ranked = function (ctx, model,voterModel,voterPerson, scale) {
 		slices.push({ num:1, fill:"#bbb" })
 	} else if(n==2) {
 		var totalSlices = 1
-		var rank = rank[0];
-		var candidate = model.candidatesById[rank];
+		var rank0 = rank[0];
+		var candidate = model.candidatesById[rank0];
 		slices.push({ num:1, fill:candidate.fill })
 	} else {
 
