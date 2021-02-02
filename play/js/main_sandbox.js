@@ -761,7 +761,7 @@ function bindModel(ui,model,config) {
                     if (won[rid] && won[rid].includes(cid)) node.winner = true
                 } else {
                     if (rid == numRounds) { //last round
-                        if (result.winners.includes(cid)) node.winner = true
+                        if (district.result.winners.includes(cid)) node.winner = true
                     }
                 }
                 nodes.push(node)
@@ -1043,7 +1043,7 @@ function bindModel(ui,model,config) {
             var won = district.result.won[round]
         } else {
             if (round == maxRound - 1) {
-                var won = result.winners
+                var won = district.result.winners
             } else {
                 var won = []
             }
