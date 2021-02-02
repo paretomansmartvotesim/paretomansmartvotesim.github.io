@@ -392,6 +392,12 @@ function bindModel(ui,model,config) {
         
     };
 
+    model.onUpdate = function() {
+        if (model.optionsForElection.sidebar ) {
+            handleRoundTransition()
+        }
+    }
+
     model.onDraw = function(){
 
         // explanation boxes are drawn from bottom to top
@@ -399,7 +405,6 @@ function bindModel(ui,model,config) {
         ui.redrawButtons() // make sure the icons show up
         
         if (model.optionsForElection.sidebar ) {
-            handleRoundTransition()
     
             sankeyDraw()
     
@@ -1507,7 +1512,6 @@ function bindModel(ui,model,config) {
             ui.dom.weightChartsForwardButton = []
             
             ui.dom.weightChartsSpace = []
-            model.roundCurrent = []
             ui.dom.weightChartsCaption = []
             ui.dom.weightChartsPreCaption = []
             for (var i = 0; i < model.district.length; i++) {
@@ -1540,7 +1544,6 @@ function bindModel(ui,model,config) {
                 ui.dom.weightChartsForwardButton[i].innerText = " > "
                 ui.dom.weightChartsForwardButton[i].className = "weightChartsButton"
                 buttonDiv.append(ui.dom.weightChartsForwardButton[i])
-                model.roundCurrent[i] = 0
                 ui.dom.weightChartsSpace[i] = document.createElement("div")
                 ui.dom.weightCharts.append(ui.dom.weightChartsSpace[i])
                 ui.dom.weightChartsCaption[i] = document.createElement("div")
