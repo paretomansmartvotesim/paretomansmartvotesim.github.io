@@ -393,6 +393,7 @@ function bindModel(ui,model,config) {
     };
 
     model.onUpdate = function() {
+        
         if (model.optionsForElection.sidebar ) {
             handleRoundTransition()
         }
@@ -403,7 +404,7 @@ function bindModel(ui,model,config) {
         // explanation boxes are drawn from bottom to top
         
         ui.redrawButtons() // make sure the icons show up
-        
+
         if (model.optionsForElection.sidebar ) {
     
             sankeyDraw()
@@ -428,8 +429,15 @@ function bindModel(ui,model,config) {
             model.roundCurrent = []
             model.flagFinalRound = []
             for (var i = 0; i < model.district.length; i++) {
-                model.roundCurrent[i] = 0
-                model.flagFinalRound[i] = false
+                var defaultFinal = true
+                if (defaultFinal) {
+                    var maxRound = model.district[i].result.history.rounds.length
+                    model.roundCurrent[i] = maxRound
+                    model.flagFinalRound[i] = true
+                } else {
+                    model.roundCurrent[i] = 0
+                    model.flagFinalRound[i] = false
+                }
             }
         } else {
             // make sure round is in the right range
