@@ -1609,7 +1609,7 @@ DrawMap.Plurality = function (ctx, model,voterModel,voterPerson) {
 	var ballot = voterPerson.stages[model.stage].ballot
 
 	
-	if (model.ballotConcept == "off") return
+	if (model.ballotConcept != "on") return
 
 	var candidate = model.candidatesById[ballot.vote];
 	
