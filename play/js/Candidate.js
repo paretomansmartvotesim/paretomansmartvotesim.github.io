@@ -73,18 +73,18 @@ function Candidate(model){
 	self.drawBackAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawAnnotation = function(x,y,ctx) {}; // TO IMPLEMENT
 	self.drawTie = function(ctx,arena) {
-		ctx.textAlign = "center";
-		var p = arena.modelToArena(self)
-		if (model.candidateIconsSet.includes("note")) {
-			_drawStroked("TIE",p.x*2,p.y*2-35,40,ctx);
-		}
+		// ctx.textAlign = "center";
+		// var p = arena.modelToArena(self)
+		// if (model.candidateIconsSet.includes("note")) {
+		// 	_drawStroked("TIE",p.x*2,p.y*2-35,40,ctx);
+		// }
 	}	
 	self.drawWin = function(ctx,arena) {
-		ctx.textAlign = "center";
-		var p = arena.modelToArena(self)
-		if (model.candidateIconsSet.includes("note")) {
-			_drawStroked("WIN",p.x*2,p.y*2-35,40,ctx);
-		}
+		// ctx.textAlign = "center";
+		// var p = arena.modelToArena(self)
+		// if (model.candidateIconsSet.includes("note")) {
+		// 	_drawStroked("WIN",p.x*2,p.y*2-35,40,ctx);
+		// }
 	}	
 	self.drawText = function(text,ctx,arena) {
 		ctx.textAlign = "center";
@@ -168,10 +168,27 @@ function Candidate(model){
 			}
 		}
 		if (model.candidateIconsSet.includes("image")) {
+			var rectW = self.nameSelf.widthFracName * size
+			var rectH = self.nameSelf.heightFracName * size
+
+			if (self.winner && model.candidateIconsSet.includes("note")) {
+				_winBackgroundRectangle(ctx,x,y,rectW,rectH)
+			} else {
+				_backgroundRectangle(ctx,x,y,rectW,rectH)
+			}
+
 			hsize = self.imageSelf.img.width / self.imageSelf.img.height * size
 			ctx.drawImage(self.imageSelf.img, x-hsize/2, y-size/2, hsize, size);
 		}
 		if (model.candidateIconsSet.includes("name")) {
+			var rectW = self.nameSelf.widthFracName * size
+			var rectH = self.nameSelf.heightFracName * size
+			if (self.winner && model.candidateIconsSet.includes("note")) {
+				_winBackgroundRectangle(ctx,x,y,rectW,rectH)
+			} else {
+				_backgroundRectangle(ctx,x,y,rectW,rectH)
+			}
+
 			hsize = self.nameSelf.img.width / self.nameSelf.img.height * size
 			ctx.drawImage(self.nameSelf.img, x-hsize/2, y-size/2, hsize, size);
 		}
@@ -600,7 +617,10 @@ function Graphicon(candidate,option,char,model,charIndex,chars) {
 	
 	function makeNameImage() {
 		model.nLoading++
-		self.png_b64 = _convertNameToDataURLviaCanvas(candidate.name,self.fill, '.png')
+		var nameImage = _convertNameToDataURLviaCanvas(candidate.name,self.fill, '.png')
+		self.png_b64 = nameImage.png_b64
+		self.widthFracName = nameImage.widthFrac
+		self.heightFracName = nameImage.heightFrac
 		self.img = new Image()
 		self.img.src = self.png_b64 // base64 png
 		self.texticon_png = "<img src='"+self.img.src+"'/>"

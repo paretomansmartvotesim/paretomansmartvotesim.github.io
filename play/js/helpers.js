@@ -263,24 +263,86 @@ function _convertNameToDataURLviaCanvas(letter,color, outputFormat){
 	if (letter.length > 2) {
 		reduce = 1.5
 		//  _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
-		_backgroundRectangle(ctx,x,y/reduce,text.width/reduce,textsize/reduce)
-		_drawStrokedColor(letter,x, y / reduce,textsize / reduce,linewidth/reduce,color,ctx, true);
+		// _backgroundRectangleOffset(ctx,x,y/reduce,text.width/reduce,textsize/reduce)
+		_drawStrokedColor(letter,x, y - textsize/2 + textsize/reduce/2 + textsize/14 ,textsize / reduce,linewidth/reduce,color,ctx, true);
 		// drawTextBG(letter, x, y, textsize, ctx, "center")
 	} else {
-		_backgroundRectangle(ctx,x,y,text.width,textsize)
+		var reduce = 1
+		// _backgroundRectangleOffset(ctx,x,y,text.width,textsize)
 		_drawStrokedColor(letter,x,y,textsize,linewidth,color,ctx, true);
 		// drawTextBG(letter, x, y, textsize, ctx, "center")
 	}
 	var dataURL = canvas.toDataURL(outputFormat);
 	canvas = null; 
-	return dataURL
+	return {
+		png_b64:dataURL,
+		widthFrac: text.width/textsize/1.25/reduce, // width as a fraction of image height
+		heightFrac: 1/1.25/reduce, // height as a fraction of image height
+	}
 }
 
-function _backgroundRectangle(ctx,x,y,width,height) {
+function _backgroundRectangleOffset(ctx,x,y,width,height) {
 	ctx.save()
 	ctx.globalAlpha = .8
 	ctx.fillStyle = "#fff"
 	ctx.fillRect(x - width/2, y-height/2*1.7, width, height);
+	ctx.restore()
+}
+
+function _winBackgroundRectangle(ctx,x,y,width,height) {
+	ctx.save()
+	ctx.shadowColor = "rgba(0,0,0,0.3)";
+	ctx.shadowBlur = 40 * .1;
+	ctx.globalAlpha = .8
+		width += 45
+		height += 45
+	ctx.fillStyle = "#fff"
+	ctx.fillRect(x - width/2, y-height/2, width, height);
+	
+	
+	width -= 30
+	height -= 30
+
+	// ctx.globalAlpha = 1
+	ctx.lineWidth = 8
+	ctx.strokeStyle = "#555"
+	// ctx.setLineDash([5, 5]);
+	ctx.strokeRect(x - width/2, y-height/2, width, height);
+	ctx.restore()
+}
+
+function _winBackgroundRectangle2(ctx,x,y,width,height) {
+	ctx.save()
+	ctx.globalAlpha = .8
+		width += 15
+		height += 15
+	ctx.fillStyle = "#fff"
+	ctx.fillRect(x - width/2, y-height/2, width, height);
+	
+	// ctx.globalAlpha = 1
+	ctx.lineWidth = 8
+	ctx.strokeStyle = "#555"
+	// ctx.setLineDash([5, 5]);
+	ctx.strokeRect(x - width/2, y-height/2, width, height);
+	if (1) {
+		ctx.strokeStyle = "#fff"
+		width += 8
+		height += 8
+		// ctx.setLineDash([15, 5]);
+		ctx.strokeRect(x - width/2, y-height/2, width, height);
+	}
+	ctx.restore()
+}
+
+function _backgroundRectangle(ctx,x,y,width,height) {
+	ctx.save()
+	ctx.shadowColor = "rgba(0,0,0,0.3)";
+	ctx.shadowBlur = 40 * .1;
+	width += 15
+	height += 15
+	ctx.globalAlpha = .8
+	ctx.fillStyle = "#fff"
+	ctx.fillRect(x - width/2, y-height/2, width, height);
 	ctx.restore()
 }
 
