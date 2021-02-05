@@ -260,8 +260,8 @@ function _convertNameToDataURLviaCanvas(letter,color, outputFormat){
 	var y = textsize
 	ctx.textAlign = "center"
 	linewidth = textsize / 30
-	if (letter.length > 2) {
-		reduce = 1.5
+	if (letter.length > 4) {
+		var reduce = Math.sqrt(letter.length) / 2
 		//  _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
 		// _backgroundRectangleOffset(ctx,x,y/reduce,text.width/reduce,textsize/reduce)
 		_drawStrokedColor(letter,x, y - textsize/2 + textsize/reduce/2 + textsize/14 ,textsize / reduce,linewidth/reduce,color,ctx, true);
