@@ -286,12 +286,12 @@ function Model(idModel){
 		
 		self.viz.calculateAfterElection()
 		 
-		self.draw()
 
 		// Update!
 		self.onUpdate();
 		publish(self.id+"-update");
 
+		self.draw()
 	};
 
 
