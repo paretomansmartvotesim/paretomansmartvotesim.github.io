@@ -16,6 +16,41 @@ function _drawText(text, x, y, textsize, ctx, textAlign) {
 	ctx.fillText(text, x, y);
 	ctx.restore()
 }
+
+
+/// expand with color, background etc.
+// https://stackoverflow.com/a/18901408
+function drawTextBG(txt, x, y, textsize, ctx, textAlign) {
+
+    /// lets save current state as we make a lot of changes        
+    ctx.save();
+
+	/// set font
+	var font = textsize + "px Sans-serif"
+	ctx.font = textsize + "px Sans-serif"
+	ctx.textAlign = textAlign || "center"
+
+    /// draw text from top - makes life easier at the moment
+    ctx.textBaseline = 'top';
+
+    /// color for background
+    ctx.fillStyle = '#f50';
+    
+    /// get width of text
+    var width = ctx.measureText(txt).width;
+
+    /// draw background rect assuming height of font
+    ctx.fillRect(x, y, width, textsize);
+    
+    /// text color
+    ctx.fillStyle = '#000';
+
+    /// draw text on top
+    ctx.fillText(txt, x, y);
+    
+    /// restore original state
+    ctx.restore();
+}
 	
 
 function _drawStroked(text, x, y, textsize, ctx, textAlign) {
@@ -224,19 +259,30 @@ function _convertNameToDataURLviaCanvas(letter,color, outputFormat){
 	var x = canvas.width / 2
 	var y = textsize
 	ctx.textAlign = "center"
-	linewidth = textsize / 10
+	linewidth = textsize / 30
 	if (letter.length > 2) {
 		reduce = 1.5
 		//  _drawStrokedColor(text, x, y, textsize,lw, color, ctx, blend) {
+		_backgroundRectangle(ctx,x,y/reduce,text.width/reduce,textsize/reduce)
 		_drawStrokedColor(letter,x, y / reduce,textsize / reduce,linewidth/reduce,color,ctx, true);
+		// drawTextBG(letter, x, y, textsize, ctx, "center")
 	} else {
+		_backgroundRectangle(ctx,x,y,text.width,textsize)
 		_drawStrokedColor(letter,x,y,textsize,linewidth,color,ctx, true);
+		// drawTextBG(letter, x, y, textsize, ctx, "center")
 	}
 	var dataURL = canvas.toDataURL(outputFormat);
 	canvas = null; 
 	return dataURL
 }
 
+function _backgroundRectangle(ctx,x,y,width,height) {
+	ctx.save()
+	ctx.globalAlpha = .8
+	ctx.fillStyle = "#fff"
+	ctx.fillRect(x - width/2, y-height/2*1.7, width, height);
+	ctx.restore()
+}
 
 
 function _convertSVGToDataURLviaCanvas(img, outputFormat){
