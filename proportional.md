@@ -141,7 +141,7 @@ Also, consider what would happen if, after the election, a candidate shifted the
 The concept of a quota extends to multiple ballot counting methods:
 
 1. Top-choice-counts Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
-2. Scoring methods (including Approval Voting and STAR voting): the facility location problem, Monroe voting, and a few methods the election method community has developed.
+2. Scoring methods (including Approval Voting and STAR voting): the facility location problem, Sequential Monroe Score Voting, Allocated Score, and STAR Proportional Representation.
 3. Clustering with STV, then electing with pairwise methods: I made one method that uses STV to form equal clusters of voters. Then it uses Minimax within the voter clusters to elect candidates.
 4. Pairwise ballot methods. (I'm working on a version of minimax)
 
@@ -165,6 +165,24 @@ caption = "Pretty much the same as score. Mouse over the rounds."
 comment = "Maybe choose a more interesting example."
 id = "approval_quota_sim" 
 gif = "gif/approval_quota.gif"
+%}
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA61W2W7jNhT9FUZAGxsmFG3UYscJ2pm0mJfMIEkxD7YRyDIdC5AlQ6TTSafut88lLyVLWSYvhW1wuYfnnruI1nfLscazmR_RKF7Qmes5NPJgEnjU8xOz4wVq5sUOdbXRcz2YuYsFtVx1OlJgBoaI0TBQgIBRN2QK4Ftjh1qBNbb-80KLWkyvQzgGxggGh774gCV-05K8aXEdze26SO56uEQFboAD-ndDHECAG8AI7kIYgNujlgc8sOkBjw-Dh5tI4wGNCwNDG9J4Ea5iXCGL72ihrsqBqw2-p8_6PtpRkA9MM5e2HwUPEYCsPgbsUo_6lFFIrxU4TQ7Uwu0uvO7Cb6jVItBswUt3QahlBRFWCoMIEr3JMKUMA2CYCoYBMEwFYzhgKliEtlh7Y5iK0MHB1cgQ6xJiQkOmFfsgJESKEBWEiR4iVBDh2QhTGPk4YAojrGnUNFWExriTN5W1CEOKkTBGwhjFxCgmDrTQmOGAemLki1FWrGTZDPoQeZJu-hOVfgZVYmrhdxfInGCyEmROon4xOkVJYvXEzK31vsxkXpWDVS5knWeSkm214gUl1U7ti-H3-bzUX2l2yJTc84LrYx_5Ot0XUgwaNCIf05rsqqKQ_JtU8CV_yMsrc-boCj2Zo3Q-n1siq2quJoao4JJkqfbZnLKFTB-4mOnDuFjYgFnlq1Ry0ao9OyN3aVE8EbnhJN3t6uoxLQT5lTwA5995WfL65Kh2CdBKKj_I-1hJXt9yaQP6d7R9NAJa_cPWl2KQ2hkE-w-vK-15oJSbQNZVPTj6IdW68WjyKzuYNhiSlwZm68R0wfDVHmctekFG0z68Y5u0Bw84OzTiG_3b9Js-BSGwngFzpcueVftSftXrgfY-nBxx4BBaQcFwNjAHscydzsiqoqoBhzBbL1uP-Zo0zWSLfMWXaT0kxx7Ewn5INaLdOsoEWuN25nSC1gXCZlTdpX5HozaM0HIudmlJsiIVYnoqthDj6UUfrQSqnd_2slIjmTY9k8LOF-j6IWkYm2fgDV_LC8x4KsgvqiWgBHBEiHxZ8DE5P1tenC_rV9yjuxV22YdNWssmRbLvRbYALBdVHWkeu6be1DSiXfDyQW6Gr_Gg2udSDoQXgvc9Nz2cT50Jyc-VP0MMy9Go38BNP0BVFHCWL-x8NXmGaDRg0HkGF0g2HCklp4LoCMZa3-h-x-uMl_KPqt6msnOhmedkQc7aJkeClyEdn4_eLF8PTkx__dv0lwnrYur1g4L2vP5Mvn66vr66uTwhn2_I3aery5PLk9cSey9zruZYUmqoh5NnhJ3WhaYBPtUbRMknTQxkRPqd9lp1fl7P15ONmjBhZAOtqu7TTf6w4UJi_ikRlW3bPyXUHs_Uw_UO5l2SJRHyqeDTU31vjHXp9RR7Qp8eof4y3fK_dtAWvSB07qA-ty_8PM_0_-bpvVJ1rzdzKxohHWDbjs012V4D1c4bEn3FbbhaqDtYVLXEfyG8qG1R5BkfwMv28C2GxnNLYmaIr7nc16UBKUmHuWWpl2LzVuzgOxzeJndPOw4vGLeqPQCk_03_rKv97gb-kartLecrAe8mfkyTMKQxvNQffgBGqmUCKgwAAA)"
+title = "Allocated Score Voting"
+caption = "Elect the highest scoring candidate, then assign the closest voters to that winner and elect more candidates with the rest of the voters."
+comment = ""
+id = "allocated_score_sim" 
+gif = "gif/allocated_score.gif"
+%}
+
+{% include sim.html 
+link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA61W2W7jNhT9FUZAGxsmFG3UYscJ2pm0mJfMIEkxD7YRyDIdC5AlQ6TTSafut88lLyVLWSYvhW1wuYfnnruI1nfLscazmR_RKF7Qmes5NPJgEnjU8xOz4wVq5sUOdbXRcz2YuYsFtVx1OlJgBoaI0TBQgIBRN2QK4Ftjh1qBNbb-8yKLWkyvQzgGxggGh774gCV-05K8aXEdze26SO56uEQFboAD-ndDHECAG8AI7kIYgNujlgc8sOkBjw-Dh5tI4wGNCwNDG9JAYHoV4wpZfEcLdVUOXG3wPX3W99GOgnxgmrm0_Sh4iABk9TFgl3rUp4xCeq3AaXKgFm534XUXfkOtFoFmC166C0ItK4iwUhhEkOhNhillGADDVDAMgGEqGMMBU8EitMXaG8NUhA4OrkaGWJcQExoyrdgHISFShKggTPQQoYIIz0aYwsjHAVMYYU2jpqkiNMadvKmsRRhSjIQxEsYoJkYxcaCFxgwH1BMjX4yyYiXLZtCHyJN005-o9DOoElMLv7tA5gSTlSBzEvWL0SlKEqsnZm6t92Um86ocrHIh6zyTlGyrFS8oqXZqXwy_z-el_kqzQ6bknhdcH_vI1-m-kGLQoBH5mNZkVxWF5N-kgi_5Q15emTNHV-jJHKXz-dwSWVVzNTFEBZckS7XP5pQtZPrAxUwfxsXCBswqX6WSi1bt2Rm5S4viicgNJ-luV1ePaSHIr-QBOP_Oy5LXJ0e1S4BWUvlB3sdK8vqWSxvQv6PtoxHQ6h-2vhSD1M4g2H94XWnPA6XcBLKu6sHRD6nWjUeTX9nBtMGQvDQwWyemC4av9jhr0QsymvbhHdukPXjA2aER3-jfpt_0KQiB9QyYK132rNqX8qteD7T34eSIA4fQCgqGs4E5iGXudEZWFVUNOITZetl6zNekaSZb5Cu-TOshOfYgFvZDqhHt1lEm0Bq3M6cTtC4QNqPqLvU7GrVhhJZzsUtLkhWpENNTsYUYTy_6aCVQ7fy2l5UaybTpmRR2vkDXD0nD2DwDb_haXmDGU0F-US0BJYAjQuTLgo_J-dny4nxZv-Ie3a2wyz5s0lo2KZJ9L7IFYLmo6kjz2DX1pqYR7YKXD3IzfI0H1T6XciC8ELzvuenhfOpMSH6u_BliWI5G_QZu-gGqooCzfGHnq8kzRKMBg84zuECy4UgpORVERzDW-kb3O15nvJR_VPU2lZ0LzTwnC3LWNjkSvAzp-Hz0Zvl6cGL669-mv0xYF1OvHxS05_Vn8vXT9fXVzeUJ-XxD7j5dXZ5cnryW2HuZczXHklJDPZw8I-y0LjQN8KneIEo-aWIgI9LvtNeq8_N6vp5s1IQJIxtoVXWfbvKHDRcS80-JqGzb_imh9nimHq53MO-SLImQTwWfnup7Y6xLr6fYE_r0CPWX6Zb_tYO26AWhcwf1uX3h53mm_zdP75Wqe72ZW9EI6QDbdmyuyfYaqHbekOgrbsPVQt3Boqol_gvhRW2LIs_4AF62h28xNJ5bEjNDfM3lvi4NSEk6zC1LvRSbt2IH3-HwNrl72nF4wbhV7QEg_W_6Z13tdzfwj1RtbzlfCXg38WOahCGN4aX-8AOL8n5rKgwAAA)"
+title = "STAR Proportional Representation"
+caption = "Elect the best candidate according to STAR voting, then assign the closest voters to that winner and elect more candidates with the rest of the voters."
+comment = ""
+id = "star_pr_sim" 
+gif = "gif/star_pr.gif"
 %}
 
 {% include sim.html 
