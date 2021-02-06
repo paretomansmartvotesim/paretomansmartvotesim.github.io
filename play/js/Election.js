@@ -1111,6 +1111,16 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 		var strongestElimination = i
 	}
 
+	if (topWinners.length == 2) { // handle tie
+		if (head2head[topWinners[0]][topWinners[1]] > head2head[topWinners[1]][topWinners[0]]) {
+			var tieBrokenText = `In tiebreaker, ${model.icon(topWinners[0])} beats ${model.icon(topWinners[1])} head to head<br>`
+			topWinners = [topWinners[0]]
+		} else {
+			var tieBrokenText = `In tiebreaker, ${model.icon(topWinners[1])} beats ${model.icon(topWinners[0])} head to head<br>`
+			topWinners = [topWinners[1]]
+		}
+	}
+
 
     var result = _result(topWinners,model)
     var color = result.color
@@ -1194,6 +1204,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 				text += model.icon(c)+" got "+losses[c]+" strong losses<br>";
 			}
 		}
+		if (tieBrokenText) text += tieBrokenText
 		text += "</span>";
 		text += "<br>";
 		text += "<b style='color:"+color+"'>"+model.nameUpper(topWinner)+"</b> WINS";
