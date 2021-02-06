@@ -3050,6 +3050,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"QuotaScore", value:"QuotaScore", realname:"Using a quota with score voting to make proportional representation.",ballotType:"Score", election:Election.quotaScore, margin:4},
             {name:"QuotaApproval", value:"QuotaApproval", realname:"Using a quota with approval voting to make proportional representation.",ballotType:"Approval", election:Election.quotaApproval},
             {name:"STV", value:"STV", ballotType:"Ranked", election:Election.stv, margin:4},
+            {name:"STV-Minimax", value:"stvMinimax", realname:"Use STV to form equal clusters of voters. Then use Minimax within the voter clusters to elect candidates.",ballotType:"Ranked", election:Election.stvMinimax},
             {name:"QuotaMinimax", value:"QuotaMinimax", realname:"Using a quota with Minimax Condorcet voting to make proportional representation.",ballotType:"Ranked", election:Election.quotaMinimax},
             {name:"Test LP", value:"PhragmenMax", realname:"Phragmen's method of minimizing the maximum representation with assignments.",ballotType:"Score", election:Election.phragmenMax},
             {name:_smaller("Equal Facility"), nameIsHTML:true, value:"equalFacilityLocation", realname:"Facility location problem with equal assignments.",ballotType:"Score", election:Election.equalFacilityLocation},
@@ -3087,6 +3088,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     22:"Create",
                     23:"Monroe Seq S",
                     24:"Phragmen Seq S",
+                    25:"stvMinimax",
                 }
             }
         ]
@@ -4086,6 +4088,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "STV": choiceType,
             "QuotaApproval": scoreType,
             "QuotaMinimax": pairType,
+            "stvMinimax": pairType,
             "QuotaScore": scoreType,
             "PhragmenMax": scoreType,
             "equalFacilityLocation": scoreType,
@@ -7251,6 +7254,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "3-2-1",
                 "RBVote",
                 "QuotaMinimax",
+                "stvMinimax",
                 "Create",
             ],
             score: [
@@ -7277,6 +7281,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "STV",
                 "QuotaApproval",
                 "QuotaMinimax",
+                "stvMinimax",
                 "QuotaScore",
                 "Monroe Seq S",
                 "Phragmen Seq S",
@@ -7286,6 +7291,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             dev: [
                 "QuotaApproval",
                 "QuotaMinimax",
+                "stvMinimax",
                 "QuotaScore",
                 "Monroe Seq S",
                 "Phragmen Seq S",
@@ -7318,6 +7324,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "STV",
             "QuotaApproval",
             "QuotaMinimax",
+            "stvMinimax",
             "QuotaScore",
             "Monroe Seq S",
             "Phragmen Seq S",
