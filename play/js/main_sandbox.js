@@ -3056,6 +3056,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:_smaller("Equal Facility"), nameIsHTML:true, value:"equalFacilityLocation", realname:"Facility location problem with equal assignments.",ballotType:"Score", election:Election.equalFacilityLocation},
             {name:"Monroe Seq S", value:"Monroe Seq S", realname:"A monroe-like sequential method.", ballotType:"Score",election:Election.monroeSequentialRange},
             {name:"AllocatedScore", value:"Allocated Score", realname:"A proportional sequential method. Monroe Sequential Score is similar.", ballotType:"Score",election:Election.allocatedScore},
+            {name:"STAR PR", value:"STAR PR", realname:"A proportional sequential method using STAR to elect. Monroe Sequential Score is similar.", ballotType:"Score",election:Election.starPR},
             {name:"Phragmen Seq S", value:"Phragmen Seq S", realname:"A phragmen-like sequential method for score voting with KP transform.", ballotType:"Score",election:Election.phragmenSequentialRange},
             {name:"Create One", value:"Create",realname:"Write your own javascript code for a voting method.",ballotType:undefined, election:Election.create},
             
@@ -3091,6 +3092,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     24:"Phragmen Seq S",
                     25:"stvMinimax",
                     26:"Allocated Score",
+                    27:"STAR PR",
                 }
             }
         ]
@@ -4097,6 +4099,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "Monroe Seq S": scoreType,
             "Phragmen Seq S": scoreType,
             "Allocated Score": scoreType,
+            "STAR PR": scoreType,
         }
         self.stratBySys = function(sys) { 
             if (sys == "Create") {
@@ -7276,6 +7279,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "Monroe Seq S",
                 "Phragmen Seq S",
                 "Allocated Score",
+                "STAR PR",
             ]
         }
         includeOnlyIf = {
@@ -7289,6 +7293,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "QuotaScore",
                 "Monroe Seq S",
                 "Allocated Score",
+                "STAR PR",
                 "Phragmen Seq S",
                 "PhragmenMax",
                 "equalFacilityLocation",
@@ -7300,6 +7305,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "QuotaScore",
                 "Monroe Seq S",
                 "Allocated Score",
+                "STAR PR",
                 "Phragmen Seq S",
                 "PhragmenMax",
                 "equalFacilityLocation",
@@ -7334,6 +7340,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "QuotaScore",
             "Monroe Seq S",
             "Allocated Score",
+            "STAR PR",
             "Phragmen Seq S",
             "PhragmenMax",
             "equalFacilityLocation",

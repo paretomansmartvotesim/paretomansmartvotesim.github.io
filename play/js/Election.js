@@ -4265,7 +4265,55 @@ Election.monroeSequentialRange = function(district, model, options){
 		}
 
 		// who won this round?
-		var roundWinners = _countWinner(tally) // need to exclude twice-winners
+
+		if (options.star) {
+			var frontrunners = [];
+
+			for (var i in tally) {
+				frontrunners.push(i);
+			}
+			frontrunners.sort(function(a,b){return tally[b]-tally[a]})
+			
+			if (frontrunners.length >= 2) {
+				var aWins = 0;
+				var bWins = 0;
+				for (var i = 0; i <= iStop; i++) {
+					var aScore = bByCan[frontrunners[0]][i]
+					var bScore = bByCan[frontrunners[1]][i]
+					if(aScore > bScore){
+						aWins++; // a wins!
+					} else if(bScore > aScore){
+						bWins++; // b wins!
+					}
+				}
+			
+				if (bWins > aWins) {
+					var roundWinners = [frontrunners[1]]
+				} else if (aWins > bWins) {
+					var roundWinners = [frontrunners[0]]
+				} else {
+					var roundWinners = frontrunners // tie
+				}
+				
+				if (options.sidebar) {
+					text += "Final Round between top two:<br>";
+					if (model.doTallyChart) {
+						var runoffTally = {}
+						runoffTally[cans[frontrunners[0]].id] = aWins
+						runoffTally[cans[frontrunners[1]].id] = bWins
+						text += tallyChart(runoffTally,cans,model,1,iStop+1)
+					} else {
+						text += model.icon(frontrunners[0])+_percentFormat(district, aWins)+". "+model.icon(frontrunners[1]) +_percentFormat(district, bWins) + "<br>";
+					}
+					text += "<br>";
+				}
+			} else {
+				var roundWinners = frontrunners
+			}
+		} else {
+			var roundWinners = _countWinner(tally) // TODO: need to exclude twice-winners
+		}
+
 		if (model.opt.breakWinTiesMultiSeat) {
 			roundWinners = roundWinners[Math.floor(Math.random() * roundWinners.length)]
 			roundWinners = [roundWinners]
@@ -4375,6 +4423,14 @@ Election.monroeSequentialRange = function(district, model, options){
 Election.allocatedScore = function(district, model, options){
 	var newOptions = _jcopy(options) // don't modify options object
 	newOptions.allocatedScore = true
+	return Election.monroeSequentialRange(district,model, newOptions) // there's only one line that's different between these methods
+}
+
+
+Election.starPR = function(district, model, options){
+	var newOptions = _jcopy(options) // don't modify options object
+	newOptions.allocatedScore = true
+	newOptions.star = true
 	return Election.monroeSequentialRange(district,model, newOptions) // there's only one line that's different between these methods
 }
 
@@ -6379,7 +6435,7 @@ function _rLimitFrom(model,round) {
 }
 
 function _type1Get(model) {
-	var type1 = model.system == "Phragmen Seq S" || model.system == "Monroe Seq S" || model.system == "Allocated Score" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
+	var type1 = model.system == "Phragmen Seq S" || model.system == "Monroe Seq S" || model.system == "Allocated Score" || model.system == "STAR PR" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
 	return type1
 }
 
