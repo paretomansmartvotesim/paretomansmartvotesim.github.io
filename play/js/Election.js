@@ -4226,8 +4226,14 @@ Election.monroeSequentialRange = function(district, model, options){
 				}
 			}
 			
+			if (options.allocatedScore) {
+				var iStop = bByCan[k].length - 1 // add up all the scores
+			} else {
+				var iStop = lasti[k]
+			}
+
 			var talsum = 0
-			for (var i = 0; i <= lasti[k]; i++) {
+			for (var i = 0; i <= iStop; i++) {
 				var voter = bByCan[k][i]
 				talsum += voter[0] * q[voter[1]]// sum, score * q
 			}
@@ -4364,6 +4370,12 @@ Election.monroeSequentialRange = function(district, model, options){
 		}
 	}
 	return result
+}
+
+Election.allocatedScore = function(district, model, options){
+	var newOptions = _jcopy(options) // don't modify options object
+	newOptions.allocatedScore = true
+	return Election.monroeSequentialRange(district,model, newOptions) // there's only one line that's different between these methods
 }
 
 
@@ -6367,7 +6379,7 @@ function _rLimitFrom(model,round) {
 }
 
 function _type1Get(model) {
-	var type1 = model.system == "Phragmen Seq S" || model.system == "Monroe Seq S" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
+	var type1 = model.system == "Phragmen Seq S" || model.system == "Monroe Seq S" || model.system == "Allocated Score" || model.system == "QuotaApproval" || model.system == "QuotaScore" // not sure why .. also not sure if STV is type 1 or not
 	return type1
 }
 
