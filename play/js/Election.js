@@ -998,18 +998,6 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 	
 	var text = "";
 
-	if (options.sidebar) {
-			
-		text += "<span class='small'>";
-		text += "<b>who wins each one-on-one?</b><br>";
-		text += pairChart(ballots,district,model)
-		
-		if (reverseExplanation) {
-			text += "<b>who lost the least, one-on-one?</b><br>";
-		} else {
-			text += "<b>who had the strongest wins, one-on-one?</b><br>";
-		}
-	}
 
 
 	// Create the WIN tally
@@ -1023,6 +1011,13 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 
 	// For each combination... who's the better ranking?
 	pairs = []
+	head2head = {}
+
+	for(var i=0; i<cans.length; i++){
+		var a = cans[i];
+		head2head[a.id] = {}
+	}
+
 	for(var i=0; i<cans.length-1; i++){
 		var a = cans[i];
 		for(var j=i+1; j<cans.length; j++){
@@ -1035,6 +1030,8 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 				var rank = ballots[k].rank;
 				if (options.ballotweight) {
 					var inc = options.ballotweight[k][i][j]
+				} else if (options.ballotweight2) {
+					var inc = options.ballotweight2[k]
 				} else {
 					var inc = 1
 				}
@@ -1044,6 +1041,8 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 					bWins+=inc; // b wins!
 				}
 			}
+			head2head[a.id][b.id] = aWins
+			head2head[b.id][a.id] = bWins
 
 			// WINNER?
 			var winner = (aWins>bWins) ? a : b;
@@ -1073,6 +1072,18 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 		}
 	}
 
+	if (options.sidebar) {
+			
+		text += "<span class='small'>";
+		text += "<b>who wins each one-on-one?</b><br>";
+		text += pairChart(ballots,district,model,head2head)
+		
+		if (reverseExplanation) {
+			text += "<b>who lost the least, one-on-one?</b><br>";
+		} else {
+			text += "<b>who had the strongest wins, one-on-one?</b><br>";
+		}
+	}
 	// Was there one who won all????
 	var topWinners = [];
 	
@@ -2940,13 +2951,13 @@ Election.stvMinimax = function(district, model, options){
         var beforePowerUsed = v.map( () => 0 )
 	}
 
-	var quota = 1/(numreps+1)
+	var quota = 1/(numreps)
 
 	if (options.sidebar) {
 		var quotapercent = Math.round(quota * 100)
 		var startText = "";
 		startText += "Find " + numreps + " winners.<br>"
-		startText += "Set quota at 1/(1+" + numreps + ") = " + quotapercent + "%.<br>"
+		startText += "Set quota at 1/" + numreps + " = " + quotapercent + "%.<br>"
 		
 		var text = "";
 		text += "<span class='small'>";
@@ -2981,6 +2992,7 @@ Election.stvMinimax = function(district, model, options){
 	}
 	var loserslist = []
 	var winnerslist = []
+	var trueWinnerslist = []
 	var top = []
 	var ballots = model.voterSet.getBallotsDistrict(district)
 	var cBallots = _jcopy(ballots)
@@ -3094,7 +3106,7 @@ Election.stvMinimax = function(district, model, options){
 		var oneleft = candidates.length == 1 // there is only one candidate left
 		var wait = option100 && lastwin & !oneleft // don't name the last winner unless he's the only one left
 		
-		if(ratio>quota && ! wait){
+		if( (ratio>=quota && ! wait) || (winnerslist.length + candidates.length == numreps) ){
 			// if (winners.length >= 2) {	// won't happen bc ratio > .5	
 			// 	resolved = "tie"; 
 			// 	break;
@@ -3104,7 +3116,7 @@ Election.stvMinimax = function(district, model, options){
 			
 			if (options.sidebar) {
 				var roundText = model.icon(winner)+" has more than " + quotapercent + "%<br>";
-				roundText += "select winner, "+model.icon(winner)+".<br>";
+				roundText += "select winning coalition of "+model.icon(winner)+".<br>";
 				text += roundText
 				text += "<br>"
 				roundHistory.roundText = roundText
@@ -3122,18 +3134,39 @@ Election.stvMinimax = function(district, model, options){
 
 			candidates.splice(candidates.indexOf(winner), 1); // remove from candidates...
 			// var ballots = model.voterSet.getBallotsDistrict(district)
+			var weightsForMinimax = cBallots.map( () => 0)
 			for(var i=0; i<cBallots.length; i++){
 				var rank = cBallots[i].rank;
 				if (rank[0] === winner) {
+					var weightUsed = ballotweight[i] * (1-reweight)
+					weightsForMinimax[i] = weightUsed
 					if (options.sidebar) {
-						var weightUsed = ballotweight[i] * (1-reweight)
 						roundHistory.weightUsed[i] = weightUsed
 						beforeWeightUsed[i] += weightUsed
 					}
+
 					ballotweight[i] *= reweight
 				}
 				rank.splice(rank.indexOf(winner), 1); // REMOVE THE winner
 			}
+			
+			var tempOptions = _jcopy(options) // send new options to minimax
+			tempOptions.ballotweight2 = weightsForMinimax
+			tempOptions.round = roundNum
+			// tempOptions.pastwinners = winnerslist
+			tempOptions.justCount = true
+
+			var roundResult = Election.minimax(district, model,tempOptions)
+			
+			var trueWinners = roundResult.winners
+			var trueWinner = trueWinners[0];  // there needs to be a better tiebreaker here. TODO
+			trueWinnerslist.push(trueWinner)
+			
+			if (options.sidebar) {
+				text += '</div>'
+				text += roundResult.text
+			}
+
 			if (options.sidebar) {
 				powerUsed = _calcPowerFromWeight(roundHistory.weightUsed,numreps)
 				roundHistory.powerUsed = _jcopy(powerUsed)
@@ -3260,8 +3293,8 @@ Election.stvMinimax = function(district, model, options){
 
 		if (options.sidebar) {
 			
-			if (winner) {
-				roundHistory.winners = [model.candidatesById[winner].i]
+			if (trueWinner) {
+				roundHistory.winners = [model.candidatesById[trueWinner].i]
 			} else {
 				roundHistory.winners = []
 			}
@@ -3274,15 +3307,15 @@ Election.stvMinimax = function(district, model, options){
 	
 	if (options.sidebar) {
 			
-		if (winner) {
-			roundHistory.winners = [model.candidatesById[winner].i]
+		if (trueWinner) {
+			roundHistory.winners = [model.candidatesById[trueWinner].i]
 		} else {
 			roundHistory.winners = []
 		}
 		history.rounds.push(roundHistory)
 		
 		
-		if (drawFlows) won.push(_jcopy(winnerslist))
+		if (drawFlows) won.push(_jcopy(trueWinnerslist))
 
 		text += "<br>"
 		text += '</div>'
@@ -3339,7 +3372,7 @@ Election.stvMinimax = function(district, model, options){
 		text += '</div>'
 	}
 
-	winners = winnerslist.sort() 
+	trueWinners = trueWinnerslist.sort() 
 
 	if (model.doTop2) { /// TODO: see if this actually works
 		loserslist = loserslist.concat(_sortTallyRev(tally))
@@ -3348,7 +3381,7 @@ Election.stvMinimax = function(district, model, options){
 	}
 	
 	
-	var result = _result(winners,model)
+	var result = _result(trueWinners,model)
 	var color = result.color
 	if (model.doTop2) result.theTop2 = theTop2
 
@@ -3407,13 +3440,13 @@ Election.stvMinimax = function(district, model, options){
 			// text = "<b>TIE</b> <br> <br>" + text;
 		} 
 		text = "<br>" + text
-		for (var i in winners) {
-			var winner = winners[i]
-			var color = _colorsWinners([winner],model)[0]
+		for (var i in trueWinners) {
+			var trueWinner = trueWinners[i]
+			var color = _colorsWinners([trueWinner],model)[0]
 			// END!
 			text += "</span>";
 			text += "<br>"
-			text += "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS ";
+			text += "<b style='color:"+color+"'>"+model.nameUpper(trueWinner)+"</b> WINS ";
 			// text = "<b style='color:"+color+"'>"+model.nameUpper(winner)+"</b> WINS <br>" + text;	
 		}
 		text += '</div>'
@@ -3421,8 +3454,8 @@ Election.stvMinimax = function(district, model, options){
 		
 		finalText += "Final Winners:";
 		finalText += "<br>";
-		for(var i=0; i<winners.length; i++){
-			var c = winners[i]
+		for(var i=0; i<trueWinners.length; i++){
+			var c = trueWinners[i]
 			finalText += model.icon(c)+" ";
 		}
 	

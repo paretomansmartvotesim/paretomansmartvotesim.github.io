@@ -142,7 +142,8 @@ The concept of a quota extends to multiple ballot counting methods:
 
 1. Top-choice-counts Ranking Methods: the Single Transferable Vote (STV), also known as multi-winner Ranked Choice Voting RCV
 2. Scoring methods (including Approval Voting and STAR voting): the facility location problem, Monroe voting, and a few methods the election method community has developed.
-3. Pairwise ballot methods (I'm working on a version of minimax)
+3. Clustering with STV, then electing with pairwise methods: I made one method that uses STV to form equal clusters of voters. Then it uses Minimax within the voter clusters to elect candidates.
+4. Pairwise ballot methods. (I'm working on a version of minimax)
 
 <!-- SNTV? SNTV kind of is proportional-->
 
@@ -167,8 +168,17 @@ gif = "gif/approval_quota.gif"
 %}
 
 {% include sim.html 
+link = "[link](http://127.0.0.1:5500/sandbox/?v=2.5&m=H4sIAAAAAAAAA61W2W7jNhT9FVpAGxsmFO2LHSdoZ9JiXjJFkmIebCOQZToWKkuGSGcmnabf3kteUpayTF4K2-ByD889dxGt75ZjTeZzP6ZxsqRz13No7MEk8Kjnp3rHC-TMSxzqKqPnejBzl0tqufJ07ANYHo8jGsUSEETUjRIJ8K2JQ63Amlj_eqFFrVCtIzgGxhgGh774gCV505K-aXEdxe26SO56uEQFboAD-ncjHECAG8AI7iIYgNujlgc8sOkBjw-Dh5tI4wGNC0OINqTxYlwluEIW31FCXZkDVxl8FOQjk4-CfGCau7T9SHiEBMjqY8Au9ahPQxoAIHBMDuTC7S687sI31HIRKLbgpbsgUiEFMVYKgwhStRliSkMMIMRUhD4OmIowxAFTEcZoS5S3MMVqO2ozchUywjREmIYoVIp9EBIhRYQKIjwbo4IYz8YeDj4OmMIYaxqbporRmHTyJrMWY0gJEiYYUoJiEhSTIGGChAnqSZAvQVmJlGWH0IfIk3bTn8r0h1ClUC787iJQKUgxWSkyp3G_GJ2ipIl8YhbW5lDloqir4brgoilyQcmuXrOSknov9_no-2JRqa_QO2RG7ljJ1LGPbJMdSsGHBo3Ih6wh-7osBfsmJHzF7ovqUp85ukJP-ihdLBYWz-uGyYkmKpkgeaZ8mlM2F9k943N1GBdLGzDrYp0Jxlu1p6fkNivLRyK2jGT7fVM_ZCUnP5N74PxaVBVrBke1K4DWQvpB3odasOaGCRvQv6LtoxbQ6h-1viSDUM4g2L9ZUyvPQ6lcB7Kpm-HRD6k3xqPOr-hg2mBIUWmYrRLTBcNXeZy36CUZz_rwjm3aHnzC2ZMRb_Tvsm_qFIQQ9gyYK1X2vD5U4otaD5X30fSIA4fQChKGs6E-iGXudEZel3UDOITZatl6LDbENJPNizVbZc2IHHsQC_shU4h26ygTaLXbudMJWhUIm1F2l_wdjcowRssZ32cVycuM89kJ30GMJ-d9tBQod345iFqOZGZ6JoOdP6DrR8QwmmfgDV-rc8x4xslPsiWgBHCE82JVsgk5O12dn62aV9yjuzV22Ydt1giTItH3IloAlovKjtSPnak31Y1ol6y6F9vRazyo9rmUJ8JKzvqeTQ8XM2dKijPpTxPDcjzuN7DpB6iKBM6LpV2sp88QRgMGXeRwgeSjsVRywomKYKL0je_2rMlZJX6rm10mOheafk6W5LRtciR4GdLx-ejNis1woPvrH9NfOqzzmdcPCtrz6jP58unq6vL6YkA-X5PbT5cXg4vBa4m9EwWTcywp1dSj6TPCTutC0wCf7A0i5RMTAxmTfqe9Vp0f1_P1ZKMmTBjZQqvK-3Rb3G8ZF5h_Snht2_YPCZXHU_lwvYN5l2RFuHgs2exE3RsTVXo1xZ5Qp8eov8p27M89tEUvCJU7qM_NCz_PM_2_eXqvVN3rTd-KWkgH2LajuSbba6DeeyOirrgtkwt5B_O6EfgvhBe1zcsiZ0N42R69xWA8tyR6hviGiUNTaZCU9LSwLPlSrN-KHXzhwdvk9nHP4AXjOqv-YmtAqb_T35v6sIetdb27YWzN4eXET2gaRTSJguXTfzeyCIMrDAAA)"
+title = "STV  Minimax"
+caption = "Use STV to form equal clusters of voters. Then use Minimax within the voter clusters to elect candidates."
+comment = ""
+id = "stv_minimax_sim" 
+gif = "gif/stv_minimax.gif"
+%}
+
+{% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA3VSMU4EMQz8S2oXsZ3Y3n0GolttcYirOAEFDULwdpwMi046nbaYOONMxpP9KrWs26ZOHjttLJVcctGERJe_HWljJVGJJyksueJ9p8LjtGs2j-NuZD4amhFbjAYta6XSylp-OAqVPmvLY0l6QqWbL5m4yyx3Ga5TmxniLCjhgBsA97MB0gC3xLzOElJbqEjq5KakjiYINiEjKcMJHRxkxFEFKqhonUZ5ZMCTUBhSKCkMaSptTP_faDcIQFUxMJOQUqeWDa0eGYyCrwu5LvSQHkWbau32umZzpOZ4KQzRlrnZEWnHAB1RdAUgit4BiKI7uJi3dURhFcCz0xCDIQbr07GmEYOEwYEtExwOHGddAApAhI439eOncpBxldtIzTFSQDAwUsBMwExAMCAY8PN0ulzePh4_38_5Ez-cXl_Oz-X7F5mNX244AwAA)"
-title = "Pairwise Voting with Quotas"
+title = "An Attempt at Pairwise Voting with Quotas"
 caption = "Under active development. Mouse over the pairs."
 comment = "Maybe choose a more interesting example."
 id = "pair_quota_sim" 
