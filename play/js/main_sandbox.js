@@ -1212,6 +1212,7 @@ function bindModel(ui,model,config) {
             ui.dom.utilityChartSpace = []
             ui.dom.utilityChartSpace2 = []
             ui.dom.utilityChartCaption = []
+            ui.dom.utilityChartCaptionOuter = []
             for (var i = 0; i < model.district.length; i++) {
                 if (model.district.length > 1) {
                     var title = document.createElement("div")
@@ -1222,8 +1223,11 @@ function bindModel(ui,model,config) {
                 ui.dom.utilityChart.append(ui.dom.utilityChartSpace[i])
                 ui.dom.utilityChartSpace2[i] = document.createElement("div")
                 ui.dom.utilityChart.append(ui.dom.utilityChartSpace2[i])
-                ui.dom.utilityChartCaption[i] = document.createElement("div")
-                ui.dom.utilityChart.append(ui.dom.utilityChartCaption[i])
+                ui.dom.utilityChartCaption[i] = document.createElement("span")
+                ui.dom.utilityChartCaption[i].className = "small"
+                ui.dom.utilityChartCaptionOuter[i] = document.createElement("div")
+                ui.dom.utilityChart.append(ui.dom.utilityChartCaptionOuter[i])
+                ui.dom.utilityChartCaptionOuter[i].append(ui.dom.utilityChartCaption[i])
             }
             
         }
@@ -1474,6 +1478,15 @@ function bindModel(ui,model,config) {
 
         ui.utilityChartAverage[iDistrict].draw(dataAverage, options);
         
+        // write out the utility
+        // var winneridx = model.district[iDistrict].result.winners[0]
+        var winneridx = winnerIndices[0]
+        var averageUtility = 1 / avg.length * avg.reduce( (p,c) => p + c)
+        var maxUtility = avg.reduce( (p,c) => Math.max(p , c) )
+        var winUtility = avg[winneridx]
+        var vse = ( winUtility - averageUtility ) / ( maxUtility - averageUtility )
+        ui.dom.utilityChartCaption[iDistrict].innerText = `VSE of winner is ${Math.round(vse*100)} %.`
+
     }
 
     function weightChartsDraw() {
