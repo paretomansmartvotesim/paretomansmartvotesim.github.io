@@ -1501,7 +1501,7 @@ function bindModel(ui,model,config) {
         }
     
         var old = ui.justFinal
-        ui.justFinal = model.system == "equalFacilityLocation" // only show the final assignments
+        ui.justFinal = (model.system == "equalFacilityLocation" || model.system == "PAV") // only show the final assignments
         var matchOpt = old == ui.justFinal 
 
         // redo charts when changing number of districts.
@@ -3072,6 +3072,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             {name:"STV-Minimax", value:"stvMinimax", realname:"Use STV to form equal clusters of voters. Then use Minimax within the voter clusters to elect candidates.",ballotType:"Ranked", election:Election.stvMinimax},
             {name:_smaller("TestQuotaMinimax"), nameIsHTML:true, value:"QuotaMinimax", realname:"An idea of using a quota with Minimax Condorcet voting to make proportional representation.",ballotType:"Ranked", election:Election.quotaMinimax},
             {name:"Test LP", value:"PhragmenMax", realname:"Phragmen's method of minimizing the maximum representation with assignments.",ballotType:"Score", election:Election.phragmenMax},
+            {name:"PAV", value:"PAV", realname:"Proportional Approval Voting",ballotType:"Approval", election:Election.pav},
             {name:_smaller("Equal Facility"), nameIsHTML:true, value:"equalFacilityLocation", realname:"Facility location problem with equal assignments.",ballotType:"Score", election:Election.equalFacilityLocation},
             {name:"Monroe Seq S", value:"Monroe Seq S", realname:"A monroe-like sequential method.", ballotType:"Score",election:Election.monroeSequentialRange},
             {name:"AllocatedScore", value:"Allocated Score", realname:"A proportional sequential method. Monroe Sequential Score is similar.", ballotType:"Score",election:Election.allocatedScore},
@@ -3112,6 +3113,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                     25:"stvMinimax",
                     26:"Allocated Score",
                     27:"STAR PR",
+                    28:"PAV",
                 }
             }
         ]
@@ -4114,6 +4116,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "stvMinimax": pairType,
             "QuotaScore": scoreType,
             "PhragmenMax": scoreType,
+            "PAV": scoreType,
             "equalFacilityLocation": scoreType,
             "Monroe Seq S": scoreType,
             "Phragmen Seq S": scoreType,
@@ -7293,6 +7296,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "QuotaApproval",
                 "QuotaScore",
                 "PhragmenMax",
+                "PAV",
                 "equalFacilityLocation",
                 "Create",
                 "Monroe Seq S",
@@ -7315,6 +7319,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "STAR PR",
                 "Phragmen Seq S",
                 "PhragmenMax",
+                "PAV",
                 "equalFacilityLocation",
             ],
             dev: [
@@ -7327,6 +7332,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
                 "STAR PR",
                 "Phragmen Seq S",
                 "PhragmenMax",
+                "PAV",
                 "equalFacilityLocation",
                 "Create",
             ]
@@ -7362,6 +7368,7 @@ function menu(ui,model,config,initialConfig, cConfig) {
             "STAR PR",
             "Phragmen Seq S",
             "PhragmenMax",
+            "PAV",
             "equalFacilityLocation",
             "Create",
         ]

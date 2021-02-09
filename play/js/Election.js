@@ -4773,7 +4773,11 @@ function lpGeneral(_solver,district,model,options) {
 
 	var b = _getBallotsAsB(ballots, cans)
 
-	var maxscore = 5
+	if (model.system == "PAV") {
+		var maxscore = 1
+	} else {
+		var maxscore = 5
+	}
 
 	var phragmenResult = _solver(b,model.seats,maxscore)
 	district.stages[model.stage].lpResult = phragmenResult.results
@@ -5369,6 +5373,123 @@ function _solveEqualFacilityLocation(b,seats,maxscore) {
 
 	return phragmenResult
 }
+
+
+Election.pav = function(district, model, options){
+
+	return lpGeneral(_solvePAV,district,model,options)
+
+}
+
+function _solvePAV(b,seats,maxscore) {
+
+	var nk = b[0].length
+	var ni = b.length
+	var nw = seats
+
+	// b[i][k] // the vote, whether i voted for k
+	
+	var array = Array.from(Array(nk).keys()) // array from 0 to k-1
+	// var combos = combine( array, nw, 0)
+	var combos = makeCombos(array,nw)
+	
+	// loop through all combos
+	var merits = []
+	var maxMerit = 0
+	var cMax = null
+	for ( var c = 0; c < combos.length; c++) {
+		var combo = combos[c]
+		// add up all the votes for this combo
+		var merit = 0
+		for (var i = 0; i < ni; i++) {
+			// how many winners did the voter choose?
+			var denom = 1
+			for (var m = 0; m < combo.length; m++) {
+				var k = combo[m]
+				if (b[i][k] == 1) {
+					merit += 1/denom
+					denom ++
+				}
+			}
+
+		}
+		merits.push(merit)
+		if (maxMerit < merit) {
+			maxMerit = merit
+			cMax = c
+		}
+	}
+	// we have the winning combo
+
+	var combo = combos[cMax]
+	var canResult = array.map( (k) => combo.includes(k))
+
+	var normalize = ni / maxMerit
+
+	var assignments = []
+	for (var i = 0; i < ni; i++) {
+		// how many winners did the voter choose?
+		var merit = 0
+		var denom = 1
+		for (var m = 0; m < combo.length; m++) {
+			var k = combo[m]
+			if (b[i][k] == 1) {
+				merit += 1/denom
+				denom ++
+			}
+		}
+		// split the merit equally over the choices
+		if (merit > 0) {
+			var weight = merit / (denom-1)
+		}
+		var iAssignments = Array(nk).map( () => 0)
+		for (var m = 0; m < combo.length; m++) { // assign weight equally to each winner that the voter voted for.
+			var k = combo[m]
+			iAssignments[k] = b[i][k] * weight * normalize
+		}
+		assignments.push(iAssignments)
+	}
+
+
+	var results = "dummy"
+
+	return { results:results, canResult:canResult, assignments:assignments}
+
+}
+
+function combine(input, len, start) {
+  if(len === 0) {
+    return result;
+  }
+  for (let i = start; i <= input.length - len; i++) {
+    result[result.length - len] = input[i];
+    combine(input, len-1, i+1 );
+  }
+}
+
+function makeCombos(array, nk) {
+	if (nk > array.length) return [];
+
+	var combos = []; 
+
+	var makeNextCombos = (combo, iStart, todo) => {
+
+		for (let i = iStart; i < array.length; i++) {
+			var next = [ ...combo, array[i] ];
+
+			if (todo == 1) {
+				combos.push(next);
+			}
+			else {
+				makeNextCombos(next, i + 1, todo - 1);
+			}
+		}
+	}
+
+	makeNextCombos([], 0, nk);
+	return combos;
+}
+  
 
 Election.toptwo = function(district, model, options){ // not to be confused with finding the top2 in a poll, which I already made as a variable
 
