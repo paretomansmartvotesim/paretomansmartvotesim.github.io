@@ -879,6 +879,7 @@ function bindModel(ui,model,config) {
             ui.dom.roundChartSpace = []
             ui.dom.roundChartCaption = []
             ui.dom.roundChartPreCaption = []
+            ui.dom.roundChartPreCaptionOuter = []
             for (var i = 0; i < model.district.length; i++) {
                 if (model.district.length > 1) {
                     var title = document.createElement("div")
@@ -888,13 +889,14 @@ function bindModel(ui,model,config) {
                     // don't use innerHTML on ui.dom.roundChart here. It will cause problems. The bindings to variables will be lost.
                     // if (model.district.length > 1) ui.dom.roundChart.innerHTML += `<div style="text-align:center;"><span class="small" > District ${i+1} </span></div>`
                 }
-                var startText = model.district[i].result.history.startText
-                if (startText) {
-                    ui.dom.roundChartPreCaption[i] = document.createElement("div")
-                    ui.dom.roundChartPreCaption[i].setAttribute("style","font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 10px;")
-                    ui.dom.roundChartPreCaption[i].innerHTML = `<span class="xsmall" > ${startText}</span>`
-                    ui.dom.roundChart.append(ui.dom.roundChartPreCaption[i])
-                }
+
+                ui.dom.roundChartPreCaptionOuter[i] = document.createElement("div")
+                ui.dom.roundChartPreCaptionOuter[i].setAttribute("style","font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 10px;")
+                ui.dom.roundChartPreCaption[i] = document.createElement("span")
+                ui.dom.roundChartPreCaption[i].className = "xsmall"
+                ui.dom.roundChartPreCaptionOuter[i].append(ui.dom.roundChartPreCaption[i])
+                ui.dom.roundChart.append(ui.dom.roundChartPreCaptionOuter[i])
+
                 var buttonDiv = document.createElement("div")
                 buttonDiv.setAttribute("style","margin-left:10px;")
                 ui.dom.roundChart.append(buttonDiv)
@@ -1154,6 +1156,10 @@ function bindModel(ui,model,config) {
         } else {
             ui.dom.roundChartCaption[iDistrict].innerHTML = roundText
         }
+        
+        var startText = model.district[iDistrict].result.history.startText
+        // startText = startText.replace("/<br>/g","\n")
+        ui.dom.roundChartPreCaption[iDistrict].innerHTML = startText
         
     }
 
