@@ -5472,7 +5472,10 @@ function makeCombos(array, nk) {
 
 	var combos = []; 
 
-	var makeNextCombos = (combo, iStart, todo) => {
+	makeNextCombos([], 0, nk);
+	return combos;
+	
+	function makeNextCombos(combo, iStart, todo) {
 
 		for (let i = iStart; i < array.length; i++) {
 			var next = [ ...combo, array[i] ];
@@ -5486,8 +5489,6 @@ function makeCombos(array, nk) {
 		}
 	}
 
-	makeNextCombos([], 0, nk);
-	return combos;
 }
   
 
