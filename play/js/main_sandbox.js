@@ -1213,6 +1213,7 @@ function bindModel(ui,model,config) {
             ui.dom.utilityChartSpace2 = []
             ui.dom.utilityChartCaption = []
             ui.dom.utilityChartCaptionOuter = []
+            ui.dom.utilityChartCaptionButton = []
             for (var i = 0; i < model.district.length; i++) {
                 if (model.district.length > 1) {
                     var title = document.createElement("div")
@@ -1228,6 +1229,19 @@ function bindModel(ui,model,config) {
                 ui.dom.utilityChartCaptionOuter[i] = document.createElement("div")
                 ui.dom.utilityChart.append(ui.dom.utilityChartCaptionOuter[i])
                 ui.dom.utilityChartCaptionOuter[i].append(ui.dom.utilityChartCaption[i])
+                
+                ui.dom.utilityChartCaptionButton[i] = document.createElement("button")
+                ui.dom.utilityChartCaptionButton[i].className = "roundChartButton"
+                ui.dom.utilityChartCaptionButton[i].innerText = "Reset VSE Average"
+                ui.dom.utilityChartCaptionButton[i].onmouseup = function() {
+                    model.totalNumVSEData = 0
+                    model.averageVSE = 0
+                    console.log("clicked")
+                }
+                model.totalNumVSEData = 0
+                model.averageVSE = 0
+                ui.dom.utilityChartCaptionOuter[i].append(ui.dom.utilityChartCaptionButton[i])
+
             }
             
         }
@@ -1485,8 +1499,15 @@ function bindModel(ui,model,config) {
         var maxUtility = avg.reduce( (p,c) => Math.max(p , c) )
         var winUtility = avg[winneridx]
         var vse = ( winUtility - averageUtility ) / ( maxUtility - averageUtility )
-        ui.dom.utilityChartCaption[iDistrict].innerText = `VSE of winner is ${Math.round(vse*100)} %.`
 
+        if (winnerIndices.length == 1) { // ties aren't good data points right now, but maybe later.
+            var frac = model.totalNumVSEData / (model.totalNumVSEData+1)
+            model.averageVSE = vse * (1-frac) + model.averageVSE * frac
+            model.totalNumVSEData ++
+        }
+
+        var vseText = `VSE of winner is ${Math.round(vse*100)} %. \n Average VSE of ${model.totalNumVSEData} past Elections is  ${Math.round(model.averageVSE*100)} %.\n`
+        ui.dom.utilityChartCaption[iDistrict].innerText = vseText
     }
 
     function weightChartsDraw() {
