@@ -67,3 +67,7 @@ Other tips for Developing the site:
 -  I edit markdown with [Typora](https://typora.io/) after copying it in from a better word processor.
 
 -  Here's a good [tutorial](https://learn.cloudcannon.com/) for jekyll from CloudCannon. The jekyll site has great tutorials, too.
+
+## License
+
+All of this is available without copyright under the [CC0 public domain license](https://creativecommons.org/share-your-work/public-domain/cc0/). The only exception is other people's stuff. I used some software packages that other people have made. You can tell where they are by reading the source code.
