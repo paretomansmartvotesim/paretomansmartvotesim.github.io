@@ -1002,11 +1002,14 @@ function bindModel(ui,model,config) {
         opt = opt || {}
         opt.ease = opt.ease || false
 
+        opt.showCoalitions = true
+
         // for (var district of model.district) {
 
         //
         var district = model.district[iDistrict]
         var round = model.roundCurrent[iDistrict]
+        var coalitionInRound = district.result.coalitionInRound
 
         // future
         // ui.dom.roundChartCaption[i].innerHTML = district.result.roundText[round+1]
@@ -1027,20 +1030,26 @@ function bindModel(ui,model,config) {
 
         var dataSankey = getDataSankey(district)
 
+        // get list of all candidates in the same order as the sankey nodes
+        var nodes0 = dataSankey.nodes.filter( x => x.round == 0)
+        var cids = nodes0.map( x => x.cid)
+
         // Create the data table.
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Candidate');
+        if (opt.showCoalitions) {
+            for ( var i = 0; i < cids.length; i++) {
+                data.addColumn('number', 'Votes');
+            }
+        }
         data.addColumn('number', 'Votes');
-        data.addColumn({ type:'string', role: 'style' })
         data.addColumn({ type:'string', role: 'annotation' })
+        data.addColumn({ type:'string', role: 'style' })
 
         var color = (cid) => model.candidatesById[cid].fill
         var getName = (cid) => model.candidatesById[cid].name
         var fPercent = (frac) => Math.round(100 * frac) + "%"
 
-        // get list of all candidates in the same order as the sankey nodes
-        var nodes0 = dataSankey.nodes.filter( x => x.round == 0)
-        var cids = nodes0.map( x => x.cid)
 
         var lookup = []
         var rows = []
@@ -1066,6 +1075,19 @@ function bindModel(ui,model,config) {
         var continuing = district.result.continuing[round]
         if (continuing == undefined) continuing = []
 
+        if (opt.showCoalitions) {
+            var eliminationOrder = _jcopy(district.result.loserslist)//.reverse()
+            if (district.result.loserslist.length < district.candidates.length) {
+                eliminationOrder = eliminationOrder.concat(_jcopy(district.result.winners).reverse())
+                for ( var i = 0; i < cids.length; i++) {
+                    var cid = cids[i]
+                    if ( ! eliminationOrder.includes(cid)) {
+                        eliminationOrder.push(cid)
+                    }
+                }
+            }
+        }
+
         for ( var i = 0; i < cids.length; i++) {
             var cid = cids[i]
             var name = getName(cid)
@@ -1087,7 +1109,30 @@ function bindModel(ui,model,config) {
                 var annotation = "Lose: " + name
             }
             var idx = lookup[cid]
-            rows[idx] = [name,frac*100,barColor,annotation]
+            if (opt.showCoalitions) {
+                var coal = coalitionInRound[round][cid]
+                if (coal) {
+                    var fracs100 = eliminationOrder.map( x => coal[x] / numBallots * 100)
+                } else {
+                    if (won.includes(cid)) {
+                        // find round in which they won
+                        var r
+                        for (r = round; coalitionInRound[r][cid] == undefined; r--) {
+                            // keep going
+                        }
+                        coal = coalitionInRound[r][cid]
+                        var fracs100 = eliminationOrder.map( x => coal[x] / numBallots * 100)
+                        var sum = fracs100.reduce( (p,c) => p+c)
+                        var normalize = quotaAmount / (sum / 100 * numBallots)
+                        fracs100 = fracs100.map( x => x * normalize)
+                    } else {
+                        var fracs100 = eliminationOrder.map( () => 0)
+                    }
+                }
+                rows[idx] = [name, ...fracs100 ,0,annotation,barColor]
+            } else {
+                rows[idx] = [name,frac*100,annotation,barColor]
+            }
         }
         data.addRows(rows);
 
@@ -1127,9 +1172,16 @@ function bindModel(ui,model,config) {
             },
         }
 
+        if (opt.showCoalitions) {
+            var allBarColors = eliminationOrder.map( (cid) => hslToHex(color(cid)))
+            allBarColors.push('#000')
+            options.isStacked = true
+            options.colors = allBarColors
+        }
+
         if (opt.ease) {
             options.animation = {
-              duration: 1000,
+              duration: 700,
               easing: 'out',
             }
         }

@@ -2335,6 +2335,7 @@ Election.irv = function(district, model, options){
 		result.nBallots = cBallots.length
 		result.tallies = tallies
 		result.continuing = continuing
+		result.coalitionInRound = coalitionInRound
 	}
 
 	// district.pollResults = undefined // clear polls for next time
@@ -2860,6 +2861,7 @@ Election.stv = function(district, model, options){
 		result.tallies = tallies
 		result.continuing = continuing
 		result.won = won
+		result.coalitionInRound = coalitionInRound
 	}
 
 	if (options.sidebar) {
@@ -3429,6 +3431,7 @@ Election.stvMinimax = function(district, model, options){
 		result.tallies = tallies
 		result.continuing = continuing
 		result.won = won
+		result.coalitionInRound = coalitionInRound
 	}
 
 	if (options.sidebar) {
