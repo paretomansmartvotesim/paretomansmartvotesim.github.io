@@ -1209,7 +1209,7 @@ Election.minimax = function(district, model, options){ // Pairs of candidates ar
 		if (unanimousWin) {
 			
 		} else {
-			text += "<b>Eliminate the weakest wins until someone has 0 losses.<br>"
+			text += "<b>Eliminate the weakest wins until someone has 0 losses.</b><br>"
 			for(var i=0; i<sortedlosses.length; i++){
 				var c = sortedlosses[i].name;
 				text += model.icon(c)+" got "+losses[c]+" strong losses<br>";
