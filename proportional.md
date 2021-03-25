@@ -74,7 +74,7 @@ This is a good method to inspire other methods like the Single Transferable Vote
 
 Here's a simple method to get a good solution to the Equal Facility Problem quickly.  First, pick the winner with the highest score among a quota of voters. Then count only the remaining voters who weren't in that quota. And repeat. The unofficial name for this is Sequential Monroe Score Voting.  It uses the same concept of the Equal Facility Problem but uses a simpler technique to find a feasible solution. 
 
-Also, I'm trying out a visualization of utility, so click the "+" next to "utility chart" to see it. Basically, the idea here is that each voter's utility is best measured by the utility of the closest winning candidate to them, so I chart that with dark grey dots.
+Also, I'm trying out a visualization of utility, so click the "+" next to "utility chart" to see it. Basically, the idea here is that each voter's utility is best measured by the utility of the closest winning candidate to them, so I chart that with dark grey dots. 
 
 {% include sim.html 
 link = "[link](http://127.0.0.1:4000/ballot/sandbox/?v=2.5&m=H4sIAAAAAAAAA61WbW_bNhD-K4yALTZMKBL1aidOsLUpUGBNhzpbP9hGIMt0LECRXJFOm7XZb98dTy924jRfBjsgxbt77rm7R3S-W441mk59h7uBM-fTWHDhBrBxHZe7ntkFDheOwN1wyF0_hp3wfS4EnokoglB3PueWi0gRIIUYJoKAu1GEBs8aOdzyrZH1r_AsbgXmOQR3MEawOPzZByzxi5bhixbXMdgucvF4xH00uDFaBFmIjOvTQlTckBbg4vqwQuYIFkjjcksAJBwKgBSwCFoIRvjkAjAeLAQjInqK6WloAjzHcHaxHa4xeMLEeh7ZiZAHSFPofPfBgJBcCNej6l0uuMd9HvAQXHyCxxb4brcV3RbSTIWB832D4x9K5YeGlB_RyKgEnxoRUG8Doh9QIwKiH1AjgoAWakQQkS02-QJqROjQ4hrPkKYSUjvDwPD1gEhIECExCIdmiYhBRLERNTDyaKEGRsQgQnVZk-u_QW7yyzbJ3yVplmf64Y8yTXRWFnD-oSyqUrKJ_MImFioxotB4t794TuXHDi2UPCbiMRGPfVNUHNBC3GPCi6mEGEuwAxAvFTHsxjTEMQU8wK3XbQlzSAUNaTDD6OnQzAdRFkmel_r6YSPhRZukZSWhxrRcystlpsvqWn7T-AbOrNW2SLEFvWWmdJWlmrM7cMs5Kzd4rvrfZ7PCfHV9wsbsRubShL2Vq2Sba9VrvMnzPqnYpsxzDXnQfSFvs-KyjulSUaY6lM9mM0shVdzUQLnULE1MzibKVjq5lWpqgulhboPPMlsmWqqW7ckJu4YuPDC9lizZbKryPskV-5XdAubXrChkddSxpYZhHsK9L7WsJlLb4P072d7WBFr-_TYXImiTDIr9R1alydxD5nUhq7LqdXlYuWoy1v3VOz5tMSwrajfbNGbXGb4m47T1nrPBeN99x3baBj7S7rEh3_C_S76ZKCgh2DNQr8zY03Jb6M_muWey9087P0gIUkA32vXqQBrzjjLSMi8r8CM32zy2GbMVa8Rkq2wpF0nVZ50GabBvEuPRHnU0AbZOO3V2ijYDIjGiuvCvMxrDgCxnapMULM0TpcbH6g5qPD7f90aCePLbVpe4snGjmQRO_gTV91mD2LwDL-RanFPHE8V-QUnACCBEqWyRyxE7O1mcny2qA-kp3ZJU9madVLppkd7PolsHGhdHRdavXTNvXgvRzmVxq9f9QzjE9imVRyZzJfczNxrOxs4py84wXw0Mj4PBvoAbPcBU0HGaze1sefrEo-FARWcpXCBpf4BMjhUzFYwMv8HNRlapLPS7srpL9M6FVr8nc3bSipwAnpfUvR97u2zVO6r19aPRV13W-VjsFwXyvPrIPr-_urr8dHHEPn5i1-8vL44ujg419kZnEvc0Ul5D90-fAO5IF0QDeKgNhvRZUwMbsH2lHZrOz-d5uNnEiRrG1iBVvE_X2e1aKk3950yVtm3_FNBkPMGX6xWfV0EWTOmHXI6Pzb0xMqM3W9KEiR4Q_yK5k39tQBZ7RZjewXwmz_I87fT_lum1Ue1eb_WtWBPZcWzl2FyT7TVQbkSfmStuLfEB72BVVpp-heiitlWepbIH_773X0JoMrcg9Y78K6m3VVE7IaXHmWU9_gdWHeE1NAwAAA)"
@@ -84,6 +84,10 @@ comment = "Maybe choose a more interesting example."
 id = "sequential_monroe_score_sim" 
 gif = "gif/sequential_monroe_score.gif"
 %}
+
+### Clustering
+
+Basically, what these methods try to do is make clusters. One idea of clusters is that you can represent a bunch of data points by a much smaller number of data points. This is really familiar. It's basically what a legislature does. The members of the legislature are the representatives of the people.
 
 ## STV's Quota
 
