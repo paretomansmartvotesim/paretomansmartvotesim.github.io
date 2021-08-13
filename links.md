@@ -30,6 +30,7 @@ Here's some great resources for expanding your voting knowledge. Some were refer
 - [District](http://polytrope.com/district/) - a game about representation and redistricting
 - [To Build a Better Ballot](https://ncase.me/ballot) - by Nicky Case - the original sim this sim is based on
 - [Voteline](http://zesty.ca/voting/voteline/) - by Ka-Ping Yee, who is the originator of win maps AKA Yee diagrams
+- [Arrow's Theorem: Visualizing 3-Candidate, 3-Voter Elections with Hexagons](https://hexagon.bettervoting.org/) - Andy's excellent explorable explanation of Arrow's Theorem, accompanied by a [YouTube video](https://youtu.be/Uvax1Hj8t_E), and a [software repository](https://github.com/abjennings/socialchoice-hexagons). I really like this because it's the only constructive proof I have seen that starts with Unanimity, IIA, and determinability (no ties) and ends with dictatorship.
 - [Political Sim](https://www.accuratedemocracy.com/s_sim.htm) - by [Accurate Democracy](https://www.accuratedemocracy.com/) - the earliest interactive voting simulator - It requires some technical know-how to get going.
 - [Median Voter](https://pianop.ly/voting/median.html) - a simple conceptual experiment with discussion of strategy and median and mean
 - [RBVote Calculator](http://www.cs.angelo.edu/~rlegrand/rbvote/calc.html) - I copied all of his methods into this simulator under "RBVote".
