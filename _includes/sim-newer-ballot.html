@@ -3,7 +3,7 @@
 	<div class="sim-container">
 		<h2 class="ballot_title" style="margin-bottom: 0.15em;">{{ include.title }}</h2>
 		<p class="ballot_caption">{{ include.caption | replace: "`", ""}}</p>
-		<div id="{{ include.id }}" class="div-election div-ballot div-model" scrolling="no">
+		<div id="{{ include.id }}" class="div-election div-ballot div-model" >
 		</div>
 		<script>
 			main_ballot({quick:"{{ include.id }}"})

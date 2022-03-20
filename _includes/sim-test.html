@@ -5,7 +5,7 @@
 			<h2 class="ballot_title" style="margin-bottom: 0.15em;">{{ include.title }}</h2>
 			<p class="ballot_caption">{{ include.caption | replace: "`", "" }}</p>
 		</p>
-		<div id="{{ include.id }}" class="div-election div-ballot-in-sandbox div-model" scrolling="no">
+		<div id="{{ include.id }}" class="div-election div-ballot-in-sandbox div-model" >
 		</div>
 		<script>
 			sandbox({quick:"{{ include.id }}"})

@@ -279,7 +279,6 @@ function Attach(ui) {
 
             // the contain-model 
             var cm = document.createElement('div'); 
-            cm.setAttribute("scrolling","no")
 
             // the script
             if (ui.danglingScript) {
@@ -306,7 +305,7 @@ function Attach(ui) {
             
             // to this
             // <div class="contain-model">
-            // 	    <div id="idModel" class="div-sandbox div-election div-ballot-in-sandbox div-model" scrolling="no">
+            // 	    <div id="idModel" class="div-sandbox div-election div-ballot-in-sandbox div-model" >
             // 	    </div>
             //      <script id="idScript">
             // 		    sandbox({idScript:"idScript",idModel:"idModel",presetName:"election3",uiType:"election"})

@@ -944,9 +944,9 @@ function Arena(arenaName, model) {
 		self.canvas = document.createElement("canvas");
 		self.canvas.setAttribute("class", "interactive");
 		self.ctx = self.canvas.getContext("2d");
-		self.mouse = new Mouse(model.id + "-" + self.id, self.canvas);	// MAH MOUSE
 		// if (self.id == "arena") self.draggableManager = new DraggableManager(self,model); // only allow dragging for the main arena... for now.. TODO
 		self.draggableManager = new DraggableManager(self,model); 
+		self.mouse = new Mouse(model.id + "-" + self.id, self.canvas, self.draggableManager);	// MAH MOUSE
 		self.plusCandidate = new Plus(model)
 		self.plusOneVoter = new Plus(model)
 		self.plusVoterGroup = new Plus(model)
